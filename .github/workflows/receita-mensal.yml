@@ -1,0 +1,22 @@
+name: Receita · atualização mensal da base do CNPJ
+# Dia 5 de cada mês, 3h (Brasília). Dado público: fica em cache do GitHub (não há dado de cliente).
+on:
+  schedule:
+    - cron: "0 6 5 * *"
+  workflow_dispatch:
+jobs:
+  rodar:
+    if: ${{ vars.AGENTES_NUVEM == 'ligado' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          rsync -a "$GITHUB_WORKSPACE/" "$HOME/agentes-partners/"; mkdir -p ~/.claude/skills && rsync -a "$GITHUB_WORKSPACE/skills/" ~/.claude/skills/
+          pip install -q -r requirements.txt
+          echo "MES=$(date +%Y-%m)" >> $GITHUB_ENV
+      - run: python3 ~/.claude/skills/depto-intel-comercial/scripts/receita_cnpj.py --carregar
+      - uses: actions/cache/save@v4
+        with:
+          path: ~/agentes-partners/dados-publicos/receita
+          key: receita-${{ env.MES }}

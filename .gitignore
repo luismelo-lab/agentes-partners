@@ -1,0 +1,38 @@
+# Repositório da estrutura de agentes: SÓ CÓDIGO E DOCUMENTAÇÃO. Dados de clientes nunca entram.
+# Tudo é ignorado por padrão; as linhas com "!" liberam o que pode entrar.
+*
+!*/
+!.gitignore
+!.gitattributes
+!.github/**
+!README.md
+!RUNBOOK.md
+!ARQUITETURA.md
+!DEPARTAMENTOS.md
+!ESTADO.md
+!requirements.txt
+!docs/**
+!bin/**
+!lib/**
+!infra/**
+!skills/**
+!rotinas/**
+!portal/index.html
+!conselho/decisoes.md
+!departamentos/*/scripts/*.py
+!departamentos/ti/*.md
+# Mesmo dentro das pastas liberadas, nunca entram:
+.env
+*.env
+**/node_modules/**
+**/__pycache__/**
+**/*.sqlite
+**/*.xlsx
+**/*.docx
+**/*.pptx
+**/*.pdf
+**/*.eml
+**/anexos/**
+infra/*.log
+infra/backup.err.log
+skills/**/references/*-dados*.json

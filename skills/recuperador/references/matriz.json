@@ -1,0 +1,391 @@
+{
+ "fonte": "Depto Tributário virtual — revisão do Recuperador, 29/09/2026 (PRÉ-ANÁLISE, validar com o técnico)",
+ "matriz": [
+  {
+   "segmento": "Carnes – abate/industrialização",
+   "prefixos": [
+    "1011",
+    "1012",
+    "1013"
+   ],
+   "regime": "Real",
+   "tese": "Crédito presumido na compra de animais/carne para industrialização + ressarcimento de créditos ligados a vendas com alíquota zero/suspensão",
+   "variante": "C + B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições (M, 1100/1500), notas de compra de animais (CST suspensão), PER/DCOMP de ressarcimento",
+   "observacao": "Conferir se o presumido foi escriturado e se já houve ressarcimento. Crédito presumido a 90% desde 04/2026 (LC 224)",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Carnes – abate/industrialização",
+   "prefixos": [
+    "1011",
+    "1012",
+    "1013"
+   ],
+   "regime": "Presumido",
+   "tese": "Exclusões da base + erro de CST",
+   "variante": "EX + CST",
+   "aderencia": "baixa",
+   "saldo_credor": false,
+   "documentos": "EFD-Contribuições (receitas por CST), balancete",
+   "observacao": "Frigorífico no Presumido é raro; carne com alíquota zero não tem o que excluir."
+  },
+  {
+   "segmento": "Pescados – indústria",
+   "prefixos": [
+    "1020",
+    "0311",
+    "0312",
+    "0321",
+    "0322"
+   ],
+   "regime": "Real",
+   "tese": "Crédito presumido (compra de pescador/aquicultor PF) + ressarcimento B",
+   "variante": "C + B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições, notas de entrada de PF, PER/DCOMP",
+   "observacao": "Peixe preservado com alíquota zero (Anexo I)",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Pescados – atacado/peixaria",
+   "prefixos": [
+    "4634603",
+    "4722902"
+   ],
+   "regime": "Real",
+   "tese": "Manutenção e ressarcimento de créditos legítimos (energia, frio, aluguel, frete) ligados a vendas com alíquota zero",
+   "variante": "B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições, notas de energia e frete",
+   "observacao": "sem crédito presumido",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Carnes – atacado",
+   "prefixos": [
+    "4634"
+   ],
+   "regime": "Real",
+   "tese": "Manutenção e ressarcimento de créditos legítimos (energia, câmara fria, aluguel, frete na venda, armazenagem) + exclusões nas receitas tributadas",
+   "variante": "B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições (rateio de receitas, M/1100), notas de energia e frete",
+   "observacao": "Sem crédito presumido (não industrializa)",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Carnes – varejo/açougue",
+   "prefixos": [
+    "4722901"
+   ],
+   "regime": "Real",
+   "tese": "Manutenção e ressarcimento de créditos legítimos + exclusões/CST no mix tributado",
+   "variante": "B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições, notas de energia e aluguel",
+   "observacao": "Valor costuma ser baixo: priorizar só com porte",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Carnes – atacado/varejo",
+   "prefixos": [
+    "4634",
+    "4722"
+   ],
+   "regime": "Presumido",
+   "tese": "Erro de CST + ICMS-ST (restituição, conforme o estado) + previdenciárias",
+   "variante": "CST + ST + PREV",
+   "aderencia": "baixa",
+   "saldo_credor": false,
+   "documentos": "PGDAS/EFD, SPED ICMS, eSocial",
+   "observacao": "Receita com alíquota zero: não há exclusão de PIS/COFINS."
+  },
+  {
+   "segmento": "Hortifrúti – atacado",
+   "prefixos": [
+    "4633"
+   ],
+   "regime": "Real",
+   "tese": "Manutenção e ressarcimento de créditos legítimos + exclusões nas receitas tributadas",
+   "variante": "B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições (CST 06 × créditos 50–56), notas de energia, aluguel e frete",
+   "observacao": "sem crédito presumido. Aderência alta pelo histórico de ganhos",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Hortifrúti – varejo/sacolão",
+   "prefixos": [
+    "4724"
+   ],
+   "regime": "Real",
+   "tese": "Manutenção e ressarcimento de créditos (energia, aluguel, depreciação proporcionais à receita com alíquota zero) + exclusões/CST no mix tributado",
+   "variante": "B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições + PER/DCOMP; conferir a raiz do CNPJ do grupo",
+   "observacao": "Histórico de 62% de sucesso em sacolões",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Hortifrúti – atacado/varejo",
+   "prefixos": [
+    "4633",
+    "4724"
+   ],
+   "regime": "Presumido",
+   "tese": "Erro de CST + previdenciárias + ICMS-ST (mercearia)",
+   "variante": "CST + PREV",
+   "aderencia": "baixa",
+   "saldo_credor": false,
+   "documentos": "Receitas por CST, folha",
+   "observacao": "Receita quase toda com alíquota zero: sem exclusão de PIS/COFINS."
+  },
+  {
+   "segmento": "Laticínios – indústria",
+   "prefixos": [
+    "1051",
+    "1052"
+   ],
+   "regime": "Real",
+   "tese": "Crédito presumido do leite in natura + ressarcimento B",
+   "variante": "C + B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições, notas de leite de PF, habilitação MAPA, PER/DCOMP",
+   "observacao": "Crédito presumido a 90% desde 04/2026 (habilitados do Mais Leite Saudável podem estar protegidos)",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Laticínios & Ovos – atacado/granja",
+   "prefixos": [
+    "4631",
+    "4633802",
+    "0155505"
+   ],
+   "regime": "Real",
+   "tese": "Manutenção e ressarcimento de créditos legítimos; granja: insumos + B",
+   "variante": "B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições, notas de ração e insumos",
+   "observacao": "Ração/insumo com alíquota zero para granja = variante A: nunca principal",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Laticínios & Ovos",
+   "prefixos": [
+    "1051",
+    "1052",
+    "4631",
+    "0155505"
+   ],
+   "regime": "Presumido",
+   "tese": "Exclusões (derivados tributados) + CST + previdenciárias",
+   "variante": "EX + CST + PREV",
+   "aderencia": "baixa",
+   "saldo_credor": false,
+   "documentos": "Receitas por CST",
+   "observacao": "—"
+  },
+  {
+   "segmento": "Atacado de insumos agropecuários",
+   "prefixos": [
+    "4683",
+    "4692",
+    "4623109"
+   ],
+   "regime": "Real",
+   "tese": "Até 03/2026: ressarcimento de créditos legítimos (frete na venda, armazenagem, energia) ligados a vendas com alíquota zero + exclusões nas vendas tributadas. Desde 04/2026 o débito residual absorve os créditos",
+   "variante": "B",
+   "aderencia": "média",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições (M/1100, origem do saldo), PER/DCOMP, livro de fretes",
+   "observacao": "LC 224: insumos agro pagam 10% da alíquota desde 04/2026; ressarcimento posterior é controvertido",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Atacado de insumos agropecuários",
+   "prefixos": [
+    "4683",
+    "4692"
+   ],
+   "regime": "Presumido",
+   "tese": "Exclusões nas vendas tributadas + previdenciárias",
+   "variante": "EX + PREV",
+   "aderencia": "baixa",
+   "saldo_credor": false,
+   "documentos": "Receitas por CST",
+   "observacao": "Nada a recuperar na parte de insumos."
+  },
+  {
+   "segmento": "Atacado de alimentos/atacarejo",
+   "prefixos": [
+    "4691",
+    "4637",
+    "4639",
+    "4632"
+   ],
+   "regime": "Real",
+   "tese": "Mix: exclusões (ICMS e ICMS-ST do substituído) + ressarcimento B (cesta básica com alíquota zero) + erro de CST",
+   "variante": "EX + B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições (C170 por CST), EFD ICMS/IPI (ST), cadastro de NCM",
+   "observacao": "Vetar crédito sobre monofásicos (Tema 1093) e sobre ICMS-ST pago (Tema 1231). Óleo de soja perdeu a alíquota zero integral desde 04/2026",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Atacado de alimentos/atacarejo",
+   "prefixos": [
+    "4691",
+    "4637",
+    "4639"
+   ],
+   "regime": "Presumido",
+   "tese": "Exclusões + ICMS-ST (exclusão/restituição) + CST",
+   "variante": "EX + ST + CST",
+   "aderencia": "média",
+   "saldo_credor": false,
+   "documentos": "EFD-Contribuições, EFD ICMS",
+   "observacao": "Presumido com receita tributada relevante tem tese real."
+  },
+  {
+   "segmento": "Supermercados",
+   "prefixos": [
+    "4711",
+    "4712"
+   ],
+   "regime": "Real",
+   "tese": "Exclusões (ICMS, ICMS-ST) + erro de CST (hortifrúti, carnes, monofásicos) + ressarcimento B",
+   "variante": "EX + B",
+   "aderencia": "alta",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições (C170/C175 por CST), cadastro de NCM, EFD ICMS",
+   "observacao": "'Insumo' no varejo é controvertido/contrário: não usar como principal. Vetar Temas 1093 e 1231",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Supermercados",
+   "prefixos": [
+    "4711",
+    "4712"
+   ],
+   "regime": "Presumido",
+   "tese": "Erro de CST + exclusões + ICMS-ST (restituição) + previdenciárias",
+   "variante": "CST + EX + ST + PREV",
+   "aderencia": "média",
+   "saldo_credor": false,
+   "documentos": "idem + folha",
+   "observacao": "Erro de CST costuma ser a tese mais forte."
+  },
+  {
+   "segmento": "Padarias",
+   "prefixos": [
+    "1091102",
+    "4721102",
+    "1091101"
+   ],
+   "regime": "Real",
+   "tese": "Insumos da produção própria (energia dos fornos, embalagem, gás) + exclusões",
+   "variante": "insumos",
+   "aderencia": "média",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições, notas de energia e gás",
+   "observacao": "4721-1/02 (predominância de revenda) é comércio, sem insumo. Farinha com alíquota zero = variante A (proibida como principal)",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Padarias",
+   "prefixos": [
+    "1091",
+    "4721"
+   ],
+   "regime": "Presumido",
+   "tese": "Exclusões + CST + previdenciárias",
+   "variante": "EX + CST + PREV",
+   "aderencia": "baixa",
+   "saldo_credor": false,
+   "documentos": "Receitas por CST, folha",
+   "observacao": "—"
+  },
+  {
+   "segmento": "Indústria de alimentos",
+   "prefixos": [
+    "10",
+    "11"
+   ],
+   "regime": "Real",
+   "tese": "Insumos (essencialidade e relevância, Tema 779) + exclusões + crédito presumido quando compra de PF/cooperativa",
+   "variante": "insumos + C",
+   "aderencia": "média",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições, laudo do processo produtivo, notas de entrada",
+   "observacao": "1081 = café (fora). Óleos (1041) com tributação residual desde 04/2026",
+   "tese_save": "PIS/COFINS nas aquisições com alíquota zero (entendimento Save: não cumulatividade, art. 195 §12 CF; marco temporal = entendimento do STJ; pedido administrativo)",
+   "risco_tese_save": "Risco registrado pelo Tributário: contrária na via administrativa (SC Cosit 227/2017), STJ dividido; honorário no ressarcimento. Procedimento da Save: PER (ressarcimento), nunca DCOMP. Considerada por decisão do Luis (29/09/2026)."
+  },
+  {
+   "segmento": "Indústria de alimentos",
+   "prefixos": [
+    "10",
+    "11"
+   ],
+   "regime": "Presumido",
+   "tese": "Exclusões + previdenciárias + ICMS (crédito acumulado/CIAP)",
+   "variante": "EX + PREV",
+   "aderencia": "baixa",
+   "saldo_credor": false,
+   "documentos": "Receitas, EFD ICMS",
+   "observacao": "—"
+  },
+  {
+   "segmento": "Outros",
+   "prefixos": [
+    ""
+   ],
+   "regime": "Real",
+   "tese": "Insumos (só produção/serviço) + exclusões + previdenciárias",
+   "variante": "insumos",
+   "aderencia": "média",
+   "saldo_credor": true,
+   "documentos": "EFD-Contribuições 12 meses",
+   "observacao": "Conferir o CNAE: cadastro errado é comum (ex.: 8211). Comércio puro = aderência baixa."
+  },
+  {
+   "segmento": "Outros",
+   "prefixos": [
+    ""
+   ],
+   "regime": "Presumido",
+   "tese": "Exclusões + CST + previdenciárias",
+   "variante": "EX + CST + PREV",
+   "aderencia": "baixa",
+   "saldo_credor": false,
+   "documentos": "Receitas por CST, folha",
+   "observacao": "—"
+  }
+ ],
+ "decisao_luis": "29/09/2026: considerar a tese de alíquota zero no entendimento da Save como hipótese principal nos perfis de alimentos em Lucro Real, com o risco registrado; a alternativa conservadora (B/C/EX) segue ao lado."
+}

@@ -1,0 +1,198 @@
+{
+ "_nota": "Catálogo de pedidos por e-mail (v1, 30/09/2026). Cada código diz qual skill atende e o que a resposta deve trazer. A pessoa pode pedir qualquer código, não só os da própria célula.",
+ "tipos": {
+  "DM1": {
+   "rotulo": "Briefing de conta Master",
+   "celula": "Central Masters",
+   "skill": "celula-daniela",
+   "entrega": "Briefing da conta: pipeline, ganhos, parados, pendências, saúde e pontos de atenção",
+   "precisa": [
+    "Master"
+   ]
+  },
+  "DM2": {
+   "rotulo": "Status de negócio(s)",
+   "celula": "Central Masters",
+   "skill": "celula-daniela",
+   "entrega": "Situação de cada negócio no HubSpot, próximo passo e quem está com a bola",
+   "precisa": [
+    "cliente ou link do negócio"
+   ]
+  },
+  "DM3": {
+   "rotulo": "Rascunho de resposta ao parceiro",
+   "celula": "Central Masters",
+   "skill": "celula-daniela",
+   "entrega": "Rascunho de WhatsApp ou e-mail para o parceiro, sem promessa de valor ou prazo de êxito",
+   "precisa": [
+    "o que o parceiro perguntou"
+   ]
+  },
+  "DM4": {
+   "rotulo": "Pedido para área de apoio",
+   "celula": "Central Masters",
+   "skill": "celula-daniela",
+   "entrega": "Pedido formatado para Contratos, Pós-venda, Jurídico, Marketing ou Técnico, com o que falta",
+   "precisa": [
+    "área",
+    "cliente ou negócio"
+   ]
+  },
+  "DM5": {
+   "rotulo": "Proposta de atualização de CRM",
+   "celula": "Central Masters",
+   "skill": "celula-daniela",
+   "entrega": "Campo, valor atual, valor sugerido e fonte (Receita/HubSpot); conflito de canal",
+   "precisa": [
+    "cliente, CNPJ ou link do negócio"
+   ]
+  },
+  "DM6": {
+   "rotulo": "Preparar reunião ou ata",
+   "celula": "Central Masters",
+   "skill": "celula-daniela",
+   "entrega": "Briefing antes da reunião ou ata com próximos passos depois dela",
+   "precisa": [
+    "cliente/parceiro e data",
+    "anotações se for ata"
+   ]
+  },
+  "DM7": {
+   "rotulo": "Consulta jurídica (pré-análise)",
+   "celula": "Central Masters",
+   "skill": "depto-juridico",
+   "entrega": "Pré-análise com base legal e fonte, para validação de advogado(a)",
+   "precisa": [
+    "a dúvida e o contexto"
+   ]
+  },
+  "JB1": {
+   "rotulo": "Lista de prospects por Master",
+   "celula": "Central BDR",
+   "skill": "celula-jenifer",
+   "entrega": "Planilha de prospects priorizados, com conflito de canal checado",
+   "precisa": [
+    "Master",
+    "segmento/UF se quiser filtrar"
+   ]
+  },
+  "JB2": {
+   "rotulo": "Escritórios contábeis (novos indicadores)",
+   "celula": "Central BDR",
+   "skill": "celula-jenifer",
+   "entrega": "Planilha de escritórios na região do Master",
+   "precisa": [
+    "Master ou região"
+   ]
+  },
+  "JB3": {
+   "rotulo": "Pré-análise rápida de empresa",
+   "celula": "Central BDR",
+   "skill": "celula-jenifer",
+   "entrega": "Perfil oficial, teses prováveis (sem valores), conflito de canal e próximo passo",
+   "precisa": [
+    "CNPJ ou nome"
+   ]
+  },
+  "JB4": {
+   "rotulo": "Mensagem de abordagem ou follow-up",
+   "celula": "Central BDR",
+   "skill": "celula-jenifer",
+   "entrega": "Rascunhos por persona (sócio, CFO, contador) e cadência",
+   "precisa": [
+    "empresa ou lista",
+    "persona"
+   ]
+  },
+  "JB5": {
+   "rotulo": "Briefing de reunião com prospect",
+   "celula": "Central BDR",
+   "skill": "celula-jenifer",
+   "entrega": "Briefing da empresa para a reunião",
+   "precisa": [
+    "empresa e data"
+   ]
+  },
+  "JB6": {
+   "rotulo": "Checagem de conflito de canal",
+   "celula": "Central BDR",
+   "skill": "depto-operacoes-canal",
+   "entrega": "Se a empresa já é cliente, tem negócio aberto ou é de outro Master",
+   "precisa": [
+    "CNPJ ou nome"
+   ]
+  },
+  "GT1": {
+   "rotulo": "Pré-análise tributária de empresa",
+   "celula": "Central Técnica",
+   "skill": "depto-tributario",
+   "entrega": "Matriz de oportunidades (tese, base legal, risco, documentos), para validação técnica",
+   "precisa": [
+    "CNPJ ou link do negócio"
+   ]
+  },
+  "GT2": {
+   "rotulo": "Revisão de diagnóstico",
+   "celula": "Central Técnica",
+   "skill": "revisor-diagnostico",
+   "entrega": "Teses esperadas e não analisadas, com base legal e o documento que decide",
+   "precisa": [
+    "link do negócio"
+   ]
+  },
+  "GT3": {
+   "rotulo": "Reanálise de perdido/zerado",
+   "celula": "Central Técnica",
+   "skill": "recuperador",
+   "entrega": "Ficha do caso: por que zerou, look-alike, hipótese de reanálise e documentos",
+   "precisa": [
+    "link do negócio"
+   ]
+  },
+  "GT4": {
+   "rotulo": "Parecer em linguagem de parceiro",
+   "celula": "Central Técnica",
+   "skill": "depto-tributario",
+   "entrega": "Versão comercial do parecer, sem valores nem promessa",
+   "precisa": [
+    "parecer anexo ou link do negócio"
+   ]
+  },
+  "GT5": {
+   "rotulo": "Preparar reunião técnica",
+   "celula": "Central Técnica",
+   "skill": "depto-tributario",
+   "entrega": "Resumo do caso, 3 mensagens-chave e objeções prováveis com resposta e fonte",
+   "precisa": [
+    "cliente e objetivo da reunião"
+   ]
+  },
+  "GT6": {
+   "rotulo": "Dúvida tributária com fonte",
+   "celula": "Central Técnica",
+   "skill": "depto-tributario",
+   "entrega": "Resposta curta com fonte oficial, vigência e grau de risco",
+   "precisa": [
+    "a dúvida"
+   ]
+  },
+  "GE1": {
+   "rotulo": "Pedido às áreas (Gabinete)",
+   "celula": "Gabinete",
+   "skill": "gabinete",
+   "entrega": "Rota pelas áreas necessárias e resposta consolidada",
+   "precisa": [
+    "o tema e o que precisa"
+   ]
+  },
+  "GE2": {
+   "rotulo": "Relatório ou levantamento do HubSpot",
+   "celula": "Gabinete",
+   "skill": "depto-dados",
+   "entrega": "Planilha com os negócios que atendem ao critério pedido (filtro, etapa, parceiro, datas), resumo por parceiro e etapa e link de cada card",
+   "precisa": [
+    "o critério do levantamento"
+   ]
+  }
+ }
+}

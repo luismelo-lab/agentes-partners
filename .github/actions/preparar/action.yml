@@ -1,0 +1,26 @@
+name: Preparar ambiente dos agentes
+description: Instala dependências, monta as pastas como no Mac (~/agentes-partners e ~/.claude/skills) e baixa o estado do SharePoint.
+runs:
+  using: composite
+  steps:
+    - name: Pastas iguais às do Mac
+      shell: bash
+      run: |
+        rsync -a "$GITHUB_WORKSPACE/" "$HOME/agentes-partners/"
+        mkdir -p "$HOME/.claude/skills" && rsync -a "$GITHUB_WORKSPACE/skills/" "$HOME/.claude/skills/"
+        chmod +x "$HOME/agentes-partners/bin/partners"
+        mkdir -p "$HOME/agentes-partners/logs" "$OD_RAIZ"
+    - name: Dependências (Python, OCR em português, conversores)
+      shell: bash
+      run: |
+        sudo apt-get -qq update && sudo apt-get -qq install -y zsh tesseract-ocr tesseract-ocr-por poppler-utils imagemagick >/dev/null
+        pip install -q -r "$GITHUB_WORKSPACE/requirements.txt"
+    - name: Base pública da Receita (cache mensal; dado público, sem LGPD)
+      uses: actions/cache/restore@v4
+      with:
+        path: ~/agentes-partners/dados-publicos/receita
+        key: receita-${{ env.MES_RECEITA }}
+        restore-keys: receita-
+    - name: Estado da última rodada (SharePoint)
+      shell: bash
+      run: python3 "$HOME/agentes-partners/lib/estado.py" baixar

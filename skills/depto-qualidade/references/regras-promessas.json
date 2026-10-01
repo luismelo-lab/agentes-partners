@@ -1,0 +1,152 @@
+{
+ "versao": "1.0 (2026-09-29)",
+ "observacao": "Padrões aplicados sobre texto em minúsculas e SEM acento. Regex Python. 'negavel': true = se houver negação logo antes (não/nunca/sem/nenhum/jamais), vira RESSALVA e não alerta. Validar a lista com o Jurídico (Compliance Ético & Marketing Jurídico).",
+ "regras": [
+  {
+   "id": "P1.1",
+   "categoria": "Promessa de êxito",
+   "severidade": "ALTO",
+   "negavel": true,
+   "padrao": "\\bgarantid[oa]s?\\b|\\bgarantimos\\b|\\bgarante(m)?\\b|\\bgarantia (de|do|da) (exito|resultado|credito|recuperacao|ressarcimento|retorno|sucesso)|\\bassegur(a|am|amos|ando|ado|ada|ados|adas)\\b",
+   "explicacao": "Promete resultado. Crédito tributário depende da análise, dos documentos e da Receita.",
+   "sugestao": "Troque por: 'após a análise técnica, indicamos se há crédito e qual o caminho'."
+  },
+  {
+   "id": "P1.2",
+   "categoria": "Promessa de êxito",
+   "severidade": "ALTO",
+   "negavel": true,
+   "padrao": "\\b100 ?% (de )?(exito|sucesso|garantid|aprovad|seguro|recuperad|certo)|\\bexito (certo|total|assegurado)|\\bsucesso (certo|garantido|assegurado)|\\bresultado (certo|assegurado)",
+   "explicacao": "Percentual ou certeza de êxito.",
+   "sugestao": "Descreva o método (análise de 5 anos, fonte oficial) em vez do resultado."
+  },
+  {
+   "id": "P1.3",
+   "categoria": "Promessa de êxito",
+   "severidade": "ALTO",
+   "negavel": true,
+   "padrao": "\\bcom (toda )?certeza (voce|vc|sua empresa|seu cliente|o cliente|a empresa)? ?(vai|ira|tem|tera|recebe)|\\bcerteza de (credito|recuperacao|receber|ganho|restituicao)|\\bvai receber (o|seu|os)? ?(credito|dinheiro|valor|restituicao)|\\bdinheiro (certo|garantido)|\\bnao tem como (perder|dar errado)|\\bsem chance de (perder|erro)",
+   "explicacao": "Afirma que o cliente vai receber.",
+   "sugestao": "Use 'pode haver crédito; a análise confirma'."
+  },
+  {
+   "id": "P2.1",
+   "categoria": "Ausência de risco",
+   "severidade": "ALTO",
+   "negavel": false,
+   "padrao": "\\bsem (nenhum |qualquer )?riscos?\\b|\\brisco zero\\b|\\bzero risco\\b|\\blivre de riscos?\\b|\\bnao (ha|tem|existe|oferece) (nenhum |qualquer )?riscos?\\b|\\bisento de riscos?\\b",
+   "explicacao": "Todo pedido de crédito tem risco (não homologação, glosa, multa em caso de fraude). Dizer 'sem risco' é informação enganosa.",
+   "sugestao": "Troque por: 'trabalhamos com fonte oficial e revisão técnica para reduzir o risco'."
+  },
+  {
+   "id": "P2.2",
+   "categoria": "Ausência de risco",
+   "severidade": "ALTO",
+   "negavel": false,
+   "padrao": "\\b(100 ?%|totalmente|completamente) (seguro|legal|blindad)|\\bblindad[oa]\\b|\\ba receita nao (questiona|contesta|glosa|autua|vai questionar)|\\bnunca (foi|fomos|e) autuad|\\bsem (problema|dor de cabeca) com (a )?receita|\\bnao ha (possibilidade|chance) de (autuacao|glosa|multa)",
+   "explicacao": "Nega o risco fiscal (autuação, glosa, multa).",
+   "sugestao": "Informe que o pedido segue a legislação e passa por revisão, sem negar o risco."
+  },
+  {
+   "id": "P3.1",
+   "categoria": "Promessa de valor",
+   "severidade": "MEDIO",
+   "negavel": false,
+   "padrao": "\\b(recupere|recuperar|receba|receber|resgate|resgatar|economize|economizar|devolva|restituir)\\b[^.\\n]{0,60}(r\\$ ?[\\d.,]+|\\d+[\\d.,]* ?(%|mil|milhoes|milhao|mi\\b))|(ate|mais de|acima de) (r\\$ ?[\\d.,]+|\\d+[\\d.,]* ?%)[^.\\n]{0,40}(de credito|em credito|de volta|de restituicao|recuperad)|\\b(reducao|economia|diminuicao) (das |de |nas |na |da )?(contribuicoes|tributos|impostos|carga|aliquota)[^.\\n]{0,50}\\d+[\\d.,]* ?%",
+   "explicacao": "Valor ou percentual de recuperação prometido ao público. Pode vincular a oferta (CDC art. 30; CC art. 427) e induzir a erro.",
+   "sugestao": "Se for média histórica, diga a fonte, o período e 'não é garantia de resultado'. Se for estimativa do cliente, 'estimativa preliminar, sujeita à análise'."
+  },
+  {
+   "id": "P3.2",
+   "categoria": "Promessa de valor",
+   "severidade": "MEDIO",
+   "negavel": false,
+   "padrao": "\\b(voce|sua empresa|seu cliente|o cliente|a empresa) (tem|possui|tera) (direito a )?(r\\$|credito de r\\$|um credito de)",
+   "explicacao": "Afirma valor de crédito como fato antes do parecer validado.",
+   "sugestao": "Use 'o diagnóstico preliminar indica potencial de R$ X, sujeito à análise documental e à Receita Federal'."
+  },
+  {
+   "id": "P4.1",
+   "categoria": "Promessa de prazo",
+   "severidade": "MEDIO",
+   "negavel": true,
+   "padrao": "\\b(dinheiro|credito|restituicao|ressarcimento|valor|pagamento) (na conta |no caixa )?em (ate )?\\d+ ?(dias|meses|semanas)|\\b(restituicao|ressarcimento|credito|dinheiro|retorno) (imediat[oa]|rapid[oa]|na hora|express)|\\bem poucos dias\\b|\\bprazo garantido\\b|\\bcai na conta\\b",
+   "explicacao": "O prazo de ressarcimento depende da Receita Federal (PER), não da Save.",
+   "sugestao": "Informe o prazo médio histórico com fonte, ou 'o prazo depende da análise da Receita Federal'."
+  },
+  {
+   "id": "P5.1",
+   "categoria": "Mercantilização / captação",
+   "severidade": "MEDIO",
+   "negavel": false,
+   "padrao": "\\bsem (nenhum )?custo\\b|\\bcusto zero\\b|\\bgratis\\b|\\bgratuit[oa]\\b|\\bde graca\\b|\\bso paga se\\b|\\bso paga (quando|no|com o) (exito|sucesso|resultado)|\\bnao paga nada\\b|\\b\\d+ ?% de desconto|\\bdesconto (especial|exclusivo|de \\d)|\\bcom desconto\\b|\\bsem (a )?(necessidade de )?(qualquer |nenhum )?desembolso|\\bnao havendo (a )?necessidade de (qualquer )?desembolso|\\bnenhum desembolso|\\bsem investimento (inicial)?",
+   "explicacao": "Referência a gratuidade, preço ou forma de pagamento como isca. Vedado na publicidade de advocacia (Prov. 205/2021 CFOAB) se a Save atuar como sociedade de advogados; em qualquer caso, 'sem custo' esconde o honorário de êxito.",
+   "sugestao": "Descreva o modelo com clareza: 'honorários proporcionais ao crédito efetivamente aproveitado, conforme contrato'. Validar com o Jurídico se pode constar em peça publicitária."
+  },
+  {
+   "id": "P5.2",
+   "categoria": "Mercantilização / captação",
+   "severidade": "BAIXO",
+   "negavel": false,
+   "padrao": "\\bultima chance\\b|\\bso (hoje|ate amanha)\\b|\\bvagas limitadas\\b|\\bimperdivel\\b|\\bpromocao\\b|\\bnao perca\\b|\\bcorra\\b|\\baproveite agora\\b",
+   "explicacao": "Urgência artificial e tom de varejo. Prazos reais (decadência, fim do PIS/COFINS em 2026) podem ser citados com fonte.",
+   "sugestao": "Troque por um prazo real e com fonte, ex.: 'créditos de 5 anos atrás prescrevem mês a mês (CTN art. 168)'."
+  },
+  {
+   "id": "P6.1",
+   "categoria": "Autoengrandecimento / comparação",
+   "severidade": "BAIXO",
+   "negavel": false,
+   "padrao": "\\b(somos|seremos|e|a save e) (o|a|os|as) (melhor|melhores|maior|maiores|primeir[oa])\\b|\\b(a|o) (melhor|maior) (empresa|consultoria|escritorio|assessoria|equipe|time|parceir[oa]) (do|de|no|em)|\\bnumero 1 (do|de|no|em)\\b|\\blider (do|de|no) (mercado|setor|brasil|pais|segmento)|\\b(unic[oa]|primeir[oa]) (empresa|consultoria|escritorio) (do|no|a) (mercado|brasil|pais)|\\bmelhor que (os|as|a|o) (concorrent|outr)|\\bninguem (faz|recupera|entrega) (melhor|mais)",
+   "explicacao": "Superlativo ou comparação sem prova. Pode ser publicidade enganosa (CDC art. 37) e é vedado na publicidade de advocacia (Prov. 205/2021).",
+   "sugestao": "Troque por fato verificável e com fonte (anos de atuação, número de análises), aprovado pelo Marketing."
+  },
+  {
+   "id": "P7.1",
+   "categoria": "Certeza jurídica",
+   "severidade": "MEDIO",
+   "negavel": true,
+   "padrao": "\\btese (esta |e |ja )?(pacificada|vencedora|ganha|garantida)\\b|\\bdireito (garantido|assegurado)\\b|\\b(stf|stj|carf|a justica|a lei|a receita) (ja )?(garantiu|garante|autoriza|liberou|mandou devolver)|\\bja (esta )?(decidido|ganho)\\b|\\bsem discussao\\b|\\bnao ha (discussao|controversia)",
+   "explicacao": "Apresenta a tese como certa. Teses mudam (modulação, novos julgamentos) e dependem do caso.",
+   "sugestao": "Cite o precedente com número e data e diga 'aplicável conforme o caso, após análise'. Peça embasamento ao depto-tributario."
+  },
+  {
+   "id": "P7.2",
+   "categoria": "Certeza jurídica",
+   "severidade": "BAIXO",
+   "negavel": false,
+   "padrao": "\\bdireito liquido e certo\\b",
+   "explicacao": "Termo técnico do mandado de segurança. Aceitável em parecer jurídico; em peça comercial soa como certeza de ganho.",
+   "sugestao": "Em material comercial, troque por 'há fundamento para pedir judicialmente, conforme o caso'."
+  },
+  {
+   "id": "P8.1",
+   "categoria": "Caso concreto / cliente",
+   "severidade": "MEDIO",
+   "negavel": false,
+   "padrao": "\\b(nosso|nossos|um) clientes? (recuperou|recuperaram|recebeu|receberam|economizou|ganhou)|\\b(empresa|cliente) [a-z0-9 ]{0,30} recuperou r\\$|\\bcase de sucesso\\b",
+   "explicacao": "Caso concreto usado para oferta: exige autorização escrita do cliente e, na advocacia, é vedado (Prov. 205/2021).",
+   "sugestao": "Retire ou use dado agregado com fonte, sem identificar o cliente, e confirme a autorização."
+  },
+  {
+   "id": "P9.1",
+   "categoria": "Medo / pressão fiscal",
+   "severidade": "BAIXO",
+   "negavel": false,
+   "padrao": "\\b(antes que|senao) a receita\\b|\\bvoce (esta|vai) (perdendo|perder) dinheiro\\b|\\bdinheiro (parado|esquecido|na mesa)\\b|\\bdinheiro que e seu\\b",
+   "explicacao": "Apelo emocional que pressupõe o crédito. Aceitável só se o texto deixar claro que depende de análise.",
+   "sugestao": "Ex.: 'muitas empresas do seu setor têm créditos não aproveitados; vale verificar'."
+  }
+ ],
+ "ressalvas": {
+  "observacao": "Se o documento tiver alertas de valor/prazo/êxito e NENHUMA destas ressalvas, o relatório sobe um alerta de documento.",
+  "padrao": "sujeit[oa]s? (a|à) analise|nao (ha|constitui|representa|e) garantia|nao garantimos|sem garantia de (resultado|exito)|estimativa (preliminar|previa)|depende (da|de) analise|resultados? (passados|anteriores) nao|nao prometemos|conforme (o )?caso|apos (a )?analise"
+ },
+ "contexto_de_regra": {
+  "observacao": "Linha que fala SOBRE a regra (lista de proibições, manual) — o alerta vira INFO (provável falso positivo). Também: linhas de relatório de auditoria (com »trecho«) e qualquer linha/seção com o marcador <!-- auditoria:ignorar -->.",
+  "padrao": "proibid|vedad|nao use|nao usar|evite|evitar|(nunca|jamais) (use|usar|diga|dizer|escreva|escrever|prometa|prometer|fale|falar)|frases? proibid|palavras? proibid|\\bproibe\\b|nao pode(m)? (constar|aparecer|prometer)|lista de risco|exemplo de risco|nenhuma promessa|sem promessa|nao prometer|nao promete|usar com cuidado|cuidado com|nunca [\\\"“'«]|frases de risco|termos de risco|categorias de risco|auditoria:ignorar|»"
+ },
+ "negacao": {
+  "padrao": "\\b(nao|nunca|jamais|nenhum[a]?|nem)\\b(\\s+[^\\s.]+){0,3}\\s*$"
+ }
+}

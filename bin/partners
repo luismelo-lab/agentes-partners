@@ -1,0 +1,110 @@
+#!/bin/zsh
+# partners — comando único da estrutura de agentes da Área Partners (roda no terminal, sem gastar tokens).
+# Tudo o que é mecânico (baixar, ler, calcular, publicar, fazer backup) roda aqui. O Claude entra só para
+# interpretar e escrever, lendo o que este comando já preparou. Ajuda: partners ajuda
+set -u
+AP="$HOME/agentes-partners"; SK="$HOME/.claude/skills"; LOG="$AP/logs"; mkdir -p "$LOG"
+export PATH="/Library/Frameworks/Python.framework/Versions/3.13/bin:/usr/local/bin:/opt/homebrew/bin:$PATH"
+hoje=$(date +%F)
+DADOS="$AP/departamentos/resultados/dados"
+log() { echo "$(date '+%F %T') [$1] ${2:-ok}" >> "$LOG/partners.log"; }
+
+alerta() { # e-mail ao Luis quando uma rotina falha (uma vez por rotina por dia)
+  local nome=$1 marca="$LOG/.alerta-$1-$hoje"
+  [ -e "$marca" ] && return; touch "$marca"
+  python3 - "$nome" "$LOG/$nome.log" <<'PY' >/dev/null 2>&1
+import sys, os
+sys.path.insert(0, os.path.expanduser("~/.claude/skills/depto-marketing/scripts")); import email_layout as L
+nome, logf = sys.argv[1], sys.argv[2]
+fim = "".join(open(logf, errors="ignore").readlines()[-8:]) if os.path.exists(logf) else ""
+corpo = L.documento(L.cabecalho("Área Partners · Agentes", f"Falha na rotina {nome}", ""),
+    L.paragrafo(f"A rotina <b>{L.esc(nome)}</b> falhou agora. As próximas etapas que dependem dela foram puladas para não usar dado desatualizado.", "28px 32px 12px"),
+    L.paragrafo("<b>Últimas linhas do log:</b><br>" + L.esc(fim).replace("\n", "<br>")),
+    L.paragrafo("Para ver tudo: <b>partners logs " + L.esc(nome) + "</b>. Este aviso sai uma vez por dia por rotina."),
+    L.rodape("Aviso automático do terminal dos agentes."))
+L.outlook(["luis.melo@savecompany.com.br"], [], f"[Agentes] Falha: {nome}", corpo, enviar=True)
+PY
+}
+
+rodar() { # rodar <nome> <comando...>: executa, guarda a saída em logs/<nome>.log e registra ok/erro
+  local nome=$1; shift
+  { echo "=== $(date '+%F %T') · $*"; "$@"; } >> "$LOG/$nome.log" 2>&1
+  local rc=$?
+  if [ $rc -eq 0 ]; then log "$nome"; else log "$nome" "ERRO $rc (ver logs/$nome.log)"; alerta "$nome"; fi
+  return $rc
+}
+
+esperar_rede() { # ao acordar, o Mac pode levar alguns minutos para ter internet (até 10 min)
+  for t in $(seq 1 20); do curl -s -m 5 -o /dev/null https://api.hubapi.com && return 0; sleep 30; done
+  log rede "ERRO sem internet há 10 min"; alerta rede; return 1
+}
+
+recente() { # recente <glob> <minutos>: há arquivo mais novo que N minutos?
+  [ -n "$(find ${~1} -mmin -$2 2>/dev/null | head -1)" ]
+}
+
+# Quando as rotinas passarem para o GitHub Actions, crie ~/agentes-partners/.nuvem-ligada: o Mac para de rodar
+# as rotinas automáticas (evita e-mail em dobro); os comandos manuais continuam funcionando.
+if [ -e "$AP/.nuvem-ligada" ] && [ -z "${GITHUB_ACTIONS:-}" ] && [ -z "${PARTNERS_MANUAL:-}" ]; then
+  case "${1:-}" in manha|segunda|caixa|whatsapp-auto|central) log "${1}" "pulado: rotinas rodando na nuvem"; exit 0 ;; esac
+fi
+[ "$(uname)" = "Linux" ] && export PATH="$PATH:/usr/bin"
+
+case "${1:-ajuda}" in
+  hubspot)      # um download por dia (o mesmo arquivo serve a todas as rotinas); "partners hubspot forcar" baixa de novo
+                if [ "${2:-}" != "forcar" ] && [ -e "$DADOS/hubspot-$hoje.json" ]; then log hubspot "já baixado hoje"; exit 0; fi
+                esperar_rede || exit 1
+                for t in 1 2 3; do rodar hubspot python3 "$SK/depto-resultados/scripts/hubspot_fonte.py" --baixar && exit 0; sleep 90; done; exit 1 ;;
+  dados-bi)     rodar dados-bi python3 "$SK/depto-dados/scripts/dados_bi.py" ;;
+  caixa)        # lê caixas e demandas do WhatsApp; pula se já leu nos últimos 20 min ("partners caixa forcar" lê de novo)
+                if [ "${2:-}" != "forcar" ] && recente "$AP/celulas/daniela/whatsapp/demandas-*.json" 20; then log caixa "já lida há menos de 20 min"; exit 0; fi
+                esperar_rede || exit 1
+                for p in daniela jenifer geovana; do
+                  rodar caixa python3 "$SK/celula-daniela/scripts/whatsapp_hubspot.py" --pessoa $p --horas 24 --aguardando 3 &&
+                  rodar demandas python3 "$SK/celula-daniela/scripts/demandas_whatsapp.py" --pessoa $p --horas 6
+                done ;;
+  whatsapp-auto) # rodada SEM IA: caixa + triagem por regras + e-mail só para quem tem pedido novo
+                "$0" caixa || exit 1
+                f=$(python3 "$SK/celula-daniela/scripts/triagem_basica.py" 2>>"$LOG/whatsapp-auto.log") &&
+                rodar whatsapp-auto python3 "$SK/celula-daniela/scripts/email_whatsapp.py" --triagem "$f" ;;
+  central)      # só em dias úteis, das 8h às 18h59 (o launchd chama a cada 15 min); "partners central agora" força
+                if [ "${2:-}" != "agora" ]; then d=$(date +%u); h=$(date +%H); { [ $d -le 5 ] && [ $h -ge 8 ] && [ $h -le 18 ]; } || exit 0; fi
+                rodar central python3 "$SK/central-agentes/scripts/central.py" ler --enfileirar ;;
+  central-fila) python3 "$SK/central-agentes/scripts/central.py" fila ;;
+  recuperador)  rodar recuperador python3 "$SK/recuperador/scripts/pareceres.py" --fila &&
+                rodar recuperador python3 "$SK/recuperador/scripts/fila.py" ;;
+  revisor)      rodar revisor python3 "$SK/recuperador/scripts/revisor.py" ;;
+  resultados)   rodar resultados python3 "$SK/depto-resultados/scripts/calc_semana.py" --data "$hoje" ;;
+  areas)        # relatórios semanais das áreas (todos leem o download do dia)
+                rodar areas python3 "$SK/depto-operacoes-canal/scripts/conflito_canal.py"
+                rodar areas python3 "$SK/depto-operacoes-canal/scripts/conferencia_repasses.py"
+                rodar areas python3 "$SK/depto-contratos/scripts/controle_contratos.py"
+                rodar areas python3 "$AP/departamentos/partner-success/scripts/metricas_ps.py"
+                rodar areas python3 "$SK/depto-intel-comercial/scripts/icp.py" ;;
+  receita)      rodar receita python3 "$SK/depto-intel-comercial/scripts/receita_cnpj.py" --carregar &&
+                rodar receita python3 "$SK/depto-intel-comercial/scripts/receita_cnpj.py" --enriquecer ;;
+  onedrive)     rodar onedrive python3 "$AP/infra/publicar_onedrive.py" ;;
+  portal)       rodar portal python3 "$AP/infra/portal_dados.py" ;;
+  backup)       rodar backup "$AP/infra/backup.sh" ;;
+  manha)        # preparação diária (dias úteis, 7h30). Se o download falhar, NÃO segue com dado velho
+                "$0" hubspot && { "$0" dados-bi; "$0" portal; "$0" onedrive; } ;;
+  segunda)      # preparação da segunda (6h): números da semana, Recuperador, Revisor e relatórios das áreas
+                "$0" hubspot && { "$0" resultados; "$0" recuperador; "$0" revisor; "$0" areas; "$0" onedrive; } ;;
+  status)       echo "Últimas execuções:"; tail -n 25 "$LOG/partners.log" 2>/dev/null
+                echo; echo "Pedidos por e-mail na fila (esperando o Claude):"; python3 "$SK/central-agentes/scripts/central.py" fila | python3 -c "import sys,json; F=json.load(sys.stdin); print(len(F), 'item(ns)')"
+                echo; echo "Pedidos em aberto na Central:"; python3 "$SK/central-agentes/scripts/central.py" registro
+                echo; echo "Jobs do terminal (launchd):"; launchctl list | grep com.savecompany || echo "nenhum instalado" ;;
+  logs)         tail -n 60 "$LOG/${2:-partners}.log" ;;
+  instalar)     "$AP/infra/launchd/instalar.sh" ;;
+  ajuda|*)      cat <<'TXT'
+partners <comando>
+  Dados        hubspot [forcar] · dados-bi · areas · receita (mensal) · portal · onedrive · backup
+  WhatsApp     caixa [forcar] · whatsapp-auto (rodada sem IA, e-mail só se houver pedido novo)
+  Central      central [agora] (lê e-mails [AGENTES] e enfileira) · central-fila
+  Técnica      recuperador (pareceres + fila) · revisor · resultados (métricas da semana)
+  Pacotes      manha (dias úteis 7h30) · segunda (segunda 6h)
+  Controle     status · logs [nome] · instalar (liga os horários automáticos)
+Falhas: e-mail automático ao Luis (uma vez por rotina por dia).
+TXT
+  ;;
+esac

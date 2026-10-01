@@ -1,0 +1,22 @@
+{
+  "_leia_me": "Limites e apelidos usados por conferencia_repasses.py e conflito_canal.py. Mudou um limite? Registre a data em 'versao' e avise no Leia-me da planilha. Nada aqui foi validado pelo Financeiro/Jurídico: são limites de TRIAGEM, não regra de pagamento.",
+  "versao": "v1 · 2026-09-29",
+  "limites": {
+    "honorario_pct_max": 0.5,
+    "parceiro_pct_teto_usual": 0.5,
+    "valor_credito_alto_rs": 50000000,
+    "soma_comissoes_max": 1.0,
+    "tolerancia_soma_1": 0.001
+  },
+  "aliases_fora_roster": {
+    "_nota": "Nome canônico -> trechos (sem acento, maiúsculas) que identificam o mesmo parceiro fora do roster. Aplicados automaticamente; aparecem na aba 'Apelidos' para o Luis confirmar.",
+    "VALUTARE (Ataliba Dalcastagne)": ["ATALIBA", "VALUTARE", "DALCASTAGNE", "DAKCASTAGNE"],
+    "M&M ASSESSORIAS INTELIGENTES": ["M&M ASSESSORIAS"]
+  },
+  "aliases_a_confirmar": {
+    "_nota": "Parecem ser do roster, mas NÃO são aplicados até o Luis confirmar. O conflito que envolver esses nomes sai marcado como 'possível mesmo parceiro'.",
+    "SERGIO AUGUSTO MONTEIRO": "D&S"
+  },
+  "parceiro_invalido": ["0", "00", "50", "-", "NA", "N/A"],
+  "roster_fonte": "~/agentes-partners/departamentos/resultados/mapeamento-hubspot.json (escopo.parceiros_roster)"
+}

@@ -1,0 +1,172 @@
+<title>Central Partners</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: faixa escura da marca no topo, abas por pessoa, e em cada aba "resumo → o que fazer agora → onde está o trabalho". */
+:root {
+  --tinta: #141416; --ouro: #b8912b; --ouro-vivo: #d4af2a;
+  --bg: #f7f6f2; --card: #ffffff; --fg: #1c1b18; --muted: #676459; --linha: #e4e1d8; --suave: #efede6;
+  --crit: #b3261e; --crit-bg: #fbe9e7; --warn: #8a6300; --warn-bg: #fbf2d9; --ok: #2f6b3a; --ok-bg: #e5f1e6;
+  --sans: "IBM Plex Sans", "Segoe UI", Arial, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121210; --card: #1b1a17; --fg: #ecEAE3; --muted: #a29e92; --linha: #2e2c27; --suave: #22211d; --ouro: #d4af2a;
+  --crit: #f2877d; --crit-bg: #3a1d1a; --warn: #e6c25a; --warn-bg: #352c12; --ok: #86c690; --ok-bg: #1b2d1e; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121210; --card: #1b1a17; --fg: #ecEAE3; --muted: #a29e92; --linha: #2e2c27; --suave: #22211d; --ouro: #d4af2a;
+  --crit: #f2877d; --crit-bg: #3a1d1a; --warn: #e6c25a; --warn-bg: #352c12; --ok: #86c690; --ok-bg: #1b2d1e; color-scheme: dark }
+* { box-sizing: border-box }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.55 var(--sans) }
+.topo { background: var(--tinta); color: #fff; padding-block: 18px 0 }
+.faixa { max-width: 1080px; margin: 0 auto; padding-inline: 20px }
+.marca { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap }
+.marca b { color: var(--ouro-vivo); letter-spacing: 6px; font-size: 18px }
+.marca h1 { margin: 2px 0 0; font-size: 24px; font-weight: 600; text-wrap: balance }
+.marca .quando { color: #b9b7b0; font: 12px var(--mono) }
+nav { display: flex; gap: 4px; margin-top: 16px; overflow-x: auto }
+nav button { background: none; border: 0; color: #cfcdc6; font: 500 14px var(--sans); padding: 10px 14px; border-bottom: 3px solid transparent; cursor: pointer; white-space: nowrap }
+nav button[aria-selected="true"] { color: #fff; border-bottom-color: var(--ouro-vivo) }
+nav button:focus-visible { outline: 2px solid var(--ouro-vivo); outline-offset: -2px }
+main { max-width: 1080px; margin: 0 auto; padding: 24px 20px 48px; display: grid; gap: 22px }
+h2 { font-size: 17px; margin: 0 0 10px; font-weight: 600 }
+.lead { margin: 0; color: var(--muted); max-width: 70ch }
+.numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px }
+.num { background: var(--card); border: 1px solid var(--linha); border-radius: 6px; padding: 14px 16px; min-width: 0 }
+.num span { display: block; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted) }
+.num strong { display: block; font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; margin-top: 2px }
+.num small { color: var(--muted); font-size: 12.5px }
+.lista { display: grid; gap: 10px }
+.item { background: var(--card); border: 1px solid var(--linha); border-radius: 6px; padding: 14px 16px; display: grid; gap: 4px; min-width: 0 }
+.item header { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+.item header strong { font-weight: 600 }
+.item p { margin: 0 }
+.item .rot { color: var(--muted); font-weight: 500 }
+.chip { font: 600 11px var(--sans); letter-spacing: .4px; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; background: var(--suave); color: var(--muted) }
+.chip.crit { background: var(--crit-bg); color: var(--crit) } .chip.warn { background: var(--warn-bg); color: var(--warn) } .chip.ok { background: var(--ok-bg); color: var(--ok) }
+a { color: var(--ouro) } a:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px }
+.vazio { background: var(--card); border: 1px dashed var(--linha); border-radius: 6px; padding: 16px; color: var(--muted) }
+.pasta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--suave); border-radius: 6px; padding: 12px 14px }
+.pasta code { font: 13px var(--mono); overflow-wrap: anywhere; min-width: 0; flex: 1 }
+.pasta button { font: 500 13px var(--sans); border: 1px solid var(--linha); background: var(--card); color: var(--fg); padding: 6px 12px; border-radius: 4px; cursor: pointer }
+.tabela { overflow-x: auto; background: var(--card); border: 1px solid var(--linha); border-radius: 6px }
+table { border-collapse: collapse; width: 100%; font-size: 14px }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--linha); vertical-align: top }
+th { font-size: 11px; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); font-weight: 600 }
+td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap }
+tr:last-child td { border-bottom: 0 }
+.barras { display: grid; gap: 8px; background: var(--card); border: 1px solid var(--linha); border-radius: 6px; padding: 14px 16px }
+.barra { display: grid; grid-template-columns: minmax(120px, 230px) 1fr 70px; gap: 10px; align-items: center; font-size: 14px }
+.trilho { height: 12px; background: var(--suave); border-radius: 2px; position: relative; overflow: hidden }
+.trilho i { position: absolute; inset: 0 auto 0 0; background: var(--ouro); opacity: .45 } .trilho b { position: absolute; inset: 0 auto 0 0; background: var(--ouro) }
+.barra .v { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px }
+.duas { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px }
+.duas > * { min-width: 0 }
+.rodape { color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--linha); padding-top: 14px }
+@media (max-width: 520px) { .barra { grid-template-columns: 1fr 60px } .barra .trilho { grid-column: 1 / -1; order: 3 } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+</style>
+
+<div class="topo"><div class="faixa">
+  <div class="marca">
+    <div><b>SAVE</b><h1>Central Partners</h1></div>
+    <div class="quando" id="quando">carregando dados…</div>
+  </div>
+  <nav role="tablist" aria-label="Pessoa">
+    <button role="tab" id="t-luis" data-aba="luis" aria-selected="true">Visão geral</button>
+    <button role="tab" id="t-daniela" data-aba="daniela" aria-selected="false">Daniela · Masters</button>
+    <button role="tab" id="t-jenifer" data-aba="jenifer" aria-selected="false">Jenifer · BDR</button>
+    <button role="tab" id="t-geovana" data-aba="geovana" aria-selected="false">Geovana · Técnica</button>
+  </nav>
+</div></div>
+<main id="conteudo"><div class="vazio">Carregando os dados mais recentes dos agentes…</div></main>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const mi = v => !v ? "—" : v >= 1e6 ? "R$ " + (v/1e6).toFixed(1).replace(".", ",") + " mi" : "R$ " + Math.round(v/1e3).toLocaleString("pt-BR") + " mil";
+const h = v => v ? String(v.toFixed ? v.toFixed(1) : v).replace(".", ",") + "h" : "";
+let D = null;
+
+const numeros = xs => `<section class="numeros">${xs.map(([r, v, s]) => `<div class="num"><span>${esc(r)}</span><strong>${esc(v)}</strong><small>${esc(s)}</small></div>`).join("")}</section>`;
+const pasta = (p) => `<section><h2>Onde está o seu trabalho</h2><div class="pasta"><code id="p-${esc(p)}">OneDrive / ${esc(D.pastas[p])}</code><button type="button" data-copiar="p-${esc(p)}">Copiar caminho</button></div></section>`;
+
+function demandas(pessoa, comDetalhe = true) {
+  const P = (D.whatsapp.pessoas || {})[pessoa];
+  if (!P) return `<div class="vazio">O WhatsApp desta pessoa ainda não está conectado ao Eazybe.</div>`;
+  if (!P.itens.length) return `<div class="vazio">Nenhuma conversa esperando resposta na rodada das ${esc(D.whatsapp.rodada)}. ${P.conversas} conversas lidas.</div>`;
+  return `<div class="lista">${P.itens.map(i => `<article class="item">
+    <header><strong>${esc(i.chat)}</strong>${i.master ? `<span class="chip">${esc(i.master)}</span>` : ""}
+      <span class="chip ${i.status === "responder" ? "crit" : "warn"}">${i.status === "responder" ? (i.aguardando_h ? h(i.aguardando_h) + " sem resposta" : "Responder") : "Acompanhar"}</span></header>
+    <p>${esc(i.o_que_pede)}</p>
+    ${comDetalhe && i.rota ? `<p><span class="rot">Encaminhar para:</span> ${esc(i.rota)}</p>` : ""}
+    ${comDetalhe && i.proximo_passo ? `<p><span class="rot">Próximo passo:</span> ${esc(i.proximo_passo)}${i.prazo ? " · prazo " + esc(i.prazo) : ""}</p>` : ""}
+    ${i.negocio ? `<p><span class="rot">Negócio:</span> <a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.negocio)}</a></p>` : ""}
+  </article>`).join("")}</div>`;
+}
+
+const conta = p => D.demandas && D.demandas[p] ? D.demandas[p].responder : ((D.whatsapp.pessoas || {})[p]?.itens || []).filter(i => i.status === "responder").length;
+
+const ABAS = {
+  luis() {
+    const G = D.gestao;
+    return `<section><h2>Resultado da área</h2><p class="lead">${esc(G.manchete)}</p></section>
+    ${numeros([["Daniela", conta("daniela"), `para responder · ${D.demandas?.daniela?.abertas ?? 0} abertas`], ["Jenifer", conta("jenifer"), `para responder · ${D.demandas?.jenifer?.abertas ?? 0} abertas`], ["Geovana", conta("geovana"), `para responder · ${D.demandas?.geovana?.abertas ?? 0} abertas`],
+               ["Recuperador", mi(D.recuperador.esperado_lote1), "potencial do lote 1"], ["Decisões", G.decisoes_pendentes.length, "aguardando você"]])}
+    <div class="duas">
+      <section><h2>Alertas das áreas</h2><div class="lista">${G.alertas.map(a => `<article class="item"><header><span class="chip warn">${esc(a.area)}</span></header><p>${esc(a.texto)}</p></article>`).join("")}</div></section>
+      <section><h2>Saúde dos Masters</h2><div class="tabela"><table><thead><tr><th>Master</th><th>Saúde</th><th class="n">Abertos</th><th class="n">Parados</th><th class="n">Ganhos 90d</th></tr></thead><tbody>
+        ${G.masters.slice().sort((a, b) => a.saude - b.saude).map(m => `<tr><td>${esc(m.parceiro)}</td><td><span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "warn" : "crit"}">${m.saude}</span></td><td class="n">${m.abertos} · ${mi(m.abertos_rs)}</td><td class="n">${m.parados}</td><td class="n">${m.ganhos_90d}</td></tr>`).join("")}
+      </tbody></table></div></section>
+    </div>
+    <section><h2>Decisões aguardando você</h2><p class="lead">${G.decisoes_pendentes.map(d => `<span class="chip">${esc(d)}</span>`).join(" ")} · detalhes na pasta Gestão · Luis / Conselho.</p></section>
+    ${pasta("luis")}`;
+  },
+  daniela() {
+    const P = (D.whatsapp.pessoas || {}).daniela || {};
+    return `<section><h2>WhatsApp · rodada das ${esc(D.whatsapp.rodada)}</h2><p class="lead">${esc(P.leitura || "")}</p></section>
+    ${numeros([["Para responder", conta("daniela"), "pedidos esperando você"], ["Conversas lidas", P.conversas ?? 0, "nas últimas 24 horas"], ["Masters", D.gestao.masters.length, "no roster"]])}
+    <section><h2>Para responder agora</h2>${demandas("daniela")}</section>${pasta("daniela")}`;
+  },
+  jenifer() {
+    const P = (D.whatsapp.pessoas || {}).jenifer || {};
+    return `<section><h2>WhatsApp · rodada das ${esc(D.whatsapp.rodada)}</h2><p class="lead">${esc(P.leitura || "")}</p></section>
+    ${numeros([["Para responder", conta("jenifer"), "pedidos esperando você"], ["Conversas lidas", P.conversas ?? 0, "nas últimas 24 horas"]])}
+    <section><h2>Para responder agora</h2>${demandas("jenifer")}</section>
+    <section><h2>Listas de prospects</h2><p class="lead">As listas por Master e o controle de follow-up estão na sua pasta. Peça uma lista nova para qualquer Master.</p></section>${pasta("jenifer")}`;
+  },
+  geovana() {
+    const R = D.recuperador, V = D.revisor, max = Math.max(...V.por_tese.map(t => t.n), 1);
+    return `${numeros([["Potencial do lote 1", mi(R.esperado_lote1), "honorário esperado"], ["Fila total", R.fila, "perdidos zerados e abertos > 90 dias"], ["Revisor", V.lacunas, `lacunas em ${V.revisados} diagnósticos`]])}
+    <section><h2>Recuperador · 10 primeiros do lote 1</h2><div class="tabela"><table><thead><tr><th>Negócio</th><th>Parceiro</th><th>Situação</th><th class="n">Parecidos</th><th class="n">Esperado</th><th>Decisão</th></tr></thead><tbody>
+      ${R.lote.map(r => `<tr><td><a href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.negocio)}</a><br><small class="lead">${esc(r.segmento)} · ${esc(r.uf)}</small></td><td>${esc(r.parceiro.startsWith("Outros") ? "Fora do roster" : r.parceiro)}</td><td>${esc(r.tipo)}</td><td class="n">${esc(String(r.taxa || "").split(" ")[0])}</td><td class="n">${mi(r.esperado)}</td><td>${r.decisao ? `<span class="chip ok">${esc(r.decisao)}</span>` : `<span class="chip">a decidir</span>`}</td></tr>`).join("")}
+    </tbody></table></div></section>
+    <section><h2>Revisor de Diagnóstico · lacunas por tese</h2><div class="barras">
+      ${V.por_tese.map(t => `<div class="barra"><span>${esc(t.tese)}</span><div class="trilho" role="img" aria-label="${t.n} lacunas, ${t.alta} de prioridade alta"><i style="width:${t.n / max * 100}%"></i><b style="width:${t.alta / max * 100}%"></b></div><span class="v">${t.n} · ${t.alta} alta</span></div>`).join("")}
+      <small class="lead">Barra cheia = prioridade alta. Lacunas prováveis até o escopo de arquivos do HubSpot permitir ler os pareceres desta etapa.</small>
+    </div></section>${pasta("geovana")}`;
+  }
+};
+
+let abaAtual = "luis";
+function abrir(aba) {
+  abaAtual = aba;
+  document.querySelectorAll("nav button").forEach(b => b.setAttribute("aria-selected", b.dataset.aba === aba));
+  $("#conteudo").innerHTML = ABAS[aba]() + `<p class="rodape">Pré-análises dos agentes da Área Partners para validação do time. Nada aqui é enviado a parceiros ou clientes. Dados atualizados em ${esc(D?.atualizado || "")}.</p>`;
+  try { localStorage.setItem("aba", aba) } catch (e) {}
+}
+
+
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-aba]"); if (t && D) abrir(t.dataset.aba);
+  const c = e.target.closest("[data-copiar]");
+  if (c) { const txt = document.getElementById(c.dataset.copiar).textContent;
+    navigator.clipboard?.writeText(txt).then(() => c.textContent = "Copiado", () => { const r = document.createRange(); r.selectNodeContents(document.getElementById(c.dataset.copiar)); getSelection().removeAllRanges(); getSelection().addRange(r); c.textContent = "Selecionado"; }); }
+});
+
+fetch("dados.json").then(r => r.json()).then(d => {
+  D = d; $("#quando").textContent = "atualizado em " + d.atualizado;
+  let aba = "luis"; try { aba = localStorage.getItem("aba") || "luis" } catch (e) {}
+  const hash = location.hash.slice(1); if (ABAS[hash]) aba = hash;
+  abrir(ABAS[aba] ? aba : "luis");
+}).catch(() => { $("#conteudo").innerHTML = `<div class="vazio">Não consegui carregar os painéis. Recarregue a página em alguns segundos.</div>` });
+</script>

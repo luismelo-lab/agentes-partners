@@ -1,0 +1,4 @@
+Variáveis comuns a todas as rotinas (copiadas em cada workflow):
+  TZ=America/Sao_Paulo · AGENTES_EMAIL=graph · AGENTES_ARQUIVOS=sharepoint · OD_RAIZ=/tmp/area-partners
+Segredos (Settings → Secrets → Actions): HUBSPOT_TOKEN, GRAPH_TENANT_ID, GRAPH_CLIENT_ID, GRAPH_CLIENT_SECRET
+Variáveis (Settings → Variables → Actions): AGENTES_CAIXA, GRAPH_SITE_ID, GRAPH_PASTA, AGENTES_NUVEM=ligado (liga), AGENTES_IA=ligado (liga as partes com IA)

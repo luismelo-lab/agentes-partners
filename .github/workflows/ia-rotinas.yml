@@ -1,0 +1,63 @@
+name: IA · rotinas com o Claude (triagem do WhatsApp, Central, relatório, Recuperador)
+# Liga com AGENTES_IA=ligado e um destes segredos: ANTHROPIC_API_KEY (crédito de API da Save) ou CLAUDE_CODE_OAUTH_TOKEN.
+# Cada horário roda o prompt da rotina correspondente em rotinas/<nome>.md (os mesmos do app no Mac).
+on:
+  schedule:
+    - cron: "0 11 * * 1-5"      # 8h  WhatsApp com IA
+    - cron: "0 17 * * 1-5"      # 14h WhatsApp com IA
+    - cron: "5 11-21 * * 1-5"   # Central, de hora em hora (só trabalha se houver fila)
+    - cron: "30 9 * * 1"        # segunda 6h30 relatório semanal
+    - cron: "0 12 * * 1"        # segunda 9h Recuperador
+  workflow_dispatch:
+    inputs:
+      rotina: {description: "whatsapp-caixa-time | central-agentes-email | relatorio-semanal-resultados | recuperador-lote-semanal | conselho-reuniao-semanal", required: true}
+env:
+  TZ: America/Sao_Paulo
+  AGENTES_EMAIL: graph
+  AGENTES_ARQUIVOS: sharepoint
+  OD_RAIZ: /tmp/area-partners
+  HUBSPOT_TOKEN: ${{ secrets.HUBSPOT_TOKEN }}
+  GRAPH_TENANT_ID: ${{ secrets.GRAPH_TENANT_ID }}
+  GRAPH_CLIENT_ID: ${{ secrets.GRAPH_CLIENT_ID }}
+  GRAPH_CLIENT_SECRET: ${{ secrets.GRAPH_CLIENT_SECRET }}
+  AGENTES_CAIXA: ${{ vars.AGENTES_CAIXA }}
+  GRAPH_SITE_ID: ${{ vars.GRAPH_SITE_ID }}
+  GRAPH_PASTA: ${{ vars.GRAPH_PASTA }}
+concurrency:
+  group: agentes-estado
+  cancel-in-progress: false
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+  CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+jobs:
+  rodar:
+    if: ${{ vars.AGENTES_NUVEM == 'ligado' && vars.AGENTES_IA == 'ligado' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/preparar
+      - name: Qual rotina
+        run: |
+          case "${{ github.event.schedule }}" in
+            "0 11 * * 1-5"|"0 17 * * 1-5") R=whatsapp-caixa-time ;;
+            "5 11-21 * * 1-5") R=central-agentes-email ;;
+            "30 9 * * 1") R=relatorio-semanal-resultados ;;
+            "0 12 * * 1") R=recuperador-lote-semanal ;;
+            *) R="${{ inputs.rotina }}" ;;
+          esac
+          echo "ROTINA=$R" >> $GITHUB_ENV
+      - name: Central sem fila não chama o Claude
+        if: env.ROTINA == 'central-agentes-email'
+        run: |
+          N=$(python3 ~/.claude/skills/central-agentes/scripts/central.py fila | python3 -c "import sys,json; print(len(json.load(sys.stdin)))")
+          echo "FILA=$N" >> $GITHUB_ENV
+      - name: Gerador do deck (só no relatório semanal)
+        if: env.ROTINA == 'relatorio-semanal-resultados'
+        run: cd ~/.claude/skills/depto-resultados/scripts && npm ci --silent
+      - name: Claude (modo automático, ferramentas restritas)
+        if: env.ROTINA != 'central-agentes-email' || env.FILA != '0'
+        run: |
+          npm i -g @anthropic-ai/claude-code >/dev/null
+          P=$(awk 'BEGIN{n=0} /^---$/{n++; next} n>=2' "rotinas/$ROTINA.md")
+          cd ~/agentes-partners && claude -p "$P" --model sonnet --max-turns 60 \
+            --allowedTools "Bash(python3:*)" "Bash(~/agentes-partners/bin/partners:*)" "Bash(cd:*)" "Bash(ls:*)" "Bash(node:*)" Read Write Edit Glob Grep
