@@ -1,0 +1,46 @@
+{
+ "_leia_me": "Filtros da base local. cnaes_alvo aceita prefixos (ex.: '1011' pega todos os CNAEs que começam com 1011). Empresas dos CNPJs do HubSpot entram sempre, com qualquer CNAE. Sem o dado de contato até validação LGPD. capital_social_maximo_prospeccao: acima disso a empresa vai para a aba 'Contas estratégicas' (grandes grupos, abordagem própria).",
+ "cnaes_alvo": [
+  "1011",
+  "1012",
+  "1013",
+  "4634",
+  "4722",
+  "4633",
+  "4724",
+  "1031",
+  "1033",
+  "4637",
+  "4639",
+  "4711",
+  "4712",
+  "1091",
+  "4721",
+  "105",
+  "4631",
+  "6920"
+ ],
+ "ufs_alvo": [
+  "MG",
+  "SP",
+  "ES",
+  "GO",
+  "DF",
+  "PR",
+  "SC",
+  "BA",
+  "RJ",
+  "MT",
+  "MS",
+  "TO"
+ ],
+ "somente_ativas": true,
+ "excluir_simples_na_prospeccao": true,
+ "portes_prospeccao": [
+  "Demais",
+  "Empresa de Pequeno Porte"
+ ],
+ "capital_social_minimo_prospeccao": 100000,
+ "incluir_contatos": false,
+ "capital_social_maximo_prospeccao": 500000000
+}

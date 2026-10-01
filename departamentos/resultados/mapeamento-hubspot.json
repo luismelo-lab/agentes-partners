@@ -1,0 +1,114 @@
+{
+ "_leia_me": "Mapeia os campos internos do HubSpot. Preencha 'campos' após rodar hubspot_fonte.py --descobrir. Deixe null o que não existir no HubSpot.",
+ "escopo": {
+  "_nota": "Área Master = negócios da Daniela (owner 79560621) + negócios dos 9 parceiros do roster sob qualquer owner (definição do cockpit, 20/08/2026). O campo nome_do_parceiro traz às vezes a empresa e às vezes o consultor: o roster abaixo mapeia os dois. CONFIRMAR.",
+  "pipelines": [],
+  "owners": [
+   "79560621"
+  ],
+  "parceiros_roster": {
+   "D&S": [
+    "D&S",
+    "Sérgio Monteiro",
+    "Sergio Monteiro",
+    "Douglas Reis",
+    "Vinicius Fontes",
+    "Vinícius Fontes",
+    "Clecio",
+    "Clécio",
+    "João Oliveira",
+    "Joao Oliveira"
+   ],
+   "AGILE": [
+    "AGILE",
+    "Thiago Moreira",
+    "Guilherme Peconik",
+    "Guilherme Avalear",
+    "Larissa Santos"
+   ],
+   "G.S.H": [
+    "G.S.H",
+    "G. S. H",
+    "GSH",
+    "Marcelo Barros"
+   ],
+   "EMPRESARIAL CARDOSO": [
+    "CARDOSO",
+    "Gilberto Cardoso"
+   ],
+   "JGM": [
+    "JGM",
+    "Eva Jucemara"
+   ],
+   "COSTA e GAUDENCIO": [
+    "COSTA e GAUDENCIO",
+    "COSTA E GAUDÊNCIO",
+    "Jonatas Gaudêncio",
+    "Jonatas Gaudencio",
+    "Ivan Naves Costa"
+   ],
+   "ASSECONT": [
+    "ASSECONT",
+    "Cleberson"
+   ],
+   "ORTECONTE": [
+    "ORTECONTE",
+    "Elias Temer"
+   ],
+   "GERSON": [
+    "GERSON",
+    "Gerson Benetti"
+   ]
+  },
+  "desde": "2024-01-01"
+ },
+ "campos": {
+  "parceiro": "nome_do_parceiro",
+  "segmento": "descricao_do_cnae",
+  "cnae": "cnae",
+  "honorario_pct": "honorarios_contratuais",
+  "parceiro_pct": "honorarios_parceiro",
+  "variante": "teses_tributarias_aplicadas_neste_negocio_",
+  "recebido_rs": null,
+  "_outras_comissoes_a_confirmar": {
+   "vendedor_pct": "honorarios_vendedor",
+   "gestor_comercial_pct": "honorarios_gestor_comercial",
+   "indicador_pct": "honorarios_indicador",
+   "coordenador_pct": "honorariosdo_coordenador"
+  }
+ },
+ "regras": {
+  "_nota": "Regra do Luis (20/08/2026): café fora da meta a partir de abr/2026 (referência = mês de fechamento; abertos = mês de criação). Grãos/cereais permanecem.",
+  "excluir_cafe_desde": "2026-04",
+  "cafe_palavras": [
+   "cafe",
+   "café",
+   "coffee",
+   "torref"
+  ],
+  "cafe_cnae": [
+   "4621400",
+   "1081301",
+   "1081302",
+   "0134200",
+   "134200"
+  ]
+ },
+ "campos_extras": {
+  "cnpj": "cnpj_",
+  "uf": "estado",
+  "cidade": "cidade",
+  "faturamento": "faturamento",
+  "faixa_faturamento": "faixa_de_faturamento_anual_estimado",
+  "porte": "porte_da_empresa",
+  "regime": "qual_e_o_regime_tributario_da_empresa_",
+  "ultima_atividade": "notes_last_updated",
+  "ultima_modificacao": "hs_lastmodifieddate",
+  "forecast": "hs_forecast_amount",
+  "ecac": "e_cac_liberado_",
+  "importado": "hs_was_imported",
+  "parecer_rt": "parecer_complementar",
+  "anexo_diagnostico": "anexo_do_diagnostico",
+  "parecer_juridico": "parecer_juridico"
+ }
+}

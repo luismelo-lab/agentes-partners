@@ -36,3 +36,9 @@
 infra/*.log
 infra/backup.err.log
 skills/**/references/*-dados*.json
+# Configurações sem dado de cliente (necessárias para rodar na nuvem)
+!departamentos/*/scripts/*.json
+!departamentos/intel-comercial/receita-config.json
+!departamentos/resultados/mapeamento-hubspot.json
+!celulas/whatsapp-config.json
+!celulas/jenifer/config-jenifer.json

@@ -1,0 +1,121 @@
+{
+ "_leia_me": "Parâmetros da célula da Jenifer (Central BDR). Tudo aqui é PROPOSTA a validar pelo Luis. Os scripts lista_master.py e followup.py leem este arquivo; mudar aqui muda o comportamento sem mexer no código.",
+ "prioridades_q4": {
+  "_status": "D7-b PENDENTE de aprovação do Luis (ata 2026-09-28-q4-mercados.md, Adendo 3). Parâmetro, não regra: 'ativo': false desliga o bônus e a busca extra.",
+  "ativo": true,
+  "incluir_prefixos_na_busca": true,
+  "itens": [
+   {
+    "id": "P1",
+    "nome": "Frigoríficos",
+    "prefixos": [
+     "1011",
+     "1012",
+     "1013",
+     "4634"
+    ],
+    "variantes": "B + C",
+    "pontos": 10
+   },
+   {
+    "id": "P2",
+    "nome": "Hortifrúti",
+    "prefixos": [
+     "4633",
+     "4724"
+    ],
+    "variantes": "só B (trava de revenda)",
+    "pontos": 5
+   }
+  ]
+ },
+ "cafe_fora_da_meta": true,
+ "masters_cadastro": {
+  "_leia_me": "Opcional. Se preenchido, substitui o perfil descoberto nos ganhos do HubSpot. Ex.: \"D&S\": {\"ufs\": [\"MG\"], \"cnaes\": [\"4722\", \"4724\", \"1013\"], \"municipios\": [\"BELO HORIZONTE\"]}"
+ },
+ "perfil_master": {
+  "janela_meses": 24,
+  "uf_participacao_minima_pct": 5,
+  "classe_cnae_minimo_ganhos": 2,
+  "max_classes_cnae": 8
+ },
+ "score": {
+  "_leia_me": "Score 0–100 = soma dos pontos ÷ máximo possível. Segmento e regime vêm do lead scoring v1 da Inteligência Comercial (icp-*.json, pendente de validação do Luis). A UF pesa pela participação dela nos ganhos do próprio Master (território), não pela média da Save.",
+  "aderencia_matriz": {
+   "alta": 15,
+   "média": 8,
+   "baixa": 2,
+   "a verificar": 4
+  },
+  "classe_cnae_do_master": 10,
+  "municipio_do_master": 8,
+  "sinal_filial_12m": 5,
+  "uf_do_master_max": 30
+ },
+ "conflito": {
+  "desqualificado_bdr_bloqueia_dias": 180,
+  "perdido_recente_dias": 365,
+  "reserva_dias": 45,
+  "_leia_me": "reserva_dias: por quantos dias uma empresa sugerida a um Master fica reservada para ele (listas/reservas.json). Decisão de conflito é sempre do Luis."
+ },
+ "persona": {
+  "_leia_me": "Regra simples de persona principal (a Jenifer confirma). O contador da empresa é sempre influenciador.",
+  "capital_cfo_a_partir_de": 10000000
+ },
+ "cadencia": [
+  {
+   "toque": 1,
+   "dia_util": 0,
+   "canal": "Master (apresentação)",
+   "acao": "Pedir ao Master a apresentação (warm intro) com a ficha da empresa"
+  },
+  {
+   "toque": 2,
+   "dia_util": 2,
+   "canal": "Telefone",
+   "acao": "Ligação de conexão após a apresentação (roteiro por persona)"
+  },
+  {
+   "toque": 3,
+   "dia_util": 2,
+   "canal": "E-mail",
+   "acao": "E-mail curto com o motivo da conversa (modelo M2)"
+  },
+  {
+   "toque": 4,
+   "dia_util": 5,
+   "canal": "LinkedIn / WhatsApp da empresa",
+   "acao": "Mensagem de reforço (modelo M3), só por canal com base legal validada"
+  },
+  {
+   "toque": 5,
+   "dia_util": 8,
+   "canal": "Telefone",
+   "acao": "2ª ligação; oferecer 2 horários para 30 min"
+  },
+  {
+   "toque": 6,
+   "dia_util": 12,
+   "canal": "E-mail",
+   "acao": "Conteúdo útil do setor (Marketing) + convite"
+  },
+  {
+   "toque": 7,
+   "dia_util": 16,
+   "canal": "Master",
+   "acao": "Alinhar com o Master: ele reforça com o contato ou libera o lead"
+  },
+  {
+   "toque": 8,
+   "dia_util": 21,
+   "canal": "E-mail",
+   "acao": "Encerramento respeitoso (modelo M5) → Nutrição"
+  }
+ ],
+ "sla": {
+  "_leia_me": "Proposta a validar com o Luis e os Masters.",
+  "master_aceite_dias_uteis": 3,
+  "followup_pos_reuniao_horas": 24,
+  "nutricao_retomar_dias": 90
+ }
+}

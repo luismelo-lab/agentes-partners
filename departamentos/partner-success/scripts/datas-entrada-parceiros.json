@@ -1,0 +1,6 @@
+{
+ "_leia_me": "Data de entrada (assinatura do termo de parceria) de cada parceiro. O HubSpot não guarda essa data; sem ela, o 'tempo até o 1º negócio' conta a partir do 1º negócio registrado. Chave = nome exatamente como aparece na aba 'Tempo 1º negócio - parceiro' (ou 'MASTER · CONSULTOR' para consultores). Formato AAAA-MM-DD. Quem preenche: Daniela (Masters) e Jenifer (indicadores novos).",
+ "datas": {
+  "_exemplo_NOVO INDICADOR": "2026-10-01"
+ }
+}

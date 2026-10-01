@@ -1,0 +1,16 @@
+{
+ "_leia_me": "Aliases de nomes brutos do campo nome_do_parceiro (normalizados: maiúsculas, sem acento). Chave = variação, valor = nome canônico. Só para o metricas_ps.py; o roster dos 9 Masters continua em resultados/mapeamento-hubspot.json (dono: Dados & BI). Editar à vontade.",
+ "aliases": {
+  "ATALIBA MOISES DALCASTAGNE": "ATALIBA DALCASTAGNE (VALUTARE)",
+  "ATALIBA MOISES DAKCASTAGNE": "ATALIBA DALCASTAGNE (VALUTARE)",
+  "ATALIBA DALCASTAGNE": "ATALIBA DALCASTAGNE (VALUTARE)",
+  "ATALIBA MOISES": "ATALIBA DALCASTAGNE (VALUTARE)",
+  "VALUTARE SOLUCOES EMPRESARIAIS": "ATALIBA DALCASTAGNE (VALUTARE)",
+  "EVA JUCEMARA MINATTO FLORES": "EVA JUCEMARA",
+  "EVA JUCEMARA MINATTI FLORES": "EVA JUCEMARA",
+  "SERGIO MONTEIRO D&S": "SERGIO MONTEIRO",
+  "GUILHERME AGILE": "GUILHERME PECONIK",
+  "GSH MARCELO BARROS": "MARCELO BARROS",
+  "G S H MARCELO BARROS": "MARCELO BARROS"
+ }
+}
