@@ -122,7 +122,7 @@ WhatsApp, GLPI (novo), HubSpot (portal 47865021), dashboard S&OE, cockpit Master
 
 ## Operação contínua (D26, 01/10)
 - `lib/operacao.py`: 11 sentinelas → registro/eventos.json → executores (Revisor diário, rascunho auditado, Receita) → plano do dia 7h30 (`partners manha`) e avisos 13h30 (`partners tarde`, launchd novo). Linha de base criada em 01/10: 137 eventos.
-- Pendente: Recuperador enviar o lote direto à Geovana (a mudança foi bloqueada pela permissão do Claude; o Luis decide).
+- Recuperador: lote de segunda enviado direto à Geovana com cópia para o Luis (D27, autorizado em 01/10).
 
 ## Pendências / dúvidas em aberto
 - Validar com o Jurídico real: estrutura societária da Save × remuneração de parceiros (indicação comercial vs. honorários).
