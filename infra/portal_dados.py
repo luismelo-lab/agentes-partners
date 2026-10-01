@@ -84,9 +84,48 @@ def demandas():
     return out
 
 
+def conselho_pendentes():
+    """Decisões com status 'pendente' (coluna 5 do decisoes.md); D7 sai quando há D7-b."""
+    out = []
+    for l in open(os.path.join(AP, "conselho/decisoes.md")).read().splitlines():
+        c = [x.strip() for x in l.split("|")]
+        if len(c) > 6 and c[1].startswith("D") and c[5] == "pendente":
+            out.append({"id": c[1], "data": c[2], "ata": c[3], "texto": c[4].replace("**", ""), "obs": c[6]})
+    ids = {d["id"] for d in out}
+    out = [d for d in out if not (d["id"] == "D7" and "D7-b" in ids)]
+    vistos, uniq = set(), []
+    for d in out:
+        if d["id"] not in vistos: vistos.add(d["id"]); uniq.append(d)
+    return uniq
+
+
+def demandas_lista():
+    f = os.path.join(AP, "registro/demandas.json")
+    if not os.path.exists(f): return []
+    R = json.load(open(f))
+    return [{k: d.get(k) for k in ("id", "pessoa", "origem", "titulo", "master", "o_que_pede", "rota", "proximo_passo", "prazo", "status", "aberta_em", "negocio", "link", "urgente", "id_origem")}
+            for d in sorted(R["demandas"].values(), key=lambda d: d.get("aberta_em") or "")
+            if d["status"] in ("responder", "acompanhar", "em_analise", "aguardando_aprovacao")]
+
+
+def catalogo():
+    C = json.load(open(os.path.expanduser("~/.claude/skills/central-agentes/references/catalogo.json")))["tipos"]
+    return [{"codigo": k, "rotulo": v["rotulo"], "celula": v["celula"], "entrega": v["entrega"], "precisa": v["precisa"]} for k, v in C.items()]
+
+
+def lote_completo():
+    f = ler(ult("celulas/geovana/recuperador/fila-*.json"))
+    top = [r for r in f.get("top", []) if r.get("lote") == 1] or f.get("top", [])[:20]
+    return [{"deal": r["link"].rsplit("/", 1)[-1], "negocio": r["negócio"], "parceiro": "Fora do roster" if r["parceiro"].startswith("Outros") else r["parceiro"],
+             "tipo": r["tipo"], "segmento": r.get("segmento (matriz)") or r.get("segmento"), "uf": r.get("uf"), "esperado": r.get("honorário esperado (look-alike)"),
+             "taxa": r.get("taxa de sucesso dos parecidos"), "hipotese": (r.get("hipótese preliminar") or "")[:400], "parecer": r.get("parecer do técnico"),
+             "documentos": r.get("documentos a pedir"), "link": r["link"]} for r in top[:20]]
+
+
 def main():
     d = {"atualizado": datetime.now().strftime("%d/%m/%Y %H:%M"), "whatsapp": whatsapp(), "recuperador": recuperador(),
          "revisor": revisor(), "gestao": gestao(), "demandas": demandas(),
+         "demandas_lista": demandas_lista(), "conselho": conselho_pendentes(), "catalogo": catalogo(), "lote": lote_completo(),
          "pastas": {"daniela": "Área Partners · Agentes / Central Masters · Daniela", "jenifer": "Área Partners · Agentes / Central BDR · Jenifer",
                     "geovana": "Área Partners · Agentes / Central Técnica · Geovana", "luis": "Área Partners · Agentes / Gestão · Luis"}}
     os.makedirs(os.path.join(AP, "portal"), exist_ok=True)

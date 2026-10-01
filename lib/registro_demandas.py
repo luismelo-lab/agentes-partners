@@ -58,6 +58,11 @@ def cmd_whatsapp(a):
                 if i.get("status") not in ("responder", "acompanhar"): continue
                 chave = f"whatsapp|{p}|{i['chat']}"; vistos.add(chave)
                 d = achar(R, chave)
+                if not d:  # fechada há pouco no painel e sem mensagem nova depois disso: não reabre
+                    ult_msg = datetime.now().timestamp() - float(i.get("aguardando_h") or 0) * 3600
+                    fechada = [x for x in R["demandas"].values() if x["chave"] == chave and x["status"] not in ABERTOS and x.get("atualizada_em")]
+                    if fechada and max(datetime.fromisoformat(x["atualizada_em"][:16]).timestamp() for x in fechada) >= ult_msg:
+                        vistos.add(chave); continue
                 campos = {k: i.get(k) for k in ("master", "o_que_pede", "rota", "proximo_passo", "prazo", "negocio", "link", "urgente") if i.get(k)}
                 if not d:
                     did = novo_id(R)

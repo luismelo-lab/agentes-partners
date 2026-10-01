@@ -1,7 +1,7 @@
 <title>Central Partners</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: faixa escura da marca no topo, abas por pessoa, e em cada aba "resumo → o que fazer agora → onde está o trabalho". */
+/* Layout: faixa escura da marca, abas por pessoa e por fluxo. Em cada aba: o que fazer agora primeiro, depois o detalhe. */
 :root {
   --tinta: #141416; --ouro: #b8912b; --ouro-vivo: #d4af2a;
   --bg: #f7f6f2; --card: #ffffff; --fg: #1c1b18; --muted: #676459; --linha: #e4e1d8; --suave: #efede6;
@@ -9,73 +9,82 @@
   --sans: "IBM Plex Sans", "Segoe UI", Arial, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #121210; --card: #1b1a17; --fg: #ecEAE3; --muted: #a29e92; --linha: #2e2c27; --suave: #22211d; --ouro: #d4af2a;
+  --bg: #121210; --card: #1b1a17; --fg: #ecebe3; --muted: #a29e92; --linha: #2e2c27; --suave: #22211d; --ouro: #d4af2a;
   --crit: #f2877d; --crit-bg: #3a1d1a; --warn: #e6c25a; --warn-bg: #352c12; --ok: #86c690; --ok-bg: #1b2d1e; color-scheme: dark } }
 :root[data-theme="dark"] {
-  --bg: #121210; --card: #1b1a17; --fg: #ecEAE3; --muted: #a29e92; --linha: #2e2c27; --suave: #22211d; --ouro: #d4af2a;
+  --bg: #121210; --card: #1b1a17; --fg: #ecebe3; --muted: #a29e92; --linha: #2e2c27; --suave: #22211d; --ouro: #d4af2a;
   --crit: #f2877d; --crit-bg: #3a1d1a; --warn: #e6c25a; --warn-bg: #352c12; --ok: #86c690; --ok-bg: #1b2d1e; color-scheme: dark }
 * { box-sizing: border-box }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.55 var(--sans) }
 .topo { background: var(--tinta); color: #fff; padding-block: 18px 0 }
-.faixa { max-width: 1080px; margin: 0 auto; padding-inline: 20px }
+.faixa { max-width: 1100px; margin: 0 auto; padding-inline: 20px }
 .marca { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap }
 .marca b { color: var(--ouro-vivo); letter-spacing: 6px; font-size: 18px }
 .marca h1 { margin: 2px 0 0; font-size: 24px; font-weight: 600; text-wrap: balance }
-.marca .quando { color: #b9b7b0; font: 12px var(--mono) }
+.marca .quando { color: #b9b7b0; font: 12px var(--mono); text-align: right }
 nav { display: flex; gap: 4px; margin-top: 16px; overflow-x: auto }
 nav button { background: none; border: 0; color: #cfcdc6; font: 500 14px var(--sans); padding: 10px 14px; border-bottom: 3px solid transparent; cursor: pointer; white-space: nowrap }
 nav button[aria-selected="true"] { color: #fff; border-bottom-color: var(--ouro-vivo) }
+nav button .badge { display: inline-block; min-width: 18px; padding: 0 5px; margin-left: 6px; border-radius: 9px; background: var(--ouro-vivo); color: var(--tinta); font-size: 11px; font-weight: 700; text-align: center }
 nav button:focus-visible { outline: 2px solid var(--ouro-vivo); outline-offset: -2px }
-main { max-width: 1080px; margin: 0 auto; padding: 24px 20px 48px; display: grid; gap: 22px }
+main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 48px; display: grid; gap: 22px }
 h2 { font-size: 17px; margin: 0 0 10px; font-weight: 600 }
-.lead { margin: 0; color: var(--muted); max-width: 70ch }
-.numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px }
+h3 { font-size: 15px; margin: 6px 0 2px; font-weight: 600 }
+.lead { margin: 0; color: var(--muted); max-width: 72ch }
+.numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px }
 .num { background: var(--card); border: 1px solid var(--linha); border-radius: 6px; padding: 14px 16px; min-width: 0 }
 .num span { display: block; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted) }
 .num strong { display: block; font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; margin-top: 2px }
 .num small { color: var(--muted); font-size: 12.5px }
 .lista { display: grid; gap: 10px }
-.item { background: var(--card); border: 1px solid var(--linha); border-radius: 6px; padding: 14px 16px; display: grid; gap: 4px; min-width: 0 }
+.item { background: var(--card); border: 1px solid var(--linha); border-radius: 6px; padding: 14px 16px; display: grid; gap: 5px; min-width: 0 }
 .item header { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
 .item header strong { font-weight: 600 }
 .item p { margin: 0 }
-.item .rot { color: var(--muted); font-weight: 500 }
+.rot { color: var(--muted); font-weight: 500 }
 .chip { font: 600 11px var(--sans); letter-spacing: .4px; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; background: var(--suave); color: var(--muted) }
 .chip.crit { background: var(--crit-bg); color: var(--crit) } .chip.warn { background: var(--warn-bg); color: var(--warn) } .chip.ok { background: var(--ok-bg); color: var(--ok) }
 a { color: var(--ouro) } a:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px }
 .vazio { background: var(--card); border: 1px dashed var(--linha); border-radius: 6px; padding: 16px; color: var(--muted) }
 .pasta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--suave); border-radius: 6px; padding: 12px 14px }
 .pasta code { font: 13px var(--mono); overflow-wrap: anywhere; min-width: 0; flex: 1 }
-.pasta button { font: 500 13px var(--sans); border: 1px solid var(--linha); background: var(--card); color: var(--fg); padding: 6px 12px; border-radius: 4px; cursor: pointer }
 .tabela { overflow-x: auto; background: var(--card); border: 1px solid var(--linha); border-radius: 6px }
 table { border-collapse: collapse; width: 100%; font-size: 14px }
 th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--linha); vertical-align: top }
 th { font-size: 11px; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); font-weight: 600 }
 td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap }
 tr:last-child td { border-bottom: 0 }
-.barras { display: grid; gap: 8px; background: var(--card); border: 1px solid var(--linha); border-radius: 6px; padding: 14px 16px }
-.barra { display: grid; grid-template-columns: minmax(120px, 230px) 1fr 70px; gap: 10px; align-items: center; font-size: 14px }
-.trilho { height: 12px; background: var(--suave); border-radius: 2px; position: relative; overflow: hidden }
-.trilho i { position: absolute; inset: 0 auto 0 0; background: var(--ouro); opacity: .45 } .trilho b { position: absolute; inset: 0 auto 0 0; background: var(--ouro) }
-.barra .v { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px }
-.duas { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px }
+.duas { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px }
 .duas > * { min-width: 0 }
+.btn { font: 600 13.5px var(--sans); border: 1px solid var(--tinta); border-radius: 5px; padding: 7px 13px; cursor: pointer; background: var(--tinta); color: #fff }
+.btn.claro { background: var(--card); color: var(--fg); border-color: var(--linha) }
+.btn.ok { background: var(--ok); border-color: var(--ok) } .btn.crit { background: var(--card); color: var(--crit); border-color: var(--crit) }
+.btn:disabled { opacity: .5; cursor: default }
+.btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px }
+.acoes { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px }
+form.cartao, .cartao { background: var(--card); border: 1px solid var(--linha); border-radius: 6px; padding: 16px; display: grid; gap: 12px }
+label { display: grid; gap: 4px; font-size: 13.5px; font-weight: 500 }
+label small { color: var(--muted); font-weight: 400 }
+input, select, textarea { font: 14.5px/1.4 var(--sans); padding: 8px 10px; border: 1px solid var(--linha); border-radius: 5px; background: var(--bg); color: var(--fg); width: 100%; min-width: 0 }
+textarea { resize: vertical; min-height: 64px }
+.linha2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px }
+.dica { background: var(--suave); border-radius: 5px; padding: 10px 12px; font-size: 13.5px; color: var(--muted) }
+.resposta { border-left: 3px solid var(--ouro); padding: 4px 0 4px 12px; display: grid; gap: 4px }
+.resposta ul { margin: 2px 0 2px 18px; padding: 0 }
+.aviso { background: var(--warn-bg); color: var(--warn); border-radius: 5px; padding: 10px 12px; font-size: 13.5px }
 .rodape { color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--linha); padding-top: 14px }
-@media (max-width: 520px) { .barra { grid-template-columns: 1fr 60px } .barra .trilho { grid-column: 1 / -1; order: 3 } }
+.filtros { display: flex; flex-wrap: wrap; gap: 6px }
+.filtros button { font: 500 13px var(--sans); border: 1px solid var(--linha); background: var(--card); color: var(--fg); border-radius: 999px; padding: 5px 12px; cursor: pointer }
+.filtros button[aria-pressed="true"] { background: var(--tinta); color: #fff; border-color: var(--tinta) }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important } }
 </style>
 
 <div class="topo"><div class="faixa">
   <div class="marca">
     <div><b>SAVE</b><h1>Central Partners</h1></div>
-    <div class="quando" id="quando">carregando dados…</div>
+    <div class="quando"><span id="quem"></span><br><span id="quando">carregando dados…</span></div>
   </div>
-  <nav role="tablist" aria-label="Pessoa">
-    <button role="tab" id="t-luis" data-aba="luis" aria-selected="true">Visão geral</button>
-    <button role="tab" id="t-daniela" data-aba="daniela" aria-selected="false">Daniela · Masters</button>
-    <button role="tab" id="t-jenifer" data-aba="jenifer" aria-selected="false">Jenifer · BDR</button>
-    <button role="tab" id="t-geovana" data-aba="geovana" aria-selected="false">Geovana · Técnica</button>
-  </nav>
+  <nav role="tablist" aria-label="Seções" id="abas"></nav>
 </div></div>
 <main id="conteudo"><div class="vazio">Carregando os dados mais recentes dos agentes…</div></main>
 
@@ -83,90 +92,238 @@ tr:last-child td { border-bottom: 0 }
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const mi = v => !v ? "—" : v >= 1e6 ? "R$ " + (v/1e6).toFixed(1).replace(".", ",") + " mi" : "R$ " + Math.round(v/1e3).toLocaleString("pt-BR") + " mil";
-const h = v => v ? String(v.toFixed ? v.toFixed(1) : v).replace(".", ",") + "h" : "";
-let D = null;
+const dataBR = iso => { try { return new Date(iso).toLocaleString("pt-BR", {day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"}) } catch (e) { return "" } };
+const md = t => { // markdown simples das respostas dos agentes
+  let h = "", lista = false;
+  for (const l of String(t || "").split("\n")) {
+    let s = esc(l.trim()).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    if (s.startsWith("- ")) { if (!lista) { h += "<ul>"; lista = true } h += `<li>${s.slice(2)}</li>`; continue }
+    if (lista) { h += "</ul>"; lista = false }
+    if (s) h += s.startsWith("### ") ? `<h3>${s.slice(4)}</h3>` : `<p>${s}</p>`;
+  }
+  return h + (lista ? "</ul>" : "");
+};
 
-const numeros = xs => `<section class="numeros">${xs.map(([r, v, s]) => `<div class="num"><span>${esc(r)}</span><strong>${esc(v)}</strong><small>${esc(s)}</small></div>`).join("")}</section>`;
-const pasta = (p) => `<section><h2>Onde está o seu trabalho</h2><div class="pasta"><code id="p-${esc(p)}">OneDrive / ${esc(D.pastas[p])}</code><button type="button" data-copiar="p-${esc(p)}">Copiar caminho</button></div></section>`;
+const EQUIPE = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "Geovana"};
+const CELULA_PESSOA = {"Central Masters": "daniela", "Central BDR": "jenifer", "Central Técnica": "geovana", "Gabinete": "luis"};
+const ST_PEDIDO = {novo: ["Na fila", "warn"], em_analise: ["Em análise", "warn"], aguardando_aprovacao: ["Pronto: aprovar", "crit"], nova_analise: ["Nova análise pedida", "warn"],
+                   aprovado: ["Aprovado", "ok"], nao_aprovado: ["Não aprovado", ""], concluido: ["Concluído", "ok"]};
+const S = {D: null, db: null, user: null, eu: null, meuId: null, pedidos: [], acoes: {}, recup: {}, conselho: {}, apont: [], aba: "luis", filtro: "meus", msg: ""};
 
-function demandas(pessoa, comDetalhe = true) {
-  const P = (D.whatsapp.pessoas || {})[pessoa];
-  if (!P) return `<div class="vazio">O WhatsApp desta pessoa ainda não está conectado ao Eazybe.</div>`;
-  if (!P.itens.length) return `<div class="vazio">Nenhuma conversa esperando resposta na rodada das ${esc(D.whatsapp.rodada)}. ${P.conversas} conversas lidas.</div>`;
-  return `<div class="lista">${P.itens.map(i => `<article class="item">
-    <header><strong>${esc(i.chat)}</strong>${i.master ? `<span class="chip">${esc(i.master)}</span>` : ""}
-      <span class="chip ${i.status === "responder" ? "crit" : "warn"}">${i.status === "responder" ? (i.aguardando_h ? h(i.aguardando_h) + " sem resposta" : "Responder") : "Acompanhar"}</span></header>
-    <p>${esc(i.o_que_pede)}</p>
-    ${comDetalhe && i.rota ? `<p><span class="rot">Encaminhar para:</span> ${esc(i.rota)}</p>` : ""}
-    ${comDetalhe && i.proximo_passo ? `<p><span class="rot">Próximo passo:</span> ${esc(i.proximo_passo)}${i.prazo ? " · prazo " + esc(i.prazo) : ""}</p>` : ""}
-    ${i.negocio ? `<p><span class="rot">Negócio:</span> <a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.negocio)}</a></p>` : ""}
-  </article>`).join("")}</div>`;
+/* ---------- abas ---------- */
+const ABAS = [["luis", "Visão geral"], ["pedidos", "Pedidos"], ["daniela", "Daniela"], ["jenifer", "Jenifer"], ["geovana", "Geovana"], ["decisoes", "Decisões"]];
+function nav() {
+  const pend = S.pedidos.filter(p => p.status === "aguardando_aprovacao" && p.solicitante === S.eu).length;
+  const minhas = (S.D?.demandas_lista || []).filter(d => d.pessoa === S.eu && !S.acoes[d.id]).length;
+  $("#abas").innerHTML = ABAS.map(([k, n]) => {
+    const b = k === "pedidos" ? pend : k === S.eu ? minhas : k === "decisoes" && S.eu === "luis" ? (S.D?.conselho || []).filter(d => !S.conselho[d.id]).length : 0;
+    return `<button role="tab" data-aba="${k}" aria-selected="${S.aba === k}">${n}${b ? `<span class="badge">${b}</span>` : ""}</button>`;
+  }).join("");
 }
 
-const conta = p => D.demandas && D.demandas[p] ? D.demandas[p].responder : ((D.whatsapp.pessoas || {})[p]?.itens || []).filter(i => i.status === "responder").length;
+/* ---------- blocos comuns ---------- */
+const numeros = xs => `<section class="numeros">${xs.map(([r, v, s]) => `<div class="num"><span>${esc(r)}</span><strong>${esc(v)}</strong><small>${esc(s)}</small></div>`).join("")}</section>`;
+const pasta = p => `<section class="pasta"><span class="rot">Arquivos no OneDrive:</span> <code>Área Partners · Agentes / ${esc({daniela: "Central Masters · Daniela", jenifer: "Central BDR · Jenifer", geovana: "Central Técnica · Geovana", luis: "Gestão · Luis"}[p])}</code></section>`;
+const semDb = () => S.db ? "" : `<div class="aviso">Os botões e formulários funcionam quando o painel é aberto pelo Claude, com a sua conta da Save.</div>`;
 
-const ABAS = {
+function demandas(p) {
+  const ds = (S.D.demandas_lista || []).filter(d => d.pessoa === p);
+  if (!ds.length) return `<div class="vazio">Nenhuma demanda aberta.</div>`;
+  const meu = S.eu === p || S.eu === "luis";
+  return `<div class="lista">${ds.map(d => { const a = S.acoes[d.id];
+    return `<article class="item"><header><strong>${esc(d.titulo)}</strong>${d.master ? `<span class="chip">${esc(d.master)}</span>` : ""}
+      <span class="chip ${a ? "ok" : d.status === "responder" ? "crit" : "warn"}">${a ? esc({respondido: "Respondido", encaminhado: "Encaminhado", nao_e_demanda: "Não é demanda"}[a.status]) : d.status === "responder" ? "Responder" : "Acompanhar"}</span>
+      ${d.urgente ? `<span class="chip crit">Urgente</span>` : ""}<span class="chip">${esc(d.origem)}</span></header>
+      ${d.o_que_pede ? `<p>${esc(d.o_que_pede)}</p>` : ""}
+      ${d.rota ? `<p><span class="rot">Encaminhar para:</span> ${esc(d.rota)}</p>` : ""}
+      ${d.proximo_passo ? `<p><span class="rot">Próximo passo:</span> ${esc(d.proximo_passo)}${d.prazo ? " · prazo " + esc(d.prazo) : ""}</p>` : ""}
+      ${d.link ? `<p><span class="rot">Negócio:</span> <a href="${esc(d.link)}" target="_blank" rel="noopener">${esc(d.negocio || "abrir no HubSpot")}</a></p>` : ""}
+      <p class="lead"><small>${esc(d.id)} · aberta em ${dataBR(d.aberta_em)}</small></p>
+      ${meu && S.db && !a ? `<div class="acoes"><button class="btn claro" data-acao="respondido" data-id="${esc(d.id)}">Respondi</button>
+        <button class="btn claro" data-acao="encaminhado" data-id="${esc(d.id)}">Encaminhei à área</button>
+        <button class="btn claro" data-acao="nao_e_demanda" data-id="${esc(d.id)}">Não é demanda</button></div>` : ""}
+    </article>` }).join("")}</div>`;
+}
+
+function apontamento(p) {
+  if (S.eu !== p) return "";
+  const hoje = new Date().toISOString().slice(0, 10), meus = S.apont.filter(x => x.pessoa === p && (x.data || "").startsWith(hoje));
+  return `<section><h2>Registrar uma tarefa (Semana 0)</h2>
+    <form class="cartao" id="f-apont"><div class="linha2">
+      <label>O que fez<input id="a-desc" required maxlength="160" placeholder="Ex.: encaminhei pedido de contrato da D&S"></label>
+      <label>Tipo<select id="a-tipo">${["Atendimento ao parceiro","Encaminhamento a área","Cobrança de área","Atualização de CRM","Reunião","Prospecção","Análise técnica","Relatório","Outro"].map(t => `<option>${t}</option>`).join("")}</select></label>
+      <label>Master<select id="a-master"><option value="">—</option>${(S.D.gestao.masters || []).map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
+      <label>Minutos<input id="a-min" type="number" min="1" max="600" value="15"></label>
+    </div><label style="display:flex;gap:8px;align-items:center;font-weight:400"><input id="a-ponte" type="checkbox" style="width:auto"> Foi só "ponte" (receber, repassar, cobrar ou devolver)</label>
+    <div class="acoes"><button class="btn" type="submit" ${S.db ? "" : "disabled"}>Registrar</button><span class="lead">${meus.length} tarefa(s) hoje · ${meus.reduce((s, x) => s + (x.minutos || 0), 0)} min</span></div></form></section>`;
+}
+
+/* ---------- abas ---------- */
+const V = {
   luis() {
-    const G = D.gestao;
+    const G = S.D.gestao, dm = S.D.demandas || {};
+    const prontos = S.pedidos.filter(p => p.status === "aguardando_aprovacao").length, fila = S.pedidos.filter(p => ["novo", "nova_analise", "em_analise"].includes(p.status)).length;
     return `<section><h2>Resultado da área</h2><p class="lead">${esc(G.manchete)}</p></section>
-    ${numeros([["Daniela", conta("daniela"), `para responder · ${D.demandas?.daniela?.abertas ?? 0} abertas`], ["Jenifer", conta("jenifer"), `para responder · ${D.demandas?.jenifer?.abertas ?? 0} abertas`], ["Geovana", conta("geovana"), `para responder · ${D.demandas?.geovana?.abertas ?? 0} abertas`],
-               ["Recuperador", mi(D.recuperador.esperado_lote1), "potencial do lote 1"], ["Decisões", G.decisoes_pendentes.length, "aguardando você"]])}
+    ${numeros([["Daniela", dm.daniela?.responder ?? 0, `para responder · ${dm.daniela?.abertas ?? 0} abertas`], ["Jenifer", dm.jenifer?.responder ?? 0, `para responder · ${dm.jenifer?.abertas ?? 0} abertas`],
+               ["Geovana", dm.geovana?.responder ?? 0, `para responder · ${dm.geovana?.abertas ?? 0} abertas`], ["Pedidos aos agentes", fila, `na fila · ${prontos} esperando aprovação`],
+               ["Decisões do Conselho", (S.D.conselho || []).filter(d => !S.conselho[d.id]).length, "esperando você"]])}
     <div class="duas">
       <section><h2>Alertas das áreas</h2><div class="lista">${G.alertas.map(a => `<article class="item"><header><span class="chip warn">${esc(a.area)}</span></header><p>${esc(a.texto)}</p></article>`).join("")}</div></section>
       <section><h2>Saúde dos Masters</h2><div class="tabela"><table><thead><tr><th>Master</th><th>Saúde</th><th class="n">Abertos</th><th class="n">Parados</th><th class="n">Ganhos 90d</th></tr></thead><tbody>
         ${G.masters.slice().sort((a, b) => a.saude - b.saude).map(m => `<tr><td>${esc(m.parceiro)}</td><td><span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "warn" : "crit"}">${m.saude}</span></td><td class="n">${m.abertos} · ${mi(m.abertos_rs)}</td><td class="n">${m.parados}</td><td class="n">${m.ganhos_90d}</td></tr>`).join("")}
       </tbody></table></div></section>
-    </div>
-    <section><h2>Decisões aguardando você</h2><p class="lead">${G.decisoes_pendentes.map(d => `<span class="chip">${esc(d)}</span>`).join(" ")} · detalhes na pasta Gestão · Luis / Conselho.</p></section>
-    ${pasta("luis")}`;
+    </div>${pasta("luis")}`;
   },
-  daniela() {
-    const P = (D.whatsapp.pessoas || {}).daniela || {};
-    return `<section><h2>WhatsApp · rodada das ${esc(D.whatsapp.rodada)}</h2><p class="lead">${esc(P.leitura || "")}</p></section>
-    ${numeros([["Para responder", conta("daniela"), "pedidos esperando você"], ["Conversas lidas", P.conversas ?? 0, "nas últimas 24 horas"], ["Masters", D.gestao.masters.length, "no roster"]])}
-    <section><h2>Para responder agora</h2>${demandas("daniela")}</section>${pasta("daniela")}`;
+  pedidos() {
+    const cat = S.D.catalogo || [];
+    const grupos = [...new Set(cat.map(c => c.celula))];
+    const vis = S.filtro === "meus" ? S.pedidos.filter(p => p.solicitante === S.eu) : S.filtro === "para_mim" ? S.pedidos.filter(p => p.para === S.eu) : S.pedidos;
+    return `<section><h2>Pedir aos agentes</h2><p class="lead">Escolha o tipo, diga o que precisa e para que vai usar. Os agentes respondem aqui, em até 1 hora nos dias úteis, e você aprova ou pede ajuste na mesma tela.</p></section>${semDb()}
+    <div class="duas">
+      <form class="cartao" id="f-pedido">
+        <label>Tipo de pedido<select id="p-codigo" required><option value="">Escolha…</option>${grupos.map(g => `<optgroup label="${esc(g)}">${cat.filter(c => c.celula === g).map(c => `<option value="${esc(c.codigo)}">${esc(c.codigo)} · ${esc(c.rotulo)}</option>`).join("")}</optgroup>`).join("")}</select></label>
+        <div class="dica" id="p-dica">A descrição do que volta aparece aqui ao escolher o tipo.</div>
+        <div class="linha2"><label>Master ou parceiro<select id="p-master"><option value="">—</option><option>Todos</option>${(S.D.gestao.masters || []).map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
+          <label>Cliente, CNPJ ou link do HubSpot<input id="p-cliente" maxlength="300"></label></div>
+        <label>O que você precisa<small>Descreva a entrega que resolve o seu problema.</small><textarea id="p-precisa" required maxlength="1500"></textarea></label>
+        <div class="linha2"><label>Para que vai usar<select id="p-uso">${["Reunião", "Resposta ao parceiro", "Decisão interna", "Prospecção", "Levantamento", "Outro"].map(x => `<option>${x}</option>`).join("")}</select></label>
+          <label>Formato<select id="p-formato">${["Resumo na tela", "Planilha", "Word", "Rascunho de mensagem"].map(x => `<option>${x}</option>`).join("")}</select></label>
+          <label>Prazo<input id="p-prazo" type="date"></label></div>
+        <label>Informações que ajudam<textarea id="p-contexto" maxlength="1500" placeholder="Não escreva dados bancários, CPF ou senhas."></textarea></label>
+        <div class="acoes"><button class="btn" type="submit" ${S.db && S.eu ? "" : "disabled"}>Enviar pedido</button><span class="lead" id="p-msg">${esc(S.msg)}</span></div>
+      </form>
+      <section><div class="filtros" role="group" aria-label="Filtro">${[["meus", "Que eu pedi"], ["para_mim", "Para a minha célula"], ["todos", "Todos"]].map(([k, n]) => `<button type="button" data-filtro="${k}" aria-pressed="${S.filtro === k}">${n}</button>`).join("")}</div>
+        <div class="lista" style="margin-top:10px">${vis.length ? vis.map(cardPedido).join("") : `<div class="vazio">Nenhum pedido aqui ainda.</div>`}</div></section>
+    </div>`;
   },
-  jenifer() {
-    const P = (D.whatsapp.pessoas || {}).jenifer || {};
-    return `<section><h2>WhatsApp · rodada das ${esc(D.whatsapp.rodada)}</h2><p class="lead">${esc(P.leitura || "")}</p></section>
-    ${numeros([["Para responder", conta("jenifer"), "pedidos esperando você"], ["Conversas lidas", P.conversas ?? 0, "nas últimas 24 horas"]])}
-    <section><h2>Para responder agora</h2>${demandas("jenifer")}</section>
-    <section><h2>Listas de prospects</h2><p class="lead">As listas por Master e o controle de follow-up estão na sua pasta. Peça uma lista nova para qualquer Master.</p></section>${pasta("jenifer")}`;
-  },
-  geovana() {
-    const R = D.recuperador, V = D.revisor, max = Math.max(...V.por_tese.map(t => t.n), 1);
-    return `${numeros([["Potencial do lote 1", mi(R.esperado_lote1), "honorário esperado"], ["Fila total", R.fila, "perdidos zerados e abertos > 90 dias"], ["Revisor", V.lacunas, `lacunas em ${V.revisados} diagnósticos`]])}
-    <section><h2>Recuperador · 10 primeiros do lote 1</h2><div class="tabela"><table><thead><tr><th>Negócio</th><th>Parceiro</th><th>Situação</th><th class="n">Parecidos</th><th class="n">Esperado</th><th>Decisão</th></tr></thead><tbody>
-      ${R.lote.map(r => `<tr><td><a href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.negocio)}</a><br><small class="lead">${esc(r.segmento)} · ${esc(r.uf)}</small></td><td>${esc(r.parceiro.startsWith("Outros") ? "Fora do roster" : r.parceiro)}</td><td>${esc(r.tipo)}</td><td class="n">${esc(String(r.taxa || "").split(" ")[0])}</td><td class="n">${mi(r.esperado)}</td><td>${r.decisao ? `<span class="chip ok">${esc(r.decisao)}</span>` : `<span class="chip">a decidir</span>`}</td></tr>`).join("")}
-    </tbody></table></div></section>
-    <section><h2>Revisor de Diagnóstico · lacunas por tese</h2><div class="barras">
-      ${V.por_tese.map(t => `<div class="barra"><span>${esc(t.tese)}</span><div class="trilho" role="img" aria-label="${t.n} lacunas, ${t.alta} de prioridade alta"><i style="width:${t.n / max * 100}%"></i><b style="width:${t.alta / max * 100}%"></b></div><span class="v">${t.n} · ${t.alta} alta</span></div>`).join("")}
-      <small class="lead">Barra cheia = prioridade alta. Lacunas prováveis até o escopo de arquivos do HubSpot permitir ler os pareceres desta etapa.</small>
-    </div></section>${pasta("geovana")}`;
+  daniela() { return pessoa("daniela") },
+  jenifer() { return pessoa("jenifer") },
+  geovana() { return pessoa("geovana") + recuperador() },
+  decisoes() {
+    const ds = S.D.conselho || [], dono = S.eu === "luis";
+    return `<section><h2>Decisões do Conselho esperando você</h2><p class="lead">Aprove, rejeite ou ajuste. O agente registra no livro de decisões na próxima rodada.</p></section>${semDb()}
+    <div class="lista">${ds.map(d => { const r = S.conselho[d.id];
+      return `<article class="item"><header><strong>${esc(d.id)}</strong>${r ? `<span class="chip ${r.decisao === "aprovada" ? "ok" : r.decisao === "rejeitada" ? "" : "warn"}">${esc(r.decisao)}</span>` : `<span class="chip warn">pendente</span>`}<span class="lead"><small>${esc(d.data)} · ${esc(d.ata)}</small></span></header>
+        <p>${esc(d.texto)}</p>${d.obs ? `<p class="lead">${esc(d.obs)}</p>` : ""}${r?.nota ? `<p><span class="rot">Sua observação:</span> ${esc(r.nota)}</p>` : ""}
+        ${dono && S.db && !r ? `<label>Observação (opcional)<input id="n-${esc(d.id)}" maxlength="400"></label><div class="acoes">
+          <button class="btn ok" data-cons="aprovada" data-id="${esc(d.id)}">Aprovar</button><button class="btn claro" data-cons="aprovada com ajuste" data-id="${esc(d.id)}">Aprovar com ajuste</button>
+          <button class="btn crit" data-cons="rejeitada" data-id="${esc(d.id)}">Rejeitar</button></div>` : ""}</article>` }).join("") || `<div class="vazio">Nenhuma decisão pendente.</div>`}</div>`;
   }
 };
 
-let abaAtual = "luis";
-function abrir(aba) {
-  abaAtual = aba;
-  document.querySelectorAll("nav button").forEach(b => b.setAttribute("aria-selected", b.dataset.aba === aba));
-  $("#conteudo").innerHTML = ABAS[aba]() + `<p class="rodape">Pré-análises dos agentes da Área Partners para validação do time. Nada aqui é enviado a parceiros ou clientes. Dados atualizados em ${esc(D?.atualizado || "")}.</p>`;
-  try { localStorage.setItem("aba", aba) } catch (e) {}
+function pessoa(p) {
+  const dm = (S.D.demandas || {})[p] || {}, W = (S.D.whatsapp.pessoas || {})[p] || {};
+  return `${numeros([["Para responder", dm.responder ?? 0, "demandas abertas que pedem resposta"], ["Abertas", dm.abertas ?? 0, "no registro de demandas"], ["WhatsApp", W.conversas ?? 0, `conversas lidas · rodada das ${S.D.whatsapp.rodada || "—"}`]])}
+    ${semDb()}<section><h2>Demandas</h2>${demandas(p)}</section>${apontamento(p)}${pasta(p)}`;
 }
 
+function recuperador() {
+  const L = S.D.lote || [], dono = S.eu === "geovana" || S.eu === "luis";
+  const feitas = L.filter(r => S.recup[r.deal]).length;
+  return `<section><h2>Recuperador · lote 1</h2><p class="lead">${feitas} de ${L.length} decididos. Potencial do lote: ${mi(S.D.recuperador.esperado_lote1)}. A decisão volta para a fila e ensina o Recuperador.</p></section>
+    <div class="lista">${L.map(r => { const d = S.recup[r.deal];
+      return `<article class="item"><header><strong><a href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.negocio)}</a></strong><span class="chip">${esc(r.parceiro)}</span><span class="chip">${esc(r.tipo)}</span>
+        ${d ? `<span class="chip ${d.decisao === "Aprovar para reanálise" ? "ok" : d.decisao === "Vetar" ? "" : "warn"}">${esc(d.decisao)}</span>` : ""}</header>
+        <p class="lead">${esc(r.segmento)} · ${esc(r.uf)} · parecidos ${esc(String(r.taxa || "").split(" ")[0])} · esperado ${mi(r.esperado)}</p>
+        <details><summary>Hipótese, parecer e documentos</summary><p>${esc(r.hipotese)}</p><p><span class="rot">Parecer:</span> ${esc(r.parecer)}</p><p><span class="rot">Pedir:</span> ${esc(r.documentos)}</p></details>
+        ${dono && S.db && !d ? `<div class="linha2"><label>Motivo / observação<input id="r-m-${esc(r.deal)}" maxlength="300"></label><label>Valor validado (R$)<input id="r-v-${esc(r.deal)}" inputmode="decimal"></label><label>Minutos gastos<input id="r-t-${esc(r.deal)}" type="number" min="0"></label></div>
+          <div class="acoes"><button class="btn ok" data-recup="Aprovar para reanálise" data-id="${esc(r.deal)}">Aprovar para reanálise</button><button class="btn crit" data-recup="Vetar" data-id="${esc(r.deal)}">Vetar</button><button class="btn claro" data-recup="Precisa de dado" data-id="${esc(r.deal)}">Precisa de dado</button></div>` : d?.motivo ? `<p><span class="rot">Motivo:</span> ${esc(d.motivo)}</p>` : ""}
+      </article>` }).join("")}</div>`;
+}
 
+function cardPedido(p) {
+  const [rot, cls] = ST_PEDIDO[p.status] || [p.status, ""], R = p.resposta, meu = p.solicitante === S.eu;
+  return `<article class="item"><header><strong>${esc(p.pid || "Pedido")} · ${esc(p.codigo)}</strong><span class="chip ${cls}">${esc(rot)}</span><span class="chip">${esc(EQUIPE[p.para] || p.para)}</span></header>
+    <p>${esc(p.campos?.precisa)}</p><p class="lead"><small>por ${esc(EQUIPE[p.solicitante] || "—")} em ${dataBR(p.criado_em)}${p.campos?.master ? " · " + esc(p.campos.master) : ""}${p.campos?.prazo ? " · prazo " + esc(p.campos.prazo) : ""}</small></p>
+    ${R ? `<div class="resposta"><p><b>Resposta v${esc(R.versao)}:</b> ${esc(R.resumo)}</p>${(R.secoes || []).map(s => `<h3>${esc(s.titulo)}</h3>${md(s.texto)}`).join("")}
+      ${(R.conferir || []).length ? `<h3>Antes de usar, confira</h3>${md(R.conferir.map(c => "- " + c).join("\n"))}` : ""}
+      ${(R.arquivos || []).length ? `<p><span class="rot">Arquivos no OneDrive:</span> ${R.arquivos.map(esc).join(", ")}</p>` : ""}</div>` : ""}
+    ${meu && S.db && p.status === "aguardando_aprovacao" ? `<label>Comentário (obrigatório em Não aprovado e Nova análise)<textarea id="c-${esc(p.id)}" maxlength="1500"></textarea></label>
+      <div class="acoes"><button class="btn ok" data-dec="aprovado" data-id="${esc(p.id)}">Aprovado</button><button class="btn claro" data-dec="nova_analise" data-id="${esc(p.id)}">Nova análise</button><button class="btn crit" data-dec="nao_aprovado" data-id="${esc(p.id)}">Não aprovado</button></div>` : ""}
+  </article>`;
+}
 
+/* ---------- gravações (db) ---------- */
+const agora = () => new Date().toISOString();
+async function salvarPedido(e) {
+  e.preventDefault(); if (!S.db || !S.eu) return;
+  const codigo = $("#p-codigo").value, c = (S.D.catalogo || []).find(x => x.codigo === codigo);
+  const precisa = $("#p-precisa").value.trim(); if (!codigo || !precisa) return;
+  const b = e.target.querySelector("button[type=submit]"); b.disabled = true;
+  try {
+    await S.db.collection("pedidos").add({criado_em: agora(), solicitante: S.eu, solicitante_id: S.meuId, codigo, para: CELULA_PESSOA[c?.celula] || "luis", status: "novo",
+      campos: {master: $("#p-master").value, cliente: $("#p-cliente").value.trim(), precisa, uso: $("#p-uso").value, formato: $("#p-formato").value, prazo: $("#p-prazo").value, contexto: $("#p-contexto").value.trim()},
+      historico: [{quando: agora(), evento: "novo", por: S.eu}]});
+    S.msg = "Pedido enviado. Os agentes respondem aqui."; S.filtro = "meus"; S.limpar = "p-";
+  } catch (x) { S.msg = x?.code === "invalid_argument" ? "Sem permissão para enviar: peça ao Luis acesso de Colaborador." : "Não consegui enviar agora. Tente de novo." }
+  render();
+}
+async function decidirPedido(id, dec) {
+  const p = S.pedidos.find(x => x.id === id); const nota = ($("#c-" + id)?.value || "").trim();
+  if (dec !== "aprovado" && !nota) { $("#c-" + id).focus(); $("#c-" + id).placeholder = "Escreva o motivo ou o que mudar"; return }
+  try { await S.db.doc("pedidos/" + id).update({status: dec, decisao: {tipo: dec, nota, quando: agora(), por: S.eu}, historico: [...(p.historico || []), {quando: agora(), evento: dec, por: S.eu, nota}].slice(-30)}) }
+  catch (x) { S.msg = "Não consegui registrar a decisão."; render() }
+}
+async function acaoDemanda(id, st) { try { await S.db.doc("acoes_demandas/" + id).set({status: st, por: S.eu, quando: agora()}) } catch (x) { S.msg = "Não consegui registrar."; render() } }
+async function decidirRecup(id, dec) {
+  const v = s => ($(s)?.value || "").trim();
+  try { await S.db.doc("recuperador/" + id).set({decisao: dec, motivo: v("#r-m-" + id), valor_validado: v("#r-v-" + id), minutos: Number(v("#r-t-" + id)) || null, por: S.eu, quando: agora()}) }
+  catch (x) { S.msg = "Não consegui registrar."; render() }
+}
+async function decidirConselho(id, dec) { try { await S.db.doc("conselho/" + id).set({decisao: dec, nota: ($("#n-" + id)?.value || "").trim(), quando: agora()}) } catch (x) { S.msg = "Só o Luis registra decisões do Conselho."; render() } }
+async function salvarApont(e) {
+  e.preventDefault(); if (!S.db) return;
+  try { await S.db.collection("apontamentos").add({pessoa: S.eu, data: agora(), descricao: $("#a-desc").value.trim(), tipo: $("#a-tipo").value, master: $("#a-master").value, minutos: Number($("#a-min").value) || 0, ponte: $("#a-ponte").checked}); S.limpar = "a-"; render() }
+  catch (x) { S.msg = "Não consegui registrar a tarefa." }
+}
+
+/* ---------- render e eventos ---------- */
+function render() {
+  nav(); if (!S.D) return;
+  // preserva o que a pessoa está digitando quando chega atualização de outro usuário
+  const vals = {}, foco = document.activeElement?.id;
+  document.querySelectorAll("#conteudo input[id], #conteudo select[id], #conteudo textarea[id]").forEach(el => { vals[el.id] = el.type === "checkbox" ? el.checked : el.value });
+  $("#quem").textContent = S.eu ? "Você: " + EQUIPE[S.eu] : "";
+  $("#conteudo").innerHTML = (S.eu ? "" : `<section class="pasta"><label style="display:flex;gap:8px;align-items:center">Quem é você?<select id="sou" style="width:auto"><option value="">escolha</option>${Object.entries(EQUIPE).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}</select></label></section>`)
+    + V[S.aba]() + `<p class="rodape">Pré-análises dos agentes da Área Partners para validação do time. Nada aqui é enviado a parceiros ou clientes. Dados atualizados em ${esc(S.D.atualizado)}.</p>`;
+  const limpar = S.limpar; S.limpar = null;
+  for (const [id, v] of Object.entries(vals)) { if (limpar && id.startsWith(limpar)) continue; const el = document.getElementById(id); if (!el) continue; if (el.type === "checkbox") el.checked = v; else if (v !== "" || el.tagName !== "SELECT") el.value = v }
+  if (foco) document.getElementById(foco)?.focus();
+  const pc = $("#p-codigo"); if (pc && pc.value) pc.dispatchEvent(new Event("change", {bubbles: true}));
+}
 document.addEventListener("click", e => {
-  const t = e.target.closest("[data-aba]"); if (t && D) abrir(t.dataset.aba);
-  const c = e.target.closest("[data-copiar]");
-  if (c) { const txt = document.getElementById(c.dataset.copiar).textContent;
-    navigator.clipboard?.writeText(txt).then(() => c.textContent = "Copiado", () => { const r = document.createRange(); r.selectNodeContents(document.getElementById(c.dataset.copiar)); getSelection().removeAllRanges(); getSelection().addRange(r); c.textContent = "Selecionado"; }); }
+  const t = e.target.closest("[data-aba]"); if (t) { S.aba = t.dataset.aba; S.msg = ""; try { localStorage.setItem("aba", S.aba) } catch (x) {} render(); return }
+  const f = e.target.closest("[data-filtro]"); if (f) { S.filtro = f.dataset.filtro; render(); return }
+  const b = e.target.closest("button[data-id]"); if (!b || !S.db) return; b.disabled = true;
+  if (b.dataset.dec) decidirPedido(b.dataset.id, b.dataset.dec);
+  else if (b.dataset.acao) acaoDemanda(b.dataset.id, b.dataset.acao);
+  else if (b.dataset.recup) decidirRecup(b.dataset.id, b.dataset.recup);
+  else if (b.dataset.cons) decidirConselho(b.dataset.id, b.dataset.cons);
+});
+document.addEventListener("submit", e => { if (e.target.id === "f-pedido") salvarPedido(e); if (e.target.id === "f-apont") salvarApont(e) });
+document.addEventListener("change", e => {
+  if (e.target.id === "sou" && e.target.value) { S.eu = e.target.value; try { localStorage.setItem("sou", S.eu) } catch (x) {} let temAba = null; try { temAba = localStorage.getItem("aba") } catch (x) {} if (!temAba) S.aba = S.eu; render() }
+  if (e.target.id === "p-codigo") { const c = (S.D.catalogo || []).find(x => x.codigo === e.target.value); $("#p-dica").innerHTML = c ? `<b>O que volta:</b> ${esc(c.entrega)}.<br><b>Informe:</b> ${esc(c.precisa.join(", "))}. · Vai para: ${esc(c.celula)}` : "" }
 });
 
-fetch("dados.json").then(r => r.json()).then(d => {
-  D = d; $("#quando").textContent = "atualizado em " + d.atualizado;
-  let aba = "luis"; try { aba = localStorage.getItem("aba") || "luis" } catch (e) {}
-  const hash = location.hash.slice(1); if (ABAS[hash]) aba = hash;
-  abrir(ABAS[aba] ? aba : "luis");
-}).catch(() => { $("#conteudo").innerHTML = `<div class="vazio">Não consegui carregar os painéis. Recarregue a página em alguns segundos.</div>` });
+async function iniciar() {
+  try { S.D = await (await fetch("dados.json")).json() } catch (e) { $("#conteudo").innerHTML = `<div class="vazio">Não consegui carregar os painéis. Recarregue a página em alguns segundos.</div>`; return }
+  $("#quando").textContent = "atualizado em " + S.D.atualizado;
+  try { S.eu = localStorage.getItem("sou"); S.aba = localStorage.getItem("aba") || S.aba } catch (e) {}
+  if (!ABAS.some(([k]) => k === S.aba)) S.aba = "luis";
+  render();
+  const [db, user] = await Promise.all([claude.use("db"), claude.use("user")]);
+  S.db = db; S.user = user;
+  if (user) { const me = await user.me(); S.meuId = me.id; const n = (me.name || "").toLowerCase(); const k = Object.keys(EQUIPE).find(x => n.includes(x)); if (k) S.eu = k; if (await user.isOwner()) S.eu = S.eu || "luis" }
+  if (db) {
+    const erro = () => { S.msg = "Não consegui carregar os registros agora."; render() };
+    db.collection("pedidos").orderBy("criado_em", "desc").limit(300).onSnapshot(s => { S.pedidos = s.docs.map(d => ({id: d.id, ...d.data()})); render() }, erro);
+    db.collection("acoes_demandas").limit(500).onSnapshot(s => { S.acoes = Object.fromEntries(s.docs.map(d => [d.id, d.data()])); render() }, erro);
+    db.collection("recuperador").limit(500).onSnapshot(s => { S.recup = Object.fromEntries(s.docs.map(d => [d.id, d.data()])); render() }, erro);
+    db.collection("conselho").limit(100).onSnapshot(s => { S.conselho = Object.fromEntries(s.docs.map(d => [d.id, d.data()])); render() }, erro);
+    db.collection("apontamentos").orderBy("data", "desc").limit(300).onSnapshot(s => { S.apont = s.docs.map(d => d.data()); render() }, erro);
+  }
+  render();
+}
+iniciar();
 </script>

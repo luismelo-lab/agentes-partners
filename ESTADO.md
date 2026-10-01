@@ -28,6 +28,8 @@
 
 **Preparação para a nuvem (01/10):** repositório git local só de código (2 commits, 166 arquivos, barreira de LGPD no pre-commit), lib/graph.py (e-mail e SharePoint pelo Graph, desligado), lib/estado.py (memória entre rodadas no SharePoint), OCR Tesseract fora do Mac, 7 workflows do GitHub Actions desligados (AGENTES_NUVEM/AGENTES_IA), trava .nuvem-ligada no Mac. Passo a passo em docs/NUVEM.md. Falta: repositório privado na organização da Save no GitHub, Microsoft Graph/SharePoint (TI), crédito do Claude para as partes com IA.
 
+**Painel como entrada única (01/10):** portal v5 com abas Visão geral, Pedidos (formulário do catálogo + resposta + aprovação), Daniela/Jenifer/Geovana (demandas com Respondi/Encaminhei/Não é demanda, apontamento da Semana 0; Geovana com decisões do lote do Recuperador) e Decisões (Conselho, só o Luis). Base: db do artifact (pedidos, acoes_demandas, recuperador, conselho[write owner], apontamentos). Processamento: rotina da Central de hora em hora (ArtifactData + lib/painel_sync.py + central.py importar-portal / responder --aviso / confirmar --sem-email). E-mail continua como canal alternativo.
+
 ## Próximo passo
 - Luis fecha a planilha antiga e envia `mapa-de-tarefas-v2.xlsx` (abas com nomes e exemplos de cada uma) + mensagem ao time.
 - Primeiro teste real do Departamento de Marketing (ex.: cronograma de datas festivas 2027).

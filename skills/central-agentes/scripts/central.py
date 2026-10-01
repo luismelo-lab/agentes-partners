@@ -288,6 +288,16 @@ def cmd_responder(a):
     assunto = f"[AGENTES] #{P['id']} · {P['assunto'][:70]} · resposta v{v}"
     if a.previa:
         open(H(a.previa), "w").write(L.documento(*blocos)); print("prévia:", a.previa, "·", assunto); return
+    if getattr(a, "aviso", False):  # pedido do painel: a resposta completa fica no painel
+        blocos = [L.cabecalho("Central de Agentes", f"Pedido {P['id']} pronto", datetime.now().strftime("%d/%m/%Y %H:%M")),
+                  L.paragrafo(f"Olá, {nome}!", "28px 32px 12px"), L.paragrafo(L.esc(J.get("resumo") or "")),
+                  L.paragrafo("A resposta completa e os botões de aprovação estão no painel <b>Central Partners</b>, na aba <b>Pedidos</b>."
+                              + (" Os arquivos estão na sua pasta do OneDrive, em Pedidos." if anexos else "")),
+                  L.rodape("Aviso automático da Central de Agentes.")]
+        assunto = f"[Painel] {P['id']} pronto · {P['assunto'][:60]}"
+        d_od = os.path.join(OD, PASTA_OD[P["pessoa"]], "Pedidos", P["id"]); os.makedirs(d_od, exist_ok=True)
+        for x in anexos: subprocess.run(["cp", x, d_od])
+        print("arquivos no OneDrive:", ", ".join(f"{PASTA_OD[P['pessoa']]} / Pedidos / {P['id']} / {os.path.basename(x)}" for x in anexos) or "nenhum")
     ok, msg = L.outlook([P["email"]], [], assunto, L.documento(*blocos), anexos, enviar=not a.rascunho)
     P["status"] = "aguardando_aprovacao"
     P["historico"].append({"quando": datetime.now().isoformat(timespec="minutes"), "evento": f"resposta_v{v}", "resumo": J.get("resumo"), "anexos": anexos, "enviado": ok})
@@ -309,7 +319,7 @@ def cmd_confirmar(a):
     corpo = L.documento(L.cabecalho("Central de Agentes", f"Pedido {P['id']} · {'aprovado' if aprovado else 'encerrado'}", datetime.now().strftime("%d/%m/%Y %H:%M")),
                         L.paragrafo(f"Olá, {nome}!", "28px 32px 12px"), L.paragrafo(txt), L.assinatura(),
                         L.rodape("Central de Agentes da Área Partners. Para um pedido novo, use o modelo de pedido."))
-    ok, msg = L.outlook([P["email"]], [], f"[AGENTES] #{P['id']} · {'aprovado' if aprovado else 'encerrado'}", corpo, enviar=not a.rascunho)
+    ok, msg = (True, "") if a.sem_email else L.outlook([P["email"]], [], f"[AGENTES] #{P['id']} · {'aprovado' if aprovado else 'encerrado'}", corpo, enviar=not a.rascunho)
     if aprovado:
         d = os.path.join(OD, PASTA_OD[P["pessoa"]], "Pedidos aprovados", P["id"]); os.makedirs(d, exist_ok=True)
         orig = os.path.join(BASE, "pedidos", P["id"])
@@ -336,6 +346,7 @@ Não escreva dados bancários, CPF ou senhas. Mantenha [AGENTES] no assunto.
 def cmd_modelos(a):
     sys.path.insert(0, H("~/agentes-partners/infra")); from publicar_onedrive import md_para_docx
     linhas = ["# Central de Agentes · como pedir", "",
+              "**Jeito mais fácil: o painel Central Partners, aba Pedidos.** Escolha o tipo, preencha e envie. A resposta e os botões Aprovado, Não aprovado e Nova análise aparecem no próprio painel. O e-mail abaixo continua funcionando.", "",
               "Mande um e-mail para **luis.melo@savecompany.com.br** com **[AGENTES]** no assunto, usando o modelo de pedido: abra o arquivo *Modelo de pedido aos agentes* desta pasta (dois cliques abre no Outlook), clique em **Responder**, preencha os campos e envie. Também dá para escrever um e-mail novo com [AGENTES] no assunto e os mesmos campos.",
               "Os agentes leem a caixa a cada 15 minutos em dias úteis, das 8h às 18h, e respondem em até 1 hora. Na resposta, escreva na primeira linha: **Aprovado**, **Não aprovado** (com o motivo) ou **Nova análise** (com o que mudar).", "",
               "## Catálogo de pedidos"]
@@ -357,6 +368,20 @@ def cmd_modelos(a):
     print("Modelos gerados em:", ", ".join(feitos))
 
 
+def cmd_importar_portal(a):
+    """Pedido feito no painel → número P-NNNN na Central (o painel guarda o mesmo número em 'pid')."""
+    d = json.load(open(H(a.arquivo))); d = d.get("data", d)
+    R = reg()
+    ja = next((p for p in R["pedidos"].values() if p.get("portal_id") == a.portal_id), None)
+    if ja: print(ja["id"]); return
+    R["seq"] += 1; pid = f"P-{R['seq']:04d}"; c = dict(d.get("campos") or {}); c["codigo"] = d.get("codigo"); c["tipo"] = d.get("codigo")
+    pessoa = d.get("solicitante") or "luis"
+    R["pedidos"][pid] = {"id": pid, "portal_id": a.portal_id, "origem": "painel", "pessoa": pessoa, "email": next((e for e, k in REMETENTES.items() if k == pessoa), CAIXA),
+                         "assunto": " · ".join(x for x in [d.get("codigo"), (c.get("precisa") or "")[:60]] if x), "recebido": d.get("criado_em"),
+                         "codigo": d.get("codigo"), "campos": c, "status": "em_analise", "versao": 0, "anexos": [], "historico": [{"quando": d.get("criado_em"), "evento": "pedido (painel)"}]}
+    salvar(R); print(pid)
+
+
 def cmd_registro(a):
     R = reg()
     for p in R["pedidos"].values():
@@ -368,8 +393,9 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(); sp = ap.add_subparsers(dest="cmd", required=True)
     x = sp.add_parser("ler"); x.add_argument("--dias", type=int, default=3); x.add_argument("--enfileirar", action="store_true", help="modo terminal: guarda na fila em vez de imprimir")
     x = sp.add_parser("fila"); x.add_argument("--limpar", help="P-0001,P-0002 ou 'tudo'")
-    x = sp.add_parser("responder"); x.add_argument("--arquivo", required=True); x.add_argument("--rascunho", action="store_true"); x.add_argument("--previa", help="só gera o HTML (teste)")
-    x = sp.add_parser("confirmar"); x.add_argument("--pedido", required=True); x.add_argument("--decisao", required=True, choices=["aprovado", "nao_aprovado"]); x.add_argument("--nota"); x.add_argument("--rascunho", action="store_true")
+    x = sp.add_parser("importar-portal"); x.add_argument("--arquivo", required=True); x.add_argument("--portal-id", required=True)
+    x = sp.add_parser("responder"); x.add_argument("--arquivo", required=True); x.add_argument("--rascunho", action="store_true"); x.add_argument("--previa", help="só gera o HTML (teste)"); x.add_argument("--aviso", action="store_true", help="pedido do painel: só um e-mail curto avisando que a resposta está no painel")
+    x = sp.add_parser("confirmar"); x.add_argument("--pedido", required=True); x.add_argument("--decisao", required=True, choices=["aprovado", "nao_aprovado"]); x.add_argument("--nota"); x.add_argument("--rascunho", action="store_true"); x.add_argument("--sem-email", action="store_true", help="pedido do painel: só registra")
     sp.add_parser("modelos"); sp.add_parser("registro")
     a = ap.parse_args()
-    {"ler": cmd_ler, "responder": cmd_responder, "confirmar": cmd_confirmar, "modelos": cmd_modelos, "registro": cmd_registro, "fila": cmd_fila}[a.cmd](a)
+    {"ler": cmd_ler, "responder": cmd_responder, "confirmar": cmd_confirmar, "modelos": cmd_modelos, "registro": cmd_registro, "fila": cmd_fila, "importar-portal": cmd_importar_portal}[a.cmd](a)

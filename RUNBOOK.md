@@ -17,6 +17,17 @@
 
 As rotinas do Claude aparecem em **Agendadas** na barra lateral do app. As do terminal: `partners status`.
 
+## Painel Central Partners (entrada única do time)
+https://claude.ai/artifact/7fgGfrK7zVqzjcXCscJmwb · compartilhar com o time como **Colaborador** (Viewer só lê).
+| Fluxo | No painel | Quem processa |
+|---|---|---|
+| Pedidos aos agentes | Aba Pedidos: formulário com o catálogo; resposta e Aprovado / Não aprovado / Nova análise | Rotina da Central, de hora em hora |
+| Demandas do WhatsApp | Aba de cada pessoa: Respondi / Encaminhei / Não é demanda | Central (sincroniza) e triagem das 8h/14h (lista) |
+| Decisões do Recuperador | Aba Geovana: Aprovar / Vetar / Precisa de dado | Central (sincroniza) e lote de segunda |
+| Decisões do Conselho | Aba Decisões (só o Luis grava) | Central (atualiza `conselho/decisoes.md`) |
+| Apontamento (Semana 0) | Aba de cada pessoa: registrar tarefa | Central (salva em `registro/apontamentos.json`) |
+O painel atualiza os dados às 8h (rotina com IA). As ações do time aparecem na hora para todos; os agentes aplicam na rodada seguinte.
+
 ## Comandos úteis
 ```
 partners status          # últimas execuções, fila da Central, pedidos em aberto, jobs ligados
