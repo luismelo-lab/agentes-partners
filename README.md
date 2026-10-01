@@ -1,6 +1,6 @@
 # Agentes da Área Partners · mapa geral
 
-Estrutura de agentes da Área Partners da Save Company (gestor: Luis Fernando de Melo). Este arquivo diz **onde está cada coisa**. Como operar no dia a dia: [RUNBOOK.md](RUNBOOK.md). Estado e pendências: [ESTADO.md](ESTADO.md). Organograma: [ARQUITETURA.md](ARQUITETURA.md) e [DEPARTAMENTOS.md](DEPARTAMENTOS.md).
+Estrutura de agentes da Área Partners da Save Company (gestor: Luis Fernando de Melo). Este arquivo diz **onde está cada coisa**. Como operar no dia a dia: [RUNBOOK.md](RUNBOOK.md). Estado e pendências: [ESTADO.md](ESTADO.md). Nuvem (GitHub + Microsoft 365): [docs/NUVEM.md](docs/NUVEM.md). Organograma: [ARQUITETURA.md](ARQUITETURA.md) e [DEPARTAMENTOS.md](DEPARTAMENTOS.md).
 
 ## Como a estrutura funciona
 - **Terminal (sem tokens):** o comando `bin/partners` faz o trabalho mecânico: baixar o HubSpot, ler o WhatsApp e os anexos, ler os e-mails de pedido, calcular, publicar no OneDrive e fazer backup. O macOS (launchd) chama esse comando nos horários.
@@ -58,6 +58,9 @@ Estrutura de agentes da Área Partners da Save Company (gestor: Luis Fernando de
 | Contentsquare | Não usar por enquanto (nenhum fluxo da área depende de analytics do site) |
 | Control Chrome · Bright Data · Google (Gmail, Agenda, Drive) | **Não usar**: risco de executar texto de terceiros no Chrome logado, envio de dados a terceiros e mistura de contas fora do Microsoft 365 da Save |
 | Microsoft 365 | Aguardando o TI (ver `departamentos/ti/integracoes-microsoft.md`); não autorizar com consentimento pessoal antes |
+
+## Versionamento
+Esta pasta é um repositório git **só de código** (o `.gitignore` bloqueia dados). Antes de cada commit: `infra/repo-sincronizar.sh` (copia skills e rotinas). O commit é barrado se `infra/checar-dados.py` achar CNPJ, CPF, telefone, token ou chave.
 
 ## Segurança e backup
 - **Backup:** diário às 19h30 no OneDrive (`Backups/agentes-partners/<data>`, 30 dias). Guarda skills, rotinas e esta pasta, exceto `.env` e a base da Receita.
