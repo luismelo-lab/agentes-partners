@@ -85,7 +85,7 @@ def main():
             else: fica.append(i)
         T["pessoas"]["jenifer"]["itens"] = fica; T["pessoas"]["daniela"] = dan
     T["leitura_geral"] = "Rodada automática, sem IA: conversas sem resposta por pessoa: " + ", ".join(f"{k} {v}" for k, v in tot.items()) + "."
-    out = os.path.join(AP, "celulas", f"whatsapp-triagem-{agora:%Y-%m-%d-%Hh%M}.json")
+    out = os.path.join(AP, "celulas", f"whatsapp-triagem-{agora:%Y-%m-%d-%Hh%M%S}.json")
     json.dump(T, open(out, "w"), ensure_ascii=False, indent=1)
     print(out)
 

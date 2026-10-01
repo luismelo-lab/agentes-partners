@@ -108,13 +108,14 @@ const EQUIPE = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "
 const CELULA_PESSOA = {"Central Masters": "daniela", "Central BDR": "jenifer", "Central Técnica": "geovana", "Gabinete": "luis"};
 const ST_PEDIDO = {novo: ["Na fila", "warn"], em_analise: ["Em análise", "warn"], aguardando_aprovacao: ["Pronto: aprovar", "crit"], nova_analise: ["Nova análise pedida", "warn"],
                    aprovado: ["Aprovado", "ok"], nao_aprovado: ["Não aprovado", ""], concluido: ["Concluído", "ok"]};
-const S = {D: null, db: null, user: null, eu: null, meuId: null, pedidos: [], acoes: {}, recup: {}, conselho: {}, apont: [], aba: "luis", filtro: "meus", msg: ""};
+const S = {D: null, db: null, user: null, eu: null, meuId: null, pedidos: [], acoes: {}, recup: {}, conselho: {}, apont: [], chamados: [], aba: "luis", filtro: "meus", msg: ""};
+const ST_CH = {proposto: ["Aguarda aprovação", "crit"], aprovado: ["Aprovado · abrindo no GLPI", "warn"], aberto: ["Aberto no GLPI", "ok"], aprovado_manual: ["Aprovado · abrir manualmente", "warn"], recusado: ["Recusado", ""]};
 
 /* ---------- abas ---------- */
 const ABAS = [["luis", "Visão geral"], ["pedidos", "Pedidos"], ["daniela", "Daniela"], ["jenifer", "Jenifer"], ["geovana", "Geovana"], ["decisoes", "Decisões"]];
 function nav() {
   const pend = S.pedidos.filter(p => p.status === "aguardando_aprovacao" && p.solicitante === S.eu).length;
-  const minhas = (S.D?.demandas_lista || []).filter(d => d.pessoa === S.eu && !S.acoes[d.id]).length;
+  const minhas = (S.D?.demandas_lista || []).filter(d => d.pessoa === S.eu && !S.acoes[d.id]).length + S.chamados.filter(c => c.pessoa === S.eu && c.status === "proposto").length;
   $("#abas").innerHTML = ABAS.map(([k, n]) => {
     const b = k === "pedidos" ? pend : k === S.eu ? minhas : k === "decisoes" && S.eu === "luis" ? (S.D?.conselho || []).filter(d => !S.conselho[d.id]).length : 0;
     return `<button role="tab" data-aba="${k}" aria-selected="${S.aba === k}">${n}${b ? `<span class="badge">${b}</span>` : ""}</button>`;
@@ -145,6 +146,23 @@ function demandas(p) {
     </article>` }).join("")}</div>`;
 }
 
+function chamados(p) {
+  const cs = S.chamados.filter(c => c.pessoa === p && c.status !== "recusado").sort((a, b) => (a.status === "proposto" ? 0 : 1) - (b.status === "proposto" ? 0 : 1));
+  if (!cs.length) return "";
+  const pode = S.eu === p || S.eu === "luis";
+  return `<section><h2>Chamados para aprovar</h2><p class="lead">Os agentes propõem; o chamado só vai ao GLPI depois que você aprova. Ajuste o texto se precisar.</p>
+    <div class="lista">${cs.map(c => { const [rot, cls] = ST_CH[c.status] || [c.status, ""];
+      return `<article class="item"><header><strong>${esc(c.grupo)}</strong><span class="chip ${cls}">${esc(rot)}</span>${c.urgencia >= 4 ? `<span class="chip crit">Urgência ${esc(c.urgencia)}</span>` : ""}${c.master ? `<span class="chip">${esc(c.master)}</span>` : ""}<span class="lead"><small>${esc(c.id)} · ${esc(c.conversa)}</small></span></header>
+        ${c.status === "proposto" && pode && S.db ? `<label>Título<input id="ct-${esc(c.id)}" value="${esc(c.titulo_editado || c.titulo)}" maxlength="200"></label>
+          <label>Descrição<textarea id="cd-${esc(c.id)}" rows="7">${esc(c.descricao_editada || c.descricao)}</textarea></label>
+          <div class="linha2"><label>Motivo, se recusar<input id="cm-${esc(c.id)}" maxlength="300"></label></div>
+          <div class="acoes"><button class="btn ok" data-ch="aprovado" data-id="${esc(c.id)}">Aprovar e abrir no GLPI</button><button class="btn crit" data-ch="recusado" data-id="${esc(c.id)}">Não abrir</button></div>`
+        : `<p><b>${esc(c.titulo_editado || c.titulo)}</b></p><div class="resposta">${md(c.descricao_editada || c.descricao)}</div>
+          ${c.url ? `<p><span class="rot">GLPI:</span> <a href="${esc(c.url)}" target="_blank" rel="noopener">chamado #${esc(c.glpi_id)}</a></p>` : ""}${c.nota_agente ? `<p class="lead">${esc(c.nota_agente)}</p>` : ""}`}
+        ${c.link ? `<p><span class="rot">Negócio:</span> <a href="${esc(c.link)}" target="_blank" rel="noopener">abrir no HubSpot</a></p>` : ""}
+      </article>` }).join("")}</div></section>`;
+}
+
 function apontamento(p) {
   if (S.eu !== p) return "";
   const hoje = new Date().toISOString().slice(0, 10), meus = S.apont.filter(x => x.pessoa === p && (x.data || "").startsWith(hoje));
@@ -166,7 +184,8 @@ const V = {
     return `<section><h2>Resultado da área</h2><p class="lead">${esc(G.manchete)}</p></section>
     ${numeros([["Daniela", dm.daniela?.responder ?? 0, `para responder · ${dm.daniela?.abertas ?? 0} abertas`], ["Jenifer", dm.jenifer?.responder ?? 0, `para responder · ${dm.jenifer?.abertas ?? 0} abertas`],
                ["Geovana", dm.geovana?.responder ?? 0, `para responder · ${dm.geovana?.abertas ?? 0} abertas`], ["Pedidos aos agentes", fila, `na fila · ${prontos} esperando aprovação`],
-               ["Decisões do Conselho", (S.D.conselho || []).filter(d => !S.conselho[d.id]).length, "esperando você"]])}
+               ["Decisões do Conselho", (S.D.conselho || []).filter(d => !S.conselho[d.id]).length, "esperando você"],
+               ["Chamados", S.chamados.filter(c => c.status === "proposto").length, `aguardando aprovação · ${S.chamados.filter(c => c.status === "aberto").length} abertos`]])}
     <div class="duas">
       <section><h2>Alertas das áreas</h2><div class="lista">${G.alertas.map(a => `<article class="item"><header><span class="chip warn">${esc(a.area)}</span></header><p>${esc(a.texto)}</p></article>`).join("")}</div></section>
       <section><h2>Saúde dos Masters</h2><div class="tabela"><table><thead><tr><th>Master</th><th>Saúde</th><th class="n">Abertos</th><th class="n">Parados</th><th class="n">Ganhos 90d</th></tr></thead><tbody>
@@ -214,7 +233,7 @@ const V = {
 function pessoa(p) {
   const dm = (S.D.demandas || {})[p] || {}, W = (S.D.whatsapp.pessoas || {})[p] || {};
   return `${numeros([["Para responder", dm.responder ?? 0, "demandas abertas que pedem resposta"], ["Abertas", dm.abertas ?? 0, "no registro de demandas"], ["WhatsApp", W.conversas ?? 0, `conversas lidas · rodada das ${S.D.whatsapp.rodada || "—"}`]])}
-    ${semDb()}<section><h2>Demandas</h2>${demandas(p)}</section>${apontamento(p)}${pasta(p)}`;
+    ${semDb()}${chamados(p)}<section><h2>Demandas</h2>${demandas(p)}</section>${apontamento(p)}${pasta(p)}`;
 }
 
 function recuperador() {
@@ -271,6 +290,13 @@ async function decidirRecup(id, dec) {
   catch (x) { S.msg = "Não consegui registrar."; render() }
 }
 async function decidirConselho(id, dec) { try { await S.db.doc("conselho/" + id).set({decisao: dec, nota: ($("#n-" + id)?.value || "").trim(), quando: agora()}) } catch (x) { S.msg = "Só o Luis registra decisões do Conselho."; render() } }
+async function decidirChamado(id, dec) {
+  const v = s => ($(s)?.value || "").trim();
+  const dados = dec === "aprovado" ? {status: "aprovado", titulo_editado: v("#ct-" + id), descricao_editada: v("#cd-" + id), aprovado_por: S.eu, aprovado_em: agora()}
+                                   : {status: "recusado", motivo: v("#cm-" + id), recusado_por: S.eu, recusado_em: agora()};
+  if (dec === "recusado" && !dados.motivo) { $("#cm-" + id).focus(); $("#cm-" + id).placeholder = "Diga por que não abrir (ensina os agentes)"; return }
+  try { await S.db.doc("chamados/" + id).update(dados) } catch (x) { S.msg = "Não consegui registrar a decisão do chamado."; render() }
+}
 async function salvarApont(e) {
   e.preventDefault(); if (!S.db) return;
   try { await S.db.collection("apontamentos").add({pessoa: S.eu, data: agora(), descricao: $("#a-desc").value.trim(), tipo: $("#a-tipo").value, master: $("#a-master").value, minutos: Number($("#a-min").value) || 0, ponte: $("#a-ponte").checked}); S.limpar = "a-"; render() }
@@ -299,6 +325,7 @@ document.addEventListener("click", e => {
   else if (b.dataset.acao) acaoDemanda(b.dataset.id, b.dataset.acao);
   else if (b.dataset.recup) decidirRecup(b.dataset.id, b.dataset.recup);
   else if (b.dataset.cons) decidirConselho(b.dataset.id, b.dataset.cons);
+  else if (b.dataset.ch) decidirChamado(b.dataset.id, b.dataset.ch);
 });
 document.addEventListener("submit", e => { if (e.target.id === "f-pedido") salvarPedido(e); if (e.target.id === "f-apont") salvarApont(e) });
 document.addEventListener("change", e => {
@@ -322,6 +349,7 @@ async function iniciar() {
     db.collection("recuperador").limit(500).onSnapshot(s => { S.recup = Object.fromEntries(s.docs.map(d => [d.id, d.data()])); render() }, erro);
     db.collection("conselho").limit(100).onSnapshot(s => { S.conselho = Object.fromEntries(s.docs.map(d => [d.id, d.data()])); render() }, erro);
     db.collection("apontamentos").orderBy("data", "desc").limit(300).onSnapshot(s => { S.apont = s.docs.map(d => d.data()); render() }, erro);
+    db.collection("chamados").orderBy("proposto_em", "desc").limit(300).onSnapshot(s => { S.chamados = s.docs.map(d => ({id: d.id, ...d.data()})); render() }, erro);
   }
   render();
 }

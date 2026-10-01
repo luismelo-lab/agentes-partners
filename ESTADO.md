@@ -36,6 +36,8 @@
 
 **Áudios e regra dos grupos (01/10):** transcrição local dos áudios do WhatsApp (whisper.cpp + ffmpeg via Homebrew, modelo ggml-small-q5_1 de 190 MB em dados-publicos/whisper, fora do git e do backup; ~25 s por áudio, com cache). Regra: pedido em grupo de Master é da Daniela (Jenifer fica com indicação e prospecção). Corrigido: grupos com sigla curta (D&S) não eram reconhecidos como Master.
 
+**Chamados com aprovação no painel (01/10):** chamados_whatsapp.py só propõe (registro/chamados-propostos.json) → IA grava no painel (coleção `chamados`) → a pessoa aprova (pode editar) ou recusa com motivo → a Central de hora em hora roda lib/chamados_painel.py aplicar (abre no GLPI se integrado, senão 'abrir manualmente'; recusas viram aprendizado em registro/chamados-aprendizados.md). 3 propostas reais no painel para teste (D-2026-0003, 0018, 0019). Aguardando a base de chamados em Excel do Luis para aprender as regras de roteamento (infra/glpi-regras.md).
+
 ## Próximo passo
 - Luis fecha a planilha antiga e envia `mapa-de-tarefas-v2.xlsx` (abas com nomes e exemplos de cada uma) + mensagem ao time.
 - Primeiro teste real do Departamento de Marketing (ex.: cronograma de datas festivas 2027).

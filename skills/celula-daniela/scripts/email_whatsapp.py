@@ -51,6 +51,8 @@ def cartoes(itens, com_rascunho=True):
         if ch:
             if ch.get("id"):
                 ls.append(("Chamado no GLPI", f'<a href="{e(ch.get("url"))}" style="{L.f("corpo", "bold", "#7a5f00", "text-decoration:none;")}">#{e(ch["id"])}</a> aberto para {e(ch.get("grupo"))}'))
+            elif ch.get("proposto"):
+                ls.append(("Chamado proposto", f"<b>{e(ch.get('grupo'))}</b>: {e(ch.get('titulo'))}. <b>Aprove no painel Central Partners</b> (aba com o seu nome) para abrir no GLPI." + (L.md(ch["descricao"]) if ch.get("descricao") else "")))
             elif ch.get("rascunho"):
                 ls.append(("Chamado pronto para o GLPI", f"<b>{e(ch.get('grupo'))}</b>: {e(ch.get('titulo'))}" + (L.md(ch["descricao"]) if ch.get("descricao") else "")))
             elif ch.get("erro"):

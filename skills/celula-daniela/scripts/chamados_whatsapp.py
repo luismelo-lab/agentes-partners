@@ -7,8 +7,8 @@ Entrada: a triagem com IA (whatsapp-triagem-*.json). Cada item que precisa de ou
                  "urgencia": 1-5}
 O script:
   1. registra a demanda no registro único (D-AAAA-NNNN) e evita chamado duplicado (um por demanda);
-  2. abre o chamado pela API do GLPI (lib/glpi.py) com a categoria e o grupo da área, ou, em modo "rascunho",
-     só monta o chamado completo para a dona do número copiar;
+  2. PROPÕE o chamado (registro/chamados-propostos.json). Nada é aberto aqui: o chamado só vai ao GLPI depois de
+     aprovado no painel Central Partners (regra do Luis, 01/10), pela rotina da Central (lib/chamados_painel.py);
   3. grava o resultado no item ("chamado") para o e-mail mostrar, e no registro de demandas.
 Decisão D25 do Luis (01/10/2026): chamado interno aberto automaticamente; nada vai a parceiro ou cliente.
 Uso: python3 chamados_whatsapp.py --triagem <arquivo>
@@ -17,6 +17,7 @@ import argparse, json, os, re, subprocess, sys
 from datetime import datetime
 
 AP = os.path.expanduser("~/agentes-partners")
+PROP = os.path.join(AP, "registro", "chamados-propostos.json")  # fila para o painel (aprovação antes de abrir)
 sys.path.insert(0, os.path.join(AP, "lib"))
 import glpi  # noqa: E402
 import registro_demandas as RD  # noqa: E402
@@ -48,19 +49,20 @@ def main():
                         + (f" · Master {i['master']}" if i.get("master") else "") + (f" · demanda {d['id']}" if d else "") + "</p>"
                         + html(e.get("descricao")) + (f"<p><b>Negócio no HubSpot:</b> {i['link']}</p>" if i.get("link") else "")
                         + "<p><i>Chamado aberto pelos agentes da Área Partners. Responsável na Partners: " + p.capitalize() + ".</i></p>")
-                r = glpi.abrir(e.get("area", "outros"), e.get("titulo") or i.get("o_que_pede", "")[:120], desc, e.get("urgencia", 3), pessoa=p)
-                r.update({"area": e.get("area"), "titulo": e.get("titulo"), "quando": datetime.now().isoformat(timespec="minutes")})
-                if r.get("rascunho"):
-                    rasc += 1
-                    pasta = os.path.join(AP, "celulas", p, "chamados"); os.makedirs(pasta, exist_ok=True)
-                    json.dump({**r, "descricao_md": e.get("descricao")}, open(os.path.join(pasta, f"{(d or {}).get('id', 'sem-id')}.json"), "w"), ensure_ascii=False, indent=1)
-                    r.pop("chamado", None)
-                elif r.get("id"): abertos += 1
-                i["chamado"] = {k: r.get(k) for k in ("id", "url", "grupo", "area", "titulo", "rascunho", "erro")}
-                if e.get("descricao") and r.get("rascunho"): i["chamado"]["descricao"] = e["descricao"]
-                if d: d["chamado"] = i["chamado"]; d["eventos"].append({"quando": r["quando"], "evento": f"chamado {'#' + str(r['id']) if r.get('id') else 'em rascunho'} → {r.get('grupo')}"})
+                prop = {"id": (d or {}).get("id"), "pessoa": p, "area": e.get("area", "outros"),
+                        "grupo": (glpi.config()["areas"].get(e.get("area")) or glpi.config()["areas"]["outros"])["nome"],
+                        "titulo": (e.get("titulo") or i.get("o_que_pede", ""))[:200], "descricao": e.get("descricao") or "", "descricao_html": desc,
+                        "urgencia": int(e.get("urgencia", 3)), "conversa": i["chat"], "master": i.get("master"), "link": i.get("link"),
+                        "status": "proposto", "proposto_em": datetime.now().isoformat(timespec="minutes")}
+                if prop["id"]:
+                    P_ = json.load(open(PROP)) if os.path.exists(PROP) else {}
+                    if prop["id"] not in P_: P_[prop["id"]] = prop; json.dump(P_, open(PROP, "w"), ensure_ascii=False, indent=1); rasc += 1
+                i["chamado"] = {"proposto": True, "grupo": prop["grupo"], "area": prop["area"], "titulo": prop["titulo"], "descricao": prop["descricao"]}
+                if d:
+                    d["chamado"] = {"proposto": True, "grupo": prop["grupo"], "titulo": prop["titulo"]}
+                    d["eventos"].append({"quando": prop["proposto_em"], "evento": f"chamado proposto → {prop['grupo']} (aguarda aprovação no painel)"})
     json.dump(T, open(f, "w"), ensure_ascii=False, indent=1)
-    print(f"chamados abertos: {abertos} · em rascunho: {rasc} (modo {glpi.config().get('modo')})")
+    print(f"chamados propostos para aprovação no painel: {rasc}")
 
 
 if __name__ == "__main__":
