@@ -1,9 +1,47 @@
 # Quando uma demanda vira chamado no GLPI (aprendido da base real)
-**Fonte:** exportação do GLPI com 1.115 chamados, de 25/11/2025 a 01/10/2026. 67% foram abertos pela Daniela (565) e pela Geovana (184). Entidade única: Escritório - Czerniewicz. A base traz título, categoria, requerente, técnico, status e datas; não traz a descrição.
+**Fonte:** exportação do GLPI com 1.115 chamados, de 25/11/2025 a 01/10/2026. 67% foram abertos pela Daniela (565) e pela Geovana (184). Entidade única: Escritório - Czerniewicz. A base traz título, categoria, requerente, técnico, status e datas. **v2 (01/10):** 152 chamados lidos por dentro (descrição, solução e acompanhamentos), em amostra por categoria, com a visão ampliada do Luis no GLPI.
 **Uso:** a triagem do WhatsApp lê este arquivo para decidir (1) se o pedido vira chamado e (2) em qual categoria. Os exemplos não trazem nomes de clientes: `<EMPRESA>` é a razão social.
 
 ## Padrão de título (seguir sempre)
 `<Subcategoria> <EMPRESA> x <assunto curto>`, por exemplo `Execução <EMPRESA> x ajuste de dados bancários`. No Jurídico: `Demandas Diversas - Jurídico <EMPRESA> x <assunto>`. "URGENTE" só quando há prazo hoje ou risco de multa.
+
+## Formulário da descrição (como as áreas recebem)
+O script `chamados_whatsapp.py` monta a descrição neste formato; a triagem só preenche os campos.
+
+**Tributário (Diagnóstico, Execução, Compensação)**
+```
+1) Urgência: Baixa | Média | Alta | Muito alta
+2) Empresa: <razão social>
+3) Descrição: o que o parceiro pede · o que já levantamos · o que falta
+4) Link do Card: https://save.bitrix24.com.br/crm/deal/details/<id_bitrix>/   (campo "ID Bitrix" do negócio no HubSpot)
+5) Prazo de Entrega: AAAA-MM-DD
+```
+**Jurídico (todas as subcategorias)**
+```
+DADOS
+1) Setor Solicitante: MASTER
+2) Parceiro Solicitante: <Master>
+INFORMAÇÕES GERAIS
+1) Assunto: <1 frase>
+2) Classe: Interna
+3) Informações Adicionais: o que o parceiro pede · o que já levantamos · o que falta
+4) Documentos: o que vai anexo (despacho, intimação, contrato, print)
+```
+Sem o link do card, a área de Tributário costuma devolver pedindo o card: a triagem usa `card_bitrix` das evidências; se não houver, avisa na descrição.
+
+## Checar antes de propor
+- **Prioridade ou reanálise de diagnóstico:** conferir a etapa do negócio no HubSpot. Boa parte desses chamados volta com "já se encontra em apresentação de diagnóstico" ou "parecer já anexado ao card". Se o negócio já passou do diagnóstico ou o parecer está no card, **não propor**: entregar o status e o parecer na resposta.
+- **Pendência de documento:** dizer qual documento falta e se já está no card. A área responde "documento já anexado" quando não é conferido antes.
+- **Despacho decisório ou comunicado da RFB:** o Jurídico pede a **autorização do parceiro/cliente para seguir (ou não) com a manifestação de inconformidade**. Se a conversa já tem a autorização, dizer isso no assunto ("… autorizado seguir com manifestação de inconformidade"); se não tem, o chamado registra o comunicado e a Partners busca a autorização.
+- **Prazo:** despacho e intimação têm prazo de defesa (em geral 30 dias da ciência). Informar a data de ciência quando aparecer no print; com menos de 10 dias, urgência 5.
+
+## Fora do GLPI (encaminhar para outra equipe, sem chamado)
+- **Contrato do parceiro, aditivo do parceiro e distrato do parceiro:** time de Contratos (o Jurídico só entra em distrato com litígio ou análise de cláusula).
+- **Prestação de contas, repasse, faturamento e detalhe de compensação de ofício para cobrança:** Financeiro.
+- **Sistema S (Sesi, Senai, Sesc, Senac, Sebrae…):** não é compensável. Responder ao parceiro com a regra; não abrir chamado de compensação.
+
+## LGPD
+Os formulários do Jurídico às vezes pedem dados do representante legal. **O agente não preenche CPF, RG, CNH nem dados bancários** de ninguém. Escreve "a Partners completa na abertura" e a pessoa completa no painel antes de aprovar, se a área exigir.
 
 ## Categorias que mais recebem chamados da Partners
 | Categoria | Chamados | Solução (mediana) | Abre quando o parceiro… | Assuntos típicos (títulos reais) |

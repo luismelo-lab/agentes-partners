@@ -109,6 +109,7 @@
   "importado": "hs_was_imported",
   "parecer_rt": "parecer_complementar",
   "anexo_diagnostico": "anexo_do_diagnostico",
-  "parecer_juridico": "parecer_juridico"
+  "parecer_juridico": "parecer_juridico",
+  "id_bitrix": "id_bitrix"
  }
 }
