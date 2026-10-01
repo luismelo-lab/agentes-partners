@@ -286,6 +286,12 @@ def cmd_responder(a):
                L.rodape("Resposta preparada pelos agentes da Área Partners. É pré-análise: nada foi enviado a parceiros ou clientes e nada foi alterado no HubSpot. "
                         "A decisão de usar é sua. Uso interno Save Company.")]
     assunto = f"[AGENTES] #{P['id']} · {P['assunto'][:70]} · resposta v{v}"
+    if getattr(a, "painel", False):  # pedido feito no painel: e-mail completo + aprovação por e-mail ou pelo painel
+        blocos.insert(-3, L.paragrafo('Você também pode aprovar ou pedir ajuste no painel <b>Central Partners</b>, aba <b>Pedidos</b>.'
+                                      + (" Os arquivos ficam na sua pasta do OneDrive, em Pedidos." if anexos else ""), "8px 32px 0"))
+        d_od = os.path.join(OD, PASTA_OD[P["pessoa"]], "Pedidos", P["id"]); os.makedirs(d_od, exist_ok=True)
+        for x in anexos: subprocess.run(["cp", x, d_od])
+        print("arquivos no OneDrive:", ", ".join(f"{PASTA_OD[P['pessoa']]} / Pedidos / {P['id']} / {os.path.basename(x)}" for x in anexos) or "nenhum")
     if a.previa:
         open(H(a.previa), "w").write(L.documento(*blocos)); print("prévia:", a.previa, "·", assunto); return
     if getattr(a, "aviso", False):  # pedido do painel: a resposta completa fica no painel
@@ -395,6 +401,7 @@ if __name__ == "__main__":
     x = sp.add_parser("fila"); x.add_argument("--limpar", help="P-0001,P-0002 ou 'tudo'")
     x = sp.add_parser("importar-portal"); x.add_argument("--arquivo", required=True); x.add_argument("--portal-id", required=True)
     x = sp.add_parser("responder"); x.add_argument("--arquivo", required=True); x.add_argument("--rascunho", action="store_true"); x.add_argument("--previa", help="só gera o HTML (teste)"); x.add_argument("--aviso", action="store_true", help="pedido do painel: só um e-mail curto avisando que a resposta está no painel")
+    x.add_argument("--painel", action="store_true", help="pedido do painel: resposta COMPLETA por e-mail ao solicitante + arquivos no OneDrive + aprovação também pelo painel")
     x = sp.add_parser("confirmar"); x.add_argument("--pedido", required=True); x.add_argument("--decisao", required=True, choices=["aprovado", "nao_aprovado"]); x.add_argument("--nota"); x.add_argument("--rascunho", action="store_true"); x.add_argument("--sem-email", action="store_true", help="pedido do painel: só registra")
     sp.add_parser("modelos"); sp.add_parser("registro")
     a = ap.parse_args()

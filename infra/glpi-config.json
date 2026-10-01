@@ -1,0 +1,16 @@
+{
+ "_nota": "Configuração do GLPI para os agentes. IDs de categoria, grupo e entidade: o administrador do GLPI informa (ou o agente lê pela API depois do login). modo = rascunho | abrir.",
+ "url": "https://tributario.savecompany.com.br",
+ "modo": "rascunho",
+ "entidade_id": null,
+ "areas": {
+  "juridico":   {"nome": "Jurídico",            "categoria_id": null, "grupo_id": null, "quando": "contrato, cláusula, notificação ou intimação da Receita, distrato com litígio, LGPD, risco de multa"},
+  "tecnico":    {"nome": "Técnico Tributário",  "categoria_id": null, "grupo_id": null, "quando": "dúvida de tese, parecer, diagnóstico, reanálise, documentos para análise, PER/DCOMP, despacho decisório"},
+  "contratos":  {"nome": "Contratos",           "categoria_id": null, "grupo_id": null, "quando": "envio, ajuste, suspensão ou assinatura de contrato, aditivo, distrato sem litígio"},
+  "pos_venda":  {"nome": "Pós-venda",           "categoria_id": null, "grupo_id": null, "quando": "guia, boleto, aviso de pagamento, extrato, saldo de crédito, compensação de ofício, procuração e-CAC"},
+  "marketing":  {"nome": "Marketing",           "categoria_id": null, "grupo_id": null, "quando": "material novo ou personalizado, co-branding"},
+  "financeiro": {"nome": "Financeiro",          "categoria_id": null, "grupo_id": null, "quando": "repasse ou comissão de parceiro, dados bancários para pagamento"},
+  "ti":         {"nome": "TI",                  "categoria_id": null, "grupo_id": null, "quando": "acesso, sistema, portal"},
+  "outros":     {"nome": "Partners (triagem)",  "categoria_id": null, "grupo_id": null, "quando": "não se encaixa nas outras"}
+ }
+}

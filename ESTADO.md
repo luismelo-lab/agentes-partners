@@ -30,6 +30,8 @@
 
 **Painel como entrada única (01/10):** portal v5 com abas Visão geral, Pedidos (formulário do catálogo + resposta + aprovação), Daniela/Jenifer/Geovana (demandas com Respondi/Encaminhei/Não é demanda, apontamento da Semana 0; Geovana com decisões do lote do Recuperador) e Decisões (Conselho, só o Luis). Base: db do artifact (pedidos, acoes_demandas, recuperador, conselho[write owner], apontamentos). Processamento: rotina da Central de hora em hora (ArtifactData + lib/painel_sync.py + central.py importar-portal / responder --aviso / confirmar --sem-email). E-mail continua como canal alternativo.
 
+**GLPI e retorno por e-mail (01/10):** pedidos do painel agora voltam por e-mail completo ao solicitante (`responder --painel`), com arquivos também no OneDrive e aprovação pelo e-mail ou pelo painel. GLPI: https://tributario.savecompany.com.br é GLPI 11 com API v2.1 ativa (OAuth2); API antiga desativada. Leitura pelo Chrome bloqueada (Control Chrome sem permissão de JavaScript; extensão Claude in Chrome não conectada), mas a API dispensa o navegador. Fluxo pronto: triagem com IA marca `encaminhar` (área: jurídico/técnico/...) → `chamados_whatsapp.py` → `lib/glpi.py` (modo rascunho até o TI criar cliente OAuth e conta de serviço; pedido em docs/GLPI.md) → chamado no e-mail e no registro de demandas. D25 registrada.
+
 ## Próximo passo
 - Luis fecha a planilha antiga e envia `mapa-de-tarefas-v2.xlsx` (abas com nomes e exemplos de cada uma) + mensagem ao time.
 - Primeiro teste real do Departamento de Marketing (ex.: cronograma de datas festivas 2027).

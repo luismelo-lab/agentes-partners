@@ -47,6 +47,14 @@ def cartoes(itens, com_rascunho=True):
         if i.get("entrega"): ls.append(("O que os agentes levantaram", L.md(i["entrega"])))
         if com_rascunho and i.get("rascunho"): ls.append(("Sugestão de resposta", f"<i>“{e(i['rascunho'])}”</i>"))
         if i.get("anexos"): ls.append(("Anexos", e(", ".join(os.path.basename(x) for x in i["anexos"]))))
+        ch = i.get("chamado")
+        if ch:
+            if ch.get("id"):
+                ls.append(("Chamado no GLPI", f'<a href="{e(ch.get("url"))}" style="{L.f("corpo", "bold", "#7a5f00", "text-decoration:none;")}">#{e(ch["id"])}</a> aberto para {e(ch.get("grupo"))}'))
+            elif ch.get("rascunho"):
+                ls.append(("Chamado pronto para o GLPI", f"<b>{e(ch.get('grupo'))}</b>: {e(ch.get('titulo'))}" + (L.md(ch["descricao"]) if ch.get("descricao") else "")))
+            elif ch.get("erro"):
+                ls.append(("Chamado no GLPI", "não foi aberto (erro). Abra manualmente."))
         if i.get("negocio"): ls.append(("Negócio", f'<a href="{e(i.get("link"))}" style="{L.f("corpo", "normal", "#7a5f00", "text-decoration:none;")}">{e(i["negocio"])}</a>'))
         tit = i["chat"] + (f" · {i['master']}" if i.get("master") else "")
         out.append(L.cartao(tit, et, ls, COR[i["status"]]))
