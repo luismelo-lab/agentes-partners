@@ -173,6 +173,24 @@ def status(tid):
     return {"id": tid, "status": r.get("status"), "atualizado": r.get("date_mod")}
 
 
+def categorias(conta=None):
+    """Mapeia nome → ID das categorias a partir dos chamados existentes (a API v2 não lista categorias à parte)."""
+    vistos = {}
+    for pag in range(0, 2000, 200):
+        lote = api("GET", f"/Assistance/Ticket?start={pag}&limit=200", conta=conta)
+        if not isinstance(lote, list) or not lote: break
+        for t in lote:
+            c = t.get("category") or {}
+            if c.get("id"): vistos[c.get("name")] = c["id"]
+    cfg = config(); n = 0
+    for k, a in cfg["areas"].items():
+        folha = a["nome"].split(">")[-1].strip()
+        cid = vistos.get(a["nome"]) or vistos.get(folha)
+        if cid and not a.get("categoria_id"): a["categoria_id"] = cid; n += 1
+    json.dump(cfg, open(CFG, "w"), ensure_ascii=False, indent=1)
+    print(f"{len(vistos)} categorias vistas nos chamados; {n} áreas preenchidas")
+
+
 if __name__ == "__main__":
     cmd = (sys.argv[1:] or [""])[0]
     if cmd == "autorizar":
@@ -181,6 +199,8 @@ if __name__ == "__main__":
         conta = sys.argv[2] if len(sys.argv) > 2 else None
         me = api("GET", "/Administration/User/Me", conta=conta); print("login ok:", me.get("username"))
         print("chamados visíveis:", len(api("GET", "/Assistance/Ticket?limit=5", conta=conta) or []))
+    elif cmd == "categorias":
+        categorias(sys.argv[2] if len(sys.argv) > 2 else None)
     elif cmd == "contas":
         for f in sorted(os.listdir(CONTAS)) if os.path.isdir(CONTAS) else []:
             d = json.load(open(os.path.join(CONTAS, f))); print(f[:-5], "→", d.get("username"), "(id", str(d.get("user_id")) + ")")

@@ -38,6 +38,8 @@
 
 **Chamados com aprovação no painel (01/10):** chamados_whatsapp.py só propõe (registro/chamados-propostos.json) → IA grava no painel (coleção `chamados`) → a pessoa aprova (pode editar) ou recusa com motivo → a Central de hora em hora roda lib/chamados_painel.py aplicar (abre no GLPI se integrado, senão 'abrir manualmente'; recusas viram aprendizado em registro/chamados-aprendizados.md). 3 propostas reais no painel para teste (D-2026-0003, 0018, 0019). Aguardando a base de chamados em Excel do Luis para aprender as regras de roteamento (infra/glpi-regras.md).
 
+**Base de chamados do GLPI (01/10):** 1.115 chamados (25/11/2025–01/10/2026; 67% da Daniela e da Geovana) viraram infra/glpi-regras.md: categorias reais (Tributário > Diagnóstico/Execução/Compensação; Jurídico > Demandas Diversas, Comunicados RFB, Contencioso, Passivo, RT, Holding, Compliance…), quando abre, padrão de título, solução mediana e o que NÃO vira chamado. glpi-config.json reescrito com as categorias reais (não existem filas de Contratos/Pós-venda); `glpi.py categorias` preenche os IDs a partir dos chamados existentes após o primeiro login. As 3 propostas de teste foram reclassificadas no painel (status de assinatura → não é chamado; recorrência → Tributário > Execução; defesa → Jurídico > Comunicados RFB).
+
 ## Próximo passo
 - Luis fecha a planilha antiga e envia `mapa-de-tarefas-v2.xlsx` (abas com nomes e exemplos de cada uma) + mensagem ao time.
 - Primeiro teste real do Departamento de Marketing (ex.: cronograma de datas festivas 2027).

@@ -1,50 +1,98 @@
 {
- "_nota": "Configuração do GLPI para os agentes. O chamado sai em nome de quem atendeu (opção A: cada pessoa autoriza uma vez com `python3 lib/glpi.py autorizar <pessoa>`) ou pela conta reserva com a pessoa como requerente (opção B; 'usuarios' = id GLPI de cada pessoa). IDs de categoria, grupo e entidade: o administrador informa. modo = rascunho | abrir.",
+ "_nota": "Categorias REAIS do GLPI da Save (base de 1.115 chamados, 01/10/2026; regras e exemplos em infra/glpi-regras.md). O chamado só abre depois de aprovado no painel, em nome de quem atendeu. IDs: preenchidos por `python3 lib/glpi.py categorias` após o primeiro login (lê as categorias dos chamados existentes). modo = rascunho | abrir.",
  "url": "https://tributario.savecompany.com.br",
  "modo": "rascunho",
  "entidade_id": null,
  "areas": {
-  "juridico": {
-   "nome": "Jurídico",
+  "trib_diagnostico": {
+   "nome": "Tributário > Diagnóstico",
    "categoria_id": null,
    "grupo_id": null,
-   "quando": "contrato, cláusula, notificação ou intimação da Receita, distrato com litígio, LGPD, risco de multa"
+   "quando": "pedir/priorizar diagnóstico, pendência de documento do diagnóstico, dúvida sobre diagnóstico ou parecer"
   },
-  "tecnico": {
-   "nome": "Técnico Tributário",
+  "trib_execucao": {
+   "nome": "Tributário > Execução",
    "categoria_id": null,
    "grupo_id": null,
-   "quando": "dúvida de tese, parecer, diagnóstico, reanálise, documentos para análise, PER/DCOMP, despacho decisório"
+   "quando": "seguir para execução, cálculo/memória/relatório de execução, dados bancários para restituição/ressarcimento, suspender execução, pendência DCTF"
   },
-  "contratos": {
-   "nome": "Contratos",
+  "trib_compensacao": {
+   "nome": "Tributário > Compensação",
    "categoria_id": null,
    "grupo_id": null,
-   "quando": "envio, ajuste, suspensão ou assinatura de contrato, aditivo, distrato sem litígio"
+   "quando": "compensação (fazer, cancelar, reverter), compensação de ofício, saldo, relatório de PER/DCOMP, caixa postal/situação fiscal no e-CAC"
   },
-  "pos_venda": {
-   "nome": "Pós-venda",
+  "jur_demandas": {
+   "nome": "Juridico > Demandas Diversas",
    "categoria_id": null,
    "grupo_id": null,
-   "quando": "guia, boleto, aviso de pagamento, extrato, saldo de crédito, compensação de ofício, procuração e-CAC"
+   "quando": "parecer jurídico, parecer atualizado de compensação x despacho decisório, intimação (inclusive NCM), modelo de contrato, tese nova, parcelamento de passivo"
   },
-  "marketing": {
-   "nome": "Marketing",
+  "jur_comunicados": {
+   "nome": "Juridico > Comunicados RFB",
    "categoria_id": null,
    "grupo_id": null,
-   "quando": "material novo ou personalizado, co-branding"
+   "quando": "despacho decisório, intimação, comunicado ou movimentação no e-CAC; autorização para seguir (ou não) com manifestação de inconformidade; CND urgente"
   },
-  "financeiro": {
-   "nome": "Financeiro",
+  "jur_manifestacao": {
+   "nome": "Juridico > Contencioso Adm > Manifestações de Inconformidade",
    "categoria_id": null,
    "grupo_id": null,
-   "quando": "repasse ou comissão de parceiro, dados bancários para pagamento"
+   "quando": "defesa (manifestação de inconformidade) já autorizada ou em curso"
   },
-  "ti": {
-   "nome": "TI",
+  "jur_contencioso_adm": {
+   "nome": "Juridico > Contencioso Adm",
    "categoria_id": null,
    "grupo_id": null,
-   "quando": "acesso, sistema, portal"
+   "quando": "verificar e-processo ou intimação de processo administrativo"
+  },
+  "jur_contencioso_jud": {
+   "nome": "Juridico > Contencioso Judicial",
+   "categoria_id": null,
+   "grupo_id": null,
+   "quando": "mandado de segurança ou ação judicial"
+  },
+  "jur_passivo": {
+   "nome": "Juridico > Gestão de Passivo",
+   "categoria_id": null,
+   "grupo_id": null,
+   "quando": "débitos: proposta, parecer de passivo, prioridade"
+  },
+  "jur_transacao": {
+   "nome": "Juridico > Transação",
+   "categoria_id": null,
+   "grupo_id": null,
+   "quando": "transação tributária, reanálise de CAPAG"
+  },
+  "jur_rt_contrato": {
+   "nome": "Juridico > RT > Aditivo",
+   "categoria_id": null,
+   "grupo_id": null,
+   "quando": "aditivo, distrato ou alteração de cláusula do contrato do cliente (use o nome exato: RT > Aditivo · RT > Distrato · RT > Alterações de Cláusulas)"
+  },
+  "jur_parceiro_distrato": {
+   "nome": "Juridico > Parceiro > Distrato",
+   "categoria_id": null,
+   "grupo_id": null,
+   "quando": "distrato do parceiro"
+  },
+  "jur_holding": {
+   "nome": "Juridico > Holding",
+   "categoria_id": null,
+   "grupo_id": null,
+   "quando": "holding familiar: pré-diagnóstico, reunião, dúvidas"
+  },
+  "jur_compliance": {
+   "nome": "Juridico > Compliance > Dossiê",
+   "categoria_id": null,
+   "grupo_id": null,
+   "quando": "dossiê de compliance ou dúvida de compliance"
+  },
+  "contrato_padrao": {
+   "nome": "(sem categoria) Contrato Padrão",
+   "categoria_id": null,
+   "grupo_id": null,
+   "quando": "gerar contrato padrão de recuperação tributária ou proposta de passivo"
   },
   "outros": {
    "nome": "Partners (triagem)",
