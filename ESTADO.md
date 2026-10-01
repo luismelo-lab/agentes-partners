@@ -34,6 +34,8 @@
 
 **GLPI com o usuário de cada pessoa (01/10):** sem conta de serviço. `lib/glpi.py autorizar <pessoa>` (OAuth authorization code; a pessoa entra no próprio GLPI e autoriza; chaves em ~/agentes-partners/.glpi/, 600, fora do git e do backup). Chamado sai em nome de quem atendeu (opção A) ou pela conta do Luis com a pessoa como requerente (opção B). Único pedido ao administrador: cliente OAuth (docs/GLPI.md).
 
+**Áudios e regra dos grupos (01/10):** transcrição local dos áudios do WhatsApp (whisper.cpp + ffmpeg via Homebrew, modelo ggml-small-q5_1 de 190 MB em dados-publicos/whisper, fora do git e do backup; ~25 s por áudio, com cache). Regra: pedido em grupo de Master é da Daniela (Jenifer fica com indicação e prospecção). Corrigido: grupos com sigla curta (D&S) não eram reconhecidos como Master.
+
 ## Próximo passo
 - Luis fecha a planilha antiga e envia `mapa-de-tarefas-v2.xlsx` (abas com nomes e exemplos de cada uma) + mensagem ao time.
 - Primeiro teste real do Departamento de Marketing (ex.: cronograma de datas festivas 2027).

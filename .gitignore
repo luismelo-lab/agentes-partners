@@ -42,3 +42,4 @@ skills/**/references/*-dados*.json
 !departamentos/resultados/mapeamento-hubspot.json
 !celulas/whatsapp-config.json
 !celulas/jenifer/config-jenifer.json
+dados-publicos/whisper/**

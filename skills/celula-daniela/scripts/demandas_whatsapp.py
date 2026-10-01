@@ -6,7 +6,7 @@ Para cada conversa com mensagem de parceiro/cliente nas últimas N horas:
 - PDF, Word e Excel → texto;
 - CNPJs digitados ou lidos no print (com dígito verificador conferido) → Receita (base local) + HubSpot (download local);
 - links de negócio do HubSpot → dados do card e resumo do parecer, se houver.
-Áudios ficam marcados para ouvir (sem transcrição nesta versão).
+Áudios: transcritos localmente em português (whisper.cpp + ffmpeg, modelo em dados-publicos/whisper); nada sai do Mac.
 
 Nada sai da máquina: os anexos vêm do armazenamento do Eazybe e ficam em celulas/<pessoa>/whatsapp/anexos
 (pasta 700, 30 dias). CNPJ de cliente nunca vai para serviço externo.
@@ -55,12 +55,34 @@ def negocio(d, R):
             "parecer_resumo": r.get("resumo"), "parecer_motivo": r.get("motivo"), "sinal_reanalise": r.get("sinal_reanalise"), "link": LINK.format(d["id"])}
 
 
+WHISPER = "/opt/homebrew/bin/whisper-cli"
+FFMPEG = "/opt/homebrew/bin/ffmpeg"
+MODELO = os.path.join(AP, "dados-publicos/whisper/ggml-small-q5_1.bin")
+
+
+def transcrever(arq):
+    """Transcrição local em português (whisper.cpp): nada sai do Mac. Devolve "" se não houver transcritor."""
+    if not (os.path.exists(WHISPER) and os.path.exists(FFMPEG) and os.path.exists(MODELO)): return ""
+    wav = arq + ".wav"
+    subprocess.run([FFMPEG, "-y", "-loglevel", "error", "-i", arq, "-ar", "16000", "-ac", "1", wav], capture_output=True, timeout=300)
+    if not os.path.exists(wav): return ""
+    r = subprocess.run([WHISPER, "-m", MODELO, "-l", "pt", "-nt", "-np", "-f", wav], capture_output=True, text=True, timeout=600)
+    try: os.remove(wav)
+    except OSError: pass
+    return " ".join(l.strip() for l in r.stdout.splitlines() if l.strip()) if r.returncode == 0 else ""
+
+
 def ler_anexo(url, pasta, cache):
     if url in cache: return cache[url]
     nome = url.rsplit("/", 1)[-1][:150]; ext = nome.rsplit(".", 1)[-1].lower() if "." in nome else ""
     info = {"arquivo": re.sub(r"^\d+_", "", nome), "tipo": "imagem" if ext in IMG else "audio" if ext in AUD else "documento" if ext in DOC else "outro", "texto": ""}
     if PESSOAL.search(nome):
         info.update({"tipo": "documento pessoal", "texto": "", "nota": "documento pessoal: não lido (LGPD)"}); cache[url] = info; return info
+    if info["tipo"] == "audio":
+        dest = os.path.join(pasta, hashlib.sha1(url.encode()).hexdigest()[:12] + "." + ext)
+        if subprocess.run(["curl", "-sS", "-L", "-f", "-m", "60", "-o", dest, url], capture_output=True).returncode == 0:
+            info["texto"] = transcrever(dest); info["transcrito"] = bool(info["texto"])
+        info["texto"] = (info["texto"] or "")[:4000]; cache[url] = info; return info
     if info["tipo"] in ("imagem", "documento"):
         dest = os.path.join(pasta, hashlib.sha1(url.encode()).hexdigest()[:12] + "." + ext)
         r = subprocess.run(["curl", "-sS", "-L", "-f", "-m", "60", "-o", dest, url], capture_output=True)
@@ -136,7 +158,8 @@ def main():
                                 "no_hubspot": bool(hs), "parceiros_no_hubspot": sorted({h["parceiro"] or "sem parceiro" for h in hs})})
         ev["links_negocio"] = [negocio(N[i], R) for i in dict.fromkeys(ev["links_negocio"]) if i in N] + \
                               [{"id": i, "nao_encontrado_no_download": True} for i in dict.fromkeys(ev["links_negocio"]) if i not in N]
-        ev["audios"] = sum(1 for x in ev["anexos"] if x["tipo"] == "audio")
+        ev["audios"] = sum(1 for x in ev["anexos"] if x["tipo"] == "audio" and not x.get("texto"))  # só os que não foram transcritos
+        ev["audios_transcritos"] = sum(1 for x in ev["anexos"] if x["tipo"] == "audio" and x.get("texto"))
         saida.append(ev)
     json.dump(cache, open(cpath, "w"), ensure_ascii=False)
     out = os.path.join(base, f"demandas-{datetime.now(TZ):%Y-%m-%d-%Hh%M}.json")

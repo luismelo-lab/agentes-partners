@@ -6,7 +6,7 @@ set -e
 DEST="$HOME/Library/CloudStorage/OneDrive-SAVECOMPANY/Backups/agentes-partners"
 HOJE=$(date +%F)
 mkdir -p "$DEST/$HOJE"
-EXC=(--exclude .env --exclude '.glpi' --exclude 'anexos' --exclude 'anexos-cache.json' --exclude '*.sqlite' --exclude node_modules --exclude .DS_Store --exclude '__pycache__')
+EXC=(--exclude .env --exclude '.glpi' --exclude 'anexos' --exclude 'anexos-cache.json' --exclude '*.sqlite' --exclude 'whisper' --exclude node_modules --exclude .DS_Store --exclude '__pycache__')
 rsync -a --delete $EXC "$HOME/agentes-partners/" "$DEST/$HOJE/agentes-partners/"
 rsync -a --delete $EXC "$HOME/.claude/skills/" "$DEST/$HOJE/skills/"
 rsync -a --delete $EXC "$HOME/.claude/scheduled-tasks/" "$DEST/$HOJE/scheduled-tasks/"

@@ -68,13 +68,22 @@ def main():
             ultimas = [m for m in (ev.get("mensagens") or c["conversa"]) if m.get("texto")][-2:]
             pede = " / ".join(m["texto"].replace("\n", " ")[:160] for m in ultimas)
             neg = (c.get("negocios") or [{}])[0]
-            itens.append({"nova": (p, c["chat"]) not in vistos, "chat": c["chat"], "master": c.get("master"), "status": "responder" if esperando >= a.aguardando else "acompanhar",
+            itens.append({"grupo": c.get("tipo") == "grupo", "nova": (p, c["chat"]) not in vistos, "chat": c["chat"], "master": c.get("master"), "status": "responder" if esperando >= a.aguardando else "acompanhar",
                           "aguardando_h": esperando, "o_que_pede": "Última mensagem: " + pede, "entrega": entrega(ev) if ev else "",
                           "proximo_passo": "Ler a conversa e responder" if esperando >= a.aguardando else "Ouvir o áudio ou ver a imagem",
                           "negocio": neg.get("nome"), "link": neg.get("link")})
         T["pessoas"][p] = {"conversas": len(caixa), "itens": itens,
                            "leitura": f"Rodada automática (sem IA): {sum(i['status'] == 'responder' for i in itens)} conversa(s) sem resposta há {a.aguardando:g}h ou mais. A rodada com análise completa sai às 8h e às 14h."}
         tot[p] = sum(i["status"] == "responder" for i in itens)
+    # Regra do Luis (01/10): pedido em grupo de Master é da Daniela; a Jenifer fica com indicação e prospecção.
+    dan = T["pessoas"].get("daniela", {"conversas": 0, "itens": [], "leitura": ""})
+    if "jenifer" in T["pessoas"]:
+        fica = []
+        for i in T["pessoas"]["jenifer"]["itens"]:
+            if i.get("master") and i.get("grupo"):
+                if not any(x["chat"] == i["chat"] for x in dan["itens"]): dan["itens"].append(i)
+            else: fica.append(i)
+        T["pessoas"]["jenifer"]["itens"] = fica; T["pessoas"]["daniela"] = dan
     T["leitura_geral"] = "Rodada automática, sem IA: conversas sem resposta por pessoa: " + ", ".join(f"{k} {v}" for k, v in tot.items()) + "."
     out = os.path.join(AP, "celulas", f"whatsapp-triagem-{agora:%Y-%m-%d-%Hh%M}.json")
     json.dump(T, open(out, "w"), ensure_ascii=False, indent=1)

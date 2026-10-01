@@ -100,13 +100,17 @@ def e_do_time(remetente, cfg):
 
 
 def master_do_texto(texto, R):
+    """Master pelo nome do grupo/conversa. Siglas curtas (ex.: "D&S") só valem como palavra inteira."""
     k = lambda x: re.sub(r"[^a-z0-9]", "", norm(x))
-    t = k(texto)
+    t, tn = k(texto), norm(texto)
     for canon, als in R.items():
         for a in [canon] + list(als):
             ka = k(a)
             if len(ka) >= 3 and ka in t:
                 return canon
+            if 2 <= len(ka) < 3:
+                pad = re.escape(norm(a)).replace(r"\&", r"\s*&\s*").replace(r"\ ", r"\s*")
+                if re.search(r"(?<![a-z0-9])" + pad + r"(?![a-z0-9])", tn): return canon
     return None
 
 
