@@ -127,5 +127,6 @@ WhatsApp, GLPI (novo), HubSpot (portal 47865021), dashboard S&OE, cockpit Master
 - Confirmar se Técnico Contábil é área própria na Save e quais outras áreas de apoio existem.
 - Aprovar rotina diária do Jornal (proposta: dias úteis 07h30, salvo como rascunho).
 - Fontes de dados da reunião semanal: HubSpot exige autorizar o conector; até lá, snapshot do cockpit + pauta-da-semana.md.
-- Detalhes do GLPI: quem configura, prazo de entrada em produção, se tem API, categorias previstas.
+- GLPI (01/10): API v2 com OAuth; categorias reais mapeadas (infra/glpi-regras.md v2). Falta a TI criar o acesso da integração (docs/GLPI.md).
+- Teams (01/10): Luis decidiu levar o painel para o Teams quando a TI liberar a Microsoft; o painel fica como reserva até lá.
 - Conector HubSpot do plugin `hubspot-sales` precisa de autorização (configurações de conectores do claude.ai). Necessário só a partir da Fase 5.
