@@ -48,7 +48,7 @@ def main():
                         + (f" · Master {i['master']}" if i.get("master") else "") + (f" · demanda {d['id']}" if d else "") + "</p>"
                         + html(e.get("descricao")) + (f"<p><b>Negócio no HubSpot:</b> {i['link']}</p>" if i.get("link") else "")
                         + "<p><i>Chamado aberto pelos agentes da Área Partners. Responsável na Partners: " + p.capitalize() + ".</i></p>")
-                r = glpi.abrir(e.get("area", "outros"), e.get("titulo") or i.get("o_que_pede", "")[:120], desc, e.get("urgencia", 3))
+                r = glpi.abrir(e.get("area", "outros"), e.get("titulo") or i.get("o_que_pede", "")[:120], desc, e.get("urgencia", 3), pessoa=p)
                 r.update({"area": e.get("area"), "titulo": e.get("titulo"), "quando": datetime.now().isoformat(timespec="minutes")})
                 if r.get("rascunho"):
                     rasc += 1

@@ -5,14 +5,18 @@ Verificado em 01/10/2026 sem login: API v2.1 ativa, autenticação OAuth2 (fluxo
 endpoints /Assistance/Ticket (criar/listar), /Assistance/Ticket/{id}/Timeline/Followup e /TeamMember.
 A API antiga (apirest.php) está desativada e não é usada.
 
-Credenciais em ~/agentes-partners/.env (nunca no código, nunca impressas):
-  GLPI_CLIENT_ID, GLPI_CLIENT_SECRET  (cliente OAuth criado pelo administrador do GLPI, escopo "api")
-  GLPI_USUARIO, GLPI_SENHA            (conta de serviço "Agentes Partners", perfil só para abrir e acompanhar chamados)
+Quem abre o chamado (sem usuário novo):
+  Opção A: a própria pessoa que atendeu o parceiro (Daniela, Geovana, Jenifer). Cada uma autoriza UMA vez:
+           python3 lib/glpi.py autorizar daniela   → abre o login do GLPI; ela entra e clica em Autorizar.
+  Opção B: a conta reserva (Luis, "conta_reserva" no config), com a pessoa como requerente.
+  Nenhuma senha passa pelos agentes; ficam só as chaves de acesso em ~/agentes-partners/.glpi/ (revogáveis no GLPI).
+Pré-requisito único do administrador: um cliente OAuth (GLPI_CLIENT_ID e GLPI_CLIENT_SECRET no .env), fluxo
+"authorization code", redirect http://127.0.0.1:8765/glpi, escopos "api" e "user". Conta de serviço é opcional.
 Modo (infra/glpi-config.json → "modo"): "rascunho" (padrão: só monta o chamado e mostra no e-mail) ou "abrir".
 Teste: python3 lib/glpi.py testar
 """
-import json, os, subprocess, sys, time
-from urllib.parse import quote
+import http.server, json, os, secrets, subprocess, sys, threading, time
+from urllib.parse import parse_qs, quote, urlparse
 
 AP = os.path.expanduser("~/agentes-partners")
 CFG = os.path.join(AP, "infra", "glpi-config.json")
@@ -37,6 +41,64 @@ def _curl(args, entrada=None):
     return subprocess.run(["curl", "-sS", "-m", "60"] + args, input=entrada, capture_output=True).stdout
 
 
+CONTAS = os.path.join(AP, ".glpi")  # chaves de acesso por pessoa (pasta 700, arquivos 600; fora do git e do backup)
+REDIRECT = "http://127.0.0.1:8765/glpi"
+
+
+def _salvar_conta(conta, d):
+    os.makedirs(CONTAS, exist_ok=True); os.chmod(CONTAS, 0o700)
+    f = os.path.join(CONTAS, conta + ".json"); json.dump(d, open(f, "w")); os.chmod(f, 0o600)
+
+
+def _trocar(campos):
+    base = config()["url"].rstrip("/")
+    corpo = "&".join(f"{k}={quote(str(v))}" for k, v in campos.items())
+    return json.loads(_curl(["-X", "POST", base + "/api.php/token", "-H", "Content-Type: application/x-www-form-urlencoded", "--data-binary", "@-"], corpo.encode()) or b"{}")
+
+
+def autorizar(conta):
+    """Uma vez por pessoa, no Mac onde os agentes rodam: abre o login do GLPI no navegador; a pessoa entra com o
+    próprio usuário e autoriza. Nenhuma senha passa pelos agentes; fica guardada só a chave de acesso (revogável no GLPI)."""
+    cid, sec = _env("GLPI_CLIENT_ID"), _env("GLPI_CLIENT_SECRET")
+    if not cid: raise SystemExit("Falta o cliente OAuth do GLPI (GLPI_CLIENT_ID/GLPI_CLIENT_SECRET no .env): ver docs/GLPI.md.")
+    estado, achado = secrets.token_urlsafe(16), {}
+    class H(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            q = parse_qs(urlparse(self.path).query)
+            if q.get("state", [""])[0] == estado and q.get("code"): achado["code"] = q["code"][0]
+            self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.end_headers()
+            self.wfile.write("<h2>Pronto. Pode fechar esta janela.</h2>".encode() if achado else "<h2>Autorização não concluída.</h2>".encode())
+        def log_message(self, *a): pass
+    srv = http.server.HTTPServer(("127.0.0.1", 8765), H); threading.Thread(target=srv.serve_forever, daemon=True).start()
+    url = (config()["url"].rstrip("/") + f"/api.php/authorize?response_type=code&client_id={quote(cid)}&redirect_uri={quote(REDIRECT)}"
+           f"&scope={quote('api user')}&state={estado}")
+    subprocess.run(["open", url]); print("Abrindo o GLPI no navegador para", conta, "entrar e autorizar…")
+    for _ in range(300):
+        if achado: break
+        time.sleep(1)
+    srv.shutdown()
+    if not achado: raise SystemExit("Tempo esgotado sem autorização.")
+    d = _trocar({"grant_type": "authorization_code", "code": achado["code"], "redirect_uri": REDIRECT, "client_id": cid, "client_secret": sec})
+    if "access_token" not in d: raise SystemExit("GLPI recusou: " + str(d.get("error_description") or d)[:200])
+    d["exp"] = time.time() + int(d.get("expires_in", 3600)); _salvar_conta(conta, d)
+    me = api("GET", "/Administration/User/Me", conta=conta)
+    d["user_id"], d["username"] = me.get("id"), me.get("username"); _salvar_conta(conta, d)
+    print(f"Autorizado: {conta} = usuário GLPI {d['username']} (id {d['user_id']})")
+
+
+def tem_conta(conta):
+    return bool(conta) and os.path.exists(os.path.join(CONTAS, conta + ".json"))
+
+
+def token_conta(conta):
+    f = os.path.join(CONTAS, conta + ".json"); d = json.load(open(f))
+    if d.get("exp", 0) > time.time() + 60: return d["access_token"]
+    n = _trocar({"grant_type": "refresh_token", "refresh_token": d.get("refresh_token", ""), "client_id": _env("GLPI_CLIENT_ID"), "client_secret": _env("GLPI_CLIENT_SECRET")})
+    if "access_token" not in n: raise SystemExit(f"A autorização de {conta} no GLPI expirou: rode `python3 lib/glpi.py autorizar {conta}`.")
+    d.update(n); d["exp"] = time.time() + int(n.get("expires_in", 3600)); _salvar_conta(conta, d)
+    return d["access_token"]
+
+
 def token():
     if _tk.get("exp", 0) > time.time() + 60: return _tk["v"]
     base = config()["url"].rstrip("/")
@@ -50,9 +112,10 @@ def token():
     return _tk["v"]
 
 
-def api(metodo, caminho, corpo=None):
+def api(metodo, caminho, corpo=None, conta=None):
     base = config()["url"].rstrip("/") + "/api.php/v2"
-    cfg = f'header = "Authorization: Bearer {token()}"\nheader = "Content-Type: application/json"\nheader = "Accept: application/json"\n'
+    tk = token_conta(conta) if conta else token()
+    cfg = f'header = "Authorization: Bearer {tk}"\nheader = "Content-Type: application/json"\nheader = "Accept: application/json"\n'
     args = ["-X", metodo, base + caminho, "-K", "-"]
     if corpo is not None:
         tmp = os.path.join(AP, "logs", f".glpi-{os.getpid()}.json"); open(tmp, "w").write(json.dumps(corpo)); args += ["--data-binary", "@" + tmp]
@@ -70,20 +133,39 @@ def montar(area, titulo, descricao_html, urgencia=3):
     return t, a
 
 
-def abrir(area, titulo, descricao_html, urgencia=3):
-    """Abre o chamado (modo "abrir") e atribui ao grupo da área. Devolve {"id", "url"} ou {"rascunho": True}."""
+def conta_para(pessoa):
+    """Opção A: a própria pessoa (se ela autorizou). Opção B: a conta reserva (Luis) com a pessoa como requerente."""
+    if tem_conta(pessoa): return pessoa, None
+    r = config().get("conta_reserva", "luis")
+    if tem_conta(r):
+        uid = (config().get("usuarios") or {}).get(pessoa)
+        if isinstance(uid, str) and "@" in uid:  # e-mail → id do usuário no GLPI (consulta uma vez e guarda)
+            achados = api("GET", "/Administration/User?filter=" + quote(f'emails.email=="{uid}"'), conta=r)
+            uid = achados[0]["id"] if isinstance(achados, list) and achados else None
+            if uid:
+                c = config(); c["usuarios"][pessoa] = uid; json.dump(c, open(CFG, "w"), ensure_ascii=False, indent=1)
+        return r, uid
+    return None, None
+
+
+def abrir(area, titulo, descricao_html, urgencia=3, pessoa=None):
+    """Abre o chamado em nome de quem atendeu (pessoa) e atribui ao grupo da área. Devolve {"id", "url"} ou {"rascunho": True}."""
     t, a = montar(area, titulo, descricao_html, urgencia)
-    if config().get("modo") != "abrir": return {"rascunho": True, "chamado": t, "grupo": a.get("nome")}
-    r = api("POST", "/Assistance/Ticket", t)
+    conta, requerente = conta_para(pessoa) if pessoa else (None, None)
+    if config().get("modo") != "abrir" or not (conta or _env("GLPI_USUARIO")):
+        return {"rascunho": True, "chamado": t, "grupo": a.get("nome")}
+    r = api("POST", "/Assistance/Ticket", t, conta=conta)
     tid = r.get("id")
     if not tid: return {"erro": str(r)[:300]}
-    if a.get("grupo_id"): api("POST", f"/Assistance/Ticket/{tid}/TeamMember", {"type": "Group", "id": a["grupo_id"], "role": "assigned"})
-    return {"id": tid, "url": config()["url"].rstrip("/") + f"/front/ticket.form.php?id={tid}", "grupo": a.get("nome")}
+    if a.get("grupo_id"): api("POST", f"/Assistance/Ticket/{tid}/TeamMember", {"type": "Group", "id": a["grupo_id"], "role": "assigned"}, conta=conta)
+    if requerente: api("POST", f"/Assistance/Ticket/{tid}/TeamMember", {"type": "User", "id": requerente, "role": "requester"}, conta=conta)
+    return {"id": tid, "url": config()["url"].rstrip("/") + f"/front/ticket.form.php?id={tid}", "grupo": a.get("nome"), "aberto_por": conta}
 
 
-def acompanhar(tid, texto_html):
+def acompanhar(tid, texto_html, pessoa=None):
     if config().get("modo") != "abrir": return {"rascunho": True}
-    return api("POST", f"/Assistance/Ticket/{tid}/Timeline/Followup", {"content": texto_html})
+    conta, _ = conta_para(pessoa) if pessoa else (None, None)
+    return api("POST", f"/Assistance/Ticket/{tid}/Timeline/Followup", {"content": texto_html}, conta=conta)
 
 
 def status(tid):
@@ -92,7 +174,15 @@ def status(tid):
 
 
 if __name__ == "__main__":
-    if (sys.argv[1:] or [""])[0] == "testar":
-        token(); print("login ok"); print("chamados visíveis:", len(api("GET", "/Assistance/Ticket?limit=5") or []))
+    cmd = (sys.argv[1:] or [""])[0]
+    if cmd == "autorizar":
+        autorizar(sys.argv[2])
+    elif cmd == "testar":
+        conta = sys.argv[2] if len(sys.argv) > 2 else None
+        me = api("GET", "/Administration/User/Me", conta=conta); print("login ok:", me.get("username"))
+        print("chamados visíveis:", len(api("GET", "/Assistance/Ticket?limit=5", conta=conta) or []))
+    elif cmd == "contas":
+        for f in sorted(os.listdir(CONTAS)) if os.path.isdir(CONTAS) else []:
+            d = json.load(open(os.path.join(CONTAS, f))); print(f[:-5], "→", d.get("username"), "(id", str(d.get("user_id")) + ")")
     else:
         print(__doc__)
