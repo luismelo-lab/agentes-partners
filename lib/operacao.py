@@ -33,12 +33,13 @@ from collections import defaultdict
 from datetime import date, datetime, timedelta
 
 AP = os.path.expanduser("~/agentes-partners"); SK = os.path.expanduser("~/.claude/skills")
-DADOS = os.path.join(AP, "departamentos/resultados/dados"); REG = os.path.join(AP, "registro")
+DADOS = os.path.join(AP, "departamentos/resultados/dados")
+REG = os.environ.get("OPERACAO_REG") or os.path.join(AP, "registro")  # OPERACAO_REG/OPERACAO_HOJE: só para simulação
 EVT = os.path.join(REG, "eventos.json"); ETP = os.path.join(REG, "etapas.json")
 sys.path.insert(0, os.path.join(AP, "lib")); sys.path.insert(0, os.path.join(SK, "depto-marketing/scripts"))
 import partners_dados as PD  # noqa: E402
 
-HOJE = date.today()
+HOJE = date.fromisoformat(os.environ["OPERACAO_HOJE"]) if os.environ.get("OPERACAO_HOJE") else date.today()
 LINK = "https://app.hubspot.com/contacts/47865021/deal/{}"
 PESSOAS = {"daniela": ("Daniela", "daniela.maciel@savecompany.com.br"), "jenifer": ("Jenifer", "jenifer.carvalho@savecompany.com.br"),
            "geovana": ("Geovana", "geovana.goncalves@savecompany.com.br"), "luis": ("Luis", "luis.melo@savecompany.com.br")}
@@ -53,7 +54,14 @@ NOME = {"contrato_parado": "Contrato sem assinatura", "entrou_diagnostico": "Ent
         "diagnostico_parado": "Diagnóstico parado", "apresentacao_parada": "Apresentação de diagnóstico parada", "parceiro_inativo": "Parceiro sem indicação",
         "demanda_atrasada": "Demanda do WhatsApp atrasada", "aprovacao_parada": "Aprovação esperando", "rotina_falhou": "Rotina com falha",
         "ganho_sem_execucao": "Ganho sem execução no Bitrix", "execucao_parada": "Execução parada no Bitrix"}
-URGENTE = {"conflito_novo", "entrou_diagnostico", "demanda_atrasada", "rotina_falhou"}
+URGENTE = {"conflito_novo", "demanda_atrasada", "rotina_falhou"}
+AVISO_TARDE = URGENTE | {"entrou_diagnostico"}  # o que justifica e-mail à tarde
+TEL = re.compile(r"@?\+?\d[\d .()-]{8,}\d")
+
+
+def limpo(t):
+    """Nada de telefone, CPF ou documento no e-mail: sequências longas de dígitos viram [número]."""
+    return TEL.sub(lambda m: "[número]" if sum(c.isdigit() for c in m.group()) >= 10 else m.group(), str(t or ""))
 
 
 def ler(f, padrao):
@@ -153,7 +161,7 @@ def sentinelas():
                      {"rascunho": rasc if auditar(rasc) else None, "dias": dias_et}))
         if et == APRES and not h.get("aprox") and h.get("desde") == os.path.basename(arqs[-1])[8:18]:
             rev_ids.append(d["id"])
-            marca(ev(E, f"diag|{d['id']}", "entrou_diagnostico", "geovana", nm, f"{base}. Entrou na etapa hoje; o Revisor já deu a segunda opinião.", "Tributário", d["id"], d.get("valor")))
+            marca(ev(E, f"diag|{d['id']}", "entrou_diagnostico", "geovana", nm, f"{base}. Entrou na etapa em {desde.strftime('%d/%m')}; o Revisor já deu a segunda opinião.", "Tributário", d["id"], d.get("valor")))
         if et in ET_COMERCIAL and parado >= LIM["comercial"]:
             p = "jenifer" if d.get("pipeline") in BDR else "daniela"
             marca(ev(E, f"comercial|{d['id']}", "comercial_parado", p, nm, f"{base}. Sem movimentação há {parado} dias.", "Comercial", d["id"], d.get("valor"), {"dias": parado}))
@@ -213,7 +221,7 @@ def sentinelas():
     # guarda resolvidos por 30 dias
     E = {k: e for k, e in E.items() if e.get("ativo") or (dia(e.get("resolvido_em")) or HOJE) >= HOJE - timedelta(days=30)}
     gravar(EVT, E)
-    if rev_ids: revisor(rev_ids)
+    if rev_ids and not os.environ.get("OPERACAO_REG"): revisor(rev_ids)  # na simulação o Revisor não roda
     at = [e for e in E.values() if e.get("ativo")]
     print(f"eventos ativos: {len(at)} · novos hoje: {sum(1 for e in at if novo(e))} · revisor: {len(rev_ids)} negócio(s)")
 
@@ -246,9 +254,10 @@ def supervisao(E, marca):
     for d in (R.values() if isinstance(R, dict) else R):
         st = d.get("status"); h = d.get("aguardando_h") or 0
         aberta = dia(d.get("aberta_em")); idade = (HOJE - aberta).days if aberta else 0
-        if (st == "responder" and (h >= 24 or idade >= 1)) or (st == "acompanhar" and idade >= 3):
+        pela_ia = any("(IA)" in (x.get("evento") or "") for x in d.get("eventos", []))  # a triagem sem IA marca tudo como responder
+        if pela_ia and ((st == "responder" and (h >= 24 or idade >= 1)) or (st == "acompanhar" and idade >= 3)):
             marca(ev(E, f"demanda|{d['id']}", "demanda_atrasada", d.get("pessoa") or "daniela", f"{d['id']} · {d.get('titulo')}",
-                     f"{d.get('o_que_pede') or ''} Status: {st}, aberta em {(d.get('aberta_em') or '')[:10]}. Próximo passo: {d.get('proximo_passo') or 'definir'}.", "Supervisor"))
+                     f"{d.get('o_que_pede') or ''} Status: {st}, aberta em {(d.get('aberta_em') or '')[8:10]}/{(d.get('aberta_em') or '')[5:7]}. Próximo passo: {d.get('proximo_passo') or 'definir'}.", "Supervisor"))
     # chamados propostos e pedidos da Central esperando decisão
     agora = datetime.now()
     for k, c in ler(os.path.join(REG, "chamados-propostos.json"), {}).items():
@@ -314,7 +323,7 @@ def plano(previa=False, so_urgentes=False):
         meus = [e for e in at if e["pessoa"] == p or (p == "luis" and e.get("cc_luis"))]
         if so_urgentes:
             ja = set(est.get(f"avisados|{p}", []))
-            meus = [e for e in meus if e["tipo"] in URGENTE and novo(e) and f"{e['tipo']}|{e['titulo']}" not in ja]
+            meus = [e for e in meus if e["tipo"] in AVISO_TARDE and novo(e) and f"{e['tipo']}|{e['titulo']}" not in ja]
             if not meus: continue
         novos = [e for e in meus if novo(e)]
         por = defaultdict(list)
@@ -340,12 +349,12 @@ def plano(previa=False, so_urgentes=False):
             linhas.append(L.secao(f"{NOME[t]} · {len(xs)}" + (f" ({n_nov} novo{'s' if n_nov > 1 else ''})" if n_nov else "")))
             lim = 6 if t in ("crm_incompleto", "apresentacao_parada", "comercial_parado") else 10
             for e in xs[:lim]:
-                ls = [("Situação", L.esc(e["texto"]))]
+                ls = [("Situação", L.esc(limpo(e["texto"])))]
                 if e.get("revisor"): ls.append(("Revisor", L.esc(e["revisor"])))
                 if e.get("rascunho"): ls.append(("Rascunho para o parceiro", "<i>" + L.esc(e["rascunho"]) + "</i> (revisado pela Qualidade; você decide se envia)"))
                 if e.get("valor"): ls.append(("Valor no CRM", f"R$ {e['valor']:,.0f}".replace(",", ".")))
                 ls.append(("Desde", L.esc(e["primeiro"][8:10] + "/" + e["primeiro"][5:7]) + (" · <b>novo</b>" if novo(e) else "")))
-                linhas.append(L.cartao(e["titulo"], e["depto"], ls, "#b3261e" if t in URGENTE else L.OURO, e.get("link")))
+                linhas.append(L.cartao(limpo(e["titulo"]), e["depto"], ls, "#b3261e" if t in URGENTE else L.OURO, e.get("link")))
             if len(xs) > lim:
                 linhas.append(L.paragrafo(f"E mais {len(xs) - lim}. A lista completa está no painel e em registro/eventos.json."))
         linhas.append(L.rodape("Plano montado pelos agentes da Área Partners às " + datetime.now().strftime("%Hh%M")
