@@ -86,12 +86,15 @@ case "${1:-ajuda}" in
   onedrive)     rodar onedrive python3 "$AP/infra/publicar_onedrive.py" ;;
   portal)       rodar portal python3 "$AP/infra/portal_dados.py" ;;
   backup)       rodar backup "$AP/infra/backup.sh" ;;
+  bitrix)       # fase da execução dos ganhos (só consulta); pula enquanto a TI não criar o webhook
+                python3 -c "import sys; sys.path.insert(0,'$AP/lib'); import bitrix; sys.exit(0 if bitrix.disponivel() else 3)" || { log bitrix "pulado: sem webhook do Bitrix (docs/BITRIX.md)"; exit 0; }
+                rodar bitrix python3 "$AP/lib/bitrix.py" baixar ;;
   sentinelas)   rodar sentinelas python3 "$AP/lib/operacao.py" sentinelas ;;      # mapeia: HubSpot, WhatsApp, Central, chamados, rotinas
   plano)        rodar plano python3 "$AP/lib/operacao.py" plano ;;                # plano do dia por pessoa + supervisor (e-mail interno)
   tarde)        # rodada da tarde (13h30): HubSpot de novo, sentinelas e aviso só do que é novo e urgente
                 "$0" hubspot forcar && "$0" sentinelas && rodar plano python3 "$AP/lib/operacao.py" avisos ;;
   manha)        # preparação diária (dias úteis, 7h30). Se o download falhar, NÃO segue com dado velho
-                "$0" hubspot && { "$0" sentinelas; "$0" plano; "$0" dados-bi; "$0" portal; "$0" onedrive; } ;;
+                "$0" hubspot && { "$0" bitrix; "$0" sentinelas; "$0" plano; "$0" dados-bi; "$0" portal; "$0" onedrive; } ;;
   segunda)      # preparação da segunda (6h): números da semana, Recuperador, Revisor e relatórios das áreas
                 "$0" hubspot && { "$0" resultados; "$0" recuperador; "$0" revisor; "$0" areas; "$0" onedrive; } ;;
   status)       echo "Últimas execuções:"; tail -n 25 "$LOG/partners.log" 2>/dev/null

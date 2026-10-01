@@ -124,6 +124,10 @@ WhatsApp, GLPI (novo), HubSpot (portal 47865021), dashboard S&OE, cockpit Master
 - `lib/operacao.py`: 11 sentinelas → registro/eventos.json → executores (Revisor diário, rascunho auditado, Receita) → plano do dia 7h30 (`partners manha`) e avisos 13h30 (`partners tarde`, launchd novo). Linha de base criada em 01/10: 137 eventos.
 - Recuperador: lote de segunda enviado direto à Geovana com cópia para o Luis (D27, autorizado em 01/10).
 
+## Bitrix (01/10)
+- Execução = processo 162 "Execução Lucro Real" (8 funis) e 152 "Execução Holding", ligados ao negócio (parentId2 = ID Bitrix). Retrato de 01/10: 1.063 de 1.076 ganhos com execução; 13 sem.
+- `lib/bitrix.py` (só consulta) + `infra/bitrix-execucao.json` + sentinelas ganho_sem_execucao e execucao_parada + fase no status do WhatsApp. Desligado até a TI criar o webhook (docs/BITRIX.md).
+
 ## Pendências / dúvidas em aberto
 - Validar com o Jurídico real: estrutura societária da Save × remuneração de parceiros (indicação comercial vs. honorários).
 - Validar dados da reforma e dos riscos-chave (levantados por pesquisa web em 28/09/2026) com os técnicos humanos.

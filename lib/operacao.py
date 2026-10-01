@@ -13,6 +13,8 @@ Sentinelas (comparam o download do HubSpot de hoje com o histórico e com os reg
   demanda_atrasada      demanda do WhatsApp esperando além do prazo                    → dona da demanda (Supervisor)
   aprovacao_parada      chamado proposto ou pedido da Central esperando decisão há 24h+ → quem decide (Supervisor)
   rotina_falhou         rotina do terminal com erro hoje                               → Luis (TI)
+  ganho_sem_execucao    ganho no HubSpot há 7+ dias sem card de execução no Bitrix      → Daniela (Pós-venda)
+  execucao_parada       execução em fase ativa no Bitrix há 30+ dias                    → Daniela (Pós-venda; cobrar o técnico)
 
 Executores encadeados (agente → agente, sem aprovação, decisão D26 do Luis em 01/10/2026):
   entrou_diagnostico → Revisor de Diagnóstico nos negócios novos (segunda opinião no mesmo dia)
@@ -49,7 +51,8 @@ BDR = ("Save Partners - BDR/SDR", "Save Partners - Closer", "Enriquecimento")
 NOME = {"contrato_parado": "Contrato sem assinatura", "entrou_diagnostico": "Entrou em apresentação de diagnóstico",
         "conflito_novo": "Possível conflito de canal", "crm_incompleto": "Cadastro incompleto no CRM", "comercial_parado": "Negócio comercial parado",
         "diagnostico_parado": "Diagnóstico parado", "apresentacao_parada": "Apresentação de diagnóstico parada", "parceiro_inativo": "Parceiro sem indicação",
-        "demanda_atrasada": "Demanda do WhatsApp atrasada", "aprovacao_parada": "Aprovação esperando", "rotina_falhou": "Rotina com falha"}
+        "demanda_atrasada": "Demanda do WhatsApp atrasada", "aprovacao_parada": "Aprovação esperando", "rotina_falhou": "Rotina com falha",
+        "ganho_sem_execucao": "Ganho sem execução no Bitrix", "execucao_parada": "Execução parada no Bitrix"}
 URGENTE = {"conflito_novo", "entrou_diagnostico", "demanda_atrasada", "rotina_falhou"}
 
 
@@ -202,6 +205,7 @@ def sentinelas():
             marca(ev(E, f"parceiro|{p}", "parceiro_inativo", "daniela", p, f"Costuma indicar a cada {ritmo:.0f} dias ({n12[p]} negócios em 12 meses); o último entrou há {gap} dias ({u.isoformat()}).",
                      "Partner Success", extra={"dias": gap}))
 
+    execucao(N, E, marca)
     supervisao(E, marca)
     for k, e in E.items():
         if not e.pop("_visto", False) and e.get("ativo"):
@@ -212,6 +216,28 @@ def sentinelas():
     if rev_ids: revisor(rev_ids)
     at = [e for e in E.values() if e.get("ativo")]
     print(f"eventos ativos: {len(at)} · novos hoje: {sum(1 for e in at if novo(e))} · revisor: {len(rev_ids)} negócio(s)")
+
+
+def execucao(N, E, marca):
+    """Pós-venda: fase da execução no Bitrix (lib/bitrix.py baixa quando o webhook da TI existir)."""
+    import bitrix as BX
+    X = BX.ultimo()
+    if not X: return
+    L = BX.CFG["limites"]; ex = X["execucoes"]
+    for d in N:
+        b = str((d.get("extras") or {}).get("id_bitrix") or "")
+        if d.get("status") != "ganho" or not b.isdigit(): continue
+        fe = dia(d.get("fechado")); nm = d.get("nome") or d["id"]
+        its = ex.get(b, [])
+        if not its and fe and (HOJE - fe).days >= L["ganho_sem_execucao_dias"]:
+            marca(ev(E, f"semexec|{d['id']}", "ganho_sem_execucao", "daniela", nm,
+                     f"Ganho em {fe.strftime('%d/%m/%Y')} (parceiro {d.get('parceiro') or 'sem parceiro'}) e ainda sem card de execução no Bitrix.", "Pós-venda", d["id"], d.get("valor")))
+        for it in its:
+            desde = dia(it.get("desde"))
+            if it["grupo"] == "ativa" and desde and (HOJE - desde).days >= L["fase_ativa_parada_dias"]:
+                marca(ev(E, f"execparada|{it['card']}", "execucao_parada", "daniela", nm,
+                         f"{it['funil']} em \"{it['fase']}\" desde {desde.strftime('%d/%m/%Y')} ({(HOJE - desde).days} dias). Card: {it['card']}", "Pós-venda", d["id"], d.get("valor"),
+                         {"dias": (HOJE - desde).days}))
 
 
 def supervisao(E, marca):
@@ -305,7 +331,7 @@ def plano(previa=False, so_urgentes=False):
             continue
         if not so_urgentes and not previa and est.get(f"plano|{p}") == HOJE.isoformat():
             print(p, "plano de hoje já enviado"); continue
-        ordem = ["rotina_falhou", "conflito_novo", "demanda_atrasada", "aprovacao_parada", "entrou_diagnostico", "contrato_parado",
+        ordem = ["rotina_falhou", "conflito_novo", "demanda_atrasada", "aprovacao_parada", "entrou_diagnostico", "contrato_parado", "ganho_sem_execucao", "execucao_parada",
                  "diagnostico_parado", "comercial_parado", "apresentacao_parada", "crm_incompleto", "parceiro_inativo"]
         for t in ordem:
             xs = por.get(t)

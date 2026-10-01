@@ -1,0 +1,16 @@
+{
+ "_fonte": "Mapeado em 01/10/2026 no Bitrix da Save com a sessão do Luis (só leitura). Execução = processo à parte ligado ao negócio (parentId2 = ID Bitrix).",
+ "processos": {
+  "162": {"nome": "Execução Lucro Real", "funis": {"10": "Execução PIS/COFINS", "14": "Compensação", "22": "Judicial", "160": "Passivo", "216": "Previdenciário", "226": "Contencioso Adm", "236": "Consultivo", "256": "Pós-Vendas"}},
+  "152": {"nome": "Execução Holding", "funis": {"54": "Execução Holding"}}
+ },
+ "limites": {"ganho_sem_execucao_dias": 7, "fase_ativa_parada_dias": 30},
+ "grupos": {
+  "encerrada": ["Concluídos", "Concluído", "Cancelados", "Cancelado", "Bem sucedido", "Mal sucedido", "Empresas Compensadas", "Empresas sem Potencial de Compensação",
+                "Processos Concluídos", "Processo Procedente", "Processo Improcedente", "Desistência", "Ganho", "Perdido", "Inativo", "Finalizado / Enviado a Contabilidade"],
+  "espera_natural": ["Empresas com Crédito Disponível", "Aguardando nova compensação", "Compensação Extemporânea", "Ganho Futuro", "Empresas Aguardando Pagamento",
+                     "Sobrestado (STF/STJ)", "Em Tramite (1ª Instância)", "Em Tramite (2ª Instância)", "Em Tramite (STF / STJ)", "MS Coletivo",
+                     "Aguardando Análise DRJ", "Manutenção", "Em Espera", "Acompanhamento"]
+ },
+ "_grupos": "Fase fora das listas = 'ativa' (o time técnico está trabalhando): é a que vira aviso se ficar parada além do limite. 'espera_natural' depende da Receita, do tribunal ou do calendário de compensação e não é cobrada."
+}
