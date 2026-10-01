@@ -120,6 +120,10 @@ WhatsApp, GLPI (novo), HubSpot (portal 47865021), dashboard S&OE, cockpit Master
 - mapa-de-tarefas.xlsx (v1, obsoleta): abas "Como preencher", "Resumo" (automático), Suporte Técnico, Suporte Dia a Dia, Prospecção, Luis (Gestão Masters)
 - mensagem-time.md: mensagem pronta para o time
 
+## Operação contínua (D26, 01/10)
+- `lib/operacao.py`: 11 sentinelas → registro/eventos.json → executores (Revisor diário, rascunho auditado, Receita) → plano do dia 7h30 (`partners manha`) e avisos 13h30 (`partners tarde`, launchd novo). Linha de base criada em 01/10: 137 eventos.
+- Pendente: Recuperador enviar o lote direto à Geovana (a mudança foi bloqueada pela permissão do Claude; o Luis decide).
+
 ## Pendências / dúvidas em aberto
 - Validar com o Jurídico real: estrutura societária da Save × remuneração de parceiros (indicação comercial vs. honorários).
 - Validar dados da reforma e dos riscos-chave (levantados por pesquisa web em 28/09/2026) com os técnicos humanos.
