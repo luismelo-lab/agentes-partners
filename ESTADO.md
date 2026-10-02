@@ -1,16 +1,16 @@
 # Projeto Agentes Partners — Estado
 
 **Fase atual:** 1 — Diagnóstico (time) · em paralelo: Conselho do Luis em Fase 5 (construção v1 pronta, falta teste real)
-**Última atualização:** 2026-09-29
+**Última atualização:** 2026-10-02
 
 ## Checklist para 100% rodando (revisão de 29/09)
-**Bloqueios de terceiros:** escopo `files` no HubSpot (CRM) · links públicos do Bitrix24 (TI) · obrigatoriedade dos campos de pagamento/% honorário (CRM, D18) · validação LGPD de contatos · marca-save.md (Marketing) · estrutura societária × remuneração de parceiros (Jurídico).
+**Bloqueios de terceiros:** escopo `files` no HubSpot (CRM) · links públicos do Bitrix24 (TI; **ainda ativo**: o Recuperador lê pareceres por esses links. O webhook de consulta, docs/BITRIX.md, cobre a fase da execução, não os arquivos) · obrigatoriedade dos campos de pagamento/% honorário (CRM, D18) · validação LGPD de contatos · marca-save.md (Marketing) · estrutura societária × remuneração de parceiros (Jurídico).
 **Decisões do Luis:** D7-b a D15 (exceto D14) · e-mail/cópia/frequência da Geovana · honorários >50% · campos honorarios_vendedor/gestor/indicador · horário do Conselho semanal · rotina do Jornal · refresh mensal da Receita · plano G.S.H/JGM.
 **Pessoas:** Semana 0 com a Geovana · mapa de tarefas do time (5 dias úteis) → Fase 2 · levantamento do GLPI.
 **Construção:** células Daniela e Jenifer · deptos Partner Success, Operações de Canal & Comissionamento, TI/GLPI, Contratos, Pós-venda, Qualidade · Revisor de Diagnóstico (2ª onda Geovana) · agendamentos (Conselho, Jornal, Recuperador, Receita) · canal de acesso (WhatsApp/app/nuvem).
-**Infra:** launchd com.savecompany.master-sync falhando (exit 127, ~/soe-agent apagado) · backup de ~/.claude/skills e ~/agentes-partners · agendamentos dependem do Mac ligado e do app aberto.
+**Infra:** ~~launchd com.savecompany.master-sync falhando (exit 127, ~/soe-agent apagado)~~ *(superado: desativado em 29/09)* · backup de ~/.claude/skills e ~/agentes-partners · agendamentos dependem do Mac ligado e do app aberto.
 
-**Feito em 29/09 (tarde):** cockpit master-sync desligado (plist movido para ~/Library/LaunchAgents/desativados/, reversível) · backup diário 19h30 no OneDrive da Save (infra/backup.sh, 30 versões, sem .env e sem a base da Receita) · PDF residual removido (texto preservado) · agendadas: Conselho semanal (seg 7h30) e Recuperador lote semanal (seg 8h, rascunho só para o Luis até confirmar o e-mail da Geovana) · pareceres.py ganhou OCR local (Vision do macOS), Excel, texto puro e modo --todos (leitura de toda a base via Bitrix; os 625 hospedados no HubSpot continuam dependendo do escopo files) · células Daniela e Jenifer em construção (v1).
+**Feito em 29/09 (tarde):** cockpit master-sync desligado (plist movido para ~/Library/LaunchAgents/desativados/, reversível) · backup diário 19h30 no OneDrive da Save (infra/backup.sh, 30 versões, sem .env e sem a base da Receita) · PDF residual removido (texto preservado) · agendadas: Conselho semanal (seg 7h30) e Recuperador lote semanal (~~seg 8h, rascunho só para o Luis até confirmar o e-mail da Geovana~~ *superado: seg 9h, enviado à Geovana com cópia para o Luis, D27*) · pareceres.py ganhou OCR local (Vision do macOS), Excel, texto puro e modo --todos (leitura de toda a base via Bitrix; os 625 hospedados no HubSpot continuam dependendo do escopo files) · células Daniela e Jenifer em construção (v1).
 
 **Feito em 29/09 (noite):** construídos em v1 e testados com dados reais: `celula-daniela`, `celula-jenifer`, `revisor-diagnostico`, `depto-ti` (GLPI pronto para agente, inventário de agentes, chamados em rascunho), `depto-partner-success`, `depto-operacoes-canal`, `depto-contratos`, `depto-pos-venda`, `depto-qualidade`. Gabinete, matriz de roteamento, ARQUITETURA e DEPARTAMENTOS atualizados. **WhatsApp:** caminho escolhido = Eazybe (já conectado ao HubSpot). O token atual lê as atividades WHATS_APP (individuais e grupos, gravadas minutos depois); `whatsapp_hubspot.py --pessoa daniela|jenifer|geovana` monta a caixa local só de leitura. OpenWA descartado por enquanto (não oficial, risco de banimento). A Geovana tem só 1 registro em 30 dias: o WhatsApp dela provavelmente não está conectado ao Eazybe.
 
@@ -20,7 +20,7 @@
 
 **Chatbot de pedidos (30/09):** aba "Pedidos" no portal: assistente com o Claude da conta de quem usa (capacidade sample, sem custo de servidor), registro compartilhado (db, coleção `pedidos`), status Aceitar/Em andamento/Concluir/Não é comigo. A rotina do WhatsApp 4x ao dia lê os pedidos abertos e inclui no e-mail de cada responsável. Sem dados bancários/CPF no chat.
 
-**Central de Agentes por e-mail (30/09, D24):** skill `central-agentes` + rotina a cada 30 min (dias úteis 8h–18h). Pedido: e-mail para luis.melo@ com [AGENTES] no assunto, modelo de 8 campos (Modelo de pedido aos agentes.eml e catálogo .docx em cada pasta do OneDrive); 20 tipos no catálogo (DM, JB, GT, GE). Resposta no layout da área; aprovação por "Aprovado / Não aprovado / Nova análise". Chatbot do portal desativado.
+**Central de Agentes por e-mail (30/09, D24):** skill `central-agentes` + ~~rotina a cada 30 min (dias úteis 8h–18h)~~ *(superado: terminal lê a cada 15 min e o Claude processa a fila de hora em hora)*. Pedido: e-mail para luis.melo@ com [AGENTES] no assunto, modelo de 8 campos (Modelo de pedido aos agentes.eml e catálogo .docx em cada pasta do OneDrive); 20 tipos no catálogo (DM, JB, GT, GE). Resposta no layout da área; aprovação por "Aprovado / Não aprovado / Nova análise". Chatbot do portal desativado.
 
 **Operação pelo terminal (30/09):** comando `bin/partners` + 5 jobs launchd (`com.savecompany.partners.*`: manha 7h30, caixa 7h45/13h45, whatsapp-auto 11h/17h sem IA, central a cada 15 min, segunda 6h). Rotinas do Claude enxugadas: Central de hora em hora só com fila; WhatsApp com IA 8h e 14h; relatório, Recuperador e Conselho às segundas usando o que o terminal preparou. `claude -p` (Claude pelo terminal) bloqueado por crédito da conta: pedir ao admin. Mapa em README.md, operação em RUNBOOK.md.
 
@@ -40,7 +40,9 @@
 
 **Base de chamados do GLPI (01/10):** 1.115 chamados (25/11/2025–01/10/2026; 67% da Daniela e da Geovana) viraram infra/glpi-regras.md: categorias reais (Tributário > Diagnóstico/Execução/Compensação; Jurídico > Demandas Diversas, Comunicados RFB, Contencioso, Passivo, RT, Holding, Compliance…), quando abre, padrão de título, solução mediana e o que NÃO vira chamado. glpi-config.json reescrito com as categorias reais (não existem filas de Contratos/Pós-venda); `glpi.py categorias` preenche os IDs a partir dos chamados existentes após o primeiro login. As 3 propostas de teste foram reclassificadas no painel (status de assinatura → não é chamado; recorrência → Tributário > Execução; defesa → Jurídico > Comunicados RFB).
 
-## Próximo passo
+## Próximo passo (28/09) · *superado em 02/10*
+> Bloco histórico. O que vale hoje está em "Operação contínua", "Validação dos agentes responsáveis (02/10)" e "Pendências externas reais (02/10)".
+
 - Luis fecha a planilha antiga e envia `mapa-de-tarefas-v2.xlsx` (abas com nomes e exemplos de cada uma) + mensagem ao time.
 - Primeiro teste real do Departamento de Marketing (ex.: cronograma de datas festivas 2027).
 - Validar `marca-save.md` com a área de Marketing da Save (dono humano do departamento).
@@ -120,14 +122,43 @@ WhatsApp, GLPI (novo), HubSpot (portal 47865021), dashboard S&OE, cockpit Master
 - mapa-de-tarefas.xlsx (v1, obsoleta): abas "Como preencher", "Resumo" (automático), Suporte Técnico, Suporte Dia a Dia, Prospecção, Luis (Gestão Masters)
 - mensagem-time.md: mensagem pronta para o time
 
-## Operação contínua (D26, 01/10)
-- `lib/operacao.py`: 11 sentinelas → registro/eventos.json → executores (Revisor diário, rascunho auditado, Receita) → plano do dia 7h30 (`partners manha`) e avisos 13h30 (`partners tarde`, launchd novo). Linha de base criada em 01/10: 137 eventos.
-- Recuperador: lote de segunda enviado direto à Geovana com cópia para o Luis (D27, autorizado em 01/10).
+## Operação contínua (D26, 01/10; revista em 02/10)
+- `lib/operacao.py`: sentinelas sem IA → `registro/eventos.json` → executores (Revisor nos negócios novos, rascunho auditado, cadastro da Receita) → plano do dia 7h30 (`partners manha`) e aviso da tarde 13h30 (`partners tarde`). Linha de base criada em 01/10: 137 eventos.
+- Sentinelas ligadas: contrato_parado (5 dias), assinado_parado (3 dias), entrou_diagnostico (7 dias), conflito_novo (regra oficial do `conflito_canal.py`), crm_incompleto (inclui CNPJ fora da base da Receita e regime que diverge do Simples), comercial_parado (15 dias; Contato Futuro 60), diagnostico_parado (15), apresentacao_parada (30), parceiro_inativo (1,5 × o maior intervalo normal, entre 30 e 90 dias), ganho_sem_bitrix, demanda_atrasada (só a confirmada pela triagem com IA), aprovacao_parada (24 h; 5 dias sobe para o Luis), rotina_falhou. Desligadas até haver dados do Bitrix: ganho_sem_execucao e execucao_parada.
+- Distribuição pelo dono do negócio no HubSpot (Jenifer ou Daniela) e pelo pipeline BDR; parceiro fora do roster vai para o Luis. Entrada na etapa pelo campo `hs_v2_date_entered_current_stage` ("entrou_etapa"). "Parado" = dias desde a última atividade.
+- Plano (opção B do Luis): blocos grandes com total + 3 de maior valor; às segundas, até 10 por bloco; lista completa na planilha anexa com links do HubSpot e do Bitrix. Aviso da tarde só com o novo e urgente. Assunto "[Partners · automático] ..."; a Central ignora. manha, tarde e segunda com trava (`lockf`).
+- Recuperador: lote de segunda às 9h enviado à Geovana com cópia para o Luis (D27, 01/10). Se o Outlook falhar, vira rascunho.
+
+## OneDrive, backup e jobs (02/10)
+- **OneDrive centralizado:** `lib/caminhos.py` acha a pasta ativa pela marca de sincronização do macOS (hoje "OneDrive-SAVECOMPANY 2 2"). A pasta antiga "OneDrive-SAVECOMPANY" não sincronizava: conteúdo copiado, cópia antiga na Lixeira. publicar_onedrive, central, registro_demandas e backup usam caminhos.py.
+- **Backup:** job `com.savecompany.partners.backup` (19h30) roda `partners backup`, com log e alerta. O antigo `com.savecompany.agentes-backup` foi removido.
+- **Jobs do launchd:** 7 (backup, caixa, central, manha, segunda, tarde, whatsapp-auto), todos em `infra/launchd/` e religados por `instalar.sh`.
+
+## Proteções (02/10, Qualidade + Jurídico)
+- `lib/protecao.py`: trava de domínio (só @savecompany.com.br) em todos os envios (`email_layout.outlook` e `graph.enviar`); mascaramento de telefone, CPF, CNPJ sem pontuação e RG/conta/PIX/senha rotulados (preserva valores, datas, processo, PER e links); auditor de promessas em que um erro conta como reprovado, com regras novas (entre elas "alíquota zero só via PER").
+- Rascunhos do WhatsApp passam pelo auditor. Filtro de documentos pessoais ampliado (RG, CPF, CTPS, IRPF, passaporte, comprovante de endereço, extrato bancário). CPF, RG e dados bancários nunca vão para o painel: quem atende completa direto no GLPI.
+- WhatsApp: a rodada sem IA não traz de volta o que a IA julgou "sem ação" sem mensagem nova; pedido em grupo de Master vai para a Daniela; demanda reaberta em até 7 dias mantém o número; com chamado em andamento fica em "acompanhar"; e-mail vazio não é enviado.
+
+## Validação dos agentes responsáveis (02/10)
+| Frente | Principais correções aplicadas |
+|---|---|
+| TI | Backup como job `partners.backup` com log e alerta; job antigo removido; OneDrive por `caminhos.py`; trava `lockf` em manha, tarde e segunda; Bitrix só consulta e desligado sem webhook |
+| Dados | "Parado" pela última atividade; entrada na etapa pelo campo do HubSpot; distribuição pelo dono do negócio; parceiro inativo pelo intervalo do próprio parceiro; conflito pela regra oficial de canal; CRM incompleto com Receita e regime |
+| Qualidade/Jurídico | `protecao.py`: trava de domínio, mascaramento, auditor (erro = reprovado, alíquota zero só via PER); filtro de documentos pessoais ampliado; dados pessoais fora do painel |
+| Células | WhatsApp sem reabrir "sem ação"; grupo de Master com a Daniela; mesmo número em reabertura de 7 dias; "acompanhar" com chamado em andamento; sem e-mail vazio; demanda atrasada só a confirmada pela IA |
+| Gabinete | Opção B no plano do dia (resumo + planilha anexa com links); aviso da tarde sem repetir o plano; assunto "[Partners · automático]" ignorado pela Central; documentação atualizada (D1–D27) |
 
 ## Bitrix (01/10)
 - Execução = processo 162 "Execução Lucro Real" (8 funis) e 152 "Execução Holding", ligados ao negócio (parentId2 = ID Bitrix). Retrato de 01/10: 1.063 de 1.076 ganhos com execução; 13 sem.
 - `lib/bitrix.py` (só consulta) + `infra/bitrix-execucao.json` + sentinelas ganho_sem_execucao e execucao_parada + fase no status do WhatsApp. Desligado até a TI criar o webhook (docs/BITRIX.md).
 - Adiado pelo Luis (01/10): importação por Excel exportado da lista do Bitrix (colunas: negócio/ID, etapa, funil, data de modificação, ID do card; pasta Download do OneDrive). Sessão automática do Chrome bloqueada pela permissão do Claude; não usar sem autorização explícita.
+
+## Pendências externas reais (02/10)
+- **TI:** Microsoft/Teams, cliente OAuth do GLPI (docs/GLPI.md) e webhook do Bitrix (docs/BITRIX.md).
+- **CRM:** escopo de arquivos do HubSpot.
+- **Claude:** crédito para `claude -p`.
+- **Luis:** compartilhar a pasta "Área Partners · Agentes" e o painel com o time; rodar `sudo pmset repeat wakeorpoweron MTWRF 07:25:00`; dar Acesso Total ao Disco para zsh e python se o backup das 19h30 falhar.
+- **Painel:** vai para o Teams quando a TI liberar a Microsoft.
 
 ## Pendências / dúvidas em aberto
 - Validar com o Jurídico real: estrutura societária da Save × remuneração de parceiros (indicação comercial vs. honorários).
@@ -136,6 +167,6 @@ WhatsApp, GLPI (novo), HubSpot (portal 47865021), dashboard S&OE, cockpit Master
 - Confirmar se Técnico Contábil é área própria na Save e quais outras áreas de apoio existem.
 - Aprovar rotina diária do Jornal (proposta: dias úteis 07h30, salvo como rascunho).
 - Fontes de dados da reunião semanal: HubSpot exige autorizar o conector; até lá, snapshot do cockpit + pauta-da-semana.md.
-- GLPI (01/10): API v2 com OAuth; categorias reais mapeadas (infra/glpi-regras.md v2). Falta a TI criar o acesso da integração (docs/GLPI.md).
+- GLPI (01/10; 02/10): API v2 com OAuth; categorias reais mapeadas e formulários no padrão por área (infra/glpi-regras.md v2). Modo rascunho até haver o cliente OAuth. Os agentes propõem às 8h e 14h; o chamado é aberto na rodada da Central seguinte à aprovação no painel (D25). Falta a TI criar o acesso da integração (docs/GLPI.md).
 - Teams (01/10): Luis decidiu levar o painel para o Teams quando a TI liberar a Microsoft; o painel fica como reserva até lá.
 - Conector HubSpot do plugin `hubspot-sales` precisa de autorização (configurações de conectores do claude.ai). Necessário só a partir da Fase 5.

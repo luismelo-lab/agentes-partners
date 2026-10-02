@@ -101,4 +101,9 @@ Depois, a Triagem trata cada conversa sinalizada como se tivesse sido colada: fi
 - **links de negócio do HubSpot:** dados do card.
 
 Áudios ficam marcados para ouvir. Documentos pessoais (CNH, RG, CPF) não são lidos.
-O agente interpreta o pedido e preenche, em cada item da triagem, a **entrega** (o que já dá para resolver) e o **rascunho** de resposta com a informação. O e-mail das 8h, 11h, 14h e 17h leva isso à dona do número.
+O agente interpreta o pedido e preenche, em cada item da triagem, a **entrega** (o que já dá para resolver) e o **rascunho** de resposta com a informação (o rascunho passa pelo auditor de promessas). O e-mail das 8h e 14h (com IA) leva isso à dona do número. Nas rodadas sem IA das 11h e 17h:
+- o e-mail vai só para quem tem pedido novo, sem resumo geral;
+- o que a IA julgou "sem ação" não volta sem mensagem nova;
+- pedido em grupo de Master vai para a Daniela, mesmo quando chega na caixa da Jenifer ou da Geovana;
+- demanda reaberta em até 7 dias mantém o mesmo número; com chamado em andamento fica em "acompanhar";
+- sem nada a responder ou acompanhar, o e-mail não é enviado.

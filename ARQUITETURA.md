@@ -1,13 +1,13 @@
 # Arquitetura de Agentes — Área Partners (Save Company)
 
-**Versão:** 1.0 (2026-09-28) · **Dono:** Luis Fernando de Melo
+**Versão:** 1.1 (2026-10-02) · **Dono:** Luis Fernando de Melo
 
 ## Princípio que vale para tudo
 
 > **Nenhum agente ou subagente executa nada sem a validação de um humano.**
 > Agentes analisam, organizam e rascunham. Quem aprova e aciona é sempre uma pessoa.
 
-Na prática, todos os agentes operam no **nível N1 (rascunho + aprovação)**, sem exceção. Isso só muda se o Luis decidir explicitamente, por escrito, para uma tarefa específica.
+Na prática, todos os agentes operam no **nível N1 (rascunho + aprovação)**. Isso só muda se o Luis decidir explicitamente, por escrito, para uma tarefa específica. Exceções aprovadas até 02/10, todas só com e-mail interno (@savecompany.com.br): D23 (e-mails do WhatsApp), D24 (respostas da Central), D26 (plano do dia e avisos) e D27 (lote do Recuperador). D25: chamado no GLPI só depois de aprovado no painel.
 
 ## Como a estrutura funciona (os 3 conceitos)
 
@@ -58,6 +58,12 @@ O Gabinete mostra a **Ficha de Rota** (quem entra, por quê e o que entrega) e s
 
 ## Status 29/09
 Células construídas em v1: **Daniela** (`celula-daniela`, 8 subagentes, com a caixa do WhatsApp via Eazybe), **Jenifer** (`celula-jenifer`, 9 subagentes) e **Geovana** (`recuperador` + `revisor-diagnostico`). Os subagentes finais estão nos SKILL.md de cada célula (fusões: Briefing, Saúde e Plano de Conta viraram "Conta Master"; Registro no HubSpot e Distribuição Lead → Master viraram um só; Onboarding do Indicador entrou no Recrutamento). Todas as 13 áreas de apoio estão em v1.
+
+## Status 02/10 · operação contínua
+- **Terminal sem IA (`bin/partners` + 7 jobs do launchd):** HubSpot, WhatsApp, Central, sentinelas, plano do dia (7h30), aviso da tarde (13h30), OneDrive e backup (19h30).
+- **Sentinelas (`lib/operacao.py`, D26):** acham negócios parados, conflitos, CRM incompleto, parceiros inativos, demandas e aprovações atrasadas e rotinas com falha. Cada evento vai para o dono do negócio no HubSpot. Fluxos entre agentes sem aprovação: Revisor nos negócios que entram em apresentação, rascunho de cobrança auditado, cadastro da Receita ao lado do CRM incompleto.
+- **Proteções (`lib/protecao.py`):** trava de domínio em todo envio, mascaramento de dados pessoais e auditor de promessas.
+- **Sistemas externos:** HubSpot só leitura; GLPI em rascunho até o cliente OAuth (chamado só depois da aprovação no painel); Bitrix só consulta e desligado até o webhook; Microsoft (Graph/Teams) desligado até a TI.
 
 ## As células em detalhe
 

@@ -1,6 +1,6 @@
 ---
 name: recuperador-lote-semanal
-description: Toda segunda 8h: atualiza HubSpot, pareceres e fila do Recuperador, gera as fichas do próximo lote e envia o lote para a Geovana com cópia para o Luis (D27).
+description: Toda segunda 9h: atualiza HubSpot, pareceres e fila do Recuperador, gera as fichas do próximo lote e envia o lote para a Geovana com cópia para o Luis (D27).
 ---
 
 Você é o orquestrador do Recuperador (célula técnica da Geovana Gonçalves, Área Partners da Save Company; gestor: Luis Fernando de Melo). Carregue e siga a skill `recuperador` (~/.claude/skills/recuperador/SKILL.md e references/matriz.json), seção "Fluxo semanal". Português do Brasil.

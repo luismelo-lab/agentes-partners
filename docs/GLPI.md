@@ -1,5 +1,5 @@
 # Chamados automáticos no GLPI · pedido ao administrador
-**De:** Luis Fernando de Melo (Área Partners) · **Data:** 01/10/2026 · **GLPI:** https://tributario.savecompany.com.br
+**De:** Luis Fernando de Melo (Área Partners) · **Data:** 01/10/2026 (revisto em 02/10/2026) · **GLPI:** https://tributario.savecompany.com.br
 
 ## O que queremos
 Os agentes da Área Partners leem as demandas que os parceiros mandam no WhatsApp. O que eles não conseguem resolver vira **chamado no GLPI** para o time certo: Jurídico, Técnico, Contratos, Pós-venda, Marketing, Financeiro ou TI. O chamado já vai com o que o parceiro pede, o que já foi levantado no HubSpot e na Receita e o que falta. Ele é aberto **com o usuário de quem atendeu o parceiro** (Daniela, Geovana ou Jenifer). **Não é preciso criar usuário nem perfil novo.** Nada é enviado a parceiros ou clientes.
@@ -27,6 +27,8 @@ Se alguém ainda não autorizou, o chamado é aberto pela conta do Luis com a pe
 
 ## Regras
 - **Um chamado por demanda:** sem duplicar. Se a demanda já tem chamado, as novidades entram como acompanhamento.
-- **Rodadas:** os agentes abrem chamados às 8h e 14h, dias úteis.
+- **Aprovação antes (D25):** os agentes **propõem** chamados às 8h e 14h, dias úteis, no painel. A pessoa aprova (pode editar) ou recusa. O chamado é aberto na rodada da Central seguinte à aprovação.
+- **Formulário:** segue o padrão de cada área (categorias e títulos em `infra/glpi-regras.md` v2).
+- **Dados pessoais:** CPF, RG e dados bancários não vão para o painel. Quem atende completa direto no GLPI.
 - **Teste:** `python3 lib/glpi.py testar daniela` (login e leitura). Depois, um chamado de teste numa categoria combinada com o TI.
-- **Modo:** começa em `rascunho` e passa para `abrir` em `infra/glpi-config.json` quando o TI validar o teste.
+- **Modo:** fica em `rascunho` até haver o cliente OAuth. Passa para `abrir` em `infra/glpi-config.json` quando o TI validar o teste. Em rascunho, o chamado aprovado sai como "abrir manualmente".
