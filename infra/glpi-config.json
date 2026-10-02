@@ -1,5 +1,5 @@
 {
- "_nota": "Categorias REAIS do GLPI da Save (base de 1.115 chamados, 01/10/2026; regras e exemplos em infra/glpi-regras.md). O chamado só abre depois de aprovado no painel, em nome de quem atendeu. IDs: preenchidos por `python3 lib/glpi.py categorias` após o primeiro login (lê as categorias dos chamados existentes). modo = rascunho | abrir.",
+ "_nota": "Categorias REAIS do GLPI da Save (base de 1.115 chamados, 01/10/2026; regras e exemplos em infra/glpi-regras.md). D29 (02/10): o chamado abre sozinho em nome de quem atendeu quando modo = abrir; até lá fica no painel para abrir manualmente. IDs: preenchidos por `python3 lib/glpi.py categorias` após o primeiro login (lê as categorias dos chamados existentes). modo = rascunho | abrir.",
  "url": "https://tributario.savecompany.com.br",
  "modo": "rascunho",
  "entidade_id": null,

@@ -8,10 +8,10 @@ Entrada: a triagem com IA (whatsapp-triagem-*.json). Cada item que precisa de ou
 A descrição sai no formulário da área (Tributário: urgência/empresa/descrição/card/prazo; Jurídico: dados/informações gerais).
 O script:
   1. registra a demanda no registro único (D-AAAA-NNNN) e evita chamado duplicado (um por demanda);
-  2. PROPÕE o chamado (registro/chamados-propostos.json). Nada é aberto aqui: o chamado só vai ao GLPI depois de
-     aprovado no painel Central Partners (regra do Luis, 01/10), pela rotina da Central (lib/chamados_painel.py);
+  2. abre o chamado no GLPI (D29) ou, sem integração, deixa pronto no painel (registro/chamados-propostos.json);
   3. grava o resultado no item ("chamado") para o e-mail mostrar, e no registro de demandas.
-Decisão D25 do Luis (01/10/2026): chamado interno proposto; abre só depois de aprovado no painel; nada vai a parceiro ou cliente.
+Decisão D29 do Luis (02/10/2026, substitui a D25): o chamado abre sozinho no GLPI com o usuário de quem atendeu quando a integração
+estiver ligada (glpi-config modo = abrir); até lá vai ao painel para abrir manualmente. Nada vai a parceiro ou cliente.
 Uso: python3 chamados_whatsapp.py --triagem <arquivo>
 """
 import argparse, json, os, re, subprocess, sys
@@ -90,15 +90,26 @@ def main():
                         "titulo": (e.get("titulo") or i.get("o_que_pede", ""))[:200], "descricao": e.get("descricao") or "", "descricao_html": desc,
                         "urgencia": int(e.get("urgencia", 3)), "conversa": i["chat"], "master": i.get("master"), "link": i.get("link"),
                         "status": "proposto", "proposto_em": datetime.now().isoformat(timespec="minutes")}
+                # D29 (02/10): abre sozinho no GLPI com o usuário de quem atendeu, se a integração estiver ligada
+                r = glpi.abrir(prop["area"], prop["titulo"], desc, prop["urgencia"], pessoa=p)
+                if r.get("id"):
+                    prop.update(status="aberto", glpi_id=r["id"], url=r.get("url"), aberto_em=prop["proposto_em"]); abertos += 1
+                    i["chamado"] = {"id": r["id"], "url": r.get("url"), "grupo": prop["grupo"], "titulo": prop["titulo"]}
+                    if d:
+                        d["chamado"] = {"status": "aberto", "glpi_id": r["id"], "url": r.get("url"), "grupo": prop["grupo"], "titulo": prop["titulo"]}
+                        d["eventos"].append({"quando": prop["proposto_em"], "evento": f"chamado #{r['id']} aberto no GLPI → {prop['grupo']} (D29)"})
+                    P_ = json.load(open(PROP)) if os.path.exists(PROP) else {}
+                    P_[prop["id"] or f"sem-demanda-{r['id']}"] = prop; json.dump(P_, open(PROP, "w"), ensure_ascii=False, indent=1)
+                    continue
                 if prop["id"]:
                     P_ = json.load(open(PROP)) if os.path.exists(PROP) else {}
                     if prop["id"] not in P_: P_[prop["id"]] = prop; json.dump(P_, open(PROP, "w"), ensure_ascii=False, indent=1); rasc += 1
                 i["chamado"] = {"proposto": True, "grupo": prop["grupo"], "area": prop["area"], "titulo": prop["titulo"], "descricao": prop["descricao"]}
                 if d:
                     d["chamado"] = {"proposto": True, "grupo": prop["grupo"], "titulo": prop["titulo"]}
-                    d["eventos"].append({"quando": prop["proposto_em"], "evento": f"chamado proposto → {prop['grupo']} (aguarda aprovação no painel)"})
+                    d["eventos"].append({"quando": prop["proposto_em"], "evento": f"chamado pronto → {prop['grupo']} (GLPI ainda não integrado: abrir pelo painel)"})
     json.dump(T, open(f, "w"), ensure_ascii=False, indent=1)
-    print(f"chamados propostos para aprovação no painel: {rasc}")
+    print(f"chamados abertos no GLPI: {abertos} · prontos para abrir pelo painel (GLPI não integrado): {rasc}")
 
 
 if __name__ == "__main__":

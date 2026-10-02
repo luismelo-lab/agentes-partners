@@ -473,6 +473,13 @@ def quadro_supervisor(L, at):
     hoje_l = [l for l in open(log, errors="ignore") if l.startswith(HOJE.isoformat())] if os.path.exists(log) else []
     ok = len([l for l in hoje_l if "] ok" in l]); er = len([l for l in hoje_l if "ERRO" in l])
     linhas.append(L.paragrafo(f"<b>Rotinas hoje:</b> {ok} execuções ok, {er} com erro."))
+    try:  # D28: acerto das respostas sugeridas ao parceiro (degrau 2 só com 20+ casos e 95%+ por tipo)
+        import medicao_respostas as MR
+        rel = [r for r in MR.relatorio() if r["tipo"] != "outro"]
+        if rel: linhas.append(L.paragrafo("<b>Respostas ao parceiro (D28, 14 dias):</b> " + L.esc("; ".join(
+            f"{r['tipo']}: {r['aproveitada_pct']}% em {r['casos']} caso(s)" + (" · pronto para o degrau 2" if r["pronto_para_degrau_2"] else "") for r in rel))))
+    except Exception:
+        pass
     return linhas
 
 
