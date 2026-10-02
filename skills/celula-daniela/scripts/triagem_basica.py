@@ -52,6 +52,14 @@ def main():
     if ant:
         A = json.load(open(ant[-1]))
         vistos = {(p, i["chat"]) for p, P in A.get("pessoas", {}).items() for i in P.get("itens", []) if i.get("status") in ("responder", "acompanhar")}
+    # o que a última rodada COM IA julgou "sem ação" não volta como "responder" se não chegou mensagem nova depois dela (Células, 02/10)
+    calados, t_ia = set(), 0
+    for f_ia in reversed(ant):
+        A_ia = json.load(open(f_ia))
+        if A_ia.get("modo") == "sem IA": continue
+        t_ia = os.path.getmtime(f_ia)
+        calados = {(p, i["chat"]) for p, P in A_ia.get("pessoas", {}).items() for i in P.get("itens", []) if i.get("status") == "sem_acao"}
+        break
     tot = {}
     for p in PESSOAS:
         cx = ult(os.path.join(AP, "celulas", p, "whatsapp", "caixa-*.json"))
@@ -65,6 +73,7 @@ def main():
             esperando = c.get("aguardando_time_h") or 0
             pend_midia = ev.get("audios") or any(x["tipo"] == "imagem" and not x.get("texto") for x in ev.get("anexos", []))
             if esperando < a.aguardando and not (ev and pend_midia): continue
+            if (p, c["chat"]) in calados and agora.timestamp() - esperando * 3600 <= t_ia: continue
             ultimas = [m for m in (ev.get("mensagens") or c["conversa"]) if m.get("texto")][-2:]
             pede = " / ".join(m["texto"].replace("\n", " ")[:160] for m in ultimas)
             neg = (c.get("negocios") or [{}])[0]
@@ -75,15 +84,18 @@ def main():
         T["pessoas"][p] = {"conversas": len(caixa), "itens": itens,
                            "leitura": f"Rodada automática (sem IA): {sum(i['status'] == 'responder' for i in itens)} conversa(s) sem resposta há {a.aguardando:g}h ou mais. A rodada com análise completa sai às 8h e às 14h."}
         tot[p] = sum(i["status"] == "responder" for i in itens)
-    # Regra do Luis (01/10): pedido em grupo de Master é da Daniela; a Jenifer fica com indicação e prospecção.
+    # Regra do Luis (01/10): pedido em grupo de Master é da Daniela, mesmo na caixa da Jenifer ou da Geovana.
     dan = T["pessoas"].get("daniela", {"conversas": 0, "itens": [], "leitura": ""})
-    if "jenifer" in T["pessoas"]:
+    for q in ("jenifer", "geovana"):
+        if q not in T["pessoas"]: continue
         fica = []
-        for i in T["pessoas"]["jenifer"]["itens"]:
+        for i in T["pessoas"][q]["itens"]:
             if i.get("master") and i.get("grupo"):
                 if not any(x["chat"] == i["chat"] for x in dan["itens"]): dan["itens"].append(i)
             else: fica.append(i)
-        T["pessoas"]["jenifer"]["itens"] = fica; T["pessoas"]["daniela"] = dan
+        T["pessoas"][q]["itens"] = fica
+    T["pessoas"]["daniela"] = dan
+    tot = {k: sum(i["status"] == "responder" for i in P["itens"]) for k, P in T["pessoas"].items()}
     T["leitura_geral"] = "Rodada automática, sem IA: conversas sem resposta por pessoa: " + ", ".join(f"{k} {v}" for k, v in tot.items()) + "."
     out = os.path.join(AP, "celulas", f"whatsapp-triagem-{agora:%Y-%m-%d-%Hh%M%S}.json")
     json.dump(T, open(out, "w"), ensure_ascii=False, indent=1)

@@ -110,6 +110,7 @@
   "parecer_rt": "parecer_complementar",
   "anexo_diagnostico": "anexo_do_diagnostico",
   "parecer_juridico": "parecer_juridico",
-  "id_bitrix": "id_bitrix"
+  "id_bitrix": "id_bitrix",
+  "entrou_etapa": "hs_v2_date_entered_current_stage"
  }
 }

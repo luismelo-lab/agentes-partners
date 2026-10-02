@@ -32,7 +32,8 @@ REMETENTES = {"daniela.maciel@savecompany.com.br": "daniela", "jenifer.carvalho@
               "geovana.goncalves@savecompany.com.br": "geovana", "luis.melo@savecompany.com.br": "luis"}
 NOMES = {"daniela": "Daniela", "jenifer": "Jenifer", "geovana": "Geovana", "luis": "Luis"}
 PASTA_OD = {"daniela": "Central Masters · Daniela", "jenifer": "Central BDR · Jenifer", "geovana": "Central Técnica · Geovana", "luis": "Gestão · Luis"}
-OD = os.environ.get("OD_RAIZ") or H("~/Library/CloudStorage/OneDrive-SAVECOMPANY/Área Partners · Agentes")
+sys.path.insert(0, H("~/agentes-partners/lib")); import caminhos  # noqa: E402  (pasta ativa do OneDrive)
+# pasta do OneDrive resolvida na hora do uso ({mod}.area()): sem OneDrive, só a parte de arquivos falha (TI, 02/10)
 CAMPOS = [("tipo", "Tipo de pedido"), ("master", "Master ou parceiro"), ("cliente", "Cliente, CNPJ ou link do negócio no HubSpot"),
           ("precisa", "O que você precisa"), ("uso", "Para que vai usar"), ("formato", "Formato da resposta"),
           ("prazo", "Prazo"), ("contexto", "Informações que ajudam")]
@@ -183,6 +184,9 @@ def cmd_ler(a):
         # e-mails que a própria Central enviou (resposta vN, aprovado, encerrado) não são pedidos nem respostas
         if not re.match(r"^\s*(re|res|fw|fwd|enc)\s*:", m["assunto"], re.I) and re.search(r"#P-\d{4} · .*(resposta v\d+|aprovado|encerrado)\s*$", m["assunto"]):
             R["processados"].append(m["id"]); continue
+        # e-mails automáticos dos agentes (plano do dia, aviso da tarde, falha de rotina) também não são pedidos (TI, 02/10)
+        if re.match(r"^\s*\[(Agentes\] (Plano do dia|Aviso da tarde|Falha:)|Partners · automático\])", m["assunto"]):
+            R["processados"].append(m["id"]); continue
         pessoa = REMETENTES.get(m["de"])
         if not pessoa:
             R["processados"].append(m["id"]); novos.append({"tipo": "ignorado", "motivo": "remetente fora do time", "de": m["de"], "assunto": m["assunto"]}); continue
@@ -289,7 +293,7 @@ def cmd_responder(a):
     if getattr(a, "painel", False):  # pedido feito no painel: e-mail completo + aprovação por e-mail ou pelo painel
         blocos.insert(-3, L.paragrafo('Você também pode aprovar ou pedir ajuste no painel <b>Central Partners</b>, aba <b>Pedidos</b>.'
                                       + (" Os arquivos ficam na sua pasta do OneDrive, em Pedidos." if anexos else ""), "8px 32px 0"))
-        d_od = os.path.join(OD, PASTA_OD[P["pessoa"]], "Pedidos", P["id"]); os.makedirs(d_od, exist_ok=True)
+        d_od = os.path.join(caminhos.area(), PASTA_OD[P["pessoa"]], "Pedidos", P["id"]); os.makedirs(d_od, exist_ok=True)
         for x in anexos: subprocess.run(["cp", x, d_od])
         print("arquivos no OneDrive:", ", ".join(f"{PASTA_OD[P['pessoa']]} / Pedidos / {P['id']} / {os.path.basename(x)}" for x in anexos) or "nenhum")
     if a.previa:
@@ -301,7 +305,7 @@ def cmd_responder(a):
                               + (" Os arquivos estão na sua pasta do OneDrive, em Pedidos." if anexos else "")),
                   L.rodape("Aviso automático da Central de Agentes.")]
         assunto = f"[Painel] {P['id']} pronto · {P['assunto'][:60]}"
-        d_od = os.path.join(OD, PASTA_OD[P["pessoa"]], "Pedidos", P["id"]); os.makedirs(d_od, exist_ok=True)
+        d_od = os.path.join(caminhos.area(), PASTA_OD[P["pessoa"]], "Pedidos", P["id"]); os.makedirs(d_od, exist_ok=True)
         for x in anexos: subprocess.run(["cp", x, d_od])
         print("arquivos no OneDrive:", ", ".join(f"{PASTA_OD[P['pessoa']]} / Pedidos / {P['id']} / {os.path.basename(x)}" for x in anexos) or "nenhum")
     ok, msg = L.outlook([P["email"]], [], assunto, L.documento(*blocos), anexos, enviar=not a.rascunho)
@@ -327,7 +331,7 @@ def cmd_confirmar(a):
                         L.rodape("Central de Agentes da Área Partners. Para um pedido novo, use o modelo de pedido."))
     ok, msg = (True, "") if a.sem_email else L.outlook([P["email"]], [], f"[AGENTES] #{P['id']} · {'aprovado' if aprovado else 'encerrado'}", corpo, enviar=not a.rascunho)
     if aprovado:
-        d = os.path.join(OD, PASTA_OD[P["pessoa"]], "Pedidos aprovados", P["id"]); os.makedirs(d, exist_ok=True)
+        d = os.path.join(caminhos.area(), PASTA_OD[P["pessoa"]], "Pedidos aprovados", P["id"]); os.makedirs(d, exist_ok=True)
         orig = os.path.join(BASE, "pedidos", P["id"])
         for x in glob.glob(os.path.join(orig, "*")):
             if not x.endswith(".json"): subprocess.run(["cp", x, d])
@@ -363,7 +367,7 @@ def cmd_modelos(a):
                "- Tudo o que voltar é pré-análise: confira antes de enviar a parceiros ou clientes."]
     feitos = []
     for pessoa, pasta in PASTA_OD.items():
-        d = os.path.join(OD, pasta); os.makedirs(d, exist_ok=True)
+        d = os.path.join(caminhos.area(), pasta); os.makedirs(d, exist_ok=True)
         m = EmailMessage(); m["From"] = f"Central de Agentes <{CAIXA}>"; m["To"] = CAIXA
         m["Subject"] = "[AGENTES] Modelo de pedido"; m["X-Unsent"] = "1"
         m.set_content("Para pedir: clique em Responder, preencha os campos abaixo e envie. Mantenha [AGENTES] no assunto.\n\n" + MODELO)

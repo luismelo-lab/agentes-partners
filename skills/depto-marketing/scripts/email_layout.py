@@ -132,7 +132,11 @@ def md(t):
 
 def outlook(para, cc, assunto, corpo, anexos=(), enviar=False, abrir=False):
     """Cria a mensagem no Outlook do Mac (clássico). enviar=False → rascunho; enviar=True → envia.
-    Na nuvem (AGENTES_EMAIL=graph), usa a caixa compartilhada pelo Microsoft Graph (lib/graph.py)."""
+    Na nuvem (AGENTES_EMAIL=graph), usa a caixa compartilhada pelo Microsoft Graph (lib/graph.py).
+    Trava de domínio (Qualidade + Jurídico, 02/10): nada sai para fora de @savecompany.com.br."""
+    import sys as _s; _s.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); import protecao
+    fora = protecao.interno(list(para), list(cc))
+    if fora or not para: return False, f"BLOQUEADO: destinatário fora do domínio ou vazio {fora}"
     if os.environ.get("AGENTES_EMAIL") == "graph":
         import sys as _s; _s.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); import graph
         return graph.enviar(list(para), list(cc), assunto, corpo, [a for a in anexos if a], rascunho=not enviar)
@@ -143,12 +147,18 @@ def outlook(para, cc, assunto, corpo, anexos=(), enviar=False, abrir=False):
     anx = "".join(f'make new attachment at m with properties {{file:POSIX file "{q(a)}"}}\n' for a in anexos if a)
     acao = "send m" if enviar else ("open m" if abrir else "")
     script = f'''set htmlContent to read POSIX file "{q(hf.name)}" as «class utf8»
+with timeout of 300 seconds
 tell application "Microsoft Outlook"
   set m to make new outgoing message with properties {{subject:"{q(assunto)}", content:htmlContent}}
   {rec}
   {anx}
   {acao}
-end tell'''
+end tell
+end timeout'''
+    # Outlook fechado ou ocupado causava timeout (-1712, 30/09): abre antes e espera até 5 min.
+    subprocess.run(["open", "-g", "-a", "Microsoft Outlook"], capture_output=True)
     r = subprocess.run(["osascript", "-e", script], capture_output=True, text=True)
+    if r.returncode != 0 and "-600" in (r.stderr or ""):  # app ainda não respondia: nada foi criado, tenta uma vez
+        import time; time.sleep(20); r = subprocess.run(["osascript", "-e", script], capture_output=True, text=True)
     os.unlink(hf.name)
     return r.returncode == 0, (r.stderr or r.stdout).strip()

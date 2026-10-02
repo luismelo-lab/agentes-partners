@@ -11,18 +11,20 @@ log() { echo "$(date '+%F %T') [$1] ${2:-ok}" >> "$LOG/partners.log"; }
 
 alerta() { # e-mail ao Luis quando uma rotina falha (uma vez por rotina por dia)
   local nome=$1 marca="$LOG/.alerta-$1-$hoje"
-  [ -e "$marca" ] && return; touch "$marca"
-  python3 - "$nome" "$LOG/$nome.log" <<'PY' >/dev/null 2>&1
+  [ -e "$marca" ] && return
+  python3 - "$nome" "$LOG/$nome.log" <<'PY' >/dev/null 2>&1 && touch "$marca"  # marca só se o aviso saiu
 import sys, os
 sys.path.insert(0, os.path.expanduser("~/.claude/skills/depto-marketing/scripts")); import email_layout as L
 nome, logf = sys.argv[1], sys.argv[2]
 fim = "".join(open(logf, errors="ignore").readlines()[-8:]) if os.path.exists(logf) else ""
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); import protecao; fim = protecao.limpo(fim)
 corpo = L.documento(L.cabecalho("Área Partners · Agentes", f"Falha na rotina {nome}", ""),
     L.paragrafo(f"A rotina <b>{L.esc(nome)}</b> falhou agora. As próximas etapas que dependem dela foram puladas para não usar dado desatualizado.", "28px 32px 12px"),
     L.paragrafo("<b>Últimas linhas do log:</b><br>" + L.esc(fim).replace("\n", "<br>")),
     L.paragrafo("Para ver tudo: <b>partners logs " + L.esc(nome) + "</b>. Este aviso sai uma vez por dia por rotina."),
     L.rodape("Aviso automático do terminal dos agentes."))
-L.outlook(["luis.melo@savecompany.com.br"], [], f"[Agentes] Falha: {nome}", corpo, enviar=True)
+ok, _ = L.outlook(["luis.melo@savecompany.com.br"], [], f"[Partners · automático] Falha: {nome}", corpo, enviar=True)
+sys.exit(0 if ok else 1)
 PY
 }
 
@@ -49,6 +51,10 @@ if [ -e "$AP/.nuvem-ligada" ] && [ -z "${GITHUB_ACTIONS:-}" ] && [ -z "${PARTNER
   case "${1:-}" in manha|segunda|caixa|whatsapp-auto|central|tarde) log "${1}" "pulado: rotinas rodando na nuvem"; exit 0 ;; esac
 fi
 [ "$(uname)" = "Linux" ] && export PATH="$PATH:/usr/bin"
+
+if [[ "${1:-}" == (manha|tarde|segunda) && -z "${PARTNERS_TRAVA:-}" ]]; then
+  export PARTNERS_TRAVA=1; exec /usr/bin/lockf -t 3600 "$LOG/.trava-operacao" "$0" "$@"
+fi
 
 case "${1:-ajuda}" in
   hubspot)      # um download por dia (o mesmo arquivo serve a todas as rotinas); "partners hubspot forcar" baixa de novo
@@ -96,7 +102,7 @@ case "${1:-ajuda}" in
   tarde)        # rodada da tarde (13h30): HubSpot de novo, sentinelas e aviso só do que é novo e urgente
                 "$0" hubspot forcar && "$0" sentinelas && rodar plano python3 "$AP/lib/operacao.py" avisos ;;
   manha)        # preparação diária (dias úteis, 7h30). Se o download falhar, NÃO segue com dado velho
-                "$0" hubspot && { "$0" bitrix; "$0" sentinelas; "$0" plano; "$0" dados-bi; "$0" portal; "$0" onedrive; } ;;
+                "$0" hubspot && { "$0" bitrix; "$0" caixa; "$0" sentinelas; "$0" plano; "$0" dados-bi; "$0" portal; "$0" onedrive; } ;;
   segunda)      # preparação da segunda (6h): números da semana, Recuperador, Revisor e relatórios das áreas
                 "$0" hubspot && { "$0" resultados; "$0" recuperador; "$0" revisor; "$0" areas; "$0" onedrive; } ;;
   status)       echo "Últimas execuções:"; tail -n 25 "$LOG/partners.log" 2>/dev/null

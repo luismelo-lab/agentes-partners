@@ -43,25 +43,24 @@ HOJE = date.fromisoformat(os.environ["OPERACAO_HOJE"]) if os.environ.get("OPERAC
 LINK = "https://app.hubspot.com/contacts/47865021/deal/{}"
 PESSOAS = {"daniela": ("Daniela", "daniela.maciel@savecompany.com.br"), "jenifer": ("Jenifer", "jenifer.carvalho@savecompany.com.br"),
            "geovana": ("Geovana", "geovana.goncalves@savecompany.com.br"), "luis": ("Luis", "luis.melo@savecompany.com.br")}
-LIM = {"contrato": 5, "comercial": 15, "diagnostico": 15, "apresentacao": 30, "parceiro": 60, "aprovacao_h": 24}
+LIM = {"contrato": 5, "assinado": 3, "comercial": 15, "contato_futuro": 60, "diagnostico": 15, "apresentacao": 30,
+       "aprovacao_h": 24, "aprovacao_escala_h": 120, "entrou_dias": 7, "ganho_sem_bitrix": (7, 60)}
 ET_CONTRATO = {"Contrato Enviado", "Pendência Fechamento"}
-ET_COMERCIAL = {"Agendamento", "Em Contato", "Negociação", "Follow - Up", "Novo Negócio", "Contato Futuro"}
-ET_DIAG = {"Em Diagnóstico", "Análise de Documentos", "Análise com Pendência", "Documentação Pendente"}
+ET_COMERCIAL = {"Agendamento", "Em Contato", "Negociação", "Follow - Up", "Novo Negócio", "Contato Futuro", "Lead Novo - Prospecção"}
+ET_DIAG = {"Em Diagnóstico", "Análise de Documentos", "Análise com Pendência", "Documentação Pendente", "Estudo Inicial",
+           "Autorização - Gestor", "Autorização Equipe Senior LR"}
+DONO = {"79401410": "jenifer", "79560621": "daniela"}  # owner do negócio no HubSpot (conferido em 02/10)
 APRES = "Apresentação de Diagnóstico"
 BDR = ("Save Partners - BDR/SDR", "Save Partners - Closer", "Enriquecimento")
 NOME = {"contrato_parado": "Contrato sem assinatura", "entrou_diagnostico": "Entrou em apresentação de diagnóstico",
         "conflito_novo": "Possível conflito de canal", "crm_incompleto": "Cadastro incompleto no CRM", "comercial_parado": "Negócio comercial parado",
         "diagnostico_parado": "Diagnóstico parado", "apresentacao_parada": "Apresentação de diagnóstico parada", "parceiro_inativo": "Parceiro sem indicação",
         "demanda_atrasada": "Demanda do WhatsApp atrasada", "aprovacao_parada": "Aprovação esperando", "rotina_falhou": "Rotina com falha",
-        "ganho_sem_execucao": "Ganho sem execução no Bitrix", "execucao_parada": "Execução parada no Bitrix"}
+        "ganho_sem_execucao": "Ganho sem execução no Bitrix", "execucao_parada": "Execução parada no Bitrix",
+        "assinado_parado": "Contrato assinado sem fechar o negócio", "ganho_sem_bitrix": "Ganho sem card no Bitrix"}
 URGENTE = {"conflito_novo", "demanda_atrasada", "rotina_falhou"}
-AVISO_TARDE = URGENTE | {"entrou_diagnostico"}  # o que justifica e-mail à tarde
-TEL = re.compile(r"@?\+?\d[\d .()-]{8,}\d")
-
-
-def limpo(t):
-    """Nada de telefone, CPF ou documento no e-mail: sequências longas de dígitos viram [número]."""
-    return TEL.sub(lambda m: "[número]" if sum(c.isdigit() for c in m.group()) >= 10 else m.group(), str(t or ""))
+AVISO_TARDE = {"conflito_novo", "rotina_falhou", "entrou_diagnostico"}  # demanda atrasada já vai no WhatsApp das 14h (Células, 02/10)
+from protecao import limpo, auditar  # noqa: E402  (mascaramento e auditor únicos: lib/protecao.py)
 
 
 def ler(f, padrao):
@@ -123,20 +122,6 @@ def ev(E, chave, tipo, pessoa, titulo, texto, depto, negocio=None, valor=None, e
     return e
 
 
-def auditar(texto):
-    """Qualidade: o rascunho só segue se o auditor de promessas não marcar nada."""
-    with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, dir=os.path.join(AP, "logs")) as t: t.write(texto)
-    try:
-        r = subprocess.run([sys.executable, os.path.join(SK, "depto-qualidade/scripts/auditar_texto.py"), t.name, "--json"], capture_output=True, text=True, timeout=60)
-        J = json.loads(r.stdout or "[]")
-        achados = sum(len(x.get("achados", [])) for x in (J.values() if isinstance(J, dict) else J))
-        return achados == 0
-    except Exception:
-        return False
-    finally:
-        os.unlink(t.name)
-
-
 def sentinelas():
     arqs = downloads()
     if not arqs: sys.exit("sem download do HubSpot")
@@ -151,71 +136,116 @@ def sentinelas():
     abertos = [d for d in N if d.get("status") == "aberto"]
     rev_ids = []
 
+    def dono(d, padrao="daniela"):
+        if "fora do roster" in (d.get("parceiro") or "").lower(): return "luis"  # até o Luis definir quem cuida de fora do roster
+        return "jenifer" if d.get("pipeline") in BDR or DONO.get(str(d.get("owner"))) == "jenifer" else padrao
+
+    contratos = defaultdict(list)  # cobrança agrupada por Master
     for d in abertos:
-        x = d.get("extras") or {}; h = H.get(d["id"], {}); et = d.get("etapa"); nm = d.get("nome") or d["id"]
-        desde = dia(h.get("desde")); dias_et = (HOJE - desde).days if desde else 0
-        mod = dia(x.get("ultima_atividade")) or dia(x.get("ultima_modificacao")); parado = (HOJE - mod).days if mod else 0
-        mais = "pelo menos " if h.get("aprox") else ""
-        base = f"{d.get('pipeline')} · {et} · parceiro {d.get('parceiro') or 'sem parceiro'}"
+        x = d.get("extras") or {}; h = H.get(d["id"], {}); et = d.get("etapa"); nm = (d.get("nome") or d["id"]).strip().rstrip(".")
+        criado = dia(d.get("criado"))
+        # data de entrada na etapa: campo do HubSpot quando existe; senão o histórico dos downloads
+        ent = dia(x.get("entrou_etapa")); desde = ent or dia(h.get("desde")); exato = bool(ent) or not h.get("aprox")
+        dias_et = (HOJE - desde).days if desde else 0
         ativ = dia(x.get("ultima_atividade")); sem_ativ = (HOJE - ativ).days if ativ else None
-        if h.get("aprox") and sem_ativ is not None: dias_et = max(dias_et, sem_ativ); mais = ""  # etapa antiga: usa a última atividade real
+        # parado: última atividade real (a "última modificação" é contaminada pela sincronização com o Bitrix)
+        ref = ativ or criado; parado = (HOJE - ref).days if ref else 0
+        if exato and desde: parado = min(parado, dias_et)
+        if not exato: dias_et = max(dias_et, sem_ativ if sem_ativ is not None else ((HOJE - criado).days if criado else 0))
+        base = f"{d.get('pipeline')} · {et} · parceiro {d.get('parceiro') or 'sem parceiro'}"
         if et in ET_CONTRATO and dias_et >= LIM["contrato"]:
-            rasc = (f"Oi! Passando para saber como está a assinatura do contrato da {nm}. Se o cliente tiver alguma dúvida, "
-                    f"podemos ajudar ou marcar uma conversa rápida. Obrigada!")
-            marca(ev(E, f"contrato|{d['id']}", "contrato_parado", "daniela", nm, f"{base}. " + (f"Última atividade há {sem_ativ} dias." if h.get("aprox") and sem_ativ is not None else f"Na etapa há {mais}{dias_et} dias."), "Contratos", d["id"], d.get("valor"),
-                     {"rascunho": rasc if auditar(rasc) else None, "dias": dias_et}))
-        if et == APRES and not h.get("aprox") and h.get("desde") == os.path.basename(arqs[-1])[8:18]:
-            rev_ids.append(d["id"])
-            marca(ev(E, f"diag|{d['id']}", "entrou_diagnostico", "geovana", nm, f"{base}. Entrou na etapa em {desde.strftime('%d/%m')}; o Revisor já deu a segunda opinião.", "Tributário", d["id"], d.get("valor")))
-        if et in ET_COMERCIAL and parado >= LIM["comercial"]:
-            p = "jenifer" if d.get("pipeline") in BDR else "daniela"
-            marca(ev(E, f"comercial|{d['id']}", "comercial_parado", p, nm, f"{base}. Sem movimentação há {parado} dias.", "Comercial", d["id"], d.get("valor"), {"dias": parado}))
+            contratos[d.get("parceiro") or "sem parceiro"].append((nm, et))
+            marca(ev(E, f"contrato|{d['id']}", "contrato_parado", dono(d), nm,
+                     f"{base}. Na etapa há {dias_et} dias" + (f"; última atividade há {sem_ativ} dias" if sem_ativ is not None else "; sem atividade registrada")
+                     + ". Confira na plataforma de assinatura antes de cobrar.", "Contratos", d["id"], d.get("valor"), {"dias": dias_et, "master": d.get("parceiro")}))
+        if et == "Contrato Assinado" and dias_et >= LIM["assinado"]:
+            marca(ev(E, f"assinado|{d['id']}", "assinado_parado", dono(d), nm, f"{base}. Assinado há {dias_et} dias e ainda não movido para Negócio Fechado: atualizar o CRM para a execução começar.",
+                     "Contratos", d["id"], d.get("valor"), {"dias": dias_et}))
+        if et == APRES and exato and desde and (HOJE - desde).days <= LIM["entrou_dias"]:
+            if desde.isoformat() == os.path.basename(arqs[-1])[8:18] or (ent and (HOJE - ent).days <= 1): rev_ids.append(d["id"])
+            marca(ev(E, f"diag|{d['id']}", "entrou_diagnostico", "geovana", nm, f"{base}. Entrou na etapa em {desde.strftime('%d/%m')}; segunda opinião do Revisor abaixo.", "Tributário", d["id"], d.get("valor")))
+        lim_com = LIM["contato_futuro"] if et == "Contato Futuro" else LIM["comercial"]
+        if (et in ET_COMERCIAL or d.get("pipeline") in BDR) and parado >= lim_com:
+            marca(ev(E, f"comercial|{d['id']}", "comercial_parado", dono(d), nm, f"{base}. Sem movimentação há {parado} dias.", "Comercial", d["id"], d.get("valor"), {"dias": parado}))
         if et in ET_DIAG and parado >= LIM["diagnostico"]:
             marca(ev(E, f"diagparado|{d['id']}", "diagnostico_parado", "geovana", nm, f"{base}. Sem movimentação há {parado} dias.", "Tributário", d["id"], d.get("valor"), {"dias": parado}))
         if et == APRES and parado >= LIM["apresentacao"]:
-            marca(ev(E, f"apres|{d['id']}", "apresentacao_parada", "daniela", nm, f"{base}. Sem movimentação há {parado} dias.", "Comercial", d["id"], d.get("valor"), {"dias": parado}))
+            marca(ev(E, f"apres|{d['id']}", "apresentacao_parada", dono(d), nm, f"{base}. Sem movimentação há {parado} dias" + (" (60+ dias: avaliar reativação ou perda)" if parado >= 60 else "") + ".",
+                     "Comercial", d["id"], d.get("valor"), {"dias": parado}))
         # cadastro: CNPJ, regime e situação oficial (Dados + Intel Comercial)
-        c = re.sub(r"\D", "", x.get("cnpj") or ""); prob = []
+        c = PD.cnpj_digitos(x.get("cnpj")); prob = []
         if not c: prob.append("sem CNPJ")
         elif not PD.cnpj_valido(c): prob.append("CNPJ com dígito inválido")
         else:
-            r = PD.receita(c) or {}
+            r = PD.receita(c)
+            if r is None and os.path.exists(os.path.join(AP, "dados-publicos/receita/cnpj.sqlite")): prob.append("CNPJ não encontrado na base da Receita (conferir se está ativo)")
+            r = r or {}
             sit = (r.get("situacao") or "").strip()
             if sit and sit.lower() != "ativa": prob.append(f"CNPJ {sit.lower()} na Receita")
+            if r.get("simples") == "S" and x.get("regime") in ("Lucro Real", "Lucro Presumido"): prob.append("regime diverge da Receita (optante do Simples)")
+            if r.get("simples") == "N" and x.get("regime") == "Simples Nacional": prob.append("regime diverge da Receita (não optante do Simples)")
             if r.get("razao") and not x.get("regime"): prob.append(f"sem regime (razão oficial: {r.get('razao')})")
         if not x.get("regime") and not any("regime" in p for p in prob): prob.append("sem regime")
         if prob:
-            marca(ev(E, f"crm|{d['id']}", "crm_incompleto", "daniela", nm, f"{base}. " + "; ".join(prob) + ".", "Dados", d["id"], d.get("valor")))
+            marca(ev(E, f"crm|{d['id']}", "crm_incompleto", dono(d), nm, f"{base}. " + "; ".join(prob) + ".", "Dados", d["id"], d.get("valor")))
 
-    # conflito de canal nos negócios novos (mesma raiz de CNPJ, outro canal, aberto ou ganho)
+    # um rascunho de cobrança por Master, com os negócios dele (Células, 02/10), auditado pela Qualidade
+    for m, ns in contratos.items():
+        lista = "; ".join(f"{n} ({'assinatura' if et == 'Contrato Enviado' else 'pendência de fechamento'})" for n, et in ns[:8])
+        rasc = (f"Oi! Passando para alinhar os contratos em andamento: {lista}. Se algum cliente tiver dúvida ou precisar de ajuda, "
+                f"podemos marcar uma conversa rápida. Obrigada!")
+        ok = auditar(rasc)
+        for e in E.values():
+            if e.get("tipo") == "contrato_parado" and e.get("_visto") and e.get("master") == m: e["rascunho"] = limpo(rasc) if ok else None
+
+    # ganho sem card no Bitrix: a execução não tem como começar (Pós-venda, 02/10)
+    for d in N:
+        if d.get("status") != "ganho" or str((d.get("extras") or {}).get("id_bitrix") or "").isdigit(): continue
+        fe = dia(d.get("fechado"))
+        if fe and LIM["ganho_sem_bitrix"][0] <= (HOJE - fe).days <= LIM["ganho_sem_bitrix"][1]:
+            marca(ev(E, f"sembitrix|{d['id']}", "ganho_sem_bitrix", "daniela", (d.get("nome") or d["id"]).rstrip("."),
+                     f"Ganho em {fe.strftime('%d/%m/%Y')} (parceiro {d.get('parceiro') or 'sem parceiro'}) e sem ID Bitrix no HubSpot: a execução não tem card para começar.",
+                     "Pós-venda", d["id"], d.get("valor"), {"dias": (HOJE - fe).days}))
+
+    # conflito de canal nos negócios novos: mesma raiz de CNPJ, canais identificados diferentes (regra do conflito_canal.py)
+    sys.path.insert(0, os.path.join(SK, "depto-operacoes-canal/scripts"))
+    try:
+        import _comum as OC
+        _, _, cfg_oc, roster = OC.carregar(arqs[-1]); canal = lambda d: OC.canal(d, cfg_oc, roster)
+    except Exception:
+        canal = lambda d: (d.get("parceiro") or "Sem parceiro identificado", "Master" if d.get("parceiro") else "Sem parceiro", "")
     if ant is not None:
         por_raiz = defaultdict(list)
         for d in N:
-            c = re.sub(r"\D", "", (d.get("extras") or {}).get("cnpj") or "")
+            c = PD.cnpj_digitos((d.get("extras") or {}).get("cnpj"))
             if d.get("status") in ("aberto", "ganho") and PD.cnpj_valido(c): por_raiz[c[:8]].append(d)
         for d in abertos:
-            if d["id"] in ant: continue
-            c = re.sub(r"\D", "", (d.get("extras") or {}).get("cnpj") or "")
+            if d["id"] in ant and f"conflito|{d['id']}" not in E: continue  # só negócio novo (ou alerta que já estava aberto)
+            c = PD.cnpj_digitos((d.get("extras") or {}).get("cnpj"))
             if not PD.cnpj_valido(c): continue
-            outros = [o for o in por_raiz[c[:8]] if o["id"] != d["id"] and (o.get("parceiro") or "") != (d.get("parceiro") or "")]
+            cd, td, _ = canal(d)
+            if td == "Sem parceiro": continue
+            outros = [o for o in por_raiz[c[:8]] if o["id"] != d["id"] and canal(o)[1] != "Sem parceiro" and canal(o)[0] != cd]
             if outros:
-                o = sorted(outros, key=lambda o: o.get("criado") or "")[0]
-                marca(ev(E, f"conflito|{d['id']}", "conflito_novo", "daniela", d.get("nome") or d["id"],
-                         f"Novo negócio do parceiro {d.get('parceiro') or 'sem parceiro'}; a mesma empresa já tem negócio {o.get('status')} com {o.get('parceiro') or 'sem parceiro'} "
-                         f"(criado em {(o.get('criado') or '')[:10]}). Decisão de conflito é do Luis.", "Operações de Canal", d["id"], d.get("valor"), {"cc_luis": True}))
+                o = sorted(outros, key=lambda o: PD.data_efetiva(o) or "")[0]
+                marca(ev(E, f"conflito|{d['id']}", "conflito_novo", "daniela", (d.get("nome") or d["id"]).rstrip("."),
+                         f"Novo negócio do parceiro {cd}; a mesma empresa já tem negócio {o.get('status')} com {canal(o)[0]} "
+                         f"(desde {(PD.data_efetiva(o) or '')[:10]}). Decisão de conflito é do Luis.", "Operações de Canal", d["id"], d.get("valor"), {"cc_luis": True}))
 
-    # parceiros sem indicação (Partner Success)
-    ult = defaultdict(lambda: None); n12 = defaultdict(int)
+    # parceiros sem indicação: compara com o intervalo real entre indicações de cada um (Dados, 02/10)
+    dias_p = defaultdict(set)
     for d in N:
-        p, cr = d.get("parceiro"), dia(d.get("criado"))
-        if not p or not cr: continue
-        if not ult[p] or cr > ult[p]: ult[p] = cr
-        if (HOJE - cr).days <= 365: n12[p] += 1
-    for p, u in ult.items():
-        if "fora do roster" in p.lower() or n12[p] < 2: continue
-        ritmo = 365 / n12[p]; gap = (HOJE - u).days  # inativo = o dobro do intervalo normal dele (mínimo 30 dias) ou 60+ dias
-        if gap >= min(LIM["parceiro"], max(30, 2 * ritmo)):
-            marca(ev(E, f"parceiro|{p}", "parceiro_inativo", "daniela", p, f"Costuma indicar a cada {ritmo:.0f} dias ({n12[p]} negócios em 12 meses); o último entrou há {gap} dias ({u.isoformat()}).",
+        p, de = d.get("parceiro"), dia(PD.data_efetiva(d))
+        if p and de and "fora do roster" not in p.lower() and (HOJE - de).days <= 365: dias_p[p].add(de)
+    for p, ds in dias_p.items():
+        ds = sorted(ds)
+        if len(ds) < 3: continue
+        gaps = sorted((b - a).days for a, b in zip(ds, ds[1:]))
+        p90 = gaps[min(len(gaps) - 1, int(round(0.9 * (len(gaps) - 1))))]
+        limite = min(90, max(30, round(1.5 * p90))); gap = (HOJE - ds[-1]).days
+        if gap >= limite:
+            marca(ev(E, f"parceiro|{p}", "parceiro_inativo", "daniela", p,
+                     f"Costuma ficar no máximo {p90} dias entre indicações ({len(ds)} dias com negócio em 12 meses); a última entrou há {gap} dias ({ds[-1].strftime('%d/%m/%Y')}).",
                      "Partner Success", extra={"dias": gap}))
 
     execucao(N, E, marca)
@@ -264,19 +294,22 @@ def supervisao(E, marca):
             marca(ev(E, f"demanda|{d['id']}", "demanda_atrasada", d.get("pessoa") or "daniela", f"{d['id']} · {d.get('titulo')}",
                      f"{d.get('o_que_pede') or ''} Status: {st}, aberta em {(d.get('aberta_em') or '')[8:10]}/{(d.get('aberta_em') or '')[5:7]}. Próximo passo: {d.get('proximo_passo') or 'definir'}.", "Supervisor"))
     # chamados propostos e pedidos da Central esperando decisão
-    agora = datetime.now()
+    agora = datetime.combine(HOJE, datetime.now().time())
     for k, c in ler(os.path.join(REG, "chamados-propostos.json"), {}).items():
         try: t = datetime.fromisoformat(c.get("proposto_em"))
         except Exception: continue
-        if c.get("status") == "proposto" and (agora - t).total_seconds() / 3600 >= LIM["aprovacao_h"]:
-            marca(ev(E, f"aprov|chamado|{k}", "aprovacao_parada", c.get("pessoa") or "daniela", c.get("titulo") or k,
-                     f"Chamado proposto para {c.get('grupo')} em {c['proposto_em'][:10]} aguarda aprovação no painel.", "Supervisor"))
+        h = (agora - t).total_seconds() / 3600
+        if c.get("status") == "proposto" and h >= LIM["aprovacao_h"]:
+            quem = "luis" if h >= LIM["aprovacao_escala_h"] else (c.get("pessoa") or "daniela")  # 5 dias sem decisão: sobe para o Luis
+            marca(ev(E, f"aprov|chamado|{k}", "aprovacao_parada", quem, c.get("titulo") or k,
+                     f"Chamado proposto para {c.get('grupo')} em {c['proposto_em'][8:10]}/{c['proposto_em'][5:7]} aguarda aprovação no painel"
+                     + (f" há {int(h // 24)} dias (de {(c.get('pessoa') or '').capitalize()})." if quem == "luis" else "."), "Supervisor"))
     for k, p in ler(os.path.join(AP, "central-agentes/registro.json"), {}).get("pedidos", {}).items():
         if p.get("status") != "aguardando_aprovacao": continue
         t = dia(p.get("respondido") or p.get("recebido"))
         if t and (HOJE - t).days >= 1:
             marca(ev(E, f"aprov|pedido|{k}", "aprovacao_parada", p.get("pessoa") or "luis", f"{k} · {(p.get('assunto') or '')[:80]}",
-                     f"Resposta entregue em {str(p.get('recebido'))[:10]}; falta Aprovado, Não aprovado ou Nova análise.", "Supervisor"))
+                     f"Resposta entregue em {t.strftime('%d/%m')}; falta Aprovado, Não aprovado ou Nova análise.", "Supervisor"))
     # rotinas com erro hoje
     log = os.path.join(AP, "logs/partners.log")
     erros = {}
@@ -323,19 +356,30 @@ def _ord(e):
 def plano(previa=False, so_urgentes=False):
     import email_layout as L
     E = ler(EVT, {}); at = [e for e in E.values() if e.get("ativo")]
-    est = ler(os.path.join(REG, "plano-enviado.json"), {})
+    fest = os.path.join(REG, "plano-enviado.json"); est = ler(fest, {}); falhas = 0
+    chave = lambda e: f"{HOJE.isoformat()}|{e['tipo']}|{e['titulo']}"  # aviso: uma vez por item por dia
     for p, (nome, email) in PESSOAS.items():
-        meus = [e for e in at if e["pessoa"] == p or (p == "luis" and e.get("cc_luis"))]
+        meus = [e for e in at if (e["pessoa"] == p and e["tipo"] != "demanda_atrasada") or (p == "luis" and (e.get("cc_luis") or e["tipo"] == "demanda_atrasada"))]
+        outros_neg = {e.get("negocio") for e in meus if e["tipo"] != "crm_incompleto" and e.get("negocio")}
+        for e in meus:  # mesmo negócio com cadastro incompleto e outra pendência: um cartão só (Dados, 02/10)
+            e.pop("tambem", None)
+        for e in [e for e in meus if e["tipo"] == "crm_incompleto" and e.get("negocio") in outros_neg]:
+            alvo = next(o for o in meus if o.get("negocio") == e["negocio"] and o["tipo"] != "crm_incompleto")
+            alvo["tambem"] = "cadastro incompleto: " + e["texto"].split(". ", 1)[-1]
+        meus = [e for e in meus if not (e["tipo"] == "crm_incompleto" and e.get("negocio") in outros_neg)]
         if so_urgentes:
             ja = set(est.get(f"avisados|{p}", []))
-            meus = [e for e in meus if e["tipo"] in AVISO_TARDE and novo(e) and f"{e['tipo']}|{e['titulo']}" not in ja]
+            meus = [e for e in meus if e["tipo"] in AVISO_TARDE and novo(e) and chave(e) not in ja]
             if not meus: continue
         novos = [e for e in meus if novo(e)]
         por = defaultdict(list)
         for e in sorted(meus, key=_ord): por[e["tipo"]].append(e)
         linhas = [L.cabecalho("Área Partners · Agentes", "Aviso da tarde" if so_urgentes else "Plano do dia", f"{nome} · {HOJE.strftime('%d/%m/%Y')}")]
+        if so_urgentes:
+            linhas.append(L.paragrafo(f"{nome}, apareceu algo novo e urgente desde o plano da manhã. Nada foi enviado a parceiro ou cliente nem alterado no CRM; "
+                                      "o contato e a decisão são seus.", "28px 32px 12px"))
         if not so_urgentes:
-            linhas.append(L.paragrafo(f"Bom dia, {nome}. Os agentes já cruzaram HubSpot, WhatsApp, Central e GLPI. Abaixo, o que pede a sua ação hoje, "
+            linhas.append(L.paragrafo(f"Bom dia, {nome}. Os agentes já cruzaram HubSpot, WhatsApp, Central e chamados propostos. Abaixo, o que pede a sua ação hoje, "
                                       "com o que eles já adiantaram. Nada foi enviado a parceiro ou cliente nem alterado no CRM.", "28px 32px 12px"))
             linhas.append(L.kpis([("Novos hoje", str(len(novos)), "desde ontem"), ("Pendências", str(len(meus)), "ativas"),
                                   ("Urgentes", str(sum(1 for e in meus if e["tipo"] in URGENTE)), "olhar primeiro")]))
@@ -345,7 +389,8 @@ def plano(previa=False, so_urgentes=False):
             continue
         if not so_urgentes and not previa and est.get(f"plano|{p}") == HOJE.isoformat():
             print(p, "plano de hoje já enviado"); continue
-        ordem = ["rotina_falhou", "conflito_novo", "demanda_atrasada", "aprovacao_parada", "entrou_diagnostico", "contrato_parado", "ganho_sem_execucao", "execucao_parada",
+        ordem = ["rotina_falhou", "conflito_novo", "demanda_atrasada", "aprovacao_parada", "entrou_diagnostico", "contrato_parado", "assinado_parado", "ganho_sem_bitrix",
+             "ganho_sem_execucao", "execucao_parada",
                  "diagnostico_parado", "comercial_parado", "apresentacao_parada", "crm_incompleto", "parceiro_inativo"]
         for t in ordem:
             xs = por.get(t)
@@ -354,18 +399,19 @@ def plano(previa=False, so_urgentes=False):
             linhas.append(L.secao(f"{NOME[t]} · {len(xs)}" + (f" ({n_nov} novo{'s' if n_nov > 1 else ''})" if n_nov else "")))
             segunda = HOJE.weekday() == 0
             if t in RESUMIDOS and not segunda:
-                lim = 3; xs = sorted(xs, key=lambda e: -(e.get("valor") or 0))
-                linhas.append(L.paragrafo(f"Os 3 de maior valor abaixo. A lista completa, com os links, está na planilha anexa e vem no e-mail de segunda."))
+                lim = 3; xs = sorted(xs, key=lambda e: (-(e.get("valor") or 0), -(e.get("dias") or 0)))
+                linhas.append(L.paragrafo(f"Os 3 de maior valor abaixo. A lista completa, com os links, está na planilha anexa."))
             elif t in RESUMIDOS:
-                lim = 60
+                lim = 10
             else:
                 lim = 6 if t == "crm_incompleto" else 10
             for e in xs[:lim]:
                 ls = [("Situação", L.esc(limpo(e["texto"])))]
-                if e.get("revisor"): ls.append(("Revisor", L.esc(e["revisor"])))
+                if e.get("tambem"): ls.append(("Também", L.esc(limpo(e["tambem"]))))
+                if e.get("revisor"): ls.append(("Revisor", L.esc(e["revisor"]) + (f" · planilha {L.esc(os.path.basename(e['arquivo']))} na pasta da Geovana" if e.get("arquivo") else "")))
                 if e.get("rascunho"): ls.append(("Rascunho para o parceiro", "<i>" + L.esc(e["rascunho"]) + "</i> (revisado pela Qualidade; você decide se envia)"))
                 if e.get("valor"): ls.append(("Valor no CRM", f"R$ {e['valor']:,.0f}".replace(",", ".")))
-                ls.append(("Desde", L.esc(e["primeiro"][8:10] + "/" + e["primeiro"][5:7]) + (" · <b>novo</b>" if novo(e) else "")))
+                ls.append(("No plano desde", L.esc(e["primeiro"][8:10] + "/" + e["primeiro"][5:7]) + (" · <b>novo</b>" if novo(e) else "")))
                 abre = [f'<a href="{L.esc(u)}" style="color:#7a5f00;font-weight:bold">{n}</a>' for n, u in (("Abrir no HubSpot", e.get("link")), ("Abrir no Bitrix", e.get("bitrix"))) if u]
                 if abre: ls.append(("Links", " &nbsp;·&nbsp; ".join(abre)))
                 linhas.append(L.cartao(limpo(e["titulo"]), e["depto"], ls, "#b3261e" if t in URGENTE else L.OURO, e.get("link")))
@@ -374,26 +420,30 @@ def plano(previa=False, so_urgentes=False):
         linhas.append(L.rodape("Plano montado pelos agentes da Área Partners às " + datetime.now().strftime("%Hh%M")
                                + ". Quando a situação se resolve no HubSpot, o item sai sozinho do plano do dia seguinte."))
         corpo = L.documento(*linhas)
-        anexo = planilha(p, nome, meus) if meus else None
-        assunto = f"[Agentes] {'Aviso da tarde' if so_urgentes else 'Plano do dia'} · {nome} · {HOJE.strftime('%d/%m')}"
+        anexo = planilha(p, nome, meus, so_urgentes) if meus else None
+        assunto = f"[Partners · automático] {'Aviso da tarde' if so_urgentes else 'Plano do dia'} · {nome} · {HOJE.strftime('%d/%m')}"
         if previa:
             f = os.path.join(tempfile.gettempdir(), f"plano-{p}.html"); open(f, "w").write(corpo); print(p, len(meus), "→", f, "·", anexo or "sem anexo"); continue
         ok, msg = L.outlook([email], [], assunto, corpo, [anexo] if anexo else (), enviar=True)
         print(p, len(meus), "enviado" if ok else f"FALHOU {msg}")
-        if ok and not so_urgentes: est[f"plano|{p}"] = HOJE.isoformat()
-        if ok and so_urgentes:
-            est.setdefault(f"avisados|{p}", []).extend(f"{e['tipo']}|{e['titulo']}" for e in meus)
-    if not previa: gravar(os.path.join(REG, "plano-enviado.json"), est)
+        falhas += not ok
+        if ok:
+            if not so_urgentes: est[f"plano|{p}"] = HOJE.isoformat()
+            # o que já foi no plano (ou no aviso) não volta no aviso da tarde
+            av = [x for x in est.get(f"avisados|{p}", []) if x[:10] >= (HOJE - timedelta(days=7)).isoformat()]
+            est[f"avisados|{p}"] = av + [chave(e) for e in meus if e["tipo"] in AVISO_TARDE]
+            gravar(fest, est)  # grava a cada envio: uma queda no meio não reenvia a quem já recebeu
+    if falhas: sys.exit(f"{falhas} e-mail(s) do plano não saíram (Outlook)")
 
 
-def planilha(p, nome, evs):
+def planilha(p, nome, evs, aviso=False):
     """Lista completa do dia com links clicáveis (o e-mail mostra só os principais)."""
     from openpyxl import Workbook
     from openpyxl.styles import Font, PatternFill, Alignment
     out = os.path.join(os.environ.get("OPERACAO_REG") or os.path.join(AP, "departamentos/operacao"), nome); os.makedirs(out, exist_ok=True)
-    f = os.path.join(out, f"Plano-do-dia-{nome}-{HOJE.isoformat()}.xlsx")
+    f = os.path.join(out, f"{'Aviso-da-tarde' if aviso else 'Plano-do-dia'}-{nome}-{HOJE.isoformat()}.xlsx")
     wb = Workbook(); ws = wb.active; ws.title = "Pendências"
-    cab = ["Tipo", "Negócio / item", "Situação", "Área", "Valor no CRM", "Desde", "Novo", "HubSpot", "Bitrix", "Rascunho para o parceiro"]
+    cab = ["Tipo", "Negócio / item", "Situação", "Área", "Valor no CRM", "Desde", "Novo", "HubSpot", "Bitrix", "Rascunho para o parceiro (auditado; quem envia é você)"]
     ws.append(cab)
     for c in ws[1]: c.font = Font(bold=True, color="FFFFFF"); c.fill = PatternFill("solid", fgColor="1F1F1F")
     for e in sorted(evs, key=lambda e: (list(NOME).index(e["tipo"]), _ord(e))):

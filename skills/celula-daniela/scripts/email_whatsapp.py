@@ -38,14 +38,18 @@ def horas(h):
 
 
 def cartoes(itens, com_rascunho=True):
+    sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); import protecao as PR  # mascaramento e auditor únicos
     out = []
     for i in itens:
+        i = {k: (PR.limpo(v) if isinstance(v, str) and k not in ("link",) else v) for k, v in i.items()}
         et = ("Urgente · " if i.get("urgente") else "") + ("Nova · " if i.get("nova") else "") + (f"{horas(i.get('aguardando_h'))} sem resposta" if i.get("aguardando_h") else ROT[i["status"]])
         ls = [("O que pede", e(i.get("o_que_pede")))]
         if i.get("rota"): ls.append(("Encaminhar para", e(i["rota"])))
         if i.get("proximo_passo"): ls.append(("Próximo passo", e(i["proximo_passo"]) + (f" · prazo {e(i['prazo'])}" if i.get("prazo") else "")))
         if i.get("entrega"): ls.append(("O que os agentes levantaram", L.md(i["entrega"])))
-        if com_rascunho and i.get("rascunho"): ls.append(("Sugestão de resposta", f"<i>“{e(i['rascunho'])}”</i>"))
+        if com_rascunho and i.get("rascunho"):
+            ls.append(("Sugestão de resposta", f"<i>“{e(i['rascunho'])}”</i> (revisada pela Qualidade; você decide se envia)" if PR.auditar(i["rascunho"])
+                       else "retida pela Qualidade: o texto sugerido tinha possível promessa de resultado. Responda com suas palavras."))
         if i.get("anexos"): ls.append(("Anexos", e(", ".join(os.path.basename(x) for x in i["anexos"]))))
         ch = i.get("chamado")
         if ch:
@@ -125,6 +129,8 @@ def main():
     for k, P in T["pessoas"].items():
         if not P.get("itens") and not P.get("conversas"):
             print(f"{k}: sem conversas nesta rodada, e-mail não enviado"); continue
+        if not any(i.get("status") in ("responder", "acompanhar") for i in P.get("itens", [])):
+            print(f"{k}: nada para responder ou acompanhar, e-mail não enviado"); continue
         if sem_ia and not any(i.get("nova") and i.get("status") == "responder" for i in P.get("itens", [])):
             print(f"{k}: nada novo para responder desde a última rodada, e-mail não enviado"); continue
         assunto, corpo = email_dono(k, P, rodada, hoje)

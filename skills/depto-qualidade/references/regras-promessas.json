@@ -25,7 +25,7 @@
    "categoria": "Promessa de êxito",
    "severidade": "ALTO",
    "negavel": true,
-   "padrao": "\\bcom (toda )?certeza (voce|vc|sua empresa|seu cliente|o cliente|a empresa)? ?(vai|ira|tem|tera|recebe)|\\bcerteza de (credito|recuperacao|receber|ganho|restituicao)|\\bvai receber (o|seu|os)? ?(credito|dinheiro|valor|restituicao)|\\bdinheiro (certo|garantido)|\\bnao tem como (perder|dar errado)|\\bsem chance de (perder|erro)",
+   "padrao": "\\bcom (toda )?certeza (voce|vc|sua empresa|seu cliente|o cliente|a empresa)? ?(vai|ira|tem|tera|recebe)|\\bcerteza de (credito|recuperacao|receber|ganho|restituicao)|\\bvai receber (o|seu|os)? ?(credito|dinheiro|valor|restituicao)|\\bdinheiro (certo|garantido)|\\bnao tem como (perder|dar errado)|\\bsem chance de (perder|erro)|\\b(vai receber|recebe|recebera|recupera)\\b[^.\\n]{0,40}\\bcom (toda )?certeza\\b",
    "explicacao": "Afirma que o cliente vai receber.",
    "sugestao": "Use 'pode haver crédito; a análise confirma'."
   },
@@ -52,7 +52,7 @@
    "categoria": "Promessa de valor",
    "severidade": "MEDIO",
    "negavel": false,
-   "padrao": "\\b(recupere|recuperar|receba|receber|resgate|resgatar|economize|economizar|devolva|restituir)\\b[^.\\n]{0,60}(r\\$ ?[\\d.,]+|\\d+[\\d.,]* ?(%|mil|milhoes|milhao|mi\\b))|(ate|mais de|acima de) (r\\$ ?[\\d.,]+|\\d+[\\d.,]* ?%)[^.\\n]{0,40}(de credito|em credito|de volta|de restituicao|recuperad)|\\b(reducao|economia|diminuicao) (das |de |nas |na |da )?(contribuicoes|tributos|impostos|carga|aliquota)[^.\\n]{0,50}\\d+[\\d.,]* ?%",
+   "padrao": "\\b(recupere|recuperar|receba|receber|resgate|resgatar|economize|economizar|devolva|restituir)\\b[^.\\n]{0,60}(r\\$ ?[\\d.,]+|\\d+[\\d.,]* ?(%|mil|milhoes|milhao|mi\\b))|(ate|mais de|acima de) (r\\$ ?[\\d.,]+|\\d+[\\d.,]* ?%)[^.\\n]{0,40}(de credito|em credito|de volta|de restituicao|recuperad)|\\b(reducao|economia|diminuicao) (das |de |nas |na |da )?(contribuicoes|tributos|impostos|carga|aliquota)[^.\\n]{0,50}\\d+[\\d.,]* ?%|\\b(recupera|recebe|recebera)\\b[^.\\n]{0,60}(r\\$ ?[\\d.,]+|\\d+[\\d.,]* ?(%|mil|milhoes|mi\\b))",
    "explicacao": "Valor ou percentual de recuperação prometido ao público. Pode vincular a oferta (CDC art. 30; CC art. 427) e induzir a erro.",
    "sugestao": "Se for média histórica, diga a fonte, o período e 'não é garantia de resultado'. Se for estimativa do cliente, 'estimativa preliminar, sujeita à análise'."
   },
@@ -70,7 +70,7 @@
    "categoria": "Promessa de prazo",
    "severidade": "MEDIO",
    "negavel": true,
-   "padrao": "\\b(dinheiro|credito|restituicao|ressarcimento|valor|pagamento) (na conta |no caixa )?em (ate )?\\d+ ?(dias|meses|semanas)|\\b(restituicao|ressarcimento|credito|dinheiro|retorno) (imediat[oa]|rapid[oa]|na hora|express)|\\bem poucos dias\\b|\\bprazo garantido\\b|\\bcai na conta\\b",
+   "padrao": "\\b(dinheiro|credito|restituicao|ressarcimento|valor|pagamento) (na conta |no caixa )?em (ate )?\\d+ ?(dias|meses|semanas)|\\b(restituicao|ressarcimento|credito|dinheiro|retorno) (imediat[oa]|rapid[oa]|na hora|express)|\\bem poucos dias\\b|\\bprazo garantido\\b|\\bcai na conta\\b|\\b(entra|cai|sai|chega)m? (na conta |no caixa )?em (ate )?\\d+ ?(dias|meses|semanas)",
    "explicacao": "O prazo de ressarcimento depende da Receita Federal (PER), não da Save.",
    "sugestao": "Informe o prazo médio histórico com fonte, ou 'o prazo depende da análise da Receita Federal'."
   },
@@ -136,6 +136,15 @@
    "padrao": "\\b(antes que|senao) a receita\\b|\\bvoce (esta|vai) (perdendo|perder) dinheiro\\b|\\bdinheiro (parado|esquecido|na mesa)\\b|\\bdinheiro que e seu\\b",
    "explicacao": "Apelo emocional que pressupõe o crédito. Aceitável só se o texto deixar claro que depende de análise.",
    "sugestao": "Ex.: 'muitas empresas do seu setor têm créditos não aproveitados; vale verificar'."
+  },
+  {
+   "id": "P10.1",
+   "categoria": "Alíquota zero fora do PER",
+   "severidade": "ALTO",
+   "negavel": true,
+   "padrao": "\\baliquota zero\\b[^.\\n]{0,80}\\b(dcomp|compens\\w*)|\\b(dcomp|compens\\w*)\\b[^.\\n]{0,80}\\baliquota zero\\b",
+   "explicacao": "Pelo entendimento da Save, crédito de alíquota zero segue sempre via PER (pedido de ressarcimento), nunca por compensação/DCOMP.",
+   "sugestao": "Troque por: 'o caminho é o pedido de ressarcimento (PER)'."
   }
  ],
  "ressalvas": {

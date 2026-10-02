@@ -13,6 +13,7 @@ Nada sai da máquina: os anexos vêm do armazenamento do Eazybe e ficam em celul
 Uso: python3 demandas_whatsapp.py --pessoa daniela [--horas 6]
 """
 import argparse, glob, hashlib, json, os, re, sqlite3, subprocess, sys, time
+from urllib.parse import unquote
 from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +27,8 @@ URL = re.compile(r"https?://\S+")
 ANEXO = re.compile(r"https://f005\.backblazeb2\.com/file/eazybe-attachments/\S+")
 CNPJ = re.compile(r"(?<!\d)(\d{2}\.?\d{3}\.?\d{3}\s?/?\s?\d{4}\s?-?\s?\d{2})(?!\d)")
 DEAL = re.compile(r"hubspot\.com/\S*?(?:deal/|record/0-3/)(\d{6,})")
-PESSOAL = re.compile(r"(cnh|\brg\b|_rg_|identidade|\bcpf\b|comprovante[_ -]?de[_ -]?resid|resid[eê]ncia|certid[aã]o[_ -]?de[_ -]?(nasc|casam)|holerite|extrato[_ -]?banc)", re.I)
+PESSOAL = re.compile(r"(?<![a-z])(cnh|rg|cpf|ctps|irpf)(?![a-z])|identidade|passaporte|holerite|contracheque|t[ií]tulo[_ -]?(de[_ -]?)?eleitor|carteira[_ -]?(de[_ -]?)?trabalho"
+                     r"|comprovante[_ -]?(de[_ -]?)?(resid|endere)|resid[eê]ncia|certid[aã]o[_ -]?(de[_ -]?)?(nasc|casam|obito)|extrato[_ -]?(banc|de[_ -]?conta)|dados[_ -]?banc", re.I)  # validado pelo Jurídico 02/10
 IMG, DOC, AUD = ("jpeg", "jpg", "png", "webp", "heic"), ("pdf", "docx", "xlsx", "doc", "txt"), ("mp3", "ogg", "opus", "m4a", "wav")
 
 
@@ -46,12 +48,24 @@ def cnpjs(texto):
 receita = PD.receita
 
 
+def _execucao(b):
+    """Fase da execução no Bitrix (último download de lib/bitrix.py), para responder status de pós-venda."""
+    try:
+        import sys as _s; _s.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); import bitrix
+        X = bitrix.ultimo(); its = (X or {}).get("execucoes", {}).get(str(b or ""), [])
+        return [f"{i['funil']}: {i['fase']} desde {i['desde']}" for i in its] or None
+    except Exception:
+        return None
+
+
 def negocio(d, R):
     r = R.get(d["id"]) or {}
     return {"id": d["id"], "nome": d.get("nome"), "status": d.get("status"), "etapa": d.get("etapa"), "pipeline": d.get("pipeline"),
             "parceiro": d.get("parceiro") or d.get("parceiro_bruto"), "valor": d.get("valor"), "criado": (d.get("criado") or "")[:10],
             "fechado": (d.get("fechado") or "")[:10], "cnpj": (d.get("extras") or {}).get("cnpj"), "regime": (d.get("extras") or {}).get("regime"),
             "ultima_atividade": (d.get("extras") or {}).get("ultima_atividade"), "honorario_pct": d.get("hContr"),
+            "card_bitrix": (f"https://save.bitrix24.com.br/crm/deal/details/{(d.get('extras') or {}).get('id_bitrix')}/" if (d.get("extras") or {}).get("id_bitrix") else None),
+            "execucao_bitrix": _execucao((d.get("extras") or {}).get("id_bitrix")) if d.get("status") == "ganho" else None,
             "parecer_resumo": r.get("resumo"), "parecer_motivo": r.get("motivo"), "sinal_reanalise": r.get("sinal_reanalise"), "link": LINK.format(d["id"])}
 
 
@@ -76,7 +90,7 @@ def ler_anexo(url, pasta, cache):
     if url in cache: return cache[url]
     nome = url.rsplit("/", 1)[-1][:150]; ext = nome.rsplit(".", 1)[-1].lower() if "." in nome else ""
     info = {"arquivo": re.sub(r"^\d+_", "", nome), "tipo": "imagem" if ext in IMG else "audio" if ext in AUD else "documento" if ext in DOC else "outro", "texto": ""}
-    if PESSOAL.search(nome):
+    if PESSOAL.search(unquote(nome)):
         info.update({"tipo": "documento pessoal", "texto": "", "nota": "documento pessoal: não lido (LGPD)"}); cache[url] = info; return info
     if info["tipo"] == "audio":
         dest = os.path.join(pasta, hashlib.sha1(url.encode()).hexdigest()[:12] + "." + ext)

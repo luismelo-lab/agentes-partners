@@ -55,6 +55,9 @@ def api(metodo, caminho, corpo=None, binario=None, cabecalhos=()):
 
 # ---------- E-mail (caixa compartilhada) ----------
 def enviar(para, cc, assunto, html, anexos=(), rascunho=False):
+    import protecao  # trava de domínio: só @savecompany.com.br
+    fora = protecao.interno(list(para), list(cc))
+    if fora or not para: return False, f"BLOQUEADO: destinatário fora do domínio ou vazio {fora}"
     caixa = os.environ["AGENTES_CAIXA"]
     msg = {"subject": assunto, "body": {"contentType": "HTML", "content": html},
            "toRecipients": [{"emailAddress": {"address": a}} for a in para], "ccRecipients": [{"emailAddress": {"address": a}} for a in cc],

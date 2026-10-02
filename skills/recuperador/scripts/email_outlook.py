@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Monta o e-mail do lote semanal do Recuperador e o salva como RASCUNHO no Outlook do Mac (não envia).
+"""Monta o e-mail do lote semanal do Recuperador e o envia à Geovana com cópia para o Luis (decisão D27, 01/10/2026).
 
-Governança (regra do Luis): nenhum agente envia nada sem validação humana. Este script só cria o rascunho;
-quem revisa e clica em Enviar é o Luis. Usa AppleScript do Outlook clássico; se o "Novo Outlook" estiver ligado
-ou a automação falhar, gera um .eml que abre no Outlook com duplo clique.
+Sem --enviar, salva como RASCUNHO no Outlook do Mac. Só aceita destinatários @savecompany.com.br (trava em
+email_layout.outlook). A decisão sobre cada tese continua sendo da Geovana. Usa AppleScript do Outlook clássico;
+se a automação falhar, gera um .eml que abre no Outlook com duplo clique.
 
-Uso: python3 email_outlook.py --para luis.melo@savecompany.com.br [--cc ...] [--lote 1] [--abrir]
+Uso: python3 email_outlook.py --para geovana.goncalves@savecompany.com.br --cc luis.melo@savecompany.com.br --lote N [--enviar]
 """
 import argparse, glob, json, os, sys
 sys.path.insert(0, os.path.expanduser("~/.claude/skills/depto-marketing/scripts"))
@@ -48,8 +48,8 @@ def montar(lote):
     return f"Recuperador · Lote {lote} da semana ({hoje}): {len(casos)} casos, {mi(tot)} em potencial", corpo, xlsx
 
 
-def outlook(para, cc, assunto, corpo, anexo, abrir):
-    return L.outlook(para, cc, assunto, corpo, [anexo], enviar=False, abrir=abrir)
+def outlook(para, cc, assunto, corpo, anexo, abrir, enviar=False):
+    return L.outlook(para, cc, assunto, corpo, [anexo], enviar=enviar, abrir=abrir)
 
 
 def eml(para, cc, assunto, corpo, anexo):
@@ -61,8 +61,10 @@ def eml(para, cc, assunto, corpo, anexo):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--para", nargs="+", required=True); ap.add_argument("--cc", nargs="*", default=[])
-    ap.add_argument("--lote", type=int, default=1); ap.add_argument("--abrir", action="store_true"); a = ap.parse_args()
+    ap.add_argument("--lote", type=int, default=1); ap.add_argument("--abrir", action="store_true")
+    ap.add_argument("--enviar", action="store_true", help="envia (interno, D27); sem a opção cria rascunho"); a = ap.parse_args()
     assunto, corpo, anexo = montar(a.lote)
-    ok, msg = outlook(a.para, a.cc, assunto, corpo, anexo, a.abrir)
-    if ok: print("Rascunho criado no Outlook (não enviado):", assunto)
+    ok, msg = outlook(a.para, a.cc, assunto, corpo, anexo, a.abrir, a.enviar)
+    if ok: print("Enviado:" if a.enviar else "Rascunho criado no Outlook (não enviado):", assunto)
+    elif "BLOQUEADO" in msg: print(msg); sys.exit(1)
     else: print("Automação do Outlook indisponível:", msg[:300], "\nArquivo .eml gerado (abre no Outlook, pronto para revisar e enviar):", eml(a.para, a.cc, assunto, corpo, anexo))

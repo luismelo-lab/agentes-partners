@@ -119,7 +119,9 @@ def api(metodo, caminho, corpo=None, conta=None):
     args = ["-X", metodo, base + caminho, "-K", "-"]
     if corpo is not None:
         tmp = os.path.join(AP, "logs", f".glpi-{os.getpid()}.json"); open(tmp, "w").write(json.dumps(corpo)); args += ["--data-binary", "@" + tmp]
-    out = _curl(args, cfg.encode())
+    try: out = _curl(args, cfg.encode())
+    finally:
+        if corpo is not None and os.path.exists(tmp): os.unlink(tmp)  # o texto do chamado não fica em logs/ nem vai para o backup
     try: return json.loads(out) if out else {}
     except json.JSONDecodeError: return {"erro": out[:200].decode(errors="ignore")}
 

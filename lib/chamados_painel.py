@@ -80,6 +80,8 @@ def aplicar(pasta):
                     R["demandas"][did]["chamado"] = {k: v for k, v in loc.items() if k in ("status", "glpi_id", "url", "grupo", "titulo")}
         elif d.get("status") == "recusado" and loc.get("status") != "recusado":
             loc["status"] = "recusado"; loc["motivo_recusa"] = d.get("motivo"); P[did] = loc
+            with RD.Registro() as R:
+                if did in R["demandas"]: R["demandas"][did]["chamado"] = {"status": "recusado", "grupo": loc.get("grupo"), "titulo": loc.get("titulo")}
             with open(APRENDE, "a") as a:
                 a.write(f"- {datetime.now():%d/%m} · {d.get('pessoa')} · {d.get('area')} · recusado: {d.get('titulo')} · motivo: {d.get('motivo') or '—'}\n")
     gravar(P)

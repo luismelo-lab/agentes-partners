@@ -41,7 +41,7 @@ Sem o link do card, a área de Tributário costuma devolver pedindo o card: a tr
 - **Sistema S (Sesi, Senai, Sesc, Senac, Sebrae…):** não é compensável. Responder ao parceiro com a regra; não abrir chamado de compensação.
 
 ## LGPD
-Os formulários do Jurídico às vezes pedem dados do representante legal. **O agente não preenche CPF, RG, CNH nem dados bancários** de ninguém. Escreve "a Partners completa na abertura" e a pessoa completa no painel antes de aprovar, se a área exigir.
+Os formulários do Jurídico às vezes pedem dados do representante legal. **O agente não preenche CPF, RG, CNH nem dados bancários** de ninguém, e esses dados **nunca são digitados no painel** (o time inteiro e os agentes leem o painel). Quem atende completa direto no GLPI depois da abertura, se a área exigir. Descrição e nome da conversa passam pelo mascaramento (lib/protecao.py) antes de ir ao painel e ao GLPI.
 
 ## Categorias que mais recebem chamados da Partners
 | Categoria | Chamados | Solução (mediana) | Abre quando o parceiro… | Assuntos típicos (títulos reais) |

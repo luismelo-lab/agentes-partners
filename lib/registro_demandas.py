@@ -20,7 +20,7 @@ from datetime import datetime
 AP = os.path.expanduser("~/agentes-partners")
 REG = os.path.join(AP, "registro", "demandas.json")
 import caminhos as _cam  # noqa: E402  (pasta ativa do OneDrive: lib/caminhos.py)
-OD = _cam.area()
+# pasta do OneDrive resolvida na hora do uso ({mod}.area()): sem OneDrive, só a parte de arquivos falha (TI, 02/10)
 PASTA = {"daniela": "Central Masters · Daniela", "jenifer": "Central BDR · Jenifer", "geovana": "Central Técnica · Geovana", "luis": "Gestão · Luis"}
 ABERTOS = ("responder", "acompanhar", "em_analise", "aguardando_aprovacao")
 
@@ -65,6 +65,12 @@ def cmd_whatsapp(a):
                     if fechada and max(datetime.fromisoformat(x["atualizada_em"][:16]).timestamp() for x in fechada) >= ult_msg:
                         vistos.add(chave); continue
                 campos = {k: i.get(k) for k in ("master", "o_que_pede", "rota", "proximo_passo", "prazo", "negocio", "link", "urgente") if i.get(k)}
+                if not d:  # o parceiro voltou em até 7 dias: reabre a mesma demanda (evita ID e chamado duplicados; Células, 02/10)
+                    rec = [x for x in R["demandas"].values() if x["chave"] == chave and x.get("resolvida_em")
+                           and (datetime.now() - datetime.fromisoformat(x["resolvida_em"][:16])).days < 7]
+                    if rec:
+                        d = max(rec, key=lambda x: x["resolvida_em"]); d.pop("resolvida_em", None)
+                        d["eventos"].append({"quando": agora(), "evento": "reaberta: nova mensagem do parceiro"})
                 if not d:
                     did = novo_id(R)
                     d = R["demandas"][did] = {"id": did, "chave": chave, "origem": "WhatsApp", "pessoa": p, "titulo": i["chat"],
@@ -75,6 +81,8 @@ def cmd_whatsapp(a):
                 d["eventos"] = (d["eventos"] + [{"quando": agora(), "evento": f"{i['status']} ({modo})"}])[-30:]
             for d in R["demandas"].values():  # conversa que saiu da lista de pendências desta pessoa = resolvida
                 if d["origem"] == "WhatsApp" and d["pessoa"] == p and d["status"] in ABERTOS and d["chave"] not in vistos:
+                    if (d.get("chamado") or {}).get("status") in ("proposto", "aberto", "aprovado_manual") or (d.get("chamado") or {}).get("proposto"):
+                        d["status"] = "acompanhar"; continue  # chamado em andamento: acompanha até a área responder
                     d["status"] = "resolvida"; d["resolvida_em"] = agora(); d["eventos"].append({"quando": agora(), "evento": "sem pendência na rodada"})
     print("registro atualizado (WhatsApp)")
 
@@ -119,8 +127,8 @@ def cmd_planilhas(a):
             w.freeze_panes = "A2"; w.auto_filter.ref = w.dimensions
         aba(ws, sorted([d for d in ds if d["status"] in ABERTOS], key=lambda d: d.get("aberta_em") or ""))
         aba(wb.create_sheet("Histórico (30 dias)"), sorted([d for d in ds if d["status"] not in ABERTOS], key=lambda d: d.get("atualizada_em") or "", reverse=True)[:300])
-        os.makedirs(os.path.join(OD, pasta), exist_ok=True)
-        wb.save(os.path.join(OD, pasta, "Demandas.xlsx"))
+        os.makedirs(os.path.join(_cam.area(), pasta), exist_ok=True)
+        wb.save(os.path.join(_cam.area(), pasta, "Demandas.xlsx"))
     print("planilhas Demandas.xlsx atualizadas")
 
 

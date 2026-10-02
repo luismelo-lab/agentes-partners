@@ -33,7 +33,7 @@ Leia o que existir (e anote no dossiê o que **não** existia; o Conselho não i
 - as 2 últimas atas (continuidade)
 - o relatório semanal de resultados mais recente (`~/agentes-partners/departamentos/resultados/relatorios/Resultado-Semanal-*.md`, do skill `depto-resultados`): é a fonte preferencial de números para a reunião semanal
 - `~/agentes-partners/mapa-de-tarefas.xlsx`, se já preenchido (carga do time)
-- Dados comerciais: se um conector HubSpot estiver disponível (verifique com ToolSearch "hubspot"), puxe os números da semana dos parceiros Masters e dos pipelines Partners. Se não estiver, use o snapshot mais recente do cockpit (`~/Library/CloudStorage/OneDrive-SAVECOMPANY/master-dashboard.html`, objeto `SNAP`, campo `generatedAt`), deixando claro a data do dado.
+- Dados comerciais: se um conector HubSpot estiver disponível (verifique com ToolSearch "hubspot"), puxe os números da semana dos parceiros Masters e dos pipelines Partners. Se não estiver, use o snapshot mais recente do cockpit (`<pasta ativa do OneDrive, dada por python3 ~/agentes-partners/lib/caminhos.py>/master-dashboard.html`, objeto `SNAP`, campo `generatedAt`), deixando claro a data do dado.
 - Modo consulta: o material enviado pelo Luis, integralmente.
 
 **Embasamento técnico:** se o tema tiver componente tributário, contábil ou jurídico, acione antes da Rodada 1 o skill `depto-tributario` e/ou `depto-juridico` em modo "embasamento de plano de ação" (via ferramenta Agent) e inclua no dossiê os dados oficiais com fonte. Para dados de mercado e prospecção, use os departamentos de Inteligência Comercial ou Dados quando existirem.

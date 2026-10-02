@@ -147,7 +147,8 @@ def baixar():
                      "extras": {k: p.get(v) for k, v in X.items()}})
     os.makedirs(OUT, exist_ok=True)
     f = os.path.join(OUT, f"hubspot-{date.today().isoformat()}.json")
-    json.dump({"baixado_em": time.strftime("%Y-%m-%d %H:%M"), "fonte": "HubSpot API v3", "negocios": norm}, open(f, "w"), ensure_ascii=False)
+    json.dump({"baixado_em": time.strftime("%Y-%m-%d %H:%M"), "fonte": "HubSpot API v3", "negocios": norm}, open(f + ".tmp", "w"), ensure_ascii=False)
+    os.replace(f + ".tmp", f)  # gravação atômica: as sentinelas nunca leem um arquivo pela metade
     print(f, len(norm))
 
 
