@@ -55,7 +55,7 @@ def receita(cnpj):
                        (select descricao from ref where tipo='cnae' and codigo=e.cnae) as cnae_desc,
                        (select descricao from ref where tipo='municipio' and codigo=e.municipio) as municipio_desc
                        from estab e left join empresa m on m.basico=e.basico left join simples s on s.basico=e.basico
-                       where e.cnpj=? or (e.basico=? and e.matriz='1') order by (e.cnpj=?) desc limit 1""", (c, c[:8], c)).fetchone()
+                       where e.cnpj=? or (e.basico=? and e.matriz IN ('1','matriz')) order by (e.cnpj=?) desc limit 1""", (c, c[:8], c)).fetchone()
     con.close()
     return dict(r) if r else None
 
