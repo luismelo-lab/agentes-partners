@@ -3,7 +3,8 @@
 # Fica de fora: a credencial (.env) e a base da Receita (recriável com receita_cnpj.py --carregar).
 # Versões: 1 pasta por dia, mantidas por 30 dias.
 set -e
-DEST="$HOME/Library/CloudStorage/OneDrive-SAVECOMPANY/Backups/agentes-partners"
+DEST=$(python3 "$HOME/agentes-partners/lib/caminhos.py" backups)  # pasta ativa do OneDrive (lib/caminhos.py)
+[ -n "$DEST" ] || { echo "OneDrive não encontrado"; exit 1; }
 HOJE=$(date +%F)
 mkdir -p "$DEST/$HOJE"
 EXC=(--exclude .env --exclude '.glpi' --exclude 'anexos' --exclude 'anexos-cache.json' --exclude '*.sqlite' --exclude 'whisper' --exclude node_modules --exclude .DS_Store --exclude '__pycache__')

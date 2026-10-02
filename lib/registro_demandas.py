@@ -19,7 +19,8 @@ from datetime import datetime
 
 AP = os.path.expanduser("~/agentes-partners")
 REG = os.path.join(AP, "registro", "demandas.json")
-OD = os.environ.get("OD_RAIZ") or os.path.expanduser("~/Library/CloudStorage/OneDrive-SAVECOMPANY/Área Partners · Agentes")
+import caminhos as _cam  # noqa: E402  (pasta ativa do OneDrive: lib/caminhos.py)
+OD = _cam.area()
 PASTA = {"daniela": "Central Masters · Daniela", "jenifer": "Central BDR · Jenifer", "geovana": "Central Técnica · Geovana", "luis": "Gestão · Luis"}
 ABERTOS = ("responder", "acompanhar", "em_analise", "aguardando_aprovacao")
 

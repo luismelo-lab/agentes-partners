@@ -14,7 +14,8 @@ from xml.sax.saxutils import escape
 
 H = os.path.expanduser
 AP = H("~/agentes-partners")
-RAIZ = os.environ.get("OD_RAIZ") or H("~/Library/CloudStorage/OneDrive-SAVECOMPANY/Área Partners · Agentes")
+sys.path.insert(0, H("~/agentes-partners/lib")); import caminhos  # noqa: E402  (pasta ativa do OneDrive)
+RAIZ = caminhos.area()
 
 ult = lambda pad: (sorted(glob.glob(os.path.join(AP, pad)), key=os.path.getmtime) or [None])[-1]
 todos = lambda pad: sorted(glob.glob(os.path.join(AP, pad)))
