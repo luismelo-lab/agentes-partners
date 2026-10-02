@@ -71,7 +71,7 @@ def e_cafe(d, R=None):
     pal = [norm(p) for p in R.get("cafe_palavras", [])]
     txt = norm((d.get("nome") or "") + " " + (d.get("segmento") or ""))
     cn = re.sub(r"\D", "", d.get("cnae") or "")
-    return any(p and p in txt for p in pal) or any(cn.startswith(x) for x in R.get("cafe_cnaes", []))
+    return any(p and p in txt for p in pal) or any(cn.startswith(x) for x in (R.get("cafe_cnae") or R.get("cafe_cnaes") or []))
 
 
 def data_efetiva(d):
