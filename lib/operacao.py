@@ -103,6 +103,9 @@ def etapas(arquivos):
 
 
 INICIAL = [False]
+BITRIX = {}  # id do negócio no HubSpot → ID Bitrix (preenchido pelas sentinelas)
+BX_LINK = "https://save.bitrix24.com.br/crm/deal/details/{}/"
+RESUMIDOS = {"apresentacao_parada", "comercial_parado"}  # opção B do Luis (02/10): no dia a dia, número + 3 maiores; lista completa na segunda
 
 
 def novo(e):
@@ -114,7 +117,8 @@ def ev(E, chave, tipo, pessoa, titulo, texto, depto, negocio=None, valor=None, e
     if not e:
         e = E[chave] = {"tipo": tipo, "pessoa": pessoa, "depto": depto, "primeiro": HOJE.isoformat(), "inicial": INICIAL[0]}
     e.update({"titulo": titulo, "texto": texto, "ultimo": HOJE.isoformat(), "ativo": True, "negocio": negocio, "valor": valor,
-              "link": LINK.format(negocio) if negocio else None, **(extra or {})})
+              "link": LINK.format(negocio) if negocio else None,
+              "bitrix": BX_LINK.format(BITRIX[negocio]) if negocio and BITRIX.get(negocio) else None, **(extra or {})})
     e.pop("resolvido_em", None)
     return e
 
@@ -138,6 +142,7 @@ def sentinelas():
     if not arqs: sys.exit("sem download do HubSpot")
     H = etapas(arqs)
     N = ler(arqs[-1], {}).get("negocios", [])
+    BITRIX.update({d["id"]: str((d.get("extras") or {}).get("id_bitrix")) for d in N if str((d.get("extras") or {}).get("id_bitrix") or "").isdigit()})
     ant = {d["id"] for d in ler(arqs[-2], {}).get("negocios", [])} if len(arqs) > 1 else None
     INICIAL[0] = not os.path.exists(EVT)  # primeira rodada = linha de base: nada aparece como "novo"
     E = ler(EVT, {})
@@ -347,28 +352,62 @@ def plano(previa=False, so_urgentes=False):
             if not xs: continue
             n_nov = sum(1 for e in xs if novo(e))
             linhas.append(L.secao(f"{NOME[t]} · {len(xs)}" + (f" ({n_nov} novo{'s' if n_nov > 1 else ''})" if n_nov else "")))
-            lim = 6 if t in ("crm_incompleto", "apresentacao_parada", "comercial_parado") else 10
+            segunda = HOJE.weekday() == 0
+            if t in RESUMIDOS and not segunda:
+                lim = 3; xs = sorted(xs, key=lambda e: -(e.get("valor") or 0))
+                linhas.append(L.paragrafo(f"Os 3 de maior valor abaixo. A lista completa, com os links, está na planilha anexa e vem no e-mail de segunda."))
+            elif t in RESUMIDOS:
+                lim = 60
+            else:
+                lim = 6 if t == "crm_incompleto" else 10
             for e in xs[:lim]:
                 ls = [("Situação", L.esc(limpo(e["texto"])))]
                 if e.get("revisor"): ls.append(("Revisor", L.esc(e["revisor"])))
                 if e.get("rascunho"): ls.append(("Rascunho para o parceiro", "<i>" + L.esc(e["rascunho"]) + "</i> (revisado pela Qualidade; você decide se envia)"))
                 if e.get("valor"): ls.append(("Valor no CRM", f"R$ {e['valor']:,.0f}".replace(",", ".")))
                 ls.append(("Desde", L.esc(e["primeiro"][8:10] + "/" + e["primeiro"][5:7]) + (" · <b>novo</b>" if novo(e) else "")))
+                abre = [f'<a href="{L.esc(u)}" style="color:#7a5f00;font-weight:bold">{n}</a>' for n, u in (("Abrir no HubSpot", e.get("link")), ("Abrir no Bitrix", e.get("bitrix"))) if u]
+                if abre: ls.append(("Links", " &nbsp;·&nbsp; ".join(abre)))
                 linhas.append(L.cartao(limpo(e["titulo"]), e["depto"], ls, "#b3261e" if t in URGENTE else L.OURO, e.get("link")))
             if len(xs) > lim:
-                linhas.append(L.paragrafo(f"E mais {len(xs) - lim}. A lista completa está no painel e em registro/eventos.json."))
+                linhas.append(L.paragrafo(f"E mais {len(xs) - lim}. Todos estão na planilha anexa, com os links do HubSpot e do Bitrix."))
         linhas.append(L.rodape("Plano montado pelos agentes da Área Partners às " + datetime.now().strftime("%Hh%M")
                                + ". Quando a situação se resolve no HubSpot, o item sai sozinho do plano do dia seguinte."))
         corpo = L.documento(*linhas)
+        anexo = planilha(p, nome, meus) if meus else None
         assunto = f"[Agentes] {'Aviso da tarde' if so_urgentes else 'Plano do dia'} · {nome} · {HOJE.strftime('%d/%m')}"
         if previa:
-            f = os.path.join(tempfile.gettempdir(), f"plano-{p}.html"); open(f, "w").write(corpo); print(p, len(meus), "→", f); continue
-        ok, msg = L.outlook([email], [], assunto, corpo, enviar=True)
+            f = os.path.join(tempfile.gettempdir(), f"plano-{p}.html"); open(f, "w").write(corpo); print(p, len(meus), "→", f, "·", anexo or "sem anexo"); continue
+        ok, msg = L.outlook([email], [], assunto, corpo, [anexo] if anexo else (), enviar=True)
         print(p, len(meus), "enviado" if ok else f"FALHOU {msg}")
         if ok and not so_urgentes: est[f"plano|{p}"] = HOJE.isoformat()
         if ok and so_urgentes:
             est.setdefault(f"avisados|{p}", []).extend(f"{e['tipo']}|{e['titulo']}" for e in meus)
     if not previa: gravar(os.path.join(REG, "plano-enviado.json"), est)
+
+
+def planilha(p, nome, evs):
+    """Lista completa do dia com links clicáveis (o e-mail mostra só os principais)."""
+    from openpyxl import Workbook
+    from openpyxl.styles import Font, PatternFill, Alignment
+    out = os.path.join(os.environ.get("OPERACAO_REG") or os.path.join(AP, "departamentos/operacao"), nome); os.makedirs(out, exist_ok=True)
+    f = os.path.join(out, f"Plano-do-dia-{nome}-{HOJE.isoformat()}.xlsx")
+    wb = Workbook(); ws = wb.active; ws.title = "Pendências"
+    cab = ["Tipo", "Negócio / item", "Situação", "Área", "Valor no CRM", "Desde", "Novo", "HubSpot", "Bitrix", "Rascunho para o parceiro"]
+    ws.append(cab)
+    for c in ws[1]: c.font = Font(bold=True, color="FFFFFF"); c.fill = PatternFill("solid", fgColor="1F1F1F")
+    for e in sorted(evs, key=lambda e: (list(NOME).index(e["tipo"]), _ord(e))):
+        ws.append([NOME[e["tipo"]], limpo(e["titulo"]), limpo(e["texto"]), e["depto"], e.get("valor"), e["primeiro"][8:10] + "/" + e["primeiro"][5:7],
+                   "sim" if novo(e) else "", "Abrir" if e.get("link") else "", "Abrir" if e.get("bitrix") else "", e.get("rascunho") or ""])
+        r = ws.max_row
+        for col, k in ((8, "link"), (9, "bitrix")):
+            if e.get(k): ws.cell(r, col).hyperlink = e[k]; ws.cell(r, col).font = Font(color="7A5F00", underline="single", bold=True)
+        ws.cell(r, 5).number_format = '"R$" #,##0'
+    for col, w in zip("ABCDEFGHIJ", (30, 42, 70, 16, 14, 8, 6, 10, 10, 50)): ws.column_dimensions[col].width = w
+    for row in ws.iter_rows(min_row=2):
+        for c in row: c.alignment = Alignment(vertical="top", wrap_text=c.column in (2, 3, 10))
+    ws.freeze_panes = "C2"; ws.auto_filter.ref = ws.dimensions
+    wb.save(f); return f
 
 
 def quadro_supervisor(L, at):

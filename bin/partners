@@ -83,7 +83,9 @@ case "${1:-ajuda}" in
                 rodar areas python3 "$SK/depto-intel-comercial/scripts/icp.py" ;;
   receita)      rodar receita python3 "$SK/depto-intel-comercial/scripts/receita_cnpj.py" --carregar &&
                 rodar receita python3 "$SK/depto-intel-comercial/scripts/receita_cnpj.py" --enriquecer ;;
-  onedrive)     rodar onedrive python3 "$AP/infra/publicar_onedrive.py" ;;
+  onedrive)     # o OneDrive pode estar sincronizando logo depois que o Mac acorda: tenta 3 vezes antes de alertar
+                for t in 1 2; do python3 "$AP/infra/publicar_onedrive.py" >> "$LOG/onedrive.log" 2>&1 && { log onedrive; exit 0; }; sleep 60; done
+                rodar onedrive python3 "$AP/infra/publicar_onedrive.py" ;;
   portal)       rodar portal python3 "$AP/infra/portal_dados.py" ;;
   backup)       rodar backup "$AP/infra/backup.sh" ;;
   bitrix)       # fase da execução dos ganhos (só consulta); pula enquanto a TI não criar o webhook
