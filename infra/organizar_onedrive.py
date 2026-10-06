@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Organiza os documentos do Mac (Downloads, Mesa, Documentos, iCloud) e a raiz do OneDrive num layout padrão.
+"""Organiza os Downloads do Mac e a raiz do OneDrive (empresa) num layout padrão. O iCloud (pessoal) não é tocado.
 Uso: organizar_onedrive.py simular | executar | desfazer <manifesto.json>
 - Nada é apagado: duplicados e temporários vão para a Lixeira (~/.Trash/limpeza-2026-10-06/duplicados).
 - Pastas de sistema e das rotinas não se movem (Área Partners · Agentes, Backups, Teams, Outlook, Attachments, Gravações).
@@ -74,8 +74,9 @@ def plano():
         if unicodedata.normalize("NFC", p.name) in FIXOS or p.name.startswith("."): continue  # o Mac grava acentos em NFD
         itens.append((p, destino(p.name), "OneDrive"))
     # 2) Mac: Downloads, Mesa, Documentos (locais) e iCloud (exceto projetos de código)
-    for base, rot in ((H / "Downloads", "Downloads"), (H / "Desktop", "Mesa"), (H / "Documents", "Documentos"),
-                      (ICLOUD / "Downloads", "iCloud/Downloads"), (ICLOUD, "iCloud")):
+    # Regra do Luis (06/10/2026): o OneDrive é da empresa; arquivos pessoais ficam no iCloud.
+    # Por isso Mesa, Documentos (sincronizados com o iCloud) e o iCloud Drive NUNCA entram aqui.
+    for base, rot in ((H / "Downloads", "Downloads"),):
         if not base.exists(): continue
         for p in sorted(base.iterdir()):
             if p.name.startswith(".") or p.name.startswith("Icon") or p.name in ("Desktop", "Documents", "Downloads"): continue
