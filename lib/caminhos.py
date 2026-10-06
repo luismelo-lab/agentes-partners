@@ -21,8 +21,14 @@ def _sincroniza(d):
     return "com.apple.file-provider-domain-id" in r.stdout
 
 
+ATALHO = "~/Library/CloudStorage/OneDrive - SAVE COMPANY"  # atalho que o próprio app do OneDrive mantém apontando para a pasta ativa
+
+
 def onedrive():
     if os.environ.get("OD_BASE"): return os.environ["OD_BASE"]
+    at = os.path.expanduser(ATALHO)
+    if os.path.islink(at) and os.path.isdir(at) and _sincroniza(os.path.realpath(at)):
+        return at
     cs = [d for d in glob.glob(os.path.expanduser(f"~/Library/CloudStorage/{PREFIXO}*")) if os.path.isdir(d) and not os.path.islink(d) and _sincroniza(d)]
     if not cs:
         sys.exit("OneDrive da Save não encontrado sincronizando em ~/Library/CloudStorage (abra o app do OneDrive e confira a conta).")
