@@ -13,8 +13,10 @@ alerta() { # e-mail ao Luis quando uma rotina falha (uma vez por rotina por dia)
   local nome=$1 marca="$LOG/.alerta-$1-$hoje"
   [ -e "$marca" ] && return
   # 2º canal, independente do e-mail (o Outlook sumiu em 06/10 e nenhum aviso saiu): notificação do macOS + arquivo de pendências
+  local nota="$LOG/.nota-$1-$hoje"  # 2º canal: 1 vez por rotina por dia (a Central falhando a cada 15 min gerava ~40 avisos)
+  [ -e "$nota" ] || { touch "$nota"
   echo "$(date '+%F %T') falha na rotina $nome (ver logs/$nome.log)" >> "$LOG/ALERTAS-PENDENTES.txt"
-  /usr/bin/osascript -e "display notification \"Falha na rotina $nome. Veja: partners logs $nome\" with title \"Partners · agentes\" sound name \"Basso\"" >/dev/null 2>&1
+  /usr/bin/osascript -e "display notification \"Falha na rotina $nome. Veja: partners logs $nome\" with title \"Partners · agentes\" sound name \"Basso\"" >/dev/null 2>&1; }
   python3 - "$nome" "$LOG/$nome.log" <<'PY' >/dev/null 2>&1 && touch "$marca"  # marca só se o e-mail saiu (sem a marca, tenta de novo na próxima falha)
 import sys, os
 sys.path.insert(0, os.path.expanduser("~/.claude/skills/depto-marketing/scripts")); import email_layout as L
