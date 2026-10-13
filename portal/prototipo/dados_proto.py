@@ -187,7 +187,8 @@ for t in por_tese: t["tese"] = NT.get(t["tese"], t["tese"])
 for x in caixa: x["pacote"] = pacote(x)
 # ================= ampliação: tudo o que já temos de dados =================
 import hashlib
-PCT = J(os.path.join(AP, "departamentos/operacoes-canal/percentual-parceiros.json"))["parceiros"]  # % oficial de repasse (cadastro dos parceiros)
+_pp = [os.path.join(AP, "departamentos/operacoes-canal/percentual-parceiros.json"), os.path.join(AP, ".claude/worktrees/amazing-kirch-442f46/departamentos/operacoes-canal/percentual-parceiros.json")]
+PCT = J(next(x for x in _pp if os.path.exists(x)))["parceiros"]  # % oficial de repasse (cadastro dos parceiros)
 pc = lambda v: (float(v) * (100 if float(v) <= 1 else 1)) if v not in (None, "") else None
 NOMES_M = {m["parceiro"] for m in masters}
 def comissao(n):
@@ -306,6 +307,55 @@ biblioteca = {"respostas": [
                 {"nome": "Relatórios das áreas", "link": web("01 · Comercial e Parceiros/Relatórios das áreas")},
                 {"nome": "Padrão de marca (logos e modelos)", "link": web("06 · Marketing e Apresentações/Marca")}]}
 
+# ================= recorrência (regras V5, L11, L13 e parecer "já aproveitado" — Tributário 29/09; Revisor "grupo já é cliente")
+def raiz(n):
+    c = re.sub(r"\D", "", str((n.get("extras") or {}).get("cnpj") or "")); return c.zfill(14)[:8] if c else None
+meses = lambda a, b: (b.year - a.year) * 12 + (b.month - a.month)
+grupos = collections.defaultdict(list)
+for n in HB:
+    r8 = raiz(n)
+    if r8: grupos[r8].append(n)
+CAFE = re.compile(r"caf[eé]", re.I)
+recorr = []
+for r8, ns in grupos.items():
+    gs = [n for n in ns if n["status"] == "ganho" and n.get("fechado")]
+    if not gs: continue
+    ult = max(gs, key=lambda n: n["fechado"]); x = ult.get("extras") or {}
+    if x.get("regime") == "Simples Nacional" or CAFE.search(ult.get("segmento") or ""): continue          # V2 Simples · V3 café
+    if any(n["status"] == "aberto" for n in ns): continue                                              # V6: já há negócio aberto no grupo
+    mn = meses(date.fromisoformat(ult["fechado"][:10]), HOJE)
+    teses = sorted({str(n.get("variante")) for n in gs if n.get("variante")})
+    cred = sum(n.get("valor") or 0 for n in gs if n["fechado"] == ult["fechado"]) or (ult.get("valor") or 0)
+    pot_cred = cred / 60 * min(mn, 60) if mn >= 6 else 0
+    p = PCT.get(ult.get("parceiro") or "", {})
+    hs = pc(ult.get("hContr")) or p.get("honorario_save_tipico_pct") or 0
+    hp = p["pct_parceiro"] if p.get("confirmado") else (pc(ult.get("hParc")) or p.get("pct_parceiro") or 0)
+    sinais = []
+    if any(re.search(r"aquisi|insumo|cr[eé]dito", t, re.I) for t in teses): sinais.append("Saldo credor até 31/12/2026 (L13)")
+    if x.get("regime") == "Lucro Real": sinais.append("Lucro Real: revisão CBS/IBS (Planejamento 2027)")
+    if mn > 54: sinais.append("Risco de decadência: períodos antigos saindo da janela")
+    if re.search(r"hortifr|frutas|verduras|legumes|carnes|pescado|latic|ovos", ult.get("segmento") or "", re.I): sinais.append("Revende produto de alíquota zero: só tese B, conferir (L7)")
+    if not teses: sinais.append("Tese do ganho anterior não registrada no HubSpot: conferir no parecer o que já foi feito")
+    recorr.append({"caso": cod(ult["id"]), "parceiro": ult.get("parceiro") or "—", "regime": x.get("regime"), "uf": x.get("uf"), "segmento": (ult.get("segmento") or "")[:40],
+                   "ultimo_ganho": ult["fechado"][:10], "meses_novos": mn, "elegivel": mn >= 6, "faltam": max(0, 6 - mn), "teses": teses[:4], "n_ganhos": len(gs),
+                   "credito_anterior": round(cred), "potencial_credito": round(pot_cred), "potencial_honorario": round(pot_cred * hs / 100), "potencial_repasse": round(pot_cred * hs / 100 * hp / 100),
+                   "sinais": sinais, "regra": "V5/L11: ≥ 6 meses novos desde o último período recuperado" if mn >= 6 else f"V5: menos de 6 meses novos (faltam {6 - mn})"})
+recorr.sort(key=lambda r: (not r["elegivel"], -r["potencial_honorario"]))
+# Revisor: diagnósticos em andamento de grupos que já são clientes (recorrência já em curso)
+rev_rec = [{"caso": cod(re.sub(r"\D", "", r.get("link") or "")[-11:]), "parceiro": r.get("parceiro"), "etapa": r.get("etapa"), "lacunas": r.get("lacunas"),
+            "lacunas_alta": r.get("lacunas alta"), "teses_grupo": str(r.get("grupo já é cliente"))[:120]}
+           for r in RV.get("revisao", []) if r.get("grupo já é cliente") not in (None, "", False, "não", "Não")]
+rec_parc = {}
+for r in recorr:
+    a = rec_parc.setdefault(r["parceiro"], {"elegiveis": 0, "aguardar": 0, "pot_credito": 0, "pot_honorario": 0, "pot_repasse": 0, "em_diagnostico": 0})
+    if r["elegivel"]: a["elegiveis"] += 1; a["pot_credito"] += r["potencial_credito"]; a["pot_honorario"] += r["potencial_honorario"]; a["pot_repasse"] += r["potencial_repasse"]
+    else: a["aguardar"] += 1
+for r in rev_rec:
+    rec_parc.setdefault(r["parceiro"] or "—", {"elegiveis": 0, "aguardar": 0, "pot_credito": 0, "pot_honorario": 0, "pot_repasse": 0, "em_diagnostico": 0})["em_diagnostico"] += 1
+for nome in ficha:
+    ficha[nome]["recorrencia"] = rec_parc.get(nome, {})
+    ficha[nome]["recorrencia_top"] = [r for r in recorr if r["parceiro"] == nome and r["elegivel"]][:5]
+
 ev_por = collections.Counter((e["pessoa"], e["tipo"]) for e in EV)
 P = {
     "atualizado": "13/10/2026 07:32", "exemplo": True,
@@ -325,6 +375,10 @@ P = {
                 "decididas": RI.get("decididas"), "revisor": {k: RV["resumo"].get(k) for k in ("selecionados", "revisados", "lacunas")} | {"alta": sum(t["alta"] for t in por_tese)},
                 "por_tese": por_tese, "diag_parado": ev_por[("geovana", "diagnostico_parado")], "aprov_parada": sum(v for (p, t), v in ev_por.items() if t == "aprovacao_parada")},
     "ficha": ficha, "esfriando": esfriando, "prazos": prazos, "docs": docs_neg[:120], "n_docs": len(docs_neg), "busca": busca, "hist": hist[:80], "tempo": tempo,
+    "recorrencia": {"fila": [r for r in recorr if r["elegivel"]][:150], "aguardar": [r for r in recorr if not r["elegivel"]][:40],
+                    "n_elegiveis": sum(r["elegivel"] for r in recorr), "n_aguardar": sum(not r["elegivel"] for r in recorr),
+                    "pot_credito": sum(r["potencial_credito"] for r in recorr), "pot_honorario": sum(r["potencial_honorario"] for r in recorr), "pot_repasse": sum(r["potencial_repasse"] for r in recorr),
+                    "revisor": rev_rec[:60], "n_revisor": len(rev_rec)},
     "operacao": operacao, "biblioteca": biblioteca, "conselho": [{"id": c["id"], "data": c["data"], "texto": c["texto"][:160]} for c in PO.get("conselho", [])],
 }
 json.dump(P, open(os.path.join(AQUI, "dados.json"), "w", encoding="utf-8"), ensure_ascii=False, default=str)

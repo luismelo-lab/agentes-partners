@@ -127,7 +127,7 @@ label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
 .pacote h4 { margin: 0; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
 .pacote pre { margin: 0; white-space: pre-wrap; font: 13px/1.5 var(--mono); color: var(--texto); background: var(--fundo); border: 1px solid var(--borda); border-radius: var(--r-sm); padding: 10px; }
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--texto); }
-.check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--ouro); }
+.check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--ouro); flex-shrink: 0; }
 .docs { display: flex; flex-wrap: wrap; gap: 8px; } .docs a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid var(--borda-3); border-radius: var(--r-sm); text-decoration: none; font-size: 13px; }
 .saudeop { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; font: 12px var(--mono); color: var(--texto-2); padding-block: 8px; border-top: 1px solid var(--borda); }
 .saudeop .pt { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
@@ -173,7 +173,7 @@ const n = v => (v ?? 0).toLocaleString("pt-BR");
 const MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
 const mesRot = m => MES[+m.slice(5,7) - 1] + "/" + m.slice(2,4);
 const PESSOAS = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "Geovana"};
-const ABAS = [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["prazos", "Prazos e documentos"], ["parceiros", "Parceiros"], ["busca", "Busca"], ["biblioteca", "Biblioteca"], ["pedidos", "Pedidos"]];
+const ABAS = [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["prazos", "Prazos e documentos"], ["parceiros", "Parceiros"], ["recorrencia", "Recorrência"], ["busca", "Busca"], ["biblioteca", "Biblioteca"], ["pedidos", "Pedidos"]];
 const S = {eu: "luis", aba: "inicio", feitos: new Set(), filtro: {grupo: "todos", so_urg: false, busca: ""}, ordem: {campo: "saude", asc: true}};
 try { S.eu = localStorage.getItem("cp-eu") || "luis"; S.aba = localStorage.getItem("cp-aba") || "inicio"; } catch (e) {}
 if (!PESSOAS[S.eu]) S.eu = "luis"; if (!ABAS.some(a => a[0] === S.aba)) S.aba = "inicio";
@@ -321,6 +321,10 @@ V.geovana = () => {
   return `${kpis([["Lote da semana", `${dec} de ${G.lote.length}`, `<span class="prog" style="display:block;margin-top:4px"><i style="width:${100 * dec / Math.max(G.lote.length, 1)}%"></i></span>`, true],
       ["Potencial do lote", rs(G.esperado_lote), `fila inteira: ${rs(G.esperado_fila)} em ${n(G.fila)} casos`], ["Revisor", `${n(R.revisados)} / ${n(R.selecionados)}`, `${n(R.lacunas)} lacunas · ${n(R.alta)} de alta prioridade`],
       ["Parados", n(G.diag_parado + G.aprov_parada), `${n(G.diag_parado)} diagnósticos · ${n(G.aprov_parada)} aprovações`]])}
+    <section><div class="cab"><h2>Recorrência para decidir</h2><button class="botao sec peq" data-ir="recorrencia">Ver a fila completa</button></div>
+      <div class="lista">${D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso)).slice(0, 4).map(x => `<article class="item ${x.sinais.some(s => /L13/.test(s)) ? "med" : ""}"><span class="tarja"></span><div class="corpo"><div class="meta"><span class="chip ouro">Recorrência</span><span>${esc(x.parceiro)} · ${esc(x.regime || "")}</span></div>
+        <span class="t">${esc(x.caso)}</span><div class="meta"><span><span class="num">${n(x.meses_novos)}</span> meses novos</span><span>Honorário potencial <span class="num">${rs(x.potencial_honorario)}</span></span></div></div>
+        <div class="acoes"><button class="botao peq" data-rec="${esc(x.caso)}">Decidir</button></div></article>`).join("")}</div></section>
     <section><div class="cab"><h2>Lote do Recuperador</h2><span class="atual">ordenado pelo honorário esperado · clique na linha para ver detalhe</span></div>
       <div class="tab-wrap"><table><thead><tr><th>Caso</th><th>Master</th><th>Tipo</th><th>Segmento</th><th>UF</th><th class="n">Esperado</th><th>Parecidos</th><th>Decisão</th></tr></thead><tbody>
       ${[...G.lote].sort((a, b) => (b.esperado || 0) - (a.esperado || 0)).map(x => `<tr class="clic" data-caso="${esc(x.caso)}" tabindex="0"><td><b>${esc(x.caso)}</b>${x.saldo === "sim" ? ` <span class="chip alerta">saldo credor</span>` : ""}</td><td>${esc(x.parceiro)}</td><td>${esc(x.tipo)}</td><td>${esc(x.segmento)}</td><td>${esc(x.uf)}</td><td class="n">${rs(x.esperado)}</td><td class="n">${esc(String(x.taxa || "").split(" ")[0])}</td>
@@ -382,12 +386,39 @@ A.parceiros = () => {
         <div class="cab" style="margin:0"><h3>${esc(m.parceiro)}</h3><span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "alerta" : "erro"}">saúde ${m.saude}</span></div>
         <div>${pctChip(m.parceiro)}</div>${spark(f.serie.map(x => x[1]))}
         <div class="mini"><div><span class="rotulo">Repasse 12m</span><b>${rs(f.comissao_12m)}</b></div><div><span class="rotulo">Potencial aberto</span><b>${rs(f.comissao_potencial_aberto)}</b></div><div><span class="rotulo">Honorário 12m</span><b>${rs(f.honorario_12m)}</b></div></div>
+        <p class="nota" style="color:var(--ouro)">Recorrência: ${n((f.recorrencia || {}).elegiveis)} elegíveis · ${rs((f.recorrencia || {}).pot_honorario)} de honorário potencial</p>
         <p class="nota">${n(m.abertos)} abertos · ${n(f.contratos)} em contrato · ${n(f.conflitos)} conflitos${f.divergencias ? ` · ${n(f.divergencias)} com % diferente do cadastro` : ""}</p></div>`; }).join("")}</div></section>
     <section><div class="cab"><h2>Esfriando</h2><span class="atual">mensagem de reativação pronta · UFs onde o parceiro já ganha</span></div>
       <div class="lista">${D.esfriando.map((e, i) => `<article class="item ${e.dias > 90 ? "urg" : "med"}"><span class="tarja"></span><div class="corpo"><div class="meta"><span class="chip">${esc(e.tipo)}</span>${e.uf.length ? `<span>Ganha em ${e.uf.map(esc).join(", ")}</span>` : ""}</div>
         <span class="t">${esc(e.parceiro)}</span><div class="meta"><span>Sem negócio novo há <span class="num">${n(e.dias)}</span> dias</span>${e.ritmo != null ? `<span>Ritmo <span class="num">${String(e.ritmo).replace(".", ",")}%</span></span>` : ""}<span>${n(e.ganhos_12m)} ganhos em 12 meses</span></div></div>
         <div class="acoes"><button class="botao peq" data-reativar="${i}">Reativar</button></div></article>`).join("")}</div></section>
     <section><div class="cab"><h2>Tabela completa</h2><span class="atual">clique no cabeçalho para ordenar</span></div>${tabelaMasters(ordenar(D.masters), true)}</section>`;
+};
+const REGRAS_REC = ["V5 · cliente com ganho na mesma raiz: com 6 meses novos ou mais é recorrência; com menos, já recuperado (aguardar)",
+  "L11 · conta os meses desde o último período recuperado, não desde a data de fechamento",
+  "Parecer \"já aproveitado\": só os meses depois do último ressarcido ou outra tese ainda não feita",
+  "L13 · saldo credor de PIS/COFINS escriturado até 31/12/2026",
+  "Decadência de 5 anos (art. 168 do CTN): a cada mês, um mês antigo sai da janela",
+  "L12 · ação judicial própria na tese: Jurídico confere antes",
+  "Fora: Simples (V2), café (V3) e grupo com negócio aberto (V6)",
+  "A recorrência segue com o parceiro do ganho anterior"];
+A.recorrencia = () => {
+  const R = D.recorrencia, fila = R.fila.filter(x => !S.feitos.has("rec-" + x.caso) && (!S.filtro.rparc || x.parceiro === S.filtro.rparc)), parcs = [...new Set(R.fila.map(x => x.parceiro))].sort();
+  const dec = R.fila.filter(x => S.feitos.has("rec-" + x.caso)).length;
+  return `${kpis([["Recorrências elegíveis", n(R.n_elegiveis), `${n(dec)} decididas nesta sessão · ${n(R.n_aguardar)} aguardando 6 meses`, true], ["Honorário potencial", rs(R.pot_honorario), "estimado: crédito anterior ÷ 60 × meses novos"],
+      ["Repasse potencial", rs(R.pot_repasse), "honorário × % oficial do parceiro"], ["Já em diagnóstico", n(R.n_revisor), "clientes da base com diagnóstico em andamento (Revisor)"]])}
+    <section><div class="cab"><h2>Para a Geovana decidir</h2><span class="atual">maior honorário potencial primeiro · clique para ver as regras e decidir</span></div>
+      <div class="filtros"><select id="f-rparc" aria-label="Filtrar por parceiro"><option value="">Todos os parceiros</option>${parcs.map(p => `<option ${S.filtro.rparc === p ? "selected" : ""}>${esc(p)}</option>`).join("")}</select></div>
+      <div class="tab-wrap"><table><thead><tr><th>Caso</th><th>Parceiro</th><th>Regime · UF</th><th class="n">Meses novos</th><th class="n">Honorário potencial</th><th>Sinais</th><th></th></tr></thead><tbody>
+      ${fila.slice(0, 30).map(x => `<tr class="clic" data-rec="${esc(x.caso)}" tabindex="0"><td><b>${esc(x.caso)}</b><br><span class="nota">último ganho ${esc(x.ultimo_ganho.slice(8) + "/" + x.ultimo_ganho.slice(5, 7) + "/" + x.ultimo_ganho.slice(2, 4))}</span></td><td>${esc(x.parceiro)}</td><td>${esc(x.regime || "—")} · ${esc(x.uf || "—")}</td>
+        <td class="n">${n(x.meses_novos)}</td><td class="n">${rs(x.potencial_honorario)}</td><td>${x.sinais.map(s => `<span class="chip ${/L13|decad/.test(s) ? "alerta" : /L7|não registrada/.test(s) ? "erro" : ""}">${esc(s.split(":")[0].split(" (")[0])}</span>`).join(" ")}</td>
+        <td><button class="botao peq" data-rec="${esc(x.caso)}">Decidir</button></td></tr>`).join("")}</tbody></table></div>
+      ${fila.length > 30 ? `<p class="nota" style="margin-top:8px">Mostrando 30 de ${n(fila.length)}. Use o filtro por parceiro.</p>` : ""}</section>
+    <section><div class="grade">
+      <div class="bloco"><h3>Regras aplicadas</h3>${REGRAS_REC.map(t => `<div class="check"><span class="chip">regra</span><span>${esc(t)}</span></div>`).join("")}<p class="nota">Desenhadas com o Tributário na revisão do Recuperador (29/09) e no Revisor de Diagnóstico.</p></div>
+      <div class="bloco"><h3>Já em diagnóstico (Revisor)</h3>${R.revisor.slice(0, 8).map(x => `<div class="check"><span class="chip ${x.lacunas_alta ? "erro" : ""}">${n(x.lacunas)} lacunas</span><span><b>${esc(x.caso)}</b> · ${esc(x.parceiro)} · ${esc(x.etapa)}<br><span class="nota">${esc(x.teses_grupo)}</span></span></div>`).join("")}</div>
+      <div class="bloco"><h3>Aguardando 6 meses</h3>${R.aguardar.slice(0, 8).map(x => `<div class="check"><span class="chip">faltam ${x.faltam}</span><span><b>${esc(x.caso)}</b> · ${esc(x.parceiro)} · último ganho ${esc(x.ultimo_ganho.slice(5, 7) + "/" + x.ultimo_ganho.slice(2, 4))}</span></div>`).join("")}</div>
+    </div></section>`;
 };
 A.busca = () => `<section><h2>Busca</h2><p class="sub">Digite o código do negócio, o parceiro, o segmento ou a UF. Para saber se uma empresa já é de alguém, digite o CNPJ: a página compara só a raiz em código, sem guardar o número.</p>
     <div class="busca-box"><input type="search" id="q" placeholder="Código, parceiro, segmento, UF ou CNPJ" value="${esc(S.q || "")}" aria-label="Buscar"></div></section>
@@ -481,6 +512,15 @@ INFORMAÇÕES GERAIS
       <div class="pacote"><h4>No card do HubSpot</h4>${Object.entries(d.tem).map(([k, v]) => `<div class="check"><span class="chip ${v ? "ok" : "alerta"}">${v ? "consta" : "não consta"}</span><span>${esc(k)}</span></div>`).join("")}</div>
       ${d.decide.length ? `<div class="pacote"><h4>Documento que decide cada tese <span class="chip">Revisor</span></h4>${d.decide.map(x => `<div class="check"><span class="chip ${x.prio === "alta" ? "erro" : ""}">${esc(x.prio || "")}</span><span><b>${esc(x.tese)}</b><br><span class="nota">${esc(x.doc)}</span></span></div>`).join("")}</div>` : ""}
       <div class="pacote"><h4>Cobrança ao parceiro <span class="chip">WhatsApp</span></h4><textarea id="pk-doc">Olá, tudo bem? Para seguirmos com o caso ${esc(d.caso)}, precisamos de: ${esc(falta)}. Consegue pedir ao cliente e me encaminhar por aqui?</textarea><div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="pk-doc">Copiar mensagem</button></div></div>`); return; }
+  if (t.dataset.rec) { const x = D.recorrencia.fila.find(i => i.caso === t.dataset.rec); if (!x) return;
+    gaveta(`<span class="rotulo ouro">Recorrência · ${esc(x.parceiro)}</span><h3>${esc(x.caso)}</h3>${par("Regra", esc(x.regra))}${par("Último ganho", esc(x.ultimo_ganho.split("-").reverse().join("/")) + ` · ${n(x.n_ganhos)} ganho(s) no grupo`)}${par("Meses novos", n(x.meses_novos))}${par("Regime · UF", esc(x.regime || "—") + " · " + esc(x.uf || "—"))}${par("Segmento", esc(x.segmento))}${par("Teses feitas", x.teses.length ? x.teses.map(esc).join("; ") : "não registradas no HubSpot")}
+      <div class="pacote"><h4>Potencial estimado</h4>${par("Crédito anterior", `<span class="num">${rs(x.credito_anterior)}</span>`)}${par("Crédito potencial", `<span class="num">${rs(x.potencial_credito)}</span>`)}${par("Honorário potencial", `<span class="num">${rs(x.potencial_honorario)}</span>`)}${par("Repasse ao parceiro", `<span class="num">${rs(x.potencial_repasse)}</span>`)}<p class="nota">Crédito anterior ÷ 60 meses × meses novos (até 60). É ordem de grandeza para priorizar, não promessa.</p></div>
+      ${x.sinais.length ? `<div class="pacote"><h4>Sinais</h4>${x.sinais.map(s => `<div class="check"><span class="chip ${/L13|decad/.test(s) ? "alerta" : /L7|não registrada/.test(s) ? "erro" : "ouro"}">sinal</span><span>${esc(s)}</span></div>`).join("")}</div>` : ""}
+      <div class="pacote"><h4>Antes de decidir</h4>${["Confirmar no parecer o último período recuperado (L11)", "Conferir a decadência de 5 anos (art. 168 do CTN)", "Se a tese já foi aproveitada: só meses depois do último ressarcido ou outra tese", "Ação judicial própria na tese: passar ao Jurídico (L12)"].map((c, i) => `<label class="check" for="rc-${i}"><input type="checkbox" id="rc-${i}"><span>${esc(c)}</span></label>`).join("")}</div>
+      <label for="rc-motivo">Motivo ou observação<input type="text" id="rc-motivo" placeholder="Ex.: período coberto até 12/2024; só 10 meses novos"></label>
+      <div class="acoes" style="justify-content:flex-start"><button class="botao" data-recok="${esc(x.caso)}">Aprovar recorrência</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="outra">Outra tese não coberta</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="dado">Precisa de dado</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="nao">Não aprovar</button></div>`); return; }
+  if (t.dataset.recok) { S.feitos.add("rec-" + t.dataset.recok); $("#camada").innerHTML = ""; S.manter = true; render();
+    toast({outra: "Marcado como outra tese: vai para pré-análise (GT1).", dado: "Marcado como precisa de dado.", nao: "Recorrência não aprovada. O motivo ensina a fila."}[t.dataset.tipo] || "Recorrência aprovada: negócio de recorrência para o parceiro e pré-análise (GT1). Protótipo: nada foi gravado."); return; }
   if ("urg" in t.dataset) { S.filtro.so_urg = !S.filtro.so_urg; S.manter = true; render(); return; }
   if (t.dataset.ord) { const k = t.dataset.ord; S.ordem = {campo: k, asc: S.ordem.campo === k ? !S.ordem.asc : k === "parceiro"}; S.manter = true; render(); return; }
   if ("fechar" in t.dataset) { $("#camada").innerHTML = ""; return; }
@@ -496,13 +536,15 @@ INFORMAÇÕES GERAIS
   if (t.dataset.master) { const m = D.masters.find(i => i.parceiro === t.dataset.master); if (m) gaveta(`<span class="rotulo ouro">Master</span><h3>${esc(m.parceiro)}</h3>${par("Saúde", `<span class="num">${m.saude}</span>`)}${par("Abertos", `${n(m.abertos)} · <span class="num">${rs(m.abertos_rs)}</span>`)}${par("Parados", n(m.abertos_parados))}${par("Ganhos 90 dias", `${n(m.ganhos_90d)} · <span class="num">${rs(m.fechado_90d_rs)}</span>`)}${par("Fechado 12 meses", `<span class="num">${rs(m.fechado_12m_rs)}</span>`)}${par("Conversão 12 meses", String(m.conversao_12m_pct ?? "—").replace(".", ",") + "%")}${par("Ciclo mediano", n(m.ciclo_mediano_dias) + " dias")}${par("Honorário líquido 12m", `<span class="num">${rs(m.honorario_liquido_12m_rs)}</span>`)}${par("Repasses", `OK ${n((m.repasse || {}).ok)} · revisar ${n((m.repasse || {}).revisar)} · bloqueados ${n((m.repasse || {}).bloqueado)}`)}${par("Itens na caixa", n(m.alertas + m.demandas))}
       ${(() => { const f = D.ficha[m.parceiro]; return f ? `<div class="pacote"><h4>Repasse ao parceiro ${pctChip(m.parceiro)}</h4>${par("Honorário 12 meses", `<span class="num">${rs(f.honorario_12m)}</span>`)}${par("Repasse 12 meses", `<span class="num">${rs(f.comissao_12m)}</span>`)}${par("Potencial em aberto", `<span class="num">${rs(f.comissao_potencial_aberto)}</span>`)}${f.divergencias ? par("Atenção", `${n(f.divergencias)} negócio(s) com % diferente do cadastro`) : ""}
         <p class="nota">Honorário contratado × % de repasse do cadastro. Onde o % de honorário da Save não está no negócio, usa o típico do parceiro (${n(f.base_estimada)} de ${n(f.base_real + f.base_estimada)}).</p></div>
+      ${(() => { const rc = f.recorrencia || {}; return `<div class="pacote"><h4>Recorrência <span class="chip ouro">${n(rc.elegiveis)} elegíveis</span></h4>${par("Honorário potencial", `<span class="num">${rs(rc.pot_honorario)}</span>`)}${par("Repasse potencial", `<span class="num">${rs(rc.pot_repasse)}</span>`)}${par("Aguardando 6 meses", n(rc.aguardar))}${par("Já em diagnóstico", n(rc.em_diagnostico))}
+        ${(f.recorrencia_top || []).map(x => `<div class="check"><span class="chip">${n(x.meses_novos)} meses</span><span><b>${esc(x.caso)}</b> · ${rs(x.potencial_honorario)}${x.sinais.length ? ` · <span class="nota">${esc(x.sinais[0].split(":")[0])}</span>` : ""}</span></div>`).join("")}</div>`; })()}
       <div class="pacote"><h4>Ganhos por mês</h4>${barras(f.serie.map(([k, v]) => ({r: mesRot(k), v})), {fmt: rs, alt: 170})}</div>
       <div class="pacote"><h4>Abertos por etapa</h4>${hbarras(f.etapas.map(([r, v]) => ({r, v})))}</div>
       ${f.uf.length ? `<div class="pacote"><h4>Onde já ganha</h4><div>${f.uf.map(([u, q]) => `<span class="chip">${esc(u)} · ${q}</span>`).join(" ")}</div></div>` : ""}
       <div class="acoes" style="justify-content:flex-start"><button class="botao" data-reuniao>Preparar reunião (briefing DM1)</button></div>` : ""; })()}
       <p class="sub">Base da futura ficha 360 do parceiro (PRM).</p>`); return; }
 });
-document.addEventListener("change", e => { if (e.target.id === "f-parc") { S.filtro.parc = e.target.value; S.manter = true; render(); } });
+document.addEventListener("change", e => { if (e.target.id === "f-parc") { S.filtro.parc = e.target.value; S.manter = true; render(); } if (e.target.id === "f-rparc") { S.filtro.rparc = e.target.value; S.manter = true; render(); } });
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") $("#camada").innerHTML = "";
   if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.clic, .parc")) { e.preventDefault(); e.target.click(); }
