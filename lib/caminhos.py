@@ -21,7 +21,7 @@ def _sincroniza(d):
     return "com.apple.file-provider-domain-id" in r.stdout
 
 
-ATALHO = "~/Library/CloudStorage/OneDrive - SAVE COMPANY"  # atalho que o próprio app do OneDrive mantém apontando para a pasta ativa
+ATALHO = "~/Library/CloudStorage/OneDrive - SAVE COMPANY"  # atalho do app; ficou apontando para pasta morta (09/10), por isso só vale se a pasta sincronizar
 
 
 def onedrive():

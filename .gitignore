@@ -21,6 +21,14 @@
 !conselho/decisoes.md
 !departamentos/*/scripts/*.py
 !departamentos/ti/*.md
+# Design System Save v0.5 (lib/marca.py e email_layout.py dependem do marca.json) e motor de peças
+!departamentos/marketing-marca/padrao/**
+!departamentos/marketing/kit/motor/*.py
+!departamentos/marketing/kit/motor/*.js
+!departamentos/marketing/kit/motor/LEIA-ME.md
+# Scripts de produtos (inclui gerar_manual_docx.js, gerador oficial de Word). Os .json ao lado são dados: ficam fora
+!departamentos/produtos/*/scripts/*.py
+!departamentos/produtos/*/scripts/*.js
 # Mesmo dentro das pastas liberadas, nunca entram:
 .env
 *.env
@@ -43,3 +51,5 @@ skills/**/references/*-dados*.json
 !celulas/whatsapp-config.json
 !celulas/jenifer/config-jenifer.json
 dados-publicos/whisper/**
+# Worktrees do Claude (cópias de trabalho, nunca versionar)
+.claude/
