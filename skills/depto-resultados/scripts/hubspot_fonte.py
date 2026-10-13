@@ -12,7 +12,16 @@ Uso:
   python3 hubspot_fonte.py --baixar       # baixa os negócios do escopo → dados/hubspot-AAAA-MM-DD.json
 """
 import argparse, json, os, subprocess, sys, time
-from datetime import date
+from datetime import date, datetime, timezone
+from zoneinfo import ZoneInfo
+
+BR = ZoneInfo("America/Sao_Paulo")
+
+
+def dia_br(iso):  # o HubSpot devolve UTC: negócio criado às 22h de domingo em Brasília contava na segunda (e na semana seguinte)
+    if not iso: return ""
+    try: return datetime.fromisoformat(iso.replace("Z", "+00:00")).astimezone(BR).date().isoformat()
+    except ValueError: return iso[:10]
 
 BASE = os.path.expanduser("~/agentes-partners")
 ENV = os.path.join(BASE, ".env")
@@ -50,6 +59,8 @@ def call(method, path, body=None, tries=6):
         if code == "401": sys.exit("HubSpot recusou o token (401): expirado ou revogado. Gere um novo na Private App.")
         if code == "403": sys.exit(f"HubSpot negou acesso (403) a {path}: falta escopo de leitura na Private App.")
         if not code.startswith("2"): sys.exit(f"Erro HubSpot {code} em {path}: {raw[:300]}")
+        if not raw.strip() and code != "204":  # 200 sem corpo era lido como "fim da paginação" e o mês sumia sem aviso
+            motivo = "resposta vazia"; print(f"HubSpot {path}: {motivo}; tentativa {i + 1} de {tries}", file=sys.stderr); continue
         try:
             return json.loads(raw) if raw else {}
         except json.JSONDecodeError:  # resposta cortada no meio
@@ -91,7 +102,7 @@ def _buscar(filtros, campos, desde, mensal=True):
             out += r.get("results", []); after = r.get("paging", {}).get("next", {}).get("after")
             if not after: return out
             time.sleep(0.12)
-    out = []; y, m = int(desde[:4]), int(desde[5:7]); hoje = date.today()
+    out = []; y, m = int(desde[:4]), int(desde[5:7]); hoje = datetime.now(timezone.utc).date()  # janelas em UTC: o mês corrente é o de UTC
     while (y, m) <= (hoje.year, hoje.month):
         ini = f"{y:04d}-{m:02d}-01"; y2, m2 = (y + 1, 1) if m == 12 else (y, m + 1); fim = f"{y2:04d}-{m2:02d}-01"
         after = None
@@ -145,7 +156,7 @@ def baixar():
         if p.get("hubspot_owner_id") not in owners_ok and not c: continue   # falso positivo da busca por token
         et = pl.get(pid, {}).get("etapas", {}).get(sid, {})
         norm.append({"id": d["id"], "nome": p.get("dealname"), "valor": float(p["amount"]) if p.get("amount") else 0.0,
-                     "criado": (p.get("createdate") or "")[:10], "fechado": (p.get("closedate") or "")[:10],
+                     "criado": dia_br(p.get("createdate")), "fechado": (p.get("closedate") or "")[:10],  # data escolhida no CRM (pode vir à meia-noite UTC): não converter
                      "status": et.get("status", "aberto"), "prob": et.get("prob"), "pipeline": pl.get(pid, {}).get("nome", pid), "etapa": et.get("nome"),
                      "owner": p.get("hubspot_owner_id"), "parceiro": c or "Outros (fora do roster)", "parceiro_bruto": p.get(C["parceiro"]),
                      "segmento": p.get(C["segmento"]) if C.get("segmento") else None, "cnae": p.get(C.get("cnae") or "cnae"),

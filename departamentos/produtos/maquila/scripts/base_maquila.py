@@ -390,7 +390,7 @@ if __name__ == "__main__":
     hs_raizes = {PD.raiz(d["extras"].get("cnpj")) for d in H["negocios"] if PD.raiz(d["extras"].get("cnpj"))}
     P, universo = prospects(hs_raizes)
     AG = agregados(B, P, universo, L, M, port, teses, n_var)
-    area = subprocess.run([sys.executable, os.path.join(AP, "lib/caminhos.py"), "area"], capture_output=True, text=True).stdout.strip()
+    area = subprocess.run([sys.executable, os.path.join(AP, "lib/caminhos.py"), "area"], capture_output=True, text=True, check=True).stdout.strip()  # sem a pasta do OneDrive, para (antes gravava no diretório atual)
     destino = os.path.join(area, "Gestão · Luis", "Produtos", "Maquila", "Maquila-Base-Priorizada.xlsx")
     gravar_xlsx(B, P, AG, destino)
     shutil.copy2(destino, os.path.join(PASTA, "Maquila-Base-Priorizada.xlsx"))

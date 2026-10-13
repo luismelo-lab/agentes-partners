@@ -9,7 +9,7 @@ Cada pessoa tem a sua pasta; o Luis compartilha cada uma pelo botão "Compartilh
 Fica FORA da pasta compartilhada: .env, base da Receita, textos de pareceres, caixas brutas do WhatsApp,
 dados bancários. Uso: python3 publicar_onedrive.py [--simular]
 """
-import argparse, glob, os, re, shutil, sys, zipfile
+import argparse, errno, glob, os, re, shutil, sys, tempfile, time, zipfile
 from xml.sax.saxutils import escape
 
 H = os.path.expanduser
@@ -77,6 +77,29 @@ def md_para_docx(md, destino, titulo):
         z.writestr("word/document.xml", doc)
 
 
+FALHAS = []
+
+
+def igual(a, b):  # o OneDrive guarda a hora em segundos inteiros: sem tolerância, toda rodada regravava as mesmas planilhas
+    return os.path.exists(b) and abs(os.path.getmtime(a) - os.path.getmtime(b)) < 2 and os.path.getsize(a) == os.path.getsize(b)
+
+
+def copiar(src, dst):
+    """Grava em temporário ao lado ("~$", o OneDrive não sincroniza) e troca de uma vez. Arquivo travado pelo OneDrive
+    (EDEADLK desde 09/10) tenta de novo e, se não der, é pulado: o resto da publicação continua."""
+    tmp = os.path.join(os.path.dirname(dst), "~$partners-" + os.path.basename(dst))
+    for t in range(4):
+        try:
+            shutil.copy2(src, tmp); os.replace(tmp, dst); return True
+        except OSError as e:
+            if os.path.exists(tmp):
+                try: os.unlink(tmp)
+                except OSError: pass
+            if e.errno not in (errno.EDEADLK, errno.EBUSY, errno.EAGAIN, errno.EPERM): raise
+            time.sleep(5 * 2 ** t)
+    FALHAS.append(dst); return False
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--simular", action="store_true"); a = ap.parse_args()
     feitos = []
@@ -93,8 +116,8 @@ def main():
                 acao = ("agente → OneDrive", loc, nuv)
             else:
                 continue
+            if not a.simular and not copiar(acao[1], acao[2]): continue
             feitos.append(f"{pasta}: {os.path.basename(rel)} ({acao[0]})")
-            if not a.simular: shutil.copy2(acao[1], acao[2])
         for sub, arquivos in cfg["ler"]:
             dest = os.path.join(base, sub)
             if not a.simular: os.makedirs(dest, exist_ok=True)
@@ -102,12 +125,16 @@ def main():
                 if not f or not os.path.exists(f): continue
                 if f.endswith(".md"):
                     alvo = os.path.join(dest, os.path.basename(f)[:-3] + ".docx")
-                    if os.path.exists(alvo) and os.path.getmtime(alvo) >= os.path.getmtime(f): continue
-                    if not a.simular: md_para_docx(open(f, encoding="utf-8").read(), alvo, os.path.basename(f))
+                    if os.path.exists(alvo) and os.path.getmtime(alvo) >= os.path.getmtime(f) - 2: continue
+                    if not a.simular:  # gera fora do OneDrive e copia pronto
+                        loc = os.path.join(tempfile.mkdtemp(), os.path.basename(alvo))
+                        md_para_docx(open(f, encoding="utf-8").read(), loc, os.path.basename(f))
+                        ok = copiar(loc, alvo); shutil.rmtree(os.path.dirname(loc), ignore_errors=True)
+                        if not ok: continue
                 else:
                     alvo = os.path.join(dest, os.path.basename(f))
-                    if os.path.exists(alvo) and os.path.getmtime(alvo) >= os.path.getmtime(f): continue
-                    if not a.simular: shutil.copy2(f, alvo)
+                    if igual(f, alvo) or (os.path.exists(alvo) and os.path.getmtime(alvo) >= os.path.getmtime(f) - 2): continue
+                    if not a.simular and not copiar(f, alvo): continue
                 feitos.append(f"{pasta}/{sub}: {os.path.basename(alvo)}")
     guia = os.path.join(RAIZ, "00 · Comece aqui.docx")
     if not a.simular and not os.path.exists(guia):
@@ -117,6 +144,8 @@ def main():
         sys.path.insert(0, os.path.join(AP, "lib")); import graph
         print(graph.subir_pasta(RAIZ, "", os.path.join(AP, "logs", ".manifesto-sharepoint.json")), "arquivo(s) enviados ao SharePoint")
     for x in feitos[:60]: print("  ", x)
+    if FALHAS:  # o que deu certo já foi publicado; a rotina falha para avisar o que ficou
+        sys.exit(f"{len(FALHAS)} arquivo(s) travado(s) pelo OneDrive não foram atualizados: " + "; ".join(os.path.basename(x) for x in FALHAS))
 
 
 COMECE = """# Área Partners · Agentes

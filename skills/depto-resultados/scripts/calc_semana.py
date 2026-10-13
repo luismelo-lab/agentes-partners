@@ -57,8 +57,10 @@ def load_premissas():
     if "Custos BI (mensal)" in wb.sheetnames:
         for r in wb["Custos BI (mensal)"].iter_rows(min_row=5, values_only=True):
             if not r[0]: continue
-            c = out["custos_mensais"].setdefault(str(r[0]), {"orcado": 0.0, "realizado": 0.0, "linhas": {}})
-            c["orcado"] += r[3] or 0; c["realizado"] += r[4] or 0; c["linhas"][f"{r[1]} · {r[2]}"] = r[4] if r[4] is not None else None
+            c = out["custos_mensais"].setdefault(str(r[0]), {"orcado": 0.0, "realizado": 0.0, "custo": 0.0, "n": 0, "n_real": 0, "linhas": {}})
+            c["orcado"] += r[3] or 0; c["realizado"] += r[4] or 0
+            c["custo"] += r[4] if r[4] is not None else (r[3] or 0)  # por linha: "Realizado vazio = usa o orçado" (antes 1 linha lançada zerava o orçado das outras)
+            c["n"] += 1; c["n_real"] += r[4] is not None; c["linhas"][f"{r[1]} · {r[2]}"] = r[4] if r[4] is not None else None
     out["antes_de_impostos"] = False
     ws = wb["Impostos"]
     for r in ws.iter_rows(min_row=5, values_only=True):
@@ -128,13 +130,16 @@ def carregar_hubspot(hoje, M):
     M["mix_teses"] = {"top": [(t, n, round(v)) for t, (n, v) in sorted(mix.items(), key=lambda x: -x[1][1])[:8]], "ganhos_sem_tese": sem_tese}
     P = sorted({d["parceiro"] or "Sem parceiro" for d in norm}); segs = sorted({d["segmento"] or "Não informado" for d in norm})
     st = {"aberto": 0, "ganho": 1, "perdido": 2}
-    deals = [[P.index(d["parceiro"] or "Sem parceiro"), d["criado"][:7], (d["fechado"][:7] if d["status"] != "aberto" else ""), st[d["status"]],
+    # entrada = data efetiva: a menor entre criação e fechamento (as importações regravaram a criação: 586 ganhos "fechados antes de criados",
+    # fev/26 com 772 "criados" contra 177 efetivos). Em aberto não tem fechamento real: vale a criação. Dicionário: metricas.md.
+    ent = lambda d: min(x for x in (d["criado"], d["fechado"] if d["status"] != "aberto" else "") if x) if d["criado"] or d["fechado"] else ""
+    deals = [[P.index(d["parceiro"] or "Sem parceiro"), ent(d)[:7], (d["fechado"][:7] if d["status"] != "aberto" else ""), st[d["status"]],
               d["valor"], None, 0, None, None, None, None, segs.index(d["segmento"] or "Não informado")] for d in norm]
     # semana real (segunda a domingo anteriores à data do relatório)
     from datetime import timedelta
     fim = hoje - timedelta(days=hoje.weekday()); ini = fim - timedelta(days=7); ini0 = ini - timedelta(days=7)
     def sem(a, b):
-        c = [d for d in norm if a.isoformat() <= d["criado"] < b.isoformat()]
+        c = [d for d in norm if a.isoformat() <= ent(d) < b.isoformat()]
         g = [d for d in norm if d["status"] == "ganho" and a.isoformat() <= (d["fechado"] or "") < b.isoformat()]
         return {"criados_n": len(c), "criados_rs": round(sum(d["valor"] for d in c)), "ganhos_n": len(g), "ganhos_rs": round(sum(d["valor"] for d in g))}
     w, w0 = sem(ini, fim), sem(ini0, ini)
@@ -296,7 +301,7 @@ def main():
     if ult:
         hon = sum(mm[m]["honorario"] for m in ult) / len(ult); liq = sum(mm[m]["liquido"] for m in ult) / len(ult)
         L = {"base": f"média mensal de {ult[0]} a {ult[-1]} (honorário contratado = potencial)", "honorario_bruto_mes": round(hon), "honorario_liquido_mes": round(liq)}
-        if pr["custo_mensal"] is not None and pr["carga_tributaria"] is not None:
+        if pr["custo_mensal"] and pr["carga_tributaria"] is not None:  # custo 0 dividia por zero e derrubava o relatório
             imp = hon * pr["carga_tributaria"]; lucro = liq - imp - pr["custo_mensal"]
             L.update({"impostos_mes": round(imp), "custos_mes": round(pr["custo_mensal"]), "lucro_area_mes": round(lucro),
                       "roi_total_potencial": round((hon - pr["custo_mensal"]) / pr["custo_mensal"], 2),
@@ -312,11 +317,12 @@ def main():
         ganhos_mes = {m: v["ganhos_rs"] for m, v in M["serie_mensal"].items()}
         linhas = []
         for m in sorted(cm):
-            c = cm[m]; real = c["realizado"] > 0; custo = c["realizado"] if real else c["orcado"]
+            c = cm[m]; custo = c.get("custo", c["realizado"] if c["realizado"] > 0 else c["orcado"])
+            base = ("realizado" if c.get("n_real") == c.get("n") else "ORÇADO (realizado ainda não lançado)" if not c.get("n_real") else "realizado + orçado (linhas sem lançamento)")
             hm = mm.get(m, {"valor": 0, "honorario": 0, "liquido": 0})
             cob = hm["valor"] / ganhos_mes[m] if ganhos_mes.get(m) else 0
             est = (lambda v: v / cob if cob else None)
-            L2 = {"mes": m, "custo": round(custo), "custo_base": "realizado" if real else "ORÇADO (realizado ainda não lançado)",
+            L2 = {"mes": m, "custo": round(custo), "custo_base": base,
                   "ganhos_rs": round(ganhos_mes.get(m, 0)), "cobertura_honorario_pct": round(cob * 100, 1),
                   "amostra": {"honorario_bruto": round(hm["honorario"]), "honorario_liquido": round(hm["liquido"]),
                               "lucro_antes_impostos": round(hm["liquido"] - custo),
@@ -325,15 +331,15 @@ def main():
             if cob:
                 hb, hl = est(hm["honorario"]), est(hm["liquido"])
                 L2["estimado_100pct"] = {"honorario_bruto": round(hb), "honorario_liquido": round(hl), "lucro_antes_impostos": round(hl - custo),
-                                         "roi_total": round((hb - custo) / custo, 1), "roi_liquido": round((hl - custo) / custo, 1)}
+                                         "roi_total": round((hb - custo) / custo, 1) if custo else None, "roi_liquido": round((hl - custo) / custo, 1) if custo else None}
             linhas.append(L2)
         tc = sum(x["custo"] for x in linhas); th = sum(x["amostra"]["honorario_bruto"] for x in linhas); tl = sum(x["amostra"]["honorario_liquido"] for x in linhas)
         eb = sum(x.get("estimado_100pct", {}).get("honorario_bruto", 0) for x in linhas); el = sum(x.get("estimado_100pct", {}).get("honorario_liquido", 0) for x in linhas)
         M["lucro_roi_mensal"] = {"modo": "antes de impostos" if pr.get("antes_de_impostos") else "com impostos", "meses": linhas,
                                  "total": {"custo": tc, "amostra": {"honorario_bruto": th, "honorario_liquido": tl, "lucro_antes_impostos": tl - tc,
-                                                                    "roi_total": round((th - tc) / tc, 1), "roi_liquido": round((tl - tc) / tc, 1)},
+                                                                    "roi_total": round((th - tc) / tc, 1) if tc else None, "roi_liquido": round((tl - tc) / tc, 1) if tc else None},
                                            "estimado_100pct": {"honorario_bruto": eb, "honorario_liquido": el, "lucro_antes_impostos": el - tc,
-                                                               "roi_total": round((eb - tc) / tc, 1), "roi_liquido": round((el - tc) / tc, 1)}},
+                                                               "roi_total": round((eb - tc) / tc, 1) if tc else None, "roi_liquido": round((el - tc) / tc, 1) if tc else None}},
                                  "ressalvas": ["Honorário CONTRATADO (potencial), não recebido: sem dado de caixa no HubSpot.",
                                                "Custos só da área Partners (BI do Luis): não incluem Técnico Tributário, Jurídico, Contratos, Pós-venda nem rateios.",
                                                "'Estimado 100%' aplica a margem dos negócios com honorário preenchido aos demais ganhos do mês."]}

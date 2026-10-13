@@ -40,7 +40,33 @@ def linha_matriz(cnae, regime):
 
 
 def raiz(d, E):
-    return re.sub(r"\D", "", str(E.get(d["id"], {}).get("cnpj") or d["extras"].get("cnpj") or "")).zfill(14)[:8]
+    c = re.sub(r"\D", "", str(E.get(d["id"], {}).get("cnpj") or d["extras"].get("cnpj") or ""))
+    return c.zfill(14)[:8] if c else None  # sem CNPJ não tem grupo (antes todos viravam "00000000" e colidiam: falsa duplicidade)
+
+
+DECISAO = ("decisão da Geovana", "motivo da decisão", "valor validado (R$)", "minutos no caso", "encaminhado ao técnico em")
+
+
+def decisoes_anteriores():
+    """link → decisões já marcadas. Lê todas as Fila-Recuperador-*.xlsx do Mac e da pasta da Geovana no OneDrive; a mais recente vence.
+    Antes cada fila nova saía em branco e o que a Geovana marcava no arquivo da semana anterior se perdia (TI, 13/10/2026)."""
+    from openpyxl import load_workbook
+    fs = glob.glob(os.path.join(OUT, "Fila-Recuperador-*.xlsx"))
+    try:
+        import sys; sys.path.insert(0, H("~/agentes-partners/lib")); import caminhos
+        fs += glob.glob(os.path.join(caminhos.area(), "Central Técnica · Geovana", "Fila-Recuperador-*.xlsx"))
+    except (SystemExit, Exception):
+        pass  # sem OneDrive: usa só as do Mac
+    out = {}
+    for f in sorted(fs, key=os.path.getmtime):
+        try: rows = list(load_workbook(f, read_only=True, data_only=True)["Fila"].iter_rows(values_only=True))
+        except Exception: continue
+        if not rows: continue
+        h = list(rows[0])
+        for r in rows[1:]:
+            g = dict(zip(h, r)); d = {k: g.get(k) for k in DECISAO if g.get(k) not in (None, "")}
+            if d and g.get("link"): out.setdefault(g["link"], {}).update(d)
+    return out
 
 
 def seg(t):
@@ -102,8 +128,8 @@ def main():
             liq = d["valor"] * d["hContr"] * (1 - min(d["hParc"] or 0, 1)) if (d["status"] == "ganho" and d["hContr"] is not None and d["valor"] > 0) else None
             ref.append((d, p, liq))
     ganhos_ref = [(d, p, l) for d, p, l in ref if d["status"] == "ganho" and d["valor"] > 0]
-    GANHOS_RAIZ = {raiz(d, E) for d, p, l in ganhos_ref}
-    ABERTOS_RAIZ = {raiz(d, E) for d in N if d["status"] == "aberto"}
+    GANHOS_RAIZ = {raiz(d, E) for d, p, l in ganhos_ref} - {None}
+    ABERTOS_RAIZ = {raiz(d, E) for d in N if d["status"] == "aberto"} - {None}
     casos = [("Perdido zerado", d) for d in N if d["status"] == "perdido" and d["valor"] <= 0 and (d["fechado"] or "") >= a.desde]
     casos += [("Aberto > %d dias" % a.dias_aberto, d) for d in N if d["status"] == "aberto" and dt(d["criado"]) and (hoje - dt(d["criado"])).days > a.dias_aberto]
     fila, fora = [], []
@@ -125,9 +151,9 @@ def main():
         if motivo: fora.append({"motivo": motivo, **base}); continue
         # look-alike
         rz = raiz(d, E); vistos_r = set(); viz = []
-        for v in sorted(((parecido(p, q), dd, l) for dd, q, l in ref if raiz(dd, E) != rz), key=lambda x: -x[0]):
+        for v in sorted(((parecido(p, q), dd, l) for dd, q, l in ref if rz is None or raiz(dd, E) != rz), key=lambda x: -x[0]):
             r_ = raiz(v[1], E)
-            if v[0] < 8 or r_ in vistos_r: continue   # exige CNAE/classe igual + regime; uma empresa conta uma vez
+            if v[0] < 8 or (r_ is not None and r_ in vistos_r): continue   # exige CNAE/classe igual + regime; uma empresa conta uma vez
             vistos_r.add(r_); viz.append(v)
             if len(viz) >= 40: break
         vg = [v for v in viz if v[1]["status"] == "ganho" and v[1]["valor"] > 0]
@@ -194,6 +220,10 @@ def main():
             "honorário mediano dos parecidos", "saldo credor (urgente até 30/11)", "negócio", "negócios no HubSpot", "parceiro", "etapa", "dias_aberto", "regime", "segmento (matriz)", "cnae_oficial", "porte_receita", "capital_social", "uf",
             "sinal do parecer", "parecer do técnico", "motivo no parecer", "ganhos parecidos (exemplos)", "hipótese preliminar", "documentos a pedir",
             "decisão da Geovana", "motivo da decisão", "valor validado (R$)", "minutos no caso", "encaminhado ao técnico em", "link"]
+    ant = decisoes_anteriores()  # decisões da Geovana marcadas em qualquer planilha anterior (Mac ou OneDrive) vêm para a fila nova
+    for l in fila:
+        for k, v in (ant.get(l.get("link")) or {}).items():
+            if not l.get(k): l[k] = v
     ws = wb.active; ws.title = "Fila"; aba(ws, fila, cols)
     dv = DataValidation(type="list", formula1='"Aprovar para reanálise,Vetar,Precisa de dado"', allow_blank=True); ws.add_data_validation(dv)
     col = ws.cell(row=1, column=cols.index("decisão da Geovana") + 1).column_letter; dv.add(f"{col}2:{col}{len(fila) + 1}")

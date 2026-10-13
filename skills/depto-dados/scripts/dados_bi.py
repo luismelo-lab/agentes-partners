@@ -17,6 +17,10 @@ HS = os.path.expanduser("~/.claude/skills/depto-resultados/scripts/hubspot_fonte
 LINK = "https://app.hubspot.com/contacts/47865021/deal/{}"
 
 
+
+def ef(d):  # data efetiva (dicionário metricas.md): a menor entre criação e fechamento; em aberto, a criação
+    return min((x for x in (d["criado"], d["fechado"] if d["status"] != "aberto" else "") if x), default="")
+
 def dt(s):
     try: return datetime.fromisoformat((s or "")[:10]).date()
     except ValueError: return None
@@ -93,12 +97,12 @@ def main():
     for d in N: P[d["parceiro"]].append(d)
     sc = []
     for p, L in P.items():
-        cri90 = [d for d in L if (dt(d["criado"]) or date.min) >= d90]
+        cri90 = [d for d in L if (dt(ef(d)) or date.min) >= d90]
         g = lambda a_, b_: [d for d in L if d["status"] == "ganho" and a_ <= (dt(d["fechado"]) or date.min) < b_]
         g90, g90a, g12 = g(d90, hoje + timedelta(days=1)), g(d180, d90), g(d365, hoje + timedelta(days=1))
         p12 = [d for d in L if d["status"] == "perdido" and (dt(d["fechado"]) or date.min) >= d365]
         ab = [d for d in L if d["status"] == "aberto"]
-        ciclos = [(dt(d["fechado"]) - dt(d["criado"])).days for d in g12 if dt(d["fechado"]) and dt(d["criado"])]
+        ciclos = [c for c in ((dt(d["fechado"]) - dt(d["criado"])).days for d in g12 if dt(d["fechado"]) and dt(d["criado"])) if c >= 0]  # ciclo negativo = criação regravada pela importação
         liq = [d["valor"] * d["hContr"] * (1 - min(d["hParc"] or 0, 1)) for d in g12 if d["hContr"] is not None]
         conv = len(g12) / (len(g12) + len(p12)) * 100 if (g12 or p12) else None
         v90, v90a = sum(d["valor"] for d in g90), sum(d["valor"] for d in g90a)
@@ -107,7 +111,7 @@ def main():
         par = sum(1 for d in ab if d["id"] in {r["link"].rsplit("/", 1)[1] for r in parados})
         # índice de saúde 0–100, comparando o parceiro com a média trimestral dele mesmo nos 12 meses
         # (pesos: ritmo de entrada 30 · conversão 25 · ritmo de valor fechado 25 · qualidade do dado 20)
-        cri_ant = [d for d in L if d365 <= (dt(d["criado"]) or date.min) < d90]
+        cri_ant = [d for d in L if d365 <= (dt(ef(d)) or date.min) < d90]
         base_cri = len(cri_ant) / 3 if cri_ant else None
         r_at = (len(cri90) / base_cri) if base_cri else (0.5 if cri90 else 0)
         base_val = sum(d["valor"] for d in g12) / 4

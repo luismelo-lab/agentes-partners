@@ -161,7 +161,10 @@ tell application "Microsoft Outlook"
 end tell
 end timeout'''
     # Outlook fechado ou ocupado causava timeout (-1712, 30/09): abre antes e espera até 5 min.
-    subprocess.run(["open", "-g", "-a", "Microsoft Outlook"], capture_output=True)
+    o = subprocess.run(["open", "-g", "-a", "Microsoft Outlook"], capture_output=True, text=True)
+    if o.returncode != 0:  # app ausente (06/10): sem isso o AppleScript dá um "syntax error -2741" enganoso
+        os.unlink(hf.name)
+        return False, "OUTLOOK_AUSENTE: o Microsoft Outlook não está instalado neste Mac (reinstale o Outlook clássico). " + (o.stderr or "").strip()
     r = subprocess.run(["osascript", "-e", script], capture_output=True, text=True)
     if r.returncode != 0 and "-600" in (r.stderr or ""):  # app ainda não respondia: nada foi criado, tenta uma vez
         import time; time.sleep(20); r = subprocess.run(["osascript", "-e", script], capture_output=True, text=True)

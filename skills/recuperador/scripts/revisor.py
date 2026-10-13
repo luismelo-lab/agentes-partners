@@ -312,7 +312,7 @@ def main():
         viz, vr = [], set()
         for s_, dd, tes in sorted(((parecido(p, q), dd, tes) for dd, q, tes in ref if raiz(dd, E) != rz and atividade(q["cnae"]) == atividade(p["cnae"])), key=lambda x: -x[0]):
             r_ = raiz(dd, E)
-            if s_ < 8 or r_ in vr: continue
+            if s_ < 8 or (r_ is not None and r_ in vr): continue  # sem CNPJ: cada negócio conta por si
             vr.add(r_); viz.append((dd, tes))
             if len(viz) >= 40: break
         vg = [(dd, tes) for dd, tes in viz if dd["status"] == "ganho" and dd["valor"] > 0]

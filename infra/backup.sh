@@ -20,6 +20,7 @@ tar -tzf "$TMP/$NOME" > "$TMP/lista"
 for parte in agentes-partners/lib/ skills/ scheduled-tasks/; do grep -q "^$parte" "$TMP/lista" || { echo "backup incompleto: falta $parte"; exit 1; }; done
 N=$(wc -l < "$TMP/lista" | tr -d ' ')
 cp "$TMP/$NOME" "$DEST/$NOME.parcial" && mv -f "$DEST/$NOME.parcial" "$DEST/$NOME"
-# retenção: só os arquivos de backup deste script (nunca apaga pastas nem outros arquivos)
-find "$DEST" -maxdepth 1 -type f -name 'agentes-partners-*.tar.gz' -mtime +14 -exec /usr/bin/trash {} +
+cmp -s "$TMP/$NOME" "$DEST/$NOME" || { echo "a cópia no OneDrive não confere com o original"; exit 1; }
+# retenção: só os arquivos de backup deste script (nunca apaga pastas nem outros arquivos); se falhar, o backup de hoje continua valendo
+find "$DEST" -maxdepth 1 -type f -name 'agentes-partners-*.tar.gz' -mtime +14 -exec /usr/bin/trash {} + || echo "aviso: a retenção falhou (backup de hoje está ok)"
 echo "$(date '+%F %T') ok $(du -h "$DEST/$NOME" | cut -f1) · $N itens · $NOME" >> "$HOME/agentes-partners/infra/backup.log"

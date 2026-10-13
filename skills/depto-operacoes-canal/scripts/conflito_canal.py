@@ -43,7 +43,8 @@ def main():
         if not cnpj_valido(c): continue
         nome, _, _ = canal(d, cfg, roster)
         h = hist[c[:8]]
-        if nome not in h or d["criado"] < h[nome]: h[nome] = d["criado"]
+        e_ = min((x for x in (d["criado"], d["fechado"] if d["status"] != "aberto" else "") if x), default="")  # data efetiva: reimportação regravou a criação e tirava a precedência de quem chegou antes
+        if nome not in h or e_ < h[nome]: h[nome] = e_
 
     conf, det = [], []
     for raiz, L in grupos.items():
@@ -52,7 +53,7 @@ def main():
         tipos = {x[2]: x[3] for x in L}
         por = defaultdict(lambda: {"aberto": 0, "ganho": 0, "perdido": 0, "valor": 0.0, "primeiro": "9999", "teses": set()})
         for d, c, nome, tipo, obs in L:
-            s = por[nome]; s[d["status"]] += 1; s["valor"] += d["valor"]; s["primeiro"] = min(s["primeiro"], d["criado"])
+            s = por[nome]; s[d["status"]] += 1; s["valor"] += d["valor"]; s["primeiro"] = min(s["primeiro"], min((x for x in (d["criado"], d["fechado"] if d["status"] != "aberto" else "") if x), default=""))
             for t in (d.get("variante") or "").split(";"):
                 if t.strip(): s["teses"].add(t.strip())
         com_ganho = [n for n in canais if por[n]["ganho"]]; com_aberto = [n for n in canais if por[n]["aberto"]]

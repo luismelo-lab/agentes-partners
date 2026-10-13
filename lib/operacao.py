@@ -310,17 +310,17 @@ def supervisao(E, marca):
         if t and (HOJE - t).days >= 1:
             marca(ev(E, f"aprov|pedido|{k}", "aprovacao_parada", p.get("pessoa") or "luis", f"{k} · {(p.get('assunto') or '')[:80]}",
                      f"Resposta entregue em {t.strftime('%d/%m')}; falta Aprovado, Não aprovado ou Nova análise.", "Supervisor"))
-    # rotinas com erro hoje
+    # rotinas com erro nas últimas 24 h (só "hoje" deixava de fora o backup das 19h30 e tudo o que roda depois das sentinelas)
     log = os.path.join(AP, "logs/partners.log")
+    desde = (datetime.now() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M:%S")
     erros = {}
     if os.path.exists(log):
         for l in open(log, errors="ignore"):
-            if l.startswith(HOJE.isoformat()) and "ERRO" in l:
-                m = re.search(r"\[(.+?)\] (.*)", l)
-                if m: erros[m.group(1)] = m.group(2)
-            elif l.startswith(HOJE.isoformat()):
-                m = re.search(r"\[(.+?)\] ok", l)
-                if m: erros.pop(m.group(1), None)  # voltou a rodar bem depois do erro
+            if l[:19] < desde: continue
+            m = re.search(r"\[(.+?)\] (.*)", l)
+            if not m: continue
+            if "ERRO" in m.group(2): erros[m.group(1)] = m.group(2)  # a chave inclui o script ("areas:icp"): o ok de um não apaga o erro de outro
+            elif m.group(2).strip() == "ok": erros.pop(m.group(1), None)  # voltou a rodar bem depois do erro
     for r, msg in erros.items():
         marca(ev(E, f"rotina|{r}|{HOJE}", "rotina_falhou", "luis", f"Rotina {r}", msg, "TI"))
 
@@ -367,6 +367,8 @@ def plano(previa=False, so_urgentes=False):
             alvo = next(o for o in meus if o.get("negocio") == e["negocio"] and o["tipo"] != "crm_incompleto")
             alvo["tambem"] = "cadastro incompleto: " + e["texto"].split(". ", 1)[-1]
         meus = [e for e in meus if not (e["tipo"] == "crm_incompleto" and e.get("negocio") in outros_neg)]
+        # "entrou em diagnóstico" é aviso de chegada: só no 1º dia (ficava 8 dias no plano; 106 de 309 eventos eram isso)
+        meus = [e for e in meus if e["tipo"] != "entrou_diagnostico" or (HOJE - date.fromisoformat(e.get("primeiro") or HOJE.isoformat())).days <= 1]
         if so_urgentes:
             ja = set(est.get(f"avisados|{p}", []))
             meus = [e for e in meus if e["tipo"] in AVISO_TARDE and novo(e) and chave(e) not in ja]

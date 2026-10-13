@@ -51,7 +51,7 @@ def main():
     vistos = set()  # conversas já avisadas na rodada anterior (com ou sem IA): não reenviar
     if ant:
         A = json.load(open(ant[-1]))
-        vistos = {(p, i["chat"]) for p, P in A.get("pessoas", {}).items() for i in P.get("itens", []) if i.get("status") in ("responder", "acompanhar")}
+        vistos = {(p, i["chat"]) for p, P in A.get("pessoas", {}).items() if P.get("enviado", True) for i in P.get("itens", []) if i.get("status") in ("responder", "acompanhar")}  # e-mail que falhou não conta como avisado
     # o que a última rodada COM IA julgou "sem ação" não volta como "responder" se não chegou mensagem nova depois dela (Células, 02/10)
     calados, t_ia = set(), 0
     for f_ia in reversed(ant):

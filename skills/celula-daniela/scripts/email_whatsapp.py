@@ -22,6 +22,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.expanduser("~/.claude/skills/depto-marketing/scripts"))
 import email_layout as L  # noqa: E402
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); import protecao as PR  # noqa: E402  mascaramento único
 
 DONOS = {"daniela": ("Daniela", "daniela.maciel@savecompany.com.br", "Central Masters"),
          "jenifer": ("Jenifer", "jenifer.carvalho@savecompany.com.br", "Central BDR"),
@@ -42,7 +43,7 @@ def cartoes(itens, com_rascunho=True):
     out = []
     for i in itens:
         i = {k: (PR.limpo(v) if isinstance(v, str) and k not in ("link",) else v) for k, v in i.items()}
-        et = ("Urgente · " if i.get("urgente") else "") + ("Nova · " if i.get("nova") else "") + (f"{horas(i.get('aguardando_h'))} sem resposta" if i.get("aguardando_h") else ROT[i["status"]])
+        et = ("Urgente · " if i.get("urgente") else "") + ("Nova · " if i.get("nova") else "") + (f"{horas(i.get('aguardando_h'))} sem resposta" if i.get("aguardando_h") else ROT.get(i["status"], "Acompanhar"))
         ls = [("O que pede", e(i.get("o_que_pede")))]
         if i.get("rota"): ls.append(("Encaminhar para", e(i["rota"])))
         if i.get("proximo_passo"): ls.append(("Próximo passo", e(i["proximo_passo"]) + (f" · prazo {e(i['prazo'])}" if i.get("prazo") else "")))
@@ -63,12 +64,12 @@ def cartoes(itens, com_rascunho=True):
                 ls.append(("Chamado no GLPI", "não foi aberto (erro). Abra manualmente."))
         if i.get("negocio"): ls.append(("Negócio", f'<a href="{e(i.get("link"))}" style="{L.f("corpo", "normal", L.OURO_TEXTO, "text-decoration:none;")}">{e(i["negocio"])}</a>'))
         tit = i["chat"] + (f" · {i['master']}" if i.get("master") else "")
-        out.append(L.cartao(tit, et, ls, COR[i["status"]]))
+        out.append(L.cartao(tit, et, ls, COR.get(i["status"], L.OURO_TEXTO)))
     return out
 
 
 def ordem(itens):
-    return sorted(itens, key=lambda i: ({"responder": 0, "acompanhar": 1, "sem_acao": 2}[i["status"]], not i.get("urgente"), -(i.get("aguardando_h") or 0)))
+    return sorted(itens, key=lambda i: ({"responder": 0, "acompanhar": 1, "sem_acao": 2}.get(i["status"], 1), not i.get("urgente"), -(i.get("aguardando_h") or 0)))
 
 
 def email_dono(chave, P, rodada, hoje):
@@ -78,7 +79,7 @@ def email_dono(chave, P, rodada, hoje):
     sem = [i for i in it if i["status"] == "sem_acao"]
     blocos = [L.cabecalho(f"{area} · WhatsApp", f"Acompanhamento das {rodada}", f"{hoje} · {P.get('conversas', len(it))} conversas lidas"),
               L.paragrafo(f"Olá, {e(nome)}!", "28px 32px 12px"),
-              L.paragrafo(e(P.get("leitura") or "Seguem as conversas do seu WhatsApp que pedem atenção agora, já organizadas por prioridade.")),
+              L.paragrafo(e(PR.limpo(P.get("leitura") or "") or "Seguem as conversas do seu WhatsApp que pedem atenção agora, já organizadas por prioridade.")),
               L.kpis([("Para responder", len(resp), "pedidos esperando você"), ("Em acompanhamento", len(acomp), "para conferir depois"),
                       ("Conversas lidas", P.get("conversas", len(it)), "nas últimas 24 horas")])]
     if resp: blocos += [L.secao("Para responder agora")] + cartoes(resp)
@@ -87,7 +88,7 @@ def email_dono(chave, P, rodada, hoje):
         blocos.append(L.paragrafo("<b>Nenhuma conversa esperando resposta.</b> Tudo em dia nesta rodada."))
     if sem:
         blocos.append(L.paragrafo(f'<span style="{L.f("apoio", "normal", L.CINZA)}">Sem ação nesta rodada: '
-                                  + e(", ".join(i["chat"] for i in sem[:8])) + (" e outras." if len(sem) > 8 else ".") + "</span>", "4px 32px 8px"))
+                                  + e(PR.limpo(", ".join(i["chat"] for i in sem[:8]))) + (" e outras." if len(sem) > 8 else ".") + "</span>", "4px 32px 8px"))
     blocos += [L.passos("Como usar", ["Responda pelo seu WhatsApp, como sempre. A sugestão de resposta é só um ponto de partida.",
                                       "Encaminhe o pedido à área indicada quando houver uma.",
                                       "A próxima leitura confere se a conversa foi respondida e tira ela da lista."]),
@@ -126,6 +127,7 @@ def main():
     rodada = T.get("rodada") or datetime.now().strftime("%Hh%M"); hoje = datetime.now().strftime("%d/%m/%Y")
     enviar = not a.rascunho
     sem_ia = T.get("modo") == "sem IA"
+    falhas = []
     for k, P in T["pessoas"].items():
         if not P.get("itens") and not P.get("conversas"):
             print(f"{k}: sem conversas nesta rodada, e-mail não enviado"); continue
@@ -136,12 +138,19 @@ def main():
         assunto, corpo = email_dono(k, P, rodada, hoje)
         anexos = [os.path.expanduser(x) for i in P.get("itens", []) for x in (i.get("anexos") or []) if os.path.exists(os.path.expanduser(x))]
         ok, msg = L.outlook([DONOS[k][1]], [], assunto, corpo, anexos, enviar=enviar)
+        P["enviado"] = ok  # a próxima triagem só dá como "já avisado" o que de fato saiu
+        if not ok: falhas.append(k)
         print(f"{k}: {'enviado' if ok and enviar else 'rascunho criado' if ok else 'FALHOU ' + msg[:200]} · {assunto}")
-    if sem_ia:
-        print("luis: rodada sem IA não gera o resumo geral"); return
-    assunto, corpo = email_luis(T, rodada, hoje)
-    ok, msg = L.outlook([LUIS], [], assunto, corpo, enviar=enviar)
-    print(f"luis: {'enviado' if ok and enviar else 'rascunho criado' if ok else 'FALHOU ' + msg[:200]} · {assunto}")
+    json.dump(T, open(os.path.expanduser(a.triagem), "w"), ensure_ascii=False, indent=1)
+    if not sem_ia:
+        assunto, corpo = email_luis(T, rodada, hoje)
+        ok, msg = L.outlook([LUIS], [], assunto, corpo, enviar=enviar)
+        if not ok: falhas.append("luis")
+        print(f"luis: {'enviado' if ok and enviar else 'rascunho criado' if ok else 'FALHOU ' + msg[:200]} · {assunto}")
+    else:
+        print("luis: rodada sem IA não gera o resumo geral")
+    if falhas:  # antes saía 0 e o partners.log registrava "ok" (09/10): agora a rotina falha e dispara o alerta
+        sys.exit(f"{len(falhas)} e-mail(s) não saíram: {', '.join(falhas)}")
 
 
 if __name__ == "__main__":

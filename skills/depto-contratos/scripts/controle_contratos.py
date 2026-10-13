@@ -181,11 +181,11 @@ def main():
     por_parc = defaultdict(Counter); cont_pend = Counter()
     for n in abertos:
         pend, conf = conferir(n, rec, roster)
-        X = n.get("extras") or {}; dc = dias(n.get("criado"), hoje); dm = dias(X.get("ultima_modificacao"), hoje)
+        X = n.get("extras") or {}; dc = dias(n.get("criado"), hoje); dm = dias(X.get("entrou_etapa") or X.get("ultima_atividade") or X.get("ultima_modificacao"), hoje)  # dias na etapa: a "última modificação" é atualizada o tempo todo pela sincronização com o Bitrix e escondia contratos parados
         alerta = []
         if n["etapa"] == "Contrato Assinado": alerta.append("🟡 assinado mas ainda não movido para Negócio Fechado")
         if n["etapa"] == "Contrato Enviado" and dm is not None and dm > DIAS_ENVIADO_ALERTA: alerta.append(f"🔴 enviado e sem movimento há {dm} dias")
-        elif dm is not None and dm > DIAS_SEM_MEXER: alerta.append(f"🟡 sem modificação há {dm} dias")
+        elif dm is not None and dm > DIAS_SEM_MEXER: alerta.append(f"🟡 na etapa há {dm} dias")
         L_contrato.append([n["etapa"], n["nome"], n["parceiro"], n.get("parceiro_bruto") or "", n["pipeline"], round(n["valor"] or 0, 2),
                            n.get("criado"), dc, (X.get("ultima_modificacao") or "")[:10], dm, "; ".join(alerta),
                            len([x for x in pend if x[0] == "🔴"]), "; ".join(f"{g} {t}" for g, t in pend), LINK.format(p=PORTAL, id=n["id"])])

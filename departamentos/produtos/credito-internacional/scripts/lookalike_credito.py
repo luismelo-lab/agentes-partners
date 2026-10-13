@@ -244,7 +244,7 @@ def grava(destino_nome, abas, metodologia):
     for r in ws.iter_rows(min_row=2):
         for c in r: c.alignment = Alignment(wrap_text=True, vertical="top")
     ws.column_dimensions["A"].width = 34; ws.column_dimensions["B"].width = 130; ws.freeze_panes = "A2"
-    area = subprocess.run([sys.executable, os.path.join(AP, "lib/caminhos.py"), "area"], capture_output=True, text=True).stdout.strip()
+    area = subprocess.run([sys.executable, os.path.join(AP, "lib/caminhos.py"), "area"], capture_output=True, text=True, check=True).stdout.strip()  # sem a pasta do OneDrive, para (antes gravava no diretório atual)
     destino = os.path.join(area, "Gestão · Luis", "Produtos", destino_nome)
     os.makedirs(os.path.dirname(destino), exist_ok=True); wb.save(destino)
     shutil.copy2(destino, os.path.join(PASTA, destino_nome))

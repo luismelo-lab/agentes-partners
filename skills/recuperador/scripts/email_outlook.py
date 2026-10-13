@@ -22,7 +22,9 @@ def montar(lote):
     """Corpo no layout único da área (depto-marketing/scripts/email_layout.py)."""
     F = json.load(open(sorted(glob.glob(os.path.join(DIR, "fila-*.json")))[-1]))
     xlsx = sorted(glob.glob(os.path.join(DIR, "Fila-Recuperador-*.xlsx")))[-1]
-    casos = [r for r in F["top"] if r.get("lote") == lote] or F["top"]
+    tem_lote = any("lote" in r for r in F["top"])  # fila antiga, sem número de lote: vai a fila inteira (como antes)
+    casos = [r for r in F["top"] if r.get("lote") == lote] if tem_lote else F["top"]
+    if not casos: sys.exit(f"O lote {lote} não existe na fila atual (lotes: {sorted({r.get('lote') for r in F['top'] if r.get('lote') is not None})}).")
     tot = sum(r.get("honorário esperado (look-alike)") or 0 for r in casos)
     nz = sum(1 for r in casos if r["tipo"].startswith("Perdido")); na = len(casos) - nz
     alta = sum(1 for r in casos if r.get("aderência") == "alta")
@@ -67,4 +69,6 @@ if __name__ == "__main__":
     ok, msg = outlook(a.para, a.cc, assunto, corpo, anexo, a.abrir, a.enviar)
     if ok: print("Enviado:" if a.enviar else "Rascunho criado no Outlook (não enviado):", assunto)
     elif "BLOQUEADO" in msg: print(msg); sys.exit(1)
-    else: print("Automação do Outlook indisponível:", msg[:300], "\nArquivo .eml gerado (abre no Outlook, pronto para revisar e enviar):", eml(a.para, a.cc, assunto, corpo, anexo))
+    else:
+        print("Automação do Outlook indisponível:", msg[:300], "\nArquivo .eml gerado (abre no Outlook, pronto para revisar e enviar):", eml(a.para, a.cc, assunto, corpo, anexo))
+        if a.enviar: sys.exit(2)  # pediram envio e não saiu: a rotina tem que falhar (antes saía 0 e ficava "ok")

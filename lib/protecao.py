@@ -12,7 +12,7 @@ AP = os.path.expanduser("~/agentes-partners"); SK = os.path.expanduser("~/.claud
 DOMINIO = re.compile(r"^[^@\s]+@savecompany\.com\.br$", re.I)
 
 TEL = re.compile(r"@?\+?\(?\d[\d .()-]{7,}\d(?![\d/.]*\d)")
-PROTEGE = re.compile(r"https?://\S+|\d{5}\.\d{6}/\d{4}-\d{2}|\d{5}\.\d{5}\.\d{6}\.\d\.\d\.\d{2}-\d{4}|\d{4}-\d{2}-\d{2}")  # link, processo RFB, PER/DCOMP, data ISO
+PROTEGE = re.compile(r"R\$\s*[\d.,]+|(?i:(?<=negócio )|(?<=negocio )|(?<=deal )|(?<=negócio #)|(?<=deal #))\d{8,12}|https?://\S+|\d{5}\.\d{6}/\d{4}-\d{2}|\d{5}\.\d{5}\.\d{6}\.\d\.\d\.\d{2}-\d{4}|\d{4}-\d{2}-\d{2}")  # valor em R$, ID de negócio, link, processo RFB, PER/DCOMP, data ISO
 ROTULO = re.compile(r"(?i)\b(rg|identidade|cnh|ag[eê]ncia|conta(?: corrente)?|c/c|chave pix|pix|senha)\b\s*[:nº°.-]*\s*(?=\S*\d)\S+")
 
 

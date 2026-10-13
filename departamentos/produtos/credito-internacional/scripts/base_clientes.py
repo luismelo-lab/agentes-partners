@@ -397,7 +397,7 @@ def agregados(L, M):
 
 if __name__ == "__main__":
     L, M = montar()
-    area = subprocess.run([sys.executable, os.path.join(AP, "lib/caminhos.py"), "area"], capture_output=True, text=True).stdout.strip()
+    area = subprocess.run([sys.executable, os.path.join(AP, "lib/caminhos.py"), "area"], capture_output=True, text=True, check=True).stdout.strip()  # sem a pasta do OneDrive, para (antes gravava no diretório atual)
     destino = os.path.join(area, "Gestão · Luis", "Produtos", "Credito-Internacional-Base-Priorizada.xlsx")
     gravar_xlsx(L, M, destino)
     shutil.copy2(destino, os.path.join(PASTA, "Credito-Internacional-Base-Priorizada.xlsx"))

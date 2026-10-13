@@ -221,14 +221,15 @@ def cmd_ler(a):
                           "campos": c, "texto": atual[:6000], "anexos": anexos, "talvez_falte": falta})
         R["processados"].append(m["id"])
     R["processados"] = R["processados"][-2000:]
-    salvar(R)
-    if a.enfileirar:
+    if a.enfileirar:  # a fila é gravada ANTES do registro: se falhar, o pedido não fica marcado como processado e volta na próxima leitura
         with trava():
             F = json.load(open(FILA)) if os.path.exists(FILA) else []
             F += [n for n in novos if n["tipo"] != "ignorado"]
             json.dump(F, open(FILA, "w"), ensure_ascii=False, indent=1)
+        salvar(R)
         print(f"{len(novos)} novos · {len(F)} na fila")
     else:
+        salvar(R)
         print(json.dumps(novos, ensure_ascii=False, indent=1))
 
 
@@ -293,11 +294,12 @@ def cmd_responder(a):
     if getattr(a, "painel", False):  # pedido feito no painel: e-mail completo + aprovação por e-mail ou pelo painel
         blocos.insert(-3, L.paragrafo('Você também pode aprovar ou pedir ajuste no painel <b>Central Partners</b>, aba <b>Pedidos</b>.'
                                       + (" Os arquivos ficam na sua pasta do OneDrive, em Pedidos." if anexos else ""), "8px 32px 0"))
+    if a.previa:  # prévia não copia nada para o OneDrive
+        open(H(a.previa), "w").write(L.documento(*blocos)); print("prévia:", a.previa, "·", assunto); return
+    if getattr(a, "painel", False):
         d_od = os.path.join(caminhos.area(), PASTA_OD[P["pessoa"]], "Pedidos", P["id"]); os.makedirs(d_od, exist_ok=True)
         for x in anexos: subprocess.run(["cp", x, d_od])
         print("arquivos no OneDrive:", ", ".join(f"{PASTA_OD[P['pessoa']]} / Pedidos / {P['id']} / {os.path.basename(x)}" for x in anexos) or "nenhum")
-    if a.previa:
-        open(H(a.previa), "w").write(L.documento(*blocos)); print("prévia:", a.previa, "·", assunto); return
     if getattr(a, "aviso", False):  # pedido do painel: a resposta completa fica no painel
         blocos = [L.cabecalho("Central de Agentes", f"Pedido {P['id']} pronto", datetime.now().strftime("%d/%m/%Y %H:%M")),
                   L.paragrafo(f"Olá, {nome}!", "28px 32px 12px"), L.paragrafo(L.esc(J.get("resumo") or "")),
@@ -309,6 +311,8 @@ def cmd_responder(a):
         for x in anexos: subprocess.run(["cp", x, d_od])
         print("arquivos no OneDrive:", ", ".join(f"{PASTA_OD[P['pessoa']]} / Pedidos / {P['id']} / {os.path.basename(x)}" for x in anexos) or "nenhum")
     ok, msg = L.outlook([P["email"]], [], assunto, L.documento(*blocos), anexos, enviar=not a.rascunho)
+    if not ok:  # nada é gravado: a versão não sobe e o pedido continua na fila para a próxima rodada
+        sys.exit("FALHOU " + msg[:200] + " · " + assunto)
     P["status"] = "aguardando_aprovacao"
     P["historico"].append({"quando": datetime.now().isoformat(timespec="minutes"), "evento": f"resposta_v{v}", "resumo": J.get("resumo"), "anexos": anexos, "enviado": ok})
     dest = os.path.join(BASE, "pedidos", P["id"]); os.makedirs(dest, exist_ok=True)
@@ -322,7 +326,6 @@ def cmd_responder(a):
 def cmd_confirmar(a):
     R = reg(); P = R["pedidos"][a.pedido]; nome = NOMES[P["pessoa"]]
     aprovado = a.decisao == "aprovado"
-    P["status"] = "aprovado" if aprovado else "nao_aprovado"
     txt = ("Registrei a sua aprovação. A versão final ficou guardada na sua pasta do OneDrive, em <b>Pedidos aprovados</b>."
            if aprovado else "Registrei que a entrega não atendeu. O motivo entra nos aprendizados dos agentes para os próximos pedidos.")
     if a.nota: txt += "<br><br>" + L.esc(a.nota)
@@ -330,6 +333,9 @@ def cmd_confirmar(a):
                         L.paragrafo(f"Olá, {nome}!", "28px 32px 12px"), L.paragrafo(txt), L.assinatura(),
                         L.rodape("Central de Agentes da Área Partners. Para um pedido novo, use o modelo de pedido."))
     ok, msg = (True, "") if a.sem_email else L.outlook([P["email"]], [], f"[AGENTES] #{P['id']} · {'aprovado' if aprovado else 'encerrado'}", corpo, enviar=not a.rascunho)
+    if not ok:  # status só muda se a confirmação saiu
+        sys.exit("FALHOU " + msg[:200])
+    P["status"] = "aprovado" if aprovado else "nao_aprovado"
     if aprovado:
         d = os.path.join(caminhos.area(), PASTA_OD[P["pessoa"]], "Pedidos aprovados", P["id"]); os.makedirs(d, exist_ok=True)
         orig = os.path.join(BASE, "pedidos", P["id"])

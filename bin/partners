@@ -12,7 +12,10 @@ log() { echo "$(date '+%F %T') [$1] ${2:-ok}" >> "$LOG/partners.log"; }
 alerta() { # e-mail ao Luis quando uma rotina falha (uma vez por rotina por dia)
   local nome=$1 marca="$LOG/.alerta-$1-$hoje"
   [ -e "$marca" ] && return
-  python3 - "$nome" "$LOG/$nome.log" <<'PY' >/dev/null 2>&1 && touch "$marca"  # marca só se o aviso saiu
+  # 2º canal, independente do e-mail (o Outlook sumiu em 06/10 e nenhum aviso saiu): notificação do macOS + arquivo de pendências
+  echo "$(date '+%F %T') falha na rotina $nome (ver logs/$nome.log)" >> "$LOG/ALERTAS-PENDENTES.txt"
+  /usr/bin/osascript -e "display notification \"Falha na rotina $nome. Veja: partners logs $nome\" with title \"Partners · agentes\" sound name \"Basso\"" >/dev/null 2>&1
+  python3 - "$nome" "$LOG/$nome.log" <<'PY' >/dev/null 2>&1 && touch "$marca"  # marca só se o e-mail saiu (sem a marca, tenta de novo na próxima falha)
 import sys, os
 sys.path.insert(0, os.path.expanduser("~/.claude/skills/depto-marketing/scripts")); import email_layout as L
 nome, logf = sys.argv[1], sys.argv[2]
@@ -29,10 +32,10 @@ PY
 }
 
 rodar() { # rodar <nome> <comando...>: executa, guarda a saída em logs/<nome>.log e registra ok/erro
-  local nome=$1; shift
-  { echo "=== $(date '+%F %T') · $*"; "$@"; } >> "$LOG/$nome.log" 2>&1
+  local nome=$1 arq=${1%%:*}; shift  # "areas:icp" grava em logs/areas.log e aparece como areas:icp no partners.log
+  { echo "=== $(date '+%F %T') · $*"; "$@"; } >> "$LOG/$arq.log" 2>&1
   local rc=$?
-  if [ $rc -eq 0 ]; then log "$nome"; else log "$nome" "ERRO $rc (ver logs/$nome.log)"; alerta "$nome"; fi
+  if [ $rc -eq 0 ]; then log "$nome"; else log "$nome" "ERRO $rc (ver logs/$arq.log)"; alerta "$arq"; fi
   return $rc
 }
 
@@ -54,7 +57,9 @@ fi
 
 if [[ "${1:-}" == (manha|tarde|segunda) && -z "${PARTNERS_TRAVA:-}" ]]; then
   export PARTNERS_TRAVA=1  # caffeinate -i: o Mac não dorme no meio do download do HubSpot nem do envio
-  exec /usr/bin/caffeinate -i /usr/bin/lockf -t 3600 "$LOG/.trava-operacao" "$0" "$@"
+  /usr/bin/caffeinate -i /usr/bin/lockf -t 3600 "$LOG/.trava-operacao" "$0" "$@"; rc=$?
+  [ $rc -eq 75 ] && { log "$1" "ERRO trava ocupada há 1 h (outra rotina não terminou)"; alerta "$1"; }
+  exit $rc
 fi
 
 case "${1:-ajuda}" in
@@ -66,13 +71,15 @@ case "${1:-ajuda}" in
   caixa)        # lê caixas e demandas do WhatsApp; pula se já leu nos últimos 20 min ("partners caixa forcar" lê de novo)
                 if [ "${2:-}" != "forcar" ] && recente "$AP/celulas/daniela/whatsapp/demandas-*.json" 20; then log caixa "já lida há menos de 20 min"; exit 0; fi
                 esperar_rede || exit 1
-                for p in daniela jenifer geovana; do
-                  rodar caixa python3 "$SK/celula-daniela/scripts/whatsapp_hubspot.py" --pessoa $p --horas 24 --aguardando 3 &&
-                  rodar demandas python3 "$SK/celula-daniela/scripts/demandas_whatsapp.py" --pessoa $p --horas 6
-                done ;;
+                rc=0
+                for p in daniela jenifer geovana; do  # a falha de uma pessoa não some atrás do "ok" da seguinte
+                  { rodar "caixa:$p" python3 "$SK/celula-daniela/scripts/whatsapp_hubspot.py" --pessoa $p --horas 24 --aguardando 3 &&
+                    rodar "demandas:$p" python3 "$SK/celula-daniela/scripts/demandas_whatsapp.py" --pessoa $p --horas 6; } || rc=1
+                done; exit $rc ;;
   whatsapp-auto) # rodada SEM IA: caixa + triagem por regras + e-mail só para quem tem pedido novo
                 "$0" caixa || exit 1
-                f=$(python3 "$SK/celula-daniela/scripts/triagem_basica.py" 2>>"$LOG/whatsapp-auto.log") &&
+                f=$(python3 "$SK/celula-daniela/scripts/triagem_basica.py" 2>>"$LOG/whatsapp-auto.log") ||
+                  { log whatsapp-auto "ERRO na triagem (ver logs/whatsapp-auto.log)"; alerta whatsapp-auto; exit 1; }
                 rodar whatsapp-auto python3 "$SK/celula-daniela/scripts/email_whatsapp.py" --triagem "$f" ;;
   central)      # só em dias úteis, das 8h às 18h59 (o launchd chama a cada 15 min); "partners central agora" força
                 if [ "${2:-}" != "agora" ]; then d=$(date +%u); h=$(date +%H); { [ $d -le 5 ] && [ $h -ge 8 ] && [ $h -le 18 ]; } || exit 0; fi
@@ -83,11 +90,12 @@ case "${1:-ajuda}" in
   revisor)      rodar revisor python3 "$SK/recuperador/scripts/revisor.py" ;;
   resultados)   rodar resultados python3 "$SK/depto-resultados/scripts/calc_semana.py" --data "$hoje" ;;
   areas)        # relatórios semanais das áreas (todos leem o download do dia)
-                rodar areas python3 "$SK/depto-operacoes-canal/scripts/conflito_canal.py"
-                rodar areas python3 "$SK/depto-operacoes-canal/scripts/conferencia_repasses.py"
-                rodar areas python3 "$SK/depto-contratos/scripts/controle_contratos.py"
-                rodar areas python3 "$AP/departamentos/partner-success/scripts/metricas_ps.py"
-                rodar areas python3 "$SK/depto-intel-comercial/scripts/icp.py" ;;
+                rc=0  # cada relatório roda mesmo se outro falhar; a rotina falha se qualquer um falhar
+                for s in "$SK/depto-operacoes-canal/scripts/conflito_canal.py" "$SK/depto-operacoes-canal/scripts/conferencia_repasses.py" \
+                         "$SK/depto-contratos/scripts/controle_contratos.py" "$AP/departamentos/partner-success/scripts/metricas_ps.py" \
+                         "$SK/depto-intel-comercial/scripts/icp.py"; do
+                  rodar "areas:$(basename $s .py)" python3 "$s" || rc=1
+                done; exit $rc ;;
   receita)      rodar receita python3 "$SK/depto-intel-comercial/scripts/receita_cnpj.py" --carregar &&
                 rodar receita python3 "$SK/depto-intel-comercial/scripts/receita_cnpj.py" --enriquecer ;;
   onedrive)     # o OneDrive pode estar sincronizando logo depois que o Mac acorda: tenta 3 vezes antes de alertar

@@ -381,7 +381,7 @@ def main():
     texto(wb, "Metodologia", 4, metodologia(meta))
     local = os.path.join(PASTA, NOME)
     wb.save(local)
-    area = subprocess.run(["python3", os.path.expanduser("~/agentes-partners/lib/caminhos.py"), "area"], capture_output=True, text=True).stdout.strip()
+    area = subprocess.run(["python3", os.path.expanduser("~/agentes-partners/lib/caminhos.py"), "area"], capture_output=True, text=True, check=True).stdout.strip()  # sem a pasta do OneDrive, para (antes gravava no diretório atual)
     destino = os.path.join(area, "Gestão · Luis", "Produtos")
     os.makedirs(destino, exist_ok=True); shutil.copy2(local, os.path.join(destino, NOME))
     agreg = dict(meta=meta, resultado=collections.Counter(l["resultado"] for l in linhas),
