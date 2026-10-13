@@ -62,6 +62,18 @@ LUIS = {
 CENTRAIS = {"daniela": "Central Masters · Daniela", "jenifer": "Central BDR · Jenifer", "geovana": "Central Técnica · Geovana"}
 
 
+# Link do Office Online (o Luis usa o OneDrive pelo navegador, 13/10/2026). Base deduzida do e-mail: confirmar no 1º clique.
+WEB = "https://gruposave-my.sharepoint.com/personal/luis_melo_savecompany_com_br/Documents"
+
+
+def web(caminho):
+    """Link do navegador para um arquivo ou pasta dentro do OneDrive (arquivos do Office abrem no Office Online)."""
+    import urllib.parse
+    rel = os.path.relpath(os.path.realpath(caminho), os.path.realpath(onedrive()))
+    u = WEB + "/" + urllib.parse.quote(rel)
+    return u + ("?web=1" if rel.lower().endswith((".docx", ".xlsx", ".pptx")) else "")
+
+
 def luis(chave):
     if os.environ.get("OD_BASE") is None and os.environ.get("OD_RAIZ"):  # nuvem com só a pasta da área: tudo do Luis fica dentro dela
         return os.path.join(area(), "Gestão · Luis", LUIS[chave].split("/")[-1])
@@ -75,4 +87,5 @@ def pasta(pessoa):
 
 if __name__ == "__main__":
     c = sys.argv[1] if len(sys.argv) > 1 else ""
-    print(luis(c) if c in LUIS else {"area": area, "backups": backups}.get(c, onedrive)())
+    if c == "web" and len(sys.argv) > 2: print(web(sys.argv[2]))   # python3 caminhos.py web <arquivo>: link do Office Online
+    else: print(luis(c) if c in LUIS else {"area": area, "backups": backups}.get(c, onedrive)())
