@@ -85,6 +85,7 @@ case "${1:-ajuda}" in
                 rodar whatsapp-auto python3 "$SK/celula-daniela/scripts/email_whatsapp.py" --triagem "$f" ;;
   central)      # só em dias úteis, das 8h às 18h59 (o launchd chama a cada 15 min); "partners central agora" força
                 if [ "${2:-}" != "agora" ]; then d=$(date +%u); h=$(date +%H); { [ $d -le 5 ] && [ $h -ge 8 ] && [ $h -le 18 ]; } || exit 0; fi
+                [ -e "$AP/.email-pausado" ] && [ "${AGENTES_EMAIL:-}" != "graph" ] && { log central "pulado: e-mail pausado (aguardando a TI liberar o Graph)"; exit 0; }
                 rodar central python3 "$SK/central-agentes/scripts/central.py" ler --enfileirar ;;
   central-fila) python3 "$SK/central-agentes/scripts/central.py" fila ;;
   recuperador)  rodar recuperador python3 "$SK/recuperador/scripts/pareceres.py" --fila &&

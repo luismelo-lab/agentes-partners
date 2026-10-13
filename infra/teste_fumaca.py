@@ -49,8 +49,12 @@ def _():
     return "Save Co." in html and L.FONTE.startswith("'IBM Plex Sans'"), f"e-mail montado ({len(html)} bytes), sem envio"
 
 
-@checa("Outlook instalado")
+@checa("Canal de e-mail")
 def _():
+    if os.environ.get("AGENTES_EMAIL") == "graph": return True, "Microsoft Graph"
+    if os.path.exists(os.path.join(AP, ".email-pausado")):
+        R.append((False, False, "E-mail pausado", "aguardando a TI liberar o Graph; mensagens salvas em 04 · Gestão/Central de Agentes/Caixa de saída (e-mail pausado)"))
+        return True, "pausado de propósito (as mensagens vão para o OneDrive)"
     r = subprocess.run(["mdfind", "kMDItemCFBundleIdentifier == 'com.microsoft.Outlook'"], capture_output=True, text=True, timeout=20)
     achado = [x for x in r.stdout.splitlines() if x.endswith(".app")] or [p for p in ("/Applications/Microsoft Outlook.app",) if os.path.exists(p)]
     return bool(achado), achado[0] if achado else "NÃO instalado: nenhum e-mail dos agentes sai (reinstale o Outlook clássico)"
