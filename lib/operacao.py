@@ -412,9 +412,9 @@ def plano(previa=False, so_urgentes=False):
                 if e.get("rascunho"): ls.append(("Rascunho para o parceiro", "<i>" + L.esc(e["rascunho"]) + "</i> (revisado pela Qualidade; você decide se envia)"))
                 if e.get("valor"): ls.append(("Valor no CRM", f"R$ {e['valor']:,.0f}".replace(",", ".")))
                 ls.append(("No plano desde", L.esc(e["primeiro"][8:10] + "/" + e["primeiro"][5:7]) + (" · <b>novo</b>" if novo(e) else "")))
-                abre = [f'<a href="{L.esc(u)}" style="color:#7a5f00;font-weight:bold">{n}</a>' for n, u in (("Abrir no HubSpot", e.get("link")), ("Abrir no Bitrix", e.get("bitrix"))) if u]
+                abre = [f'<a href="{L.esc(u)}" style="color:{L.OURO_TEXTO};font-weight:bold">{n}</a>' for n, u in (("Abrir no HubSpot", e.get("link")), ("Abrir no Bitrix", e.get("bitrix"))) if u]
                 if abre: ls.append(("Links", " &nbsp;·&nbsp; ".join(abre)))
-                linhas.append(L.cartao(limpo(e["titulo"]), e["depto"], ls, "#b3261e" if t in URGENTE else L.OURO, e.get("link")))
+                linhas.append(L.cartao(limpo(e["titulo"]), e["depto"], ls, L.marca.C["erro"] if t in URGENTE else L.OURO_TEXTO, e.get("link")))
             if len(xs) > lim:
                 linhas.append(L.paragrafo(f"E mais {len(xs) - lim}. Todos estão na planilha anexa, com os links do HubSpot e do Bitrix."))
         linhas.append(L.rodape("Plano montado pelos agentes da Área Partners às " + datetime.now().strftime("%Hh%M")

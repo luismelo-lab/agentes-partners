@@ -6,8 +6,11 @@ const [, , fMet, fTxt, out] = process.argv;
 const M = JSON.parse(fs.readFileSync(fMet, 'utf8'));
 const T = JSON.parse(fs.readFileSync(fTxt, 'utf8'));
 
-const C = { bg: '0D0D0D', card: '17181D', line: '2A2B31', gold: 'F5C518', text: 'F2F2F2', mute: '9A9A9A', red: 'E66767', green: '3DBE6B', amber: 'F0A43A' };
-const F = 'Arial';
+// Design System Save v0.5, modo escuro (marketing-marca/padrao/marca.json), padrão desde 07/10/2026
+const DS = JSON.parse(fs.readFileSync(require('path').join(process.env.HOME, 'agentes-partners/departamentos/marketing-marca/padrao/marca.json'), 'utf8'));
+const h = c => c.replace('#', ''), E = DS.escuro;
+const C = { bg: h(E.fundo), card: h(E.cartao), line: h(E.borda), gold: h(E.ouro), text: h(E.texto), mute: h(E.texto_2), red: h(E.erro), green: h(E.sucesso), amber: h(E.alerta) };
+const F = DS.fontes.sans;  // IBM Plex Sans (instalar a partir de marketing-marca/padrao/fontes)
 const mi = v => (typeof v !== 'number') ? String(v) : Math.abs(v) < 1e6 ? 'R$ ' + Math.round(v / 1e3).toLocaleString('pt-BR') + ' mil' : 'R$ ' + (v / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' mi';
 const pct = v => (typeof v === 'number') ? (v > 0 ? '+' : '') + v.toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%' : '—';
 const fx = v => (typeof v === 'number') ? v.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + 'x' : '—';

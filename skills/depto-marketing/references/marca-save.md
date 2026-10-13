@@ -1,12 +1,17 @@
 # Marca Save — guia para os agentes
 
-> v1: rascunho montado a partir dos materiais visuais existentes (dashboards e CRM). **Precisa ser validado pela área de Marketing da Save** (dono humano do departamento). Itens marcados [VALIDAR].
+> Identidade visual oficial: Design System Save v0.5 do Marketing (adotado pelo Luis em 07/10/2026). Tom de voz e públicos seguem como rascunho; itens marcados [VALIDAR].
 
-## Identidade visual
-- Cor principal: **dourado** `#F5C518` (variação `#FCCB60`) sobre **fundo escuro** (`#0D0D0D`, cards `#16171C`)
-- Tipografia: **Bebas Neue** (títulos, maiúsculas) · **DM Sans** (texto) · DM Mono (números/dados)
-- Estilo: premium, sóbrio, confiante. Muito espaço em branco, pouco texto na arte.
-- Logo: wordmark "SAVE" [VALIDAR arquivo oficial do logo e regras de uso]
+## Identidade visual: Design System Save v0.5 (oficial, padrão de tudo desde 07/10/2026)
+Fonte única: `~/agentes-partners/departamentos/marketing-marca/padrao/` (marca.json, logos, fontes). Em Python use `lib/marca.py`; em Node leia o `marca.json`. Nunca escreva cor ou fonte "na mão" num gerador novo. Pacote completo do Marketing (telas, componentes, acessibilidade) em `marketing-marca/design-system/`.
+- **Fonte:** IBM Plex Sans (300 a 700); IBM Plex Mono para números, códigos e rótulos curtos. Sem serifa.
+- **Uma cor cromática, o ouro.** `#F3CD60` em fundos, faixas, selos e no modo escuro. Texto em ouro sobre fundo claro: sempre `#B58A1F`.
+- **Material para cliente ou parceiro (PDF, Word, WhatsApp): modo claro.** Fundo branco ou `#F6F7F9`, texto `#0F1115`, apoio `#4A4F58`, bordas `#E6E8EC`.
+- **Painéis e faixas de destaque: modo escuro.** Fundo `#000000`, cartões `#171717`, bordas `#2A2A2A`, texto `#F5F5F5`, apoio `#A1A1A1`.
+- **Logo:** `logo-save-fundo-claro.png` no fundo claro; `logo-save-fundo-escuro.png` no fundo escuro; símbolo em `simbolo-save-*.png`. Marca é **Save Co.**; não criar submarcas.
+- Raios de 4 a 24 px; espaçamento na base 4; cor nunca é o único sinal; sem emoji, mascote ou tom de chatbot.
+- Estilo: sóbrio, institucional, denso em informação. Em produto de alto ticket, nada de "marketing digital".
+- Word: o gerador embute a IBM Plex Sans no .docx. PowerPoint não embute: quem abrir precisa da fonte instalada (OneDrive "Área Partners · Agentes/Marca/Fontes IBM Plex").
 
 ## Tom de voz [VALIDAR]
 - **Especialista acessível:** domina o tema tributário e explica de forma simples.
