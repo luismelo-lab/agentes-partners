@@ -8,13 +8,10 @@ Preciso de um repositório **privado** na organização da Save no GitHub, chama
 - **O que vai para lá:** só código e documentação. Dados de clientes ficam fora; uma barreira no commit bloqueia CNPJ, CPF, telefone e token.
 - **Depois:** o mesmo repositório permite rodar as rotinas no GitHub Actions, sem depender do Mac ligado.
 
-## 2. Microsoft Outlook clássico no Mac do Luis (prioridade alta)
-O Outlook deixou de estar instalado no Mac em 06/10. Peço a reinstalação do Microsoft 365 com o **Outlook clássico** (o "novo Outlook" não aceita a automação) e a confirmação da licença.
-- **Por quê:** todos os e-mails dos agentes (plano do dia, avisos, WhatsApp, Central de Agentes) saem por ele. Estão parados desde 06/10.
-
-## 3. Microsoft Graph e Teams (prioridade média)
-Registro de aplicativo no Entra ID com Mail.Send e Mail.Read da caixa do Luis e Sites.ReadWrite da pasta "Área Partners · Agentes".
-- **Por quê:** tira a dependência do Outlook instalado no Mac e permite o painel no Teams.
+## 2. Integração com o Office: Microsoft Graph (prioridade alta)
+Registro de aplicativo no Entra ID com Mail.Send e Mail.Read da caixa do Luis (ou de uma caixa compartilhada da área), Calendars.Read e Sites.ReadWrite da pasta "Área Partners · Agentes".
+- **Por quê:** é por onde os agentes enviam e leem e-mail sem depender de um Outlook instalado no Mac. Desde 06/10 o envio está pausado; o código do Graph já está pronto e só falta a autorização.
+- **Destrava:** plano do dia, avisos, WhatsApp, Central de Agentes, lote do Recuperador, preparação de reunião pela agenda e, depois, o painel no Teams.
 
 ## Pendências já pedidas antes (cobrar prazo)
 - Cliente OAuth do GLPI (docs/GLPI.md).
