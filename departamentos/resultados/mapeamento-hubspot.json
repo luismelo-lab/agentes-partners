@@ -111,6 +111,8 @@
   "anexo_diagnostico": "anexo_do_diagnostico",
   "parecer_juridico": "parecer_juridico",
   "id_bitrix": "id_bitrix",
-  "entrou_etapa": "hs_v2_date_entered_current_stage"
+  "entrou_etapa": "hs_v2_date_entered_current_stage",
+  "indicado_por_email": "email_de_quem_esta_indicando_o_leadcliente",
+  "indicado_por_nome": "nome_de_quem_esta_indicando_o_lead_cliente"
  }
 }

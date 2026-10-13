@@ -334,10 +334,11 @@ for r8, ns in grupos.items():
     if any(re.search(r"aquisi|insumo|cr[eé]dito", t, re.I) for t in teses): sinais.append("Saldo credor até 31/12/2026 (L13)")
     if x.get("regime") == "Lucro Real": sinais.append("Lucro Real: revisão CBS/IBS (Planejamento 2027)")
     if mn > 54: sinais.append("Risco de decadência: períodos antigos saindo da janela")
-    if re.search(r"hortifr|frutas|verduras|legumes|carnes|pescado|latic|ovos", ult.get("segmento") or "", re.I): sinais.append("Revende produto de alíquota zero: só tese B, conferir (L7)")
+    if re.search(r"hortifr|frutas|verduras|legumes|carnes|pescado|latic|ovos", ult.get("segmento") or "", re.I): sinais.append("Tese B (manutenção e ressarcimento): revenda com alíquota zero (L7)")
     if not teses: sinais.append("Tese do ganho anterior não registrada no HubSpot: conferir no parecer o que já foi feito")
     recorr.append({"caso": cod(ult["id"]), "parceiro": ult.get("parceiro") or "—", "regime": x.get("regime"), "uf": x.get("uf"), "segmento": (ult.get("segmento") or "")[:40],
-                   "ultimo_ganho": ult["fechado"][:10], "meses_novos": mn, "elegivel": mn >= 6, "faltam": max(0, 6 - mn), "teses": teses[:4], "n_ganhos": len(gs),
+                   "ultimo_ganho": ult["fechado"][:10], "meses_novos": mn, "recorrencias_feitas": max(len({n["fechado"][:7] for n in gs}) - 1, 0),
+                   "ganhos_datas": sorted({n["fechado"][:10] for n in gs}), "elegivel": mn >= 6, "faltam": max(0, 6 - mn), "teses": teses[:4], "n_ganhos": len(gs),
                    "credito_anterior": round(cred), "potencial_credito": round(pot_cred), "potencial_honorario": round(pot_cred * hs / 100), "potencial_repasse": round(pot_cred * hs / 100 * hp / 100),
                    "sinais": sinais, "regra": "V5/L11: ≥ 6 meses novos desde o último período recuperado" if mn >= 6 else f"V5: menos de 6 meses novos (faltam {6 - mn})"})
 recorr.sort(key=lambda r: (not r["elegivel"], -r["potencial_honorario"]))
@@ -348,13 +349,67 @@ rev_rec = [{"caso": cod(re.sub(r"\D", "", r.get("link") or "")[-11:]), "parceiro
 rec_parc = {}
 for r in recorr:
     a = rec_parc.setdefault(r["parceiro"], {"elegiveis": 0, "aguardar": 0, "pot_credito": 0, "pot_honorario": 0, "pot_repasse": 0, "em_diagnostico": 0})
-    if r["elegivel"]: a["elegiveis"] += 1; a["pot_credito"] += r["potencial_credito"]; a["pot_honorario"] += r["potencial_honorario"]; a["pot_repasse"] += r["potencial_repasse"]
+    if r["elegivel"]: a["elegiveis"] += 1; a["pot_credito"] += r["potencial_credito"]; a["feitas"] = a.get("feitas", 0) + r["recorrencias_feitas"]; a["pot_honorario"] += r["potencial_honorario"]; a["pot_repasse"] += r["potencial_repasse"]
     else: a["aguardar"] += 1
 for r in rev_rec:
     rec_parc.setdefault(r["parceiro"] or "—", {"elegiveis": 0, "aguardar": 0, "pot_credito": 0, "pot_honorario": 0, "pot_repasse": 0, "em_diagnostico": 0})["em_diagnostico"] += 1
 for nome in ficha:
     ficha[nome]["recorrencia"] = rec_parc.get(nome, {})
     ficha[nome]["recorrencia_top"] = [r for r in recorr if r["parceiro"] == nome and r["elegivel"]][:5]
+
+# ================= detalhes para os números clicáveis
+mes_atual = HOJE.isoformat()[:7]
+ganhos_mes = []
+for n in HB:
+    if n["status"] == "ganho" and (n.get("fechado") or "")[:7] == mes_atual:
+        h, c, e = comissao(n)
+        ganhos_mes.append({"caso": cod(n["id"]), "parceiro": n.get("parceiro") or "—", "valor": round(n.get("valor") or 0), "fechado": n["fechado"][:10],
+                           "honorario": round(h or 0), "repasse": round(c or 0), "segmento": (n.get("segmento") or "")[:40]})
+ganhos_mes.sort(key=lambda x: -x["valor"])
+abertos_l = [{"caso": cod(n["id"]), "parceiro": n.get("parceiro") or "—", "etapa": n["etapa"], "valor": round(n.get("valor") or 0),
+              "dias": dias((n.get("extras") or {}).get("entrou_etapa") or n.get("criado")), "pipeline": n.get("pipeline")} for n in ab]
+abertos_l.sort(key=lambda x: -x["valor"])
+por_et = collections.defaultdict(lambda: [0, 0]); por_pa = collections.defaultdict(lambda: [0, 0])
+for x in abertos_l: por_et[x["etapa"]][0] += 1; por_et[x["etapa"]][1] += x["valor"]; por_pa[x["parceiro"]][0] += 1; por_pa[x["parceiro"]][1] += x["valor"]
+agend = [x for x in abertos_l if x["etapa"] == "Agendamento"]
+rv_l = [r for r in RV.get("revisao", []) if (r.get("lacunas") or 0) > 0]
+geo_oport = {"revisor_negocios": len(rv_l), "revisor_valor": round(sum(f(r.get("valor no HubSpot")) for r in rv_l)), "revisor_alta": sum(1 for r in rv_l if r.get("lacunas alta")),
+             "lacunas": RV["resumo"].get("lacunas"), "recuperador_fila": RI.get("fila_total"), "recuperador_esperado": RI.get("honorario_esperado_fila_rs"),
+             "recorrencia_n": sum(r["elegivel"] for r in recorr), "recorrencia_credito": sum(r["potencial_credito"] for r in recorr if r["elegivel"]),
+             "por_parceiro": collections.Counter(r.get("parceiro") for r in rv_l).most_common(8)}
+# indicações registradas no HubSpot (campo "E-mail de quem está indicando o lead/cliente"), como no filtro do Luis
+def baixar_indicacoes():
+    """Negócios por quem indicou (só leitura no HubSpot). O download diário só traz o escopo dos Masters; as indicações da Jenifer ficam fora dele."""
+    sys.path.insert(0, os.path.expanduser("~/.claude/skills/depto-resultados/scripts")); import hubspot_fonte as H
+    pl = H.pipelines(); out = {}
+    for quem, email in (("geovana", "geovana.goncalves@savecompany.com.br"), ("jenifer", "jenifer.carvalho@savecompany.com.br")):
+        res, after = [], None
+        while True:
+            body = {"filterGroups": [{"filters": [{"propertyName": "email_de_quem_esta_indicando_o_leadcliente", "operator": "EQ", "value": email}]}],
+                    "properties": ["amount", "dealstage", "pipeline", "createdate", "closedate", "nome_do_parceiro"], "limit": 100}
+            if after: body["after"] = after
+            r = H.call("POST", "/crm/v3/objects/deals/search", body); res += r.get("results", []); after = r.get("paging", {}).get("next", {}).get("after")
+            if not after: break
+        out[quem] = [{"id": d["id"], "valor": float(d["properties"]["amount"]) if d["properties"].get("amount") else 0.0,
+                      "etapa": pl.get(d["properties"].get("pipeline"), {}).get("etapas", {}).get(d["properties"].get("dealstage"), {}).get("nome"),
+                      "status": pl.get(d["properties"].get("pipeline"), {}).get("etapas", {}).get(d["properties"].get("dealstage"), {}).get("status"),
+                      "criado": H.dia_br(d["properties"].get("createdate")), "fechado": (d["properties"].get("closedate") or "")[:10], "parceiro": d["properties"].get("nome_do_parceiro")} for d in res]
+    json.dump(out, open(os.path.join(AQUI, "indicacoes.json"), "w"), ensure_ascii=False); return out
+IND = J(os.path.join(AQUI, "indicacoes.json")) if os.path.exists(os.path.join(AQUI, "indicacoes.json")) else baixar_indicacoes()
+def resumo_ind(ns):
+    st = collections.Counter(n["status"] for n in ns); et = collections.Counter(n["etapa"] for n in ns)
+    meses6 = sorted({x["mes"] for x in serie})[-6:]
+    return {"n": len(ns), "valor": round(sum(n["valor"] for n in ns)), "ganhos": st.get("ganho", 0), "abertos": st.get("aberto", 0), "perdidos": st.get("perdido", 0),
+            "valor_ganho": round(sum(n["valor"] for n in ns if n["status"] == "ganho")), "valor_aberto": round(sum(n["valor"] for n in ns if n["status"] == "aberto")),
+            "agendamento": et.get("Agendamento", 0), "etapas": et.most_common(10),
+            "por_mes": [[m, sum(1 for n in ns if (n.get("criado") or "")[:7] == m)] for m in meses6],
+            "abertos_l": sorted([{"caso": cod(n["id"]), "parceiro": n.get("parceiro") or "—", "etapa": n["etapa"], "valor": round(n["valor"]), "criado": n.get("criado")} for n in ns if n["status"] == "aberto"], key=lambda x: -x["valor"])[:25]}
+ind = {k: resumo_ind(v) for k, v in IND.items()}
+detalhe = {"indicacoes": ind, "ganhos_mes": ganhos_mes, "abertos": abertos_l[:40], "por_etapa": sorted([[k, v[0], round(v[1])] for k, v in por_et.items()], key=lambda x: -x[2]),
+           "por_parceiro": sorted([[k, v[0], round(v[1])] for k, v in por_pa.items()], key=lambda x: -x[2]),
+           "agenda": {"agendamento_n": len(agend), "agendamento_rs": sum(x["valor"] for x in agend), "jenifer_negocios": sum(1 for n in HB if n.get("owner") == "79401410"),
+                      "jenifer_registradas": 0, "nota": "A aba Agenda do Controle de Follow-up da Jenifer está vazia e reuniões não fazem parte do download do HubSpot. As agendas dela passam a contar quando forem registradas ali ou quando o HubSpot liberar a leitura de reuniões."},
+           "geovana": geo_oport}
 
 ev_por = collections.Counter((e["pessoa"], e["tipo"]) for e in EV)
 P = {
@@ -379,6 +434,7 @@ P = {
                     "n_elegiveis": sum(r["elegivel"] for r in recorr), "n_aguardar": sum(not r["elegivel"] for r in recorr),
                     "pot_credito": sum(r["potencial_credito"] for r in recorr), "pot_honorario": sum(r["potencial_honorario"] for r in recorr), "pot_repasse": sum(r["potencial_repasse"] for r in recorr),
                     "revisor": rev_rec[:60], "n_revisor": len(rev_rec)},
+    "detalhe": detalhe,
     "operacao": operacao, "biblioteca": biblioteca, "conselho": [{"id": c["id"], "data": c["data"], "texto": c["texto"][:160]} for c in PO.get("conselho", [])],
 }
 json.dump(P, open(os.path.join(AQUI, "dados.json"), "w", encoding="utf-8"), ensure_ascii=False, default=str)
