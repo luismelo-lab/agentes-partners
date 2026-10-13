@@ -18,6 +18,8 @@
 !skills/**
 !rotinas/**
 !portal/index.html
+!portal/prototipo/modelo.html
+!portal/prototipo/dados_proto.py
 !conselho/decisoes.md
 !departamentos/*/scripts/*.py
 !departamentos/ti/*.md

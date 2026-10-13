@@ -1,0 +1,402 @@
+<title>Central Partners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: cockpit por pessoa (números → Fazer agora → detalhe) + caixa de entrada única; Design System Save v0.5, modo painel (escuro). */
+:root {
+  --fundo: #000000; --fundo-2: #111111; --cartao: #171717; --elevado: #1E1E1E;
+  --borda: #2A2A2A; --borda-3: #3A3A3A;
+  --texto: #F5F5F5; --texto-2: #A1A1A1; --texto-3: #6B6B6B;
+  --ouro: #F3CD60; --ouro-suave: rgba(243,205,96,.12);
+  --sucesso: #44C653; --alerta: #E8B34A; --erro: #D64545; --info: #6E92E8;
+  --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r-sm: 8px; --r-md: 12px; --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--fundo); color: var(--texto); }
+body { margin: 0; font: 400 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+.num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.rotulo { font: 500 11px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--texto-2); }
+.rotulo.ouro { color: var(--ouro); }
+a { color: var(--ouro); }
+:focus-visible { outline: 3px solid var(--ouro); outline-offset: 2px; }
+
+/* topo */
+.topo { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: rgba(0,0,0,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--borda); }
+.faixa { max-width: 1240px; margin: 0 auto; padding-inline: 20px; }
+.linha-topo { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-block: 14px 10px; }
+.linha-topo img { height: 26px; width: auto; }
+.linha-topo h1 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
+.linha-topo .sep { width: 1px; height: 22px; background: var(--borda-3); }
+.quem { margin-left: auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.seg { display: inline-flex; background: var(--fundo-2); border: 1px solid var(--borda); border-radius: var(--r-sm); padding: 3px; }
+.seg button { font: 500 13px var(--sans); color: var(--texto-2); background: none; border: 0; border-radius: 6px; padding: 8px 12px; min-height: 36px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--elevado); color: var(--texto); box-shadow: inset 0 0 0 1px var(--borda-3); }
+.atual { font: 12px var(--mono); color: var(--texto-3); }
+.prot { font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ouro); background: var(--ouro-suave); padding: 3px 8px; border-radius: 4px; }
+nav[role="tablist"] { display: flex; gap: 2px; overflow-x: auto; }
+nav[role="tablist"] button { background: none; border: 0; color: var(--texto-2); font: 500 14px var(--sans); padding: 12px 14px; min-height: 44px; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; }
+nav[role="tablist"] button[aria-selected="true"] { color: var(--texto); border-bottom-color: var(--ouro); }
+.badge { display: inline-block; min-width: 20px; margin-left: 6px; padding: 0 6px; border-radius: 10px; background: var(--ouro); color: #0F1115; font: 600 11px/18px var(--mono); text-align: center; }
+
+main { max-width: 1240px; margin: 0 auto; padding: 24px 20px 64px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+main > * { min-width: 0; }
+section > h2 { font-size: 18px; font-weight: 600; margin: 0 0 4px; letter-spacing: -.01em; text-wrap: balance; }
+.sub { color: var(--texto-2); margin: 0 0 14px; font-size: 14px; max-width: 70ch; }
+.cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.cab h2 { margin: 0; font-size: 18px; font-weight: 600; }
+
+/* KPIs */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: 12px; }
+.kpi { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 16px 18px; min-width: 0; display: grid; gap: 6px; }
+.kpi .v { font: 500 30px/1.1 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.kpi.destaque { border-color: rgba(243,205,96,.45); background: linear-gradient(180deg, rgba(243,205,96,.07), transparent 70%), var(--cartao); }
+.kpi.destaque .v { color: var(--ouro); }
+.kpi .d { color: var(--texto-2); font-size: 13px; }
+.delta { font: 500 12px var(--mono); }
+.delta.sobe { color: var(--sucesso); } .delta.desce { color: var(--erro); }
+
+/* listas de ação */
+.lista { display: grid; gap: 8px; }
+.item { display: grid; grid-template-columns: 4px 1fr auto; gap: 14px; align-items: center; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 12px 14px 12px 0; min-width: 0; }
+.item .tarja { align-self: stretch; border-radius: 0 3px 3px 0; background: var(--borda-3); }
+.item.urg .tarja { background: var(--erro); } .item.med .tarja { background: var(--alerta); }
+.item .corpo { min-width: 0; display: grid; gap: 3px; }
+.item .t { font-weight: 600; overflow-wrap: anywhere; }
+.item .meta { display: flex; flex-wrap: wrap; gap: 6px 12px; color: var(--texto-2); font-size: 13px; }
+.item .meta .num { color: var(--texto); }
+.item.feito { opacity: .45; }
+.acoes { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 500 11px/1.6 var(--mono); letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; background: var(--fundo-2); color: var(--texto-2); border: 1px solid var(--borda); }
+.chip.erro { color: var(--erro); border-color: rgba(214,69,69,.4); background: rgba(214,69,69,.08); }
+.chip.alerta { color: var(--alerta); border-color: rgba(232,179,74,.4); background: rgba(232,179,74,.08); }
+.chip.ok { color: var(--sucesso); border-color: rgba(68,198,83,.4); background: rgba(68,198,83,.08); }
+.chip.ouro { color: var(--ouro); border-color: rgba(243,205,96,.4); background: var(--ouro-suave); }
+.botao { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: var(--r-sm); border: 1px solid transparent; font: 600 14px var(--sans); cursor: pointer; background: var(--ouro); color: #0F1115; transition: filter 120ms var(--ease); }
+.botao:hover { filter: brightness(.95); }
+.botao.sec { background: transparent; color: var(--texto); border-color: var(--borda-3); }
+.botao.peq { min-height: 36px; padding: 0 12px; font-size: 13px; }
+.mais { margin-top: 10px; }
+
+/* grade de blocos */
+.grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px; }
+.bloco { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 18px; min-width: 0; display: grid; gap: 12px; align-content: start; }
+.bloco h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.bloco .nota { color: var(--texto-3); font-size: 12px; margin: 0; }
+.mini { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+.mini div { display: grid; gap: 2px; } .mini b { font: 500 20px var(--mono); }
+
+/* tabelas */
+.tab-wrap { overflow-x: auto; border: 1px solid var(--borda); border-radius: var(--r-md); background: var(--cartao); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font: 500 11px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--texto-2); padding: 12px; border-bottom: 1px solid var(--borda-3); white-space: nowrap; }
+th button { all: unset; cursor: pointer; } th button:focus-visible { outline: 2px solid var(--ouro); }
+td { padding: 11px 12px; border-bottom: 1px solid var(--borda); vertical-align: middle; }
+tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tbody tr.clic { cursor: pointer; } tbody tr.clic:hover td { background: var(--elevado); }
+.saude { display: inline-flex; align-items: center; gap: 8px; }
+.barrinha { width: 64px; height: 6px; background: var(--fundo-2); border-radius: 3px; overflow: hidden; }
+.barrinha i { display: block; height: 100%; }
+
+/* gráficos */
+svg.graf { width: 100%; height: auto; display: block; }
+svg.graf text { fill: var(--texto-2); font: 11px var(--mono); }
+svg.graf .rot { fill: var(--texto); font: 12px var(--sans); }
+.legenda { display: flex; gap: 14px; flex-wrap: wrap; color: var(--texto-2); font-size: 12px; }
+.legenda i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.prog { height: 10px; background: var(--fundo-2); border-radius: 5px; overflow: hidden; } .prog i { display: block; height: 100%; background: var(--ouro); }
+
+/* filtros */
+.filtros { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+.filtros button { font: 500 13px var(--sans); color: var(--texto-2); background: var(--fundo-2); border: 1px solid var(--borda); border-radius: 999px; padding: 0 14px; min-height: 36px; cursor: pointer; }
+.filtros button[aria-pressed="true"] { color: #0F1115; background: var(--ouro); border-color: var(--ouro); }
+input[type="search"], select, textarea, input[type="text"] { font: 14px var(--sans); color: var(--texto); background: var(--fundo-2); border: 1px solid var(--borda-3); border-radius: var(--r-sm); padding: 0 12px; min-height: 40px; min-width: 0; }
+textarea { padding: 10px 12px; min-height: 90px; width: 100%; resize: vertical; }
+label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
+
+/* gaveta */
+.veu { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 20; }
+.gaveta { position: fixed; top: 0; right: 0; bottom: 0; width: min(480px, 100%); background: var(--fundo-2); border-left: 1px solid var(--borda-3); z-index: 21; padding: calc(env(safe-area-inset-top, 0px) + 20px) 22px 24px; overflow-y: auto; display: grid; gap: 16px; align-content: start; }
+.gaveta h3 { margin: 0; font-size: 18px; }
+.par { display: grid; grid-template-columns: 140px 1fr; gap: 8px; font-size: 14px; } .par span:first-child { color: var(--texto-2); }
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); transform: translateX(-50%); background: var(--elevado); border: 1px solid var(--borda-3); color: var(--texto); padding: 12px 16px; border-radius: var(--r-sm); z-index: 30; font-size: 14px; max-width: calc(100% - 32px); }
+.pacote { display: grid; gap: 10px; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 14px; }
+.pacote h4 { margin: 0; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.pacote pre { margin: 0; white-space: pre-wrap; font: 13px/1.5 var(--mono); color: var(--texto); background: var(--fundo); border: 1px solid var(--borda); border-radius: var(--r-sm); padding: 10px; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--texto); }
+.check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--ouro); }
+.docs { display: flex; flex-wrap: wrap; gap: 8px; } .docs a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid var(--borda-3); border-radius: var(--r-sm); text-decoration: none; font-size: 13px; }
+.vazio { border: 1px dashed var(--borda-3); border-radius: var(--r-md); padding: 18px; color: var(--texto-2); }
+@media (max-width: 640px) {
+  .item { grid-template-columns: 4px 1fr; } .item .acoes { grid-column: 2; justify-content: flex-start; }
+  .linha-topo .sep { display: none; } .quem { margin-left: 0; width: 100%; }
+  .kpi .v { font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="topo"><div class="faixa">
+  <div class="linha-topo">
+    <img src="__LOGO__" alt="Save Co.">
+    <span class="sep" aria-hidden="true"></span>
+    <h1>Central Partners</h1>
+    <span class="prot">Protótipo</span>
+    <div class="quem">
+      <span class="rotulo">Ver como</span>
+      <div class="seg" role="group" aria-label="Ver o painel como" id="pessoas"></div>
+      <span class="atual" id="atual"></span>
+    </div>
+  </div>
+  <nav role="tablist" aria-label="Seções" id="abas"></nav>
+</div></header>
+<main id="conteudo"></main>
+<div id="camada"></div>
+
+<script type="application/json" id="dados">__DADOS__</script>
+<script>
+const D = JSON.parse(document.getElementById("dados").textContent);
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const rs = v => { v = +v || 0; const a = Math.abs(v); return a >= 1e9 ? "R$ " + (v/1e9).toFixed(1).replace(".", ",") + " bi" : a >= 1e6 ? "R$ " + (v/1e6).toFixed(1).replace(".", ",") + " mi" : a >= 1e3 ? "R$ " + Math.round(v/1e3).toLocaleString("pt-BR") + " mil" : "R$ " + Math.round(v).toLocaleString("pt-BR") };
+const n = v => (v ?? 0).toLocaleString("pt-BR");
+const MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const mesRot = m => MES[+m.slice(5,7) - 1] + "/" + m.slice(2,4);
+const PESSOAS = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "Geovana"};
+const ABAS = [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["pedidos", "Pedidos aos agentes"], ["masters", "Masters"]];
+const S = {eu: "luis", aba: "inicio", feitos: new Set(), filtro: {grupo: "todos", so_urg: false, busca: ""}, ordem: {campo: "saude", asc: true}};
+try { S.eu = localStorage.getItem("cp-eu") || "luis"; S.aba = localStorage.getItem("cp-aba") || "inicio"; } catch (e) {}
+if (!PESSOAS[S.eu]) S.eu = "luis"; if (!ABAS.some(a => a[0] === S.aba)) S.aba = "inicio";
+
+const minhas = () => D.caixa.filter(x => (S.eu === "luis" ? true : x.pessoa === S.eu) && !S.feitos.has(x.id));
+const doLuis = () => D.caixa.filter(x => x.pessoa === "luis" && !S.feitos.has(x.id));
+const pronto = x => !!((x.pacote || {}).glpi || (x.pacote || {}).mensagem || (x.pacote || {}).encaminhar);
+const corSaude = s => s >= 75 ? "var(--sucesso)" : s >= 60 ? "var(--alerta)" : "var(--erro)";
+
+/* ---------- gráficos (SVG desenhado em escala) ---------- */
+function barras(dados, {alt = 200, cor = "var(--ouro)", fmt = n, linha = null, corLinha = "var(--texto)"} = {}) {
+  const W = 380, H = alt, m = {l: 6, r: 6, t: 18, b: 24}; const w = W - m.l - m.r, h = H - m.t - m.b;
+  const max = Math.max(...dados.map(d => d.v), 1); const bw = w / dados.length;
+  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
+  for (let i = 0; i <= 3; i++) { const y = m.t + h - h * i / 3; s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y}" y2="${y}" stroke="var(--borda)" stroke-width="1"/>`; }
+  dados.forEach((d, i) => { const bh = h * d.v / max, x = m.l + i * bw + bw * .18, y = m.t + h - bh, ult = i === dados.length - 1;
+    s += `<rect x="${x}" y="${y}" width="${bw * .64}" height="${Math.max(bh, 1)}" rx="3" fill="${ult ? cor : "var(--borda-3)"}"><title>${esc(d.r)}: ${esc(fmt(d.v))}</title></rect>`;
+    if (dados.length <= 8 || (dados.length - 1 - i) % 2 === 0) s += `<text x="${x + bw * .32}" y="${H - 8}" text-anchor="middle">${esc(d.r)}</text>`;
+    if (ult || d.v === max) { const ax = x + bw * .32, anc = ax > W - 50 ? "end" : ax < 50 ? "start" : "middle"; s += `<text x="${anc === "end" ? x + bw * .64 : anc === "start" ? x : ax}" y="${y - 5}" text-anchor="${anc}" style="fill:var(--texto)">${esc(fmt(d.v))}</text>`; } });
+  if (linha) { const lm = Math.max(...linha, 1); const pts = linha.map((v, i) => `${m.l + i * bw + bw / 2},${m.t + h - h * v / lm}`);
+    s += `<polyline points="${pts.join(" ")}" fill="none" stroke="${corLinha}" stroke-width="2"/>`;
+    linha.forEach((v, i) => { s += `<circle cx="${m.l + i * bw + bw / 2}" cy="${m.t + h - h * v / lm}" r="3" fill="${corLinha}"/>`; }); }
+  return s + "</svg>";
+}
+function hbarras(dados, {fmt = n, cor = "var(--ouro)", larg = 130} = {}) {
+  const W = 380, lh = 30, H = dados.length * lh + 8, max = Math.max(...dados.map(d => d.v), 1), w = W - larg - 78;
+  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
+  dados.forEach((d, i) => { const y = 4 + i * lh, bw = Math.max(w * d.v / max, 2);
+    s += `<text class="rot" x="0" y="${y + 18}">${esc(d.r.length > 19 ? d.r.slice(0, 18) + "…" : d.r)}</text>`;
+    s += `<rect x="${larg}" y="${y + 6}" width="${bw}" height="16" rx="3" fill="${i === 0 ? cor : "var(--borda-3)"}"><title>${esc(d.r)}: ${esc(fmt(d.v))}</title></rect>`;
+    s += `<text x="${larg + bw + 8}" y="${y + 18}" style="fill:var(--texto)">${esc(fmt(d.v))}</text>`; });
+  return s + "</svg>";
+}
+function linhaG(vals, rots, {alt = 160, fmt = v => v + "%", ref = null} = {}) {
+  const W = 380, H = alt, m = {l: 6, r: 42, t: 18, b: 24}, w = W - m.l - m.r, h = H - m.t - m.b;
+  const max = Math.max(...vals, ref || 0, 1), x = i => m.l + w * i / Math.max(vals.length - 1, 1), y = v => m.t + h - h * v / max;
+  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
+  for (let i = 0; i <= 3; i++) s += `<line x1="${m.l}" x2="${W - m.r}" y1="${m.t + h * i / 3}" y2="${m.t + h * i / 3}" stroke="var(--borda)"/>`;
+  if (ref != null) s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(ref)}" y2="${y(ref)}" stroke="var(--texto-3)" stroke-dasharray="4 4"/><text x="${W - m.r + 4}" y="${y(ref) + 4}">${esc(fmt(ref))}</text>`;
+  s += `<path d="M${vals.map((v, i) => `${x(i)},${y(v)}`).join(" L")} L${x(vals.length - 1)},${m.t + h} L${x(0)},${m.t + h} Z" fill="var(--ouro-suave)"/>`;
+  s += `<polyline points="${vals.map((v, i) => `${x(i)},${y(v)}`).join(" ")}" fill="none" stroke="var(--ouro)" stroke-width="2"/>`;
+  vals.forEach((v, i) => { if ((vals.length - 1 - i) % 3 === 0) s += `<text x="${x(i)}" y="${H - 8}" text-anchor="${i === 0 ? "start" : i === vals.length - 1 ? "end" : "middle"}">${esc(rots[i])}</text>`; });
+  s += `<circle cx="${x(vals.length - 1)}" cy="${y(vals[vals.length - 1])}" r="4" fill="var(--ouro)"/><text x="${x(vals.length - 1) + 6}" y="${y(vals[vals.length - 1]) - 6}" style="fill:var(--texto)">${esc(fmt(vals[vals.length - 1]))}</text>`;
+  return s + "</svg>";
+}
+
+/* ---------- blocos comuns ---------- */
+const kpis = xs => `<div class="kpis">${xs.map(([r, v, d, dest]) => `<div class="kpi${dest ? " destaque" : ""}"><span class="rotulo${dest ? " ouro" : ""}">${esc(r)}</span><span class="v">${v}</span><span class="d">${d}</span></div>`).join("")}</div>`;
+function itemHTML(x, compacto) {
+  const sev = x.urgente ? "urg" : (x.dias || 0) >= 7 ? "med" : "";
+  const quem = S.eu === "luis" && !compacto ? `<span>${esc(PESSOAS[x.pessoa] || x.pessoa)}</span>` : "";
+  return `<article class="item ${sev}${S.feitos.has(x.id) ? " feito" : ""}" data-id="${esc(x.id)}"><span class="tarja" aria-hidden="true"></span>
+    <div class="corpo"><div class="meta"><span class="chip ${x.urgente ? "erro" : (x.dias || 0) >= 7 ? "alerta" : ""}">${x.urgente ? "Urgente" : (x.dias || 0) >= 7 ? "Atenção" : "Normal"}</span><span>${esc(x.tipo)}</span>${x.novo ? `<span class="chip ouro">Novo</span>` : ""}${(x.pacote || {}).glpi ? `<span class="chip ouro">Chamado pronto</span>` : ""}${(x.pacote || {}).mensagem ? `<span class="chip ouro">Mensagem pronta</span>` : ""}${(x.pacote || {}).encaminhar ? `<span class="chip ouro">Para ${esc(x.pacote.encaminhar.equipe)}</span>` : ""}</div>
+      <span class="t">${esc(x.titulo)}</span>
+      <div class="meta">${x.master ? `<span>Master <b>${esc(x.master)}</b></span>` : ""}${x.valor ? `<span>Valor <span class="num">${rs(x.valor)}</span></span>` : ""}${x.dias != null ? `<span>Há <span class="num">${n(x.dias)}</span> dia(s)</span>` : ""}${quem}</div></div>
+    <div class="acoes">${pronto(x) ? `<button class="botao peq" data-abrir="${esc(x.id)}">Encaminhar</button>` : `<button class="botao sec peq" data-abrir="${esc(x.id)}">Detalhe</button><button class="botao peq" data-feito="${esc(x.id)}">${esc(x.acao.split(" / ")[0])}</button>`}</div></article>`;
+}
+function fazerAgora(lista, lim = 6, titulo = "Fazer agora") {
+  const it = lista.slice(0, lim);
+  return `<section><div class="cab"><h2>${titulo}</h2><span class="atual">${n(lista.length)} no total · ${n(lista.filter(pronto).length)} prontos para encaminhar · urgentes e mais antigos primeiro</span></div>
+    ${it.length ? `<div class="lista">${it.map(x => itemHTML(x, true)).join("")}</div>` : `<div class="vazio">Nada esperando por você agora. Veja os pedidos aos agentes ou a tabela dos Masters.</div>`}
+    ${lista.length > lim ? `<button class="botao sec mais" data-ir="caixa">Ver os ${n(lista.length)} na caixa de entrada</button>` : ""}</section>`;
+}
+function tabelaMasters(lin, completo) {
+  const cols = completo
+    ? [["parceiro", "Master"], ["saude", "Saúde", 1], ["abertos", "Abertos", 1], ["abertos_rs", "R$ aberto", 1], ["ganhos_90d", "Ganhos 90d", 1], ["fechado_12m_rs", "Fechado 12m", 1], ["conversao_12m_pct", "Conversão 12m", 1], ["ciclo_mediano_dias", "Ciclo (dias)", 1], ["ritmo_valor_vs_media_trimestral_pct", "Ritmo vs média", 1], ["dias_sem_negocio", "Dias sem negócio", 1], ["alertas", "Alertas", 1]]
+    : [["parceiro", "Master"], ["saude", "Saúde", 1], ["abertos_rs", "R$ aberto", 1], ["ganhos_90d", "Ganhos 90d", 1], ["ritmo_valor_vs_media_trimestral_pct", "Ritmo", 1], ["alertas", "Alertas", 1]];
+  const fmt = (k, v) => k.endsWith("_rs") ? rs(v) : k.endsWith("_pct") ? (v == null ? "—" : (v > 0 ? "+" : "") + String(v).replace(".", ",") + "%") : v == null ? "—" : n(v);
+  return `<div class="tab-wrap"><table><thead><tr>${cols.map(([k, r, num]) => `<th class="${num ? "n" : ""}" aria-sort="${S.ordem.campo === k ? (S.ordem.asc ? "ascending" : "descending") : "none"}"><button data-ord="${k}">${r}${S.ordem.campo === k ? (S.ordem.asc ? " ↑" : " ↓") : ""}</button></th>`).join("")}</tr></thead>
+    <tbody>${lin.map(m => `<tr class="clic" data-master="${esc(m.parceiro)}" tabindex="0">${cols.map(([k, , num]) => k === "saude"
+      ? `<td class="n"><span class="saude"><span class="barrinha" aria-hidden="true"><i style="width:${m.saude}%;background:${corSaude(m.saude)}"></i></span>${m.saude} <span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "alerta" : "erro"}">${m.saude >= 75 ? "boa" : m.saude >= 60 ? "atenção" : "risco"}</span></span></td>`
+      : k === "parceiro" ? `<td><b>${esc(m.parceiro)}</b></td>`
+      : `<td class="${num ? "n" : ""}" ${k.startsWith("ritmo") && m[k] < -30 ? 'style="color:var(--erro)"' : ""}>${fmt(k, m[k])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+const ordenar = xs => [...xs].sort((a, b) => { const k = S.ordem.campo, va = a[k] ?? -1e18, vb = b[k] ?? -1e18; return (typeof va === "string" ? va.localeCompare(vb) : va - vb) * (S.ordem.asc ? 1 : -1); });
+
+/* ---------- cockpits ---------- */
+const V = {};
+V.luis = () => {
+  const K = D.kpi, L = doLuis(), riscos = D.masters.filter(m => m.saude < 60), mes = K.mes || {}, cres = (mes.crescimento || {}).ganhos_rs || {};
+  const carga = ["daniela", "jenifer", "geovana"].map(p => { const xs = D.caixa.filter(x => x.pessoa === p); return {p, n: xs.length, urg: xs.filter(x => x.urgente).length, max: Math.max(0, ...xs.map(x => x.dias || 0))}; });
+  const s12 = D.serie.slice(-12);
+  return `${kpis([
+      ["Esperando por você", n(K.conselho + K.pedidos_prontos + K.chamados), `${K.conselho} decisões do Conselho · ${K.pedidos_prontos} respostas · ${K.chamados} chamados`, true],
+      ["Ganhos no mês", rs(mes.ganhos_rs), `${n(mes.ganhos_n)} negócios · <span class="delta ${cres.pct >= 0 ? "sobe" : "desce"}">${cres.pct >= 0 ? "▲" : "▼"} ${String(Math.abs(cres.pct ?? 0)).replace(".", ",")}%</span> vs mesmo período`],
+      ["Pipeline aberto", rs((K.pipeline || {}).rs), `${n((K.pipeline || {}).n)} negócios em aberto`],
+      ["Win rate 3 meses", String(K.win_rate_3m ?? "—").replace(".", ",") + "%", `ticket médio ${rs(K.ticket_3m)}`],
+      ["Masters em risco", n(riscos.length), riscos.map(m => esc(m.parceiro)).join(", ") || "nenhum"]])}
+    ${fazerAgora(L, 5, "Decidir hoje")}
+    <section><div class="cab"><h2>Carga do time</h2><span class="atual">o que espera cada pessoa agora</span></div>
+      <div class="kpis">${carga.map(c => `<div class="kpi"><span class="rotulo">${PESSOAS[c.p]}</span><span class="v">${n(c.n)}</span><span class="d">${n(c.urg)} urgentes · mais antigo há ${n(c.max)} dias</span></div>`).join("")}</div></section>
+    <section><div class="cab"><h2>Resultado</h2><span class="atual">últimos 12 meses · data efetiva</span></div>
+      <div class="grade">
+        <div class="bloco"><h3>Ganhos por mês (R$)</h3>${barras(s12.map(x => ({r: mesRot(x.mes), v: x.ganhos_rs})), {fmt: rs, linha: s12.map(x => x.ganhos_n)})}
+          <div class="legenda"><span><i style="background:var(--ouro)"></i>R$ ganho (mês atual em ouro)</span><span><i style="background:var(--texto)"></i>nº de ganhos</span></div></div>
+        <div class="bloco"><h3>Win rate mensal</h3>${linhaG(D.winrate.slice(-12).map(x => x.pct), D.winrate.slice(-12).map(x => mesRot(x.mes)), {ref: K.win_rate_3m})}
+          <p class="nota">Ganhos ÷ (ganhos + perdidos) pela data de fechamento. Linha tracejada: média dos últimos 3 meses.</p></div>
+        <div class="bloco"><h3>Abertos por etapa</h3>${hbarras(D.funil.slice(0, 7).map(([r, v]) => ({r, v})))}<p class="nota">Funil completo com conversão entre etapas depende do histórico de etapas do HubSpot.</p></div>
+        <div class="bloco"><h3>Idade dos negócios abertos</h3>${barras(D.idade_abertos.map(([r, v]) => ({r: r + " d", v})), {cor: "var(--erro)"})}
+          <div class="mini"><div><span class="rotulo">Ciclo mediano</span><b>${n((K.ciclo || {}).mediana_dias)} d</b></div><div><span class="rotulo">P90</span><b>${n((K.ciclo || {}).p90_dias)} d</b></div><div><span class="rotulo">Ganhos até 90 d</span><b>${String((K.ciclo || {}).ganhos_ate_90d_pct ?? "—").replace(".", ",")}%</b></div></div></div>
+        <div class="bloco"><h3>Margem por mês</h3>${barras(D.lucro.map(x => ({r: mesRot(x.mes), v: Math.max(x.hl - x.custo, 0)})), {fmt: rs})}
+          <p class="nota">Honorário líquido menos custo da área (orçado onde o realizado não foi lançado). Amostra: só ganhos com honorário preenchido.</p></div>
+        <div class="bloco"><h3>Concentração (12 meses)</h3>${hbarras(((K.concentracao || {}).top5 || []).map(([r, v]) => ({r, v})), {fmt: rs})}
+          <p class="nota">Os 3 maiores parceiros somam ${String((K.concentracao || {}).top3_pct ?? "—").replace(".", ",")}% do fechado em 12 meses.</p></div>
+      </div></section>
+    <section><div class="cab"><h2>Masters</h2><button class="botao sec peq" data-ir="masters">Ver tabela completa</button></div>${tabelaMasters(ordenar(D.masters), false)}</section>
+    <section><div class="cab"><h2>Saúde da base e do canal</h2></div><div class="grade">
+      <div class="bloco"><h3>Qualidade do CRM</h3><div class="mini"><div><span class="rotulo">Índice dos ganhos</span><b>${String(K.qualidade).replace(".", ",")}</b></div>${Object.entries(K.inconsistencias || {}).slice(0, 3).map(([k, v]) => `<div><span class="rotulo">${esc(k)}</span><b>${n(v)}</b></div>`).join("")}</div></div>
+      <div class="bloco"><h3>Conflito de canal</h3><div class="mini"><div><span class="rotulo">Alta severidade</span><b>${n(K.conflito.alta)}</b></div><div><span class="rotulo">Master × Master</span><b>${n(K.conflito.mxm)}</b></div><div><span class="rotulo">Valor em conflito</span><b>${rs(K.conflito.valor)}</b></div></div></div>
+      <div class="bloco"><h3>Repasses</h3><div class="mini">${Object.entries(K.repasse || {}).map(([k, v]) => `<div><span class="rotulo">${esc(k.split(" (")[0])}</span><b>${n(v)}</b></div>`).join("")}</div><p class="nota">Repasse a pagar de fato depende do "recebido" do Financeiro.</p></div>
+      <div class="bloco"><h3>Contratos</h3><div class="mini"><div><span class="rotulo">Em contrato</span><b>${n((K.contratos || {}).negocios)}</b></div><div><span class="rotulo">Valor</span><b>${rs((K.contratos || {}).valor)}</b></div><div><span class="rotulo">Com alerta</span><b>${n((K.contratos || {}).com_alerta)}</b></div></div></div>
+    </div></section>`;
+};
+V.daniela = () => {
+  const L = minhas(), urg = L.filter(x => x.urgente), dem = L.filter(x => x.grupo === "Demanda");
+  const porM = D.masters.map(m => ({...m, itens: L.filter(x => x.master === m.parceiro)})).sort((a, b) => b.itens.length - a.itens.length);
+  return `${kpis([["Para responder", n(dem.length), "demandas de parceiro abertas", true], ["Urgentes", n(urg.length), "contratos parados, demandas atrasadas"],
+      ["Mais antigo", n(Math.max(0, ...L.map(x => x.dias || 0))) + " d", "item mais antigo esperando"], ["Prontos para encaminhar", n(L.filter(pronto).length), "chamado ou mensagem já montados", false]])}
+    ${fazerAgora(L, 6, "Responder agora")}
+    <section><div class="cab"><h2>Por Master</h2><span class="atual">onde está a pressão de cada conta</span></div>
+      <div class="grade">${porM.map(m => `<div class="bloco"><div class="cab" style="margin:0"><h3>${esc(m.parceiro)}</h3><span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "alerta" : "erro"}">saúde ${m.saude}</span></div>
+        <div class="mini"><div><span class="rotulo">Itens</span><b>${n(m.itens.length)}</b></div><div><span class="rotulo">R$ aberto</span><b>${rs(m.abertos_rs)}</b></div><div><span class="rotulo">Parados</span><b>${n(m.abertos_parados)}</b></div><div><span class="rotulo">Repasse bloqueado</span><b>${n((m.repasse || {}).bloqueado)}</b></div></div>
+        <p class="nota">Último negócio criado há ${n(m.dias_sem_negocio)} dia(s) · ritmo ${m.ritmo_valor_vs_media_trimestral_pct > 0 ? "+" : ""}${String(m.ritmo_valor_vs_media_trimestral_pct ?? "—").replace(".", ",")}% vs média</p></div>`).join("")}</div></section>`;
+};
+V.jenifer = () => {
+  const J = D.jenifer, L = minhas(), rot = J.semanas.map(s => s.slice(8, 10) + "/" + s.slice(5, 7));
+  return `${kpis([["Novos no funil (semana)", n(J.novos[J.novos.length - 2]), "negócios criados na última semana completa", true], ["Entradas em diagnóstico", n(J.diag[J.diag.length - 2]), "na última semana completa"],
+      ["Cadastros incompletos", n(J.crm_incompleto), "corrigir antes de abordar"], ["Conflitos a checar", n(J.conflitos_alta), `alta severidade · ${n((J.duplicidade || {}).cnpjs)} CNPJs duplicados`]])}
+    ${fazerAgora(L, 5)}
+    <section><div class="cab"><h2>Ritmo das últimas 8 semanas</h2></div><div class="grade">
+      <div class="bloco"><h3>Negócios novos por semana</h3>${barras(J.novos.map((v, i) => ({r: rot[i], v})))}<p class="nota">Funil BDR/SDR no HubSpot: ${n(J.bdr.reduce((a, b) => a + b, 0))} novos no período.</p></div>
+      <div class="bloco"><h3>Entradas em diagnóstico por semana</h3>${barras(J.diag.map((v, i) => ({r: rot[i], v})), {cor: "var(--info)"})}</div>
+    </div></section>
+    <section><div class="cab"><h2>Onde cada Master já ganha</h2><span class="atual">UFs com mais ganhos: use para direcionar listas</span></div>
+      <div class="tab-wrap"><table><thead><tr><th>Master</th><th>UFs com mais ganhos</th></tr></thead><tbody>${Object.entries(J.cobertura).map(([m, ufs]) => `<tr><td><b>${esc(m)}</b></td><td>${ufs.map(([u, q]) => `<span class="chip">${esc(u)} · ${q}</span>`).join(" ")}</td></tr>`).join("")}</tbody></table></div>
+      <p class="nota" style="margin-top:8px">Atividades (ligações, reuniões) e follow-ups vencendo dependem de dado novo.</p></section>`;
+};
+V.geovana = () => {
+  const G = D.geovana, dec = G.lote.filter(x => S.feitos.has(x.caso)).length, R = G.revisor;
+  return `${kpis([["Lote da semana", `${dec} de ${G.lote.length}`, `<span class="prog" style="display:block;margin-top:4px"><i style="width:${100 * dec / Math.max(G.lote.length, 1)}%"></i></span>`, true],
+      ["Potencial do lote", rs(G.esperado_lote), `fila inteira: ${rs(G.esperado_fila)} em ${n(G.fila)} casos`], ["Revisor", `${n(R.revisados)} / ${n(R.selecionados)}`, `${n(R.lacunas)} lacunas · ${n(R.alta)} de alta prioridade`],
+      ["Parados", n(G.diag_parado + G.aprov_parada), `${n(G.diag_parado)} diagnósticos · ${n(G.aprov_parada)} aprovações`]])}
+    <section><div class="cab"><h2>Lote do Recuperador</h2><span class="atual">ordenado pelo honorário esperado · clique na linha para ver detalhe</span></div>
+      <div class="tab-wrap"><table><thead><tr><th>Caso</th><th>Master</th><th>Tipo</th><th>Segmento</th><th>UF</th><th class="n">Esperado</th><th>Parecidos</th><th>Decisão</th></tr></thead><tbody>
+      ${[...G.lote].sort((a, b) => (b.esperado || 0) - (a.esperado || 0)).map(x => `<tr class="clic" data-caso="${esc(x.caso)}" tabindex="0"><td><b>${esc(x.caso)}</b>${x.saldo === "sim" ? ` <span class="chip alerta">saldo credor</span>` : ""}</td><td>${esc(x.parceiro)}</td><td>${esc(x.tipo)}</td><td>${esc(x.segmento)}</td><td>${esc(x.uf)}</td><td class="n">${rs(x.esperado)}</td><td class="n">${esc(String(x.taxa || "").split(" ")[0])}</td>
+        <td>${S.feitos.has(x.caso) ? `<span class="chip ok">decidido</span>` : `<button class="botao peq" data-decidir="${esc(x.caso)}">Decidir</button>`}</td></tr>`).join("")}</tbody></table></div></section>
+    <section><div class="grade">
+      <div class="bloco"><h3>Revisor: lacunas por tese</h3>${hbarras(G.por_tese.map(t => ({r: t.tese, v: t.n})))}</div>
+      ${fazerAgora(minhas(), 4, "Outros itens")}
+    </div></section>`;
+};
+
+/* ---------- abas ---------- */
+const A = {};
+A.inicio = () => V[S.eu]();
+A.caixa = () => {
+  const base = minhas(), grupos = ["todos", ...new Set(D.caixa.map(x => x.grupo))], f = S.filtro;
+  const xs = base.filter(x => (f.grupo === "todos" || x.grupo === f.grupo) && (!f.so_urg || x.urgente) && (!f.prontos || pronto(x)) && (!f.busca || (x.titulo + " " + x.tipo + " " + (x.master || "")).toLowerCase().includes(f.busca.toLowerCase())));
+  return `<section><div class="cab"><h2>Caixa de entrada</h2><span class="atual">${n(xs.length)} de ${n(base.length)} itens${S.eu === "luis" ? " · de todo o time" : ""}</span></div>
+    <div class="filtros" role="group" aria-label="Filtros">${grupos.map(g => `<button data-grupo="${esc(g)}" aria-pressed="${f.grupo === g}">${g === "todos" ? "Tudo" : esc(g)}</button>`).join("")}
+      <button data-urg aria-pressed="${f.so_urg}">Só urgentes</button><button data-prontos aria-pressed="${!!f.prontos}">Prontos para encaminhar</button>
+      <input type="search" id="busca" placeholder="Buscar por tipo, Master ou código" value="${esc(f.busca)}" aria-label="Buscar"></div>
+    ${xs.length ? `<div class="lista">${xs.slice(0, 60).map(x => itemHTML(x, false)).join("")}</div>${xs.length > 60 ? `<p class="nota">Mostrando 60. Use os filtros para achar o resto.</p>` : ""}` : `<div class="vazio">Nada com esses filtros. Limpe a busca ou escolha "Tudo".</div>`}</section>`;
+};
+A.pedidos = () => {
+  const ps = D.caixa.filter(x => x.grupo === "Pedido");
+  return `<section><div class="cab"><h2>Respostas para aprovar</h2><button class="botao" data-novo>Novo pedido</button></div>
+    ${ps.length ? `<div class="lista">${ps.map(x => itemHTML(x, false)).join("")}</div>` : `<div class="vazio">Nenhuma resposta esperando aprovação.</div>`}</section>
+    <section><h2>Como funciona</h2><p class="sub">Escolha o tipo de pedido, diga o que precisa e para que vai usar. Os agentes respondem aqui, de hora em hora nos dias úteis, e você aprova, pede nova análise ou não aprova na mesma tela. Nada é enviado a parceiro ou cliente.</p></section>`;
+};
+A.masters = () => `<section><div class="cab"><h2>Masters</h2><span class="atual">clique no cabeçalho para ordenar · clique na linha para ver o detalhe</span></div>${tabelaMasters(ordenar(D.masters), true)}</section>`;
+
+/* ---------- gaveta e toast ---------- */
+function gaveta(html) { $("#camada").innerHTML = `<div class="veu" data-fechar></div><aside class="gaveta" role="dialog" aria-modal="true" aria-label="Detalhe">${html}<button class="botao sec" data-fechar>Fechar</button></aside>`; $(".gaveta button, .gaveta [tabindex]")?.focus(); }
+function toast(t) { const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 2600); }
+function pacoteHTML(x) {
+  const P = x.pacote || {}; let s = "";
+  if (!pronto(x) && !(P.checklist || []).length && !(P.docs || []).length) return `<p class="sub">No painel real, aqui aparecem o texto completo e os links do HubSpot e do Bitrix.</p>`;
+  if (pronto(x)) s += `<span class="rotulo ouro">Pronto para encaminhar</span><p class="sub" style="margin:0">Montado pelos agentes com os dados do HubSpot e as regras do GLPI. Confira, ajuste se precisar e envie.</p>`;
+  if (P.mensagem) s += `<div class="pacote"><h4>Mensagem para o parceiro <span class="chip">WhatsApp</span></h4><label for="pk-msg" class="rotulo">Texto (pode editar)</label><textarea id="pk-msg">${esc(P.mensagem)}</textarea>
+      <div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="pk-msg">Copiar mensagem</button></div></div>`;
+  if (P.glpi) s += `<div class="pacote"><h4>Chamado no GLPI <span class="chip">${esc(P.glpi.categoria)}</span></h4>${par("Urgência", esc(P.glpi.urgencia))}
+      <label for="pk-tit">Título<input type="text" id="pk-tit" value="${esc(P.glpi.titulo)}"></label><label for="pk-desc">Descrição (formulário da área)<textarea id="pk-desc" rows="7">${esc(P.glpi.descricao)}</textarea></label>
+      <div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-glpi="${esc(x.id)}">Abrir chamado no GLPI</button><button class="botao sec peq" data-copiar="pk-desc">Copiar descrição</button></div></div>`;
+  if (P.encaminhar) s += `<div class="pacote"><h4>Encaminhar à área <span class="chip">${esc(P.encaminhar.equipe)} · sem chamado</span></h4><label for="pk-enc" class="rotulo">Texto (pode editar)</label><textarea id="pk-enc">${esc(P.encaminhar.texto)}</textarea>
+      <div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="pk-enc">Copiar texto</button></div></div>`;
+  if ((P.checklist || []).length) s += `<div class="pacote"><h4>Antes de enviar</h4>${P.checklist.map((c, i) => `<label class="check" for="ck-${i}"><input type="checkbox" id="ck-${i}"><span>${esc(c)}</span></label>`).join("")}</div>`;
+  if ((P.docs || []).length) s += `<div class="pacote"><h4>Documentos e links</h4><div class="docs">${P.docs.map(d => `<a href="${esc(d.link)}" target="_blank" rel="noopener">${esc(d.nome)}</a>`).join("")}</div></div>`;
+  return s;
+}
+const par = (r, v) => `<div class="par"><span>${esc(r)}</span><span>${v}</span></div>`;
+
+/* ---------- render ---------- */
+function render() {
+  $("#pessoas").innerHTML = Object.entries(PESSOAS).map(([k, v]) => `<button data-eu="${k}" aria-pressed="${S.eu === k}">${v}</button>`).join("");
+  const cont = {caixa: minhas().length, pedidos: D.caixa.filter(x => x.grupo === "Pedido" && !S.feitos.has(x.id)).length};
+  $("#abas").innerHTML = ABAS.map(([k, r]) => `<button role="tab" id="tab-${k}" aria-controls="painel" aria-selected="${S.aba === k}" tabindex="${S.aba === k ? 0 : -1}" data-aba="${k}">${r}${cont[k] ? `<span class="badge">${cont[k] > 99 ? "99+" : cont[k]}</span>` : ""}</button>`).join("");
+  $("#atual").textContent = "dados de " + D.atualizado;
+  const main = $("#conteudo"); main.setAttribute("role", "tabpanel"); main.id = "conteudo"; main.setAttribute("aria-labelledby", "tab-" + S.aba);
+  const y = scrollY; main.innerHTML = A[S.aba](); if (S.manter) window.scrollTo(0, y); S.manter = false;
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("button, tr.clic, .veu"); if (!t) return;
+  if (t.dataset.eu) { S.eu = t.dataset.eu; S.aba = "inicio"; try { localStorage.setItem("cp-eu", S.eu); } catch (x) {} render(); return; }
+  if (t.dataset.aba) { S.aba = t.dataset.aba; try { localStorage.setItem("cp-aba", S.aba); } catch (x) {} render(); return; }
+  if (t.dataset.ir) { S.aba = t.dataset.ir; render(); window.scrollTo(0, 0); return; }
+  if (t.dataset.feito) { S.feitos.add(t.dataset.feito); S.manter = true; render(); toast("Registrado. Protótipo: nada foi gravado."); return; }
+  if (t.dataset.grupo) { S.filtro.grupo = t.dataset.grupo; S.manter = true; render(); return; }
+  if ("prontos" in t.dataset) { S.filtro.prontos = !S.filtro.prontos; S.manter = true; render(); return; }
+  if (t.dataset.copiar) { const el = document.getElementById(t.dataset.copiar); const txt = el.value ?? el.textContent; navigator.clipboard?.writeText(txt).then(() => toast("Copiado."), () => { el.select?.(); toast("Selecionado: use Copiar do teclado."); }); return; }
+  if (t.dataset.glpi) { toast("Protótipo: no painel real o chamado é aberto no GLPI em nome de quem aprovou, assim que a TI liberar o acesso."); return; }
+  if ("urg" in t.dataset) { S.filtro.so_urg = !S.filtro.so_urg; S.manter = true; render(); return; }
+  if (t.dataset.ord) { const k = t.dataset.ord; S.ordem = {campo: k, asc: S.ordem.campo === k ? !S.ordem.asc : k === "parceiro"}; S.manter = true; render(); return; }
+  if ("fechar" in t.dataset) { $("#camada").innerHTML = ""; return; }
+  if ("novo" in t.dataset) { gaveta(`<h3>Novo pedido aos agentes</h3><label for="p-tipo">Tipo de pedido<select id="p-tipo"><option>DM1 · Briefing de conta Master</option><option>DM3 · Rascunho de resposta ao parceiro</option><option>JB1 · Lista de prospects por Master</option><option>GT1 · Pré-análise tributária de empresa</option><option>GE2 · Relatório do HubSpot</option></select></label>
+      <label for="p-master">Master<select id="p-master"><option value="">—</option>${D.masters.map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
+      <label for="p-precisa">O que você precisa<textarea id="p-precisa" placeholder="Descreva a entrega que resolve o seu problema"></textarea></label>
+      <button class="botao" data-enviar>Enviar pedido</button>`); return; }
+  if ("enviar" in t.dataset) { $("#camada").innerHTML = ""; toast("Pedido enviado. Protótipo: nada foi gravado."); return; }
+  if (t.dataset.abrir) { const x = D.caixa.find(i => i.id === t.dataset.abrir); if (x) gaveta(`<span class="rotulo ouro">${esc(x.tipo)}</span><h3>${esc(x.titulo)}</h3>${par("Responsável", esc(PESSOAS[x.pessoa]))}${x.master ? par("Master", esc(x.master)) : ""}${x.valor ? par("Valor", `<span class="num">${rs(x.valor)}</span>`) : ""}${x.dias != null ? par("Esperando", `<span class="num">${n(x.dias)}</span> dia(s)`) : ""}${par("Origem", esc(x.grupo))}
+      ${pacoteHTML(x)}<button class="botao" data-feito="${esc(x.id)}">${pronto(x) ? "Marcar como encaminhado" : esc(x.acao.split(" / ")[0])}</button>`); return; }
+  if (t.dataset.decidir || t.dataset.caso) { const x = D.geovana.lote.find(i => i.caso === (t.dataset.decidir || t.dataset.caso)); if (x) gaveta(`<span class="rotulo ouro">Recuperador · ${esc(x.tipo)}</span><h3>${esc(x.caso)}</h3>${par("Master", esc(x.parceiro))}${par("Segmento", esc(x.segmento) + " · " + esc(x.uf))}${par("Esperado", `<span class="num">${rs(x.esperado)}</span>`)}${par("Parecidos", esc(x.taxa))}${par("Aderência", esc(x.aderencia))}${par("Documentos", esc(x.docs || "—"))}
+      <label for="d-motivo">Motivo ou observação<input type="text" id="d-motivo"></label><div class="acoes" style="justify-content:flex-start"><button class="botao" data-feito="${esc(x.caso)}">Aprovar reanálise</button><button class="botao sec" data-feito="${esc(x.caso)}">Precisa de dado</button><button class="botao sec" data-feito="${esc(x.caso)}">Vetar</button></div>`); return; }
+  if (t.dataset.master) { const m = D.masters.find(i => i.parceiro === t.dataset.master); if (m) gaveta(`<span class="rotulo ouro">Master</span><h3>${esc(m.parceiro)}</h3>${par("Saúde", `<span class="num">${m.saude}</span>`)}${par("Abertos", `${n(m.abertos)} · <span class="num">${rs(m.abertos_rs)}</span>`)}${par("Parados", n(m.abertos_parados))}${par("Ganhos 90 dias", `${n(m.ganhos_90d)} · <span class="num">${rs(m.fechado_90d_rs)}</span>`)}${par("Fechado 12 meses", `<span class="num">${rs(m.fechado_12m_rs)}</span>`)}${par("Conversão 12 meses", String(m.conversao_12m_pct ?? "—").replace(".", ",") + "%")}${par("Ciclo mediano", n(m.ciclo_mediano_dias) + " dias")}${par("Honorário líquido 12m", `<span class="num">${rs(m.honorario_liquido_12m_rs)}</span>`)}${par("Repasses", `OK ${n((m.repasse || {}).ok)} · revisar ${n((m.repasse || {}).revisar)} · bloqueados ${n((m.repasse || {}).bloqueado)}`)}${par("Itens na caixa", n(m.alertas + m.demandas))}
+      <p class="sub">Esta ficha é a base da futura ficha 360 do parceiro (PRM).</p>`); return; }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") $("#camada").innerHTML = "";
+  if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.clic")) { e.preventDefault(); e.target.click(); }
+  if (e.target.matches('[role="tab"]') && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { const i = ABAS.findIndex(a => a[0] === S.aba), j = (i + (e.key === "ArrowRight" ? 1 : ABAS.length - 1)) % ABAS.length; S.aba = ABAS[j][0]; render(); document.getElementById("tab-" + S.aba).focus(); }
+});
+document.addEventListener("input", e => { if (e.target.id === "busca") { S.filtro.busca = e.target.value; const pos = e.target.selectionStart; S.manter = true; render(); const b = $("#busca"); b.focus(); b.setSelectionRange(pos, pos); } });
+render();
+</script>
