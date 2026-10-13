@@ -62,16 +62,20 @@ LUIS = {
 CENTRAIS = {"daniela": "Central Masters · Daniela", "jenifer": "Central BDR · Jenifer", "geovana": "Central Técnica · Geovana"}
 
 
-# Link do Office Online (o Luis usa o OneDrive pelo navegador, 13/10/2026). Base deduzida do e-mail: confirmar no 1º clique.
-WEB = "https://gruposave-my.sharepoint.com/personal/luis_melo_savecompany_com_br/Documents"
+# Link do Office Online (o Luis usa o OneDrive pelo navegador, 13/10/2026). Formato confirmado pelo Luis: /my?id=/personal/<usuário>/Documents/...
+# (o caminho direto /personal/.../Documents/arquivo?web=1 dava 404).
+WEB = "https://gruposave-my.sharepoint.com"
+RAIZ_WEB = "/personal/luis_melo_savecompany_com_br/Documents"
 
 
 def web(caminho):
-    """Link do navegador para um arquivo ou pasta dentro do OneDrive (arquivos do Office abrem no Office Online)."""
+    """Link do navegador para um arquivo ou pasta do OneDrive. Pasta abre a lista; arquivo abre no visualizador do Office Online."""
     import urllib.parse
     rel = os.path.relpath(os.path.realpath(caminho), os.path.realpath(onedrive()))
-    u = WEB + "/" + urllib.parse.quote(rel)
-    return u + ("?web=1" if rel.lower().endswith((".docx", ".xlsx", ".pptx")) else "")
+    q = lambda x: urllib.parse.quote(x, safe="")
+    alvo = f"{RAIZ_WEB}/{rel}"
+    if os.path.isdir(caminho): return f"{WEB}/my?id={q(alvo)}"
+    return f"{WEB}/my?id={q(alvo)}&parent={q(os.path.dirname(alvo))}"
 
 
 def luis(chave):
