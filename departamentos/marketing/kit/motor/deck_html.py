@@ -286,6 +286,22 @@ table.cmp {{ width: 100%; border-collapse: collapse; }}
 .mapa .tot .f {{ font: 400 11px/1.4 {marca.MONO}; color: {E['texto_3']}; margin-top: 12px; }}
 .mapa .nota {{ color: {E['texto_3']}; margin-bottom: 18px; }}
 .mapa .rod {{ position: absolute; left: 72px; right: 72px; bottom: 0; }}
+/* instituicao: instituição de referência em destaque (marca à esquerda, fatos à direita), fundo preto */
+.inst {{ flex-direction: row; padding: 0; }}
+.inst .marca {{ width: 520px; flex: none; display: flex; flex-direction: column; justify-content: center; padding: 0 0 48px 72px; }}
+.inst .marca .w {{ font: 500 168px/1 {marca.SANS}; letter-spacing: -4px; color: {E['texto']}; }}
+.inst .marca img {{ max-width: 380px; max-height: 200px; }}
+.inst .marca .fx {{ width: 72px; height: 6px; background: {E['ouro']}; margin: 28px 0 22px; }}
+.inst .marca .d {{ font: 500 13px/1.6 {marca.MONO}; letter-spacing: 2px; text-transform: uppercase; color: {E['texto_2']}; }}
+.inst .dir {{ flex: 1; display: flex; flex-direction: column; padding: 56px 72px 72px 24px; border-left: 1px solid {E['borda']}; margin: 140px 0 60px; padding-top: 0; }}
+.inst .dir h1 {{ font-size: 34px; margin-top: 14px; }}
+.inst .fatos {{ margin-top: 30px; display: grid; gap: 0; }}
+.inst .fato {{ display: grid; grid-template-columns: 220px 1fr; gap: 20px; align-items: baseline; padding: 16px 0; border-top: 1px solid {E['borda']}; }}
+.inst .fato .v {{ font: 500 40px/1 {marca.SANS}; letter-spacing: -0.8px; color: {E['ouro']}; white-space: nowrap; }}
+.inst .fato .l {{ font-size: 17px; line-height: 1.45; color: {E['texto']}; }}
+.inst .fato .f {{ font: 400 10.5px/1.4 {marca.MONO}; color: {E['texto_3']}; margin-top: 6px; }}
+.inst .nota {{ color: {E['texto_3']}; margin-top: auto; }}
+.inst .rod {{ position: absolute; left: 72px; right: 72px; bottom: 0; }}
 .fim .ps {{ display: grid; gap: 24px; margin-top: 56px; }}
 .fim .p {{ border-top: 1px solid {E['borda']}; padding-top: 18px; }}
 .fim .p .n {{ font: 500 13px/1 {marca.MONO}; color: {E['ouro']}; }}
@@ -546,9 +562,26 @@ def s_mapa(sl, doc, n, tot):
             f'<div class="dir">{dir_}</div>{rod(doc, n, tot)}</div>')
 
 
+def s_instituicao(sl, doc, n, tot):
+    """Instituição de referência: marca (logo autorizado ou nome em texto) à esquerda e fatos com fonte à direita."""
+    import base64
+    m = sl.get("marca", {})
+    if m.get("logo"):
+        img = BASE[0] / m["logo"]; tipo = "png" if img.suffix.lower() == ".png" else "svg+xml" if img.suffix.lower() == ".svg" else "jpeg"
+        mk = f'<img src="data:image/{tipo};base64,{base64.b64encode(img.read_bytes()).decode()}">'
+    else:
+        mk = f'<div class="w">{t(m.get("nome", ""))}</div>'
+    mk += f'<div class="fx"></div><div class="d">{t(m.get("descricao", ""))}</div>'
+    fatos = "".join(f'<div class="fato"><div class="v">{t(f["valor"])}</div><div><div class="l">{t(f["legenda"])}</div>'
+                    + (f'<div class="f">{t(f["fonte"])}</div>' if f.get("fonte") else "") + "</div></div>" for f in sl.get("fatos", []))
+    return (f'<div class="s esc inst">{marcas(True)}<div class="marca">{mk}</div>'
+            f'<div class="dir"><div class="rot">{t(sl.get("rotulo", ""))}</div><h1>{t(sl["titulo"])}</h1>'
+            f'<div class="fatos">{fatos}</div>{nota(sl)}</div>{rod(doc, n, tot)}</div>')
+
+
 TIPOS = {"capa": s_capa, "secao": s_secao, "frase": s_frase, "afirmacao": s_afirmacao, "numeros": s_numeros,
          "barras": s_barras, "comparativo": s_comparativo, "fluxo": s_fluxo, "pilares": s_pilares,
-         "duas_colunas": s_duas, "diagrama": s_diagrama, "pares": s_pares, "cascata": s_cascata, "matriz": s_matriz, "calor": s_calor, "organograma": s_organograma, "tabela": s_tabela, "mandala": s_mandala, "etapas": s_etapas, "caso": s_caso, "fechamento": s_fechamento, "mapa": s_mapa}
+         "duas_colunas": s_duas, "diagrama": s_diagrama, "pares": s_pares, "cascata": s_cascata, "matriz": s_matriz, "calor": s_calor, "organograma": s_organograma, "tabela": s_tabela, "mandala": s_mandala, "etapas": s_etapas, "caso": s_caso, "fechamento": s_fechamento, "mapa": s_mapa, "instituicao": s_instituicao}
 
 
 def montar(doc):
