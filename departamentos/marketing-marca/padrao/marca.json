@@ -1,0 +1,84 @@
+{
+  "_fonte": "Design System Save v0.5 (Marketing, 21/05/2026). Pacote completo em ../design-system/. Adotado como padrão de tudo o que a Área Partners produz em 07/10/2026.",
+  "fontes": {
+    "sans": "IBM Plex Sans",
+    "mono": "IBM Plex Mono",
+    "google_fonts": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap",
+    "pilha_sans": "'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Arial, sans-serif",
+    "pilha_mono": "'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace",
+    "pilha_email": "'IBM Plex Sans', Calibri, Arial, Helvetica, sans-serif"
+  },
+  "claro": {
+    "_uso": "Modo C · Light-only: materiais para cliente e parceiro, PDFs, documentos Word, peças de WhatsApp",
+    "fundo": "#F6F7F9",
+    "fundo_2": "#F1F2F5",
+    "cartao": "#FFFFFF",
+    "borda": "#E6E8EC",
+    "borda_2": "#DEE0E5",
+    "borda_3": "#C9CCD3",
+    "texto": "#0F1115",
+    "texto_2": "#4A4F58",
+    "texto_3": "#838892",
+    "ouro_texto": "#B58A1F",
+    "ouro": "#F3CD60",
+    "ouro_suave": "#FBF1D7",
+    "sucesso": "#1E8E3E",
+    "alerta": "#B5790F",
+    "erro": "#C5221F",
+    "info": "#1A56DB"
+  },
+  "escuro": {
+    "_uso": "Modo A · Dark-first: painéis, dashboards, capas e faixas de destaque",
+    "fundo": "#000000",
+    "fundo_2": "#111111",
+    "cartao": "#171717",
+    "elevado": "#1E1E1E",
+    "borda": "#2A2A2A",
+    "texto": "#F5F5F5",
+    "texto_2": "#A1A1A1",
+    "texto_3": "#6B6B6B",
+    "ouro": "#F3CD60",
+    "ouro_suave": "#E8BC4C",
+    "sucesso": "#44C653",
+    "alerta": "#E8B34A",
+    "erro": "#D64545",
+    "info": "#6E92E8"
+  },
+  "espaco": [
+    4,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64,
+    96,
+    128
+  ],
+  "raio": [
+    4,
+    8,
+    12,
+    16,
+    24
+  ],
+  "logos": {
+    "fundo_claro": "logo-save-fundo-claro.png",
+    "fundo_escuro": "logo-save-fundo-escuro.png",
+    "simbolo_ouro": "simbolo-save-ouro.png",
+    "simbolo": "simbolo-save-original.png",
+    "proporcao_logo": 0.1756,
+    "simbolo_contorno_ouro": "simbolo-save-contorno-ouro.png",
+    "simbolo_branco": "simbolo-save-branco.png",
+    "proporcao_simbolo": 1.1461
+  },
+  "regras": [
+    "Uma única cor cromática: o ouro. No fundo claro, texto em ouro usa sempre #B58A1F; o #F3CD60 só em fundos, faixas e selos.",
+    "Fundo claro para tudo que vai a cliente ou parceiro; fundo preto para painéis e faixas de destaque.",
+    "Tipografia IBM Plex Sans (300 a 700); IBM Plex Mono para números, códigos e rótulos curtos.",
+    "Raios de 4 a 24 px, nunca acima de 24. Espaçamento na base 4.",
+    "Cor nunca é o único sinal: sempre com texto ou ícone.",
+    "Sem emoji, mascote ou tom de chatbot. A marca é Save Co.; não criar submarcas."
+  ]
+}
