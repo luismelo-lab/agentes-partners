@@ -2,6 +2,8 @@
 
 Revisão de 13/10/2026 feita pelo Arquiteto de Agentes, por TI/Operações e por Resultados com a Qualidade, com dados de 30/09 a 13/10. Proposta para o Luis aprovar por bloco. Nada foi mudado ainda, exceto a correção do aviso repetido (item A1).
 
+> **Contexto (Luis, 13/10):** os fluxos ainda não foram lançados para Daniela, Jenifer e Geovana. Por isso, uso zero do time (Central, painel, decisões no Recuperador e no Revisor, respostas sugeridas) é o esperado e **não** é motivo para pausar nada. Os critérios de pausa de C2 e C3 ficam suspensos até o lançamento. Esta proposta fica guardada para ser corrigida e aplicada no lançamento.
+
 ## Resumo
 - **O que funciona e é usado:** a leitura e a triagem do WhatsApp (80 demandas, 94% resolvidas, mediana de 17 h, usada pelas três) e o registro único de demandas.
 - **O que roda muito e entrega pouco:** a Central foi lida 385 vezes em 14 dias e trouxe 3 pedidos, todos do Luis. O WhatsApp é lido de 5 a 7 vezes por dia, e só 4 das 12 rodadas com IA geraram algo.
@@ -60,3 +62,17 @@ Revisão de 13/10/2026 feita pelo Arquiteto de Agentes, por TI/Operações e por
 | 13h30 | Tarde: HubSpot (só alterados), sentinelas, avisos urgentes | Não |
 | 19h30 | Backup e limpeza | Não |
 | Seg 6h / 7h / 8h / 9h | Segunda (terminal) / relatório / Conselho / lote do Recuperador | Não / Sim / Sim / Sim |
+
+## Bloco E · Agentes novos que podem melhorar a operação (avaliação de 13/10)
+Base: as 85 demandas do registro único (42 classificadas pelo título: 17 de documentos do cliente, 15 de dúvida técnica, 13 de contrato, 13 de reunião, 9 de Receita/prazo, 5 de andamento) e as lacunas das revisões de 08 e 13/10. Para manter o catálogo enxuto, cada agente novo entra como **modo** de uma célula ou departamento existente, não como skill nova.
+
+| # | Agente (onde entra) | Problema que resolve | Evidência | Dados já disponíveis | Depende de |
+|---|---|---|---|---|---|
+| E1 | **Guardião de Prazos da Receita** (depto-juridico, para Geovana e Daniela) | Prazo perdido de manifestação de inconformidade, intimação ou CND vira prejuízo direto ao cliente e risco à Save | 9 demandas de Receita/prazo; caso Cafeeira (PER indeferido, prazo ≈ 04/11) acompanhado à mão no backlog; o "Controle de Prazos" do Jurídico é só texto | Anexos do WhatsApp com OCR (pareceres.py), registro único de demandas, HubSpot | Nada novo |
+| E2 | **Coletor de Documentos do Cliente** (celula-geovana / celula-daniela) | Ida e volta de SPED, XML, EFD e procuração atrasa o diagnóstico e ocupa a Geovana | 17 demandas de documentos; o Recuperador já lista "documentos a pedir" por tese (matriz.json) | Matriz tese × documentos, anexos do WhatsApp, HubSpot | Nada novo |
+| E3 | **Ativação de Parceiros Dormentes** (depto-partner-success + celula-jenifer) | Masters e indicadores que esfriam sem ninguém perceber a tempo | D43 (reconversão de G.S.H, JGM e Orteconte); scorecard de saúde já calculado (dados_bi.py) | Scorecard, base da Receita por região, listas da Jenifer | Nada novo |
+| E4 | **Preparador de Reunião automático** (todas as células) | Briefing só sai se alguém pedir; ata e próximos passos dependem de memória | 13 demandas de reunião; só 3 briefings e 0 atas desde 29/09 | HubSpot, WhatsApp, demandas | Agenda do Outlook (reinstalar) ou Graph (TI) |
+| E5 | **Resposta de andamento ao parceiro** (celula-daniela) | "Como está meu negócio / minha comissão" vira ponte manual | 5 demandas de andamento; fase de execução depende do Bitrix | HubSpot; Bitrix quando houver webhook | Webhook do Bitrix (TI) |
+| E6 | **Porta única no Teams** (central-agentes) | Pedir por e-mail tem atrito; o time vive no Teams/WhatsApp | Central por e-mail ainda não lançada | Catálogo de pedidos pronto | Graph e Teams (TI) |
+
+**Recomendação:** construir primeiro E1, E2 e E3. Os três usam dados que já existem, não dependem da TI e atacam risco (prazo), o gargalo técnico (documentos) e receita (parceiros esfriando). E4 a E6 entram quando o Outlook ou o Graph voltarem. Todos seguem a regra N1: rascunho para a pessoa aprovar, nada sai para parceiro ou cliente sozinho.
