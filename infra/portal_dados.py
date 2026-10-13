@@ -127,7 +127,7 @@ def main():
          "revisor": revisor(), "gestao": gestao(), "demandas": demandas(),
          "demandas_lista": demandas_lista(), "conselho": conselho_pendentes(), "catalogo": catalogo(), "lote": lote_completo(),
          "pastas": {"daniela": "Área Partners · Agentes / Central Masters · Daniela", "jenifer": "Área Partners · Agentes / Central BDR · Jenifer",
-                    "geovana": "Área Partners · Agentes / Central Técnica · Geovana", "luis": "Área Partners · Agentes / Gestão · Luis"}}
+                    "geovana": "Área Partners · Agentes / Central Técnica · Geovana", "luis": "04 · Gestão, Metas e Estratégia / Central de Agentes"}}
     os.makedirs(os.path.join(AP, "portal"), exist_ok=True)
     json.dump(d, open(os.path.join(AP, "portal/dados.json"), "w"), ensure_ascii=False, indent=1)
     print("portal/dados.json atualizado:", d["atualizado"])

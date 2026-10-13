@@ -1,6 +1,6 @@
 """Crédito internacional · Scorecard de qualificação (planilha com fórmulas) + base pré-qualificada pelos dados.
 
-Uso:  python3 qualificacao_planilha.py   -> grava a planilha na pasta do produto e no OneDrive (Gestão · Luis/Produtos)
+Uso:  python3 qualificacao_planilha.py   -> grava a planilha na pasta do produto e no OneDrive (03 · Produtos e Projetos/Crédito Internacional)
 Somente leitura nas fontes; nada vai ao HubSpot; não lê .env.
 """
 import collections, json, os, shutil, subprocess, sys
@@ -381,8 +381,8 @@ def main():
     texto(wb, "Metodologia", 4, metodologia(meta))
     local = os.path.join(PASTA, NOME)
     wb.save(local)
-    area = subprocess.run(["python3", os.path.expanduser("~/agentes-partners/lib/caminhos.py"), "area"], capture_output=True, text=True, check=True).stdout.strip()  # sem a pasta do OneDrive, para (antes gravava no diretório atual)
-    destino = os.path.join(area, "Gestão · Luis", "Produtos")
+    area = subprocess.run(["python3", os.path.expanduser("~/agentes-partners/lib/caminhos.py"), "credito"], capture_output=True, text=True, check=True).stdout.strip()  # sem a pasta do OneDrive, para (antes gravava no diretório atual)
+    destino = os.path.join(area)
     os.makedirs(destino, exist_ok=True); shutil.copy2(local, os.path.join(destino, NOME))
     agreg = dict(meta=meta, resultado=collections.Counter(l["resultado"] for l in linhas),
                  prioridade=collections.Counter(l["prior"] for l in linhas if l["resultado"] == "Depende da camada 1"),

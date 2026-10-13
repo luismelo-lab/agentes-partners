@@ -32,11 +32,12 @@ PASTAS = {
                   + ["celulas/geovana/Semana0-apontamento-Geovana.xlsx"],
         "ler": [("Fichas do Recuperador", todos("celulas/geovana/recuperador/fichas/*.md")), ("Fichas do Revisor", todos("celulas/geovana/revisor/fichas/*.md")),
                 ("Semana 0", [os.path.join(AP, "celulas/geovana/Semana0-roteiro-conversa-Geovana.md")])]},
-    "Gestão · Luis": {
+    # Luis: padrão 00–99 por área (13/10/2026); chave absoluta = fora da pasta compartilhada do time
+    caminhos.luis("resultado"): {"editar": [], "ler": [("", [p for p in [ult("departamentos/resultados/relatorios/Resultado-Semanal-*.pptx"), ult("departamentos/resultados/relatorios/Resultado-Semanal-*.md")] if p])]},
+    caminhos.luis("conselho"): {"editar": [], "ler": [("", todos("conselho/atas/*.md") + [os.path.join(AP, "conselho/decisoes.md")])]},
+    caminhos.luis("areas"): {
         "editar": [],
-        "ler": [("Resultado semanal", [p for p in [ult("departamentos/resultados/relatorios/Resultado-Semanal-*.pptx"), ult("departamentos/resultados/relatorios/Resultado-Semanal-*.md")] if p]),
-                ("Conselho", todos("conselho/atas/*.md") + [os.path.join(AP, "conselho/decisoes.md")]),
-                ("Áreas", [p for p in [ult("departamentos/dados/Dados-BI-*.xlsx"), ult("departamentos/operacoes-canal/Conferencia-Repasses-*.xlsx"),
+        "ler": [("", [p for p in [ult("departamentos/dados/Dados-BI-*.xlsx"), ult("departamentos/operacoes-canal/Conferencia-Repasses-*.xlsx"),
                                        ult("departamentos/operacoes-canal/Conflito-Canal-*.xlsx"), ult("departamentos/contratos/Controle-Contratos-*.xlsx"),
                                        ult("departamentos/partner-success/metricas/Metricas-PS-*.xlsx"), ult("departamentos/qualidade/auditorias/*-teste-auditar_texto.md"),
                                        os.path.join(AP, "departamentos/ti/GLPI-pronto-para-agente.xlsx"), os.path.join(AP, "departamentos/ti/chamados-rascunho.md"), os.path.join(AP, "departamentos/ti/integracoes-microsoft.md"),
@@ -104,7 +105,7 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--simular", action="store_true"); a = ap.parse_args()
     feitos = []
     for pasta, cfg in PASTAS.items():
-        base = os.path.join(RAIZ, pasta)
+        base = pasta if os.path.isabs(pasta) else os.path.join(RAIZ, pasta)
         if not a.simular: os.makedirs(base, exist_ok=True)
         for rel in cfg["editar"]:  # vale a versão mais nova
             loc = os.path.join(AP, rel)
@@ -161,7 +162,7 @@ Esta pasta é onde os agentes da Área Partners entregam o trabalho para cada pe
 - **Central Masters · Daniela:** controle de pendências dos Masters, briefings de conta e Semana 0.
 - **Central BDR · Jenifer:** listas de prospects por Master, controle de follow-up e Semana 0.
 - **Central Técnica · Geovana:** fila do Recuperador, Revisor de Diagnóstico, fichas e Semana 0.
-- **Gestão · Luis:** resultado semanal, atas do Conselho e os relatórios das áreas.
+- **Luis:** fora desta pasta, no padrão por área do OneDrive: resultado semanal e Conselho em "04 · Gestão, Metas e Estratégia", relatórios das áreas em "01 · Comercial e Parceiros", produtos em "03 · Produtos e Projetos".
 
 ## Regras
 - Não mova nem renomeie as planilhas de trabalho: o agente procura pelo nome.

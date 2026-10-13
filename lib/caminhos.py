@@ -9,6 +9,7 @@ então uma nova renomeação não quebra nada. Na nuvem (GitHub Actions), use a 
 Uso: python3 caminhos.py            mostra a pasta ativa
      python3 caminhos.py area       imprime só o caminho da "Área Partners · Agentes"
      python3 caminhos.py backups    imprime só o caminho dos backups
+     python3 caminhos.py produtos   pastas do Luis no padrão 00–99 (central, resultado, conselho, planejamento, areas, produtos, credito, maquila, programa, marca)
 """
 import glob, os, subprocess, sys
 
@@ -43,6 +44,35 @@ def backups():
     return os.path.join(onedrive(), "Backups", "agentes-partners")
 
 
+# Padrão 00–99 (decisão do Luis, 13/10/2026): o que é do Luis fica nas pastas por área; as Centrais do time
+# continuam juntas em "Área Partners · Agentes", que é a pasta compartilhada com cada uma.
+G = "04 · Gestão, Metas e Estratégia"
+LUIS = {
+    "central": f"{G}/Central de Agentes",            # Demandas.xlsx, Pedidos, Pedidos aprovados, como pedir
+    "resultado": f"{G}/Resultado semanal",
+    "conselho": f"{G}/Conselho",
+    "planejamento": f"{G}/Planejamento 2027",
+    "areas": "01 · Comercial e Parceiros/Relatórios das áreas",
+    "produtos": "03 · Produtos e Projetos",
+    "credito": "03 · Produtos e Projetos/Crédito Internacional",
+    "maquila": "03 · Produtos e Projetos/PROJETO MAQUILA - INTERNACIONALIZAÇÃO",
+    "programa": "01 · Comercial e Parceiros/Programa de Parceiros",
+    "marca": "06 · Marketing e Apresentações/Marca",
+}
+CENTRAIS = {"daniela": "Central Masters · Daniela", "jenifer": "Central BDR · Jenifer", "geovana": "Central Técnica · Geovana"}
+
+
+def luis(chave):
+    if os.environ.get("OD_BASE") is None and os.environ.get("OD_RAIZ"):  # nuvem com só a pasta da área: tudo do Luis fica dentro dela
+        return os.path.join(area(), "Gestão · Luis", LUIS[chave].split("/")[-1])
+    return os.path.join(onedrive(), LUIS[chave])
+
+
+def pasta(pessoa):
+    """Pasta da pessoa no OneDrive: as do time ficam na pasta compartilhada; a do Luis, em 04 · Gestão/Central de Agentes."""
+    return luis("central") if pessoa == "luis" else os.path.join(area(), CENTRAIS[pessoa])
+
+
 if __name__ == "__main__":
     c = sys.argv[1] if len(sys.argv) > 1 else ""
-    print({"area": area, "backups": backups}.get(c, onedrive)())
+    print(luis(c) if c in LUIS else {"area": area, "backups": backups}.get(c, onedrive)())

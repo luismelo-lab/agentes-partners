@@ -140,10 +140,16 @@ def _topo(p):
     except ValueError: return None  # fora do OneDrive
 
 
+# pastas dos agentes no padrão 00–99 (13/10/2026): cópias ali são de propósito (guia em cada pasta, pedido e pedido aprovado,
+# pacote de referência do Design System); "Versões anteriores" guarda histórico
+AGENTES = [_nfc(caminhos.LUIS[k]) for k in ("central", "resultado", "conselho", "planejamento", "areas", "credito", "maquila", "programa", "marca")]
+
+
 def _prio(p):
     t, r = _topo(p), Path(p)
     if t is None: return 9
-    if t in PROTEGIDAS: return 0
+    rel = _nfc(str(r.relative_to(OD)))
+    if t in PROTEGIDAS or "Versões anteriores" in rel or any(rel == a or rel.startswith(a + "/") for a in AGENTES): return 0
     if len(r.relative_to(OD).parts) == 1: return 3  # solto na raiz
     return {"00": 2, "99": 4}.get(t[:2], 1 if t[:2].isdigit() else 3)
 

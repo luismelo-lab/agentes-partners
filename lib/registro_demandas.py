@@ -127,8 +127,8 @@ def cmd_planilhas(a):
             w.freeze_panes = "A2"; w.auto_filter.ref = w.dimensions
         aba(ws, sorted([d for d in ds if d["status"] in ABERTOS], key=lambda d: d.get("aberta_em") or ""))
         aba(wb.create_sheet("Histórico (30 dias)"), sorted([d for d in ds if d["status"] not in ABERTOS], key=lambda d: d.get("atualizada_em") or "", reverse=True)[:300])
-        os.makedirs(os.path.join(_cam.area(), pasta), exist_ok=True)
-        wb.save(os.path.join(_cam.area(), pasta, "Demandas.xlsx"))
+        os.makedirs(_cam.pasta(p), exist_ok=True)
+        wb.save(os.path.join(_cam.pasta(p), "Demandas.xlsx"))  # Luis: 04 · Gestão/Central de Agentes (padrão 00–99)
     print("planilhas Demandas.xlsx atualizadas")
 
 
