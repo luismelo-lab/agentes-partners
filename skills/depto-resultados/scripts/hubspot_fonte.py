@@ -32,21 +32,30 @@ def token():
     return t
 
 
-def call(method, path, body=None, tries=5):
+def call(method, path, body=None, tries=6):
     # o cabeçalho com o token vai por stdin (-K -), fora da linha de comando e dos logs
     cfg = f'header = "Authorization: Bearer {token()}"\nheader = "Content-Type: application/json"\n'
     args = ["curl", "-sS", "-m", "60", "-K", "-", "-X", method, "-w", "\n%{http_code}", API + path]
     if body is not None: args += ["--data-binary", json.dumps(body)]
+    motivo = ""
     for i in range(tries):
+        if i: time.sleep(min(60, 5 * 2 ** (i - 1)))  # 5, 10, 20, 40, 60 s: cobre a rede instável logo depois que o Mac acorda
         r = subprocess.run(args, input=cfg.encode(), capture_output=True)
         txt = r.stdout.decode("utf-8", "replace"); raw, _, code = txt.rpartition("\n")
         if code == "429" or code.startswith("5"):
-            time.sleep(2 ** i); continue
+            motivo = f"HTTP {code}"; continue
+        if code == "000" or r.returncode:  # sem resposta: rede caiu, DNS, tempo esgotado (a mensagem do curl não traz o token)
+            motivo = f"sem resposta (curl {r.returncode}: {r.stderr.decode('utf-8', 'replace').strip()[:200]})"
+            print(f"HubSpot {path}: {motivo}; tentativa {i + 1} de {tries}", file=sys.stderr); continue
         if code == "401": sys.exit("HubSpot recusou o token (401): expirado ou revogado. Gere um novo na Private App.")
         if code == "403": sys.exit(f"HubSpot negou acesso (403) a {path}: falta escopo de leitura na Private App.")
         if not code.startswith("2"): sys.exit(f"Erro HubSpot {code} em {path}: {raw[:300]}")
-        return json.loads(raw) if raw else {}
-    sys.exit(f"HubSpot indisponível após {tries} tentativas ({path}).")
+        try:
+            return json.loads(raw) if raw else {}
+        except json.JSONDecodeError:  # resposta cortada no meio
+            motivo = f"JSON cortado ({len(raw)} bytes)"
+            print(f"HubSpot {path}: {motivo}; tentativa {i + 1} de {tries}", file=sys.stderr)
+    sys.exit(f"HubSpot indisponível após {tries} tentativas ({path}). Último motivo: {motivo}")
 
 
 def pipelines():

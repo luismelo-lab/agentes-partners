@@ -130,7 +130,7 @@ WhatsApp, GLPI (novo), HubSpot (portal 47865021), dashboard S&OE, cockpit Master
 - Recuperador: lote de segunda às 9h enviado à Geovana com cópia para o Luis (D27, 01/10). Se o Outlook falhar, vira rascunho.
 
 ## OneDrive, backup e jobs (02/10)
-- **OneDrive centralizado:** `lib/caminhos.py` acha a pasta ativa pela marca de sincronização do macOS (hoje "OneDrive-SAVECOMPANY 2 2"). A pasta antiga "OneDrive-SAVECOMPANY" não sincronizava: conteúdo copiado, cópia antiga na Lixeira. publicar_onedrive, central, registro_demandas e backup usam caminhos.py.
+- **OneDrive centralizado:** `lib/caminhos.py` acha a pasta ativa pela marca de sincronização do macOS (em 10/10: "OneDrive-SAVECOMPANY"; a "... 2 2" virou pasta morta, sem sincronização, criada pelo atalho antigo e usada pelos downloads do Chrome). publicar_onedrive, central, registro_demandas e backup usam caminhos.py.
 - **Backup:** job `com.savecompany.partners.backup` (19h30) roda `partners backup`, com log e alerta. O antigo `com.savecompany.agentes-backup` foi removido.
 - **Jobs do launchd:** 7 (backup, caixa, central, manha, segunda, tarde, whatsapp-auto), todos em `infra/launchd/` e religados por `instalar.sh`.
 

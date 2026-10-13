@@ -49,7 +49,7 @@ Estrutura de agentes da Área Partners da Save Company (gestor: Luis Fernando de
 
 ## Onde o time vê o trabalho
 - **E-mail:** plano do dia (7h30, com planilha anexa) e aviso da tarde (13h30), caixa do WhatsApp (8h e 14h com IA; 11h e 17h sem IA), respostas da Central, lote do Recuperador (segunda 9h). Os automáticos têm o assunto "[Partners · automático] ..." e a Central os ignora.
-- **OneDrive:** `Área Partners · Agentes/` com uma pasta por pessoa (planilhas de trabalho sincronizadas nos dois sentidos). A pasta local ativa é achada por `lib/caminhos.py` (hoje "OneDrive-SAVECOMPANY 2 2").
+- **OneDrive:** `Área Partners · Agentes/` com uma pasta por pessoa (planilhas de trabalho sincronizadas nos dois sentidos). A pasta local ativa é achada por `lib/caminhos.py` (desde 10/10: "OneDrive-SAVECOMPANY"; os atalhos "OneDrive - SAVE COMPANY" não são confiáveis e só valem se apontarem para a pasta que sincroniza).
 - **Portal:** https://claude.ai/artifact/7fgGfrK7zVqzjcXCscJmwb
 
 ## Conectores (revisão do TI, 01/10/2026)
@@ -66,5 +66,5 @@ Estrutura de agentes da Área Partners da Save Company (gestor: Luis Fernando de
 Esta pasta é um repositório git **só de código** (o `.gitignore` bloqueia dados). Antes de cada commit: `infra/repo-sincronizar.sh` (copia skills e rotinas). O commit é barrado se `infra/checar-dados.py` achar CNPJ, CPF, telefone, token ou chave.
 
 ## Segurança e backup
-- **Backup:** diário às 19h30 (`com.savecompany.partners.backup` → `partners backup`, com log e alerta) no OneDrive (`Backups/agentes-partners/<data>`, 30 dias). Guarda skills, rotinas e esta pasta, exceto `.env` e a base da Receita.
+- **Backup:** diário às 19h30 (`com.savecompany.partners.backup` → `partners backup`, com log e alerta) no OneDrive (`Backups/agentes-partners/agentes-partners-<data>.tar.gz`, um arquivo por dia, 14 dias). Guarda skills, rotinas e esta pasta, exceto `.env`, worktrees do Claude, a base da Receita e o Whisper. Antes de 10/10 eram ~7 mil arquivos soltos por dia (48 mil no OneDrive).
 - **Dados pessoais:** RG, CPF, CNH, CTPS, IRPF, passaporte, comprovante de endereço e extrato bancário não são lidos nem copiados. CPF, RG e dados bancários nunca vão para o painel: quem atende completa direto no GLPI. As pastas com conteúdo de clientes ficam com permissão 700.

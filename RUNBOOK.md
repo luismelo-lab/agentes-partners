@@ -68,6 +68,8 @@ Para ter o comando no terminal: `echo 'export PATH="$HOME/agentes-partners/bin:$
 - **`partners status` mostra ERRO:** rode `partners logs <nome>` para ver a mensagem.
 - **O Outlook não envia:** confira se o Outlook clássico está aberto. Na primeira execução pelo launchd, o macOS pode pedir para autorizar o controle do Outlook: aceite.
 - **Mac acordar sozinho (recomendado):** no Terminal, rode `sudo pmset repeat wakeorpoweron MTWRF 07:25:00` e deixe o Mac na tomada.
+- **Backup (10/10):** um `.tar.gz` por dia em `Backups/agentes-partners/`, montado fora do OneDrive e conferido antes de entrar. Restaurar: `tar -xzf <arquivo> -C ~/restaurado`.
+- **Duplicados no OneDrive:** `python3 infra/organizar_onedrive.py duplicados` mostra o que sairia; `... duplicados executar` manda para a Lixeira (recuperável) e grava o manifesto em `logs/`. Nunca toca Área Partners · Agentes, Backups, Teams, Gravações e Whiteboards.
 - **Backup das 19h30 falhou:** veja `partners logs backup`. Se for permissão, dê Acesso Total ao Disco para zsh e python (Ajustes do Sistema → Privacidade e Segurança).
 - **Mac desligado ou app fechado:** os jobs do terminal rodam quando o Mac liga; as rotinas do Claude rodam quando o app abre.
 - **Restaurar do backup:** copie `OneDrive/Backups/agentes-partners/<data>/agentes-partners` para `~/agentes-partners` e `.../skills` para `~/.claude/skills`. Recrie o `.env` com o token do HubSpot e rode `partners receita`.

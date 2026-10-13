@@ -53,7 +53,8 @@ fi
 [ "$(uname)" = "Linux" ] && export PATH="$PATH:/usr/bin"
 
 if [[ "${1:-}" == (manha|tarde|segunda) && -z "${PARTNERS_TRAVA:-}" ]]; then
-  export PARTNERS_TRAVA=1; exec /usr/bin/lockf -t 3600 "$LOG/.trava-operacao" "$0" "$@"
+  export PARTNERS_TRAVA=1  # caffeinate -i: o Mac não dorme no meio do download do HubSpot nem do envio
+  exec /usr/bin/caffeinate -i /usr/bin/lockf -t 3600 "$LOG/.trava-operacao" "$0" "$@"
 fi
 
 case "${1:-ajuda}" in
