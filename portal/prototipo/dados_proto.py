@@ -405,7 +405,23 @@ def resumo_ind(ns):
             "por_mes": [[m, sum(1 for n in ns if (n.get("criado") or "")[:7] == m)] for m in meses6],
             "abertos_l": sorted([{"caso": cod(n["id"]), "parceiro": n.get("parceiro") or "—", "etapa": n["etapa"], "valor": round(n["valor"]), "criado": n.get("criado")} for n in ns if n["status"] == "aberto"], key=lambda x: -x["valor"])[:25]}
 ind = {k: resumo_ind(v) for k, v in IND.items()}
-detalhe = {"indicacoes": ind, "ganhos_mes": ganhos_mes, "abertos": abertos_l[:40], "por_etapa": sorted([[k, v[0], round(v[1])] for k, v in por_et.items()], key=lambda x: -x[2]),
+ORDEM_ETAPAS = ["Lead Novo - Prospecção", "Lead Novo - Partners", "Novo Negócio", "Agendamento", "Em Contato", "Follow - Up", "Contato Futuro", "Estudo Inicial",
+                "Documentação Pendente", "Análise de Documentos", "Em Diagnóstico", "Análise com Pendência", "Autorização - Gestor", "Autorização Equipe Senior LR",
+                "Apresentação de Diagnóstico", "Negociação", "Contrato Enviado", "Pendência Fechamento", "Contrato Assinado"]
+FX = ["0–30", "31–60", "61–90", "91–180", "> 180"]
+fx = lambda d: "0–30" if d <= 30 else "31–60" if d <= 60 else "61–90" if d <= 90 else "91–180" if d <= 180 else "> 180"
+funil_rs, heat = [], []
+for et in sorted({n["etapa"] for n in ab}, key=lambda e: ORDEM_ETAPAS.index(e) if e in ORDEM_ETAPAS else 99):
+    ns = [n for n in ab if n["etapa"] == et]
+    funil_rs.append([et, len(ns), round(sum(n.get("valor") or 0 for n in ns)), sum(1 for n in ns if not n.get("valor"))])
+    row = []
+    for b in FX:
+        xs = [n for n in ns if fx(dias((n.get("extras") or {}).get("entrou_etapa") or n.get("criado")) or 0) == b]
+        row.append([len(xs), round(sum(n.get("valor") or 0 for n in xs))])
+    heat.append([et, row])
+mais90 = [n for n in ab if (dias((n.get("extras") or {}).get("entrou_etapa") or n.get("criado")) or 0) > 90]
+detalhe = {"funil_rs": funil_rs, "heat": heat, "faixas": FX, "mais90": [len(mais90), round(sum(n.get("valor") or 0 for n in mais90))],
+           "sem_valor": sum(1 for n in ab if not n.get("valor")), "indicacoes": ind, "ganhos_mes": ganhos_mes, "abertos": abertos_l[:40], "por_etapa": sorted([[k, v[0], round(v[1])] for k, v in por_et.items()], key=lambda x: -x[2]),
            "por_parceiro": sorted([[k, v[0], round(v[1])] for k, v in por_pa.items()], key=lambda x: -x[2]),
            "agenda": {"agendamento_n": len(agend), "agendamento_rs": sum(x["valor"] for x in agend), "jenifer_negocios": sum(1 for n in HB if n.get("owner") == "79401410"),
                       "jenifer_registradas": 0, "nota": "A aba Agenda do Controle de Follow-up da Jenifer está vazia e reuniões não fazem parte do download do HubSpot. As agendas dela passam a contar quando forem registradas ali ou quando o HubSpot liberar a leitura de reuniões."},
@@ -418,7 +434,7 @@ P = {
     "masters": sorted(masters, key=lambda m: m["saude"] or 0),
     "serie": serie, "winrate": winrate, "lucro": lucro, "funil": funil, "idade_abertos": [[k, faixas[k]] for k in ("0–30", "31–60", "61–90", "91–180", "> 180")],
     "kpi": {"win_rate_3m": M.get("win_rate_3m"), "ticket_3m": M.get("ticket_valor_3m"), "pipeline": M.get("pipeline_aberto"), "concentracao": M.get("concentracao_12m"),
-            "mes": M.get("mes_ate_hoje"), "ano": M.get("crescimento_acumulado_ano"), "ciclo": CF.get("ciclo"), "mix": (M.get("mix_teses") or {}).get("top", [])[:8],
+            "mes": M.get("mes_ate_hoje"), "pipeline_hb": {"n": len(ab), "rs": round(sum(n.get("valor") or 0 for n in ab))}, "ano": M.get("crescimento_acumulado_ano"), "ciclo": CF.get("ciclo"), "mix": (M.get("mix_teses") or {}).get("top", [])[:8],
             "sem_tese": (M.get("mix_teses") or {}).get("ganhos_sem_tese"), "qualidade": BI.get("indice_qualidade_ganhos"), "inconsistencias": BI.get("inconsistencias"),
             "conflito": {"alta": CF["por_severidade"].get("Alta"), "mxm": CF.get("master_x_master"), "valor": CF.get("valor_em_conflito_rs"), "raizes": CF.get("raizes_com_mais_de_um_canal")},
             "repasse": RP.get("status"), "repasse_calc": RP.get("repasse_calculado_rs"), "contratos": CT.get("em_contrato"),

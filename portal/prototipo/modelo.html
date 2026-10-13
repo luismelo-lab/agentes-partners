@@ -2,13 +2,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: cockpit por pessoa (números → Fazer agora → detalhe) + caixa de entrada única; Design System Save v0.5, modo painel (escuro). */
+/* Layout: barra lateral agrupada + cockpit por pessoa (herói → alerta → números → fazer agora → análise). Design System Save v0.5, modo painel. */
 :root {
   --fundo: #000000; --fundo-2: #111111; --cartao: #171717; --elevado: #1E1E1E;
   --borda: #2A2A2A; --borda-3: #3A3A3A;
   --texto: #F5F5F5; --texto-2: #A1A1A1; --texto-3: #6B6B6B;
-  --ouro: #F3CD60; --ouro-suave: rgba(243,205,96,.12);
-  --sucesso: #44C653; --alerta: #E8B34A; --erro: #D64545; --info: #6E92E8;
+  --ouro: #F3CD60; --ouro-suave: rgba(243,205,96,.12); --ouro-50: rgba(243,205,96,.5);
+  --serie-2: #6B6B6B; --serie-3: #A1A1A1; --serie-4: #555555;
+  --sucesso: #44C653; --alerta: #E8B34A; --erro: #D64545;
   --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --r-sm: 8px; --r-md: 12px; --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -19,151 +20,237 @@ html, body { background: var(--fundo); color: var(--texto); }
 body { margin: 0; font: 400 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
 .num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .rotulo { font: 500 11px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--texto-2); }
-.rotulo.ouro { color: var(--ouro); }
 a { color: var(--ouro); }
 :focus-visible { outline: 3px solid var(--ouro); outline-offset: 2px; }
+button { font-family: var(--sans); }
 
-/* topo */
-.topo { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: rgba(0,0,0,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--borda); }
-.faixa { max-width: 1240px; margin: 0 auto; padding-inline: 20px; }
-.linha-topo { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-block: 14px 10px; }
-.linha-topo img { height: 26px; width: auto; }
-.linha-topo h1 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
-.linha-topo .sep { width: 1px; height: 22px; background: var(--borda-3); }
-.quem { margin-left: auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.seg { display: inline-flex; background: var(--fundo-2); border: 1px solid var(--borda); border-radius: var(--r-sm); padding: 3px; }
-.seg button { font: 500 13px var(--sans); color: var(--texto-2); background: none; border: 0; border-radius: 6px; padding: 8px 12px; min-height: 36px; cursor: pointer; }
-.seg button[aria-pressed="true"] { background: var(--elevado); color: var(--texto); box-shadow: inset 0 0 0 1px var(--borda-3); }
-.atual { font: 12px var(--mono); color: var(--texto-3); }
+/* estrutura */
+.app { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100vh; }
+.app { background: linear-gradient(90deg, var(--fundo-2) 232px, var(--borda) 232px 233px, var(--fundo) 233px); }
+.lateral { position: sticky; top: 0; height: 100vh; background: var(--fundo-2); border-right: 1px solid var(--borda); display: flex; flex-direction: column; gap: 4px; padding: 18px 12px; overflow-y: auto; }
+.lateral .logo { height: 24px; width: auto; margin: 2px 8px 6px; align-self: flex-start; }
+.lateral .nome { font-weight: 600; font-size: 14px; margin: 0 8px 14px; color: var(--texto-2); }
+.grupo-nav { display: grid; gap: 2px; margin-bottom: 12px; }
+.grupo-nav .rotulo { padding: 0 10px 4px; color: var(--texto-3); }
+.nav-item { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 10px; border-radius: 8px; color: var(--texto-2); cursor: pointer; font-size: 14px; position: relative; }
+.nav-item:hover { background: var(--cartao); color: var(--texto); }
+.nav-item[aria-current="page"] { background: var(--elevado); color: var(--texto); }
+.nav-item[aria-current="page"]::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 2px; border-radius: 2px; background: var(--ouro); }
+.nav-item svg { width: 18px; height: 18px; flex: none; }
+.nav-item .badge { margin-left: auto; }
+.nav-item:focus-visible { outline: 2px solid var(--ouro); }
+.quem { margin-top: auto; border-top: 1px solid var(--borda); padding-top: 12px; display: grid; gap: 6px; }
+.pessoas { display: flex; gap: 6px; padding: 0 6px; }
+.pessoa { all: unset; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font: 600 12px var(--mono); color: var(--texto-2); background: var(--cartao); border: 1px solid var(--borda); }
+.pessoa[aria-pressed="true"] { color: #0F1115; background: var(--ouro); border-color: var(--ouro); }
+.pessoa:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px; }
+.badge { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 10px; background: var(--elevado); color: var(--texto); border: 1px solid var(--borda-3); font: 600 11px/18px var(--mono); text-align: center; }
+
+.conteudo { min-width: 0; }
+.topo { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: rgba(0,0,0,.9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--borda); }
+.topo-in { max-width: 1280px; margin: 0 auto; padding: 14px 28px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topo h1 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
+.topo .sub { color: var(--texto-2); font-size: 13px; }
+.topo .dir { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .prot { font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ouro); background: var(--ouro-suave); padding: 3px 8px; border-radius: 4px; }
-nav[role="tablist"] { display: flex; gap: 2px; overflow-x: auto; }
-nav[role="tablist"] button { background: none; border: 0; color: var(--texto-2); font: 500 14px var(--sans); padding: 12px 14px; min-height: 44px; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; }
-nav[role="tablist"] button[aria-selected="true"] { color: var(--texto); border-bottom-color: var(--ouro); }
-.badge { display: inline-block; min-width: 20px; margin-left: 6px; padding: 0 6px; border-radius: 10px; background: var(--ouro); color: #0F1115; font: 600 11px/18px var(--mono); text-align: center; }
+.op { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font: 500 12px var(--mono); color: var(--texto-2); padding: 6px 10px; border: 1px solid var(--borda); border-radius: 999px; }
+.op .pt { width: 8px; height: 8px; border-radius: 50%; }
+.op.falha { color: var(--erro); border-color: rgba(214,69,69,.45); }
+.op:focus-visible { outline: 2px solid var(--ouro); }
 
-main { max-width: 1240px; margin: 0 auto; padding: 24px 20px 64px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+main { max-width: 1280px; margin: 0 auto; padding: 24px 28px 96px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
 main > * { min-width: 0; }
-section > h2 { font-size: 18px; font-weight: 600; margin: 0 0 4px; letter-spacing: -.01em; text-wrap: balance; }
-.sub { color: var(--texto-2); margin: 0 0 14px; font-size: 14px; max-width: 70ch; }
+main.entra { animation: entra 180ms var(--ease); }
+@keyframes entra { from { opacity: 0; } to { opacity: 1; } }
+section > h2, .cab h2 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
 .cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-.cab h2 { margin: 0; font-size: 18px; font-weight: 600; }
+.atual { font: 12px var(--mono); color: var(--texto-3); }
+.sub { color: var(--texto-2); margin: 4px 0 12px; font-size: 14px; max-width: 72ch; }
+.nota { color: var(--texto-3); font-size: 12px; margin: 0; }
 
-/* KPIs */
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); gap: 12px; }
-.kpi { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 16px 18px; min-width: 0; display: grid; gap: 6px; }
-.kpi .v { font: 500 30px/1.1 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
-.kpi.destaque { border-color: rgba(243,205,96,.45); background: linear-gradient(180deg, rgba(243,205,96,.07), transparent 70%), var(--cartao); }
-.kpi.destaque .v { color: var(--ouro); }
-.kpi .d { color: var(--texto-2); font-size: 13px; }
+/* herói e números */
+.topo-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.heroi { grid-column: span 2; position: relative; overflow: hidden; background: var(--cartao); border: 1px solid rgba(243,205,96,.4); border-radius: var(--r-md); padding: 24px; display: grid; gap: 14px; align-content: start; }
+.heroi::after { content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(243,205,96,.14), transparent 65%); pointer-events: none; }
+.heroi .v { font: 600 56px/1 var(--sans); color: var(--ouro); letter-spacing: -.02em; }
+.heroi .t { font-size: 15px; color: var(--texto); max-width: 40ch; }
+.heroi .lado { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.comp { display: flex; height: 8px; border-radius: 4px; overflow: hidden; gap: 2px; background: transparent; }
+.comp i { display: block; height: 100%; }
+.leg { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 12px var(--mono); color: var(--texto-2); }
+.leg i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.kpi { position: relative; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
 .kpi[data-kpi] { cursor: pointer; transition: border-color 120ms var(--ease); } .kpi[data-kpi]:hover { border-color: var(--borda-3); }
-.kpi .ver { font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ouro); }
-.delta { font: 500 12px var(--mono); }
-.delta.sobe { color: var(--sucesso); } .delta.desce { color: var(--erro); }
+.kpi .cabk { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.kpi .v { font: 500 30px/1.05 var(--mono); letter-spacing: -.02em; overflow-wrap: anywhere; }
+.kpi .v small { font-size: .55em; color: var(--texto-3); margin-right: 3px; }
+.kpi .d { color: var(--texto-2); font-size: 13px; }
+.kpi .ver { font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--texto-3); }
+.kpi[data-kpi]:hover .ver { color: var(--ouro); }
+.delta { font: 500 12px var(--mono); white-space: nowrap; } .delta .s { color: var(--sucesso); } .delta .e { color: var(--erro); }
+.spk { width: 100%; height: 32px; display: block; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; }
 
-/* listas de ação */
-.lista { display: grid; gap: 8px; }
-.item { display: grid; grid-template-columns: 4px 1fr auto; gap: 14px; align-items: center; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 12px 14px 12px 0; min-width: 0; }
-.item .tarja { align-self: stretch; border-radius: 0 3px 3px 0; background: var(--borda-3); }
-.item.urg .tarja { background: var(--erro); } .item.med .tarja { background: var(--alerta); }
-.item .corpo { min-width: 0; display: grid; gap: 3px; }
-.item .t { font-weight: 600; overflow-wrap: anywhere; }
-.item .meta { display: flex; flex-wrap: wrap; gap: 6px 12px; color: var(--texto-2); font-size: 13px; }
-.item .meta .num { color: var(--texto); }
-.item.feito { opacity: .45; }
-.acoes { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-.chip { display: inline-flex; align-items: center; gap: 6px; font: 500 11px/1.6 var(--mono); letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; background: var(--fundo-2); color: var(--texto-2); border: 1px solid var(--borda); }
-.chip.erro { color: var(--erro); border-color: rgba(214,69,69,.4); background: rgba(214,69,69,.08); }
-.chip.alerta { color: var(--alerta); border-color: rgba(232,179,74,.4); background: rgba(232,179,74,.08); }
+/* faixa de alerta */
+.faixa { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 12px 16px; border-radius: var(--r-md); border: 1px solid rgba(214,69,69,.4); background: rgba(214,69,69,.06); }
+.faixa svg { width: 18px; height: 18px; color: var(--erro); flex: none; }
+.faixa .txt { flex: 1 1 260px; font-size: 14px; }
+.faixa .botao { margin-left: auto; }
+
+/* chips e botões */
+.chip { display: inline-flex; align-items: center; gap: 5px; font: 500 11px/1.6 var(--mono); letter-spacing: .04em; text-transform: uppercase; padding: 1px 8px; border-radius: 4px; background: var(--fundo-2); color: var(--texto-2); border: 1px solid var(--borda); white-space: nowrap; }
+.chip svg { width: 11px; height: 11px; }
+.chip.erro { color: var(--erro); border-color: rgba(214,69,69,.45); background: rgba(214,69,69,.08); }
+.chip.alerta { color: var(--alerta); border-color: rgba(232,179,74,.5); border-style: dashed; background: transparent; }
 .chip.ok { color: var(--sucesso); border-color: rgba(68,198,83,.4); background: rgba(68,198,83,.08); }
 .chip.ouro { color: var(--ouro); border-color: rgba(243,205,96,.4); background: var(--ouro-suave); }
-.botao { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: var(--r-sm); border: 1px solid transparent; font: 600 14px var(--sans); cursor: pointer; background: var(--ouro); color: #0F1115; transition: filter 120ms var(--ease); }
+.botao { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: var(--r-sm); border: 1px solid transparent; font: 600 14px var(--sans); cursor: pointer; background: var(--ouro); color: #0F1115; transition: filter 120ms var(--ease), border-color 120ms var(--ease), color 120ms var(--ease); white-space: nowrap; }
 .botao:hover { filter: brightness(.95); }
 .botao.sec { background: transparent; color: var(--texto); border-color: var(--borda-3); }
+.botao.sec:hover { border-color: var(--ouro); color: var(--ouro); filter: none; }
 .botao.peq { min-height: 36px; padding: 0 12px; font-size: 13px; }
-.mais { margin-top: 10px; }
+.botao.icone { width: 44px; padding: 0; }
 
-/* grade de blocos */
-.grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px; }
+/* itens de ação */
+.lista { display: grid; gap: 6px; }
+.item { display: grid; grid-template-columns: 4px minmax(0, 1fr) 110px 86px auto; gap: 14px; align-items: center; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 10px 14px 10px 0; transition: background 120ms var(--ease); }
+.item:hover { background: var(--elevado); }
+.item .tarja { align-self: stretch; border-radius: 0 3px 3px 0; background: var(--borda-3); }
+.item.atrasado .tarja { background: var(--erro); }
+.item.atencao .tarja { background: repeating-linear-gradient(180deg, var(--alerta) 0 6px, transparent 6px 9px); }
+.item .corpo { min-width: 0; display: grid; gap: 2px; }
+.item .t { font-weight: 600; overflow-wrap: anywhere; }
+.item .meta { display: flex; flex-wrap: wrap; gap: 4px 10px; color: var(--texto-2); font-size: 13px; align-items: center; }
+.item .val { text-align: right; font: 500 14px var(--mono); }
+.item .idade { text-align: right; font: 500 13px var(--mono); color: var(--texto-2); }
+.idade.a { color: var(--alerta); } .idade.e { color: var(--erro); }
+.item.feito { opacity: .4; }
+.grupo-tit { display: flex; align-items: center; gap: 10px; margin: 14px 0 6px; font: 600 14px var(--sans); }
+.grupo-tit .badge { background: var(--fundo-2); }
+details.grp > summary { list-style: none; cursor: pointer; } details.grp > summary::-webkit-details-marker { display: none; }
+details.grp > summary .grupo-tit::after { content: "▾"; color: var(--texto-3); margin-left: auto; } details.grp:not([open]) > summary .grupo-tit::after { content: "▸"; }
+
+/* blocos, tabelas */
+.grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); gap: 16px; }
+.grade-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; }
 .bloco { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 18px; min-width: 0; display: grid; gap: 12px; align-content: start; }
 .bloco h3 { margin: 0; font-size: 15px; font-weight: 600; }
-.bloco .nota { color: var(--texto-3); font-size: 12px; margin: 0; }
+.bloco .tese { font-size: 13px; color: var(--texto-2); margin: -6px 0 0; }
 .mini { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
 .mini div { display: grid; gap: 2px; min-width: 0; } .mini b { font: 500 17px var(--mono); white-space: nowrap; }
-
-/* tabelas */
 .tab-wrap { overflow-x: auto; border: 1px solid var(--borda); border-radius: var(--r-md); background: var(--cartao); }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th { text-align: left; font: 500 11px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--texto-2); padding: 12px; border-bottom: 1px solid var(--borda-3); white-space: nowrap; }
+th { text-align: left; font: 500 11px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--texto-2); padding: 11px 12px; border-bottom: 1px solid var(--borda-3); white-space: nowrap; }
 th button { all: unset; cursor: pointer; } th button:focus-visible { outline: 2px solid var(--ouro); }
-td { padding: 11px 12px; border-bottom: 1px solid var(--borda); vertical-align: middle; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--borda); vertical-align: middle; }
 tr:last-child td { border-bottom: 0; }
 td.n, th.n { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
 tbody tr.clic { cursor: pointer; } tbody tr.clic:hover td { background: var(--elevado); }
+tbody tr.clic .botao { border-color: var(--borda-3); background: transparent; color: var(--texto); }
+tbody tr.clic:hover .botao, tbody tr.clic:focus-within .botao { background: var(--ouro); color: #0F1115; border-color: var(--ouro); }
 .saude { display: inline-flex; align-items: center; gap: 8px; }
-.barrinha { width: 64px; height: 6px; background: var(--fundo-2); border-radius: 3px; overflow: hidden; }
+.barrinha { width: 72px; height: 6px; background: var(--borda-3); border-radius: 3px; overflow: hidden; }
 .barrinha i { display: block; height: 100%; }
+.linha-m { display: grid; grid-template-columns: minmax(110px, 1.2fr) 120px repeat(3, minmax(70px, .7fr)) 140px 24px; gap: 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--borda); cursor: pointer; }
+.linha-m:hover { background: var(--elevado); } .linha-m:last-child { border-bottom: 0; }
+.linha-m .k { font: 500 13px var(--mono); text-align: right; } .linha-m .k small { display: block; font: 11px var(--mono); color: var(--texto-3); }
 
 /* gráficos */
-svg.graf { width: 100%; height: auto; display: block; }
+svg.graf { width: 100%; max-width: 760px; }
+.estreito svg.graf { max-width: 560px; }
+svg.graf { height: auto; display: block; overflow: visible; }
 svg.graf text { fill: var(--texto-2); font: 11px var(--mono); }
 svg.graf .rot { fill: var(--texto); font: 12px var(--sans); }
-.legenda { display: flex; gap: 14px; flex-wrap: wrap; color: var(--texto-2); font-size: 12px; }
-.legenda i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
-.prog { height: 10px; background: var(--fundo-2); border-radius: 5px; overflow: hidden; } .prog i { display: block; height: 100%; background: var(--ouro); }
+svg.graf .forte { fill: var(--texto); }
+svg.graf [data-tip] { cursor: pointer; }
+svg.graf [data-tip]:hover, svg.graf [data-tip]:focus { filter: brightness(1.25); outline: none; }
+.tip { position: fixed; z-index: 40; pointer-events: none; background: var(--elevado); border: 1px solid var(--borda-3); border-radius: 8px; padding: 8px 10px; font: 12px/1.5 var(--mono); color: var(--texto); max-width: 260px; box-shadow: 0 6px 18px rgba(0,0,0,.4); }
+.tip b { font-family: var(--sans); }
+details.tabela > summary { cursor: pointer; font: 500 12px var(--mono); color: var(--texto-3); } details.tabela[open] > summary { margin-bottom: 8px; }
+.prog { height: 8px; background: var(--borda-3); border-radius: 4px; overflow: hidden; } .prog i { display: block; height: 100%; background: var(--ouro); }
 
-/* filtros */
+/* linha do tempo de prazos */
+.tl { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.tl .col { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 14px; display: grid; gap: 8px; align-content: start; min-height: 120px; }
+.tl .col.quente { border-color: rgba(214,69,69,.45); }
+.tl .col h4 { margin: 0; display: flex; justify-content: space-between; font: 600 13px var(--sans); }
+.tl .mk { all: unset; cursor: pointer; display: flex; gap: 8px; align-items: center; font: 12px var(--mono); color: var(--texto); padding: 6px 8px; border-radius: 6px; background: var(--fundo-2); }
+.tl .mk:hover { background: var(--elevado); } .tl .mk i { width: 10px; height: 10px; border-radius: 50%; background: var(--serie-2); flex: none; }
+.tl .col.quente .mk i { background: var(--erro); }
+
+/* filtros e campos */
 .filtros { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
 .filtros button { font: 500 13px var(--sans); color: var(--texto-2); background: var(--fundo-2); border: 1px solid var(--borda); border-radius: 999px; padding: 0 14px; min-height: 36px; cursor: pointer; }
-.filtros button[aria-pressed="true"] { color: #0F1115; background: var(--ouro); border-color: var(--ouro); }
+.filtros button[aria-pressed="true"] { color: var(--texto); background: var(--elevado); border-color: var(--ouro); }
 input[type="search"], select, textarea, input[type="text"] { font: 14px var(--sans); color: var(--texto); background: var(--fundo-2); border: 1px solid var(--borda-3); border-radius: var(--r-sm); padding: 0 12px; min-height: 40px; min-width: 0; }
 textarea { padding: 10px 12px; min-height: 90px; width: 100%; resize: vertical; }
 label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
+.busca-box { display: flex; gap: 8px; } .busca-box input { flex: 1 1 auto; min-height: 48px; font-size: 16px; }
 
-/* gaveta */
-.veu { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 20; }
-.gaveta { position: fixed; top: 0; right: 0; bottom: 0; width: min(480px, 100%); background: var(--fundo-2); border-left: 1px solid var(--borda-3); z-index: 21; padding: calc(env(safe-area-inset-top, 0px) + 20px) 22px 24px; overflow-y: auto; display: grid; gap: 16px; align-content: start; }
-.gaveta h3 { margin: 0; font-size: 18px; }
-.par { display: grid; grid-template-columns: 140px 1fr; gap: 8px; font-size: 14px; } .par span:first-child { color: var(--texto-2); }
-.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); transform: translateX(-50%); background: var(--elevado); border: 1px solid var(--borda-3); color: var(--texto); padding: 12px 16px; border-radius: var(--r-sm); z-index: 30; font-size: 14px; max-width: calc(100% - 32px); }
+/* painel lateral */
+.veu { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 20; animation: entra 180ms var(--ease); }
+.gaveta { position: fixed; top: 0; right: 0; bottom: 0; width: min(540px, 100%); background: var(--fundo-2); border-left: 1px solid var(--borda-3); z-index: 21; overflow-y: auto; animation: desliza 240ms var(--ease); display: flex; flex-direction: column; }
+@keyframes desliza { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.gaveta-cab { position: sticky; top: 0; z-index: 2; background: var(--fundo-2); border-bottom: 1px solid var(--borda); padding: calc(env(safe-area-inset-top, 0px) + 14px) 18px 12px 22px; display: flex; gap: 12px; align-items: flex-start; }
+.gaveta-cab .tt { flex: 1; min-width: 0; } .gaveta-cab h3 { margin: 2px 0 0; font-size: 18px; }
+.gaveta-corpo { padding: 18px 22px 28px; display: grid; gap: 16px; align-content: start; }
+.par { display: grid; grid-template-columns: 150px 1fr; gap: 8px; font-size: 14px; } .par span:first-child { color: var(--texto-2); }
 .pacote { display: grid; gap: 10px; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 14px; }
-.pacote h4 { margin: 0; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-.pacote pre { margin: 0; white-space: pre-wrap; font: 13px/1.5 var(--mono); color: var(--texto); background: var(--fundo); border: 1px solid var(--borda); border-radius: var(--r-sm); padding: 10px; }
+.pacote h4 { margin: 0; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--texto); }
 .check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--ouro); flex-shrink: 0; }
 .docs { display: flex; flex-wrap: wrap; gap: 8px; } .docs a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid var(--borda-3); border-radius: var(--r-sm); text-decoration: none; font-size: 13px; }
-.saudeop { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; font: 12px var(--mono); color: var(--texto-2); padding-block: 8px; border-top: 1px solid var(--borda); }
-.saudeop .pt { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
-.saudeop button { all: unset; cursor: pointer; color: var(--ouro); } .saudeop button:focus-visible { outline: 2px solid var(--ouro); }
-.parc { display: grid; gap: 10px; cursor: pointer; } .parc:hover { border-color: var(--borda-3); }
-.spark { width: 100%; height: 34px; display: block; }
-.busca-box { display: flex; gap: 8px; flex-wrap: wrap; } .busca-box input { flex: 1 1 260px; min-height: 44px; font-size: 15px; }
-.resp { display: grid; gap: 8px; }
-.vazio { border: 1px dashed var(--borda-3); border-radius: var(--r-md); padding: 18px; color: var(--texto-2); }
-@media (max-width: 640px) {
-  .item { grid-template-columns: 4px 1fr; } .item .acoes { grid-column: 2; justify-content: flex-start; }
-  .linha-topo .sep { display: none; } .quem { margin-left: 0; width: 100%; }
-  .kpi .v { font-size: 24px; }
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); transform: translateX(-50%); background: var(--elevado); border: 1px solid var(--borda-3); color: var(--texto); padding: 12px 16px; border-radius: var(--r-sm); z-index: 30; font-size: 14px; max-width: calc(100% - 32px); }
+.vazio { display: flex; gap: 10px; align-items: flex-start; border: 1px dashed var(--borda-3); border-radius: var(--r-md); padding: 16px; color: var(--texto-2); font-size: 14px; }
+
+/* barra inferior (celular) */
+.inferior { display: none; }
+@media (max-width: 1099px) {
+  .app { grid-template-columns: 64px minmax(0, 1fr); background: linear-gradient(90deg, var(--fundo-2) 64px, var(--borda) 64px 65px, var(--fundo) 65px); }
+  .lateral { padding: 14px 8px; } .lateral .logo, .lateral .nome, .grupo-nav .rotulo, .nav-item span, .quem .rotulo { display: none; }
+  .nav-item { justify-content: center; padding: 0; } .nav-item .badge { position: absolute; top: 2px; right: 2px; min-width: 16px; padding: 0 4px; font-size: 10px; line-height: 15px; }
+  .pessoas { flex-direction: column; align-items: center; }
+  .topo-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (max-width: 760px) {
+  .app { display: block; background: var(--fundo); } .lateral { display: none; }
+  .inferior { display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 15; background: rgba(17,17,17,.97); border-top: 1px solid var(--borda); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .inferior button { all: unset; display: grid; justify-items: center; gap: 2px; min-height: 56px; align-content: center; font-size: 11px; color: var(--texto-2); position: relative; cursor: pointer; }
+  .inferior button[aria-current="page"] { color: var(--ouro); } .inferior svg { width: 20px; height: 20px; }
+  .inferior .badge { position: absolute; top: 4px; left: 54%; font-size: 10px; min-width: 16px; line-height: 15px; padding: 0 4px; }
+  .topo-in, main { padding-inline: 16px; }
+  .topo-cards { grid-template-columns: minmax(0, 1fr); }
+  .heroi { grid-column: auto; } .heroi .v { font-size: 40px; }
+  .kpis.carrossel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; padding-bottom: 4px; }
+  .kpis.carrossel .kpi { min-width: 72%; scroll-snap-align: start; }
+  .item { grid-template-columns: 4px minmax(0, 1fr) auto; } .item .val, .item .idade { display: none; } .item .meta .so-cel { display: inline; }
+  .tl { grid-template-columns: minmax(0, 1fr); }
+  .linha-m { grid-template-columns: minmax(0, 1fr) auto; } .linha-m > :not(:first-child):not(:last-child):not(.cel) { display: none; }
+  .gaveta { width: 100%; top: 6vh; border-left: 0; border-top: 1px solid var(--borda-3); border-radius: 16px 16px 0 0; animation: sobe 240ms var(--ease); }
+  @keyframes sobe { from { transform: translateY(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .par { grid-template-columns: 1fr; gap: 2px; }
+  table.cartoes thead { display: none; } table.cartoes tr { display: grid; gap: 2px; padding: 10px 12px; border-bottom: 1px solid var(--borda); }
+  table.cartoes td { border: 0; padding: 0; text-align: left !important; } table.cartoes td[data-r]::before { content: attr(data-r) ": "; color: var(--texto-3); font: 11px var(--mono); }
+}
+.item .meta .so-cel { display: none; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
 
-<header class="topo"><div class="faixa">
-  <div class="linha-topo">
-    <img src="__LOGO__" alt="Save Co.">
-    <span class="sep" aria-hidden="true"></span>
-    <h1>Central Partners</h1>
-    <span class="prot">Protótipo</span>
-    <div class="quem">
-      <span class="rotulo">Ver como</span>
-      <div class="seg" role="group" aria-label="Ver o painel como" id="pessoas"></div>
-      <span class="atual" id="atual"></span>
-    </div>
+<div class="app">
+  <aside class="lateral" aria-label="Navegação">
+    <img class="logo" src="__LOGO__" alt="Save Co.">
+    <div class="nome">Central Partners <span class="prot">Protótipo</span></div>
+    <nav id="nav"></nav>
+    <div class="quem"><span class="rotulo" style="padding:0 10px">Ver como</span><div class="pessoas" id="pessoas"></div></div>
+  </aside>
+  <div class="conteudo">
+    <header class="topo"><div class="topo-in" id="topo"></div></header>
+    <main id="conteudo" tabindex="-1"></main>
   </div>
-  <nav role="tablist" aria-label="Seções" id="abas"></nav>
-  <div class="saudeop" id="saudeop"></div>
-</div></header>
-<main id="conteudo"></main>
+</div>
+<nav class="inferior" id="inferior" aria-label="Navegação"></nav>
 <div id="camada"></div>
+<div class="tip" id="tip" hidden role="tooltip"></div>
 
 <script type="application/json" id="dados">__DADOS__</script>
 <script>
@@ -171,433 +258,490 @@ const D = JSON.parse(document.getElementById("dados").textContent);
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const rs = v => { v = +v || 0; const a = Math.abs(v); return a >= 1e9 ? "R$ " + (v/1e9).toFixed(1).replace(".", ",") + " bi" : a >= 1e6 ? "R$ " + (v/1e6).toFixed(1).replace(".", ",") + " mi" : a >= 1e3 ? "R$ " + Math.round(v/1e3).toLocaleString("pt-BR") + " mil" : "R$ " + Math.round(v).toLocaleString("pt-BR") };
+const rsK = v => rs(v).replace("R$ ", "");
+const rsH = v => `<small>R$</small>${esc(rsK(v))}`;
 const n = v => (v ?? 0).toLocaleString("pt-BR");
+const pc = v => v == null ? "—" : String(Math.round(v * 10) / 10).replace(".", ",") + "%";
 const MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
 const mesRot = m => MES[+m.slice(5,7) - 1] + "/" + m.slice(2,4);
+const dt = s => s ? s.slice(8, 10) + "/" + s.slice(5, 7) + "/" + s.slice(2, 4) : "—";
+const HOJE = "2026-10-13", MES_ATUAL = HOJE.slice(0, 7);
 const PESSOAS = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "Geovana"};
-const ABAS = [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["prazos", "Prazos e documentos"], ["parceiros", "Parceiros"], ["recorrencia", "Recorrência"], ["busca", "Busca"], ["biblioteca", "Biblioteca"], ["pedidos", "Pedidos"]];
-const S = {eu: "luis", aba: "inicio", feitos: new Set(), filtro: {grupo: "todos", so_urg: false, busca: ""}, ordem: {campo: "saude", asc: true}};
+const ICON = {
+  inicio: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>', caixa: '<path d="M3 13h5l2 3h4l2-3h5M5 5h14l2 8v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6z"/>',
+  prazos: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/>', parceiros: '<circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M15 14.6c2.6.1 4.6 1.8 5.5 5.4"/>',
+  recorrencia: '<path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9M18 3v4.5h-4.5M6 21v-4.5h4.5"/>', busca: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+  biblioteca: '<path d="M5 4h4v16H5zM10 4h4v16h-4zM15.5 4.6l3.8-1 3.7 15.5-3.8 1z"/>', pedidos: '<path d="M4 5h16v11H8l-4 4zM8 9h8M8 12h5"/>', mais: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
+  alerta: '<path d="M12 3l10 18H2zM12 10v5M12 18v.5"/>', ok: '<path d="M4 12l5 5L20 6"/>', fechar: '<path d="M6 6l12 12M18 6L6 18"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
+const ico = (k, cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
+const GRUPOS = [["Meu dia", [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["prazos", "Prazos e documentos"]]], ["Carteira", [["parceiros", "Parceiros"], ["recorrencia", "Recorrência"]]], ["Ferramentas", [["busca", "Busca"], ["biblioteca", "Biblioteca"], ["pedidos", "Pedidos"]]]];
+const ABAS = GRUPOS.flatMap(g => g[1]);
+const S = {eu: "luis", aba: "inicio", feitos: new Set(), filtro: {}, ordem: {campo: "saude", asc: true}, animar: true, origem: null};
 try { S.eu = localStorage.getItem("cp-eu") || "luis"; S.aba = localStorage.getItem("cp-aba") || "inicio"; } catch (e) {}
 if (!PESSOAS[S.eu]) S.eu = "luis"; if (!ABAS.some(a => a[0] === S.aba)) S.aba = "inicio";
+const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/* ---------- regras de leitura dos itens ---------- */
 const minhas = () => D.caixa.filter(x => (S.eu === "luis" ? true : x.pessoa === S.eu) && !S.feitos.has(x.id));
 const doLuis = () => D.caixa.filter(x => x.pessoa === "luis" && !S.feitos.has(x.id));
 const pronto = x => !!((x.pacote || {}).glpi || (x.pacote || {}).mensagem || (x.pacote || {}).encaminhar);
+const idade = d => d == null ? "" : d > 30 ? "e" : d > 7 ? "a" : "";
 const corSaude = s => s >= 75 ? "var(--sucesso)" : s >= 60 ? "var(--alerta)" : "var(--erro)";
+const selSaude = s => s >= 75 ? ["ok", "boa"] : s >= 60 ? ["alerta", "atenção"] : ["erro", "risco"];
+D.masters.forEach(m => { const f = D.ficha[m.parceiro] || {}; m.pct_repasse = f.pct; m.repasse_12m = f.comissao_12m; });
+const PIPE = D.kpi.pipeline_hb;
 
-/* ---------- gráficos (SVG desenhado em escala) ---------- */
-function barras(dados, {alt = 200, cor = "var(--ouro)", fmt = n, linha = null, corLinha = "var(--texto)"} = {}) {
-  const W = 380, H = alt, m = {l: 6, r: 6, t: 18, b: 24}; const w = W - m.l - m.r, h = H - m.t - m.b;
-  const max = Math.max(...dados.map(d => d.v), 1); const bw = w / dados.length;
-  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
-  for (let i = 0; i <= 3; i++) { const y = m.t + h - h * i / 3; s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y}" y2="${y}" stroke="var(--borda)" stroke-width="1"/>`; }
-  dados.forEach((d, i) => { const bh = h * d.v / max, x = m.l + i * bw + bw * .18, y = m.t + h - bh, ult = i === dados.length - 1;
-    s += `<rect x="${x}" y="${y}" width="${bw * .64}" height="${Math.max(bh, 1)}" rx="3" fill="${ult ? cor : "var(--borda-3)"}"><title>${esc(d.r)}: ${esc(fmt(d.v))}</title></rect>`;
-    if (dados.length <= 8 || (dados.length - 1 - i) % 2 === 0) s += `<text x="${x + bw * .32}" y="${H - 8}" text-anchor="middle">${esc(d.r)}</text>`;
-    if (ult || d.v === max) { const ax = x + bw * .32, anc = ax > W - 50 ? "end" : ax < 50 ? "start" : "middle"; s += `<text x="${anc === "end" ? x + bw * .64 : anc === "start" ? x : ax}" y="${y - 5}" text-anchor="${anc}" style="fill:var(--texto)">${esc(fmt(d.v))}</text>`; } });
-  if (linha) { const lm = Math.max(...linha, 1); const pts = linha.map((v, i) => `${m.l + i * bw + bw / 2},${m.t + h - h * v / lm}`);
-    s += `<polyline points="${pts.join(" ")}" fill="none" stroke="${corLinha}" stroke-width="2"/>`;
-    linha.forEach((v, i) => { s += `<circle cx="${m.l + i * bw + bw / 2}" cy="${m.t + h - h * v / lm}" r="3" fill="${corLinha}"/>`; }); }
-  return s + "</svg>";
-}
-function hbarras(dados, {fmt = n, cor = "var(--ouro)", larg = 130} = {}) {
-  const W = 380, lh = 30, H = dados.length * lh + 8, max = Math.max(...dados.map(d => d.v), 1), w = W - larg - 78;
-  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
-  dados.forEach((d, i) => { const y = 4 + i * lh, bw = Math.max(w * d.v / max, 2);
-    s += `<text class="rot" x="0" y="${y + 18}">${esc(d.r.length > 19 ? d.r.slice(0, 18) + "…" : d.r)}</text>`;
-    s += `<rect x="${larg}" y="${y + 6}" width="${bw}" height="16" rx="3" fill="${i === 0 ? cor : "var(--borda-3)"}"><title>${esc(d.r)}: ${esc(fmt(d.v))}</title></rect>`;
-    s += `<text x="${larg + bw + 8}" y="${y + 18}" style="fill:var(--texto)">${esc(fmt(d.v))}</text>`; });
-  return s + "</svg>";
-}
-function linhaG(vals, rots, {alt = 160, fmt = v => v + "%", ref = null} = {}) {
-  const W = 380, H = alt, m = {l: 6, r: 42, t: 18, b: 24}, w = W - m.l - m.r, h = H - m.t - m.b;
-  const max = Math.max(...vals, ref || 0, 1), x = i => m.l + w * i / Math.max(vals.length - 1, 1), y = v => m.t + h - h * v / max;
-  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
-  for (let i = 0; i <= 3; i++) s += `<line x1="${m.l}" x2="${W - m.r}" y1="${m.t + h * i / 3}" y2="${m.t + h * i / 3}" stroke="var(--borda)"/>`;
-  if (ref != null) s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(ref)}" y2="${y(ref)}" stroke="var(--texto-3)" stroke-dasharray="4 4"/><text x="${W - m.r + 4}" y="${y(ref) + 4}">${esc(fmt(ref))}</text>`;
-  s += `<path d="M${vals.map((v, i) => `${x(i)},${y(v)}`).join(" L")} L${x(vals.length - 1)},${m.t + h} L${x(0)},${m.t + h} Z" fill="var(--ouro-suave)"/>`;
-  s += `<polyline points="${vals.map((v, i) => `${x(i)},${y(v)}`).join(" ")}" fill="none" stroke="var(--ouro)" stroke-width="2"/>`;
-  vals.forEach((v, i) => { if ((vals.length - 1 - i) % 3 === 0) s += `<text x="${x(i)}" y="${H - 8}" text-anchor="${i === 0 ? "start" : i === vals.length - 1 ? "end" : "middle"}">${esc(rots[i])}</text>`; });
-  s += `<circle cx="${x(vals.length - 1)}" cy="${y(vals[vals.length - 1])}" r="4" fill="var(--ouro)"/><text x="${x(vals.length - 1) + 6}" y="${y(vals[vals.length - 1]) - 6}" style="fill:var(--texto)">${esc(fmt(vals[vals.length - 1]))}</text>`;
-  return s + "</svg>";
-}
+/* ---------- dica (tooltip) ---------- */
+const tip = $("#tip");
+function mostraTip(el, x, y) { tip.innerHTML = el.dataset.tip; tip.hidden = false; const r = tip.getBoundingClientRect(); tip.style.left = Math.min(innerWidth - r.width - 8, Math.max(8, x + 14)) + "px"; tip.style.top = Math.max(8, y - r.height - 10) + "px"; }
+document.addEventListener("mousemove", e => { const el = e.target.closest("[data-tip]"); if (el) mostraTip(el, e.clientX, e.clientY); else tip.hidden = true; });
+document.addEventListener("focusin", e => { const el = e.target.closest("[data-tip]"); if (el) { const r = el.getBoundingClientRect(); mostraTip(el, r.left + r.width / 2, r.top); } });
+document.addEventListener("focusout", () => tip.hidden = true);
+const T = (t, linhas) => esc(`<b>${t}</b><br>${linhas.join("<br>")}`);
 
-/* ---------- blocos comuns ---------- */
-const kpis = xs => `<div class="kpis">${xs.map(([r, v, d, dest, key]) => `<div class="kpi${dest ? " destaque" : ""}"${key ? ` data-kpi="${esc(key)}" role="button" tabindex="0" aria-label="${esc(r)}: ver detalhe"` : ""}><span class="rotulo${dest ? " ouro" : ""}">${esc(r)}</span><span class="v">${v}</span><span class="d">${d}</span>${key ? `<span class="ver">Ver detalhe ›</span>` : ""}</div>`).join("")}</div>`;
-const tab = (cols, rows) => `<div class="tab-wrap"><table><thead><tr>${cols.map(([c, num]) => `<th class="${num ? "n" : ""}">${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map(rw => `<tr>${rw.map((v, i) => `<td class="${cols[i][1] ? "n" : ""}">${v}</td>`).join("")}</tr>`).join("") || `<tr><td colspan="${cols.length}">Nada aqui.</td></tr>`}</tbody></table></div>`;
-const dt = s => s ? s.slice(8, 10) + "/" + s.slice(5, 7) + "/" + s.slice(2, 4) : "—";
-const listaCaixa = xs => xs.length ? `<div class="lista">${xs.slice(0, 40).map(x => itemHTML(x, false)).join("")}</div>${xs.length > 40 ? `<p class="nota">Mostrando 40 de ${n(xs.length)}. Veja todos na Caixa de entrada.</p>` : ""}` : `<div class="vazio">Nada aqui.</div>`;
-const DET = {
-  esperando: () => `<h3>Esperando por você</h3>${par("Decisões do Conselho", n(D.kpi.conselho))}${par("Respostas para aprovar", n(D.kpi.pedidos_prontos))}${par("Chamados propostos", n(D.kpi.chamados))}
-    <div class="pacote"><h4>Decisões do Conselho</h4>${tab([["Decisão"], ["Desde", 1]], D.conselho.map(c => [`<b>${esc(c.id)}</b> · ${esc(c.texto)}`, dt(c.data)]))}<button class="botao sec peq" data-ir="inicio" data-fechar>Decidir em lote no Início</button></div>
-    <div class="pacote"><h4>Respostas e chamados</h4>${listaCaixa(D.caixa.filter(x => x.pessoa === "luis" && x.grupo !== "Conselho" && !S.feitos.has(x.id)))}</div>`,
-  ganhos_mes: () => { const g = D.detalhe.ganhos_mes; return `<h3>Ganhos no mês</h3>${par("Negócios", n(g.length))}${par("Valor", `<span class="num">${rs(g.reduce((s, x) => s + x.valor, 0))}</span>`)}${par("Honorário estimado", `<span class="num">${rs(g.reduce((s, x) => s + x.honorario, 0))}</span>`)}${par("Repasse estimado", `<span class="num">${rs(g.reduce((s, x) => s + x.repasse, 0))}</span>`)}
-    ${tab([["Caso"], ["Parceiro"], ["Fechado", 1], ["Valor", 1], ["Honorário", 1], ["Repasse", 1]], g.map(x => [`<b>${esc(x.caso)}</b><br><span class="nota">${esc(x.segmento)}</span>`, esc(x.parceiro), dt(x.fechado), rs(x.valor), rs(x.honorario), rs(x.repasse)]))}
-    <p class="nota">Honorário = valor × % de honorário da Save; repasse = honorário × % oficial do parceiro.</p>`; },
-  pipeline: () => { const d = D.detalhe, a = d.agenda, g = d.geovana; return `<h3>Pipeline aberto</h3>${par("Negócios em aberto", n(D.kpi.pipeline.n))}${par("Valor", `<span class="num">${rs(D.kpi.pipeline.rs)}</span>`)}
-    ${(() => { const J = d.indicacoes.jenifer || {}, G = d.indicacoes.geovana || {}; return `
-    <div class="pacote"><h4>Agendas e indicações <span class="chip">Jenifer</span></h4>${par("Agendamentos (etapa Agendamento)", `<b>${n(J.agendamento)}</b>`)}${par("Indicações em aberto", `${n(J.abertos)} · <span class="num">${rs(J.valor_aberto)}</span>`)}${par("Total indicado", `${n(J.n)} negócios · ${n(J.perdidos)} perdidos ou desqualificados`)}<button class="botao sec peq" data-kpi="ind_jenifer">Ver o detalhe da Jenifer</button></div>
-    <div class="pacote"><h4>Oportunidades indicadas <span class="chip">Geovana</span></h4>${par("Indicadas por ela", `<b>${n(G.n)}</b> negócios · <span class="num">${rs(G.valor)}</span>`)}${par("Ganhas", `${n(G.ganhos)} · <span class="num">${rs(G.valor_ganho)}</span>`)}${par("Em aberto", `${n(G.abertos)} · <span class="num">${rs(G.valor_aberto)}</span>`)}${par("Perdidas", n(G.perdidos))}<button class="botao sec peq" data-kpi="ind_geovana">Ver o detalhe da Geovana</button>
-      <p class="nota">Campo "E-mail de quem está indicando o lead/cliente" no HubSpot, o mesmo do filtro "Negócios - Suporte Técnico Master".</p></div>`; })()}
-    <div class="pacote"><h4>Análises da Geovana (Revisor, Recuperador e recorrência)</h4>${par("Diagnósticos com tese faltando", `${n(g.revisor_negocios)} negócios · <span class="num">${rs(g.revisor_valor)}</span>`)}${par("Com lacuna de prioridade alta", n(g.revisor_alta))}${par("Lacunas apontadas pelo Revisor", n(g.lacunas))}${par("Fila do Recuperador", `${n(g.recuperador_fila)} casos · <span class="num">${rs(g.recuperador_esperado)}</span> de honorário esperado`)}${par("Recorrências elegíveis", `${n(g.recorrencia_n)} · <span class="num">${rs(g.recorrencia_credito)}</span> em negócios`)}
-      ${tab([["Parceiro"], ["Diagnósticos com lacuna", 1]], g.por_parceiro.map(([p, q]) => [esc(p), n(q)]))}</div>
-    <div class="pacote"><h4>Por etapa</h4>${tab([["Etapa"], ["Negócios", 1], ["Valor", 1]], d.por_etapa.map(([e, q, v]) => [esc(e), n(q), rs(v)]))}</div>
-    <div class="pacote"><h4>Por parceiro</h4>${tab([["Parceiro"], ["Negócios", 1], ["Valor", 1]], d.por_parceiro.map(([p, q, v]) => [esc(p), n(q), rs(v)]))}</div>
-    <div class="pacote"><h4>Maiores negócios em aberto</h4>${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Dias", 1], ["Valor", 1]], d.abertos.map(x => [`<b>${esc(x.caso)}</b>`, esc(x.parceiro), esc(x.etapa), n(x.dias), rs(x.valor)]))}</div>`; },
-  winrate: () => `<h3>Win rate</h3>${tab([["Mês"], ["Ganhos", 1], ["Perdidos", 1], ["Win rate", 1], ["R$ ganho", 1]], D.serie.slice(-12).map(s => { const w = D.winrate.find(x => x.mes === s.mes); return [mesRot(s.mes), n(s.ganhos_n), n(s.perdidos_n), w ? String(w.pct).replace(".", ",") + "%" : "—", rs(s.ganhos_rs)]; }))}`,
-  risco: () => `<h3>Masters por saúde</h3>${tab([["Master"], ["Saúde", 1], ["Ritmo vs média", 1], ["Dias sem negócio", 1], ["R$ aberto", 1]], [...D.masters].sort((a, b) => a.saude - b.saude).map(m => [`<b>${esc(m.parceiro)}</b>`, `${m.saude} <span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "alerta" : "erro"}">${m.saude >= 75 ? "boa" : m.saude >= 60 ? "atenção" : "risco"}</span>`, String(m.ritmo_valor_vs_media_trimestral_pct ?? "—").replace(".", ",") + "%", n(m.dias_sem_negocio), rs(m.abertos_rs)]))}`,
-  repasse12: () => `<h3>Repasse aos parceiros · 12 meses</h3>${tab([["Parceiro"], ["% oficial", 1], ["Honorário 12m", 1], ["Repasse 12m", 1], ["Potencial aberto", 1]], Object.entries(D.ficha).sort((a, b) => b[1].comissao_12m - a[1].comissao_12m).map(([k, f]) => [`<b>${esc(k)}</b>`, f.pct == null ? "—" : String(f.pct).replace(".0", "") + "%" + (f.pct_confirmado ? "" : " (a confirmar)"), rs(f.honorario_12m), rs(f.comissao_12m), rs(f.comissao_potencial_aberto)]))}`,
-  divergencias: () => `<h3>% do negócio diferente do cadastro</h3>${tab([["Parceiro"], ["% oficial", 1], ["Negócios com % diferente", 1]], Object.entries(D.ficha).filter(([, f]) => f.divergencias).map(([k, f]) => [`<b>${esc(k)}</b>`, String(f.pct).replace(".0", "") + "%", n(f.divergencias)]))}<p class="nota">Conferir com Operações de Canal: o negócio pode ter condição negociada ou o campo está errado.</p>`,
-  esfriando: () => `<h3>Parceiros esfriando</h3>${tab([["Parceiro"], ["Tipo"], ["Dias sem negócio", 1], ["Ganhos 12m", 1]], D.esfriando.map(e => [`<b>${esc(e.parceiro)}</b>`, esc(e.tipo), n(e.dias), n(e.ganhos_12m)]))}`,
-  rec_parc: () => { const rows = Object.entries(D.ficha).map(([k, f]) => [k, f.recorrencia || {}]).filter(([, r]) => r.elegiveis || r.aguardar).sort((a, b) => (b[1].pot_credito || 0) - (a[1].pot_credito || 0));
-    return `<h3>Recorrência por parceiro</h3>${tab([["Parceiro"], ["Elegíveis", 1], ["Em negócios", 1], ["Recorrências já feitas", 1], ["Aguardando", 1]], rows.map(([k, r]) => [`<b>${esc(k)}</b>`, n(r.elegiveis), rs(r.pot_credito), n(r.feitas), n(r.aguardar)]))}`; },
-  rec_pipe: () => `<h3>Fora da análise: já no pipeline</h3><p class="sub">Clientes da base com negócio aberto (diagnóstico em andamento). Não entram na fila de recorrência.</p>${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Lacunas", 1]], D.recorrencia.revisor.map(x => [`<b>${esc(x.caso)}</b>`, esc(x.parceiro), esc(x.etapa), n(x.lacunas)]))}`,
-  lote: () => `<h3>Lote do Recuperador</h3>${tab([["Caso"], ["Master"], ["Tipo"], ["Esperado", 1], ["Parecidos", 1]], D.geovana.lote.map(x => [`<b>${esc(x.caso)}</b>`, esc(x.parceiro), esc(x.tipo), rs(x.esperado), esc(String(x.taxa || "").split(" ")[0])]))}`,
-  revisor: () => `<h3>Revisor por tese</h3>${tab([["Tese"], ["Lacunas", 1], ["Alta", 1]], D.geovana.por_tese.map(t => [esc(t.tese), n(t.n), n(t.alta)]))}`,
-};
-const indDet = (quem, titulo) => () => { const I = D.detalhe.indicacoes[quem] || {}; return `<h3>${titulo}</h3>${par("Indicados", `${n(I.n)} negócios · <span class="num">${rs(I.valor)}</span>`)}${par("Ganhos", `${n(I.ganhos)} · <span class="num">${rs(I.valor_ganho)}</span>`)}${par("Em aberto", `${n(I.abertos)} · <span class="num">${rs(I.valor_aberto)}</span>`)}${par("Perdidos", n(I.perdidos))}${I.agendamento ? par("Em Agendamento", n(I.agendamento)) : ""}
-  <div class="pacote"><h4>Indicações por mês</h4>${barras((I.por_mes || []).map(([m, q]) => ({r: mesRot(m), v: q})), {alt: 170})}</div>
-  <div class="pacote"><h4>Por etapa</h4>${tab([["Etapa"], ["Negócios", 1]], (I.etapas || []).map(([e, q]) => [esc(e || "—"), n(q)]))}</div>
-  <div class="pacote"><h4>Em aberto, maiores primeiro</h4>${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Criado", 1], ["Valor", 1]], (I.abertos_l || []).map(x => [`<b>${esc(x.caso)}</b>`, esc(x.parceiro), esc(x.etapa), dt(x.criado), rs(x.valor)]))}</div>`; };
-DET.ind_geovana = indDet("geovana", "Oportunidades indicadas pela Geovana"); DET.ind_jenifer = indDet("jenifer", "Agendas e indicações da Jenifer");
-const pessoaDet = p => () => `<h3>${PESSOAS[p]}: o que espera agora</h3>${listaCaixa(D.caixa.filter(x => x.pessoa === p && !S.feitos.has(x.id)))}`;
-["daniela", "jenifer", "geovana"].forEach(p => DET["carga_" + p] = pessoaDet(p));
-DET.minha_caixa = () => `<h3>Para responder</h3>${listaCaixa(minhas().filter(x => x.grupo === "Demanda"))}`;
-DET.urgentes = () => `<h3>Urgentes</h3>${listaCaixa(minhas().filter(x => x.urgente))}`;
-DET.antigos = () => `<h3>Mais antigos</h3>${listaCaixa([...minhas()].sort((a, b) => (b.dias || 0) - (a.dias || 0)))}`;
-DET.prontos = () => `<h3>Prontos para encaminhar</h3>${listaCaixa(minhas().filter(pronto))}`;
-function itemHTML(x, compacto) {
-  const sev = x.urgente ? "urg" : (x.dias || 0) >= 7 ? "med" : "";
-  const quem = S.eu === "luis" && !compacto ? `<span>${esc(PESSOAS[x.pessoa] || x.pessoa)}</span>` : "";
-  return `<article class="item ${sev}${S.feitos.has(x.id) ? " feito" : ""}" data-id="${esc(x.id)}"><span class="tarja" aria-hidden="true"></span>
-    <div class="corpo"><div class="meta"><span class="chip ${x.urgente ? "erro" : (x.dias || 0) >= 7 ? "alerta" : ""}">${x.urgente ? "Urgente" : (x.dias || 0) >= 7 ? "Atenção" : "Normal"}</span><span>${esc(x.tipo)}</span>${x.novo ? `<span class="chip ouro">Novo</span>` : ""}${(x.pacote || {}).glpi ? `<span class="chip ouro">Chamado pronto</span>` : ""}${(x.pacote || {}).mensagem ? `<span class="chip ouro">Mensagem pronta</span>` : ""}${(x.pacote || {}).encaminhar ? `<span class="chip ouro">Para ${esc(x.pacote.encaminhar.equipe)}</span>` : ""}</div>
-      <span class="t">${esc(x.titulo)}</span>
-      <div class="meta">${x.master ? `<span>Master <b>${esc(x.master)}</b></span>` : ""}${x.valor ? `<span>Valor <span class="num">${rs(x.valor)}</span></span>` : ""}${x.dias != null ? `<span>Há <span class="num">${n(x.dias)}</span> dia(s)</span>` : ""}${quem}</div></div>
-    <div class="acoes">${pronto(x) ? `<button class="botao peq" data-abrir="${esc(x.id)}">Encaminhar</button>` : `<button class="botao sec peq" data-abrir="${esc(x.id)}">Detalhe</button><button class="botao peq" data-feito="${esc(x.id)}">${esc(x.acao.split(" / ")[0])}</button>`}</div></article>`;
+/* ---------- gráficos (SVG em escala, 1 eixo, rótulo seletivo) ---------- */
+let gid = 0;
+const hachura = id => `<defs><pattern id="${id}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="var(--ouro-suave)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--ouro)" stroke-width="1.5"/></pattern></defs>`;
+function colunas(dd, {alt = 190, fmt = n, ref = null, refRot = "", dest = dd.length - 1, cor = "var(--ouro)"} = {}) {
+  const W = 380, H = alt, m = {l: 4, r: 4, t: 22, b: 24}, w = W - m.l - m.r, h = H - m.t - m.b, id = "h" + (++gid);
+  const max = Math.max(...dd.map(d => d.v), ref || 0, 1), bw = w / dd.length, cw = Math.min(24, bw * .62);
+  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">${hachura(id)}`;
+  for (let i = 1; i <= 3; i++) s += `<line x1="${m.l}" x2="${W - m.r}" y1="${m.t + h - h * i / 3}" y2="${m.t + h - h * i / 3}" stroke="var(--borda)"/>`;
+  s += `<line x1="${m.l}" x2="${W - m.r}" y1="${m.t + h}" y2="${m.t + h}" stroke="var(--borda-3)"/>`;
+  dd.forEach((d, i) => { const bh = Math.max(h * d.v / max, d.v ? 2 : 0), x = m.l + i * bw + (bw - cw) / 2, y = m.t + h - bh, r = Math.min(4, bh / 2);
+    const dst = i === dest || d.dest, parcial = d.estado === "parcial", fill = dst ? (parcial ? `url(#${id})` : cor) : (d.estado === "sem" ? "transparent" : "var(--serie-2)");
+    const path = bh ? `M${x},${m.t + h} V${y + r} Q${x},${y} ${x + r},${y} H${x + cw - r} Q${x + cw},${y} ${x + cw},${y + r} V${m.t + h} Z` : "";
+    s += `<rect x="${m.l + i * bw}" y="${m.t}" width="${bw}" height="${h}" fill="transparent" data-tip="${d.tip || T(d.r, [fmt(d.v)])}" tabindex="0"/>`;
+    if (path) s += `<path d="${path}" fill="${fill}" ${parcial && dst ? `stroke="var(--ouro)" stroke-width="1.5"` : ""} pointer-events="none"/>`;
+    if (d.estado === "sem") s += `<text x="${x + cw / 2}" y="${m.t + h - 4}" text-anchor="middle">–</text>`;
+    if (dd.length <= 8 || (dd.length - 1 - i) % 2 === 0) s += `<text x="${x + cw / 2}" y="${H - 7}" text-anchor="middle">${esc(d.r)}</text>`;
+    if (dst || d.rotular) { const ax = x + cw / 2, anc = ax > W - 60 ? "end" : ax < 60 ? "start" : "middle"; s += `<text class="forte" x="${anc === "end" ? x + cw : anc === "start" ? x : ax}" y="${y - 6}" text-anchor="${anc}">${esc(fmt(d.v))}${parcial ? " · parcial" : ""}</text>`; } });
+  if (ref != null) { const y = m.t + h - h * ref / max; s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y}" y2="${y}" stroke="var(--texto-3)" stroke-width="1"/><text x="${W - m.r}" y="${y - 5}" text-anchor="end" style="paint-order:stroke;stroke:var(--cartao);stroke-width:4px">${esc(refRot)}</text>`; }
+  return s + "</svg>";
 }
-function fazerAgora(lista, lim = 6, titulo = "Fazer agora") {
-  const it = lista.slice(0, lim);
-  return `<section><div class="cab"><h2>${titulo}</h2><span class="atual">${n(lista.length)} no total · ${n(lista.filter(pronto).length)} prontos para encaminhar · urgentes e mais antigos primeiro</span></div>
-    ${it.length ? `<div class="lista">${it.map(x => itemHTML(x, true)).join("")}</div>` : `<div class="vazio">Nada esperando por você agora. Veja os pedidos aos agentes ou a tabela dos Masters.</div>`}
-    ${lista.length > lim ? `<button class="botao sec mais" data-ir="caixa">Ver os ${n(lista.length)} na caixa de entrada</button>` : ""}</section>`;
+function barrasH(dd, {fmt = n, larg = 132, dest = 0, sub = null} = {}) {
+  const W = 380, lh = sub ? 34 : 28, H = dd.length * lh + 4, max = Math.max(...dd.map(d => d.v), 1), w = W - larg - 74;
+  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
+  dd.forEach((d, i) => { const y = 2 + i * lh, bw = d.v ? Math.max(w * d.v / max, 3) : 0, r = Math.min(4, bw / 2);
+    s += `<rect x="0" y="${y}" width="${W}" height="${lh}" fill="transparent" data-tip="${d.tip || T(d.r, [fmt(d.v)])}" tabindex="0"/>`;
+    s += `<text class="rot" x="0" y="${y + 17}" pointer-events="none">${esc(d.r.length > 18 ? d.r.slice(0, 17) + "…" : d.r)}</text>`;
+    if (bw) s += `<path d="M${larg},${y + 7} H${larg + bw - r} Q${larg + bw},${y + 7} ${larg + bw},${y + 7 + r} V${y + 21 - r} Q${larg + bw},${y + 21} ${larg + bw - r},${y + 21} H${larg} Z" fill="${i === dest || d.dest ? "var(--ouro)" : "var(--serie-2)"}" pointer-events="none"/>`;
+    else s += `<text x="${larg}" y="${y + 18}" pointer-events="none">${esc(d.vazio || "sem valor")}</text>`;
+    if (bw) s += `<text class="forte" x="${larg + bw + 6}" y="${y + 18}" pointer-events="none">${esc(fmt(d.v))}</text>`;
+    if (sub && d.sub) s += `<text x="${larg}" y="${y + 32}" pointer-events="none">${esc(d.sub)}</text>`; });
+  return s + "</svg>";
 }
-function tabelaMasters(lin, completo) {
-  const cols = completo
-    ? [["parceiro", "Master"], ["saude", "Saúde", 1], ["abertos", "Abertos", 1], ["abertos_rs", "R$ aberto", 1], ["ganhos_90d", "Ganhos 90d", 1], ["fechado_12m_rs", "Fechado 12m", 1], ["conversao_12m_pct", "Conversão 12m", 1], ["ciclo_mediano_dias", "Ciclo (dias)", 1], ["ritmo_valor_vs_media_trimestral_pct", "Ritmo vs média", 1], ["dias_sem_negocio", "Dias sem negócio", 1], ["pct_repasse", "% repasse", 1], ["repasse_12m", "Repasse 12m", 1], ["alertas", "Alertas", 1]]
-    : [["parceiro", "Master"], ["saude", "Saúde", 1], ["abertos_rs", "R$ aberto", 1], ["ganhos_90d", "Ganhos 90d", 1], ["ritmo_valor_vs_media_trimestral_pct", "Ritmo", 1], ["alertas", "Alertas", 1]];
-  const fmt = (k, v) => k === "repasse_12m" ? rs(v) : k === "pct_repasse" ? (v == null ? "—" : String(v).replace(".0", "") + "%") : k.endsWith("_rs") ? rs(v) : k.endsWith("_pct") ? (v == null ? "—" : (v > 0 ? "+" : "") + String(v).replace(".", ",") + "%") : v == null ? "—" : n(v);
-  return `<div class="tab-wrap"><table><thead><tr>${cols.map(([k, r, num]) => `<th class="${num ? "n" : ""}" aria-sort="${S.ordem.campo === k ? (S.ordem.asc ? "ascending" : "descending") : "none"}"><button data-ord="${k}">${r}${S.ordem.campo === k ? (S.ordem.asc ? " ↑" : " ↓") : ""}</button></th>`).join("")}</tr></thead>
-    <tbody>${lin.map(m => `<tr class="clic" data-master="${esc(m.parceiro)}" tabindex="0">${cols.map(([k, , num]) => k === "saude"
-      ? `<td class="n"><span class="saude"><span class="barrinha" aria-hidden="true"><i style="width:${m.saude}%;background:${corSaude(m.saude)}"></i></span>${m.saude} <span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "alerta" : "erro"}">${m.saude >= 75 ? "boa" : m.saude >= 60 ? "atenção" : "risco"}</span></span></td>`
-      : k === "parceiro" ? `<td><b>${esc(m.parceiro)}</b></td>`
-      : `<td class="${num ? "n" : ""}" ${k.startsWith("ritmo") && m[k] < -30 ? 'style="color:var(--erro)"' : ""}>${fmt(k, m[k])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+function linhaG(vals, rots, {alt = 170, ns = [], ref = null, refRot = ""} = {}) {
+  const W = 380, H = alt, m = {l: 4, r: 52, t: 18, b: 24}, w = W - m.l - m.r, h = H - m.t - m.b, x = i => m.l + w * i / Math.max(vals.length - 1, 1), y = v => m.t + h - h * v / 100;
+  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
+  for (let i = 0; i <= 4; i += 2) s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(i * 25)}" y2="${y(i * 25)}" stroke="var(--borda)"/><text x="${W - m.r + 6}" y="${y(i * 25) + 4}">${i * 25}%</text>`;
+  if (ref != null) s += `<rect x="${m.l}" y="${y(ref) - 1}" width="${w}" height="2" fill="var(--texto-3)"/><text x="${m.l}" y="${y(ref) - 5}">${esc(refRot)}</text>`;
+  s += `<path d="M${vals.map((v, i) => `${x(i)},${y(v)}`).join(" L")} L${x(vals.length - 1)},${y(0)} L${x(0)},${y(0)} Z" fill="var(--ouro)" opacity=".1"/>`;
+  s += `<polyline points="${vals.map((v, i) => `${x(i)},${y(v)}`).join(" ")}" fill="none" stroke="var(--ouro)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  vals.forEach((v, i) => { const pq = (ns[i] || 99) < 10, ult = i === vals.length - 1;
+    s += `<circle cx="${x(i)}" cy="${y(v)}" r="${ult ? 5 : 3.5}" fill="${pq ? "var(--cartao)" : "var(--ouro)"}" stroke="${pq ? "var(--ouro)" : "var(--cartao)"}" stroke-width="2" data-tip="${T(rots[i], [pc(v), ns[i] != null ? `n = ${ns[i]}${pq ? " · amostra pequena" : ""}` : ""])}" tabindex="0"/>`;
+    if ((vals.length - 1 - i) % 3 === 0) s += `<text x="${x(i)}" y="${H - 7}" text-anchor="${i === 0 ? "start" : ult ? "end" : "middle"}">${esc(rots[i])}</text>`; });
+  s += `<text class="forte" x="${x(vals.length - 1) - 8}" y="${y(vals[vals.length - 1]) - 9}" text-anchor="end">${pc(vals[vals.length - 1])}${(ns[ns.length - 1] || 99) < 30 ? " · parcial" : ""}</text>`;
+  return s + "</svg>";
 }
-D.masters.forEach(m => { const f = D.ficha[m.parceiro] || {}; m.pct_repasse = f.pct; m.repasse_12m_rs = f.comissao_12m; m.repasse_12m = f.comissao_12m; });
+function spark(vals, max) { const W = 200, H = 32, mx = max || Math.max(...vals, 1), pts = vals.map((v, i) => [W * i / Math.max(vals.length - 1, 1), H - 3 - (H - 8) * v / mx]);
+  const lst = pts[pts.length - 1];
+  return `<svg class="spk" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path d="M${pts.map(p => p.join(",")).join(" L")} L${W},${H} L0,${H} Z" fill="var(--texto-3)" opacity=".12"/><polyline points="${pts.map(p => p.join(",")).join(" ")}" fill="none" stroke="var(--texto-3)" stroke-width="1.5" vector-effect="non-scaling-stroke"/><circle cx="${lst[0]}" cy="${lst[1]}" r="3" fill="var(--ouro)" vector-effect="non-scaling-stroke"/></svg>`; }
+function empilhada100(segs, {fmt = rs} = {}) { const tot = segs.reduce((a, s) => a + s.v, 0) || 1;
+  return `<div class="comp" style="height:14px">${segs.map(s => `<i style="width:${100 * s.v / tot}%;background:${s.cor}" data-tip="${T(s.r, [fmt(s.v), pc(100 * s.v / tot)])}" tabindex="0"></i>`).join("")}</div>
+    <div class="leg">${segs.map(s => `<span><i style="background:${s.cor}"></i>${esc(s.r)} ${pc(100 * s.v / tot)}</span>`).join("")}</div>`; }
+function empilhadaH(rows, cores, nomes, {larg = 120, fmtTot = n, totRot = null} = {}) {
+  const W = 380, lh = 30, H = rows.length * lh + 4, max = Math.max(...rows.map(r => r.segs.reduce((a, b) => a + b, 0)), 1), w = W - larg - 78;
+  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
+  rows.forEach((r, i) => { const y = 2 + i * lh; let x = larg; const tot = r.segs.reduce((a, b) => a + b, 0);
+    s += `<rect x="0" y="${y}" width="${W}" height="${lh}" fill="transparent" data-tip="${T(r.r, r.segs.map((v, k) => `${nomes[k]}: ${n(v)}`).concat(r.extra ? [r.extra] : []))}" tabindex="0"/>`;
+    s += `<text class="rot" x="0" y="${y + 18}" pointer-events="none">${esc(r.r.length > 16 ? r.r.slice(0, 15) + "…" : r.r)}</text>`;
+    r.segs.forEach((v, k) => { if (!v) return; const bw = Math.max(w * v / max - 2, 2); s += `<rect x="${x}" y="${y + 8}" width="${bw}" height="14" rx="${k === r.segs.length - 1 ? 3 : 0}" fill="${cores[k]}" pointer-events="none"/>`; x += bw + 2; });
+    s += `<text class="forte" x="${x + 6}" y="${y + 19}" pointer-events="none">${esc(totRot ? totRot(r) : fmtTot(tot))}</text>`; });
+  return s + "</svg>";
+}
+function anel(frac, centro, {tam = 96} = {}) { const R = 38, C = 2 * Math.PI * R, f = Math.max(0, Math.min(1, frac));
+  return `<svg viewBox="0 0 96 96" width="${tam}" height="${tam}" aria-hidden="true"><circle cx="48" cy="48" r="${R}" fill="none" stroke="var(--borda-3)" stroke-width="8"/>
+    ${f > 0 ? `<circle cx="48" cy="48" r="${R}" fill="none" stroke="var(--ouro)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${C * f} ${C}" transform="rotate(-90 48 48)"/>` : `<circle cx="48" cy="10" r="4" fill="var(--ouro)"/>`}
+    <text x="48" y="53" text-anchor="middle" style="fill:var(--texto);font:600 18px var(--mono)">${esc(centro)}</text></svg>`; }
+function quadrantes(pts) {
+  const W = 380, H = 280, m = {l: 30, r: 10, t: 14, b: 30}, w = W - m.l - m.r, h = H - m.t - m.b;
+  const x = v => m.l + w * (Math.max(-100, Math.min(100, v)) + 100) / 200, y = v => m.t + h - h * v / 100, rmax = Math.max(...pts.map(p => p.r), 1);
+  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img"><rect x="${m.l}" y="${y(60)}" width="${x(0) - m.l}" height="${y(0) - y(60)}" fill="rgba(214,69,69,.07)"/>
+    <line x1="${x(0)}" x2="${x(0)}" y1="${m.t}" y2="${m.t + h}" stroke="var(--borda-3)"/><line x1="${m.l}" x2="${W - m.r}" y1="${y(60)}" y2="${y(60)}" stroke="var(--borda-3)"/>
+        <text x="${m.l}" y="${H - 8}">−100%</text><text x="${x(0)}" y="${H - 8}" text-anchor="middle">ritmo vs média 0</text><text x="${W - m.r}" y="${H - 8}" text-anchor="end">+100%</text>
+    <text x="${m.l - 6}" y="${y(100) + 4}" text-anchor="end">100</text><text x="${m.l - 6}" y="${y(60) + 4}" text-anchor="end">60</text><text x="${m.l - 6}" y="${y(0)}" text-anchor="end">0</text>`;
+  pts.forEach(p => { const cx = x(p.x), cy = y(p.y), r = 5 + 12 * Math.sqrt(p.r / rmax), risco = p.y < 60 && p.x < 0;
+    s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${risco ? "var(--ouro)" : "var(--serie-2)"}" fill-opacity="${risco ? .9 : .7}" stroke="var(--cartao)" stroke-width="2" data-tip="${T(p.nome, [`saúde ${p.y}`, `ritmo ${pc(p.xr)}`, `aberto ${rs(p.r)}`])}" tabindex="0" data-master="${esc(p.nome)}"/>`;
+    s += `<text class="${risco ? "forte" : ""}" x="${cx > W - 100 ? cx - r - 4 : cx + r + 4}" y="${cy + 4}" text-anchor="${cx > W - 100 ? "end" : "start"}" pointer-events="none">${esc(p.nome.length > 12 ? p.nome.slice(0, 11) + "…" : p.nome)}</text>`; });
+  return s + "</svg>";
+}
+function mapaCalor(rows, faixas) {
+  const max = Math.max(...rows.flatMap(r => r[1].map(c => c[1])), 1), rampa = v => v === 0 ? "var(--fundo-2)" : v / max > .66 ? "#F3CD60" : v / max > .33 ? "#C9A548" : v / max > .1 ? "#9C7F35" : "#6E5A25";
+  return `<div class="tab-wrap"><table><thead><tr><th>Etapa</th>${faixas.map(f => `<th class="n">${esc(f)} d</th>`).join("")}</tr></thead><tbody>${rows.filter(r => r[1].some(c => c[0])).map(([e, cs]) => `<tr><td>${esc(e)}</td>${cs.map((c, k) => `<td class="n" style="background:${rampa(c[1])};color:${c[1] / max > .33 ? "#0F1115" : "var(--texto)"}" data-tip="${T(e, [faixas[k] + " dias", n(c[0]) + " negócios", rs(c[1])])}" tabindex="0">${c[0] || ""}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+    <div class="leg"><span>Cor = R$ parado (mais claro = mais valor) · número = negócios</span></div>`;
+}
+const verTabela = (cols, rows) => `<details class="tabela"><summary>Ver tabela</summary>${tab(cols, rows)}</details>`;
+const tab = (cols, rows, cls = "") => `<div class="tab-wrap"><table class="${cls}"><thead><tr>${cols.map(([c, num]) => `<th class="${num ? "n" : ""}">${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map(rw => `<tr>${rw.map((v, i) => `<td class="${cols[i][1] ? "n" : ""}" data-r="${esc(cols[i][0])}">${v}</td>`).join("")}</tr>`).join("") || `<tr><td colspan="${cols.length}">Nada aqui.</td></tr>`}</tbody></table></div>`;
+
+/* ---------- componentes ---------- */
+const kpi = ({r, v, d = "", delta = "", sp = null, key = null, count = null}) => `<div class="kpi"${key ? ` data-kpi="${esc(key)}" role="button" tabindex="0" aria-label="${esc(r)}: ver detalhe"` : ""}>
+  <div class="cabk"><span class="rotulo">${esc(r)}</span>${delta}</div><span class="v"${count != null ? ` data-count="${count}"` : ""}>${v}</span>${sp ? sp : ""}<span class="d">${d}</span>${key ? `<span class="ver">Ver detalhe ›</span>` : ""}</div>`;
+const delta = (pct, rot) => pct == null ? "" : `<span class="delta"><span class="${pct >= 0 ? "s" : "e"}">${pct >= 0 ? "▲" : "▼"}</span> ${pc(Math.abs(pct))} ${esc(rot)}</span>`;
+const faixa = (txt, key) => `<div class="faixa" role="status">${ico("alerta")}<span class="txt">${txt}</span>${key ? `<button class="botao sec peq" data-kpi="${esc(key)}">Ver</button>` : ""}</div>`;
+function itemHTML(x, primeiro) {
+  const P = x.pacote || {}, cls = (x.dias || 0) > 30 ? "atrasado" : (x.dias || 0) > 7 ? "atencao" : "";
+  const selos = [P.glpi ? `<span class="chip">${ico("ok")}chamado</span>` : "", P.mensagem ? `<span class="chip">${ico("ok")}mensagem</span>` : "", P.encaminhar ? `<span class="chip">${ico("ok")}${esc(P.encaminhar.equipe)}</span>` : ""].join("");
+  const quem = S.eu === "luis" ? `<span>${esc(PESSOAS[x.pessoa] || x.pessoa)}</span>` : "";
+  const acao = pronto(x) ? "Encaminhar" : x.acao.split(" / ")[0];
+  return `<article class="item ${cls}${S.feitos.has(x.id) ? " feito" : ""}" data-id="${esc(x.id)}"><span class="tarja" aria-hidden="true"></span>
+    <div class="corpo"><span class="t">${esc(x.titulo)}</span><div class="meta"><span>${esc(x.tipo)}</span>${x.master ? `<span>· ${esc(x.master)}</span>` : ""}${quem}${selos}${x.novo ? `<span class="chip ouro">novo</span>` : ""}<span class="so-cel">· ${x.dias != null ? n(x.dias) + " d" : ""}</span></div></div>
+    <span class="val">${x.valor ? rs(x.valor) : ""}</span><span class="idade ${idade(x.dias)}">${x.dias != null ? n(x.dias) + " d" + (x.dias > 30 ? " · atrasado" : "") : ""}</span>
+    <div><button class="botao ${primeiro ? "" : "sec"} peq" data-abrir="${esc(x.id)}">${esc(acao)}</button></div></article>`;
+}
+const lista = (xs, lim = 6) => xs.length ? `<div class="lista">${xs.slice(0, lim).map((x, i) => itemHTML(x, i === 0)).join("")}</div>` : `<div class="vazio">${ico("ok")}<span>Nada esperando agora.</span></div>`;
+function porTipo(xs, lim = 5) {
+  const g = {}; xs.forEach(x => (g[x.tipo] = g[x.tipo] || []).push(x));
+  const ord = Object.entries(g).sort((a, b) => Math.max(...b[1].map(x => x.dias || 0)) - Math.max(...a[1].map(x => x.dias || 0)));
+  return ord.map(([t, it], gi) => `<details class="grp" ${gi < 4 ? "open" : ""}><summary><div class="grupo-tit">${esc(t)} <span class="badge">${n(it.length)}</span><span class="atual">${n(it.filter(pronto).length)} prontos</span></div></summary>
+    <div class="lista">${it.slice(0, S.filtro["mais-" + t] ? 60 : lim).map((x, i) => itemHTML(x, gi === 0 && i === 0)).join("")}</div>${it.length > lim && !S.filtro["mais-" + t] ? `<button class="botao sec peq" style="margin-top:6px" data-mais="${esc(t)}">Ver mais ${n(it.length - lim)}</button>` : ""}</details>`).join("");
+}
 const ordenar = xs => [...xs].sort((a, b) => { const k = S.ordem.campo, va = a[k] ?? -1e18, vb = b[k] ?? -1e18; return (typeof va === "string" ? va.localeCompare(vb) : va - vb) * (S.ordem.asc ? 1 : -1); });
+const par = (r, v) => `<div class="par"><span>${esc(r)}</span><span>${v}</span></div>`;
+const pctChip = nome => { const f = D.ficha[nome] || {}; return f.pct == null ? "" : `<span class="mono" style="color:var(--texto-2);font-size:12px">repasse ${String(f.pct).replace(".0", "")}%</span>${f.pct_confirmado ? "" : ` <span class="chip alerta">${ico("alerta")}a confirmar</span>`}`; };
+
+/* ---------- gráficos de negócio ---------- */
+const g12 = () => D.serie.slice(-12);
+function grafGanhos() { const s = g12(), med = s.slice(0, -1).reduce((a, x) => a + x.ganhos_rs, 0) / Math.max(s.length - 1, 1);
+  return colunas(s.map(x => ({r: mesRot(x.mes), v: x.ganhos_rs, estado: x.mes === MES_ATUAL ? "parcial" : "real", tip: T(mesRot(x.mes) + (x.mes === MES_ATUAL ? " · parcial até 13/10" : ""), [rs(x.ganhos_rs), n(x.ganhos_n) + " ganhos"]), rotular: x.ganhos_rs === Math.max(...s.map(z => z.ganhos_rs))})), {fmt: rs, ref: med, refRot: "média " + rs(med)}); }
+function grafFunil(rows = D.detalhe.funil_rs) { const mx = Math.max(...rows.map(r => r[2])); const tot = rows.reduce((a, r) => a + r[2], 0);
+  return barrasH(rows.map(([e, q, v, sv]) => ({r: e.replace("Apresentação de Diagnóstico", "Apres. Diagnóstico"), v, dest: v === mx, sub: `${n(q)} negócios${sv ? ` · ${n(sv)} sem valor` : ""}`, vazio: `sem valor no CRM (${n(q)})`, tip: T(e, [rs(v), n(q) + " negócios", pc(100 * v / (tot || 1)) + " do valor"])})), {fmt: rs, dest: -1, sub: true}); }
+function grafIdade() { const fx = D.detalhe.faixas, rows = D.detalhe.heat, tot = fx.map((f, k) => [rows.reduce((a, r) => a + r[1][k][0], 0), rows.reduce((a, r) => a + r[1][k][1], 0)]);
+  return colunas(fx.map((f, k) => ({r: f + " d", v: tot[k][0], tip: T(f + " dias", [n(tot[k][0]) + " negócios", rs(tot[k][1])]), dest: k >= 3})), {dest: -1, fmt: n}); }
 
 /* ---------- cockpits ---------- */
 const V = {};
 V.luis = () => {
-  const K = D.kpi, L = doLuis(), riscos = D.masters.filter(m => m.saude < 60), mes = K.mes || {}, cres = (mes.crescimento || {}).ganhos_rs || {};
-  const carga = ["daniela", "jenifer", "geovana"].map(p => { const xs = D.caixa.filter(x => x.pessoa === p); return {p, n: xs.length, urg: xs.filter(x => x.urgente).length, max: Math.max(0, ...xs.map(x => x.dias || 0))}; });
-  const s12 = D.serie.slice(-12);
-  return `${kpis([
-      ["Esperando por você", n(K.conselho + K.pedidos_prontos + K.chamados), `${K.conselho} decisões do Conselho · ${K.pedidos_prontos} respostas · ${K.chamados} chamados`, true, "esperando"],
-      ["Ganhos no mês", rs(mes.ganhos_rs), `${n(mes.ganhos_n)} negócios · <span class="delta ${cres.pct >= 0 ? "sobe" : "desce"}">${cres.pct >= 0 ? "▲" : "▼"} ${String(Math.abs(cres.pct ?? 0)).replace(".", ",")}%</span> vs mesmo período`, false, "ganhos_mes"],
-      ["Pipeline aberto", rs((K.pipeline || {}).rs), `${n((K.pipeline || {}).n)} negócios em aberto · agendas e oportunidades da Geovana`, false, "pipeline"],
-      ["Win rate 3 meses", String(K.win_rate_3m ?? "—").replace(".", ",") + "%", `ticket médio ${rs(K.ticket_3m)}`, false, "winrate"],
-      ["Masters em risco", n(riscos.length), riscos.map(m => esc(m.parceiro)).join(", ") || "nenhum", false, "risco"]])}
-    ${fazerAgora(L.filter(x => x.grupo !== "Conselho"), 5, "Decidir hoje")}
-    <section><div class="cab"><h2>Conselho em lote</h2><span class="atual">${n(D.conselho.filter(c => !S.feitos.has(c.id)).length)} decisões esperando · marque e decida de uma vez</span></div>
-      <div class="filtros"><button data-cons-todas>Selecionar todas</button><button data-cons="aprovar">Aprovar selecionadas</button><button data-cons="rejeitar">Rejeitar selecionadas</button></div>
-      <div class="tab-wrap"><table><thead><tr><th></th><th>Decisão</th><th>Desde</th></tr></thead><tbody>${D.conselho.filter(c => !S.feitos.has(c.id)).slice(0, 15).map(c => `<tr><td><input type="checkbox" class="cons" value="${esc(c.id)}" aria-label="Selecionar ${esc(c.id)}"></td><td><b>${esc(c.id)}</b> · ${esc(c.texto)}</td><td class="n">${esc(c.data.slice(8) + "/" + c.data.slice(5, 7))}</td></tr>`).join("")}</tbody></table></div>
-      ${D.conselho.length > 15 ? `<p class="nota" style="margin-top:8px">Mostrando as 15 mais antigas. As demais aparecem quando estas forem decididas.</p>` : ""}</section>
-    <section><div class="cab"><h2>Carga do time</h2><span class="atual">o que espera cada pessoa agora</span></div>
-      ${kpis(carga.map(c => [PESSOAS[c.p], n(c.n), `${n(c.urg)} urgentes · mais antigo há ${n(c.max)} dias`, false, "carga_" + c.p]))}</section>
-    <section><div class="cab"><h2>Resultado</h2><span class="atual">últimos 12 meses · data efetiva</span></div>
-      <div class="grade">
-        <div class="bloco"><h3>Ganhos por mês (R$)</h3>${barras(s12.map(x => ({r: mesRot(x.mes), v: x.ganhos_rs})), {fmt: rs, linha: s12.map(x => x.ganhos_n)})}
-          <div class="legenda"><span><i style="background:var(--ouro)"></i>R$ ganho (mês atual em ouro)</span><span><i style="background:var(--texto)"></i>nº de ganhos</span></div></div>
-        <div class="bloco"><h3>Win rate mensal</h3>${linhaG(D.winrate.slice(-12).map(x => x.pct), D.winrate.slice(-12).map(x => mesRot(x.mes)), {ref: K.win_rate_3m})}
-          <p class="nota">Ganhos ÷ (ganhos + perdidos) pela data de fechamento. Linha tracejada: média dos últimos 3 meses.</p></div>
-        <div class="bloco"><h3>Abertos por etapa</h3>${hbarras(D.funil.slice(0, 7).map(([r, v]) => ({r, v})))}<p class="nota">Funil completo com conversão entre etapas depende do histórico de etapas do HubSpot.</p></div>
-        <div class="bloco"><h3>Idade dos negócios abertos</h3>${barras(D.idade_abertos.map(([r, v]) => ({r: r + " d", v})), {cor: "var(--erro)"})}
-          <div class="mini"><div><span class="rotulo">Ciclo mediano</span><b>${n((K.ciclo || {}).mediana_dias)} d</b></div><div><span class="rotulo">P90</span><b>${n((K.ciclo || {}).p90_dias)} d</b></div><div><span class="rotulo">Ganhos até 90 d</span><b>${String((K.ciclo || {}).ganhos_ate_90d_pct ?? "—").replace(".", ",")}%</b></div></div></div>
-        <div class="bloco"><h3>Margem por mês</h3>${barras(D.lucro.map(x => ({r: mesRot(x.mes), v: Math.max(x.hl - x.custo, 0)})), {fmt: rs})}
-          <p class="nota">Honorário líquido menos custo da área (orçado onde o realizado não foi lançado). Amostra: só ganhos com honorário preenchido.</p></div>
-        <div class="bloco"><h3>Concentração (12 meses)</h3>${hbarras(((K.concentracao || {}).top5 || []).map(([r, v]) => ({r, v})), {fmt: rs})}
-          <p class="nota">Os 3 maiores parceiros somam ${String((K.concentracao || {}).top3_pct ?? "—").replace(".", ",")}% do fechado em 12 meses.</p></div>
-      </div></section>
-    <section><div class="cab"><h2>Masters</h2><button class="botao sec peq" data-ir="parceiros">Ver tabela completa</button></div>${tabelaMasters(ordenar(D.masters), false)}</section>
-    <section><div class="cab"><h2>Saúde da base e do canal</h2></div><div class="grade">
-      <div class="bloco"><h3>Qualidade do CRM</h3><div class="mini"><div><span class="rotulo">Índice dos ganhos</span><b>${String(K.qualidade).replace(".", ",")}</b></div>${Object.entries(K.inconsistencias || {}).slice(0, 3).map(([k, v]) => `<div><span class="rotulo">${esc(k)}</span><b>${n(v)}</b></div>`).join("")}</div></div>
-      <div class="bloco"><h3>Conflito de canal</h3><div class="mini"><div><span class="rotulo">Alta severidade</span><b>${n(K.conflito.alta)}</b></div><div><span class="rotulo">Master × Master</span><b>${n(K.conflito.mxm)}</b></div><div><span class="rotulo">Valor em conflito</span><b>${rs(K.conflito.valor)}</b></div></div></div>
-      <div class="bloco"><h3>Repasses</h3><div class="mini">${Object.entries(K.repasse || {}).map(([k, v]) => `<div><span class="rotulo">${esc(k.split(" (")[0])}</span><b>${n(v)}</b></div>`).join("")}</div><p class="nota">Repasse a pagar de fato depende do "recebido" do Financeiro.</p></div>
-      <div class="bloco"><h3>Contratos</h3><div class="mini"><div><span class="rotulo">Em contrato</span><b>${n((K.contratos || {}).negocios)}</b></div><div><span class="rotulo">Valor</span><b>${rs((K.contratos || {}).valor)}</b></div><div><span class="rotulo">Com alerta</span><b>${n((K.contratos || {}).com_alerta)}</b></div></div></div>
-    </div></section>`;
+  const K = D.kpi, L = doLuis(), c = D.conselho.filter(x => !S.feitos.has(x.id)).length, pr = K.pedidos_prontos, ch = K.chamados, tot = c + pr + ch;
+  const mes = K.mes || {}, cres = ((mes.crescimento || {}).ganhos_rs || {}).pct, riscos = D.masters.filter(m => m.saude < 60);
+  const carga = ["daniela", "jenifer", "geovana"].map(p => { const xs = D.caixa.filter(x => x.pessoa === p); return {p, n: xs.length, at: xs.filter(x => (x.dias || 0) > 30).length, max: Math.max(0, ...xs.map(x => x.dias || 0))}; });
+  const wr = D.winrate.slice(-12);
+  return `<div class="topo-cards">
+      <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Esperando por você</span><div class="lado"><span class="v" data-count="${tot}">${n(tot)}</span><span class="t">decisões e aprovações para destravar o time</span></div>
+        <div class="comp">${[[c, "var(--ouro)"], [pr, "var(--ouro-50)"], [ch, "var(--serie-2)"]].map(([v, cor]) => `<i style="width:${100 * v / (tot || 1)}%;background:${cor}"></i>`).join("")}</div>
+        <div class="leg"><span><i style="background:var(--ouro)"></i>${n(c)} Conselho</span><span><i style="background:var(--ouro-50)"></i>${n(pr)} respostas</span><span><i style="background:var(--serie-2)"></i>${n(ch)} chamados</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="botao" data-lote>Decidir o Conselho em lote</button><button class="botao sec" data-kpi="esperando">Ver tudo</button></div></div>
+      ${kpi({r: "Ganhos no mês", v: rsH(mes.ganhos_rs), d: `${n(mes.ganhos_n)} negócios · até 13/10`, delta: delta(cres, "vs set."), sp: spark(g12().map(x => x.ganhos_rs)), key: "ganhos_mes"})}
+      ${kpi({r: "Pipeline aberto", v: rsH(PIPE.rs), d: `${n(PIPE.n)} negócios · agendas e indicações`, sp: `<span class="nota">sem histórico semanal ainda</span>`, key: "pipeline"})}
+    </div>
+    ${riscos.length ? faixa(`<b>${n(riscos.length)} Masters em risco:</b> ${riscos.map(m => `<span class="chip erro">${esc(m.parceiro)} ${m.saude}</span>`).join(" ")}`, "risco") : ""}
+    <div class="kpis carrossel">
+      ${kpi({r: "Win rate 3 meses", v: pc(K.win_rate_3m), d: "ganhos ÷ (ganhos + perdidos)", sp: spark(wr.map(x => x.pct), 100), key: "winrate"})}
+      ${kpi({r: "Ticket médio", v: rsH(K.ticket_3m), d: "últimos 3 meses"})}
+      ${kpi({r: "Repasse 12 meses", v: rsH(Object.values(D.ficha).reduce((a, f) => a + (f.comissao_12m || 0), 0)), d: "aos parceiros, % oficial", key: "repasse12"})}
+      ${kpi({r: "Recorrência", v: rsH(D.recorrencia.pot_credito), d: `${n(D.recorrencia.n_elegiveis)} clientes elegíveis`, key: "rec_parc"})}
+    </div>
+    <section><div class="cab"><h2>Decidir hoje</h2><span class="atual">${n(L.filter(x => x.grupo !== "Conselho").length)} itens · mais antigos primeiro</span></div>${lista(L.filter(x => x.grupo !== "Conselho"), 5)}</section>
+    <section><div class="cab"><h2>Carga do time</h2><span class="atual">o que espera cada pessoa</span></div>
+      <div class="kpis">${carga.map(cg => kpi({r: PESSOAS[cg.p], v: n(cg.n), d: `<span class="prog" style="display:block;margin:2px 0 6px"><i style="width:${Math.min(100, 100 * cg.n / 140)}%"></i></span>${n(cg.at)} atrasados · mais antigo ${n(cg.max)} d`, key: "carga_" + cg.p, count: cg.n})).join("")}</div></section>
+    <section><div class="cab"><h2>Resultado</h2><button class="botao sec peq" data-kpi="analises">Mais análises</button></div>
+      <div class="grade-3">
+        <div class="bloco"><h3>Ganhos por mês</h3><p class="tese">Outubro em andamento; a linha é a média dos 11 meses fechados.</p>${grafGanhos()}${verTabela([["Mês"], ["R$", 1], ["Ganhos", 1]], g12().map(x => [mesRot(x.mes), rs(x.ganhos_rs), n(x.ganhos_n)]))}</div>
+        <div class="bloco"><h3>Onde está o pipeline</h3><p class="tese">${pc(100 * (D.detalhe.funil_rs.find(r => r[0] === "Apresentação de Diagnóstico") || [0, 0, 0])[2] / (PIPE.rs || 1))} do valor parado em Apresentação de Diagnóstico.</p>${grafFunil(D.detalhe.funil_rs.filter(r => r[2] > 0))}<p class="nota">${n(D.detalhe.funil_rs.filter(r => !r[2]).length)} etapas sem valor no CRM (${n(D.detalhe.sem_valor)} negócios) ficam no detalhe.</p><button class="botao sec peq" data-kpi="pipeline">Ver o pipeline completo</button></div>
+        <div class="bloco"><h3>Idade dos abertos</h3><p class="tese"><b>${n(D.detalhe.mais90[0])}</b> negócios há mais de 90 dias (${rs(D.detalhe.mais90[1])}).</p>${grafIdade()}<button class="botao sec peq" data-kpi="heat">Ver por etapa (mapa de calor)</button></div>
+      </div></section>`;
 };
 V.daniela = () => {
-  const L = minhas(), urg = L.filter(x => x.urgente), dem = L.filter(x => x.grupo === "Demanda");
-  const porM = D.masters.map(m => ({...m, itens: L.filter(x => x.master === m.parceiro)})).sort((a, b) => b.itens.length - a.itens.length);
-  return `${kpis([["Para responder", n(dem.length), "demandas de parceiro abertas", true, "minha_caixa"], ["Urgentes", n(urg.length), "contratos parados, demandas atrasadas", false, "urgentes"],
-      ["Mais antigo", n(Math.max(0, ...L.map(x => x.dias || 0))) + " d", "item mais antigo esperando", false, "antigos"], ["Prontos para encaminhar", n(L.filter(pronto).length), "chamado ou mensagem já montados", false, "prontos"]])}
-    ${fazerAgora(L, 6, "Responder agora")}
-    <section><div class="cab"><h2>Por Master</h2><span class="atual">onde está a pressão de cada conta</span></div>
-      <div class="grade">${porM.map(m => `<div class="bloco"><div class="cab" style="margin:0"><h3>${esc(m.parceiro)}</h3><span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "alerta" : "erro"}">saúde ${m.saude}</span></div>
-        <div class="mini"><div><span class="rotulo">Itens</span><b>${n(m.itens.length)}</b></div><div><span class="rotulo">R$ aberto</span><b>${rs(m.abertos_rs)}</b></div><div><span class="rotulo">Parados</span><b>${n(m.abertos_parados)}</b></div><div><span class="rotulo">Repasse bloqueado</span><b>${n((m.repasse || {}).bloqueado)}</b></div></div>
-        <p class="nota">Último negócio criado há ${n(m.dias_sem_negocio)} dia(s) · ritmo ${m.ritmo_valor_vs_media_trimestral_pct > 0 ? "+" : ""}${String(m.ritmo_valor_vs_media_trimestral_pct ?? "—").replace(".", ",")}% vs média</p></div>`).join("")}</div></section>`;
+  const L = minhas(), at = L.filter(x => (x.dias || 0) > 30), pr = L.filter(pronto), max = Math.max(0, ...L.map(x => x.dias || 0));
+  const pm = [...D.masters].sort((a, b) => a.saude - b.saude);
+  return `<div class="topo-cards">
+      <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Responder agora</span>
+        <div class="lado">${anel(L.length ? at.length / L.length : 0, n(at.length))}<div><div class="t"><b>${n(at.length)} atrasados</b> de ${n(L.length)} itens</div><div class="nota" style="color:var(--erro)">mais antigo há ${n(max)} dias</div></div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="botao" data-prontos-ir>Encaminhar os ${n(pr.length)} prontos</button></div></div>
+      ${kpi({r: "Demandas de parceiro", v: n(L.filter(x => x.grupo === "Demanda").length), d: "WhatsApp e e-mail", key: "minha_caixa"})}
+      ${kpi({r: "Contratos parados", v: n(L.filter(x => x.tipo === "Contrato sem assinatura").length), d: "enviados e sem assinatura", key: "urgentes"})}
+    </div>
+    <section><div class="cab"><h2>Responder agora</h2><span class="atual">agrupado por tipo · o primeiro de cada grupo em destaque</span></div>${porTipo(L, 3)}</section>
+    <section><div class="cab"><h2>Pressão por Master</h2><span class="atual">saúde mais baixa primeiro</span></div>
+      <div class="tab-wrap">${pm.map(m => { const it = L.filter(x => x.master === m.parceiro); return `<div class="linha-m" data-master="${esc(m.parceiro)}" tabindex="0" role="button">
+        <b>${esc(m.parceiro)}</b><span class="saude"><span class="barrinha"><i style="width:${m.saude}%;background:${corSaude(m.saude)}"></i></span><span class="mono">${m.saude}</span></span>
+        <span class="k">${n(it.length)}<small>itens</small></span><span class="k">${rs(m.abertos_rs)}<small>aberto</small></span><span class="k">${n(m.abertos_parados)}<small>parados</small></span>
+        <span class="k" style="${(m.repasse || {}).bloqueado ? "color:var(--erro)" : ""}">${n((m.repasse || {}).bloqueado)}<small>repasses bloqueados</small></span><span class="cel" aria-hidden="true">›</span></div>`; }).join("")}</div></section>`;
 };
 V.jenifer = () => {
-  const J = D.jenifer, L = minhas(), rot = J.semanas.map(s => s.slice(8, 10) + "/" + s.slice(5, 7));
-  const IJ = D.detalhe.indicacoes.jenifer || {};
-  return `${kpis([["Agendamentos", n(IJ.agendamento), `${n(IJ.abertos)} indicações em aberto · ${rs(IJ.valor_aberto)}`, true, "ind_jenifer"], ["Indicações no mês", n((IJ.por_mes || []).slice(-1)[0]?.[1]), `${n(IJ.n)} no total`, false, "ind_jenifer"], ["Entradas em diagnóstico", n(J.diag[J.diag.length - 2]), "na última semana completa"],
-      ["Conflitos a checar", n(J.conflitos_alta), `alta severidade · ${n((J.duplicidade || {}).cnpjs)} CNPJs duplicados`]])}
-    ${fazerAgora(L, 5)}
-    <section><div class="cab"><h2>Ritmo das últimas 8 semanas</h2></div><div class="grade">
-      <div class="bloco"><h3>Negócios novos por semana</h3>${barras(J.novos.map((v, i) => ({r: rot[i], v})))}<p class="nota">Funil BDR/SDR no HubSpot: ${n(J.bdr.reduce((a, b) => a + b, 0))} novos no período.</p></div>
-      <div class="bloco"><h3>Entradas em diagnóstico por semana</h3>${barras(J.diag.map((v, i) => ({r: rot[i], v})), {cor: "var(--info)"})}</div>
-    </div></section>
-    <section><div class="cab"><h2>Onde cada Master já ganha</h2><span class="atual">UFs com mais ganhos: use para direcionar listas</span></div>
-      <div class="tab-wrap"><table><thead><tr><th>Master</th><th>UFs com mais ganhos</th></tr></thead><tbody>${Object.entries(J.cobertura).map(([m, ufs]) => `<tr><td><b>${esc(m)}</b></td><td>${ufs.map(([u, q]) => `<span class="chip">${esc(u)} · ${q}</span>`).join(" ")}</td></tr>`).join("")}</tbody></table></div>
-      <p class="nota" style="margin-top:8px">Atividades (ligações, reuniões) e follow-ups vencendo dependem de dado novo.</p></section>`;
+  const J = D.jenifer, IJ = D.detalhe.indicacoes.jenifer || {}, IG = D.detalhe.indicacoes.geovana || {}, L = minhas(), rot = J.semanas.map(s => s.slice(8, 10) + "/" + s.slice(5, 7));
+  const mxs = Math.max(...J.novos, ...J.diag, 1), sem = (vals, nome) => colunas(vals.map((v, i) => ({r: rot[i], v, estado: i === vals.length - 1 ? "parcial" : (nome === "diag" && i < 5 && !v ? "sem" : "real"), tip: T("semana de " + rot[i], [n(v) + " " + (nome === "diag" ? "entradas" : "negócios"), i === vals.length - 1 ? "semana parcial" : ""])})), {alt: 150});
+  return `<div class="topo-cards">
+      <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Agendamentos</span><div class="lado"><span class="v" data-count="${IJ.agendamento || 0}">${n(IJ.agendamento)}</span><span class="t">reuniões agendadas a partir das suas indicações</span></div>
+        ${empilhada100([{r: "Agendamento", v: IJ.agendamento || 0, cor: "var(--ouro)"}, {r: "Demais abertas", v: Math.max(0, (IJ.abertos || 0) - (IJ.agendamento || 0)), cor: "var(--serie-3)"}, {r: "Perdidas ou desqualificadas", v: IJ.perdidos || 0, cor: "var(--serie-4)"}], {fmt: n})}
+        <div><button class="botao" data-kpi="ind_jenifer">Ver minhas indicações</button></div></div>
+      ${kpi({r: "Indicações em aberto", v: n(IJ.abertos), d: rs(IJ.valor_aberto), key: "ind_jenifer"})}
+      ${kpi({r: "Conflitos a checar", v: n(J.conflitos_alta), d: `alta severidade · ${n((J.duplicidade || {}).cnpjs)} CNPJs duplicados`})}
+    </div>
+    <section><div class="cab"><h2>Funil de indicações</h2><span class="atual">mesma régua · Jenifer × Geovana</span></div>
+      <div class="bloco estreito">${empilhadaH([{r: "Jenifer", segs: [IJ.ganhos || 0, IJ.abertos || 0, IJ.perdidos || 0], extra: `${n(IJ.n)} indicadas`}, {r: "Geovana", segs: [IG.ganhos || 0, IG.abertos || 0, IG.perdidos || 0], extra: `${n(IG.n)} indicadas · ${rs(IG.valor_ganho)} ganho`}], ["var(--ouro)", "var(--serie-3)", "var(--serie-4)"], ["Ganhas", "Em aberto", "Perdidas"], {totRot: r => n(r.segs.reduce((a, b) => a + b, 0)) + " indicadas"})}
+        <div class="leg"><span><i style="background:var(--ouro)"></i>ganhas</span><span><i style="background:var(--serie-3)"></i>em aberto</span><span><i style="background:var(--serie-4)"></i>perdidas ou desqualificadas</span></div>
+        <p class="tese">Jenifer: ${pc(100 * (IJ.abertos || 0) / (IJ.n || 1))} seguem em aberto. Geovana: ${pc(100 * (IG.ganhos || 0) / (IG.n || 1))} viraram ganho.</p></div></section>
+    <section><div class="cab"><h2>Fazer agora</h2></div>${lista(L, 5)}</section>
+    <section><div class="cab"><h2>Ritmo das últimas 8 semanas</h2><span class="atual">mesma escala · semana atual parcial</span></div>
+      <div class="grade"><div class="bloco"><h3>Negócios novos por semana</h3>${sem(J.novos, "novos")}</div><div class="bloco"><h3>Entradas em diagnóstico</h3>${sem(J.diag, "diag")}<p class="nota">O registro de entradas começa em 28/09; antes disso não há dado.</p></div></div></section>
+    <section><div class="cab"><h2>Onde cada Master já ganha</h2><span class="atual">use para direcionar as listas</span></div>
+      <div class="grade-3">${Object.entries(J.cobertura).map(([m, ufs]) => `<div class="bloco"><h3>${esc(m)}</h3>${barrasH(ufs.map(([u, q]) => ({r: u, v: q})), {larg: 40})}</div>`).join("")}</div></section>`;
 };
 V.geovana = () => {
-  const G = D.geovana, dec = G.lote.filter(x => S.feitos.has(x.caso)).length, R = G.revisor;
-  return `${kpis([["Lote da semana", `${dec} de ${G.lote.length}`, `<span class="prog" style="display:block;margin-top:4px"><i style="width:${100 * dec / Math.max(G.lote.length, 1)}%"></i></span>`, true],
-      ["Potencial do lote", rs(G.esperado_lote), `fila inteira: ${rs(G.esperado_fila)} em ${n(G.fila)} casos`, false, "lote"], ["Revisor", `${n(R.revisados)} / ${n(R.selecionados)}`, `${n(R.lacunas)} lacunas · ${n(R.alta)} de alta prioridade`, false, "revisor"],
-      ["Oportunidades indicadas", n((D.detalhe.indicacoes.geovana || {}).n), `${rs((D.detalhe.indicacoes.geovana || {}).valor)} · ${n((D.detalhe.indicacoes.geovana || {}).ganhos)} ganhas`, false, "ind_geovana"]])}
+  const G = D.geovana, dec = G.lote.filter(x => S.feitos.has(x.caso)).length, R = G.revisor, IG = D.detalhe.indicacoes.geovana || {};
+  const rec = D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso));
+  return `<div class="topo-cards">
+      <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Lote da semana</span>
+        <div class="lado">${anel(dec / Math.max(G.lote.length, 1), `${dec}/${G.lote.length}`)}<div><div class="t"><b>${rs(G.esperado_lote)}</b> de honorário esperado no lote</div><div class="nota">${dec ? `${dec} decididos` : "comece pelo 1º caso"} · cerca de 4 por dia útil</div></div></div>
+        <div><button class="botao" data-comecar>${dec ? "Continuar o lote" : "Começar o lote"}</button></div></div>
+      ${kpi({r: "Oportunidades indicadas", v: n(IG.n), d: `${rs(IG.valor)} · ${n(IG.ganhos)} ganhas`, key: "ind_geovana", count: IG.n})}
+      ${kpi({r: "Recorrência para decidir", v: n(rec.length), d: `${rs(D.recorrencia.pot_credito)} em negócios`, key: "rec_parc"})}
+    </div>
     <section><div class="cab"><h2>Recorrência para decidir</h2><button class="botao sec peq" data-ir="recorrencia">Ver a fila completa</button></div>
-      <div class="lista">${D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso)).slice(0, 4).map(x => `<article class="item ${x.sinais.some(s => /L13/.test(s)) ? "med" : ""}"><span class="tarja"></span><div class="corpo"><div class="meta"><span class="chip ouro">Recorrência</span><span>${esc(x.parceiro)} · ${esc(x.regime || "")}</span></div>
-        <span class="t">${esc(x.caso)}</span><div class="meta"><span><span class="num">${n(x.meses_novos)}</span> meses novos</span><span>Potencial <span class="num">${rs(x.potencial_credito)}</span> em negócios</span><span>${n(x.recorrencias_feitas)} já feita(s)</span></div></div>
-        <div class="acoes"><button class="botao peq" data-rec="${esc(x.caso)}">Decidir</button></div></article>`).join("")}</div></section>
-    <section><div class="cab"><h2>Lote do Recuperador</h2><span class="atual">ordenado pelo honorário esperado · clique na linha para ver detalhe</span></div>
-      <div class="tab-wrap"><table><thead><tr><th>Caso</th><th>Master</th><th>Tipo</th><th>Segmento</th><th>UF</th><th class="n">Esperado</th><th>Parecidos</th><th>Decisão</th></tr></thead><tbody>
-      ${[...G.lote].sort((a, b) => (b.esperado || 0) - (a.esperado || 0)).map(x => `<tr class="clic" data-caso="${esc(x.caso)}" tabindex="0"><td><b>${esc(x.caso)}</b>${x.saldo === "sim" ? ` <span class="chip alerta">saldo credor</span>` : ""}</td><td>${esc(x.parceiro)}</td><td>${esc(x.tipo)}</td><td>${esc(x.segmento)}</td><td>${esc(x.uf)}</td><td class="n">${rs(x.esperado)}</td><td class="n">${esc(String(x.taxa || "").split(" ")[0])}</td>
-        <td>${S.feitos.has(x.caso) ? `<span class="chip ok">decidido</span>` : `<button class="botao peq" data-decidir="${esc(x.caso)}">Decidir</button>`}</td></tr>`).join("")}</tbody></table></div></section>
+      <div class="lista">${rec.slice(0, 4).map((x, i) => `<article class="item ${x.sinais.some(s => /L13|decad/.test(s)) ? "atencao" : ""}"><span class="tarja"></span><div class="corpo"><span class="t">${esc(x.caso)} · ${esc(x.parceiro)}</span><div class="meta"><span>${n(x.recorrencias_feitas)} já feita(s)</span><span>· ${n(x.meses_novos)} meses novos</span>${x.sinais.slice(0, 2).map(s => `<span class="chip ${/L13|decad/.test(s) ? "alerta" : ""}">${/L13|decad/.test(s) ? ico("alerta") : ""}${esc(s.split(":")[0].split(" (")[0])}</span>`).join("")}</div></div>
+        <span class="val">${rs(x.potencial_credito)}</span><span class="idade"></span><div><button class="botao ${i ? "sec" : ""} peq" data-rec="${esc(x.caso)}">Decidir</button></div></article>`).join("")}</div></section>
+    <section><div class="cab"><h2>Lote do Recuperador</h2><span class="atual">maior honorário esperado primeiro</span></div>
+      ${tab([["Caso"], ["Master"], ["Tipo"], ["Segmento"], ["Esperado", 1], ["Parecidos", 1], [""]], [...G.lote].sort((a, b) => (b.esperado || 0) - (a.esperado || 0)).map(x => [`<b>${esc(x.caso)}</b>${x.saldo === "sim" ? ` <span class="chip alerta">${ico("alerta")}saldo credor</span>` : ""}`, esc(x.parceiro), esc(x.tipo), esc(x.segmento), rs(x.esperado), esc(String(x.taxa || "").split(" ")[0]), S.feitos.has(x.caso) ? `<span class="chip ok">${ico("ok")}decidido</span>` : `<button class="botao sec peq" data-decidir="${esc(x.caso)}">Decidir</button>`]), "cartoes")}</section>
     <section><div class="grade">
-      <div class="bloco"><h3>Revisor: lacunas por tese</h3>${hbarras(G.por_tese.map(t => ({r: t.tese, v: t.n})))}</div>
-      ${fazerAgora(minhas(), 4, "Outros itens")}
-    </div></section>`;
+      <div class="bloco"><h3>Revisor: lacunas por tese</h3><p class="tese">${n(R.revisados)} de ${n(R.selecionados)} diagnósticos revisados · ${n(R.lacunas)} lacunas.</p>${empilhadaH(G.por_tese.map(t => ({r: t.tese, segs: [t.alta, t.n - t.alta]})), ["var(--ouro)", "var(--serie-2)"], ["Alta", "Demais"], {totRot: r => `${n(r.segs[0])} de ${n(r.segs[0] + r.segs[1])}`})}<div class="leg"><span><i style="background:var(--ouro)"></i>prioridade alta</span><span><i style="background:var(--serie-2)"></i>demais</span></div></div>
+      <div class="bloco"><h3>Outros itens</h3>${lista(minhas(), 4)}</div></div></section>`;
 };
 
 /* ---------- abas ---------- */
 const A = {};
 A.inicio = () => V[S.eu]();
 A.caixa = () => {
-  const base = minhas(), grupos = ["todos", ...new Set(D.caixa.map(x => x.grupo))], f = S.filtro;
-  const xs = base.filter(x => (f.grupo === "todos" || x.grupo === f.grupo) && (!f.so_urg || x.urgente) && (!f.prontos || pronto(x)) && (!f.busca || (x.titulo + " " + x.tipo + " " + (x.master || "")).toLowerCase().includes(f.busca.toLowerCase())));
-  return `<section><div class="cab"><h2>Caixa de entrada</h2><span class="atual">${n(xs.length)} de ${n(base.length)} itens${S.eu === "luis" ? " · de todo o time" : ""}</span></div>
-    <div class="filtros" role="group" aria-label="Filtros">${grupos.map(g => `<button data-grupo="${esc(g)}" aria-pressed="${f.grupo === g}">${g === "todos" ? "Tudo" : esc(g)}</button>`).join("")}
-      <button data-urg aria-pressed="${f.so_urg}">Só urgentes</button><button data-prontos aria-pressed="${!!f.prontos}">Prontos para encaminhar</button>
-      <input type="search" id="busca" placeholder="Buscar por tipo, Master ou código" value="${esc(f.busca)}" aria-label="Buscar"></div>
-    ${xs.length ? `<div class="lista">${xs.slice(0, 60).map(x => itemHTML(x, false)).join("")}</div>${xs.length > 60 ? `<p class="nota">Mostrando 60. Use os filtros para achar o resto.</p>` : ""}` : `<div class="vazio">Nada com esses filtros. Limpe a busca ou escolha "Tudo".</div>`}</section>`;
+  const base = minhas(), f = S.filtro, grupos = ["Tudo", ...new Set(D.caixa.map(x => x.grupo))];
+  const xs = base.filter(x => (!f.grupo || f.grupo === "Tudo" || x.grupo === f.grupo) && (!f.prontos || pronto(x)) && (!f.busca || (x.titulo + " " + x.tipo + " " + (x.master || "")).toLowerCase().includes(f.busca.toLowerCase())));
+  const at = base.filter(x => (x.dias || 0) > 30).length, sem = base.filter(x => (x.dias || 0) > 7 && (x.dias || 0) <= 30).length;
+  return `<div class="kpis">${kpi({r: "Atrasados (mais de 30 dias)", v: n(at), d: "tarja vermelha", key: "antigos"})}${kpi({r: "Em atenção (8 a 30 dias)", v: n(sem), d: "tarja listrada"})}${kpi({r: "Prontos para encaminhar", v: n(base.filter(pronto).length), d: "chamado, mensagem ou área já montados", key: "prontos"})}${kpi({r: "Total", v: n(base.length), d: S.eu === "luis" ? "de todo o time" : "seus"})}</div>
+    <section><div class="filtros" role="group" aria-label="Filtros">${grupos.map(g => `<button data-grupo="${esc(g)}" aria-pressed="${(f.grupo || "Tudo") === g}">${esc(g)}</button>`).join("")}<button data-prontos aria-pressed="${!!f.prontos}">Prontos para encaminhar</button>
+      <input type="search" id="busca" placeholder="Buscar por tipo, Master ou código" value="${esc(f.busca || "")}" aria-label="Buscar"></div>
+    ${xs.length ? porTipo(xs, 5) : `<div class="vazio">${ico("info")}<span>Nada com esses filtros. Limpe a busca ou escolha "Tudo".</span></div>`}</section>`;
 };
-A.pedidos = () => {
-  const ps = D.caixa.filter(x => x.grupo === "Pedido");
-  return `<section><div class="cab"><h2>Respostas para aprovar</h2><button class="botao" data-novo>Novo pedido</button></div>
-    ${ps.length ? `<div class="lista">${ps.map(x => itemHTML(x, false)).join("")}</div>` : `<div class="vazio">Nenhuma resposta esperando aprovação.</div>`}</section>
-    <section><div class="cab"><h2>Histórico do que foi resolvido</h2><span class="atual">tempo entre a demanda chegar e sair da lista</span></div>
-      ${kpis(["daniela", "jenifer", "geovana"].map(p => [PESSOAS[p], D.tempo[p].mediana_h == null ? "—" : String(D.tempo[p].mediana_h).replace(".", ",") + " h", `mediana · ${n(D.tempo[p].n)} demandas`]))}
-      <div class="tab-wrap" style="margin-top:12px"><table><thead><tr><th>Demanda</th><th>Responsável</th><th>Origem</th><th>Aberta</th><th>Resolvida</th><th class="n">Horas</th></tr></thead><tbody>
-      ${D.hist.slice(0, 20).map(x => `<tr><td><b>${esc(x.id)}</b></td><td>${esc(PESSOAS[x.pessoa] || x.pessoa)}</td><td>${esc(x.origem)}</td><td class="n">${esc(x.aberta.slice(8) + "/" + x.aberta.slice(5, 7))}</td><td class="n">${esc(x.resolvida.slice(8) + "/" + x.resolvida.slice(5, 7))}</td><td class="n">${String(x.horas).replace(".", ",")}</td></tr>`).join("")}</tbody></table></div>
-      <p class="nota" style="margin-top:8px">Hoje "resolvida" é quando os agentes não veem mais pendência na conversa. Com o registro de cada encaminhamento no painel, este tempo passa a ser o real.</p></section>
-    <section><h2>Como funciona</h2><p class="sub">Escolha o tipo de pedido, diga o que precisa e para que vai usar. Os agentes respondem aqui, de hora em hora nos dias úteis, e você aprova, pede nova análise ou não aprova na mesma tela. Nada é enviado a parceiro ou cliente.</p></section>`;
-};
-A.masters_old = () => `<section><div class="cab"><h2>Masters</h2><span class="atual">clique no cabeçalho para ordenar · clique na linha para ver o detalhe</span></div>${tabelaMasters(ordenar(D.masters), true)}</section>`;
-
-const pctChip = nome => { const f = D.ficha[nome] || {}; return f.pct == null ? "" : `<span class="chip ${f.pct_confirmado ? "ok" : "alerta"}">repasse ${String(f.pct).replace(".0", "")}%${f.pct_confirmado ? "" : " · a confirmar"}</span>`; };
-function spark(vals) { const W = 160, H = 34, mx = Math.max(...vals, 1); const pts = vals.map((v, i) => `${(W * i / Math.max(vals.length - 1, 1)).toFixed(1)},${(H - 2 - (H - 6) * v / mx).toFixed(1)}`).join(" ");
-  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="var(--ouro)" stroke-width="1.6"/></svg>`; }
 A.prazos = () => {
-  const pz = D.prazos, dc = D.docs.filter(d => !S.filtro.parc || d.parceiro === S.filtro.parc), parcs = [...new Set(D.docs.map(d => d.parceiro))].sort();
-  return `<section><div class="cab"><h2>Prazos da Receita</h2><span class="atual">despachos, intimações, CND e manifestações · o mais urgente primeiro</span></div>
-    <div class="tab-wrap"><table><thead><tr><th>Código</th><th>Tipo</th><th>Master</th><th>Responsável</th><th>Prazo</th><th></th></tr></thead><tbody>
-    ${pz.map(p => `<tr><td><b>${esc(p.id)}</b></td><td>${esc(p.tipo)}</td><td>${esc(p.master || "—")}</td><td>${esc(PESSOAS[p.pessoa] || p.pessoa)}</td>
-      <td>${p.restam != null ? `<span class="chip ${p.restam <= 10 ? "erro" : p.restam <= 20 ? "alerta" : "ok"}">faltam ${p.restam} dias</span> ` : ""}<span class="nota">${esc(p.prazo_txt)}</span></td>
-      <td><button class="botao peq" data-prazo="${esc(p.id)}">Montar chamado</button></td></tr>`).join("")}</tbody></table></div>
-    <p class="nota" style="margin-top:8px">A data exata vem do documento (data de ciência). Com o Guardião de Prazos, ela é lida do despacho ou da intimação e os avisos saem com 10, 5 e 2 dias.</p></section>
-  <section><div class="cab"><h2>Documentos por negócio</h2><span class="atual">${n(D.n_docs)} negócios em diagnóstico com algo a conferir · o documento que decide cada tese</span></div>
-    <div class="filtros"><select id="f-parc" aria-label="Filtrar por parceiro"><option value="">Todos os parceiros</option>${parcs.map(p => `<option ${S.filtro.parc === p ? "selected" : ""}>${esc(p)}</option>`).join("")}</select></div>
-    <div class="tab-wrap"><table><thead><tr><th>Caso</th><th>Parceiro</th><th>Etapa</th><th class="n">Dias</th><th>Não consta no HubSpot</th><th class="n">Teses a decidir</th></tr></thead><tbody>
-    ${dc.slice(0, 50).map(d => `<tr class="clic" data-doc="${esc(d.caso)}" tabindex="0"><td><b>${esc(d.caso)}</b></td><td>${esc(d.parceiro)}</td><td>${esc(d.etapa)}</td><td class="n">${n(d.dias)}</td><td>${d.falta.map(x => `<span class="chip alerta">${esc(x)}</span>`).join(" ") || "—"}</td><td class="n">${n(d.decide.length)}</td></tr>`).join("")}</tbody></table></div></section>`;
+  const hoje = new Date(HOJE), pz = D.prazos.map(p => { let dd = p.data; if (!dd) { const m = String(p.prazo_txt || "").match(/(\d{2})\/(\d{2})/); if (m) dd = `2026-${m[2]}-${m[1]}`; } const r = dd ? Math.round((new Date(dd) - hoje) / 864e5) : null; return {...p, dd, r}; });
+  const col = [["Vencido", p => p.r != null && p.r < 0, true], ["Hoje", p => p.r === 0, true], ["Até 5 dias", p => p.r > 0 && p.r <= 5, true], ["Depois", p => p.r > 5, false], ["Sem data", p => p.r == null, false]];
+  const dc = D.docs.filter(d => !S.filtro.parc || d.parceiro === S.filtro.parc), parcs = [...new Set(D.docs.map(d => d.parceiro))].sort();
+  const grpDoc = {}; dc.forEach(d => d.falta.forEach(k => grpDoc[k] = (grpDoc[k] || 0) + 1));
+  return `<section><div class="cab"><h2>Prazos da Receita</h2><span class="atual">vencido e hoje em vermelho · clique para montar o chamado</span></div>
+      <div class="tl">${col.map(([t, fn, q]) => { const xs = pz.filter(fn); return `<div class="col ${q && xs.length ? "quente" : ""}"><h4>${t}<span class="badge">${n(xs.length)}</span></h4>${xs.map(p => `<button class="mk" data-prazo="${esc(p.id)}"><i></i>${esc(p.id)} · ${esc((p.master || "—").slice(0, 10))}${p.r != null ? ` · ${p.r < 0 ? Math.abs(p.r) + " d atrás" : p.r === 0 ? "hoje" : "em " + p.r + " d"}` : ""}</button>`).join("") || `<span class="nota">nenhum</span>`}</div>`; }).join("")}</div>
+      <p class="nota" style="margin-top:8px">A data exata vem do documento (data de ciência). Com o Guardião de Prazos, ela é lida do despacho ou da intimação e os avisos saem com 10, 5 e 2 dias.</p></section>
+    <section><div class="cab"><h2>Documentos por negócio</h2><span class="atual">${n(D.n_docs)} negócios em diagnóstico com algo a conferir</span></div>
+      <div class="kpis" style="margin-bottom:12px">${Object.entries(grpDoc).map(([k, v]) => kpi({r: "Não consta: " + k, v: n(v), d: "negócios"})).join("")}</div>
+      <div class="filtros"><select id="f-parc" aria-label="Filtrar por parceiro"><option value="">Todos os parceiros</option>${parcs.map(p => `<option ${S.filtro.parc === p ? "selected" : ""}>${esc(p)}</option>`).join("")}</select></div>
+      ${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Dias", 1], ["Não consta no HubSpot"], ["Teses a decidir", 1]], dc.slice(0, 40).map(d => [`<button class="botao sec peq" data-doc="${esc(d.caso)}">${esc(d.caso)}</button>`, esc(d.parceiro), esc(d.etapa), `<span class="idade ${idade(d.dias)}">${n(d.dias)}</span>`, d.falta.map(x => `<span class="chip alerta">${esc(x)}</span>`).join(" ") || "—", n(d.decide.length)]), "cartoes")}</section>`;
 };
 A.parceiros = () => {
-  const ms = [...D.masters].sort((a, b) => (D.ficha[b.parceiro]?.comissao_12m || 0) - (D.ficha[a.parceiro]?.comissao_12m || 0)).filter(m => D.ficha[m.parceiro]);
-  const tot = ms.reduce((s, m) => s + (D.ficha[m.parceiro].comissao_12m || 0), 0), pot = ms.reduce((s, m) => s + (D.ficha[m.parceiro].comissao_potencial_aberto || 0), 0);
-  return `${kpis([["Repasse estimado 12 meses", rs(tot), "honorário contratado × % de repasse do parceiro", true, "repasse12"], ["Recorrência em negócios", rs(D.recorrencia.pot_credito), `${n(D.recorrencia.n_elegiveis)} clientes elegíveis`, false, "rec_parc"],
-      ["Parceiros esfriando", n(D.esfriando.length), "sem negócio novo ou ritmo muito abaixo", false, "esfriando"], ["% divergentes", n(ms.reduce((s, m) => s + (D.ficha[m.parceiro].divergencias || 0), 0)), "negócios com % diferente do cadastro", false, "divergencias"]])}
-    <section><div class="cab"><h2>Masters</h2><span class="atual">clique para abrir a ficha · % de repasse do cadastro</span></div>
-      <div class="grade">${ms.map(m => { const f = D.ficha[m.parceiro]; return `<div class="bloco parc" data-master="${esc(m.parceiro)}" tabindex="0">
-        <div class="cab" style="margin:0"><h3>${esc(m.parceiro)}</h3><span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "alerta" : "erro"}">saúde ${m.saude}</span></div>
-        <div>${pctChip(m.parceiro)}</div>${spark(f.serie.map(x => x[1]))}
-        <div class="mini"><div><span class="rotulo">Repasse 12m</span><b>${rs(f.comissao_12m)}</b></div><div><span class="rotulo">Potencial aberto</span><b>${rs(f.comissao_potencial_aberto)}</b></div><div><span class="rotulo">Honorário 12m</span><b>${rs(f.honorario_12m)}</b></div></div>
-        <p class="nota" style="color:var(--ouro)">Recorrência: ${n((f.recorrencia || {}).elegiveis)} clientes · ${rs((f.recorrencia || {}).pot_credito)} em negócios · ${n((f.recorrencia || {}).feitas)} já feitas</p>
-        <p class="nota">${n(m.abertos)} abertos · ${n(f.contratos)} em contrato · ${n(f.conflitos)} conflitos${f.divergencias ? ` · ${n(f.divergencias)} com % diferente do cadastro` : ""}</p></div>`; }).join("")}</div></section>
-    <section><div class="cab"><h2>Esfriando</h2><span class="atual">mensagem de reativação pronta · UFs onde o parceiro já ganha</span></div>
-      <div class="lista">${D.esfriando.map((e, i) => `<article class="item ${e.dias > 90 ? "urg" : "med"}"><span class="tarja"></span><div class="corpo"><div class="meta"><span class="chip">${esc(e.tipo)}</span>${e.uf.length ? `<span>Ganha em ${e.uf.map(esc).join(", ")}</span>` : ""}</div>
-        <span class="t">${esc(e.parceiro)}</span><div class="meta"><span>Sem negócio novo há <span class="num">${n(e.dias)}</span> dias</span>${e.ritmo != null ? `<span>Ritmo <span class="num">${String(e.ritmo).replace(".", ",")}%</span></span>` : ""}<span>${n(e.ganhos_12m)} ganhos em 12 meses</span></div></div>
-        <div class="acoes"><button class="botao peq" data-reativar="${i}">Reativar</button></div></article>`).join("")}</div></section>
-    <section><div class="cab"><h2>Tabela completa</h2><span class="atual">clique no cabeçalho para ordenar</span></div>${tabelaMasters(ordenar(D.masters), true)}</section>`;
-};
-const REGRAS_REC = ["V5 · cliente com ganho na mesma raiz: com 6 meses novos ou mais é recorrência; com menos, já recuperado (aguardar)",
-  "L11 · conta os meses desde o último período recuperado, não desde a data de fechamento",
-  "Parecer \"já aproveitado\": só os meses depois do último ressarcido ou outra tese ainda não feita",
-  "L13 · saldo credor de PIS/COFINS escriturado até 31/12/2026",
-  "Decadência de 5 anos (art. 168 do CTN): a cada mês, um mês antigo sai da janela",
-  "L12 · ação judicial própria na tese: Jurídico confere antes",
-  "Fora: Simples (V2), café (V3) e grupo com negócio aberto (V6)",
-  "A recorrência segue com o parceiro do ganho anterior",
-  "Cliente com negócio aberto em qualquer pipeline fica fora da análise"];
-A.recorrencia = () => {
-  const R = D.recorrencia, fila = R.fila.filter(x => !S.feitos.has("rec-" + x.caso) && (!S.filtro.rparc || x.parceiro === S.filtro.rparc)), parcs = [...new Set(R.fila.map(x => x.parceiro))].sort();
-  const dec = R.fila.filter(x => S.feitos.has("rec-" + x.caso)).length;
-  return `${kpis([["Recorrências elegíveis", n(R.n_elegiveis), `${n(dec)} decididas nesta sessão · ${n(R.n_aguardar)} aguardando 6 meses`, true, "rec_parc"], ["Potencial em negócios", rs(R.pot_credito), "crédito anterior ÷ 60 × meses novos", false, "rec_parc"],
-      ["Honorário potencial", rs(R.pot_honorario), `repasse aos parceiros: ${rs(R.pot_repasse)}`, false, "rec_parc"], ["Fora da análise: já no pipeline", n(R.n_revisor), "clientes da base com negócio aberto", false, "rec_pipe"]])}
-    <section><div class="cab"><h2>Para a Geovana decidir</h2><span class="atual">maior potencial primeiro · quem já está no pipeline fica fora · clique para decidir</span></div>
-      <div class="filtros"><select id="f-rparc" aria-label="Filtrar por parceiro"><option value="">Todos os parceiros</option>${parcs.map(p => `<option ${S.filtro.rparc === p ? "selected" : ""}>${esc(p)}</option>`).join("")}</select></div>
-      <div class="tab-wrap"><table><thead><tr><th>Caso</th><th>Parceiro</th><th>Regime · UF</th><th class="n">Já feitas</th><th class="n">Meses novos</th><th class="n">Potencial em negócios</th><th>Sinais</th><th></th></tr></thead><tbody>
-      ${fila.slice(0, 30).map(x => `<tr class="clic" data-rec="${esc(x.caso)}" tabindex="0"><td><b>${esc(x.caso)}</b><br><span class="nota">último ganho ${esc(x.ultimo_ganho.slice(8) + "/" + x.ultimo_ganho.slice(5, 7) + "/" + x.ultimo_ganho.slice(2, 4))}</span></td><td>${esc(x.parceiro)}</td><td>${esc(x.regime || "—")} · ${esc(x.uf || "—")}</td>
-        <td class="n">${n(x.recorrencias_feitas)}</td><td class="n">${n(x.meses_novos)}</td><td class="n">${rs(x.potencial_credito)}</td><td>${x.sinais.map(s => `<span class="chip ${/L13|decad/.test(s) ? "alerta" : /não registrada/.test(s) ? "erro" : ""}">${esc(s.split(":")[0].split(" (")[0])}</span>`).join(" ")}</td>
-        <td><button class="botao peq" data-rec="${esc(x.caso)}">Decidir</button></td></tr>`).join("")}</tbody></table></div>
-      ${fila.length > 30 ? `<p class="nota" style="margin-top:8px">Mostrando 30 de ${n(fila.length)}. Use o filtro por parceiro.</p>` : ""}</section>
+  const ms = [...D.masters].filter(m => D.ficha[m.parceiro]).sort((a, b) => a.saude - b.saude);
+  const tot = ms.reduce((s, m) => s + (D.ficha[m.parceiro].comissao_12m || 0), 0), mxSp = Math.max(...ms.flatMap(m => D.ficha[m.parceiro].serie.map(x => x[1])), 1);
+  const div = ms.reduce((s, m) => s + (D.ficha[m.parceiro].divergencias || 0), 0);
+  const conc = (D.kpi.concentracao || {}).top5 || [];
+  return `<div class="kpis carrossel">${kpi({r: "Repasse estimado 12 meses", v: rsH(tot), d: "honorário × % oficial do parceiro", key: "repasse12"})}${kpi({r: "Recorrência em negócios", v: rsH(D.recorrencia.pot_credito), d: `${n(D.recorrencia.n_elegiveis)} clientes elegíveis`, key: "rec_parc"})}${kpi({r: "Parceiros esfriando", v: n(D.esfriando.length), d: "sem negócio novo ou ritmo abaixo", key: "esfriando"})}${kpi({r: "% diferente do cadastro", v: n(div), d: "negócios a conferir", key: "divergencias"})}</div>
     <section><div class="grade">
-      <div class="bloco"><h3>Regras aplicadas</h3>${REGRAS_REC.map(t => `<div class="check"><span class="chip">regra</span><span>${esc(t)}</span></div>`).join("")}<p class="nota">Desenhadas com o Tributário na revisão do Recuperador (29/09) e no Revisor de Diagnóstico.</p></div>
-      <div class="bloco"><h3>Fora da análise: já no pipeline</h3>${R.revisor.slice(0, 8).map(x => `<div class="check"><span class="chip ${x.lacunas_alta ? "erro" : ""}">${n(x.lacunas)} lacunas</span><span><b>${esc(x.caso)}</b> · ${esc(x.parceiro)} · ${esc(x.etapa)}<br><span class="nota">${esc(x.teses_grupo)}</span></span></div>`).join("")}</div>
-      <div class="bloco"><h3>Aguardando 6 meses</h3>${R.aguardar.slice(0, 8).map(x => `<div class="check"><span class="chip">faltam ${x.faltam}</span><span><b>${esc(x.caso)}</b> · ${esc(x.parceiro)} · último ganho ${esc(x.ultimo_ganho.slice(5, 7) + "/" + x.ultimo_ganho.slice(2, 4))}</span></div>`).join("")}</div>
+      <div class="bloco"><h3>Saúde × ritmo dos Masters</h3><p class="tese">Área sombreada = risco (saúde abaixo de 60 e ritmo caindo); em ouro, quem está nela. Tamanho = R$ em aberto. Clique no ponto para abrir a ficha.</p>${quadrantes(ms.map(m => ({nome: m.parceiro, x: m.ritmo_valor_vs_media_trimestral_pct || 0, xr: m.ritmo_valor_vs_media_trimestral_pct, y: m.saude, r: m.abertos_rs || 0})))}</div>
+      <div class="bloco"><h3>Repasse 12 meses × potencial em aberto</h3><p class="tese">Mesma régua: cinza é o que já foi, ouro é o que pode vir.</p>${empilhadaH(ms.map(m => { const f = D.ficha[m.parceiro]; return {r: m.parceiro, segs: [f.comissao_12m || 0, f.comissao_potencial_aberto || 0]}; }).sort((a, b) => (b.segs[0] + b.segs[1]) - (a.segs[0] + a.segs[1])), ["var(--serie-2)", "var(--ouro)"], ["Repasse 12m", "Potencial aberto"], {totRot: r => rs(r.segs[0] + r.segs[1])})}<div class="leg"><span><i style="background:var(--serie-2)"></i>repasse 12 meses</span><span><i style="background:var(--ouro)"></i>potencial em aberto</span></div></div>
+    </div></section>
+    <section><div class="cab"><h2>Masters</h2><span class="atual">saúde mais baixa primeiro · minigráfico: ganhos em 12 meses, escala comum</span></div>
+      <div class="tab-wrap">${ms.map(m => { const f = D.ficha[m.parceiro], rc = f.recorrencia || {}; return `<div class="linha-m" data-master="${esc(m.parceiro)}" tabindex="0" role="button">
+        <span><b>${esc(m.parceiro)}</b><br>${pctChip(m.parceiro)}</span><span class="saude"><span class="barrinha"><i style="width:${m.saude}%;background:${corSaude(m.saude)}"></i></span><span class="mono">${m.saude}</span></span>
+        <span class="k">${rs(f.comissao_12m)}<small>repasse 12m</small></span><span class="k">${rs(rc.pot_credito)}<small>recorrência</small></span><span class="k">${n(f.conflitos)}<small>conflitos</small></span>
+        <span>${spark(f.serie.map(x => x[1]), mxSp)}</span><span class="cel" aria-hidden="true">›</span></div>`; }).join("")}</div></section>
+    <section><div class="grade">
+      <div class="bloco"><h3>Concentração em 12 meses</h3><p class="tese">Os 3 maiores somam ${pc((D.kpi.concentracao || {}).top3_pct)} do fechado.</p>${empilhada100(conc.map(([r, v], i) => ({r, v, cor: i === 0 ? "var(--ouro)" : ["var(--serie-3)", "var(--serie-2)", "var(--serie-4)", "var(--borda-3)"][i - 1]})))}</div>
+      <div class="bloco"><h3>Esfriando</h3><p class="tese">Sem negócio novo há mais tempo primeiro. A mensagem de reativação já vem pronta.</p>${D.esfriando.slice(0, 6).map((e, i) => `<div class="check" style="justify-content:space-between;align-items:center"><span><b>${esc(e.parceiro)}</b> <span class="nota">${esc(e.tipo)} · ${n(e.dias)} dias sem negócio</span></span><button class="botao ${i ? "sec" : ""} peq" data-reativar="${i}">Reativar</button></div>`).join("")}<button class="botao sec peq" data-kpi="esfriando">Ver os ${n(D.esfriando.length)}</button></div>
     </div></section>`;
 };
-A.busca = () => `<section><h2>Busca</h2><p class="sub">Digite o código do negócio, o parceiro, o segmento ou a UF. Para saber se uma empresa já é de alguém, digite o CNPJ: a página compara só a raiz em código, sem guardar o número.</p>
-    <div class="busca-box"><input type="search" id="q" placeholder="Código, parceiro, segmento, UF ou CNPJ" value="${esc(S.q || "")}" aria-label="Buscar"></div></section>
-  <section id="res-busca">${resBusca()}</section>`;
+const REGRAS_REC = ["V5 · cliente com ganho na mesma raiz: com 6 meses novos ou mais é recorrência; com menos, aguardar", "L11 · conta os meses desde o último período recuperado", "Parecer \"já aproveitado\": só os meses depois do último ressarcido ou outra tese", "L13 · saldo credor de PIS/COFINS escriturado até 31/12/2026", "Decadência de 5 anos (art. 168 do CTN)", "L12 · ação judicial própria na tese: Jurídico confere antes", "Fora: Simples (V2), café (V3) e cliente com negócio aberto em qualquer pipeline", "A recorrência segue com o parceiro do ganho anterior"];
+A.recorrencia = () => {
+  const R = D.recorrencia, fila = R.fila.filter(x => !S.feitos.has("rec-" + x.caso) && (!S.filtro.rparc || x.parceiro === S.filtro.rparc)), parcs = [...new Set(R.fila.map(x => x.parceiro))].sort();
+  const pp = Object.entries(D.ficha).map(([k, f]) => [k, f.recorrencia || {}]).filter(([, r]) => r.elegiveis || r.aguardar).sort((a, b) => (b[1].pot_credito || 0) - (a[1].pot_credito || 0));
+  return `<div class="topo-cards"><div class="heroi"><span class="rotulo" style="color:var(--ouro)">Potencial de recorrência</span><div class="lado"><span class="v">${rsH(R.pot_credito)}</span><span class="t">em negócios de <b>${n(R.n_elegiveis)}</b> clientes da base com 6 meses novos ou mais</span></div>
+      <div class="leg"><span>${n(R.n_aguardar)} aguardando 6 meses</span><span>· ${n(R.n_revisor)} fora da análise (já no pipeline)</span><span>· honorário ${rs(R.pot_honorario)}</span></div></div>
+      ${kpi({r: "Já no pipeline", v: n(R.n_revisor), d: "fora da análise", key: "rec_pipe"})}${kpi({r: "Repasse potencial", v: rsH(R.pot_repasse), d: "% oficial do parceiro", key: "rec_parc"})}</div>
+    <section><div class="grade"><div class="bloco"><h3>Recorrência por parceiro</h3><p class="tese">Elegíveis em ouro; à direita, o potencial em negócios.</p>${empilhadaH(pp.map(([k, r]) => ({r: k, segs: [r.elegiveis || 0, r.aguardar || 0, r.feitas || 0], pot: r.pot_credito})), ["var(--ouro)", "var(--serie-3)", "var(--serie-4)"], ["Elegíveis", "Aguardando 6 meses", "Já feitas"], {totRot: r => rs(r.pot)})}<div class="leg"><span><i style="background:var(--ouro)"></i>elegíveis</span><span><i style="background:var(--serie-3)"></i>aguardando 6 meses</span><span><i style="background:var(--serie-4)"></i>recorrências já feitas</span></div></div>
+      <div class="bloco"><h3>Regras aplicadas</h3>${REGRAS_REC.map(t => `<div class="check"><span class="chip">regra</span><span>${esc(t)}</span></div>`).join("")}</div></div></section>
+    <section><div class="cab"><h2>Para a Geovana decidir</h2><span class="atual">maior potencial primeiro · clique para ver as regras</span></div>
+      <div class="filtros"><select id="f-rparc" aria-label="Filtrar por parceiro"><option value="">Todos os parceiros</option>${parcs.map(p => `<option ${S.filtro.rparc === p ? "selected" : ""}>${esc(p)}</option>`).join("")}</select></div>
+      <div class="tab-wrap"><table class="cartoes"><thead><tr><th>Caso</th><th>Parceiro</th><th class="n">Já feitas</th><th class="n">Meses novos</th><th class="n">Potencial</th><th>Sinais</th><th></th></tr></thead><tbody>
+      ${fila.slice(0, 30).map(x => `<tr class="clic" data-rec="${esc(x.caso)}" tabindex="0"><td data-r="Caso"><b>${esc(x.caso)}</b> <span class="nota">· ${esc(x.regime || "")} · ${esc(x.uf || "")}</span></td><td data-r="Parceiro">${esc(x.parceiro)}</td><td class="n" data-r="Já feitas">${n(x.recorrencias_feitas)}</td><td class="n" data-r="Meses novos">${n(x.meses_novos)}</td><td class="n" data-r="Potencial">${rs(x.potencial_credito)}</td>
+        <td data-r="Sinais">${x.sinais.map(s => `<span class="chip ${/L13|decad/.test(s) ? "alerta" : /não registrada/.test(s) ? "erro" : ""}">${/L13|decad|não registrada/.test(s) ? ico("alerta") : ""}${esc(s.split(":")[0].split(" (")[0])}</span>`).join(" ")}</td><td><button class="botao peq" data-rec="${esc(x.caso)}">Decidir</button></td></tr>`).join("")}</tbody></table></div>
+      ${fila.length > 30 ? `<p class="nota" style="margin-top:8px">Mostrando 30 de ${n(fila.length)}. Use o filtro por parceiro.</p>` : ""}</section>`;
+};
+A.busca = () => `<section><h2>Busca</h2><p class="sub">Código, parceiro, segmento ou UF. Para saber se uma empresa já é de alguém, digite o CNPJ: a página compara só a raiz em código, sem guardar o número.</p>
+    <div class="busca-box"><input type="search" id="q" placeholder="Código, parceiro, segmento, UF ou CNPJ" value="${esc(S.q || "")}" aria-label="Buscar"></div></section><section id="res-busca">${resBusca()}</section>`;
 function resBusca() {
-  const q = (S.q || "").trim(); if (!q) return `<div class="vazio">Comece a digitar. Exemplo: <b>D&S</b>, <b>Hortifrúti</b>, <b>MG</b> ou um CNPJ.</div>`;
+  const q = (S.q || "").trim(); if (!q) return `<div class="vazio">${ico("busca")}<span>Comece a digitar. Exemplo: <b>D&S</b>, <b>Hortifrúti</b>, <b>MG</b> ou um CNPJ.</span></div>`;
   if (S.cnpjRes) return S.cnpjRes;
   const t = q.toLowerCase(), xs = D.busca.filter(b => b[0].includes(t) || b[1].toLowerCase().includes(t) || b[6].toLowerCase().includes(t) || b[5].toLowerCase() === t);
-  return `<div class="cab"><h2>${n(xs.length)} negócio(s)</h2></div><div class="tab-wrap"><table><thead><tr><th>Código</th><th>Parceiro</th><th>Etapa</th><th>Situação</th><th class="n">Valor</th><th>UF</th><th>Segmento</th><th>Criado</th></tr></thead><tbody>
-    ${xs.slice(0, 50).map(b => `<tr><td><b>#${esc(b[0])}</b></td><td>${esc(b[1])}</td><td>${esc(b[2])}</td><td><span class="chip ${b[3] === "ganho" ? "ok" : b[3] === "perdido" ? "" : "ouro"}">${esc(b[3])}</span></td><td class="n">${rs(b[4])}</td><td>${esc(b[5])}</td><td>${esc(b[6])}</td><td class="n">${esc(b[7].slice(8) + "/" + b[7].slice(5, 7) + "/" + b[7].slice(2, 4))}</td></tr>`).join("")}</tbody></table></div>${xs.length > 50 ? `<p class="nota">Mostrando 50. Refine a busca.</p>` : ""}`;
+  return `<div class="cab"><h2>${n(xs.length)} negócio(s)</h2></div>${tab([["Código"], ["Parceiro"], ["Etapa"], ["Situação"], ["Valor", 1], ["UF"], ["Criado", 1]], xs.slice(0, 50).map(b => [`<b>#${esc(b[0])}</b>`, esc(b[1]), esc(b[2]), `<span class="chip ${b[3] === "ganho" ? "ok" : ""}">${esc(b[3])}</span>`, rs(b[4]), esc(b[5]), dt(b[7])]), "cartoes")}${xs.length > 50 ? `<p class="nota">Mostrando 50. Refine a busca.</p>` : ""}`;
 }
 async function buscaCnpj(q) {
   const d = q.replace(/\D/g, ""); if (d.length < 8) { S.cnpjRes = null; return; }
   const r8 = d.padStart(14, "0").slice(0, 8), buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("save:" + r8));
   const hx = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16), xs = D.busca.filter(b => b[8] === hx);
-  const ps = [...new Set(xs.map(b => b[1]))], abertos = xs.filter(b => b[3] === "aberto"), ganhos = xs.filter(b => b[3] === "ganho");
-  S.cnpjRes = xs.length ? `<div class="bloco"><span class="rotulo ouro">Raiz do CNPJ já existe no HubSpot</span><h3>${n(xs.length)} negócio(s) · ${ps.map(esc).join(", ")}</h3>
-      <p class="sub" style="margin:0">${ganhos.length ? `<b>Já é cliente</b> (${n(ganhos.length)} ganho(s)). ` : ""}${abertos.length ? `<b>${n(abertos.length)} em aberto</b> com ${[...new Set(abertos.map(b => b[1]))].map(esc).join(", ")}. ` : ""}${ps.length > 1 ? "Mais de um canal: conflito a resolver com Operações de Canal." : "Fale com o dono do canal antes de abordar."}</p>
-      <div class="tab-wrap"><table><tbody>${xs.map(b => `<tr><td><b>#${esc(b[0])}</b></td><td>${esc(b[1])}</td><td>${esc(b[2])}</td><td>${esc(b[3])}</td><td class="n">${rs(b[4])}</td></tr>`).join("")}</tbody></table></div></div>`
-    : `<div class="bloco"><span class="rotulo">Raiz do CNPJ</span><h3>Nenhum negócio com esta empresa</h3><p class="sub" style="margin:0">Livre para abordar. Registre a oportunidade no HubSpot com o Master que vai atender.</p></div>`;
+  const ps = [...new Set(xs.map(b => b[1]))], ab = xs.filter(b => b[3] === "aberto"), gs = xs.filter(b => b[3] === "ganho");
+  S.cnpjRes = xs.length ? `<div class="faixa" style="border-color:rgba(243,205,96,.45);background:var(--ouro-suave)">${ico("alerta")}<span class="txt"><b>Esta empresa já existe no HubSpot:</b> ${n(xs.length)} negócio(s) com ${ps.map(esc).join(", ")}. ${gs.length ? `<b>Já é cliente</b> (${n(gs.length)} ganho). ` : ""}${ab.length ? `<b>${n(ab.length)} em aberto.</b> ` : ""}${ps.length > 1 ? "Mais de um canal: conflito para Operações de Canal." : "Fale com o dono do canal antes de abordar."}</span></div>
+      ${tab([["Código"], ["Parceiro"], ["Etapa"], ["Situação"], ["Valor", 1]], xs.map(b => [`<b>#${esc(b[0])}</b>`, esc(b[1]), esc(b[2]), esc(b[3]), rs(b[4])]), "cartoes")}`
+    : `<div class="vazio">${ico("ok")}<span><b>Nenhum negócio com esta empresa.</b> Livre para abordar: registre a oportunidade no HubSpot com o Master que vai atender.</span></div>`;
 }
-A.biblioteca = () => `<section><div class="cab"><h2>Respostas prontas</h2><span class="atual">troque o que está entre < > antes de enviar</span></div>
-    <div class="grade">${D.biblioteca.respostas.map((r, i) => `<div class="bloco"><h3>${esc(r.situacao)}</h3><textarea id="bib-${i}" rows="4" aria-label="${esc(r.situacao)}">${esc(r.texto)}</textarea><div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="bib-${i}">Copiar</button></div></div>`).join("")}</div></section>
-  <section><div class="cab"><h2>Materiais</h2><span class="atual">abrem no OneDrive (Office Online)</span></div>
-    <div class="docs">${D.biblioteca.materiais.map(m => `<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.nome)}</a>`).join("")}</div></section>`;
+A.biblioteca = () => `<section><div class="cab"><h2>Respostas prontas</h2><span class="atual">troque o que está entre &lt; &gt; antes de enviar</span></div>
+    <div class="grade-3">${D.biblioteca.respostas.map((r, i) => `<div class="bloco"><h3>${esc(r.situacao)}</h3><textarea id="bib-${i}" rows="4" aria-label="${esc(r.situacao)}">${esc(r.texto)}</textarea><div><button class="botao ${i ? "sec" : ""} peq" data-copiar="bib-${i}">Copiar</button></div></div>`).join("")}</div></section>
+  <section><div class="cab"><h2>Materiais</h2><span class="atual">abrem no OneDrive (Office Online)</span></div><div class="docs">${D.biblioteca.materiais.map(m => `<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.nome)}</a>`).join("")}</div></section>`;
+A.pedidos = () => { const ps = D.caixa.filter(x => x.grupo === "Pedido");
+  return `<section><div class="cab"><h2>Respostas para aprovar</h2><button class="botao" data-novo>Novo pedido</button></div>${lista(ps, 10)}</section>
+    <section><div class="cab"><h2>Tempo até resolver</h2><span class="atual">mediana por pessoa</span></div>
+      <div class="kpis">${["daniela", "jenifer", "geovana"].map(p => kpi({r: PESSOAS[p], v: D.tempo[p].mediana_h == null ? "—" : String(D.tempo[p].mediana_h).replace(".", ",") + " h", d: `${n(D.tempo[p].n)} demandas resolvidas`})).join("")}</div>
+      <details class="tabela" style="margin-top:12px"><summary>Ver as últimas 20 resolvidas</summary>${tab([["Demanda"], ["Responsável"], ["Origem"], ["Aberta", 1], ["Resolvida", 1], ["Horas", 1]], D.hist.slice(0, 20).map(x => [`<b>${esc(x.id)}</b>`, esc(PESSOAS[x.pessoa] || x.pessoa), esc(x.origem), dt(x.aberta), dt(x.resolvida), String(x.horas).replace(".", ",")]), "cartoes")}</details>
+      <div class="vazio" style="margin-top:12px">${ico("info")}<span>Hoje "resolvida" é quando os agentes não veem mais pendência na conversa. Com o registro de cada encaminhamento no painel, este passa a ser o tempo real.</span></div></section>`; };
 
-/* ---------- gaveta e toast ---------- */
-function gaveta(html) { $("#camada").innerHTML = `<div class="veu" data-fechar></div><aside class="gaveta" role="dialog" aria-modal="true" aria-label="Detalhe">${html}<button class="botao sec" data-fechar>Fechar</button></aside>`; $(".gaveta button, .gaveta [tabindex]")?.focus(); }
-function toast(t) { const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 2600); }
+/* ---------- detalhes dos números ---------- */
+const listaCaixa = xs => xs.length ? `<div class="lista">${xs.slice(0, 40).map((x, i) => itemHTML(x, i === 0)).join("")}</div>${xs.length > 40 ? `<p class="nota">Mostrando 40 de ${n(xs.length)}. Veja todos na Caixa de entrada.</p>` : ""}` : `<div class="vazio">${ico("ok")}<span>Nada aqui.</span></div>`;
+function loteConselho() { const cs = D.conselho.filter(c => !S.feitos.has(c.id));
+  return `<p class="sub" style="margin:0">Marque e decida de uma vez. O agente registra no livro de decisões.</p><div class="filtros"><button data-cons-todas>Selecionar todas</button></div>
+    ${cs.map(c => `<label class="check" for="cs-${esc(c.id)}"><input type="checkbox" class="cons" value="${esc(c.id)}" id="cs-${esc(c.id)}"><span><b>${esc(c.id)}</b> · ${esc(c.texto)} <span class="nota">desde ${dt(c.data)}</span></span></label>`).join("")}`; }
+const DET = {
+  esperando: () => [`Esperando por você`, `${par("Decisões do Conselho", n(D.kpi.conselho))}${par("Respostas para aprovar", n(D.kpi.pedidos_prontos))}${par("Chamados propostos", n(D.kpi.chamados))}<div class="pacote"><h4>Respostas e chamados</h4>${listaCaixa(D.caixa.filter(x => x.pessoa === "luis" && x.grupo !== "Conselho" && !S.feitos.has(x.id)))}</div><div class="pacote"><h4>Conselho</h4>${loteConselho()}</div>`, `<button class="botao" data-cons="aprovar">Aprovar selecionadas</button><button class="botao sec" data-cons="rejeitar">Rejeitar</button>`],
+  lote: () => [`Conselho em lote`, loteConselho(), `<button class="botao" data-cons="aprovar">Aprovar selecionadas</button><button class="botao sec" data-cons="rejeitar">Rejeitar</button>`],
+  ganhos_mes: () => { const g = D.detalhe.ganhos_mes; return [`Ganhos no mês`, `${par("Negócios", n(g.length))}${par("Valor", rs(g.reduce((s, x) => s + x.valor, 0)))}${par("Honorário estimado", rs(g.reduce((s, x) => s + x.honorario, 0)))}${par("Repasse estimado", rs(g.reduce((s, x) => s + x.repasse, 0)))}
+    <div class="pacote"><h4>Por parceiro</h4>${barrasH(Object.entries(g.reduce((a, x) => (a[x.parceiro] = (a[x.parceiro] || 0) + x.valor, a), {})).sort((a, b) => b[1] - a[1]).map(([r, v]) => ({r, v})), {fmt: rs})}</div>
+    ${tab([["Caso"], ["Parceiro"], ["Fechado", 1], ["Valor", 1], ["Honorário", 1], ["Repasse", 1]], g.map(x => [`<b>${esc(x.caso)}</b>`, esc(x.parceiro), dt(x.fechado), rs(x.valor), rs(x.honorario), rs(x.repasse)]), "cartoes")}<p class="nota">Honorário = valor × % de honorário da Save; repasse = honorário × % oficial do parceiro.</p>`]; },
+  pipeline: () => { const d = D.detalhe, J = d.indicacoes.jenifer || {}, G = d.indicacoes.geovana || {}, g = d.geovana;
+    return [`Pipeline aberto · ${n(PIPE.n)} · ${rs(PIPE.rs)}`, `<div class="pacote"><h4>De onde vem o pipeline</h4>${empilhada100(d.por_parceiro.slice(0, 5).map(([r, q, v], i) => ({r, v, cor: i === 0 ? "var(--ouro)" : ["var(--serie-3)", "var(--serie-2)", "var(--serie-4)", "var(--borda-3)"][i - 1]})))}</div>
+      <div class="pacote"><h4>Agendas e indicações <span class="chip">Jenifer</span></h4>${par("Agendamentos", `<b>${n(J.agendamento)}</b>`)}${par("Indicações em aberto", `${n(J.abertos)} · ${rs(J.valor_aberto)}`)}${par("Total indicado", `${n(J.n)} · ${n(J.perdidos)} perdidas ou desqualificadas`)}<button class="botao sec peq" data-kpi="ind_jenifer">Ver o detalhe da Jenifer</button></div>
+      <div class="pacote"><h4>Oportunidades indicadas <span class="chip">Geovana</span></h4>${par("Indicadas por ela", `<b>${n(G.n)}</b> · ${rs(G.valor)}`)}${par("Ganhas", `${n(G.ganhos)} · ${rs(G.valor_ganho)}`)}${par("Em aberto", `${n(G.abertos)} · ${rs(G.valor_aberto)}`)}<button class="botao sec peq" data-kpi="ind_geovana">Ver o detalhe da Geovana</button></div>
+      <div class="pacote"><h4>Análises da Geovana</h4>${par("Diagnósticos com tese faltando", `${n(g.revisor_negocios)} · ${rs(g.revisor_valor)}`)}${par("Lacuna de prioridade alta", n(g.revisor_alta))}${par("Fila do Recuperador", `${n(g.recuperador_fila)} · ${rs(g.recuperador_esperado)} esperado`)}${par("Recorrências elegíveis", `${n(g.recorrencia_n)} · ${rs(g.recorrencia_credito)}`)}</div>
+      <div class="pacote"><h4>Por etapa (ordem do funil)</h4>${grafFunil()}</div>
+      <div class="pacote"><h4>Idade × etapa</h4>${mapaCalor(d.heat, d.faixas)}</div>
+      <div class="pacote"><h4>Maiores negócios em aberto</h4>${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Dias", 1], ["Valor", 1]], d.abertos.slice(0, 15).map(x => [`<b>${esc(x.caso)}</b>`, esc(x.parceiro), esc(x.etapa), `<span class="idade ${idade(x.dias)}">${n(x.dias)}</span>`, rs(x.valor)]), "cartoes")}</div>
+      <p class="nota">${n(d.sem_valor)} negócios abertos estão sem valor no CRM e entram como zero.</p>`]; },
+  heat: () => [`Idade × etapa`, mapaCalor(D.detalhe.heat, D.detalhe.faixas)],
+  analises: () => { const wr = D.winrate.slice(-12);
+    return [`Mais análises`, `<div class="pacote"><h4>Win rate mensal</h4>${linhaG(wr.map(x => x.pct), wr.map(x => mesRot(x.mes)), {ns: wr.map(x => { const s = D.serie.find(z => z.mes === x.mes) || {}; return (s.ganhos_n || 0) + (s.perdidos_n || 0); }), ref: D.kpi.win_rate_3m, refRot: "média 3 meses " + pc(D.kpi.win_rate_3m)})}</div>
+      <div class="pacote"><h4>Margem por mês</h4>${colunas(D.lucro.map(x => ({r: mesRot(x.mes), v: Math.max(x.hl - x.custo, 0), estado: /ORÇADO|orçado/.test(x.base) ? "parcial" : "real", tip: T(mesRot(x.mes), [rs(Math.max(x.hl - x.custo, 0)), x.base])})), {fmt: rs, alt: 160})}<p class="nota">Hachura = custo orçado (realizado ainda não lançado).</p></div>
+      <div class="pacote"><h4>Concentração (12 meses)</h4>${empilhada100(((D.kpi.concentracao || {}).top5 || []).map(([r, v], i) => ({r, v, cor: i === 0 ? "var(--ouro)" : ["var(--serie-3)", "var(--serie-2)", "var(--serie-4)", "var(--borda-3)"][i - 1]})))}</div>
+      <div class="pacote"><h4>Saúde da base</h4><div class="mini"><div><span class="rotulo">Índice dos ganhos</span><b>${String(D.kpi.qualidade).replace(".", ",")}</b></div>${Object.entries(D.kpi.inconsistencias || {}).slice(0, 3).map(([k, v]) => `<div><span class="rotulo">${esc(k)}</span><b>${n(v)}</b></div>`).join("")}</div></div>
+      <div class="pacote"><h4>Repasses</h4>${empilhada100(Object.entries(D.kpi.repasse || {}).map(([k, v]) => ({r: k.split(" (")[0], v, cor: /Bloq/.test(k) ? "var(--erro)" : /Revisar/.test(k) ? "var(--alerta)" : "var(--sucesso)"})), {fmt: n})}<p class="nota">Cor de status com rótulo. Repasse a pagar de fato depende do "recebido" do Financeiro.</p></div>`]; },
+  winrate: () => DET.analises(),
+  risco: () => [`Masters por saúde`, tab([["Master"], ["Saúde", 1], ["Ritmo", 1], ["Dias sem negócio", 1], ["R$ aberto", 1]], [...D.masters].sort((a, b) => a.saude - b.saude).map(m => [`<b>${esc(m.parceiro)}</b>`, `${m.saude} <span class="chip ${selSaude(m.saude)[0]}">${selSaude(m.saude)[1]}</span>`, pc(m.ritmo_valor_vs_media_trimestral_pct), n(m.dias_sem_negocio), rs(m.abertos_rs)]), "cartoes")],
+  repasse12: () => [`Repasse aos parceiros · 12 meses`, tab([["Parceiro"], ["% oficial", 1], ["Honorário 12m", 1], ["Repasse 12m", 1], ["Potencial aberto", 1]], Object.entries(D.ficha).sort((a, b) => b[1].comissao_12m - a[1].comissao_12m).map(([k, f]) => [`<b>${esc(k)}</b>`, f.pct == null ? "—" : String(f.pct).replace(".0", "") + "%" + (f.pct_confirmado ? "" : " (a confirmar)"), rs(f.honorario_12m), rs(f.comissao_12m), rs(f.comissao_potencial_aberto)]), "cartoes")],
+  divergencias: () => [`% do negócio diferente do cadastro`, `${tab([["Parceiro"], ["% oficial", 1], ["Negócios", 1]], Object.entries(D.ficha).filter(([, f]) => f.divergencias).map(([k, f]) => [`<b>${esc(k)}</b>`, String(f.pct).replace(".0", "") + "%", n(f.divergencias)]), "cartoes")}<p class="nota">Conferir com Operações de Canal: condição negociada ou campo errado.</p>`],
+  esfriando: () => [`Parceiros esfriando`, D.esfriando.map((e, i) => `<div class="check" style="justify-content:space-between;align-items:center"><span><b>${esc(e.parceiro)}</b> <span class="nota">${esc(e.tipo)} · ${n(e.dias)} dias · ${n(e.ganhos_12m)} ganhos em 12m</span></span><button class="botao sec peq" data-reativar="${i}">Reativar</button></div>`).join("")],
+  rec_parc: () => { const rows = Object.entries(D.ficha).map(([k, f]) => [k, f.recorrencia || {}]).filter(([, r]) => r.elegiveis || r.aguardar).sort((a, b) => (b[1].pot_credito || 0) - (a[1].pot_credito || 0));
+    return [`Recorrência por parceiro`, tab([["Parceiro"], ["Elegíveis", 1], ["Em negócios", 1], ["Já feitas", 1], ["Aguardando", 1]], rows.map(([k, r]) => [`<b>${esc(k)}</b>`, n(r.elegiveis), rs(r.pot_credito), n(r.feitas), n(r.aguardar)]), "cartoes")]; },
+  rec_pipe: () => [`Fora da análise: já no pipeline`, `<p class="sub" style="margin:0">Clientes da base com negócio aberto. Não entram na fila de recorrência.</p>${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Lacunas", 1]], D.recorrencia.revisor.map(x => [`<b>${esc(x.caso)}</b>`, esc(x.parceiro), esc(x.etapa), n(x.lacunas)]), "cartoes")}`],
+};
+const indDet = (quem, titulo) => () => { const I = D.detalhe.indicacoes[quem] || {};
+  return [titulo, `${par("Indicados", `${n(I.n)} · ${rs(I.valor)}`)}${par("Ganhos", `${n(I.ganhos)} · ${rs(I.valor_ganho)}`)}${par("Em aberto", `${n(I.abertos)} · ${rs(I.valor_aberto)}`)}${par("Perdidos", n(I.perdidos))}${I.agendamento ? par("Em Agendamento", `<b>${n(I.agendamento)}</b>`) : ""}
+    <div class="pacote"><h4>Indicações por mês</h4>${colunas((I.por_mes || []).map(([m, q], i, a) => ({r: mesRot(m), v: q, estado: m === MES_ATUAL ? "parcial" : "real"})), {alt: 160})}</div>
+    <div class="pacote"><h4>Por etapa</h4>${barrasH((I.etapas || []).map(([e, q]) => ({r: e || "—", v: q})), {dest: -1})}</div>
+    <div class="pacote"><h4>Em aberto, maiores primeiro</h4>${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Criado", 1], ["Valor", 1]], (I.abertos_l || []).map(x => [`<b>${esc(x.caso)}</b>`, esc(x.parceiro), esc(x.etapa), dt(x.criado), rs(x.valor)]), "cartoes")}</div>
+    <p class="nota">Campo "E-mail de quem está indicando o lead/cliente" no HubSpot.</p>`]; };
+DET.ind_geovana = indDet("geovana", "Oportunidades indicadas pela Geovana"); DET.ind_jenifer = indDet("jenifer", "Agendas e indicações da Jenifer");
+["daniela", "jenifer", "geovana"].forEach(p => DET["carga_" + p] = () => [`${PESSOAS[p]}: o que espera agora`, listaCaixa(D.caixa.filter(x => x.pessoa === p && !S.feitos.has(x.id)))]);
+DET.minha_caixa = () => [`Demandas de parceiro`, listaCaixa(minhas().filter(x => x.grupo === "Demanda"))];
+DET.urgentes = () => [`Contratos parados`, listaCaixa(minhas().filter(x => x.tipo === "Contrato sem assinatura"))];
+DET.antigos = () => [`Atrasados (mais de 30 dias)`, listaCaixa([...minhas()].filter(x => (x.dias || 0) > 30).sort((a, b) => (b.dias || 0) - (a.dias || 0)))];
+DET.prontos = () => [`Prontos para encaminhar`, listaCaixa(minhas().filter(pronto))];
+
+/* ---------- pacote pronto ---------- */
 function pacoteHTML(x) {
   const P = x.pacote || {}; let s = "";
-  if (!pronto(x) && !(P.checklist || []).length && !(P.docs || []).length) return `<p class="sub">No painel real, aqui aparecem o texto completo e os links do HubSpot e do Bitrix.</p>`;
-  if (pronto(x)) s += `<span class="rotulo ouro">Pronto para encaminhar</span><p class="sub" style="margin:0">Montado pelos agentes com os dados do HubSpot e as regras do GLPI. Confira, ajuste se precisar e envie.</p>`;
-  if (P.mensagem) s += `<div class="pacote"><h4>Mensagem para o parceiro <span class="chip">WhatsApp</span></h4><label for="pk-msg" class="rotulo">Texto (pode editar)</label><textarea id="pk-msg">${esc(P.mensagem)}</textarea>
-      <div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="pk-msg">Copiar mensagem</button></div></div>`;
-  if (P.glpi) s += `<div class="pacote"><h4>Chamado no GLPI <span class="chip">${esc(P.glpi.categoria)}</span></h4>${par("Urgência", esc(P.glpi.urgencia))}
-      <label for="pk-tit">Título<input type="text" id="pk-tit" value="${esc(P.glpi.titulo)}"></label><label for="pk-desc">Descrição (formulário da área)<textarea id="pk-desc" rows="7">${esc(P.glpi.descricao)}</textarea></label>
-      <div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-glpi="${esc(x.id)}">Abrir chamado no GLPI</button><button class="botao sec peq" data-copiar="pk-desc">Copiar descrição</button></div></div>`;
-  if (P.encaminhar) s += `<div class="pacote"><h4>Encaminhar à área <span class="chip">${esc(P.encaminhar.equipe)} · sem chamado</span></h4><label for="pk-enc" class="rotulo">Texto (pode editar)</label><textarea id="pk-enc">${esc(P.encaminhar.texto)}</textarea>
-      <div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="pk-enc">Copiar texto</button></div></div>`;
+  if (!pronto(x) && !(P.checklist || []).length && !(P.docs || []).length) return `<div class="vazio">${ico("info")}<span>No painel real, aqui aparecem o texto completo e os links do HubSpot e do Bitrix.</span></div>`;
+  if (P.mensagem) s += `<div class="pacote"><h4>Mensagem para o parceiro <span class="chip">WhatsApp</span></h4><textarea id="pk-msg">${esc(P.mensagem)}</textarea><div><button class="botao peq" data-copiar="pk-msg">Copiar mensagem</button></div></div>`;
+  if (P.glpi) s += `<div class="pacote"><h4>Chamado no GLPI <span class="chip">${esc(P.glpi.categoria)}</span></h4>${par("Urgência", esc(P.glpi.urgencia))}<label for="pk-tit">Título<input type="text" id="pk-tit" value="${esc(P.glpi.titulo)}"></label><label for="pk-desc">Descrição (formulário da área)<textarea id="pk-desc" rows="7">${esc(P.glpi.descricao)}</textarea></label><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="botao ${P.mensagem ? "sec" : ""} peq" data-glpi="${esc(x.id)}">Abrir chamado no GLPI</button><button class="botao sec peq" data-copiar="pk-desc">Copiar descrição</button></div></div>`;
+  if (P.encaminhar) s += `<div class="pacote"><h4>Encaminhar à área <span class="chip">${esc(P.encaminhar.equipe)} · sem chamado</span></h4><textarea id="pk-enc">${esc(P.encaminhar.texto)}</textarea><div><button class="botao sec peq" data-copiar="pk-enc">Copiar texto</button></div></div>`;
   if ((P.checklist || []).length) s += `<div class="pacote"><h4>Antes de enviar</h4>${P.checklist.map((c, i) => `<label class="check" for="ck-${i}"><input type="checkbox" id="ck-${i}"><span>${esc(c)}</span></label>`).join("")}</div>`;
   if ((P.docs || []).length) s += `<div class="pacote"><h4>Documentos e links</h4><div class="docs">${P.docs.map(d => `<a href="${esc(d.link)}" target="_blank" rel="noopener">${esc(d.nome)}</a>`).join("")}</div></div>`;
   return s;
 }
-const par = (r, v) => `<div class="par"><span>${esc(r)}</span><span>${v}</span></div>`;
+
+/* ---------- painel lateral ---------- */
+function gaveta(titulo, corpo, rodape = "", contexto = "") {
+  S.origem = document.activeElement;
+  $("#camada").innerHTML = `<div class="veu" data-fechar></div><aside class="gaveta" role="dialog" aria-modal="true" aria-label="${esc(titulo)}">
+    <div class="gaveta-cab"><div class="tt">${contexto ? `<span class="rotulo" style="color:var(--ouro)">${contexto}</span>` : ""}<h3>${esc(titulo)}</h3></div><button class="botao sec icone" data-fechar aria-label="Fechar">${ico("fechar")}</button></div>
+    <div class="gaveta-corpo">${corpo}${rodape ? `<div style="display:flex;gap:8px;flex-wrap:wrap">${rodape}</div>` : ""}</div></aside>`;
+  $(".gaveta [data-fechar]").focus();
+}
+function fechar() { $("#camada").innerHTML = ""; if (S.origem && document.contains(S.origem)) S.origem.focus(); }
+function toast(t) { const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 2600); }
 
 /* ---------- render ---------- */
+const contagem = () => ({caixa: minhas().length, prazos: D.prazos.length, recorrencia: D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso)).length});
 function render() {
-  $("#pessoas").innerHTML = Object.entries(PESSOAS).map(([k, v]) => `<button data-eu="${k}" aria-pressed="${S.eu === k}">${v}</button>`).join("");
-  const cont = {caixa: minhas().length, pedidos: D.caixa.filter(x => x.grupo === "Pedido" && !S.feitos.has(x.id)).length};
-  $("#abas").innerHTML = ABAS.map(([k, r]) => `<button role="tab" id="tab-${k}" aria-controls="painel" aria-selected="${S.aba === k}" tabindex="${S.aba === k ? 0 : -1}" data-aba="${k}">${r}${cont[k] ? `<span class="badge">${cont[k] > 99 ? "99+" : cont[k]}</span>` : ""}</button>`).join("");
-  $("#atual").textContent = "dados de " + D.atualizado;
-  const O = D.operacao, falhas = Object.entries(O.rotinas).filter(([, v]) => !v.ok);
-  $("#saudeop").innerHTML = `<span><span class="pt" style="background:var(--sucesso)"></span>HubSpot ${esc(O.hubspot.slice(8, 10) + "/" + O.hubspot.slice(5, 7) + " " + O.hubspot.slice(11))}</span>
-    <span><span class="pt" style="background:var(--sucesso)"></span>Backup ${esc(O.backup.slice(8) + "/" + O.backup.slice(5, 7))}</span>
-    ${O.email_pausado ? `<span><span class="pt" style="background:var(--alerta)"></span>E-mail pausado: aguardando a TI</span>` : ""}
-    <span><span class="pt" style="background:${falhas.length ? "var(--erro)" : "var(--sucesso)"}"></span>${falhas.length ? `${falhas.length} rotina(s) com falha nas últimas 24 h` : "Rotinas ok nas últimas 24 h"}</span>
-    <button data-saude>Ver rotinas</button>`;
-  const main = $("#conteudo"); main.setAttribute("role", "tabpanel"); main.id = "conteudo"; main.setAttribute("aria-labelledby", "tab-" + S.aba);
-  const y = scrollY; main.innerHTML = A[S.aba](); if (S.manter) window.scrollTo(0, y); S.manter = false;
+  const cont = contagem(), falhas = Object.entries(D.operacao.rotinas).filter(([, v]) => !v.ok);
+  $("#nav").innerHTML = GRUPOS.map(([g, it]) => `<div class="grupo-nav"><span class="rotulo">${g}</span>${it.map(([k, r]) => `<button class="nav-item" data-aba="${k}" ${S.aba === k ? 'aria-current="page"' : ""} title="${r}">${ico(k)}<span>${r}</span>${cont[k] ? `<span class="badge">${cont[k] > 99 ? "99+" : cont[k]}</span>` : ""}</button>`).join("")}</div>`).join("");
+  $("#pessoas").innerHTML = Object.entries(PESSOAS).map(([k, v]) => `<button class="pessoa" data-eu="${k}" aria-pressed="${S.eu === k}" title="Ver como ${v}" aria-label="Ver como ${v}">${v.slice(0, 2).toUpperCase()}</button>`).join("");
+  $("#inferior").innerHTML = [["inicio", "Início"], ["caixa", "Caixa"], ["prazos", "Prazos"], ["mais", "Mais"]].map(([k, r]) => `<button data-${k === "mais" ? "mais-menu" : "aba"}="${k}" ${S.aba === k || (k === "mais" && !["inicio", "caixa", "prazos"].includes(S.aba)) ? 'aria-current="page"' : ""}>${ico(k)}${r}${cont[k] ? `<span class="badge">${cont[k] > 99 ? "99+" : cont[k]}</span>` : ""}</button>`).join("");
+  const rot = (ABAS.find(a => a[0] === S.aba) || [])[1];
+  $("#topo").innerHTML = `<div><h1>${S.aba === "inicio" ? "Olá, " + PESSOAS[S.eu] : esc(rot)}</h1><div class="sub">${S.aba === "inicio" ? "Seu dia na Área Partners · dados de " + esc(D.atualizado) : "Central Partners"}</div></div>
+    <div class="dir"><button class="op ${falhas.length || D.operacao.email_pausado ? "falha" : ""}" data-saude><span class="pt" style="background:${falhas.length ? "var(--erro)" : D.operacao.email_pausado ? "var(--alerta)" : "var(--sucesso)"}"></span>${falhas.length ? `Operação: ${falhas.length} falha(s)` : D.operacao.email_pausado ? "E-mail pausado" : "Operação ok"}</button></div>`;
+  const main = $("#conteudo"), y = scrollY; main.innerHTML = A[S.aba]();
+  if (S.animar) { main.classList.remove("entra"); void main.offsetWidth; main.classList.add("entra"); contar(); }
+  S.animar = false; if (S.manter) window.scrollTo(0, y); S.manter = false;
 }
+function contar() { if (reduz) return; document.querySelectorAll("[data-count]").forEach(el => { const fim = +el.dataset.count; if (!fim) return; const t0 = performance.now(); const passo = t => { const p = Math.min(1, (t - t0) / 600), e = 1 - Math.pow(1 - p, 3); el.textContent = n(Math.round(fim * e)); if (p < 1) requestAnimationFrame(passo); }; requestAnimationFrame(passo); }); }
+function ir(aba) { S.aba = aba; S.animar = true; try { localStorage.setItem("cp-aba", aba); } catch (x) {} render(); window.scrollTo(0, 0); }
+
 document.addEventListener("click", e => {
-  const t = e.target.closest("button, tr.clic, .parc, .kpi[data-kpi], .veu"); if (!t) return;
-  if (t.dataset.kpi && DET[t.dataset.kpi]) { gaveta(DET[t.dataset.kpi]()); return; }
-  if (t.dataset.eu) { S.eu = t.dataset.eu; S.aba = "inicio"; try { localStorage.setItem("cp-eu", S.eu); } catch (x) {} render(); return; }
-  if (t.dataset.aba) { S.aba = t.dataset.aba; try { localStorage.setItem("cp-aba", S.aba); } catch (x) {} render(); return; }
-  if (t.dataset.ir) { S.aba = t.dataset.ir; render(); window.scrollTo(0, 0); return; }
-  if (t.dataset.feito) { S.feitos.add(t.dataset.feito); S.manter = true; render(); toast("Registrado. Protótipo: nada foi gravado."); return; }
-  if (t.dataset.grupo) { S.filtro.grupo = t.dataset.grupo; S.manter = true; render(); return; }
-  if ("prontos" in t.dataset) { S.filtro.prontos = !S.filtro.prontos; S.manter = true; render(); return; }
-  if (t.dataset.copiar) { const el = document.getElementById(t.dataset.copiar); const txt = el.value ?? el.textContent; navigator.clipboard?.writeText(txt).then(() => toast("Copiado."), () => { el.select?.(); toast("Selecionado: use Copiar do teclado."); }); return; }
-  if (t.dataset.glpi) { toast("Protótipo: no painel real o chamado é aberto no GLPI em nome de quem aprovou, assim que a TI liberar o acesso."); return; }
-  if ("saude" in t.dataset) { gaveta(`<span class="rotulo ouro">Saúde da operação</span><h3>Rotinas nas últimas 24 h</h3>${Object.entries(D.operacao.rotinas).map(([k, v]) => par(k, `<span class="chip ${v.ok ? "ok" : "erro"}">${v.ok ? "ok" : "falha"}</span> <span class="nota">${esc(v.quando)} · ${esc(v.msg)}</span>`)).join("")}`); return; }
-  if ("consTodas" in t.dataset) { document.querySelectorAll("input.cons").forEach(c => c.checked = true); return; }
-  if (t.dataset.cons) { const sel = [...document.querySelectorAll("input.cons:checked")].map(c => c.value); if (!sel.length) { toast("Marque pelo menos uma decisão."); return; } sel.forEach(id => S.feitos.add(id)); S.manter = true; render(); toast(`${sel.length} decisão(ões) ${t.dataset.cons === "aprovar" ? "aprovada(s)" : "rejeitada(s)"}. Protótipo: nada foi gravado.`); return; }
-  if (t.dataset.reativar != null && t.dataset.reativar !== "") { const e = D.esfriando[+t.dataset.reativar]; gaveta(`<span class="rotulo ouro">Reativação · ${esc(e.tipo)}</span><h3>${esc(e.parceiro)}</h3>${par("Sem negócio novo", n(e.dias) + " dias")}${par("Ganhos em 12 meses", n(e.ganhos_12m))}${e.uf.length ? par("Onde já ganha", e.uf.map(esc).join(", ")) : ""}
-      <div class="pacote"><h4>Mensagem de reativação <span class="chip">WhatsApp</span></h4><textarea id="pk-reat">Olá, tudo bem? Faz um tempo que não falamos sobre novos casos. Separamos algumas empresas${e.uf.length ? " em " + e.uf.join(", ") : " da sua região"} com perfil parecido com clientes que já ganhamos juntos. Podemos marcar 20 minutos esta semana?</textarea><div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="pk-reat">Copiar mensagem</button><button class="botao sec peq" data-lista>Pedir lista de contas-alvo (JB1)</button></div></div>`); return; }
-  if ("lista" in t.dataset || "reuniao" in t.dataset) { $("#camada").innerHTML = ""; toast("Pedido enviado aos agentes. Protótipo: nada foi gravado."); return; }
-  if (t.dataset.prazo) { const p = D.prazos.find(i => i.id === t.dataset.prazo); gaveta(`<span class="rotulo ouro">Prazo da Receita</span><h3>${esc(p.id)} · ${esc(p.tipo)}</h3>${par("Master", esc(p.master || "—"))}${par("Prazo", esc(p.prazo_txt))}
-      <div class="pacote"><h4>Chamado no GLPI <span class="chip">Jurídico > Comunicados RFB</span></h4><textarea id="pk-rfb" rows="9">DADOS
-1) Setor Solicitante: MASTER
-2) Parceiro Solicitante: ${esc(p.master || "<Master>")}
-INFORMAÇÕES GERAIS
-1) Assunto: ${esc(p.tipo)} de <EMPRESA>
-2) Classe: Interna
-3) Informações Adicionais: data de ciência <DATA>; autorização do cliente para seguir (ou não) com a manifestação: <SIM/NÃO>
-4) Documentos: despacho ou intimação, print do e-CAC</textarea>
-      <div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-glpi="${esc(p.id)}">Abrir chamado no GLPI</button><button class="botao sec peq" data-copiar="pk-rfb">Copiar descrição</button></div></div>
-      <div class="pacote"><h4>Antes de enviar</h4><label class="check" for="ck-rfb1"><input type="checkbox" id="ck-rfb1"><span>Confirmar a data de ciência no documento</span></label><label class="check" for="ck-rfb2"><input type="checkbox" id="ck-rfb2"><span>Ter a autorização do cliente para seguir (o Jurídico pede)</span></label><label class="check" for="ck-rfb3"><input type="checkbox" id="ck-rfb3"><span>Com menos de 10 dias, marcar urgência máxima</span></label></div>`); return; }
-  if (t.dataset.doc) { const d = D.docs.find(i => i.caso === t.dataset.doc); const falta = d.falta.join(", ") + (d.decide.length ? (d.falta.length ? "; " : "") + [...new Set(d.decide.map(x => x.doc))].join("; ") : "");
-    gaveta(`<span class="rotulo ouro">Documentos · ${esc(d.etapa)}</span><h3>${esc(d.caso)}</h3>${par("Parceiro", esc(d.parceiro))}${par("Na etapa há", n(d.dias) + " dias")}
-      <div class="pacote"><h4>No card do HubSpot</h4>${Object.entries(d.tem).map(([k, v]) => `<div class="check"><span class="chip ${v ? "ok" : "alerta"}">${v ? "consta" : "não consta"}</span><span>${esc(k)}</span></div>`).join("")}</div>
-      ${d.decide.length ? `<div class="pacote"><h4>Documento que decide cada tese <span class="chip">Revisor</span></h4>${d.decide.map(x => `<div class="check"><span class="chip ${x.prio === "alta" ? "erro" : ""}">${esc(x.prio || "")}</span><span><b>${esc(x.tese)}</b><br><span class="nota">${esc(x.doc)}</span></span></div>`).join("")}</div>` : ""}
-      <div class="pacote"><h4>Cobrança ao parceiro <span class="chip">WhatsApp</span></h4><textarea id="pk-doc">Olá, tudo bem? Para seguirmos com o caso ${esc(d.caso)}, precisamos de: ${esc(falta)}. Consegue pedir ao cliente e me encaminhar por aqui?</textarea><div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="pk-doc">Copiar mensagem</button></div></div>`); return; }
-  if (t.dataset.rec) { const x = D.recorrencia.fila.find(i => i.caso === t.dataset.rec); if (!x) return;
-    gaveta(`<span class="rotulo ouro">Recorrência · ${esc(x.parceiro)}</span><h3>${esc(x.caso)}</h3>${par("Regra", esc(x.regra))}${par("Recorrências já feitas", `<b>${n(x.recorrencias_feitas)}</b> · ganhos em ${x.ganhos_datas.map(dt).join(", ")}`)}${par("Último ganho", esc(x.ultimo_ganho.split("-").reverse().join("/")) + ` · ${n(x.n_ganhos)} negócio(s) ganho(s) no grupo`)}${par("Meses novos", n(x.meses_novos))}${par("Regime · UF", esc(x.regime || "—") + " · " + esc(x.uf || "—"))}${par("Segmento", esc(x.segmento))}${par("Teses feitas", x.teses.length ? x.teses.map(esc).join("; ") : "não registradas no HubSpot")}
-      <div class="pacote"><h4>Potencial estimado</h4>${par("Crédito anterior", `<span class="num">${rs(x.credito_anterior)}</span>`)}${par("Crédito potencial", `<span class="num">${rs(x.potencial_credito)}</span>`)}${par("Honorário potencial", `<span class="num">${rs(x.potencial_honorario)}</span>`)}${par("Repasse ao parceiro", `<span class="num">${rs(x.potencial_repasse)}</span>`)}<p class="nota">Crédito anterior ÷ 60 meses × meses novos (até 60). É ordem de grandeza para priorizar, não promessa.</p></div>
-      ${x.sinais.length ? `<div class="pacote"><h4>Sinais</h4>${x.sinais.map(s => `<div class="check"><span class="chip ${/L13|decad/.test(s) ? "alerta" : /não registrada/.test(s) ? "erro" : "ouro"}">sinal</span><span>${esc(s)}</span></div>`).join("")}</div>` : ""}
+  const t = e.target.closest("button, tr.clic, .linha-m, .kpi[data-kpi], circle[data-master], .veu"); if (!t) return;
+  const d = t.dataset;
+  if ("fechar" in d) { fechar(); if (!d.ir) return; }
+  if (d.kpi && DET[d.kpi]) { const [ti, co, ro] = DET[d.kpi](); gaveta(ti, co, ro); return; }
+  if ("lote" in d) { const [ti, co, ro] = DET.lote(); gaveta(ti, co, ro); return; }
+  if (d.eu) { S.eu = d.eu; S.aba = "inicio"; S.animar = true; try { localStorage.setItem("cp-eu", S.eu); } catch (x) {} render(); window.scrollTo(0, 0); return; }
+  if (d.aba) { ir(d.aba); return; }
+  if (d.ir) { ir(d.ir); return; }
+  if ("maisMenu" in d) { gaveta("Mais", `${ABAS.filter(a => !["inicio", "caixa", "prazos"].includes(a[0])).map(([k, r]) => `<button class="nav-item" data-aba="${k}" data-fechar>${ico(k)}<span>${r}</span></button>`).join("")}<div class="pacote"><h4>Ver como</h4><div class="pessoas">${Object.entries(PESSOAS).map(([k, v]) => `<button class="pessoa" data-eu="${k}" data-fechar aria-pressed="${S.eu === k}" aria-label="Ver como ${v}">${v.slice(0, 2).toUpperCase()}</button>`).join("")}</div></div>`); return; }
+  if ("prontosIr" in d) { S.filtro.prontos = true; ir("caixa"); return; }
+  if (d.mais) { S.filtro["mais-" + d.mais] = true; S.manter = true; render(); return; }
+  if (d.feito) { S.feitos.add(d.feito); fechar(); S.manter = true; render(); toast("Registrado. Protótipo: nada foi gravado."); return; }
+  if (d.grupo) { S.filtro.grupo = d.grupo; S.manter = true; render(); return; }
+  if ("prontos" in d) { S.filtro.prontos = !S.filtro.prontos; S.manter = true; render(); return; }
+  if (d.ord) { const k = d.ord; S.ordem = {campo: k, asc: S.ordem.campo === k ? !S.ordem.asc : k === "parceiro"}; S.manter = true; render(); return; }
+  if (d.copiar) { const el = document.getElementById(d.copiar); const txt = el.value ?? el.textContent; navigator.clipboard?.writeText(txt).then(() => toast("Copiado."), () => { el.select?.(); toast("Selecionado: use Copiar do teclado."); }); return; }
+  if (d.glpi) { toast("Protótipo: no painel real o chamado é aberto no GLPI em nome de quem aprovou, assim que a TI liberar o acesso."); return; }
+  if ("saude" in d) { gaveta("Saúde da operação", `${D.operacao.email_pausado ? `<div class="faixa" style="border-color:rgba(232,179,74,.5);background:transparent">${ico("alerta")}<span class="txt">E-mail pausado até a TI liberar a integração com o Office. As mensagens ficam no OneDrive.</span></div>` : ""}${par("HubSpot", esc(D.operacao.hubspot))}${par("Backup", esc(D.operacao.backup))}<div class="pacote"><h4>Rotinas nas últimas 24 h</h4>${Object.entries(D.operacao.rotinas).map(([k, v]) => par(k, `<span class="chip ${v.ok ? "ok" : "erro"}">${v.ok ? "ok" : "falha"}</span> <span class="nota">${esc(v.quando)} · ${esc(v.msg)}</span>`)).join("")}</div>`); return; }
+  if ("consTodas" in d) { document.querySelectorAll("input.cons").forEach(c => c.checked = true); return; }
+  if (d.cons) { const sel = [...document.querySelectorAll("input.cons:checked")].map(c => c.value); if (!sel.length) { toast("Marque pelo menos uma decisão."); return; } sel.forEach(id => S.feitos.add(id)); fechar(); S.manter = true; render(); toast(`${sel.length} decisão(ões) ${d.cons === "aprovar" ? "aprovada(s)" : "rejeitada(s)"}. Protótipo: nada foi gravado.`); return; }
+  if (d.reativar != null && d.reativar !== "") { const r = D.esfriando[+d.reativar]; gaveta(r.parceiro, `${par("Sem negócio novo", n(r.dias) + " dias")}${par("Ganhos em 12 meses", n(r.ganhos_12m))}${r.uf.length ? par("Onde já ganha", r.uf.map(esc).join(", ")) : ""}<div class="pacote"><h4>Mensagem de reativação <span class="chip">WhatsApp</span></h4><textarea id="pk-reat">Olá, tudo bem? Faz um tempo que não falamos sobre novos casos. Separamos algumas empresas${r.uf.length ? " em " + r.uf.join(", ") : " da sua região"} com perfil parecido com clientes que já ganhamos juntos. Podemos marcar 20 minutos esta semana?</textarea></div>`, `<button class="botao" data-copiar="pk-reat">Copiar mensagem</button><button class="botao sec" data-lista>Pedir lista de contas-alvo (JB1)</button>`, "Reativação · " + r.tipo); return; }
+  if ("lista" in d || "reuniao" in d || "enviar" in d) { fechar(); toast("Pedido enviado aos agentes. Protótipo: nada foi gravado."); return; }
+  if ("novo" in d) { gaveta("Novo pedido aos agentes", `<label for="p-tipo">Tipo de pedido<select id="p-tipo"><option>DM1 · Briefing de conta Master</option><option>DM3 · Rascunho de resposta ao parceiro</option><option>JB1 · Lista de prospects por Master</option><option>GT1 · Pré-análise tributária de empresa</option><option>GE2 · Relatório do HubSpot</option></select></label><label for="p-master">Master<select id="p-master"><option value="">—</option>${D.masters.map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label><label for="p-precisa">O que você precisa<textarea id="p-precisa" placeholder="Descreva a entrega que resolve o seu problema"></textarea></label>`, `<button class="botao" data-enviar>Enviar pedido</button>`); return; }
+  if (d.abrir) { const x = D.caixa.find(i => i.id === d.abrir); if (x) gaveta(x.titulo, `${par("Responsável", esc(PESSOAS[x.pessoa]))}${x.master ? par("Master", esc(x.master)) : ""}${x.valor ? par("Valor", rs(x.valor)) : ""}${x.dias != null ? par("Esperando", `<span class="idade ${idade(x.dias)}">${n(x.dias)} dia(s)</span>`) : ""}${pacoteHTML(x)}`, `<button class="botao" data-feito="${esc(x.id)}">${pronto(x) ? "Marcar como encaminhado" : esc(x.acao.split(" / ")[0])}</button>`, pronto(x) ? "Pronto para encaminhar · " + x.tipo : x.tipo); return; }
+  if ("comecar" in d) { const x = [...D.geovana.lote].sort((a, b) => (b.esperado || 0) - (a.esperado || 0)).find(i => !S.feitos.has(i.caso)); if (x) abrirLote(x); return; }
+  if (d.decidir) { const x = D.geovana.lote.find(i => i.caso === d.decidir); if (x) abrirLote(x); return; }
+  if (d.prazo) { const p = D.prazos.find(i => i.id === d.prazo); gaveta(p.id + " · " + p.tipo, `${par("Master", esc(p.master || "—"))}${par("Prazo", esc(p.prazo_txt))}<div class="pacote"><h4>Chamado no GLPI <span class="chip">Jurídico > Comunicados RFB</span></h4><textarea id="pk-rfb" rows="9">DADOS\n1) Setor Solicitante: MASTER\n2) Parceiro Solicitante: ${esc(p.master || "<Master>")}\nINFORMAÇÕES GERAIS\n1) Assunto: ${esc(p.tipo)} de <EMPRESA>\n2) Classe: Interna\n3) Informações Adicionais: data de ciência <DATA>; autorização do cliente para seguir (ou não) com a manifestação: <SIM/NÃO>\n4) Documentos: despacho ou intimação, print do e-CAC</textarea></div><div class="pacote"><h4>Antes de enviar</h4>${["Confirmar a data de ciência no documento", "Ter a autorização do cliente para seguir (o Jurídico pede)", "Com menos de 10 dias, marcar urgência máxima"].map((c, i) => `<label class="check" for="rf-${i}"><input type="checkbox" id="rf-${i}"><span>${c}</span></label>`).join("")}</div>`, `<button class="botao" data-glpi="${esc(p.id)}">Abrir chamado no GLPI</button><button class="botao sec" data-copiar="pk-rfb">Copiar descrição</button>`, "Prazo da Receita"); return; }
+  if (d.doc) { const x = D.docs.find(i => i.caso === d.doc); const falta = x.falta.join(", ") + (x.decide.length ? (x.falta.length ? "; " : "") + [...new Set(x.decide.map(z => z.doc))].join("; ") : "");
+    gaveta(x.caso, `${par("Parceiro", esc(x.parceiro))}${par("Na etapa há", n(x.dias) + " dias")}<div class="pacote"><h4>No card do HubSpot</h4>${Object.entries(x.tem).map(([k, v]) => `<div class="check"><span class="chip ${v ? "ok" : "alerta"}">${v ? "consta" : "não consta"}</span><span>${esc(k)}</span></div>`).join("")}</div>${x.decide.length ? `<div class="pacote"><h4>Documento que decide cada tese <span class="chip">Revisor</span></h4>${x.decide.map(z => `<div class="check"><span class="chip ${z.prio === "alta" ? "ouro" : ""}">${esc(z.prio || "")}</span><span><b>${esc(z.tese)}</b><br><span class="nota">${esc(z.doc)}</span></span></div>`).join("")}</div>` : ""}<div class="pacote"><h4>Cobrança ao parceiro <span class="chip">WhatsApp</span></h4><textarea id="pk-doc">Olá, tudo bem? Para seguirmos com o caso ${esc(x.caso)}, precisamos de: ${esc(falta)}. Consegue pedir ao cliente e me encaminhar por aqui?</textarea></div>`, `<button class="botao" data-copiar="pk-doc">Copiar mensagem</button>`, "Documentos · " + x.etapa); return; }
+  if (d.rec) { const x = D.recorrencia.fila.find(i => i.caso === d.rec); if (!x) return;
+    gaveta(x.caso, `${par("Regra", esc(x.regra))}${par("Recorrências já feitas", `<b>${n(x.recorrencias_feitas)}</b> · ganhos em ${x.ganhos_datas.map(dt).join(", ")}`)}${par("Meses novos", n(x.meses_novos))}${par("Regime · UF", esc(x.regime || "—") + " · " + esc(x.uf || "—"))}${par("Segmento", esc(x.segmento))}${par("Teses feitas", x.teses.length ? x.teses.map(esc).join("; ") : "não registradas no HubSpot")}
+      <div class="pacote"><h4>Potencial estimado</h4>${par("Crédito anterior", rs(x.credito_anterior))}${par("Potencial em negócios", `<b>${rs(x.potencial_credito)}</b>`)}${par("Honorário", rs(x.potencial_honorario))}${par("Repasse ao parceiro", rs(x.potencial_repasse))}<p class="nota">Crédito anterior ÷ 60 meses × meses novos (até 60). Ordem de grandeza para priorizar, não promessa.</p></div>
+      ${x.sinais.length ? `<div class="pacote"><h4>Sinais</h4>${x.sinais.map(s => `<div class="check"><span class="chip ${/L13|decad/.test(s) ? "alerta" : /não registrada/.test(s) ? "erro" : ""}">${/L13|decad|não registrada/.test(s) ? ico("alerta") : ""}sinal</span><span>${esc(s)}</span></div>`).join("")}</div>` : ""}
       <div class="pacote"><h4>Antes de decidir</h4>${["Confirmar no parecer o último período recuperado (L11)", "Conferir a decadência de 5 anos (art. 168 do CTN)", "Se a tese já foi aproveitada: só meses depois do último ressarcido ou outra tese", "Ação judicial própria na tese: passar ao Jurídico (L12)"].map((c, i) => `<label class="check" for="rc-${i}"><input type="checkbox" id="rc-${i}"><span>${esc(c)}</span></label>`).join("")}</div>
-      <label for="rc-motivo">Motivo ou observação<input type="text" id="rc-motivo" placeholder="Ex.: período coberto até 12/2024; só 10 meses novos"></label>
-      <div class="acoes" style="justify-content:flex-start"><button class="botao" data-recok="${esc(x.caso)}">Aprovar recorrência</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="outra">Outra tese não coberta</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="dado">Precisa de dado</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="nao">Não aprovar</button></div>`); return; }
-  if (t.dataset.recok) { S.feitos.add("rec-" + t.dataset.recok); $("#camada").innerHTML = ""; S.manter = true; render();
-    toast({outra: "Marcado como outra tese: vai para pré-análise (GT1).", dado: "Marcado como precisa de dado.", nao: "Recorrência não aprovada. O motivo ensina a fila."}[t.dataset.tipo] || "Recorrência aprovada: negócio de recorrência para o parceiro e pré-análise (GT1). Protótipo: nada foi gravado."); return; }
-  if ("urg" in t.dataset) { S.filtro.so_urg = !S.filtro.so_urg; S.manter = true; render(); return; }
-  if (t.dataset.ord) { const k = t.dataset.ord; S.ordem = {campo: k, asc: S.ordem.campo === k ? !S.ordem.asc : k === "parceiro"}; S.manter = true; render(); return; }
-  if ("fechar" in t.dataset) { $("#camada").innerHTML = ""; return; }
-  if ("novo" in t.dataset) { gaveta(`<h3>Novo pedido aos agentes</h3><label for="p-tipo">Tipo de pedido<select id="p-tipo"><option>DM1 · Briefing de conta Master</option><option>DM3 · Rascunho de resposta ao parceiro</option><option>JB1 · Lista de prospects por Master</option><option>GT1 · Pré-análise tributária de empresa</option><option>GE2 · Relatório do HubSpot</option></select></label>
-      <label for="p-master">Master<select id="p-master"><option value="">—</option>${D.masters.map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
-      <label for="p-precisa">O que você precisa<textarea id="p-precisa" placeholder="Descreva a entrega que resolve o seu problema"></textarea></label>
-      <button class="botao" data-enviar>Enviar pedido</button>`); return; }
-  if ("enviar" in t.dataset) { $("#camada").innerHTML = ""; toast("Pedido enviado. Protótipo: nada foi gravado."); return; }
-  if (t.dataset.abrir) { const x = D.caixa.find(i => i.id === t.dataset.abrir); if (x) gaveta(`<span class="rotulo ouro">${esc(x.tipo)}</span><h3>${esc(x.titulo)}</h3>${par("Responsável", esc(PESSOAS[x.pessoa]))}${x.master ? par("Master", esc(x.master)) : ""}${x.valor ? par("Valor", `<span class="num">${rs(x.valor)}</span>`) : ""}${x.dias != null ? par("Esperando", `<span class="num">${n(x.dias)}</span> dia(s)`) : ""}${par("Origem", esc(x.grupo))}
-      ${pacoteHTML(x)}<button class="botao" data-feito="${esc(x.id)}">${pronto(x) ? "Marcar como encaminhado" : esc(x.acao.split(" / ")[0])}</button>`); return; }
-  if (t.dataset.decidir || t.dataset.caso) { const x = D.geovana.lote.find(i => i.caso === (t.dataset.decidir || t.dataset.caso)); if (x) gaveta(`<span class="rotulo ouro">Recuperador · ${esc(x.tipo)}</span><h3>${esc(x.caso)}</h3>${par("Master", esc(x.parceiro))}${par("Segmento", esc(x.segmento) + " · " + esc(x.uf))}${par("Esperado", `<span class="num">${rs(x.esperado)}</span>`)}${par("Parecidos", esc(x.taxa))}${par("Aderência", esc(x.aderencia))}${par("Documentos", esc(x.docs || "—"))}
-      <label for="d-motivo">Motivo ou observação<input type="text" id="d-motivo"></label><div class="acoes" style="justify-content:flex-start"><button class="botao" data-feito="${esc(x.caso)}">Aprovar reanálise</button><button class="botao sec" data-feito="${esc(x.caso)}">Precisa de dado</button><button class="botao sec" data-feito="${esc(x.caso)}">Vetar</button></div>`); return; }
-  if (t.dataset.master) { const m = D.masters.find(i => i.parceiro === t.dataset.master); if (m) gaveta(`<span class="rotulo ouro">Master</span><h3>${esc(m.parceiro)}</h3>${par("Saúde", `<span class="num">${m.saude}</span>`)}${par("Abertos", `${n(m.abertos)} · <span class="num">${rs(m.abertos_rs)}</span>`)}${par("Parados", n(m.abertos_parados))}${par("Ganhos 90 dias", `${n(m.ganhos_90d)} · <span class="num">${rs(m.fechado_90d_rs)}</span>`)}${par("Fechado 12 meses", `<span class="num">${rs(m.fechado_12m_rs)}</span>`)}${par("Conversão 12 meses", String(m.conversao_12m_pct ?? "—").replace(".", ",") + "%")}${par("Ciclo mediano", n(m.ciclo_mediano_dias) + " dias")}${par("Honorário líquido 12m", `<span class="num">${rs(m.honorario_liquido_12m_rs)}</span>`)}${par("Repasses", `OK ${n((m.repasse || {}).ok)} · revisar ${n((m.repasse || {}).revisar)} · bloqueados ${n((m.repasse || {}).bloqueado)}`)}${par("Itens na caixa", n(m.alertas + m.demandas))}
-      ${(() => { const f = D.ficha[m.parceiro]; return f ? `<div class="pacote"><h4>Repasse ao parceiro ${pctChip(m.parceiro)}</h4>${par("Honorário 12 meses", `<span class="num">${rs(f.honorario_12m)}</span>`)}${par("Repasse 12 meses", `<span class="num">${rs(f.comissao_12m)}</span>`)}${par("Potencial em aberto", `<span class="num">${rs(f.comissao_potencial_aberto)}</span>`)}${f.divergencias ? par("Atenção", `${n(f.divergencias)} negócio(s) com % diferente do cadastro`) : ""}
-        <p class="nota">Honorário contratado × % de repasse do cadastro. Onde o % de honorário da Save não está no negócio, usa o típico do parceiro (${n(f.base_estimada)} de ${n(f.base_real + f.base_estimada)}).</p></div>
-      ${(() => { const rc = f.recorrencia || {}; return `<div class="pacote"><h4>Recorrência <span class="chip ouro">${n(rc.elegiveis)} elegíveis</span></h4>${par("Potencial em negócios", `<span class="num">${rs(rc.pot_credito)}</span>`)}${par("Recorrências já feitas", n(rc.feitas))}${par("Honorário potencial", `<span class="num">${rs(rc.pot_honorario)}</span>`)}${par("Aguardando 6 meses", n(rc.aguardar))}${par("Já no pipeline (fora da análise)", n(rc.em_diagnostico))}
-        ${(f.recorrencia_top || []).map(x => `<div class="check"><span class="chip">${n(x.meses_novos)} meses</span><span><b>${esc(x.caso)}</b> · ${rs(x.potencial_credito)} em negócios · ${n(x.recorrencias_feitas)} já feita(s)${x.sinais.length ? ` · <span class="nota">${esc(x.sinais[0].split(":")[0])}</span>` : ""}</span></div>`).join("")}</div>`; })()}
-      <div class="pacote"><h4>Ganhos por mês</h4>${barras(f.serie.map(([k, v]) => ({r: mesRot(k), v})), {fmt: rs, alt: 170})}</div>
-      <div class="pacote"><h4>Abertos por etapa</h4>${hbarras(f.etapas.map(([r, v]) => ({r, v})))}</div>
-      ${f.uf.length ? `<div class="pacote"><h4>Onde já ganha</h4><div>${f.uf.map(([u, q]) => `<span class="chip">${esc(u)} · ${q}</span>`).join(" ")}</div></div>` : ""}
-      <div class="acoes" style="justify-content:flex-start"><button class="botao" data-reuniao>Preparar reunião (briefing DM1)</button></div>` : ""; })()}
-      <p class="sub">Base da futura ficha 360 do parceiro (PRM).</p>`); return; }
+      <label for="rc-motivo">Motivo ou observação<input type="text" id="rc-motivo" placeholder="Ex.: período coberto até 12/2024"></label>`,
+      `<button class="botao" data-recok="${esc(x.caso)}">Aprovar recorrência</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="outra">Outra tese</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="dado">Precisa de dado</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="nao">Não aprovar</button>`, "Recorrência · " + x.parceiro); return; }
+  if (d.recok) { S.feitos.add("rec-" + d.recok); fechar(); S.manter = true; render(); toast({outra: "Marcado como outra tese: vai para pré-análise (GT1).", dado: "Marcado como precisa de dado.", nao: "Recorrência não aprovada. O motivo ensina a fila."}[d.tipo] || "Recorrência aprovada: negócio de recorrência com o parceiro e pré-análise (GT1). Protótipo: nada foi gravado."); return; }
+  if (d.master) { const m = D.masters.find(i => i.parceiro === d.master); if (!m) return; const f = D.ficha[m.parceiro] || {}, rc = f.recorrencia || {};
+    gaveta(m.parceiro, `<div class="kpis">${kpi({r: "Saúde", v: n(m.saude), d: selSaude(m.saude)[1]})}${kpi({r: "Repasse 12m", v: rsH(f.comissao_12m), d: pctChip(m.parceiro)})}</div>
+      ${par("Abertos", `${n(m.abertos)} · ${rs(m.abertos_rs)} · ${n(m.abertos_parados)} parados`)}${par("Ganhos 90 dias", `${n(m.ganhos_90d)} · ${rs(m.fechado_90d_rs)}`)}${par("Conversão 12m", pc(m.conversao_12m_pct))}${par("Ciclo mediano", n(m.ciclo_mediano_dias) + " dias")}
+      <div class="pacote"><h4>Ganhos por mês</h4>${colunas((f.serie || []).map(([k, v]) => ({r: mesRot(k), v, estado: k === MES_ATUAL ? "parcial" : "real"})), {fmt: rs, alt: 160})}</div>
+      <div class="pacote"><h4>Recorrência <span class="chip">${n(rc.elegiveis)} elegíveis</span></h4>${par("Potencial em negócios", `<b>${rs(rc.pot_credito)}</b>`)}${par("Recorrências já feitas", n(rc.feitas))}${par("Aguardando 6 meses", n(rc.aguardar))}${par("Já no pipeline", n(rc.em_diagnostico))}${(f.recorrencia_top || []).map(x => `<div class="check"><span class="chip">${n(x.meses_novos)} meses</span><span><b>${esc(x.caso)}</b> · ${rs(x.potencial_credito)} · ${n(x.recorrencias_feitas)} já feita(s)</span></div>`).join("")}</div>
+      <div class="pacote"><h4>Repasse <span class="mono" style="color:var(--texto-2);font-size:12px">${String(f.pct ?? "—").replace(".0", "")}% oficial</span></h4>${par("Honorário 12 meses", rs(f.honorario_12m))}${par("Repasse 12 meses", rs(f.comissao_12m))}${par("Potencial em aberto", rs(f.comissao_potencial_aberto))}${f.divergencias ? par("Atenção", `${n(f.divergencias)} negócio(s) com % diferente do cadastro`) : ""}</div>
+      <div class="pacote"><h4>Abertos por etapa</h4>${barrasH((f.etapas || []).map(([r, v]) => ({r, v})))}</div>
+      ${(f.uf || []).length ? `<div class="pacote"><h4>Onde já ganha</h4>${barrasH(f.uf.map(([u, q]) => ({r: u, v: q})), {larg: 40})}</div>` : ""}`, `<button class="botao" data-reuniao>Preparar reunião (briefing DM1)</button>`, "Ficha do parceiro"); return; }
+});
+function abrirLote(x) { gaveta(x.caso, `${par("Master", esc(x.parceiro))}${par("Tipo", esc(x.tipo))}${par("Segmento", esc(x.segmento) + " · " + esc(x.uf))}${par("Esperado", `<b>${rs(x.esperado)}</b>`)}${par("Parecidos", esc(x.taxa))}${par("Aderência", esc(x.aderencia))}${par("Documentos", esc(x.docs || "—"))}<label for="d-motivo">Motivo ou observação<input type="text" id="d-motivo"></label>`,
+  `<button class="botao" data-feito="${esc(x.caso)}">Aprovar reanálise</button><button class="botao sec" data-feito="${esc(x.caso)}">Precisa de dado</button><button class="botao sec" data-feito="${esc(x.caso)}">Vetar</button>`, "Recuperador · lote da semana"); }
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && $("#camada").innerHTML) fechar();
+  if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.clic, .linha-m, .kpi[data-kpi], circle[data-master]")) { e.preventDefault(); e.target.click(); }
 });
 document.addEventListener("change", e => { if (e.target.id === "f-parc") { S.filtro.parc = e.target.value; S.manter = true; render(); } if (e.target.id === "f-rparc") { S.filtro.rparc = e.target.value; S.manter = true; render(); } });
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") $("#camada").innerHTML = "";
-  if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.clic, .parc, .kpi[data-kpi]")) { e.preventDefault(); e.target.click(); }
-  if (e.target.matches('[role="tab"]') && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { const i = ABAS.findIndex(a => a[0] === S.aba), j = (i + (e.key === "ArrowRight" ? 1 : ABAS.length - 1)) % ABAS.length; S.aba = ABAS[j][0]; render(); document.getElementById("tab-" + S.aba).focus(); }
-});
 document.addEventListener("input", async e => {
-  if (e.target.id === "q") { S.q = e.target.value; S.cnpjRes = null; if (/\d{8,}/.test(S.q.replace(/\D/g, "")) && /^[\d.\/\-\s]+$/.test(S.q)) await buscaCnpj(S.q); $("#res-busca").innerHTML = resBusca(); return; } if (e.target.id === "busca") { S.filtro.busca = e.target.value; const pos = e.target.selectionStart; S.manter = true; render(); const b = $("#busca"); b.focus(); b.setSelectionRange(pos, pos); } });
-render();
+  if (e.target.id === "q") { S.q = e.target.value; S.cnpjRes = null; if (/\d{8,}/.test(S.q.replace(/\D/g, "")) && /^[\d.\/\-\s]+$/.test(S.q)) await buscaCnpj(S.q); $("#res-busca").innerHTML = resBusca(); return; }
+  if (e.target.id === "busca") { S.filtro.busca = e.target.value; const pos = e.target.selectionStart; S.manter = true; render(); const b = $("#busca"); b.focus(); b.setSelectionRange(pos, pos); }
+});
+S.animar = true; render();
 </script>
