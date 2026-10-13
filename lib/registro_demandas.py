@@ -21,7 +21,7 @@ AP = os.path.expanduser("~/agentes-partners")
 REG = os.path.join(AP, "registro", "demandas.json")
 import caminhos as _cam  # noqa: E402  (pasta ativa do OneDrive: lib/caminhos.py)
 # pasta do OneDrive resolvida na hora do uso ({mod}.area()): sem OneDrive, só a parte de arquivos falha (TI, 02/10)
-PASTA = {"daniela": "Central Masters · Daniela", "jenifer": "Central BDR · Jenifer", "geovana": "Central Técnica · Geovana", "luis": "Gestão · Luis"}
+PASTA = {"daniela": "Central Masters · Daniela", "jenifer": "Central BDR · Jenifer", "geovana": "Central Técnica · Geovana", "luis": "04 · Gestão / Central de Agentes"}  # rótulo; o caminho vem de caminhos.pasta()
 ABERTOS = ("responder", "acompanhar", "em_analise", "aguardando_aprovacao")
 
 

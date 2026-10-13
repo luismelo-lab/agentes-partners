@@ -102,6 +102,7 @@ case "${1:-ajuda}" in
                 for t in 1 2; do python3 "$AP/infra/publicar_onedrive.py" >> "$LOG/onedrive.log" 2>&1 && { log onedrive; exit 0; }; sleep 60; done
                 rodar onedrive python3 "$AP/infra/publicar_onedrive.py" ;;
   portal)       rodar portal python3 "$AP/infra/portal_dados.py" ;;
+  teste)        python3 "$AP/infra/teste_fumaca.py" "${@:2}" ;;   # teste de fumaça (< 1 min, não envia nada): rode antes de cada commit
   backup)       rodar backup "$AP/infra/backup.sh" ;;
   bitrix)       # fase da execução dos ganhos (só consulta); pula enquanto a TI não criar o webhook
                 python3 -c "import sys; sys.path.insert(0,'$AP/lib'); import bitrix; sys.exit(0 if bitrix.disponivel() else 3)" || { log bitrix "pulado: sem webhook do Bitrix (docs/BITRIX.md)"; exit 0; }

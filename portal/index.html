@@ -124,7 +124,7 @@ function nav() {
 
 /* ---------- blocos comuns ---------- */
 const numeros = xs => `<section class="numeros">${xs.map(([r, v, s]) => `<div class="num"><span>${esc(r)}</span><strong>${esc(v)}</strong><small>${esc(s)}</small></div>`).join("")}</section>`;
-const pasta = p => `<section class="pasta"><span class="rot">Arquivos no OneDrive:</span> <code>Área Partners · Agentes / ${esc({daniela: "Central Masters · Daniela", jenifer: "Central BDR · Jenifer", geovana: "Central Técnica · Geovana", luis: "Gestão · Luis"}[p])}</code></section>`;
+const pasta = p => `<section class="pasta"><span class="rot">Arquivos no OneDrive:</span> <code>${esc({daniela: "Área Partners · Agentes / Central Masters · Daniela", jenifer: "Área Partners · Agentes / Central BDR · Jenifer", geovana: "Área Partners · Agentes / Central Técnica · Geovana", luis: "04 · Gestão, Metas e Estratégia / Central de Agentes"}[p])}</code></section>`;
 const semDb = () => S.db ? "" : `<div class="aviso">Os botões e formulários funcionam quando o painel é aberto pelo Claude, com a sua conta da Save.</div>`;
 
 function demandas(p) {
