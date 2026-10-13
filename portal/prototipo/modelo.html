@@ -86,7 +86,7 @@ section > h2 { font-size: 18px; font-weight: 600; margin: 0 0 4px; letter-spacin
 .bloco h3 { margin: 0; font-size: 15px; font-weight: 600; }
 .bloco .nota { color: var(--texto-3); font-size: 12px; margin: 0; }
 .mini { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
-.mini div { display: grid; gap: 2px; } .mini b { font: 500 20px var(--mono); }
+.mini div { display: grid; gap: 2px; min-width: 0; } .mini b { font: 500 17px var(--mono); white-space: nowrap; }
 
 /* tabelas */
 .tab-wrap { overflow-x: auto; border: 1px solid var(--borda); border-radius: var(--r-md); background: var(--cartao); }
@@ -129,6 +129,13 @@ label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
 .check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--texto); }
 .check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--ouro); }
 .docs { display: flex; flex-wrap: wrap; gap: 8px; } .docs a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid var(--borda-3); border-radius: var(--r-sm); text-decoration: none; font-size: 13px; }
+.saudeop { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; font: 12px var(--mono); color: var(--texto-2); padding-block: 8px; border-top: 1px solid var(--borda); }
+.saudeop .pt { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.saudeop button { all: unset; cursor: pointer; color: var(--ouro); } .saudeop button:focus-visible { outline: 2px solid var(--ouro); }
+.parc { display: grid; gap: 10px; cursor: pointer; } .parc:hover { border-color: var(--borda-3); }
+.spark { width: 100%; height: 34px; display: block; }
+.busca-box { display: flex; gap: 8px; flex-wrap: wrap; } .busca-box input { flex: 1 1 260px; min-height: 44px; font-size: 15px; }
+.resp { display: grid; gap: 8px; }
 .vazio { border: 1px dashed var(--borda-3); border-radius: var(--r-md); padding: 18px; color: var(--texto-2); }
 @media (max-width: 640px) {
   .item { grid-template-columns: 4px 1fr; } .item .acoes { grid-column: 2; justify-content: flex-start; }
@@ -151,6 +158,7 @@ label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
     </div>
   </div>
   <nav role="tablist" aria-label="Seções" id="abas"></nav>
+  <div class="saudeop" id="saudeop"></div>
 </div></header>
 <main id="conteudo"></main>
 <div id="camada"></div>
@@ -165,7 +173,7 @@ const n = v => (v ?? 0).toLocaleString("pt-BR");
 const MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
 const mesRot = m => MES[+m.slice(5,7) - 1] + "/" + m.slice(2,4);
 const PESSOAS = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "Geovana"};
-const ABAS = [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["pedidos", "Pedidos aos agentes"], ["masters", "Masters"]];
+const ABAS = [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["prazos", "Prazos e documentos"], ["parceiros", "Parceiros"], ["busca", "Busca"], ["biblioteca", "Biblioteca"], ["pedidos", "Pedidos"]];
 const S = {eu: "luis", aba: "inicio", feitos: new Set(), filtro: {grupo: "todos", so_urg: false, busca: ""}, ordem: {campo: "saude", asc: true}};
 try { S.eu = localStorage.getItem("cp-eu") || "luis"; S.aba = localStorage.getItem("cp-aba") || "inicio"; } catch (e) {}
 if (!PESSOAS[S.eu]) S.eu = "luis"; if (!ABAS.some(a => a[0] === S.aba)) S.aba = "inicio";
@@ -231,15 +239,16 @@ function fazerAgora(lista, lim = 6, titulo = "Fazer agora") {
 }
 function tabelaMasters(lin, completo) {
   const cols = completo
-    ? [["parceiro", "Master"], ["saude", "Saúde", 1], ["abertos", "Abertos", 1], ["abertos_rs", "R$ aberto", 1], ["ganhos_90d", "Ganhos 90d", 1], ["fechado_12m_rs", "Fechado 12m", 1], ["conversao_12m_pct", "Conversão 12m", 1], ["ciclo_mediano_dias", "Ciclo (dias)", 1], ["ritmo_valor_vs_media_trimestral_pct", "Ritmo vs média", 1], ["dias_sem_negocio", "Dias sem negócio", 1], ["alertas", "Alertas", 1]]
+    ? [["parceiro", "Master"], ["saude", "Saúde", 1], ["abertos", "Abertos", 1], ["abertos_rs", "R$ aberto", 1], ["ganhos_90d", "Ganhos 90d", 1], ["fechado_12m_rs", "Fechado 12m", 1], ["conversao_12m_pct", "Conversão 12m", 1], ["ciclo_mediano_dias", "Ciclo (dias)", 1], ["ritmo_valor_vs_media_trimestral_pct", "Ritmo vs média", 1], ["dias_sem_negocio", "Dias sem negócio", 1], ["pct_repasse", "% repasse", 1], ["repasse_12m", "Repasse 12m", 1], ["alertas", "Alertas", 1]]
     : [["parceiro", "Master"], ["saude", "Saúde", 1], ["abertos_rs", "R$ aberto", 1], ["ganhos_90d", "Ganhos 90d", 1], ["ritmo_valor_vs_media_trimestral_pct", "Ritmo", 1], ["alertas", "Alertas", 1]];
-  const fmt = (k, v) => k.endsWith("_rs") ? rs(v) : k.endsWith("_pct") ? (v == null ? "—" : (v > 0 ? "+" : "") + String(v).replace(".", ",") + "%") : v == null ? "—" : n(v);
+  const fmt = (k, v) => k === "repasse_12m" ? rs(v) : k === "pct_repasse" ? (v == null ? "—" : String(v).replace(".0", "") + "%") : k.endsWith("_rs") ? rs(v) : k.endsWith("_pct") ? (v == null ? "—" : (v > 0 ? "+" : "") + String(v).replace(".", ",") + "%") : v == null ? "—" : n(v);
   return `<div class="tab-wrap"><table><thead><tr>${cols.map(([k, r, num]) => `<th class="${num ? "n" : ""}" aria-sort="${S.ordem.campo === k ? (S.ordem.asc ? "ascending" : "descending") : "none"}"><button data-ord="${k}">${r}${S.ordem.campo === k ? (S.ordem.asc ? " ↑" : " ↓") : ""}</button></th>`).join("")}</tr></thead>
     <tbody>${lin.map(m => `<tr class="clic" data-master="${esc(m.parceiro)}" tabindex="0">${cols.map(([k, , num]) => k === "saude"
       ? `<td class="n"><span class="saude"><span class="barrinha" aria-hidden="true"><i style="width:${m.saude}%;background:${corSaude(m.saude)}"></i></span>${m.saude} <span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "alerta" : "erro"}">${m.saude >= 75 ? "boa" : m.saude >= 60 ? "atenção" : "risco"}</span></span></td>`
       : k === "parceiro" ? `<td><b>${esc(m.parceiro)}</b></td>`
       : `<td class="${num ? "n" : ""}" ${k.startsWith("ritmo") && m[k] < -30 ? 'style="color:var(--erro)"' : ""}>${fmt(k, m[k])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
+D.masters.forEach(m => { const f = D.ficha[m.parceiro] || {}; m.pct_repasse = f.pct; m.repasse_12m_rs = f.comissao_12m; m.repasse_12m = f.comissao_12m; });
 const ordenar = xs => [...xs].sort((a, b) => { const k = S.ordem.campo, va = a[k] ?? -1e18, vb = b[k] ?? -1e18; return (typeof va === "string" ? va.localeCompare(vb) : va - vb) * (S.ordem.asc ? 1 : -1); });
 
 /* ---------- cockpits ---------- */
@@ -254,7 +263,11 @@ V.luis = () => {
       ["Pipeline aberto", rs((K.pipeline || {}).rs), `${n((K.pipeline || {}).n)} negócios em aberto`],
       ["Win rate 3 meses", String(K.win_rate_3m ?? "—").replace(".", ",") + "%", `ticket médio ${rs(K.ticket_3m)}`],
       ["Masters em risco", n(riscos.length), riscos.map(m => esc(m.parceiro)).join(", ") || "nenhum"]])}
-    ${fazerAgora(L, 5, "Decidir hoje")}
+    ${fazerAgora(L.filter(x => x.grupo !== "Conselho"), 5, "Decidir hoje")}
+    <section><div class="cab"><h2>Conselho em lote</h2><span class="atual">${n(D.conselho.filter(c => !S.feitos.has(c.id)).length)} decisões esperando · marque e decida de uma vez</span></div>
+      <div class="filtros"><button data-cons-todas>Selecionar todas</button><button data-cons="aprovar">Aprovar selecionadas</button><button data-cons="rejeitar">Rejeitar selecionadas</button></div>
+      <div class="tab-wrap"><table><thead><tr><th></th><th>Decisão</th><th>Desde</th></tr></thead><tbody>${D.conselho.filter(c => !S.feitos.has(c.id)).slice(0, 15).map(c => `<tr><td><input type="checkbox" class="cons" value="${esc(c.id)}" aria-label="Selecionar ${esc(c.id)}"></td><td><b>${esc(c.id)}</b> · ${esc(c.texto)}</td><td class="n">${esc(c.data.slice(8) + "/" + c.data.slice(5, 7))}</td></tr>`).join("")}</tbody></table></div>
+      ${D.conselho.length > 15 ? `<p class="nota" style="margin-top:8px">Mostrando as 15 mais antigas. As demais aparecem quando estas forem decididas.</p>` : ""}</section>
     <section><div class="cab"><h2>Carga do time</h2><span class="atual">o que espera cada pessoa agora</span></div>
       <div class="kpis">${carga.map(c => `<div class="kpi"><span class="rotulo">${PESSOAS[c.p]}</span><span class="v">${n(c.n)}</span><span class="d">${n(c.urg)} urgentes · mais antigo há ${n(c.max)} dias</span></div>`).join("")}</div></section>
     <section><div class="cab"><h2>Resultado</h2><span class="atual">últimos 12 meses · data efetiva</span></div>
@@ -271,7 +284,7 @@ V.luis = () => {
         <div class="bloco"><h3>Concentração (12 meses)</h3>${hbarras(((K.concentracao || {}).top5 || []).map(([r, v]) => ({r, v})), {fmt: rs})}
           <p class="nota">Os 3 maiores parceiros somam ${String((K.concentracao || {}).top3_pct ?? "—").replace(".", ",")}% do fechado em 12 meses.</p></div>
       </div></section>
-    <section><div class="cab"><h2>Masters</h2><button class="botao sec peq" data-ir="masters">Ver tabela completa</button></div>${tabelaMasters(ordenar(D.masters), false)}</section>
+    <section><div class="cab"><h2>Masters</h2><button class="botao sec peq" data-ir="parceiros">Ver tabela completa</button></div>${tabelaMasters(ordenar(D.masters), false)}</section>
     <section><div class="cab"><h2>Saúde da base e do canal</h2></div><div class="grade">
       <div class="bloco"><h3>Qualidade do CRM</h3><div class="mini"><div><span class="rotulo">Índice dos ganhos</span><b>${String(K.qualidade).replace(".", ",")}</b></div>${Object.entries(K.inconsistencias || {}).slice(0, 3).map(([k, v]) => `<div><span class="rotulo">${esc(k)}</span><b>${n(v)}</b></div>`).join("")}</div></div>
       <div class="bloco"><h3>Conflito de canal</h3><div class="mini"><div><span class="rotulo">Alta severidade</span><b>${n(K.conflito.alta)}</b></div><div><span class="rotulo">Master × Master</span><b>${n(K.conflito.mxm)}</b></div><div><span class="rotulo">Valor em conflito</span><b>${rs(K.conflito.valor)}</b></div></div></div>
@@ -334,9 +347,72 @@ A.pedidos = () => {
   const ps = D.caixa.filter(x => x.grupo === "Pedido");
   return `<section><div class="cab"><h2>Respostas para aprovar</h2><button class="botao" data-novo>Novo pedido</button></div>
     ${ps.length ? `<div class="lista">${ps.map(x => itemHTML(x, false)).join("")}</div>` : `<div class="vazio">Nenhuma resposta esperando aprovação.</div>`}</section>
+    <section><div class="cab"><h2>Histórico do que foi resolvido</h2><span class="atual">tempo entre a demanda chegar e sair da lista</span></div>
+      ${kpis(["daniela", "jenifer", "geovana"].map(p => [PESSOAS[p], D.tempo[p].mediana_h == null ? "—" : String(D.tempo[p].mediana_h).replace(".", ",") + " h", `mediana · ${n(D.tempo[p].n)} demandas`]))}
+      <div class="tab-wrap" style="margin-top:12px"><table><thead><tr><th>Demanda</th><th>Responsável</th><th>Origem</th><th>Aberta</th><th>Resolvida</th><th class="n">Horas</th></tr></thead><tbody>
+      ${D.hist.slice(0, 20).map(x => `<tr><td><b>${esc(x.id)}</b></td><td>${esc(PESSOAS[x.pessoa] || x.pessoa)}</td><td>${esc(x.origem)}</td><td class="n">${esc(x.aberta.slice(8) + "/" + x.aberta.slice(5, 7))}</td><td class="n">${esc(x.resolvida.slice(8) + "/" + x.resolvida.slice(5, 7))}</td><td class="n">${String(x.horas).replace(".", ",")}</td></tr>`).join("")}</tbody></table></div>
+      <p class="nota" style="margin-top:8px">Hoje "resolvida" é quando os agentes não veem mais pendência na conversa. Com o registro de cada encaminhamento no painel, este tempo passa a ser o real.</p></section>
     <section><h2>Como funciona</h2><p class="sub">Escolha o tipo de pedido, diga o que precisa e para que vai usar. Os agentes respondem aqui, de hora em hora nos dias úteis, e você aprova, pede nova análise ou não aprova na mesma tela. Nada é enviado a parceiro ou cliente.</p></section>`;
 };
-A.masters = () => `<section><div class="cab"><h2>Masters</h2><span class="atual">clique no cabeçalho para ordenar · clique na linha para ver o detalhe</span></div>${tabelaMasters(ordenar(D.masters), true)}</section>`;
+A.masters_old = () => `<section><div class="cab"><h2>Masters</h2><span class="atual">clique no cabeçalho para ordenar · clique na linha para ver o detalhe</span></div>${tabelaMasters(ordenar(D.masters), true)}</section>`;
+
+const pctChip = nome => { const f = D.ficha[nome] || {}; return f.pct == null ? "" : `<span class="chip ${f.pct_confirmado ? "ok" : "alerta"}">repasse ${String(f.pct).replace(".0", "")}%${f.pct_confirmado ? "" : " · a confirmar"}</span>`; };
+function spark(vals) { const W = 160, H = 34, mx = Math.max(...vals, 1); const pts = vals.map((v, i) => `${(W * i / Math.max(vals.length - 1, 1)).toFixed(1)},${(H - 2 - (H - 6) * v / mx).toFixed(1)}`).join(" ");
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="var(--ouro)" stroke-width="1.6"/></svg>`; }
+A.prazos = () => {
+  const pz = D.prazos, dc = D.docs.filter(d => !S.filtro.parc || d.parceiro === S.filtro.parc), parcs = [...new Set(D.docs.map(d => d.parceiro))].sort();
+  return `<section><div class="cab"><h2>Prazos da Receita</h2><span class="atual">despachos, intimações, CND e manifestações · o mais urgente primeiro</span></div>
+    <div class="tab-wrap"><table><thead><tr><th>Código</th><th>Tipo</th><th>Master</th><th>Responsável</th><th>Prazo</th><th></th></tr></thead><tbody>
+    ${pz.map(p => `<tr><td><b>${esc(p.id)}</b></td><td>${esc(p.tipo)}</td><td>${esc(p.master || "—")}</td><td>${esc(PESSOAS[p.pessoa] || p.pessoa)}</td>
+      <td>${p.restam != null ? `<span class="chip ${p.restam <= 10 ? "erro" : p.restam <= 20 ? "alerta" : "ok"}">faltam ${p.restam} dias</span> ` : ""}<span class="nota">${esc(p.prazo_txt)}</span></td>
+      <td><button class="botao peq" data-prazo="${esc(p.id)}">Montar chamado</button></td></tr>`).join("")}</tbody></table></div>
+    <p class="nota" style="margin-top:8px">A data exata vem do documento (data de ciência). Com o Guardião de Prazos, ela é lida do despacho ou da intimação e os avisos saem com 10, 5 e 2 dias.</p></section>
+  <section><div class="cab"><h2>Documentos por negócio</h2><span class="atual">${n(D.n_docs)} negócios em diagnóstico com algo a conferir · o documento que decide cada tese</span></div>
+    <div class="filtros"><select id="f-parc" aria-label="Filtrar por parceiro"><option value="">Todos os parceiros</option>${parcs.map(p => `<option ${S.filtro.parc === p ? "selected" : ""}>${esc(p)}</option>`).join("")}</select></div>
+    <div class="tab-wrap"><table><thead><tr><th>Caso</th><th>Parceiro</th><th>Etapa</th><th class="n">Dias</th><th>Não consta no HubSpot</th><th class="n">Teses a decidir</th></tr></thead><tbody>
+    ${dc.slice(0, 50).map(d => `<tr class="clic" data-doc="${esc(d.caso)}" tabindex="0"><td><b>${esc(d.caso)}</b></td><td>${esc(d.parceiro)}</td><td>${esc(d.etapa)}</td><td class="n">${n(d.dias)}</td><td>${d.falta.map(x => `<span class="chip alerta">${esc(x)}</span>`).join(" ") || "—"}</td><td class="n">${n(d.decide.length)}</td></tr>`).join("")}</tbody></table></div></section>`;
+};
+A.parceiros = () => {
+  const ms = [...D.masters].sort((a, b) => (D.ficha[b.parceiro]?.comissao_12m || 0) - (D.ficha[a.parceiro]?.comissao_12m || 0)).filter(m => D.ficha[m.parceiro]);
+  const tot = ms.reduce((s, m) => s + (D.ficha[m.parceiro].comissao_12m || 0), 0), pot = ms.reduce((s, m) => s + (D.ficha[m.parceiro].comissao_potencial_aberto || 0), 0);
+  return `${kpis([["Repasse estimado 12 meses", rs(tot), "honorário contratado × % de repasse do parceiro", true], ["Repasse potencial em aberto", rs(pot), "se os negócios abertos fecharem"],
+      ["Parceiros esfriando", n(D.esfriando.length), "sem negócio novo ou ritmo muito abaixo"], ["% divergentes", n(ms.reduce((s, m) => s + (D.ficha[m.parceiro].divergencias || 0), 0)), "negócios com % diferente do cadastro"]])}
+    <section><div class="cab"><h2>Masters</h2><span class="atual">clique para abrir a ficha · % de repasse do cadastro</span></div>
+      <div class="grade">${ms.map(m => { const f = D.ficha[m.parceiro]; return `<div class="bloco parc" data-master="${esc(m.parceiro)}" tabindex="0">
+        <div class="cab" style="margin:0"><h3>${esc(m.parceiro)}</h3><span class="chip ${m.saude >= 75 ? "ok" : m.saude >= 60 ? "alerta" : "erro"}">saúde ${m.saude}</span></div>
+        <div>${pctChip(m.parceiro)}</div>${spark(f.serie.map(x => x[1]))}
+        <div class="mini"><div><span class="rotulo">Repasse 12m</span><b>${rs(f.comissao_12m)}</b></div><div><span class="rotulo">Potencial aberto</span><b>${rs(f.comissao_potencial_aberto)}</b></div><div><span class="rotulo">Honorário 12m</span><b>${rs(f.honorario_12m)}</b></div></div>
+        <p class="nota">${n(m.abertos)} abertos · ${n(f.contratos)} em contrato · ${n(f.conflitos)} conflitos${f.divergencias ? ` · ${n(f.divergencias)} com % diferente do cadastro` : ""}</p></div>`; }).join("")}</div></section>
+    <section><div class="cab"><h2>Esfriando</h2><span class="atual">mensagem de reativação pronta · UFs onde o parceiro já ganha</span></div>
+      <div class="lista">${D.esfriando.map((e, i) => `<article class="item ${e.dias > 90 ? "urg" : "med"}"><span class="tarja"></span><div class="corpo"><div class="meta"><span class="chip">${esc(e.tipo)}</span>${e.uf.length ? `<span>Ganha em ${e.uf.map(esc).join(", ")}</span>` : ""}</div>
+        <span class="t">${esc(e.parceiro)}</span><div class="meta"><span>Sem negócio novo há <span class="num">${n(e.dias)}</span> dias</span>${e.ritmo != null ? `<span>Ritmo <span class="num">${String(e.ritmo).replace(".", ",")}%</span></span>` : ""}<span>${n(e.ganhos_12m)} ganhos em 12 meses</span></div></div>
+        <div class="acoes"><button class="botao peq" data-reativar="${i}">Reativar</button></div></article>`).join("")}</div></section>
+    <section><div class="cab"><h2>Tabela completa</h2><span class="atual">clique no cabeçalho para ordenar</span></div>${tabelaMasters(ordenar(D.masters), true)}</section>`;
+};
+A.busca = () => `<section><h2>Busca</h2><p class="sub">Digite o código do negócio, o parceiro, o segmento ou a UF. Para saber se uma empresa já é de alguém, digite o CNPJ: a página compara só a raiz em código, sem guardar o número.</p>
+    <div class="busca-box"><input type="search" id="q" placeholder="Código, parceiro, segmento, UF ou CNPJ" value="${esc(S.q || "")}" aria-label="Buscar"></div></section>
+  <section id="res-busca">${resBusca()}</section>`;
+function resBusca() {
+  const q = (S.q || "").trim(); if (!q) return `<div class="vazio">Comece a digitar. Exemplo: <b>D&S</b>, <b>Hortifrúti</b>, <b>MG</b> ou um CNPJ.</div>`;
+  if (S.cnpjRes) return S.cnpjRes;
+  const t = q.toLowerCase(), xs = D.busca.filter(b => b[0].includes(t) || b[1].toLowerCase().includes(t) || b[6].toLowerCase().includes(t) || b[5].toLowerCase() === t);
+  return `<div class="cab"><h2>${n(xs.length)} negócio(s)</h2></div><div class="tab-wrap"><table><thead><tr><th>Código</th><th>Parceiro</th><th>Etapa</th><th>Situação</th><th class="n">Valor</th><th>UF</th><th>Segmento</th><th>Criado</th></tr></thead><tbody>
+    ${xs.slice(0, 50).map(b => `<tr><td><b>#${esc(b[0])}</b></td><td>${esc(b[1])}</td><td>${esc(b[2])}</td><td><span class="chip ${b[3] === "ganho" ? "ok" : b[3] === "perdido" ? "" : "ouro"}">${esc(b[3])}</span></td><td class="n">${rs(b[4])}</td><td>${esc(b[5])}</td><td>${esc(b[6])}</td><td class="n">${esc(b[7].slice(8) + "/" + b[7].slice(5, 7) + "/" + b[7].slice(2, 4))}</td></tr>`).join("")}</tbody></table></div>${xs.length > 50 ? `<p class="nota">Mostrando 50. Refine a busca.</p>` : ""}`;
+}
+async function buscaCnpj(q) {
+  const d = q.replace(/\D/g, ""); if (d.length < 8) { S.cnpjRes = null; return; }
+  const r8 = d.padStart(14, "0").slice(0, 8), buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("save:" + r8));
+  const hx = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16), xs = D.busca.filter(b => b[8] === hx);
+  const ps = [...new Set(xs.map(b => b[1]))], abertos = xs.filter(b => b[3] === "aberto"), ganhos = xs.filter(b => b[3] === "ganho");
+  S.cnpjRes = xs.length ? `<div class="bloco"><span class="rotulo ouro">Raiz do CNPJ já existe no HubSpot</span><h3>${n(xs.length)} negócio(s) · ${ps.map(esc).join(", ")}</h3>
+      <p class="sub" style="margin:0">${ganhos.length ? `<b>Já é cliente</b> (${n(ganhos.length)} ganho(s)). ` : ""}${abertos.length ? `<b>${n(abertos.length)} em aberto</b> com ${[...new Set(abertos.map(b => b[1]))].map(esc).join(", ")}. ` : ""}${ps.length > 1 ? "Mais de um canal: conflito a resolver com Operações de Canal." : "Fale com o dono do canal antes de abordar."}</p>
+      <div class="tab-wrap"><table><tbody>${xs.map(b => `<tr><td><b>#${esc(b[0])}</b></td><td>${esc(b[1])}</td><td>${esc(b[2])}</td><td>${esc(b[3])}</td><td class="n">${rs(b[4])}</td></tr>`).join("")}</tbody></table></div></div>`
+    : `<div class="bloco"><span class="rotulo">Raiz do CNPJ</span><h3>Nenhum negócio com esta empresa</h3><p class="sub" style="margin:0">Livre para abordar. Registre a oportunidade no HubSpot com o Master que vai atender.</p></div>`;
+}
+A.biblioteca = () => `<section><div class="cab"><h2>Respostas prontas</h2><span class="atual">troque o que está entre < > antes de enviar</span></div>
+    <div class="grade">${D.biblioteca.respostas.map((r, i) => `<div class="bloco"><h3>${esc(r.situacao)}</h3><textarea id="bib-${i}" rows="4" aria-label="${esc(r.situacao)}">${esc(r.texto)}</textarea><div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="bib-${i}">Copiar</button></div></div>`).join("")}</div></section>
+  <section><div class="cab"><h2>Materiais</h2><span class="atual">abrem no OneDrive (Office Online)</span></div>
+    <div class="docs">${D.biblioteca.materiais.map(m => `<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.nome)}</a>`).join("")}</div></section>`;
 
 /* ---------- gaveta e toast ---------- */
 function gaveta(html) { $("#camada").innerHTML = `<div class="veu" data-fechar></div><aside class="gaveta" role="dialog" aria-modal="true" aria-label="Detalhe">${html}<button class="botao sec" data-fechar>Fechar</button></aside>`; $(".gaveta button, .gaveta [tabindex]")?.focus(); }
@@ -364,11 +440,17 @@ function render() {
   const cont = {caixa: minhas().length, pedidos: D.caixa.filter(x => x.grupo === "Pedido" && !S.feitos.has(x.id)).length};
   $("#abas").innerHTML = ABAS.map(([k, r]) => `<button role="tab" id="tab-${k}" aria-controls="painel" aria-selected="${S.aba === k}" tabindex="${S.aba === k ? 0 : -1}" data-aba="${k}">${r}${cont[k] ? `<span class="badge">${cont[k] > 99 ? "99+" : cont[k]}</span>` : ""}</button>`).join("");
   $("#atual").textContent = "dados de " + D.atualizado;
+  const O = D.operacao, falhas = Object.entries(O.rotinas).filter(([, v]) => !v.ok);
+  $("#saudeop").innerHTML = `<span><span class="pt" style="background:var(--sucesso)"></span>HubSpot ${esc(O.hubspot.slice(8, 10) + "/" + O.hubspot.slice(5, 7) + " " + O.hubspot.slice(11))}</span>
+    <span><span class="pt" style="background:var(--sucesso)"></span>Backup ${esc(O.backup.slice(8) + "/" + O.backup.slice(5, 7))}</span>
+    ${O.email_pausado ? `<span><span class="pt" style="background:var(--alerta)"></span>E-mail pausado: aguardando a TI</span>` : ""}
+    <span><span class="pt" style="background:${falhas.length ? "var(--erro)" : "var(--sucesso)"}"></span>${falhas.length ? `${falhas.length} rotina(s) com falha nas últimas 24 h` : "Rotinas ok nas últimas 24 h"}</span>
+    <button data-saude>Ver rotinas</button>`;
   const main = $("#conteudo"); main.setAttribute("role", "tabpanel"); main.id = "conteudo"; main.setAttribute("aria-labelledby", "tab-" + S.aba);
   const y = scrollY; main.innerHTML = A[S.aba](); if (S.manter) window.scrollTo(0, y); S.manter = false;
 }
 document.addEventListener("click", e => {
-  const t = e.target.closest("button, tr.clic, .veu"); if (!t) return;
+  const t = e.target.closest("button, tr.clic, .parc, .veu"); if (!t) return;
   if (t.dataset.eu) { S.eu = t.dataset.eu; S.aba = "inicio"; try { localStorage.setItem("cp-eu", S.eu); } catch (x) {} render(); return; }
   if (t.dataset.aba) { S.aba = t.dataset.aba; try { localStorage.setItem("cp-aba", S.aba); } catch (x) {} render(); return; }
   if (t.dataset.ir) { S.aba = t.dataset.ir; render(); window.scrollTo(0, 0); return; }
@@ -377,6 +459,28 @@ document.addEventListener("click", e => {
   if ("prontos" in t.dataset) { S.filtro.prontos = !S.filtro.prontos; S.manter = true; render(); return; }
   if (t.dataset.copiar) { const el = document.getElementById(t.dataset.copiar); const txt = el.value ?? el.textContent; navigator.clipboard?.writeText(txt).then(() => toast("Copiado."), () => { el.select?.(); toast("Selecionado: use Copiar do teclado."); }); return; }
   if (t.dataset.glpi) { toast("Protótipo: no painel real o chamado é aberto no GLPI em nome de quem aprovou, assim que a TI liberar o acesso."); return; }
+  if ("saude" in t.dataset) { gaveta(`<span class="rotulo ouro">Saúde da operação</span><h3>Rotinas nas últimas 24 h</h3>${Object.entries(D.operacao.rotinas).map(([k, v]) => par(k, `<span class="chip ${v.ok ? "ok" : "erro"}">${v.ok ? "ok" : "falha"}</span> <span class="nota">${esc(v.quando)} · ${esc(v.msg)}</span>`)).join("")}`); return; }
+  if ("consTodas" in t.dataset) { document.querySelectorAll("input.cons").forEach(c => c.checked = true); return; }
+  if (t.dataset.cons) { const sel = [...document.querySelectorAll("input.cons:checked")].map(c => c.value); if (!sel.length) { toast("Marque pelo menos uma decisão."); return; } sel.forEach(id => S.feitos.add(id)); S.manter = true; render(); toast(`${sel.length} decisão(ões) ${t.dataset.cons === "aprovar" ? "aprovada(s)" : "rejeitada(s)"}. Protótipo: nada foi gravado.`); return; }
+  if (t.dataset.reativar != null && t.dataset.reativar !== "") { const e = D.esfriando[+t.dataset.reativar]; gaveta(`<span class="rotulo ouro">Reativação · ${esc(e.tipo)}</span><h3>${esc(e.parceiro)}</h3>${par("Sem negócio novo", n(e.dias) + " dias")}${par("Ganhos em 12 meses", n(e.ganhos_12m))}${e.uf.length ? par("Onde já ganha", e.uf.map(esc).join(", ")) : ""}
+      <div class="pacote"><h4>Mensagem de reativação <span class="chip">WhatsApp</span></h4><textarea id="pk-reat">Olá, tudo bem? Faz um tempo que não falamos sobre novos casos. Separamos algumas empresas${e.uf.length ? " em " + e.uf.join(", ") : " da sua região"} com perfil parecido com clientes que já ganhamos juntos. Podemos marcar 20 minutos esta semana?</textarea><div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="pk-reat">Copiar mensagem</button><button class="botao sec peq" data-lista>Pedir lista de contas-alvo (JB1)</button></div></div>`); return; }
+  if ("lista" in t.dataset || "reuniao" in t.dataset) { $("#camada").innerHTML = ""; toast("Pedido enviado aos agentes. Protótipo: nada foi gravado."); return; }
+  if (t.dataset.prazo) { const p = D.prazos.find(i => i.id === t.dataset.prazo); gaveta(`<span class="rotulo ouro">Prazo da Receita</span><h3>${esc(p.id)} · ${esc(p.tipo)}</h3>${par("Master", esc(p.master || "—"))}${par("Prazo", esc(p.prazo_txt))}
+      <div class="pacote"><h4>Chamado no GLPI <span class="chip">Jurídico > Comunicados RFB</span></h4><textarea id="pk-rfb" rows="9">DADOS
+1) Setor Solicitante: MASTER
+2) Parceiro Solicitante: ${esc(p.master || "<Master>")}
+INFORMAÇÕES GERAIS
+1) Assunto: ${esc(p.tipo)} de <EMPRESA>
+2) Classe: Interna
+3) Informações Adicionais: data de ciência <DATA>; autorização do cliente para seguir (ou não) com a manifestação: <SIM/NÃO>
+4) Documentos: despacho ou intimação, print do e-CAC</textarea>
+      <div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-glpi="${esc(p.id)}">Abrir chamado no GLPI</button><button class="botao sec peq" data-copiar="pk-rfb">Copiar descrição</button></div></div>
+      <div class="pacote"><h4>Antes de enviar</h4><label class="check" for="ck-rfb1"><input type="checkbox" id="ck-rfb1"><span>Confirmar a data de ciência no documento</span></label><label class="check" for="ck-rfb2"><input type="checkbox" id="ck-rfb2"><span>Ter a autorização do cliente para seguir (o Jurídico pede)</span></label><label class="check" for="ck-rfb3"><input type="checkbox" id="ck-rfb3"><span>Com menos de 10 dias, marcar urgência máxima</span></label></div>`); return; }
+  if (t.dataset.doc) { const d = D.docs.find(i => i.caso === t.dataset.doc); const falta = d.falta.join(", ") + (d.decide.length ? (d.falta.length ? "; " : "") + [...new Set(d.decide.map(x => x.doc))].join("; ") : "");
+    gaveta(`<span class="rotulo ouro">Documentos · ${esc(d.etapa)}</span><h3>${esc(d.caso)}</h3>${par("Parceiro", esc(d.parceiro))}${par("Na etapa há", n(d.dias) + " dias")}
+      <div class="pacote"><h4>No card do HubSpot</h4>${Object.entries(d.tem).map(([k, v]) => `<div class="check"><span class="chip ${v ? "ok" : "alerta"}">${v ? "consta" : "não consta"}</span><span>${esc(k)}</span></div>`).join("")}</div>
+      ${d.decide.length ? `<div class="pacote"><h4>Documento que decide cada tese <span class="chip">Revisor</span></h4>${d.decide.map(x => `<div class="check"><span class="chip ${x.prio === "alta" ? "erro" : ""}">${esc(x.prio || "")}</span><span><b>${esc(x.tese)}</b><br><span class="nota">${esc(x.doc)}</span></span></div>`).join("")}</div>` : ""}
+      <div class="pacote"><h4>Cobrança ao parceiro <span class="chip">WhatsApp</span></h4><textarea id="pk-doc">Olá, tudo bem? Para seguirmos com o caso ${esc(d.caso)}, precisamos de: ${esc(falta)}. Consegue pedir ao cliente e me encaminhar por aqui?</textarea><div class="acoes" style="justify-content:flex-start"><button class="botao peq" data-copiar="pk-doc">Copiar mensagem</button></div></div>`); return; }
   if ("urg" in t.dataset) { S.filtro.so_urg = !S.filtro.so_urg; S.manter = true; render(); return; }
   if (t.dataset.ord) { const k = t.dataset.ord; S.ordem = {campo: k, asc: S.ordem.campo === k ? !S.ordem.asc : k === "parceiro"}; S.manter = true; render(); return; }
   if ("fechar" in t.dataset) { $("#camada").innerHTML = ""; return; }
@@ -390,13 +494,21 @@ document.addEventListener("click", e => {
   if (t.dataset.decidir || t.dataset.caso) { const x = D.geovana.lote.find(i => i.caso === (t.dataset.decidir || t.dataset.caso)); if (x) gaveta(`<span class="rotulo ouro">Recuperador · ${esc(x.tipo)}</span><h3>${esc(x.caso)}</h3>${par("Master", esc(x.parceiro))}${par("Segmento", esc(x.segmento) + " · " + esc(x.uf))}${par("Esperado", `<span class="num">${rs(x.esperado)}</span>`)}${par("Parecidos", esc(x.taxa))}${par("Aderência", esc(x.aderencia))}${par("Documentos", esc(x.docs || "—"))}
       <label for="d-motivo">Motivo ou observação<input type="text" id="d-motivo"></label><div class="acoes" style="justify-content:flex-start"><button class="botao" data-feito="${esc(x.caso)}">Aprovar reanálise</button><button class="botao sec" data-feito="${esc(x.caso)}">Precisa de dado</button><button class="botao sec" data-feito="${esc(x.caso)}">Vetar</button></div>`); return; }
   if (t.dataset.master) { const m = D.masters.find(i => i.parceiro === t.dataset.master); if (m) gaveta(`<span class="rotulo ouro">Master</span><h3>${esc(m.parceiro)}</h3>${par("Saúde", `<span class="num">${m.saude}</span>`)}${par("Abertos", `${n(m.abertos)} · <span class="num">${rs(m.abertos_rs)}</span>`)}${par("Parados", n(m.abertos_parados))}${par("Ganhos 90 dias", `${n(m.ganhos_90d)} · <span class="num">${rs(m.fechado_90d_rs)}</span>`)}${par("Fechado 12 meses", `<span class="num">${rs(m.fechado_12m_rs)}</span>`)}${par("Conversão 12 meses", String(m.conversao_12m_pct ?? "—").replace(".", ",") + "%")}${par("Ciclo mediano", n(m.ciclo_mediano_dias) + " dias")}${par("Honorário líquido 12m", `<span class="num">${rs(m.honorario_liquido_12m_rs)}</span>`)}${par("Repasses", `OK ${n((m.repasse || {}).ok)} · revisar ${n((m.repasse || {}).revisar)} · bloqueados ${n((m.repasse || {}).bloqueado)}`)}${par("Itens na caixa", n(m.alertas + m.demandas))}
-      <p class="sub">Esta ficha é a base da futura ficha 360 do parceiro (PRM).</p>`); return; }
+      ${(() => { const f = D.ficha[m.parceiro]; return f ? `<div class="pacote"><h4>Repasse ao parceiro ${pctChip(m.parceiro)}</h4>${par("Honorário 12 meses", `<span class="num">${rs(f.honorario_12m)}</span>`)}${par("Repasse 12 meses", `<span class="num">${rs(f.comissao_12m)}</span>`)}${par("Potencial em aberto", `<span class="num">${rs(f.comissao_potencial_aberto)}</span>`)}${f.divergencias ? par("Atenção", `${n(f.divergencias)} negócio(s) com % diferente do cadastro`) : ""}
+        <p class="nota">Honorário contratado × % de repasse do cadastro. Onde o % de honorário da Save não está no negócio, usa o típico do parceiro (${n(f.base_estimada)} de ${n(f.base_real + f.base_estimada)}).</p></div>
+      <div class="pacote"><h4>Ganhos por mês</h4>${barras(f.serie.map(([k, v]) => ({r: mesRot(k), v})), {fmt: rs, alt: 170})}</div>
+      <div class="pacote"><h4>Abertos por etapa</h4>${hbarras(f.etapas.map(([r, v]) => ({r, v})))}</div>
+      ${f.uf.length ? `<div class="pacote"><h4>Onde já ganha</h4><div>${f.uf.map(([u, q]) => `<span class="chip">${esc(u)} · ${q}</span>`).join(" ")}</div></div>` : ""}
+      <div class="acoes" style="justify-content:flex-start"><button class="botao" data-reuniao>Preparar reunião (briefing DM1)</button></div>` : ""; })()}
+      <p class="sub">Base da futura ficha 360 do parceiro (PRM).</p>`); return; }
 });
+document.addEventListener("change", e => { if (e.target.id === "f-parc") { S.filtro.parc = e.target.value; S.manter = true; render(); } });
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") $("#camada").innerHTML = "";
-  if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.clic")) { e.preventDefault(); e.target.click(); }
+  if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.clic, .parc")) { e.preventDefault(); e.target.click(); }
   if (e.target.matches('[role="tab"]') && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { const i = ABAS.findIndex(a => a[0] === S.aba), j = (i + (e.key === "ArrowRight" ? 1 : ABAS.length - 1)) % ABAS.length; S.aba = ABAS[j][0]; render(); document.getElementById("tab-" + S.aba).focus(); }
 });
-document.addEventListener("input", e => { if (e.target.id === "busca") { S.filtro.busca = e.target.value; const pos = e.target.selectionStart; S.manter = true; render(); const b = $("#busca"); b.focus(); b.setSelectionRange(pos, pos); } });
+document.addEventListener("input", async e => {
+  if (e.target.id === "q") { S.q = e.target.value; S.cnpjRes = null; if (/\d{8,}/.test(S.q.replace(/\D/g, "")) && /^[\d.\/\-\s]+$/.test(S.q)) await buscaCnpj(S.q); $("#res-busca").innerHTML = resBusca(); return; } if (e.target.id === "busca") { S.filtro.busca = e.target.value; const pos = e.target.selectionStart; S.manter = true; render(); const b = $("#busca"); b.focus(); b.setSelectionRange(pos, pos); } });
 render();
 </script>

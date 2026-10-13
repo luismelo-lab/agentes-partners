@@ -1,0 +1,84 @@
+{
+ "_fonte": "Percentuais oficiais de repasse informados pelo Luis em 13/10/2026 (cadastro dos parceiros no HubSpot). Onde confirmado: true, o painel aplica este % em todos os negócios do parceiro e aponta quando o % do negócio é diferente. ASSECONT segue inferido dos negócios, a confirmar.",
+ "parceiros": {
+  "AGILE": {
+   "pct_parceiro": 50,
+   "consistencia_pct": 94,
+   "base_negocios": 17,
+   "honorario_save_tipico_pct": 30.0,
+   "confirmado": true,
+   "pct_inferido": 50.0,
+   "informado_como": "Agile"
+  },
+  "ASSECONT": {
+   "pct_parceiro": 30.0,
+   "consistencia_pct": 86,
+   "base_negocios": 7,
+   "honorario_save_tipico_pct": 25.3,
+   "confirmado": false
+  },
+  "COSTA e GAUDENCIO": {
+   "pct_parceiro": 30,
+   "consistencia_pct": 100,
+   "base_negocios": 46,
+   "honorario_save_tipico_pct": 30.0,
+   "confirmado": true,
+   "pct_inferido": 30.0,
+   "informado_como": "Costa & Gaudêncio"
+  },
+  "D&S": {
+   "pct_parceiro": 50,
+   "consistencia_pct": 79,
+   "base_negocios": 298,
+   "honorario_save_tipico_pct": 20.0,
+   "confirmado": true,
+   "pct_inferido": 50.0,
+   "informado_como": "D&S"
+  },
+  "EMPRESARIAL CARDOSO": {
+   "pct_parceiro": 50,
+   "consistencia_pct": 57,
+   "base_negocios": 21,
+   "honorario_save_tipico_pct": 30.0,
+   "confirmado": true,
+   "pct_inferido": 50.0,
+   "informado_como": "Gilberto Cardoso"
+  },
+  "G.S.H": {
+   "pct_parceiro": 50,
+   "consistencia_pct": 51,
+   "base_negocios": 55,
+   "honorario_save_tipico_pct": 20.0,
+   "confirmado": true,
+   "pct_inferido": 30.0,
+   "informado_como": "Marcelo Barros"
+  },
+  "GERSON": {
+   "pct_parceiro": 30,
+   "consistencia_pct": 75,
+   "base_negocios": 4,
+   "honorario_save_tipico_pct": 25.0,
+   "confirmado": true,
+   "pct_inferido": 10.0,
+   "informado_como": "Gerson"
+  },
+  "JGM": {
+   "pct_parceiro": 40,
+   "consistencia_pct": 92,
+   "base_negocios": 160,
+   "honorario_save_tipico_pct": 30.0,
+   "confirmado": true,
+   "pct_inferido": 30.0,
+   "informado_como": "Mara (Eva Jucemara)"
+  },
+  "ORTECONTE": {
+   "pct_parceiro": 25,
+   "consistencia_pct": 95,
+   "base_negocios": 19,
+   "honorario_save_tipico_pct": 30.0,
+   "confirmado": true,
+   "pct_inferido": 25.0,
+   "informado_como": "Orteconte"
+  }
+ }
+}

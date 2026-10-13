@@ -185,6 +185,127 @@ NT = {"B": "Manutenção e ressarcimento", "CST": "Erro de CST", "EX_ICMS": "Exc
 for t in por_tese: t["tese"] = NT.get(t["tese"], t["tese"])
 
 for x in caixa: x["pacote"] = pacote(x)
+# ================= ampliação: tudo o que já temos de dados =================
+import hashlib
+PCT = J(os.path.join(AP, "departamentos/operacoes-canal/percentual-parceiros.json"))["parceiros"]  # % oficial de repasse (cadastro dos parceiros)
+pc = lambda v: (float(v) * (100 if float(v) <= 1 else 1)) if v not in (None, "") else None
+NOMES_M = {m["parceiro"] for m in masters}
+def comissao(n):
+    """Honorário contratado (valor × % Save) × % do parceiro. Faltando, usa o típico do cadastro (marcado como estimado)."""
+    p = PCT.get(n.get("parceiro") or "", {}); v = n.get("valor") or 0
+    hs = pc(n.get("hContr")); est = False
+    if not hs: hs = p.get("honorario_save_tipico_pct"); est = True
+    hp_neg = pc(n.get("hParc"))
+    if p.get("confirmado"): hp = p["pct_parceiro"]                  # % oficial do cadastro vale para todos os negócios
+    else:
+        hp = hp_neg
+        if not hp: hp = p.get("pct_parceiro"); est = True
+    if not (v and hs and hp): return None, None, est
+    hon = v * hs / 100; return hon, hon * hp / 100, est
+# ficha 360 por parceiro: série 12m, abertos por etapa, honorário e comissão (real × estimada)
+ini12 = (HOJE.replace(day=1) - timedelta(days=330)).replace(day=1).isoformat()[:7]
+ficha = {}
+for nome in NOMES_M:
+    ns = [n for n in HB if n.get("parceiro") == nome]
+    s = collections.Counter(); hon = com = com_est = pot = 0.0; n_est = n_real = diverg = 0
+    for n in ns:
+        if n["status"] == "ganho" and (n.get("fechado") or "")[:7] >= ini12:
+            s[n["fechado"][:7]] += n.get("valor") or 0
+            h, c, e = comissao(n)
+            if c: hon += h; com += c; n_est += e; n_real += not e
+            hn = pc(n.get("hParc")); po = PCT.get(nome, {})
+            if po.get("confirmado") and hn and abs(hn - po["pct_parceiro"]) > 0.5: diverg += 1
+        if n["status"] == "aberto":
+            h, c, e = comissao(n); pot += c or 0
+    ficha[nome] = {"serie": [[k, round(s.get(k, 0))] for k in sorted({x["mes"] for x in serie})[-12:]],
+                   "etapas": collections.Counter(n["etapa"] for n in ns if n["status"] == "aberto").most_common(6),
+                   "honorario_12m": round(hon), "comissao_12m": round(com), "comissao_potencial_aberto": round(pot), "base_real": n_real, "base_estimada": n_est, "divergencias": diverg,
+                   "pct": PCT.get(nome, {}).get("pct_parceiro"), "pct_confirmado": PCT.get(nome, {}).get("confirmado"), "pct_consistencia": PCT.get(nome, {}).get("consistencia_pct"),
+                   "uf": cobertura.get(nome, []), "contratos": sum(1 for n in ns if n["status"] == "aberto" and n["etapa"] in ("Contrato Enviado", "Contrato Assinado", "Pendência Fechamento")),
+                   "conflitos": sum(v for k, v in CF.get("pares_de_canais", {}).items() if nome in k)}
+# parceiros esfriando: Masters com ritmo muito abaixo ou sem negócio novo; indicadores fora do roster que pararam
+esfriando = [{"parceiro": m["parceiro"], "tipo": "Master", "dias": m["dias_sem_negocio"], "ritmo": m["ritmo_valor_vs_media_trimestral_pct"], "ganhos_12m": m["ganhos_12m"],
+              "uf": [u for u, _ in cobertura.get(m["parceiro"], [])][:3]}
+             for m in masters if (m["ritmo_valor_vs_media_trimestral_pct"] or 0) < -50 or (m["dias_sem_negocio"] or 0) > 30]
+ind = collections.defaultdict(list)
+for n in HB:
+    pb = n.get("parceiro_bruto") or ""
+    if n.get("parceiro", "").startswith("Outros") and pb: ind[pb].append(n)
+for pb, ns in ind.items():
+    g12 = [n for n in ns if n["status"] == "ganho" and (n.get("fechado") or "") >= (HOJE - timedelta(days=365)).isoformat()]
+    ult = max((n.get("criado") or "") for n in ns)
+    if len(g12) >= 2 and dias(ult) and dias(ult) > 60:
+        esfriando.append({"parceiro": "Indicador #" + hashlib.sha1(pb.encode()).hexdigest()[:4].upper(), "tipo": "Indicador", "dias": dias(ult), "ritmo": None, "ganhos_12m": len(g12), "uf": []})
+esfriando.sort(key=lambda x: -(x["dias"] or 0))
+# agenda de prazos (assunto de Receita detectado na triagem; data exata a confirmar no documento)
+prazos = []
+for k, i in TRI.items():
+    t = (i.get("o_que_pede") or "") + " " + (i.get("entrega") or "")
+    mt = re.search(r"despacho|intima|manifesta|cnd|certid|per/?dcomp|indeferi|compensa[çc][ãa]o de of", t, re.I)
+    if not mt: continue
+    tipo = {"despacho": "Despacho decisório", "intima": "Intimação", "manifesta": "Manifestação de inconformidade", "cnd": "CND", "certid": "CND", "indeferi": "PER indeferido"}.get(mt.group(0).lower()[:8].rstrip(), "Comunicado da Receita")
+    prazos.append({"id": "R-" + hashlib.sha1(k.encode()).hexdigest()[:5].upper(), "pessoa": k.split("|")[1], "master": i.get("master"), "tipo": tipo,
+                   "prazo_txt": i.get("prazo") or "a confirmar no documento", "rota": anon(i.get("rota") or "")[:80]})
+vistos_p = {}; [vistos_p.setdefault((p["master"], p["tipo"]), p) for p in prazos]; prazos = list(vistos_p.values())
+prazos.insert(0, {"id": "R-CAFE", "pessoa": "geovana", "master": "—", "tipo": "PER indeferido · manifestação de inconformidade", "prazo_txt": "≈ 04/11/2026 (backlog)", "data": "2026-11-04", "rota": "Jurídico > Comunicados RFB"})
+for p in prazos:
+    if p.get("data"): p["restam"] = (date.fromisoformat(p["data"]) - HOJE).days
+# documentos por negócio (diagnóstico e apresentação): o que já está no card e o documento que decide cada lacuna
+lac = collections.defaultdict(list)
+for l in RV.get("lacunas", []):
+    if l.get("documento que decide"): lac[re.sub(r"\D", "", l.get("link") or "")[-11:]].append((l.get("tese"), l.get("documento que decide"), l.get("prioridade")))
+docs_neg = []
+for n in HB:
+    if n["status"] != "aberto" or n["etapa"] not in ("Apresentação de Diagnóstico", "Em Diagnóstico", "Análise de Documentos", "Documentação Pendente", "Análise com Pendência", "Estudo Inicial"): continue
+    x = n.get("extras") or {}
+    tem = {"Procuração e-CAC": bool(x.get("ecac")), "Anexo de diagnóstico": bool(x.get("anexo_diagnostico")), "Parecer RT": bool(x.get("parecer_rt")), "Parecer jurídico": bool(x.get("parecer_juridico"))}
+    falta = [k for k, v in tem.items() if not v and k != "Parecer jurídico"]
+    decide = lac.get(str(n["id"])[-11:], [])[:3]
+    if falta or decide:
+        docs_neg.append({"caso": cod(n["id"]), "parceiro": n.get("parceiro"), "etapa": n["etapa"], "dias": dias(x.get("entrou_etapa") or n.get("criado")), "tem": tem, "falta": falta,
+                         "decide": [{"tese": t, "doc": d, "prio": pr} for t, d, pr in decide], "valor": n.get("valor") or 0})
+docs_neg.sort(key=lambda d: (-len(d["decide"]), -(d["dias"] or 0)))
+# busca única: código, parceiro, etapa e raiz do CNPJ em hash (o CNPJ não vai para a página)
+H8 = lambda r: hashlib.sha256(("save:" + r).encode()).hexdigest()[:16]
+busca = []
+for n in HB:
+    c = re.sub(r"\D", "", str((n.get("extras") or {}).get("cnpj") or "")); r8 = c.zfill(14)[:8] if c else None
+    busca.append([str(n["id"])[-5:], n.get("parceiro") or "", n.get("etapa") or "", n["status"], round(n.get("valor") or 0), (n.get("extras") or {}).get("uf") or "", (n.get("segmento") or "")[:40], (n.get("criado") or "")[:10], H8(r8) if r8 else ""])
+# histórico: demandas resolvidas e tempo até resolver
+hist = []
+for d in DM:
+    if d["status"] != "resolvida": continue
+    fim = next((e["quando"] for e in reversed(d.get("eventos") or []) if "resolv" in e.get("evento", "")), d.get("atualizada_em"))
+    if not fim or not d.get("aberta_em"): continue
+    h = (datetime.fromisoformat(fim[:16]) - datetime.fromisoformat(d["aberta_em"][:16])).total_seconds() / 3600
+    hist.append({"id": d["id"], "pessoa": d["pessoa"], "origem": d.get("origem"), "aberta": d["aberta_em"][:10], "resolvida": fim[:10], "horas": round(max(h, 0), 1)})
+hist.sort(key=lambda x: x["resolvida"], reverse=True)
+med = lambda xs: sorted(xs)[len(xs) // 2] if xs else None
+tempo = {p: {"mediana_h": med([x["horas"] for x in hist if x["pessoa"] == p]), "n": sum(1 for x in hist if x["pessoa"] == p)} for p in ("daniela", "jenifer", "geovana", "luis")}
+# saúde da operação (logs das rotinas nas últimas 24 h)
+saude_op = {}
+desde = (datetime(2026, 10, 13, 15, 0) - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M:%S")
+for l in open(os.path.join(AP, "logs/partners.log"), errors="ignore"):
+    m_ = re.match(r"(\S+ \S+) \[([^\]:]+)[^\]]*\] (.*)", l.strip())
+    if m_ and m_.group(1) >= desde: saude_op[m_.group(2)] = {"quando": m_.group(1)[5:16], "ok": "ERRO" not in m_.group(3), "msg": m_.group(3)[:80]}
+operacao = {"rotinas": saude_op, "email_pausado": os.path.exists(os.path.join(AP, ".email-pausado")), "hubspot": BI.get("baixado_em"),
+            "backup": re.search(r"(\d{4}-\d{2}-\d{2})", sorted(glob.glob(os.path.expanduser("~/Library/CloudStorage/OneDrive-SAVECOMPANY/Backups/agentes-partners/*.tar.gz")))[-1]).group(1)}
+# biblioteca: respostas-modelo e materiais
+import urllib.parse
+web = lambda rel: "https://gruposave-my.sharepoint.com/my?id=" + urllib.parse.quote("/personal/luis_melo_savecompany_com_br/Documents/" + rel, safe="")
+biblioteca = {"respostas": [
+    {"situacao": "Contrato enviado e não assinado", "texto": "Olá, tudo bem? O contrato de <EMPRESA> foi enviado há <N> dias e ainda não aparece como assinado. Você consegue confirmar com o cliente se ficou alguma dúvida ou se ele precisa de um novo envio?"},
+    {"situacao": "Diagnóstico em andamento", "texto": "Olá, tudo bem? Sobre <EMPRESA>: o caso está em análise e já pedimos ao time técnico a previsão. Assim que tivermos o retorno, te aviso."},
+    {"situacao": "Pedido recebido e encaminhado", "texto": "Olá, tudo bem? Recebi o seu pedido e já encaminhei ao time responsável. Te retorno com a posição até amanhã."},
+    {"situacao": "Documento pendente", "texto": "Olá, tudo bem? Para seguirmos com <EMPRESA>, precisamos de: <DOCUMENTOS>. Consegue pedir ao cliente e me encaminhar por aqui?"},
+    {"situacao": "Reativação de parceiro", "texto": "Olá, tudo bem? Faz um tempo que não falamos sobre novos casos. Separamos algumas empresas da sua região com perfil parecido com clientes que já ganhamos juntos. Podemos marcar 20 minutos esta semana?"},
+    {"situacao": "Comunicado da Receita recebido", "texto": "Olá, tudo bem? Recebemos o comunicado da Receita de <EMPRESA>. Para o Jurídico seguir (ou não) com a manifestação, precisamos da autorização do cliente e da data de ciência. Consegue confirmar?"}],
+  "materiais": [{"nome": "Kit Crédito Internacional (rascunho)", "link": web("03 · Produtos e Projetos/Crédito Internacional/Marketing")},
+                {"nome": "Programa de Parceiros", "link": web("01 · Comercial e Parceiros/Programa de Parceiros")},
+                {"nome": "Manual dos Agentes", "link": web("04 · Gestão, Metas e Estratégia/Central de Agentes")},
+                {"nome": "Relatórios das áreas", "link": web("01 · Comercial e Parceiros/Relatórios das áreas")},
+                {"nome": "Padrão de marca (logos e modelos)", "link": web("06 · Marketing e Apresentações/Marca")}]}
+
 ev_por = collections.Counter((e["pessoa"], e["tipo"]) for e in EV)
 P = {
     "atualizado": "13/10/2026 07:32", "exemplo": True,
@@ -203,6 +324,8 @@ P = {
     "geovana": {"lote": lote, "fila": RI.get("fila_total"), "esperado_fila": RI.get("honorario_esperado_fila_rs"), "esperado_lote": RI.get("honorario_esperado_lote_rs"),
                 "decididas": RI.get("decididas"), "revisor": {k: RV["resumo"].get(k) for k in ("selecionados", "revisados", "lacunas")} | {"alta": sum(t["alta"] for t in por_tese)},
                 "por_tese": por_tese, "diag_parado": ev_por[("geovana", "diagnostico_parado")], "aprov_parada": sum(v for (p, t), v in ev_por.items() if t == "aprovacao_parada")},
+    "ficha": ficha, "esfriando": esfriando, "prazos": prazos, "docs": docs_neg[:120], "n_docs": len(docs_neg), "busca": busca, "hist": hist[:80], "tempo": tempo,
+    "operacao": operacao, "biblioteca": biblioteca, "conselho": [{"id": c["id"], "data": c["data"], "texto": c["texto"][:160]} for c in PO.get("conselho", [])],
 }
 json.dump(P, open(os.path.join(AQUI, "dados.json"), "w", encoding="utf-8"), ensure_ascii=False, default=str)
 print("caixa:", len(P["caixa"]), collections.Counter(x["pessoa"] for x in P["caixa"]), "· masters:", len(masters), "· lote:", len(lote), "· bytes:", os.path.getsize(os.path.join(AQUI, "dados.json")))
