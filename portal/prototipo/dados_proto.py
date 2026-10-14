@@ -535,7 +535,7 @@ for k, v in J(os.path.join(AP, "registro/chamados-propostos.json")).items():
 chamados_v7.sort(key=lambda c: ({"proposto": 0, "aprovado": 1, "aprovado_manual": 2, "aberto": 3}.get(c["status"], 4), -(c["urgencia"] or 0)))
 pedidos_v7 = [(lambda d: {**d, "id": os.path.basename(f)[:-5]})((lambda d: d.get("data", d))(J(f))) for f in glob.glob(os.path.join(AQUI, "db/pedidos/*.json"))]
 for p in CR.values():
-    if p.get("status") in ("descartado",) or not p.get("codigo"): continue
+    if p.get("status") in ("descartado",) or not p.get("codigo") or p["id"] in {x.get("pid") for x in pedidos_v7}: continue
     pedidos_v7.append({"id": p["id"], "pid": p["id"], "codigo": p.get("codigo"), "status": p.get("status"), "para": p.get("pessoa"), "solicitante": p.get("pessoa"),
                        "criado_em": p.get("recebido"), "campos": p.get("campos") if isinstance(p.get("campos"), dict) else {}, "resposta": p.get("resposta")})
 

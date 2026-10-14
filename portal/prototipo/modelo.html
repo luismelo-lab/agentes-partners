@@ -278,6 +278,9 @@ label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
 .cf { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; margin-top: 1px; font: 600 12px var(--sans); }
 .cf svg { width: 12px; height: 12px; } .cf.ok { background: rgba(68,198,83,.15); color: var(--sucesso); } .cf.at { background: rgba(232,179,74,.15); color: var(--alerta); } .cf.nd { background: var(--elevado); color: var(--texto-3); }
 .cf-at { color: var(--alerta); font-size: 13px; }
+.duas-col { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.form-pedido { gap: 14px; } .form-pedido h2 { font-size: 17px; margin: 0; }
+@media (max-width: 1099px) { .duas-col { grid-template-columns: minmax(0, 1fr); } }
 .resposta-md p { margin: 0 0 8px; } .resposta-md ul { margin: 0 0 8px; padding-left: 20px; }
 @media (max-width: 1099px) { .tarefa-btn { justify-content: center; padding: 0; } .tarefa-btn span { display: none; } }
 @media (max-width: 760px) {
@@ -639,19 +642,27 @@ A.resultados = () => { const K = D.kpi, wr = D.winrate.slice(-12);
 const ST_PED = {novo: ["Na fila", "alerta"], em_analise: ["Em análise", "alerta"], aguardando_aprovacao: ["Pronto: aprovar", "ouro"], nova_analise: ["Nova análise pedida", "alerta"], aprovado: ["Aprovado", "ok"], nao_aprovado: ["Não aprovado", ""], concluido: ["Concluído", "ok"]};
 const pedSt = p => (S.ped[p.id] || {}).status || p.status;
 const mdH = t => { let h = "", ul = false; for (const l of String(t || "").split("\n")) { let x = esc(l.trim()).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>"); if (!x) continue; if (x.startsWith("- ")) { if (!ul) { h += "<ul>"; ul = true; } h += `<li>${x.slice(2)}</li>`; continue; } if (ul) { h += "</ul>"; ul = false; } h += `<p>${x}</p>`; } return h + (ul ? "</ul>" : ""); };
-A.pedidos = () => { const sub = S.filtro.psub || "acompanhar", f = S.filtro.pf || "todos";
+A.pedidos = () => { const f = S.filtro.pf || "meus";
   const ps = D.pedidos.filter(p => f === "todos" || (f === "meus" ? p.solicitante === S.eu : p.para === S.eu)).sort((a, b) => String(b.criado_em).localeCompare(String(a.criado_em)));
-  const cels = [...new Set(D.catalogo.map(c => c.celula))];
-  return `<div class="filtros" role="tablist">${[["acompanhar", "Acompanhar pedidos"], ["pedir", "Fazer um pedido"]].map(([k, r]) => `<button data-psub="${k}" aria-pressed="${sub === k}">${r}</button>`).join("")}</div>
-    ${sub === "pedir" ? `
-      ${cels.map(cl => `<section><div class="cab"><h2>${esc(cl)}</h2></div><div class="grade-3">${D.catalogo.filter(c => c.celula === cl).map(c => `<div class="bloco cat"><span class="cod">${esc(c.codigo)}</span><h3>${esc(c.rotulo)}</h3><p class="tese"><b>O que volta:</b> ${esc(c.entrega)}</p><p class="nota">Informe: ${esc(c.precisa.join(", "))}</p><div><button class="botao sec peq" data-pedir="${esc(c.codigo)}">Pedir</button></div></div>`).join("")}</div></section>`).join("")}`
-    : `<section><div class="filtros" role="group" aria-label="Filtro">${[["meus", "Que eu pedi"], ["celula", "Para a minha célula"], ["todos", "Todos"]].map(([k, r]) => `<button data-pf="${k}" aria-pressed="${f === k}">${r}</button>`).join("")}</div>
-      ${ps.length ? `<div class="lista">${ps.map((p, i) => { const [rot, cl] = ST_PED[pedSt(p)] || [pedSt(p), ""]; return `<article class="item ${pedSt(p) === "aguardando_aprovacao" ? "" : "leve"}"><span class="tarja st-${pedSt(p) === "aguardando_aprovacao" ? "proposto" : ""}" aria-hidden="true"></span><div class="corpo">
-        <span class="t">${esc((p.campos || {}).precisa || p.codigo)}</span><div class="meta"><span class="num">${esc(p.pid || p.id)}</span><span>${esc(p.codigo)}</span>${(p.campos || {}).master ? `<span>· ${esc(p.campos.master)}</span>` : ""}<span>· pedido por ${esc(PESSOAS[p.solicitante] || "—")} em ${dt(String(p.criado_em || ""))}</span></div>
-        <div class="meta"><span class="chip ${cl}">${esc(rot)}</span>${p.resposta ? `<span class="chip">${ico("ok")}Resposta versão ${esc(p.resposta.versao || 1)}</span>` : ""}</div></div><span class="val"></span>
-        <div><button class="botao ${pedSt(p) === "aguardando_aprovacao" && i === 0 ? "" : "sec"} peq" data-pedido="${esc(p.id)}">${p.resposta ? "Ver a resposta" : "Ver"}</button></div></article>`; }).join("")}</div>` : `<div class="vazio">${ico("info")}<span>Nenhum pedido aqui ainda. <button class="botao sec peq" data-psub="pedir">Fazer um pedido</button></span></div>`}</section>
-    <section><details class="grp"><summary><div class="grupo-tit">Tempo até resolver, por pessoa</div></summary>
-      <div class="kpis">${["daniela", "jenifer", "geovana"].map(p => kpi({r: PESSOAS[p], v: D.tempo[p].mediana_h == null ? "—" : String(D.tempo[p].mediana_h).replace(".", ",") + " h", d: `mediana de ${n(D.tempo[p].n)} demandas resolvidas`})).join("")}</div></details></section>`}`; };
+  return `<div class="duas-col">
+    <section class="bloco form-pedido"><h2>Novo pedido aos agentes</h2>
+      <label for="p-precisa">O que você precisa?<textarea id="p-precisa" rows="7" maxlength="3000" placeholder="Escreva com as suas palavras. Ex.: quero a lista dos clientes da D&S com parecer zerado para enviar ao parceiro."></textarea></label>
+      <div class="mini" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+        <label for="p-master">Parceiro (opcional)<select id="p-master"><option value="">—</option><option>Todos</option>${D.masters.map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
+        <label for="p-cliente">Cliente, CNPJ ou link (opcional)<input type="text" id="p-cliente" maxlength="300"></label>
+        <label for="p-uso">Para que vai usar<select id="p-uso">${["Resposta ao parceiro", "Reunião", "Decisão interna", "Prospecção", "Levantamento", "Outro"].map(x => `<option>${x}</option>`).join("")}</select></label>
+        <label for="p-formato">Como quer receber<select id="p-formato">${["Resumo na tela", "Planilha", "Word", "Rascunho de mensagem"].map(x => `<option>${x}</option>`).join("")}</select></label>
+        <label for="p-prazo">Prazo (opcional)<input type="text" id="p-prazo" placeholder="dd/mm"></label>
+      </div>
+      <label for="p-contexto">Mais contexto (opcional)<textarea id="p-contexto" rows="3" maxlength="1500" placeholder="Não escreva dados bancários, CPF ou senhas."></textarea></label>
+      <div><button class="botao" data-penviar>Enviar pedido</button></div></section>
+    <section><div class="cab"><h2>Pedidos</h2></div>
+      <div class="filtros" role="group" aria-label="Filtro">${[["meus", "Que eu pedi"], ["celula", "Para mim"], ["todos", "Todos"]].map(([k, r]) => `<button data-pf="${k}" aria-pressed="${f === k}">${r}</button>`).join("")}</div>
+      ${ps.length ? `<div class="lista">${ps.map(p => { const [rot, cl] = ST_PED[pedSt(p)] || [pedSt(p), ""]; return `<article class="item ${pedSt(p) === "aguardando_aprovacao" ? "" : "leve"}"><span class="tarja st-${pedSt(p) === "aguardando_aprovacao" ? "proposto" : ""}" aria-hidden="true"></span><div class="corpo">
+        <span class="t">${esc((p.campos || {}).precisa || p.codigo)}</span><div class="meta"><span>${esc(PESSOAS[p.solicitante] || "—")} · ${dt(String(p.criado_em || ""))}</span>${(p.campos || {}).master ? `<span>· ${esc(p.campos.master)}</span>` : ""}</div>
+        <div class="meta"><span class="chip ${cl}">${esc(rot)}</span></div></div><span class="val"></span>
+        <div><button class="botao sec peq" data-pedido="${esc(p.id)}">Abrir</button></div></article>`; }).join("")}</div>` : `<div class="vazio">${ico("info")}<span>Nenhum pedido aqui ainda.</span></div>`}</section>
+  </div>`; };
 
 A.caixa = () => {
   const F = fila(S.eu), f = S.filtro, tipos = ["Tudo", ...Object.keys(TIPOS_FILA).filter(t => F.some(x => x._grupo === t))];
@@ -859,7 +870,7 @@ document.addEventListener("click", e => {
   if (d.psub) { S.filtro.psub = d.psub; S.manter = true; render(); return; }
   if (d.pf) { S.filtro.pf = d.pf; S.manter = true; render(); return; }
   if (d.pedir) { abrirPedir(d.pedir); return; }
-  if ("penviar" in d) { if (!$("#p-precisa").value.trim()) { $("#p-precisa").focus(); $("#p-precisa").placeholder = "Descreva a entrega que resolve o seu problema"; return; } fechar(); toast("Pedido enviado. Os agentes respondem aqui, em até 1 hora nos dias úteis. Protótipo: nada foi gravado."); return; }
+  if ("penviar" in d) { if (!$("#p-precisa").value.trim()) { $("#p-precisa").focus(); return; } ["p-precisa", "p-cliente", "p-prazo", "p-contexto"].forEach(k => { const el = document.getElementById(k); if (el) el.value = ""; }); fechar(); toast("Pedido enviado. Os agentes respondem aqui, em até 1 hora nos dias úteis. Protótipo: nada foi gravado."); return; }
   if (d.pedido) { const p = D.pedidos.find(i => i.id === d.pedido); if (p) abrirPedido(p); return; }
   if (d.pdec) { const id = d.id, nota = ($("#p-nota")?.value || "").trim(); if (d.pdec !== "aprovado" && !nota) { $("#p-nota").focus(); $("#p-nota").placeholder = "Escreva o motivo ou o que mudar"; return; }
     S.ped[id] = {status: d.pdec}; fechar(); S.manter = true; render(); toastD({aprovado: "Resposta aprovada.", nova_analise: "Pedido de nova análise enviado ao agente.", nao_aprovado: "Resposta não aprovada. O comentário orienta o agente."}[d.pdec], () => delete S.ped[id]); return; }
