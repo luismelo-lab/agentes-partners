@@ -29,6 +29,13 @@
 !departamentos/marketing/kit/motor/*.py
 !departamentos/marketing/kit/motor/*.js
 !departamentos/marketing/kit/motor/LEIA-ME.md
+# Apresentação de diagnóstico: gerador, fluxo e biblioteca de cases (sem dados de cliente; a pasta de cada cliente fica fora)
+!departamentos/tributario/apresentacao-diagnostico/*.py
+!departamentos/tributario/apresentacao-diagnostico/FLUXO.md
+!departamentos/tributario/apresentacao-diagnostico/MODELO-OXIGENAR-ESTRUTURAR-ESCALAR.md
+!departamentos/tributario/apresentacao-diagnostico/biblioteca-cases/README.md
+!departamentos/tributario/apresentacao-diagnostico/biblioteca-cases/cases.json
+!departamentos/produtos/ecossistema-financeiro-reuniao-2026-10-13.md
 # Scripts de produtos (inclui gerar_manual_docx.js, gerador oficial de Word). Os .json ao lado são dados: ficam fora
 !departamentos/produtos/*/scripts/*.py
 !departamentos/produtos/*/scripts/*.js
