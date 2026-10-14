@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Dados do protótipo do novo Painel Central Partners: lê os arquivos reais das rotinas e anonimiza clientes
-(nome de cliente vira código do negócio). Parceiros (Masters) aparecem pelo nome. Saída: dados.json ao lado."""
+"""Dados do protótipo do novo Painel Central Partners: lê os arquivos reais das rotinas.
+v7 (decisão do Luis, 14/10): negócios aparecem pelo nome da empresa no HubSpot; CPF, telefone, e-mail e dados bancários
+continuam mascarados (lib/protecao.py). Saída: dados.json ao lado."""
 import collections, glob, json, os, re, sys
 from datetime import date, datetime, timedelta
 
@@ -26,6 +27,9 @@ EV = [e for e in J(os.path.join(AP, "registro/eventos.json")).values() if str(e.
 DM = list(J(os.path.join(AP, "registro/demandas.json"))["demandas"].values())
 CR = J(os.path.join(AP, "central-agentes/registro.json"))["pedidos"]
 HB = J(ult("departamentos/resultados/dados/hubspot-*.json"))["negocios"]
+NOME = {str(n["id"]): (n.get("nome") or "").strip() for n in HB}
+cod = lambda i: NOME.get(str(i)) or (f"Negócio #{str(i)[-5:]}" if i else "Negócio")
+codigo = lambda i: f"#{str(i)[-5:]}" if i else ""
 
 ROT = {"comercial_parado": "Negócio comercial parado", "apresentacao_parada": "Apresentação de diagnóstico parada", "contrato_parado": "Contrato sem assinatura",
        "assinado_parado": "Assinado e não fechado", "diagnostico_parado": "Diagnóstico parado", "entrou_diagnostico": "Entrou em diagnóstico",
@@ -41,13 +45,13 @@ for e in EV:
     m = re.search(r"parceiro ([^.]+)\.", e.get("texto") or ""); par = m.group(1).strip() if m else None
     if par == "sem parceiro": par = None
     caixa.append({"id": f"S-{str(e.get('negocio') or e['titulo'])[-5:]}-{e['tipo'][:4]}", "pessoa": e["pessoa"], "tipo": ROT.get(e["tipo"], e["tipo"]),
-                  "grupo": "Sentinela", "titulo": cod(e.get("negocio")) if e.get("negocio") else ROT.get(e["tipo"], e["tipo"]), "master": par,
+                  "grupo": "Sentinela", "titulo": cod(e.get("negocio")) if e.get("negocio") else ROT.get(e["tipo"], e["tipo"]), "codigo": codigo(e.get("negocio")), "master": par,
                   "valor": f(e.get("valor")), "dias": int(f(e.get("dias"))) if e.get("dias") else dias(e.get("primeiro")),
                   "urgente": e["tipo"] in URG, "novo": e.get("primeiro") == HOJE.isoformat(), "acao": "Abrir no HubSpot"})
 for d in DM:
     if d["status"] == "resolvida": continue
     caixa.append({"id": d["id"], "pessoa": d["pessoa"], "tipo": "Demanda de parceiro" if d.get("origem", "").startswith("WhatsApp") or d.get("tipo") == "whatsapp" else "Pedido aos agentes",
-                  "grupo": "Demanda", "titulo": f"{d['id']} · {d.get('origem') or d.get('tipo')}", "master": None, "valor": 0, "dias": dias(d.get("aberta_em")),
+                  "grupo": "Demanda", "titulo": (next((z.get("negocio") or z.get("titulo") for z in PO.get("demandas_lista", []) if z["id"] == d["id"] and (z.get("negocio") or z.get("titulo"))), None) or f"{d['id']} · {d.get('origem') or d.get('tipo')}"), "codigo": d["id"], "master": None, "valor": 0, "dias": dias(d.get("aberta_em")),
                   "urgente": (dias(d.get("aberta_em")) or 0) >= 3, "novo": False, "acao": "Respondi / Encaminhei"})
 for p in CR.values():
     if p["status"] == "aguardando_aprovacao":
@@ -61,7 +65,7 @@ for c in PO.get("conselho", []):
 # triagem do WhatsApp (o que o parceiro pede, Master, rota e rascunho dos agentes), ligada à demanda pela chave
 sys.path.insert(0, os.path.join(AP, "lib")); import protecao
 EMP = re.compile(r"\b[A-ZÀ-Ý0-9&.\-]+(?:\s+[A-ZÀ-Ý0-9&.\-]+)*\s+(?:LTDA|S/?A|EIRELI|ME|EPP)\b\.?")
-anon = lambda t: EMP.sub("<EMPRESA>", protecao.limpo(t)) if t else ""
+anon = lambda t: protecao.limpo(t) if t else ""
 TRI = {}
 for ft in sorted(glob.glob(os.path.join(AP, "celulas/whatsapp-triagem-*.json")), key=os.path.getmtime):
     for pp, PP in J(ft)["pessoas"].items():
@@ -77,7 +81,7 @@ def form_trib(urg, emp, desc, bitrix, prazo):
     return (f"1) Urgência: {urg}\n2) Empresa: {emp}\n3) Descrição: {desc}\n"
             f"4) Link do Card: {bitrix or 'card do Bitrix não encontrado no HubSpot (conferir o campo ID Bitrix)'}\n5) Prazo de Entrega: {prazo}")
 def pacote(x):
-    e = EVX.get(x["id"]); emp = x["titulo"] if x["titulo"].startswith("Negócio") else "a empresa"; m = x.get("master") or "parceiro"
+    e = EVX.get(x["id"]); emp = x["titulo"] if e else "a empresa"; m = x.get("master") or "parceiro"
     d = x.get("dias") or 0; prazo = (HOJE + timedelta(days=2 if x["urgente"] else 5)).isoformat()
     etapa = ((e or {}).get("texto") or "").split(" · ")[1] if e and " · " in (e.get("texto") or "") else ""
     docs = []
@@ -113,9 +117,11 @@ def pacote(x):
     elif x["grupo"] == "Demanda":
         it = TRI.get(x.get("_chave")) or {}
         m = it.get("master") or m; x["master"] = x.get("master") or it.get("master")
-        pede = "[pedido do parceiro, extraído da conversa: no painel real o texto aparece aqui, depois do parecer de LGPD]"; rota = it.get("rota") or ""
-        P["mensagem"] = "Olá, tudo bem? Recebi o seu pedido e já encaminhei ao time responsável. Te retorno com a posição até amanhã."
-        if it.get("entrega"): P["checklist"].append("Os agentes já levantaram o histórico da conversa (no painel real, o texto aparece aqui depois do parecer de LGPD)")
+        pede = anon(it.get("o_que_pede") or "pedido do parceiro (ver a conversa)"); rota = it.get("rota") or ""
+        x.update(o_que_pede=pede, rota=anon(rota), proximo_passo=anon(it.get("proximo_passo") or ""), prazo=it.get("prazo"), negocio=it.get("negocio"), link=it.get("link"),
+                 entrega=anon(it.get("entrega") or ""), conversa=anon(it.get("chat") or ""))
+        if it.get("negocio"): x["titulo"] = it["negocio"]
+        P["mensagem"] = anon(it.get("rascunho")) or "Olá, tudo bem? Recebi o seu pedido e já encaminhei ao time responsável. Te retorno com a posição até amanhã."
         if re.search(r"contrat|distrat|aditivo", rota, re.I) and not re.search(r"jur[ií]dico", rota, re.I):
             P["encaminhar"] = {"equipe": "Contratos", "texto": f"Olá, time de Contratos! O parceiro {m} pede: {pede[:300]}. Podem verificar e me retornar? Obrigada."}
         elif re.search(r"financeiro|repasse|p[oó]s-venda|faturamento", rota, re.I):
@@ -176,7 +182,10 @@ for n in HB:
 cobertura = {k: v.most_common(4) for k, v in cobertura.items()}
 
 # ---------- Recuperador (lote anonimizado) e Revisor
-lote = [{"caso": cod(re.sub(r"\D", "", r.get("link") or "")), "parceiro": r.get("parceiro"), "tipo": r.get("tipo"), "segmento": r.get("segmento (matriz)") or r.get("segmento"),
+LT = {str(r.get("deal")): r for r in PO.get("lote", [])}
+did = lambda l: (re.search(r"deal/(\d+)", l or "") or re.search(r"(\d+)\D*$", l or "x") or [None, None])[1]
+lote = [{"caso": cod(did(r.get("link"))), "codigo": codigo(did(r.get("link"))), "link": r.get("link"),
+         **{k: anon((LT.get(re.sub(r"\D", "", r.get("link") or "")[-11:]) or {}).get(k) or "") for k in ("hipotese", "parecer", "documentos")}, "parceiro": r.get("parceiro"), "tipo": r.get("tipo"), "segmento": r.get("segmento (matriz)") or r.get("segmento"),
          "uf": r.get("uf"), "esperado": r.get("honorário esperado (look-alike)"), "taxa": r.get("taxa de sucesso dos parecidos"), "aderencia": r.get("aderência"),
          "saldo": r.get("saldo credor (urgente até 30/11)"), "docs": r.get("documentos a pedir"), "sinal": r.get("sinal do parecer")}
         for r in FI["top"] if r.get("lote") == 1][:20]
@@ -271,7 +280,7 @@ H8 = lambda r: hashlib.sha256(("save:" + r).encode()).hexdigest()[:16]
 busca = []
 for n in HB:
     c = re.sub(r"\D", "", str((n.get("extras") or {}).get("cnpj") or "")); r8 = c.zfill(14)[:8] if c else None
-    busca.append([str(n["id"])[-5:], n.get("parceiro") or "", n.get("etapa") or "", n["status"], round(n.get("valor") or 0), (n.get("extras") or {}).get("uf") or "", (n.get("segmento") or "")[:40], (n.get("criado") or "")[:10], H8(r8) if r8 else ""])
+    busca.append([str(n["id"])[-5:], n.get("parceiro") or "", n.get("etapa") or "", n["status"], round(n.get("valor") or 0), (n.get("extras") or {}).get("uf") or "", (n.get("segmento") or "")[:40], (n.get("criado") or "")[:10], H8(r8) if r8 else "", (n.get("nome") or "")[:70]])
 # histórico: demandas resolvidas e tempo até resolver
 hist = []
 for d in DM:
@@ -343,7 +352,7 @@ for r8, ns in grupos.items():
                    "sinais": sinais, "regra": "V5/L11: ≥ 6 meses novos desde o último período recuperado" if mn >= 6 else f"V5: menos de 6 meses novos (faltam {6 - mn})"})
 recorr.sort(key=lambda r: (not r["elegivel"], -r["potencial_honorario"]))
 # Revisor: diagnósticos em andamento de grupos que já são clientes (recorrência já em curso)
-rev_rec = [{"caso": cod(re.sub(r"\D", "", r.get("link") or "")[-11:]), "parceiro": r.get("parceiro"), "etapa": r.get("etapa"), "lacunas": r.get("lacunas"),
+rev_rec = [{"caso": cod(did(r.get("link"))), "parceiro": r.get("parceiro"), "etapa": r.get("etapa"), "lacunas": r.get("lacunas"),
             "lacunas_alta": r.get("lacunas alta"), "teses_grupo": str(r.get("grupo já é cliente"))[:120]}
            for r in RV.get("revisao", []) if r.get("grupo já é cliente") not in (None, "", False, "não", "Não")]
 rec_parc = {}
@@ -428,6 +437,27 @@ detalhe = {"funil_rs": funil_rs, "heat": heat, "faixas": FX, "mais90": [len(mais
            "geovana": geo_oport}
 
 ev_por = collections.Counter((e["pessoa"], e["tipo"]) for e in EV)
+# ---------- v7: chamados escritos pelo especialista (infra/chamado-ideal.md) e pedidos aos agentes (base do painel atual)
+import chamado_modelo as CM
+ESP = J(os.path.join(AQUI, "especialistas.json")) if os.path.exists(os.path.join(AQUI, "especialistas.json")) else {}
+DBC = {os.path.basename(f)[:-5]: (lambda d: d.get("data", d))(J(f)) for f in glob.glob(os.path.join(AQUI, "db/chamados/*.json"))}
+chamados_v7 = []
+for k, v in J(os.path.join(AP, "registro/chamados-propostos.json")).items():
+    db = DBC.get(k, {}); X = ESP.get(k) or v.get("especialista") or {}
+    e = {**v, "especialista": X}; md = CM.descricao_md(e)
+    dm = next((d for d in DM if d["id"] == k), {})
+    chamados_v7.append({"id": k, "pessoa": v.get("pessoa"), "area": v.get("area"), "grupo": v.get("grupo"), "titulo": anon(v.get("titulo")), "urgencia": v.get("urgencia"),
+                        "master": v.get("master"), "link": v.get("link"), "status": db.get("status") or v.get("status"), "motivo": anon(db.get("motivo") or v.get("motivo_recusa") or ""),
+                        "glpi_id": db.get("glpi_id"), "url": db.get("url"), "proposto_em": v.get("proposto_em"), "dias": dias(v.get("proposto_em")),
+                        "especialista": {kk: (anon(vv) if isinstance(vv, str) else [anon(z) for z in vv] if isinstance(vv, list) else vv) for kk, vv in X.items()},
+                        "texto_md": md, "original": anon(v.get("descricao") or ""), "conversa": anon(v.get("conversa") or "")})
+chamados_v7.sort(key=lambda c: ({"proposto": 0, "aprovado": 1, "aprovado_manual": 2, "aberto": 3}.get(c["status"], 4), -(c["urgencia"] or 0)))
+pedidos_v7 = [(lambda d: {**d, "id": os.path.basename(f)[:-5]})((lambda d: d.get("data", d))(J(f))) for f in glob.glob(os.path.join(AQUI, "db/pedidos/*.json"))]
+for p in CR.values():
+    if p.get("status") in ("descartado",) or not p.get("codigo"): continue
+    pedidos_v7.append({"id": p["id"], "pid": p["id"], "codigo": p.get("codigo"), "status": p.get("status"), "para": p.get("pessoa"), "solicitante": p.get("pessoa"),
+                       "criado_em": p.get("recebido"), "campos": p.get("campos") if isinstance(p.get("campos"), dict) else {}, "resposta": p.get("resposta")})
+
 P = {
     "atualizado": "13/10/2026 07:32", "exemplo": True,
     "caixa": sorted(caixa, key=lambda x: (not x["urgente"], -(x["dias"] or 0))),
@@ -451,7 +481,10 @@ P = {
                     "pot_credito": sum(r["potencial_credito"] for r in recorr), "pot_honorario": sum(r["potencial_honorario"] for r in recorr), "pot_repasse": sum(r["potencial_repasse"] for r in recorr),
                     "revisor": rev_rec[:60], "n_revisor": len(rev_rec)},
     "detalhe": detalhe,
-    "operacao": operacao, "biblioteca": biblioteca, "conselho": [{"id": c["id"], "data": c["data"], "texto": c["texto"][:160]} for c in PO.get("conselho", [])],
+    "operacao": operacao, "biblioteca": biblioteca, "conselho": [{"id": c["id"], "data": c["data"], "ata": c.get("ata"), "texto": c["texto"], "obs": c.get("obs")} for c in PO.get("conselho", [])],
+    "chamados": chamados_v7, "catalogo": PO.get("catalogo", []), "alertas": PO["gestao"].get("alertas", []), "pastas": PO.get("pastas", {}),
+    "whatsapp": {"rodada": PO["whatsapp"].get("rodada"), "pessoas": {k: {"conversas": v.get("conversas"), "responder": sum(1 for i in v.get("itens", []) if i.get("status") == "responder")} for k, v in PO["whatsapp"].get("pessoas", {}).items()}},
+    "pedidos": pedidos_v7,
 }
 json.dump(P, open(os.path.join(AQUI, "dados.json"), "w", encoding="utf-8"), ensure_ascii=False, default=str)
 print("caixa:", len(P["caixa"]), collections.Counter(x["pessoa"] for x in P["caixa"]), "· masters:", len(masters), "· lote:", len(lote), "· bytes:", os.path.getsize(os.path.join(AQUI, "dados.json")))

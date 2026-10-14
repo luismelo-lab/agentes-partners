@@ -223,7 +223,6 @@ label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
   .heroi { grid-column: auto; } .heroi .v { font-size: 40px; }
   .kpis.carrossel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; padding-bottom: 4px; }
   .kpis.carrossel .kpi { min-width: 72%; scroll-snap-align: start; }
-  .item { grid-template-columns: 4px minmax(0, 1fr) auto; } .item .val, .item .idade { display: none; } .item .meta .so-cel { display: inline; }
   .tl { grid-template-columns: minmax(0, 1fr); }
   .linha-m { grid-template-columns: minmax(0, 1fr) auto; } .linha-m > :not(:first-child):not(:last-child):not(.cel) { display: none; }
   .gaveta { width: 100%; top: 6vh; border-left: 0; border-top: 1px solid var(--borda-3); border-radius: 16px 16px 0 0; animation: sobe 240ms var(--ease); }
@@ -232,7 +231,55 @@ label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
   table.cartoes thead { display: none; } table.cartoes tr { display: grid; gap: 2px; padding: 10px 12px; border-bottom: 1px solid var(--borda); }
   table.cartoes td { border: 0; padding: 0; text-align: left !important; } table.cartoes td[data-r]::before { content: attr(data-r) ": "; color: var(--texto-3); font: 11px var(--mono); }
 }
-.item .meta .so-cel { display: none; }
+/* v7: linguagem simples, nome da empresa primeiro, desfazer, tarefa sempre à mão */
+.rotulo { font: 500 12px/1.4 var(--sans); letter-spacing: .01em; text-transform: none; }
+.grupo-nav .rotulo { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-family: var(--mono); }
+.chip { font: 500 12px/1.6 var(--sans); letter-spacing: 0; text-transform: none; }
+.kpi .ver { font: 500 12px var(--sans); letter-spacing: 0; text-transform: none; }
+.prot { text-transform: none; letter-spacing: 0; font-family: var(--sans); }
+.item { grid-template-columns: 4px minmax(0, 1fr) 120px auto; }
+.item .t { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 15px; }
+.item .pede { font-size: 14px; color: var(--texto); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 2px; }
+.item .meta .num { font-size: 12px; color: var(--texto-3); }
+.item .meta .idade { text-align: left; font: 500 13px var(--sans); }
+.item .val { font-size: 13px; color: var(--texto-2); }
+.item.cham .tarja.st-proposto { background: var(--ouro); }
+.item.cham .tarja.st-abrindo, .item.cham .tarja.st-aprovado_manual { background: var(--alerta); }
+.item.cham .tarja.st-aberto { background: var(--sucesso); }
+.item.leve { opacity: .7; }
+.toast { display: flex; gap: 14px; align-items: center; overflow: hidden; padding: 12px 16px 14px; }
+.toast .desfazer { all: unset; cursor: pointer; color: var(--ouro); font-weight: 600; padding: 6px 4px; }
+.toast .desfazer:focus-visible { outline: 2px solid var(--ouro); }
+.toast .barra { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--ouro); animation: barra 5s linear forwards; }
+@keyframes barra { from { width: 100%; } to { width: 0; } }
+.botao.txt-erro { color: var(--erro); border-color: rgba(214,69,69,.45); }
+.botao.txt-erro:hover { color: var(--erro); border-color: var(--erro); }
+.gaveta-rod { position: sticky; bottom: 0; margin-top: auto; background: var(--fundo-2); border-top: 1px solid var(--borda); padding: 12px 22px calc(env(safe-area-inset-bottom, 0px) + 12px); display: flex; gap: 8px; flex-wrap: wrap; }
+.tarefa-btn { width: 100%; justify-content: flex-start; margin: 0 0 14px; }
+.tarefa-btn svg { width: 18px; height: 18px; }
+.fab { display: none; }
+.vendo { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 10px 14px; border-radius: var(--r-md); background: var(--ouro-suave); border: 1px solid rgba(243,205,96,.4); font-size: 14px; }
+.vendo .botao { margin-left: auto; }
+.vendo svg { width: 18px; height: 18px; flex: none; color: var(--ouro); }
+.destaque { border-left: 3px solid var(--ouro); }
+.confira { background: var(--elevado); border-left: 3px solid var(--ouro); border-radius: 8px; padding: 12px 14px; }
+.aviso-topo { font-size: 12px; color: var(--texto-3); }
+.linha-c { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--borda); }
+.linha-c:last-child { border-bottom: 0; }
+.linha-c .tx { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 14px; }
+.linha-c .acoes-l { display: flex; gap: 8px; }
+.cat { display: grid; gap: 8px; align-content: start; }
+.cat .cod { font: 500 12px var(--mono); color: var(--texto-3); }
+.boasvindas { display: grid; gap: 12px; background: var(--cartao); border: 1px solid rgba(243,205,96,.4); border-radius: var(--r-md); padding: 18px; }
+.boasvindas ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; color: var(--texto-2); }
+.boasvindas b { color: var(--texto); }
+.resposta-md p { margin: 0 0 8px; } .resposta-md ul { margin: 0 0 8px; padding-left: 20px; }
+@media (max-width: 1099px) { .tarefa-btn { justify-content: center; padding: 0; } .tarefa-btn span { display: none; } }
+@media (max-width: 760px) {
+  .item { grid-template-columns: 4px minmax(0, 1fr) auto; } .item .val { display: none; }
+  .fab { display: inline-flex; position: fixed; right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 68px); z-index: 16; border-radius: 999px; box-shadow: 0 6px 18px rgba(0,0,0,.5); }
+  .linha-c { grid-template-columns: minmax(0, 1fr); } .aviso-topo { display: none; }
+}
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
 
@@ -240,8 +287,9 @@ label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
   <aside class="lateral" aria-label="Navegação">
     <img class="logo" src="__LOGO__" alt="Save Co.">
     <div class="nome">Central Partners <span class="prot">Protótipo</span></div>
+    <button class="botao tarefa-btn" data-tarefa title="Registrar tarefa (atalho: T)">__ICO_TAREFA__<span>Registrar tarefa</span></button>
     <nav id="nav"></nav>
-    <div class="quem"><span class="rotulo" style="padding:0 10px">Ver como</span><div class="pessoas" id="pessoas"></div></div>
+    <div class="quem"><span class="rotulo" style="padding:0 10px">Ver como (só você vê)</span><div class="pessoas" id="pessoas"></div></div>
   </aside>
   <div class="conteudo">
     <header class="topo"><div class="topo-in" id="topo"></div></header>
@@ -249,12 +297,14 @@ label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
   </div>
 </div>
 <nav class="inferior" id="inferior" aria-label="Navegação"></nav>
+<button class="botao fab" data-tarefa aria-label="Registrar tarefa">+ Tarefa</button>
 <div id="camada"></div>
 <div class="tip" id="tip" hidden role="tooltip"></div>
 
 <script type="application/json" id="dados">__DADOS__</script>
 <script>
 const D = JSON.parse(document.getElementById("dados").textContent);
+D.chamados.forEach(c => { c.grupo = String(c.grupo || "").replace(/^Juridico/, "Jurídico").replace(/^Tributario/, "Tributário"); });
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const rs = v => { v = +v || 0; const a = Math.abs(v); return a >= 1e9 ? "R$ " + (v/1e9).toFixed(1).replace(".", ",") + " bi" : a >= 1e6 ? "R$ " + (v/1e6).toFixed(1).replace(".", ",") + " mi" : a >= 1e3 ? "R$ " + Math.round(v/1e3).toLocaleString("pt-BR") + " mil" : "R$ " + Math.round(v).toLocaleString("pt-BR") };
@@ -272,11 +322,12 @@ const ICON = {
   prazos: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/>', parceiros: '<circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M15 14.6c2.6.1 4.6 1.8 5.5 5.4"/>',
   recorrencia: '<path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9M18 3v4.5h-4.5M6 21v-4.5h4.5"/>', busca: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
   biblioteca: '<path d="M5 4h4v16H5zM10 4h4v16h-4zM15.5 4.6l3.8-1 3.7 15.5-3.8 1z"/>', pedidos: '<path d="M4 5h16v11H8l-4 4zM8 9h8M8 12h5"/>', mais: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
+  chamados: '<path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 5v12" stroke-dasharray="2 2"/>', resultados: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', tarefa: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
   alerta: '<path d="M12 3l10 18H2zM12 10v5M12 18v.5"/>', ok: '<path d="M4 12l5 5L20 6"/>', fechar: '<path d="M6 6l12 12M18 6L6 18"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
 const ico = (k, cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
-const GRUPOS = [["Meu dia", [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["prazos", "Prazos e documentos"]]], ["Carteira", [["parceiros", "Parceiros"], ["recorrencia", "Recorrência"]]], ["Ferramentas", [["busca", "Busca"], ["biblioteca", "Biblioteca"], ["pedidos", "Pedidos"]]]];
+const GRUPOS = [["Meu dia", [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["chamados", "Chamados"], ["prazos", "Prazos e documentos"], ["pedidos", "Pedidos aos agentes"]]], ["Carteira", [["parceiros", "Parceiros"], ["recorrencia", "Recorrência"], ["resultados", "Resultados"]]], ["Ferramentas", [["busca", "Busca"], ["biblioteca", "Biblioteca"]]]];
 const ABAS = GRUPOS.flatMap(g => g[1]);
-const S = {eu: "luis", aba: "inicio", feitos: new Set(), filtro: {}, ordem: {campo: "saude", asc: true}, animar: true, origem: null};
+const S = {ch: {}, apont: [], ped: {}, dem: {}, cons: {}, recup: {}, eu: "luis", aba: "inicio", feitos: new Set(), filtro: {}, ordem: {campo: "saude", asc: true}, animar: true, origem: null};
 try { S.eu = localStorage.getItem("cp-eu") || "luis"; S.aba = localStorage.getItem("cp-aba") || "inicio"; } catch (e) {}
 if (!PESSOAS[S.eu]) S.eu = "luis"; if (!ABAS.some(a => a[0] === S.aba)) S.aba = "inicio";
 const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -389,22 +440,29 @@ const kpi = ({r, v, d = "", delta = "", sp = null, key = null, count = null}) =>
   <div class="cabk"><span class="rotulo">${esc(r)}</span>${delta}</div><span class="v"${count != null ? ` data-count="${count}"` : ""}>${v}</span>${sp ? sp : ""}<span class="d">${d}</span>${key ? `<span class="ver">Ver detalhe ›</span>` : ""}</div>`;
 const delta = (pct, rot) => pct == null ? "" : `<span class="delta"><span class="${pct >= 0 ? "s" : "e"}">${pct >= 0 ? "▲" : "▼"}</span> ${pc(Math.abs(pct))} ${esc(rot)}</span>`;
 const faixa = (txt, key) => `<div class="faixa" role="status">${ico("alerta")}<span class="txt">${txt}</span>${key ? `<button class="botao sec peq" data-kpi="${esc(key)}">Ver</button>` : ""}</div>`;
+const quando = d => d == null ? "" : d > 30 ? `Atrasado há ${n(d)} dias` : d > 7 ? `Esperando há ${n(d)} dias` : d <= 0 ? "Chegou hoje" : d === 1 ? "Desde ontem" : `Há ${n(d)} dias`;
 function itemHTML(x, primeiro) {
   const P = x.pacote || {}, cls = (x.dias || 0) > 30 ? "atrasado" : (x.dias || 0) > 7 ? "atencao" : "";
-  const selos = [P.glpi ? `<span class="chip">${ico("ok")}chamado</span>` : "", P.mensagem ? `<span class="chip">${ico("ok")}mensagem</span>` : "", P.encaminhar ? `<span class="chip">${ico("ok")}${esc(P.encaminhar.equipe)}</span>` : ""].join("");
-  const quem = S.eu === "luis" ? `<span>${esc(PESSOAS[x.pessoa] || x.pessoa)}</span>` : "";
-  const acao = pronto(x) ? "Encaminhar" : x.acao.split(" / ")[0];
+  const selos = [P.glpi ? "Chamado pronto" : "", P.mensagem ? "Mensagem pronta" : "", P.encaminhar ? "Texto para " + P.encaminhar.equipe : ""].filter(Boolean);
+  const sel = selos.slice(0, 2).map(t => `<span class="chip">${ico("ok")}${esc(t)}</span>`).join("") + (selos.length > 2 ? `<span class="chip">+${selos.length - 2}</span>` : "");
+  const quem = S.eu === "luis" && x.pessoa !== "luis" ? `<span>· ${esc(PESSOAS[x.pessoa] || x.pessoa)}</span>` : "";
+  const acao = x.grupo === "Demanda" ? "Ver e responder" : x.grupo === "Conselho" ? "Decidir" : x.grupo === "Pedido" ? "Ver a resposta" : pronto(x) ? "Encaminhar" : x.acao.split(" / ")[0];
   return `<article class="item ${cls}${S.feitos.has(x.id) ? " feito" : ""}" data-id="${esc(x.id)}"><span class="tarja" aria-hidden="true"></span>
-    <div class="corpo"><span class="t">${esc(x.titulo)}</span><div class="meta"><span>${esc(x.tipo)}</span>${x.master ? `<span>· ${esc(x.master)}</span>` : ""}${quem}${selos}${x.novo ? `<span class="chip ouro">novo</span>` : ""}<span class="so-cel">· ${x.dias != null ? n(x.dias) + " d" : ""}</span></div></div>
-    <span class="val">${x.valor ? rs(x.valor) : ""}</span><span class="idade ${idade(x.dias)}">${x.dias != null ? n(x.dias) + " d" + (x.dias > 30 ? " · atrasado" : "") : ""}</span>
+    <div class="corpo"><span class="t" title="${esc(x.titulo)}">${esc(x.titulo)}</span>
+      <div class="meta">${x.codigo ? `<span class="num">${esc(x.codigo)}</span>` : ""}<span>${esc(x.tipo)}</span>${x.master ? `<span>· ${esc(x.master)}</span>` : ""}${quem}${x.novo ? `<span class="chip ouro">novo</span>` : ""}</div>
+      ${x.o_que_pede ? `<div class="pede">O parceiro pede: ${esc(x.o_que_pede)}</div>` : ""}
+      <div class="meta">${sel}<span class="idade ${idade(x.dias)}">${esc(quando(x.dias))}</span></div></div>
+    <span class="val">${x.valor ? rs(x.valor) : ""}</span>
     <div><button class="botao ${primeiro ? "" : "sec"} peq" data-abrir="${esc(x.id)}">${esc(acao)}</button></div></article>`;
 }
-const lista = (xs, lim = 6) => xs.length ? `<div class="lista">${xs.slice(0, lim).map((x, i) => itemHTML(x, i === 0)).join("")}</div>` : `<div class="vazio">${ico("ok")}<span>Nada esperando agora.</span></div>`;
-function porTipo(xs, lim = 5) {
+const lista = (xs, lim = 6) => xs.length ? `<div class="lista">${xs.slice(0, lim).map((x, i) => itemHTML(x, i === 0)).join("")}</div>` : `<div class="vazio">${ico("ok")}<span>Tudo em dia por aqui.</span></div>`;
+function porTipo(xs, lim = 3) {
   const g = {}; xs.forEach(x => (g[x.tipo] = g[x.tipo] || []).push(x));
-  const ord = Object.entries(g).sort((a, b) => Math.max(...b[1].map(x => x.dias || 0)) - Math.max(...a[1].map(x => x.dias || 0)));
-  return ord.map(([t, it], gi) => `<details class="grp" ${gi < 4 ? "open" : ""}><summary><div class="grupo-tit">${esc(t)} <span class="badge">${n(it.length)}</span><span class="atual">${n(it.filter(pronto).length)} prontos</span></div></summary>
-    <div class="lista">${it.slice(0, S.filtro["mais-" + t] ? 60 : lim).map((x, i) => itemHTML(x, gi === 0 && i === 0)).join("")}</div>${it.length > lim && !S.filtro["mais-" + t] ? `<button class="botao sec peq" style="margin-top:6px" data-mais="${esc(t)}">Ver mais ${n(it.length - lim)}</button>` : ""}</details>`).join("");
+  const ord = Object.entries(g).sort((a, b) => (b[1].filter(pronto).length > 0) - (a[1].filter(pronto).length > 0) || Math.max(...b[1].map(x => x.dias || 0)) - Math.max(...a[1].map(x => x.dias || 0)));
+  const bloco = ([t, it], gi) => `<details class="grp" ${gi < 3 ? "open" : ""}><summary><div class="grupo-tit">${esc(t)} <span class="badge">${n(it.length)}</span>${it.filter(pronto).length ? `<span class="atual">${n(it.filter(pronto).length)} prontos para encaminhar</span>` : ""}</div></summary>
+    <div class="lista">${it.slice(0, S.filtro["mais-" + t] ? 60 : lim).map((x, i) => itemHTML(x, gi === 0 && i === 0)).join("")}</div>${it.length > lim && !S.filtro["mais-" + t] ? `<button class="botao sec peq" style="margin-top:6px" data-mais="${esc(t)}">Ver mais ${n(it.length - lim)}</button>` : ""}</details>`;
+  const fixos = ord.filter((o, i) => i < 4 || o[1].some(pronto)), resto = ord.filter(o => !fixos.includes(o));
+  return fixos.map(bloco).join("") + (resto.length ? `<details class="grp"><summary><div class="grupo-tit">Outros ${n(resto.length)} grupos <span class="badge">${n(resto.reduce((a, o) => a + o[1].length, 0))}</span><span class="atual">sem nada pronto para encaminhar</span></div></summary>${resto.map((o, i) => bloco(o, 9 + i)).join("")}</details>` : "");
 }
 const ordenar = xs => [...xs].sort((a, b) => { const k = S.ordem.campo, va = a[k] ?? -1e18, vb = b[k] ?? -1e18; return (typeof va === "string" ? va.localeCompare(vb) : va - vb) * (S.ordem.asc ? 1 : -1); });
 const par = (r, v) => `<div class="par"><span>${esc(r)}</span><span>${v}</span></div>`;
@@ -421,57 +479,62 @@ function grafIdade() { const fx = D.detalhe.faixas, rows = D.detalhe.heat, tot =
 
 /* ---------- cockpits ---------- */
 const V = {};
+const chamadosDe = p => D.chamados.filter(c => (p === "luis" || c.pessoa === p));
+const chAguardando = p => chamadosDe(p).filter(c => chSt(c) === "proposto");
+const consPend = () => D.conselho.filter(c => !S.feitos.has(c.id));
+const fmtMin = m => m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? " " + (m % 60) + " min" : ""}` : `${m} min`;
+function boasVindas() { let visto = false; try { visto = localStorage.getItem("cp-tour") === "1"; } catch (e) {} if (visto) return "";
+  return `<section class="boasvindas"><h2>Primeira vez aqui? Três coisas</h2><ol><li><b>Seu dia começa aqui.</b> O que pede a sua ação vem primeiro, do mais antigo para o mais novo.</li><li><b>Registre o que fez em 20 segundos</b> no botão "Registrar tarefa", sempre à mão.</li><li><b>Nada aqui vai para parceiros ou clientes.</b> Os agentes preparam; você decide e envia.</li></ol><div><button class="botao sec peq" data-tour-ok>Entendi</button></div></section>`; }
+function blocoChamados(p, lim = 3) { const cs = chamadosDe(p).filter(c => chSt(c) !== "recusado"), ag = cs.filter(c => chSt(c) === "proposto");
+  return `<section><div class="cab"><h2>Chamados para aprovar</h2><span class="atual">escritos pelos agentes Tributário e Jurídico · nada abre sem a sua aprovação</span></div>
+    ${ag.length ? `<div class="lista">${ag.slice(0, lim).map((c, i) => chamadoCard(c, i === 0)).join("")}</div>${ag.length > lim || cs.length > ag.length ? `<button class="botao sec peq" style="margin-top:8px" data-ir="chamados">Ver todos os chamados</button>` : ""}`
+      : `<div class="vazio">${ico("ok")}<span>Nenhum chamado esperando você. ${cs.length ? `<button class="botao sec peq" data-ir="chamados">Ver os já decididos</button>` : ""}</span></div>`}</section>`; }
+function blocoSeuDia(p) { const W = (D.whatsapp.pessoas || {})[p] || {}, ap = S.apont.filter(a => a.pessoa === p), min = ap.reduce((a, x) => a + x.min, 0);
+  return `<section><div class="cab"><h2>Seu dia</h2></div><div class="kpis">
+    ${kpi({r: "WhatsApp da rodada", v: n(W.conversas || 0), d: `conversas lidas pelos agentes · ${n(W.responder || 0)} para responder · rodada das ${esc(D.whatsapp.rodada || "—")}`})}
+    ${kpi({r: "Tarefas registradas hoje", v: n(ap.length), d: ap.length ? `${fmtMin(min)} no total` : `<button class="botao sec peq" data-tarefa>Registrar a primeira</button>`})}
+    </div><p class="nota" style="margin-top:8px">Seus arquivos no OneDrive: <span class="mono">${esc(D.pastas[p] || "")}</span></p></section>`; }
 V.luis = () => {
-  const K = D.kpi, L = doLuis(), c = D.conselho.filter(x => !S.feitos.has(x.id)).length, pr = K.pedidos_prontos, ch = K.chamados, tot = c + pr + ch;
+  const K = D.kpi, c = consPend().length, pr = K.pedidos_prontos, ch = chAguardando("luis").length, tot = c + pr + ch;
   const mes = K.mes || {}, cres = ((mes.crescimento || {}).ganhos_rs || {}).pct, riscos = D.masters.filter(m => m.saude < 60);
-  const carga = ["daniela", "jenifer", "geovana"].map(p => { const xs = D.caixa.filter(x => x.pessoa === p); return {p, n: xs.length, at: xs.filter(x => (x.dias || 0) > 30).length, max: Math.max(0, ...xs.map(x => x.dias || 0))}; });
-  const wr = D.winrate.slice(-12);
-  return `<div class="topo-cards">
+  const carga = ["daniela", "jenifer", "geovana"].map(p => { const xs = D.caixa.filter(x => x.pessoa === p && !S.feitos.has(x.id)); return {p, n: xs.length, at: xs.filter(x => (x.dias || 0) > 30).length, max: Math.max(0, ...xs.map(x => x.dias || 0)), tar: S.apont.filter(a => a.pessoa === p).length}; });
+  return `${boasVindas()}<div class="topo-cards">
       <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Esperando por você</span><div class="lado"><span class="v" data-count="${tot}">${n(tot)}</span><span class="t">decisões e aprovações para destravar o time</span></div>
         <div class="comp">${[[c, "var(--ouro)"], [pr, "var(--ouro-50)"], [ch, "var(--serie-2)"]].map(([v, cor]) => `<i style="width:${100 * v / (tot || 1)}%;background:${cor}"></i>`).join("")}</div>
-        <div class="leg"><span><i style="background:var(--ouro)"></i>${n(c)} Conselho</span><span><i style="background:var(--ouro-50)"></i>${n(pr)} respostas</span><span><i style="background:var(--serie-2)"></i>${n(ch)} chamados</span></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="botao" data-lote>Decidir o Conselho em lote</button><button class="botao sec" data-kpi="esperando">Ver tudo</button></div></div>
-      ${kpi({r: "Ganhos no mês", v: rsH(mes.ganhos_rs), d: `${n(mes.ganhos_n)} negócios · até 13/10`, delta: delta(cres, "vs set."), sp: spark(g12().map(x => x.ganhos_rs)), key: "ganhos_mes"})}
-      ${kpi({r: "Pipeline aberto", v: rsH(PIPE.rs), d: `${n(PIPE.n)} negócios · agendas e indicações`, sp: `<span class="nota">sem histórico semanal ainda</span>`, key: "pipeline"})}
+        <div class="leg"><span><i style="background:var(--ouro)"></i>${n(c)} do Conselho</span><span><i style="background:var(--ouro-50)"></i>${n(pr)} respostas dos agentes</span><span><i style="background:var(--serie-2)"></i>${n(ch)} chamados</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="botao" data-kpi="esperando">Ver o que espera por mim</button></div></div>
+      ${kpi({r: "Ganhos no mês", v: rsH(mes.ganhos_rs), d: `${n(mes.ganhos_n)} negócios até 13/10`, delta: delta(cres, "sobre setembro"), sp: spark(g12().map(x => x.ganhos_rs)), key: "ganhos_mes"})}
+      ${kpi({r: "Pipeline aberto", v: rsH(PIPE.rs), d: `${n(PIPE.n)} negócios, com agendas e indicações`, key: "pipeline"})}
     </div>
-    ${riscos.length ? faixa(`<b>${n(riscos.length)} Masters em risco:</b> ${riscos.map(m => `<span class="chip erro">${esc(m.parceiro)} ${m.saude}</span>`).join(" ")}`, "risco") : ""}
-    <div class="kpis carrossel">
-      ${kpi({r: "Win rate 3 meses", v: pc(K.win_rate_3m), d: "ganhos ÷ (ganhos + perdidos)", sp: spark(wr.map(x => x.pct), 100), key: "winrate"})}
-      ${kpi({r: "Ticket médio", v: rsH(K.ticket_3m), d: "últimos 3 meses"})}
-      ${kpi({r: "Repasse 12 meses", v: rsH(Object.values(D.ficha).reduce((a, f) => a + (f.comissao_12m || 0), 0)), d: "aos parceiros, % oficial", key: "repasse12"})}
-      ${kpi({r: "Recorrência", v: rsH(D.recorrencia.pot_credito), d: `${n(D.recorrencia.n_elegiveis)} clientes elegíveis`, key: "rec_parc"})}
-    </div>
-    <section><div class="cab"><h2>Decidir hoje</h2><span class="atual">${n(L.filter(x => x.grupo !== "Conselho").length)} itens · mais antigos primeiro</span></div>${lista(L.filter(x => x.grupo !== "Conselho"), 5)}</section>
-    <section><div class="cab"><h2>Carga do time</h2><span class="atual">o que espera cada pessoa</span></div>
-      <div class="kpis">${carga.map(cg => kpi({r: PESSOAS[cg.p], v: n(cg.n), d: `<span class="prog" style="display:block;margin:2px 0 6px"><i style="width:${Math.min(100, 100 * cg.n / 140)}%"></i></span>${n(cg.at)} atrasados · mais antigo ${n(cg.max)} d`, key: "carga_" + cg.p, count: cg.n})).join("")}</div></section>
-    <section><div class="cab"><h2>Resultado</h2><button class="botao sec peq" data-kpi="analises">Mais análises</button></div>
-      <div class="grade-3">
-        <div class="bloco"><h3>Ganhos por mês</h3><p class="tese">Outubro em andamento; a linha é a média dos 11 meses fechados.</p>${grafGanhos()}${verTabela([["Mês"], ["R$", 1], ["Ganhos", 1]], g12().map(x => [mesRot(x.mes), rs(x.ganhos_rs), n(x.ganhos_n)]))}</div>
-        <div class="bloco"><h3>Onde está o pipeline</h3><p class="tese">${pc(100 * (D.detalhe.funil_rs.find(r => r[0] === "Apresentação de Diagnóstico") || [0, 0, 0])[2] / (PIPE.rs || 1))} do valor parado em Apresentação de Diagnóstico.</p>${grafFunil(D.detalhe.funil_rs.filter(r => r[2] > 0))}<p class="nota">${n(D.detalhe.funil_rs.filter(r => !r[2]).length)} etapas sem valor no CRM (${n(D.detalhe.sem_valor)} negócios) ficam no detalhe.</p><button class="botao sec peq" data-kpi="pipeline">Ver o pipeline completo</button></div>
-        <div class="bloco"><h3>Idade dos abertos</h3><p class="tese"><b>${n(D.detalhe.mais90[0])}</b> negócios há mais de 90 dias (${rs(D.detalhe.mais90[1])}).</p>${grafIdade()}<button class="botao sec peq" data-kpi="heat">Ver por etapa (mapa de calor)</button></div>
-      </div></section>`;
+    ${riscos.length ? faixa(`<b>${n(riscos.length)} Masters com saúde abaixo de 60:</b> ${riscos.map(m => esc(m.parceiro)).join(", ")}`, "risco") : ""}
+    ${blocoChamados("luis")}
+    <section><div class="cab"><h2>Decisões do Conselho</h2><span class="atual">${n(c)} esperando · mais antigas primeiro</span></div>
+      ${c ? `<div class="tab-wrap">${consPend().slice(0, 5).map(x => `<div class="linha-c"><div><div class="tx"><b>${esc(x.id)}</b> · ${esc(x.texto)}</div><span class="nota">${esc(quando(Math.round((new Date(HOJE) - new Date(x.data)) / 864e5)))}</span></div>
+        <div class="acoes-l"><button class="botao sec peq" data-csq="${esc(x.id)}">Aprovar</button><button class="botao sec peq" data-cons-abrir="${esc(x.id)}">Decidir…</button></div></div>`).join("")}</div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="botao sec peq" data-lote>Decidir várias de uma vez</button>${c > 5 ? `<button class="botao sec peq" data-kpi="esperando">Ver as ${n(c)}</button>` : ""}</div>` : `<div class="vazio">${ico("ok")}<span>Nenhuma decisão esperando.</span></div>`}</section>
+    <section><div class="cab"><h2>Time hoje</h2><span class="atual">o que espera cada pessoa</span></div>
+      <div class="kpis">${carga.map(cg => kpi({r: PESSOAS[cg.p], v: n(cg.n), d: `<span class="prog" style="display:block;margin:2px 0 6px"><i style="width:${Math.min(100, 100 * cg.n / 150)}%"></i></span>${n(cg.at)} atrasados · o mais antigo há ${n(cg.max)} dias · ${n(cg.tar)} tarefas registradas hoje`, key: "carga_" + cg.p, count: cg.n})).join("")}</div></section>
+    <section><div class="cab"><h2>Alertas das áreas</h2><button class="botao sec peq" data-ir="resultados">Ver resultados e gráficos</button></div>
+      <div class="tab-wrap">${D.alertas.map(a => `<div class="linha-c"><div class="tx"><b>${esc(a.area)}:</b> ${esc(a.texto)}</div></div>`).join("") || `<div class="vazio">Sem alertas.</div>`}</div></section>`;
 };
 V.daniela = () => {
-  const L = minhas(), at = L.filter(x => (x.dias || 0) > 30), pr = L.filter(pronto), max = Math.max(0, ...L.map(x => x.dias || 0));
-  const pm = [...D.masters].sort((a, b) => a.saude - b.saude);
-  return `<div class="topo-cards">
+  const L = minhas(), at = L.filter(x => (x.dias || 0) > 30), pr = L.filter(pronto), max = Math.max(0, ...L.map(x => x.dias || 0)), dem = L.filter(x => x.grupo === "Demanda");
+  return `${boasVindas()}<div class="topo-cards">
       <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Responder agora</span>
-        <div class="lado">${anel(L.length ? at.length / L.length : 0, n(at.length))}<div><div class="t"><b>${n(at.length)} atrasados</b> de ${n(L.length)} itens</div><div class="nota" style="color:var(--erro)">mais antigo há ${n(max)} dias</div></div></div>
+        <div class="lado">${anel(L.length ? at.length / L.length : 0, n(at.length))}<div><div class="t"><b>${n(at.length)} atrasados</b> de ${n(L.length)} itens</div><div class="nota" style="color:var(--erro)">o mais antigo espera há ${n(max)} dias</div></div></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="botao" data-prontos-ir>Encaminhar os ${n(pr.length)} prontos</button></div></div>
-      ${kpi({r: "Demandas de parceiro", v: n(L.filter(x => x.grupo === "Demanda").length), d: "WhatsApp e e-mail", key: "minha_caixa"})}
-      ${kpi({r: "Contratos parados", v: n(L.filter(x => x.tipo === "Contrato sem assinatura").length), d: "enviados e sem assinatura", key: "urgentes"})}
+      ${kpi({r: "Demandas de parceiro", v: n(dem.length), d: "WhatsApp e e-mail", key: "minha_caixa"})}
+      ${kpi({r: "Chamados para aprovar", v: n(chAguardando("daniela").length), d: "escritos pelos agentes das áreas", key: "meus_chamados"})}
     </div>
-    <section><div class="cab"><h2>Responder agora</h2><span class="atual">agrupado por tipo · o primeiro de cada grupo em destaque</span></div>${porTipo(L, 3)}</section>
-    <section><div class="cab"><h2>Pressão por Master</h2><span class="atual">saúde mais baixa primeiro</span></div>
-      <div class="tab-wrap">${pm.map(m => { const it = L.filter(x => x.master === m.parceiro); return `<div class="linha-m" data-master="${esc(m.parceiro)}" tabindex="0" role="button">
-        <b>${esc(m.parceiro)}</b><span class="saude"><span class="barrinha"><i style="width:${m.saude}%;background:${corSaude(m.saude)}"></i></span><span class="mono">${m.saude}</span></span>
-        <span class="k">${n(it.length)}<small>itens</small></span><span class="k">${rs(m.abertos_rs)}<small>aberto</small></span><span class="k">${n(m.abertos_parados)}<small>parados</small></span>
-        <span class="k" style="${(m.repasse || {}).bloqueado ? "color:var(--erro)" : ""}">${n((m.repasse || {}).bloqueado)}<small>repasses bloqueados</small></span><span class="cel" aria-hidden="true">›</span></div>`; }).join("")}</div></section>`;
+    ${blocoChamados("daniela")}
+    <section><div class="cab"><h2>Demandas de parceiro</h2><span class="atual">o que cada parceiro pediu, já interpretado</span></div>${lista(dem, 3)}${dem.length > 3 ? `<button class="botao sec peq" style="margin-top:8px" data-kpi="minha_caixa">Ver as ${n(dem.length)}</button>` : ""}</section>
+    <section><div class="cab"><h2>Negócios que pedem ação</h2><span class="atual">agrupado por tipo · 3 por grupo</span></div>${porTipo(L.filter(x => x.grupo !== "Demanda"), 3)}</section>
+    ${blocoSeuDia("daniela")}`;
 };
 V.jenifer = () => {
   const J = D.jenifer, IJ = D.detalhe.indicacoes.jenifer || {}, IG = D.detalhe.indicacoes.geovana || {}, L = minhas(), rot = J.semanas.map(s => s.slice(8, 10) + "/" + s.slice(5, 7));
   const mxs = Math.max(...J.novos, ...J.diag, 1), sem = (vals, nome) => colunas(vals.map((v, i) => ({r: rot[i], v, estado: i === vals.length - 1 ? "parcial" : (nome === "diag" && i < 5 && !v ? "sem" : "real"), tip: T("semana de " + rot[i], [n(v) + " " + (nome === "diag" ? "entradas" : "negócios"), i === vals.length - 1 ? "semana parcial" : ""])})), {alt: 150});
-  return `<div class="topo-cards">
+  return `${boasVindas()}<div class="topo-cards">
       <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Agendamentos</span><div class="lado"><span class="v" data-count="${IJ.agendamento || 0}">${n(IJ.agendamento)}</span><span class="t">reuniões agendadas a partir das suas indicações</span></div>
         ${empilhada100([{r: "Agendamento", v: IJ.agendamento || 0, cor: "var(--ouro)"}, {r: "Demais abertas", v: Math.max(0, (IJ.abertos || 0) - (IJ.agendamento || 0)), cor: "var(--serie-3)"}, {r: "Perdidas ou desqualificadas", v: IJ.perdidos || 0, cor: "var(--serie-4)"}], {fmt: n})}
         <div><button class="botao" data-kpi="ind_jenifer">Ver minhas indicações</button></div></div>
@@ -485,19 +548,21 @@ V.jenifer = () => {
     <section><div class="cab"><h2>Fazer agora</h2></div>${lista(L, 5)}</section>
     <section><div class="cab"><h2>Ritmo das últimas 8 semanas</h2><span class="atual">mesma escala · semana atual parcial</span></div>
       <div class="grade"><div class="bloco"><h3>Negócios novos por semana</h3>${sem(J.novos, "novos")}</div><div class="bloco"><h3>Entradas em diagnóstico</h3>${sem(J.diag, "diag")}<p class="nota">O registro de entradas começa em 28/09; antes disso não há dado.</p></div></div></section>
-    <section><div class="cab"><h2>Onde cada Master já ganha</h2><span class="atual">use para direcionar as listas</span></div>
-      <div class="grade-3">${Object.entries(J.cobertura).map(([m, ufs]) => `<div class="bloco"><h3>${esc(m)}</h3>${barrasH(ufs.map(([u, q]) => ({r: u, v: q})), {larg: 40})}</div>`).join("")}</div></section>`;
+    <section><details class="grp"><summary><div class="grupo-tit">Onde cada Master já ganha <span class="atual">use para direcionar as listas</span></div></summary>
+      <div class="grade-3">${Object.entries(J.cobertura).map(([m, ufs]) => `<div class="bloco"><h3>${esc(m)}</h3>${barrasH(ufs.map(([u, q]) => ({r: u, v: q})), {larg: 40})}</div>`).join("")}</div></details></section>
+    ${blocoSeuDia("jenifer")}`;
 };
 V.geovana = () => {
   const G = D.geovana, dec = G.lote.filter(x => S.feitos.has(x.caso)).length, R = G.revisor, IG = D.detalhe.indicacoes.geovana || {};
   const rec = D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso));
-  return `<div class="topo-cards">
+  return `${boasVindas()}<div class="topo-cards">
       <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Lote da semana</span>
         <div class="lado">${anel(dec / Math.max(G.lote.length, 1), `${dec}/${G.lote.length}`)}<div><div class="t"><b>${rs(G.esperado_lote)}</b> de honorário esperado no lote</div><div class="nota">${dec ? `${dec} decididos` : "comece pelo 1º caso"} · cerca de 4 por dia útil</div></div></div>
         <div><button class="botao" data-comecar>${dec ? "Continuar o lote" : "Começar o lote"}</button></div></div>
       ${kpi({r: "Oportunidades indicadas", v: n(IG.n), d: `${rs(IG.valor)} · ${n(IG.ganhos)} ganhas`, key: "ind_geovana", count: IG.n})}
       ${kpi({r: "Recorrência para decidir", v: n(rec.length), d: `${rs(D.recorrencia.pot_credito)} em negócios`, key: "rec_parc"})}
     </div>
+    ${blocoChamados("geovana")}
     <section><div class="cab"><h2>Recorrência para decidir</h2><button class="botao sec peq" data-ir="recorrencia">Ver a fila completa</button></div>
       <div class="lista">${rec.slice(0, 4).map((x, i) => `<article class="item ${x.sinais.some(s => /L13|decad/.test(s)) ? "atencao" : ""}"><span class="tarja"></span><div class="corpo"><span class="t">${esc(x.caso)} · ${esc(x.parceiro)}</span><div class="meta"><span>${n(x.recorrencias_feitas)} já feita(s)</span><span>· ${n(x.meses_novos)} meses novos</span>${x.sinais.slice(0, 2).map(s => `<span class="chip ${/L13|decad/.test(s) ? "alerta" : ""}">${/L13|decad/.test(s) ? ico("alerta") : ""}${esc(s.split(":")[0].split(" (")[0])}</span>`).join("")}</div></div>
         <span class="val">${rs(x.potencial_credito)}</span><span class="idade"></span><div><button class="botao ${i ? "sec" : ""} peq" data-rec="${esc(x.caso)}">Decidir</button></div></article>`).join("")}</div></section>
@@ -505,12 +570,56 @@ V.geovana = () => {
       ${tab([["Caso"], ["Master"], ["Tipo"], ["Segmento"], ["Esperado", 1], ["Parecidos", 1], [""]], [...G.lote].sort((a, b) => (b.esperado || 0) - (a.esperado || 0)).map(x => [`<b>${esc(x.caso)}</b>${x.saldo === "sim" ? ` <span class="chip alerta">${ico("alerta")}saldo credor</span>` : ""}`, esc(x.parceiro), esc(x.tipo), esc(x.segmento), rs(x.esperado), esc(String(x.taxa || "").split(" ")[0]), S.feitos.has(x.caso) ? `<span class="chip ok">${ico("ok")}decidido</span>` : `<button class="botao sec peq" data-decidir="${esc(x.caso)}">Decidir</button>`]), "cartoes")}</section>
     <section><div class="grade">
       <div class="bloco"><h3>Revisor: lacunas por tese</h3><p class="tese">${n(R.revisados)} de ${n(R.selecionados)} diagnósticos revisados · ${n(R.lacunas)} lacunas.</p>${empilhadaH(G.por_tese.map(t => ({r: t.tese, segs: [t.alta, t.n - t.alta]})), ["var(--ouro)", "var(--serie-2)"], ["Alta", "Demais"], {totRot: r => `${n(r.segs[0])} de ${n(r.segs[0] + r.segs[1])}`})}<div class="leg"><span><i style="background:var(--ouro)"></i>prioridade alta</span><span><i style="background:var(--serie-2)"></i>demais</span></div></div>
-      <div class="bloco"><h3>Outros itens</h3>${lista(minhas(), 4)}</div></div></section>`;
+      <div class="bloco"><h3>Outros itens</h3>${lista(minhas(), 4)}</div></div></section>
+    ${blocoSeuDia("geovana")}`;
 };
 
 /* ---------- abas ---------- */
 const A = {};
-A.inicio = () => V[S.eu]();
+A.inicio = () => (S.eu !== "luis" ? `<div class="vendo">${ico("info")}<span>Você está vendo como <b>${PESSOAS[S.eu]}</b>.</span><button class="botao sec peq" data-eu="luis">Voltar para a sua visão</button></div>` : "") + V[S.eu]();
+const ST_CH = {proposto: ["Aguarda sua aprovação", "ouro"], abrindo: ["Abrindo no GLPI…", "alerta"], aberto: ["Aberto no GLPI", "ok"], aprovado_manual: ["Aprovado: abrir manualmente", "alerta"], recusado: ["Não aberto", ""]};
+const chSt = c => (S.ch[c.id] || {}).status || c.status;
+const agenteNome = X => (X.agente || "agente").replace("Gerente", "Agente");
+function chamadoCard(c, primeiro) { const st = chSt(c), [rot, cl] = ST_CH[st] || [st, ""], X = c.especialista || {}, pz = (X.prazo_motivo || "").match(/^\d{4}-\d{2}-\d{2}/);
+  return `<article class="item cham ${st === "proposto" ? "" : "leve"}"><span class="tarja st-${st}" aria-hidden="true"></span><div class="corpo">
+    <span class="t" title="${esc(c.titulo)}">${esc(c.titulo)}</span>
+    <div class="meta"><span>${esc(c.grupo)}</span>${c.master ? `<span>· ${esc(c.master)}</span>` : ""}${S.eu === "luis" ? `<span>· ${esc(PESSOAS[c.pessoa] || "")}</span>` : ""}</div>
+    <div class="meta"><span class="chip ${cl}">${st === "aberto" && c.glpi_id ? `Aberto no GLPI #${esc(c.glpi_id)}` : esc(rot)}</span>${X.agente ? `<span class="chip">${ico("ok")}Escrito pelo ${esc(agenteNome(X))}</span>` : `<span class="chip alerta">${ico("alerta")}Texto da triagem, sem especialista</span>`}${X.nao_abrir && st === "proposto" ? `<span class="chip alerta">${ico("alerta")}O agente sugere não abrir</span>` : ""}${c.urgencia >= 4 ? `<span class="chip erro">Urgente</span>` : ""}</div></div>
+    <span class="val">${pz ? "prazo " + dt(pz[0]) : ""}</span>
+    <div><button class="botao ${primeiro && st === "proposto" ? "" : "sec"} peq" data-chamado="${esc(c.id)}">${st === "proposto" ? "Revisar e aprovar" : "Ver"}</button></div></article>`; }
+A.chamados = () => { const cs = chamadosDe(S.eu), f = S.filtro.chf || "aguarda", vis = cs.filter(c => f === "todos" || (f === "aguarda" ? chSt(c) === "proposto" : chSt(c) !== "proposto"));
+  return `<section><p class="sub">Os agentes interpretam o pedido do parceiro e o agente da área (Tributário ou Jurídico) escreve o chamado dizendo exatamente o que precisamos. Nada abre no GLPI sem a sua aprovação. Se não abrir, conte o motivo: ele ensina os agentes.</p>
+    <div class="filtros" role="group" aria-label="Filtro">${[["aguarda", "Esperando aprovação"], ["decididos", "Já decididos"], ["todos", "Todos"]].map(([k, r]) => `<button data-chf="${k}" aria-pressed="${f === k}">${r} <span class="badge">${n(cs.filter(c => k === "todos" || (k === "aguarda" ? chSt(c) === "proposto" : chSt(c) !== "proposto")).length)}</span></button>`).join("")}</div>
+    ${vis.length ? `<div class="lista">${vis.map((c, i) => chamadoCard(c, i === 0)).join("")}</div>` : `<div class="vazio">${ico("ok")}<span>${f === "aguarda" ? "Nenhum chamado esperando você." : "Nada aqui."}</span></div>`}</section>`; };
+A.resultados = () => { const K = D.kpi, wr = D.winrate.slice(-12);
+  return `<div class="kpis carrossel">
+      ${kpi({r: "Win rate 3 meses", v: pc(K.win_rate_3m), d: "ganhos ÷ (ganhos + perdidos)", sp: spark(wr.map(x => x.pct), 100), key: "winrate"})}
+      ${kpi({r: "Ticket médio", v: rsH(K.ticket_3m), d: "últimos 3 meses"})}
+      ${kpi({r: "Repasse 12 meses", v: rsH(Object.values(D.ficha).reduce((a, f) => a + (f.comissao_12m || 0), 0)), d: "aos parceiros, % oficial", key: "repasse12"})}
+      ${kpi({r: "Recorrência", v: rsH(D.recorrencia.pot_credito), d: `${n(D.recorrencia.n_elegiveis)} clientes elegíveis`, key: "rec_parc"})}</div>
+    <section><div class="grade-3">
+      <div class="bloco"><h3>Ganhos por mês</h3><p class="tese">Outubro em andamento; a linha é a média dos 11 meses fechados.</p>${grafGanhos()}${verTabela([["Mês"], ["R$", 1], ["Ganhos", 1]], g12().map(x => [mesRot(x.mes), rs(x.ganhos_rs), n(x.ganhos_n)]))}</div>
+      <div class="bloco"><h3>Onde está o pipeline</h3><p class="tese">${pc(100 * (D.detalhe.funil_rs.find(r => r[0] === "Apresentação de Diagnóstico") || [0, 0, 0])[2] / (PIPE.rs || 1))} do valor está parado em Apresentação de Diagnóstico.</p>${grafFunil(D.detalhe.funil_rs.filter(r => r[2] > 0))}<button class="botao sec peq" data-kpi="pipeline">Ver o pipeline completo</button></div>
+      <div class="bloco"><h3>Idade dos abertos</h3><p class="tese"><b>${n(D.detalhe.mais90[0])}</b> negócios há mais de 90 dias (${rs(D.detalhe.mais90[1])}).</p>${grafIdade()}<button class="botao sec peq" data-kpi="heat">Ver por etapa</button></div>
+    </div></section>
+    <section><div class="cab"><h2>Mais análises</h2></div><div class="grade">${DET.analises()[1]}</div></section>`; };
+const ST_PED = {novo: ["Na fila", "alerta"], em_analise: ["Em análise", "alerta"], aguardando_aprovacao: ["Pronto: aprovar", "ouro"], nova_analise: ["Nova análise pedida", "alerta"], aprovado: ["Aprovado", "ok"], nao_aprovado: ["Não aprovado", ""], concluido: ["Concluído", "ok"]};
+const pedSt = p => (S.ped[p.id] || {}).status || p.status;
+const mdH = t => { let h = "", ul = false; for (const l of String(t || "").split("\n")) { let x = esc(l.trim()).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>"); if (!x) continue; if (x.startsWith("- ")) { if (!ul) { h += "<ul>"; ul = true; } h += `<li>${x.slice(2)}</li>`; continue; } if (ul) { h += "</ul>"; ul = false; } h += `<p>${x}</p>`; } return h + (ul ? "</ul>" : ""); };
+A.pedidos = () => { const sub = S.filtro.psub || "acompanhar", f = S.filtro.pf || "todos";
+  const ps = D.pedidos.filter(p => f === "todos" || (f === "meus" ? p.solicitante === S.eu : p.para === S.eu)).sort((a, b) => String(b.criado_em).localeCompare(String(a.criado_em)));
+  const cels = [...new Set(D.catalogo.map(c => c.celula))];
+  return `<div class="filtros" role="tablist">${[["acompanhar", "Acompanhar pedidos"], ["pedir", "Fazer um pedido"]].map(([k, r]) => `<button data-psub="${k}" aria-pressed="${sub === k}">${r}</button>`).join("")}</div>
+    ${sub === "pedir" ? `<p class="sub">Escolha o tipo de pedido. Cada um diz o que volta e o que você precisa informar. Os agentes respondem em até 1 hora nos dias úteis.</p>
+      ${cels.map(cl => `<section><div class="cab"><h2>${esc(cl)}</h2></div><div class="grade-3">${D.catalogo.filter(c => c.celula === cl).map(c => `<div class="bloco cat"><span class="cod">${esc(c.codigo)}</span><h3>${esc(c.rotulo)}</h3><p class="tese"><b>O que volta:</b> ${esc(c.entrega)}</p><p class="nota">Informe: ${esc(c.precisa.join(", "))}</p><div><button class="botao sec peq" data-pedir="${esc(c.codigo)}">Pedir</button></div></div>`).join("")}</div></section>`).join("")}`
+    : `<section><div class="filtros" role="group" aria-label="Filtro">${[["meus", "Que eu pedi"], ["celula", "Para a minha célula"], ["todos", "Todos"]].map(([k, r]) => `<button data-pf="${k}" aria-pressed="${f === k}">${r}</button>`).join("")}</div>
+      ${ps.length ? `<div class="lista">${ps.map((p, i) => { const [rot, cl] = ST_PED[pedSt(p)] || [pedSt(p), ""]; return `<article class="item ${pedSt(p) === "aguardando_aprovacao" ? "" : "leve"}"><span class="tarja st-${pedSt(p) === "aguardando_aprovacao" ? "proposto" : ""}" aria-hidden="true"></span><div class="corpo">
+        <span class="t">${esc((p.campos || {}).precisa || p.codigo)}</span><div class="meta"><span class="num">${esc(p.pid || p.id)}</span><span>${esc(p.codigo)}</span>${(p.campos || {}).master ? `<span>· ${esc(p.campos.master)}</span>` : ""}<span>· pedido por ${esc(PESSOAS[p.solicitante] || "—")} em ${dt(String(p.criado_em || ""))}</span></div>
+        <div class="meta"><span class="chip ${cl}">${esc(rot)}</span>${p.resposta ? `<span class="chip">${ico("ok")}Resposta versão ${esc(p.resposta.versao || 1)}</span>` : ""}</div></div><span class="val"></span>
+        <div><button class="botao ${pedSt(p) === "aguardando_aprovacao" && i === 0 ? "" : "sec"} peq" data-pedido="${esc(p.id)}">${p.resposta ? "Ver a resposta" : "Ver"}</button></div></article>`; }).join("")}</div>` : `<div class="vazio">${ico("info")}<span>Nenhum pedido aqui ainda. <button class="botao sec peq" data-psub="pedir">Fazer um pedido</button></span></div>`}</section>
+    <section><details class="grp"><summary><div class="grupo-tit">Tempo até resolver, por pessoa</div></summary>
+      <div class="kpis">${["daniela", "jenifer", "geovana"].map(p => kpi({r: PESSOAS[p], v: D.tempo[p].mediana_h == null ? "—" : String(D.tempo[p].mediana_h).replace(".", ",") + " h", d: `mediana de ${n(D.tempo[p].n)} demandas resolvidas`})).join("")}</div></details></section>`}`; };
+
 A.caixa = () => {
   const base = minhas(), f = S.filtro, grupos = ["Tudo", ...new Set(D.caixa.map(x => x.grupo))];
   const xs = base.filter(x => (!f.grupo || f.grupo === "Tudo" || x.grupo === f.grupo) && (!f.prontos || pronto(x)) && (!f.busca || (x.titulo + " " + x.tipo + " " + (x.master || "")).toLowerCase().includes(f.busca.toLowerCase())));
@@ -569,13 +678,13 @@ A.recorrencia = () => {
         <td data-r="Sinais">${x.sinais.map(s => `<span class="chip ${/L13|decad/.test(s) ? "alerta" : /não registrada/.test(s) ? "erro" : ""}">${/L13|decad|não registrada/.test(s) ? ico("alerta") : ""}${esc(s.split(":")[0].split(" (")[0])}</span>`).join(" ")}</td><td><button class="botao peq" data-rec="${esc(x.caso)}">Decidir</button></td></tr>`).join("")}</tbody></table></div>
       ${fila.length > 30 ? `<p class="nota" style="margin-top:8px">Mostrando 30 de ${n(fila.length)}. Use o filtro por parceiro.</p>` : ""}</section>`;
 };
-A.busca = () => `<section><h2>Busca</h2><p class="sub">Código, parceiro, segmento ou UF. Para saber se uma empresa já é de alguém, digite o CNPJ: a página compara só a raiz em código, sem guardar o número.</p>
-    <div class="busca-box"><input type="search" id="q" placeholder="Código, parceiro, segmento, UF ou CNPJ" value="${esc(S.q || "")}" aria-label="Buscar"></div></section><section id="res-busca">${resBusca()}</section>`;
+A.busca = () => `<section><h2>Busca</h2><p class="sub">Nome da empresa, código, parceiro, segmento ou UF. Para saber se uma empresa já é de alguém, digite o CNPJ: a página compara só a raiz em código, sem guardar o número.</p>
+    <div class="busca-box"><input type="search" id="q" placeholder="Empresa, código, parceiro, UF ou CNPJ" value="${esc(S.q || "")}" aria-label="Buscar"></div></section><section id="res-busca">${resBusca()}</section>`;
 function resBusca() {
-  const q = (S.q || "").trim(); if (!q) return `<div class="vazio">${ico("busca")}<span>Comece a digitar. Exemplo: <b>D&S</b>, <b>Hortifrúti</b>, <b>MG</b> ou um CNPJ.</span></div>`;
+  const q = (S.q || "").trim(); if (!q) return `<div class="vazio">${ico("busca")}<span>Comece a digitar. Exemplo: <b>Panificadora</b>, <b>D&S</b>, <b>MG</b> ou um CNPJ.</span></div>`;
   if (S.cnpjRes) return S.cnpjRes;
-  const t = q.toLowerCase(), xs = D.busca.filter(b => b[0].includes(t) || b[1].toLowerCase().includes(t) || b[6].toLowerCase().includes(t) || b[5].toLowerCase() === t);
-  return `<div class="cab"><h2>${n(xs.length)} negócio(s)</h2></div>${tab([["Código"], ["Parceiro"], ["Etapa"], ["Situação"], ["Valor", 1], ["UF"], ["Criado", 1]], xs.slice(0, 50).map(b => [`<b>#${esc(b[0])}</b>`, esc(b[1]), esc(b[2]), `<span class="chip ${b[3] === "ganho" ? "ok" : ""}">${esc(b[3])}</span>`, rs(b[4]), esc(b[5]), dt(b[7])]), "cartoes")}${xs.length > 50 ? `<p class="nota">Mostrando 50. Refine a busca.</p>` : ""}`;
+  const t = q.toLowerCase(), xs = D.busca.filter(b => b[0].includes(t) || (b[9] || "").toLowerCase().includes(t) || b[1].toLowerCase().includes(t) || b[6].toLowerCase().includes(t) || b[5].toLowerCase() === t);
+  return `<div class="cab"><h2>${n(xs.length)} negócio(s)</h2></div>${tab([["Empresa"], ["Parceiro"], ["Etapa"], ["Situação"], ["Valor", 1], ["UF"], ["Criado", 1]], xs.slice(0, 50).map(b => [`<b>${esc(b[9] || "")}</b> <span class="nota">#${esc(b[0])}</span>`, esc(b[1]), esc(b[2]), `<span class="chip ${b[3] === "ganho" ? "ok" : ""}">${esc(b[3])}</span>`, rs(b[4]), esc(b[5]), dt(b[7])]), "cartoes")}${xs.length > 50 ? `<p class="nota">Mostrando 50. Refine a busca.</p>` : ""}`;
 }
 async function buscaCnpj(q) {
   const d = q.replace(/\D/g, ""); if (d.length < 8) { S.cnpjRes = null; return; }
@@ -583,19 +692,12 @@ async function buscaCnpj(q) {
   const hx = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16), xs = D.busca.filter(b => b[8] === hx);
   const ps = [...new Set(xs.map(b => b[1]))], ab = xs.filter(b => b[3] === "aberto"), gs = xs.filter(b => b[3] === "ganho");
   S.cnpjRes = xs.length ? `<div class="faixa" style="border-color:rgba(243,205,96,.45);background:var(--ouro-suave)">${ico("alerta")}<span class="txt"><b>Esta empresa já existe no HubSpot:</b> ${n(xs.length)} negócio(s) com ${ps.map(esc).join(", ")}. ${gs.length ? `<b>Já é cliente</b> (${n(gs.length)} ganho). ` : ""}${ab.length ? `<b>${n(ab.length)} em aberto.</b> ` : ""}${ps.length > 1 ? "Mais de um canal: conflito para Operações de Canal." : "Fale com o dono do canal antes de abordar."}</span></div>
-      ${tab([["Código"], ["Parceiro"], ["Etapa"], ["Situação"], ["Valor", 1]], xs.map(b => [`<b>#${esc(b[0])}</b>`, esc(b[1]), esc(b[2]), esc(b[3]), rs(b[4])]), "cartoes")}`
+      ${tab([["Empresa"], ["Parceiro"], ["Etapa"], ["Situação"], ["Valor", 1]], xs.map(b => [`<b>${esc(b[9] || "")}</b> <span class="nota">#${esc(b[0])}</span>`, esc(b[1]), esc(b[2]), esc(b[3]), rs(b[4])]), "cartoes")}`
     : `<div class="vazio">${ico("ok")}<span><b>Nenhum negócio com esta empresa.</b> Livre para abordar: registre a oportunidade no HubSpot com o Master que vai atender.</span></div>`;
 }
 A.biblioteca = () => `<section><div class="cab"><h2>Respostas prontas</h2><span class="atual">troque o que está entre &lt; &gt; antes de enviar</span></div>
     <div class="grade-3">${D.biblioteca.respostas.map((r, i) => `<div class="bloco"><h3>${esc(r.situacao)}</h3><textarea id="bib-${i}" rows="4" aria-label="${esc(r.situacao)}">${esc(r.texto)}</textarea><div><button class="botao ${i ? "sec" : ""} peq" data-copiar="bib-${i}">Copiar</button></div></div>`).join("")}</div></section>
   <section><div class="cab"><h2>Materiais</h2><span class="atual">abrem no OneDrive (Office Online)</span></div><div class="docs">${D.biblioteca.materiais.map(m => `<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.nome)}</a>`).join("")}</div></section>`;
-A.pedidos = () => { const ps = D.caixa.filter(x => x.grupo === "Pedido");
-  return `<section><div class="cab"><h2>Respostas para aprovar</h2><button class="botao" data-novo>Novo pedido</button></div>${lista(ps, 10)}</section>
-    <section><div class="cab"><h2>Tempo até resolver</h2><span class="atual">mediana por pessoa</span></div>
-      <div class="kpis">${["daniela", "jenifer", "geovana"].map(p => kpi({r: PESSOAS[p], v: D.tempo[p].mediana_h == null ? "—" : String(D.tempo[p].mediana_h).replace(".", ",") + " h", d: `${n(D.tempo[p].n)} demandas resolvidas`})).join("")}</div>
-      <details class="tabela" style="margin-top:12px"><summary>Ver as últimas 20 resolvidas</summary>${tab([["Demanda"], ["Responsável"], ["Origem"], ["Aberta", 1], ["Resolvida", 1], ["Horas", 1]], D.hist.slice(0, 20).map(x => [`<b>${esc(x.id)}</b>`, esc(PESSOAS[x.pessoa] || x.pessoa), esc(x.origem), dt(x.aberta), dt(x.resolvida), String(x.horas).replace(".", ",")]), "cartoes")}</details>
-      <div class="vazio" style="margin-top:12px">${ico("info")}<span>Hoje "resolvida" é quando os agentes não veem mais pendência na conversa. Com o registro de cada encaminhamento no painel, este passa a ser o tempo real.</span></div></section>`; };
-
 /* ---------- detalhes dos números ---------- */
 const listaCaixa = xs => xs.length ? `<div class="lista">${xs.slice(0, 40).map((x, i) => itemHTML(x, i === 0)).join("")}</div>${xs.length > 40 ? `<p class="nota">Mostrando 40 de ${n(xs.length)}. Veja todos na Caixa de entrada.</p>` : ""}` : `<div class="vazio">${ico("ok")}<span>Nada aqui.</span></div>`;
 function loteConselho() { const cs = D.conselho.filter(c => !S.feitos.has(c.id));
@@ -640,6 +742,7 @@ const indDet = (quem, titulo) => () => { const I = D.detalhe.indicacoes[quem] ||
     <p class="nota">Campo "E-mail de quem está indicando o lead/cliente" no HubSpot.</p>`]; };
 DET.ind_geovana = indDet("geovana", "Oportunidades indicadas pela Geovana"); DET.ind_jenifer = indDet("jenifer", "Agendas e indicações da Jenifer");
 ["daniela", "jenifer", "geovana"].forEach(p => DET["carga_" + p] = () => [`${PESSOAS[p]}: o que espera agora`, listaCaixa(D.caixa.filter(x => x.pessoa === p && !S.feitos.has(x.id)))]);
+DET.meus_chamados = () => [`Chamados para aprovar`, `<div class="lista">${chamadosDe(S.eu).filter(c => chSt(c) === "proposto").map((c, i) => chamadoCard(c, i === 0)).join("") || `<div class="vazio">Nenhum chamado esperando.</div>`}</div>`];
 DET.minha_caixa = () => [`Demandas de parceiro`, listaCaixa(minhas().filter(x => x.grupo === "Demanda"))];
 DET.urgentes = () => [`Contratos parados`, listaCaixa(minhas().filter(x => x.tipo === "Contrato sem assinatura"))];
 DET.antigos = () => [`Atrasados (mais de 30 dias)`, listaCaixa([...minhas()].filter(x => (x.dias || 0) > 30).sort((a, b) => (b.dias || 0) - (a.dias || 0)))];
@@ -662,14 +765,19 @@ function gaveta(titulo, corpo, rodape = "", contexto = "") {
   S.origem = document.activeElement;
   $("#camada").innerHTML = `<div class="veu" data-fechar></div><aside class="gaveta" role="dialog" aria-modal="true" aria-label="${esc(titulo)}">
     <div class="gaveta-cab"><div class="tt">${contexto ? `<span class="rotulo" style="color:var(--ouro)">${contexto}</span>` : ""}<h3>${esc(titulo)}</h3></div><button class="botao sec icone" data-fechar aria-label="Fechar">${ico("fechar")}</button></div>
-    <div class="gaveta-corpo">${corpo}${rodape ? `<div style="display:flex;gap:8px;flex-wrap:wrap">${rodape}</div>` : ""}</div></aside>`;
+    <div class="gaveta-corpo">${corpo}</div>${rodape ? `<div class="gaveta-rod">${rodape}</div>` : ""}</aside>`;
   $(".gaveta [data-fechar]").focus();
 }
 function fechar() { $("#camada").innerHTML = ""; if (S.origem && document.contains(S.origem)) S.origem.focus(); }
-function toast(t) { const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 2600); }
+function toastD(t, desfazer) { document.querySelectorAll(".toast").forEach(e => e.remove()); const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status");
+  el.innerHTML = `<span>${esc(t)}</span>${desfazer ? `<button class="desfazer">Desfazer</button>` : ""}<i class="barra"></i>`; document.body.appendChild(el);
+  const tm = setTimeout(() => el.remove(), 5000); if (desfazer) el.querySelector(".desfazer").onclick = () => { clearTimeout(tm); el.remove(); desfazer(); S.manter = true; render(); toast("Desfeito."); }; }
+function decidido(id, msg, desfazer) { S.feitos.add(id); fechar(); S.manter = true; render(); toastD(msg, () => { S.feitos.delete(id); desfazer && desfazer(); }); }
+const nomeItem = id => { const x = D.caixa.find(i => i.id === id) || D.chamados.find(i => i.id === id) || {}; return x.titulo ? String(x.titulo).slice(0, 40) : id; };
+function toast(t) { document.querySelectorAll(".toast").forEach(e => e.remove()); const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 3200); }
 
 /* ---------- render ---------- */
-const contagem = () => ({caixa: minhas().length, prazos: D.prazos.length, recorrencia: D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso)).length});
+const contagem = () => ({caixa: minhas().length, prazos: D.prazos.length, chamados: chAguardando(S.eu).length, pedidos: D.pedidos.filter(p => pedSt(p) === "aguardando_aprovacao" && (S.eu === "luis" || p.para === S.eu)).length, recorrencia: S.eu === "geovana" || S.eu === "luis" ? D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso)).length : 0});
 function render() {
   const cont = contagem(), falhas = Object.entries(D.operacao.rotinas).filter(([, v]) => !v.ok);
   $("#nav").innerHTML = GRUPOS.map(([g, it]) => `<div class="grupo-nav"><span class="rotulo">${g}</span>${it.map(([k, r]) => `<button class="nav-item" data-aba="${k}" ${S.aba === k ? 'aria-current="page"' : ""} title="${r}">${ico(k)}<span>${r}</span>${cont[k] ? `<span class="badge">${cont[k] > 99 ? "99+" : cont[k]}</span>` : ""}</button>`).join("")}</div>`).join("");
@@ -677,7 +785,7 @@ function render() {
   $("#inferior").innerHTML = [["inicio", "Início"], ["caixa", "Caixa"], ["prazos", "Prazos"], ["mais", "Mais"]].map(([k, r]) => `<button data-${k === "mais" ? "mais-menu" : "aba"}="${k}" ${S.aba === k || (k === "mais" && !["inicio", "caixa", "prazos"].includes(S.aba)) ? 'aria-current="page"' : ""}>${ico(k)}${r}${cont[k] ? `<span class="badge">${cont[k] > 99 ? "99+" : cont[k]}</span>` : ""}</button>`).join("");
   const rot = (ABAS.find(a => a[0] === S.aba) || [])[1];
   $("#topo").innerHTML = `<div><h1>${S.aba === "inicio" ? "Olá, " + PESSOAS[S.eu] : esc(rot)}</h1><div class="sub">${S.aba === "inicio" ? "Seu dia na Área Partners · dados de " + esc(D.atualizado) : "Central Partners"}</div></div>
-    <div class="dir"><button class="op ${falhas.length || D.operacao.email_pausado ? "falha" : ""}" data-saude><span class="pt" style="background:${falhas.length ? "var(--erro)" : D.operacao.email_pausado ? "var(--alerta)" : "var(--sucesso)"}"></span>${falhas.length ? `Operação: ${falhas.length} falha(s)` : D.operacao.email_pausado ? "E-mail pausado" : "Operação ok"}</button></div>`;
+    <div class="dir"><span class="aviso-topo">Nada aqui é enviado a parceiros ou clientes</span>${S.eu !== "luis" ? "" : `<button class="op ${falhas.length || D.operacao.email_pausado ? "falha" : ""}" data-saude><span class="pt" style="background:${falhas.length ? "var(--erro)" : D.operacao.email_pausado ? "var(--alerta)" : "var(--sucesso)"}"></span>${falhas.length ? `${falhas.length} rotinas falharam · ver` : D.operacao.email_pausado ? "E-mail pausado" : "Operação ok"}</button>`}</div>`;
   const main = $("#conteudo"), y = scrollY; main.innerHTML = A[S.aba]();
   if (S.animar) { main.classList.remove("entra"); void main.offsetWidth; main.classList.add("entra"); contar(); }
   S.animar = false; if (S.manter) window.scrollTo(0, y); S.manter = false;
@@ -688,6 +796,42 @@ function ir(aba) { S.aba = aba; S.animar = true; try { localStorage.setItem("cp-
 document.addEventListener("click", e => {
   const t = e.target.closest("button, tr.clic, .linha-m, .kpi[data-kpi], circle[data-master], .veu"); if (!t) return;
   const d = t.dataset;
+  if ("tourOk" in d) { try { localStorage.setItem("cp-tour", "1"); } catch (x) {} S.manter = true; render(); return; }
+  if ("tarefa" in d) { abrirTarefa(); return; }
+  if (d.mtipo) { document.querySelectorAll("[data-mtipo]").forEach(b => b.setAttribute("aria-pressed", b === t)); return; }
+  if (d.mmin) { document.querySelectorAll("[data-mmin]").forEach(b => b.setAttribute("aria-pressed", b === t)); $("#t-min").value = d.mmin; return; }
+  if ("tsalvar" in d) { const desc = $("#t-desc").value.trim(), min = +$("#t-min").value || 0; if (!desc) { $("#t-desc").focus(); $("#t-desc").placeholder = "Conte o que fez em uma frase"; return; } if (!min) { toast("Informe os minutos."); return; }
+    const tipo = (document.querySelector("[data-mtipo][aria-pressed=true]") || {}).dataset?.mtipo || "Outro", a = {pessoa: S.eu, desc, tipo, master: $("#t-master").value, min, ponte: $("#t-ponte").checked}; S.apont.push(a); fechar(); S.manter = true; render();
+    const tot = S.apont.filter(x => x.pessoa === S.eu).reduce((s, x) => s + x.min, 0); toastD(`Tarefa registrada: ${fmtMin(min)}. Hoje: ${fmtMin(tot)}.`, () => S.apont.splice(S.apont.indexOf(a), 1)); return; }
+  if (d.chamado) { const c = D.chamados.find(i => i.id === d.chamado); if (c) abrirChamado(c); return; }
+  if (d.chok) { const id = d.chok; S.ch[id] = {status: "abrindo"}; fechar(); S.manter = true; render();
+    toastD("Chamado aprovado. Abrindo no GLPI em 5 s…", () => delete S.ch[id]);
+    setTimeout(() => { if ((S.ch[id] || {}).status === "abrindo") { S.ch[id] = {status: "aprovado_manual"}; S.manter = true; render(); toast("O GLPI ainda não está integrado: o chamado ficou aprovado para você abrir manualmente. O texto está no detalhe."); } }, 5200); return; }
+  if (d.chnao) { const box = $("#ch-rec"); if (box.hidden) { box.hidden = false; $("#ch-mot").focus(); t.textContent = "Confirmar: não abrir"; return; }
+    const mot = $("#ch-mot").value.trim(); if (!mot) { $("#ch-mot").focus(); $("#ch-mot").placeholder = "Conte o motivo em uma frase. Isso ajuda o agente a aprender."; return; }
+    const id = d.chnao; S.ch[id] = {status: "recusado", motivo: mot}; fechar(); S.manter = true; render(); toastD("Chamado não será aberto. Motivo salvo.", () => delete S.ch[id]); return; }
+  if ("chsalvar" in d) { toast("Edição salva. Protótipo: nada foi gravado."); return; }
+  if (d.chf) { S.filtro.chf = d.chf; S.manter = true; render(); return; }
+  if (d.encarea) { document.querySelectorAll("[data-encarea]").forEach(b => b.setAttribute("aria-pressed", b === t)); return; }
+  if (d.dem) { const id = d.id, area = (document.querySelector("[data-encarea][aria-pressed=true]") || {}).dataset?.encarea;
+    if (d.dem === "encaminhado" && !area) { toast("Escolha para qual área encaminhou."); document.querySelector("[data-encarea]")?.focus(); return; }
+    decidido(id, {respondido: `Demanda de ${nomeItem(id)} marcada como respondida.`, encaminhado: `Encaminhada ao ${area}.`, nao_e_demanda: "Marcada como não demanda. Sai da fila e ensina os agentes."}[d.dem]); return; }
+  if (d.csq) { const id = d.csq; S.cons[id] = {decisao: "aprovada"}; decidido(id, "Decisão do Conselho aprovada.", () => delete S.cons[id]); return; }
+  if (d.consAbrir) { const c = D.conselho.find(i => i.id === d.consAbrir); if (c) abrirConselho(c); return; }
+  if (d.csd) { const obs = $("#cs-obs").value.trim(); if (d.csd === "aprovada com ajuste" && !obs) { $("#cs-obs").focus(); $("#cs-obs").placeholder = "Diga qual ajuste"; return; }
+    const id = d.id; S.cons[id] = {decisao: d.csd, obs}; decidido(id, `Decisão do Conselho registrada: ${d.csd}.`, () => delete S.cons[id]); return; }
+  if (d.rcp) { const id = d.id, v = s => ($(s)?.value || "").trim();
+    if (d.rcp === "Aprovar para reanálise" && (!v("#r-valor") || !v("#r-min"))) { toast("Informe o valor validado e os minutos para aprovar."); (!v("#r-valor") ? $("#r-valor") : $("#r-min")).focus(); return; }
+    if (d.rcp !== "Aprovar para reanálise" && !v("#d-motivo")) { $("#d-motivo").focus(); $("#d-motivo").placeholder = "Conte o motivo em uma frase"; return; }
+    S.recup[id] = {decisao: d.rcp, valor: v("#r-valor"), min: v("#r-min"), motivo: v("#d-motivo")};
+    decidido(id, d.rcp === "Aprovar para reanálise" ? `Enviado para reanálise. R$ ${v("#r-valor")} validados, ${v("#r-min")} min.` : d.rcp === "Vetar" ? "Caso vetado. O motivo ensina o Recuperador." : "Marcado como precisa de dado.", () => delete S.recup[id]); return; }
+  if (d.psub) { S.filtro.psub = d.psub; S.manter = true; render(); return; }
+  if (d.pf) { S.filtro.pf = d.pf; S.manter = true; render(); return; }
+  if (d.pedir) { abrirPedir(d.pedir); return; }
+  if ("penviar" in d) { if (!$("#p-precisa").value.trim()) { $("#p-precisa").focus(); $("#p-precisa").placeholder = "Descreva a entrega que resolve o seu problema"; return; } fechar(); toast("Pedido enviado. Os agentes respondem aqui, em até 1 hora nos dias úteis. Protótipo: nada foi gravado."); return; }
+  if (d.pedido) { const p = D.pedidos.find(i => i.id === d.pedido); if (p) abrirPedido(p); return; }
+  if (d.pdec) { const id = d.id, nota = ($("#p-nota")?.value || "").trim(); if (d.pdec !== "aprovado" && !nota) { $("#p-nota").focus(); $("#p-nota").placeholder = "Escreva o motivo ou o que mudar"; return; }
+    S.ped[id] = {status: d.pdec}; fechar(); S.manter = true; render(); toastD({aprovado: "Resposta aprovada.", nova_analise: "Pedido de nova análise enviado ao agente.", nao_aprovado: "Resposta não aprovada. O comentário orienta o agente."}[d.pdec], () => delete S.ped[id]); return; }
   if ("fechar" in d) { fechar(); if (!d.ir) return; }
   if (d.kpi && DET[d.kpi]) { const [ti, co, ro] = DET[d.kpi](); gaveta(ti, co, ro); return; }
   if ("lote" in d) { const [ti, co, ro] = DET.lote(); gaveta(ti, co, ro); return; }
@@ -709,7 +853,7 @@ document.addEventListener("click", e => {
   if (d.reativar != null && d.reativar !== "") { const r = D.esfriando[+d.reativar]; gaveta(r.parceiro, `${par("Sem negócio novo", n(r.dias) + " dias")}${par("Ganhos em 12 meses", n(r.ganhos_12m))}${r.uf.length ? par("Onde já ganha", r.uf.map(esc).join(", ")) : ""}<div class="pacote"><h4>Mensagem de reativação <span class="chip">WhatsApp</span></h4><textarea id="pk-reat">Olá, tudo bem? Faz um tempo que não falamos sobre novos casos. Separamos algumas empresas${r.uf.length ? " em " + r.uf.join(", ") : " da sua região"} com perfil parecido com clientes que já ganhamos juntos. Podemos marcar 20 minutos esta semana?</textarea></div>`, `<button class="botao" data-copiar="pk-reat">Copiar mensagem</button><button class="botao sec" data-lista>Pedir lista de contas-alvo (JB1)</button>`, "Reativação · " + r.tipo); return; }
   if ("lista" in d || "reuniao" in d || "enviar" in d) { fechar(); toast("Pedido enviado aos agentes. Protótipo: nada foi gravado."); return; }
   if ("novo" in d) { gaveta("Novo pedido aos agentes", `<label for="p-tipo">Tipo de pedido<select id="p-tipo"><option>DM1 · Briefing de conta Master</option><option>DM3 · Rascunho de resposta ao parceiro</option><option>JB1 · Lista de prospects por Master</option><option>GT1 · Pré-análise tributária de empresa</option><option>GE2 · Relatório do HubSpot</option></select></label><label for="p-master">Master<select id="p-master"><option value="">—</option>${D.masters.map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label><label for="p-precisa">O que você precisa<textarea id="p-precisa" placeholder="Descreva a entrega que resolve o seu problema"></textarea></label>`, `<button class="botao" data-enviar>Enviar pedido</button>`); return; }
-  if (d.abrir) { const x = D.caixa.find(i => i.id === d.abrir); if (x) gaveta(x.titulo, `${par("Responsável", esc(PESSOAS[x.pessoa]))}${x.master ? par("Master", esc(x.master)) : ""}${x.valor ? par("Valor", rs(x.valor)) : ""}${x.dias != null ? par("Esperando", `<span class="idade ${idade(x.dias)}">${n(x.dias)} dia(s)</span>`) : ""}${pacoteHTML(x)}`, `<button class="botao" data-feito="${esc(x.id)}">${pronto(x) ? "Marcar como encaminhado" : esc(x.acao.split(" / ")[0])}</button>`, pronto(x) ? "Pronto para encaminhar · " + x.tipo : x.tipo); return; }
+  if (d.abrir) { const x = D.caixa.find(i => i.id === d.abrir); if (x && abrirEspecial(x)) return; if (x) gaveta(x.titulo, `${par("Responsável", esc(PESSOAS[x.pessoa]))}${x.master ? par("Master", esc(x.master)) : ""}${x.valor ? par("Valor", rs(x.valor)) : ""}${x.dias != null ? par("Esperando", `<span class="idade ${idade(x.dias)}">${n(x.dias)} dia(s)</span>`) : ""}${pacoteHTML(x)}`, `<button class="botao" data-feito="${esc(x.id)}">${pronto(x) ? "Marcar como encaminhado" : esc(x.acao.split(" / ")[0])}</button>`, pronto(x) ? "Pronto para encaminhar · " + x.tipo : x.tipo); return; }
   if ("comecar" in d) { const x = [...D.geovana.lote].sort((a, b) => (b.esperado || 0) - (a.esperado || 0)).find(i => !S.feitos.has(i.caso)); if (x) abrirLote(x); return; }
   if (d.decidir) { const x = D.geovana.lote.find(i => i.caso === d.decidir); if (x) abrirLote(x); return; }
   if (d.prazo) { const p = D.prazos.find(i => i.id === d.prazo); gaveta(p.id + " · " + p.tipo, `${par("Master", esc(p.master || "—"))}${par("Prazo", esc(p.prazo_txt))}<div class="pacote"><h4>Chamado no GLPI <span class="chip">Jurídico > Comunicados RFB</span></h4><textarea id="pk-rfb" rows="9">DADOS\n1) Setor Solicitante: MASTER\n2) Parceiro Solicitante: ${esc(p.master || "<Master>")}\nINFORMAÇÕES GERAIS\n1) Assunto: ${esc(p.tipo)} de <EMPRESA>\n2) Classe: Interna\n3) Informações Adicionais: data de ciência <DATA>; autorização do cliente para seguir (ou não) com a manifestação: <SIM/NÃO>\n4) Documentos: despacho ou intimação, print do e-CAC</textarea></div><div class="pacote"><h4>Antes de enviar</h4>${["Confirmar a data de ciência no documento", "Ter a autorização do cliente para seguir (o Jurídico pede)", "Com menos de 10 dias, marcar urgência máxima"].map((c, i) => `<label class="check" for="rf-${i}"><input type="checkbox" id="rf-${i}"><span>${c}</span></label>`).join("")}</div>`, `<button class="botao" data-glpi="${esc(p.id)}">Abrir chamado no GLPI</button><button class="botao sec" data-copiar="pk-rfb">Copiar descrição</button>`, "Prazo da Receita"); return; }
@@ -732,10 +876,70 @@ document.addEventListener("click", e => {
       <div class="pacote"><h4>Abertos por etapa</h4>${barrasH((f.etapas || []).map(([r, v]) => ({r, v})))}</div>
       ${(f.uf || []).length ? `<div class="pacote"><h4>Onde já ganha</h4>${barrasH(f.uf.map(([u, q]) => ({r: u, v: q})), {larg: 40})}</div>` : ""}`, `<button class="botao" data-reuniao>Preparar reunião (briefing DM1)</button>`, "Ficha do parceiro"); return; }
 });
-function abrirLote(x) { gaveta(x.caso, `${par("Master", esc(x.parceiro))}${par("Tipo", esc(x.tipo))}${par("Segmento", esc(x.segmento) + " · " + esc(x.uf))}${par("Esperado", `<b>${rs(x.esperado)}</b>`)}${par("Parecidos", esc(x.taxa))}${par("Aderência", esc(x.aderencia))}${par("Documentos", esc(x.docs || "—"))}<label for="d-motivo">Motivo ou observação<input type="text" id="d-motivo"></label>`,
-  `<button class="botao" data-feito="${esc(x.caso)}">Aprovar reanálise</button><button class="botao sec" data-feito="${esc(x.caso)}">Precisa de dado</button><button class="botao sec" data-feito="${esc(x.caso)}">Vetar</button>`, "Recuperador · lote da semana"); }
+function abrirLote(x) { gaveta(x.caso, `${par("Parceiro", esc(x.parceiro))}${par("Tipo", esc(x.tipo))}${par("Segmento", esc(x.segmento) + " · " + esc(x.uf))}${par("Honorário esperado", `<b>${rs(x.esperado)}</b>`)}${par("Casos parecidos", esc(x.taxa))}${x.link ? par("Negócio", `<a href="${esc(x.link)}" target="_blank" rel="noopener">Abrir no HubSpot ↗</a>`) : ""}
+    ${x.hipotese ? `<div class="pacote destaque"><h4>Hipótese do Recuperador</h4><p>${esc(x.hipotese)}</p></div>` : ""}${x.parecer ? `<details class="grp" open><summary><div class="grupo-tit">Parecer do técnico</div></summary><p>${esc(x.parecer)}</p></details>` : ""}
+    <div class="pacote"><h4>Documentos a pedir</h4><p>${esc(x.documentos || x.docs || "—")}</p></div>
+    <div class="mini" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"><label for="r-valor">Valor validado (R$)<input type="text" id="r-valor" inputmode="decimal" placeholder="Ex.: 120.000"></label><label for="r-min">Minutos gastos<input type="text" id="r-min" inputmode="numeric" placeholder="Ex.: 25"></label></div>
+    <label for="d-motivo">Motivo ou observação<input type="text" id="d-motivo" placeholder="Obrigatório para vetar ou pedir dado"></label>`,
+  `<button class="botao" data-rcp="Aprovar para reanálise" data-id="${esc(x.caso)}">Aprovar para reanálise</button><button class="botao sec" data-rcp="Precisa de dado" data-id="${esc(x.caso)}">Precisa de dado</button><button class="botao sec txt-erro" data-rcp="Vetar" data-id="${esc(x.caso)}">Vetar</button>`, "Recuperador · lote da semana"); }
+function abrirEspecial(x) {
+  if (x.grupo === "Conselho") { const c = D.conselho.find(i => i.id === x.id); if (c) { abrirConselho(c); return true; } }
+  if (x.grupo === "Pedido") { const p = D.pedidos.find(i => i.id === x.id || i.pid === x.id); if (p) { abrirPedido(p); return true; } }
+  if (x.grupo === "Demanda") { abrirDemanda(x); return true; }
+  return false;
+}
+function abrirDemanda(x) { const ch = D.chamados.find(c => c.id === x.id);
+  gaveta(x.titulo, `${x.o_que_pede ? `<div class="pacote destaque"><h4>O parceiro pede</h4><p>${esc(x.o_que_pede)}</p></div>` : ""}
+    ${par("Responsável", esc(PESSOAS[x.pessoa]))}${x.master ? par("Parceiro", esc(x.master)) : ""}${x.rota ? par("Para onde vai", esc(x.rota)) : ""}${x.proximo_passo ? par("Próximo passo", esc(x.proximo_passo) + (x.prazo ? " · até " + esc(/^\d{4}-\d{2}-\d{2}/.test(x.prazo) ? dt(x.prazo) : x.prazo) : "")) : ""}${x.link ? par("Negócio", `<a href="${esc(x.link)}" target="_blank" rel="noopener">Abrir no HubSpot ↗</a>`) : ""}${par("Esperando", `<span class="idade ${idade(x.dias)}">${esc(quando(x.dias))}</span>`)}
+    ${x.entrega ? `<details class="grp"><summary><div class="grupo-tit">O que os agentes já levantaram</div></summary><div class="pacote"><div class="resposta-md">${mdH(x.entrega)}</div></div></details>` : ""}
+    ${ch ? `<div class="pacote"><h4>Chamado escrito pelo ${esc(agenteNome(ch.especialista || {}))}</h4><p class="nota">${esc(ST_CH[chSt(ch)]?.[0] || "")}</p><div><button class="botao sec peq" data-chamado="${esc(ch.id)}">Ver o chamado</button></div></div>` : pacoteHTML(x)}
+    <div class="pacote"><h4>Se encaminhou, para qual área?</h4><div class="filtros" style="margin:0">${["Tributário", "Jurídico", "Contratos", "Financeiro", "Outra área"].map(a => `<button type="button" data-encarea="${a}" aria-pressed="false">${a}</button>`).join("")}</div></div>`,
+    `<button class="botao" data-dem="respondido" data-id="${esc(x.id)}">Respondi</button><button class="botao sec" data-dem="encaminhado" data-id="${esc(x.id)}">Encaminhei à área</button><button class="botao sec" data-dem="nao_e_demanda" data-id="${esc(x.id)}">Não é demanda</button>`, "Demanda de parceiro · " + (x.codigo || x.id)); }
+function abrirConselho(c) { gaveta(c.id, `<div class="pacote destaque"><p>${esc(c.texto)}</p></div>${c.obs ? `<p class="nota">${esc(c.obs)}</p>` : ""}${par("Desde", dt(c.data))}${c.ata ? par("Ata", esc(c.ata)) : ""}
+    <label for="cs-obs">Observação (obrigatória em "Aprovar com ajuste")<input type="text" id="cs-obs" maxlength="400"></label>`,
+    `<button class="botao" data-csd="aprovada" data-id="${esc(c.id)}">Aprovar</button><button class="botao sec" data-csd="aprovada com ajuste" data-id="${esc(c.id)}">Aprovar com ajuste</button><button class="botao sec txt-erro" data-csd="rejeitada" data-id="${esc(c.id)}">Rejeitar</button>`, "Decisão do Conselho"); }
+function abrirChamado(c) { const X = c.especialista || {}, st = chSt(c), ed = st === "proposto", ro = ed ? "" : "readonly";
+  const ta = (id, rot, v, rows) => `<label for="${id}">${rot}<textarea id="${id}" rows="${rows}" ${ro}>${esc(v)}</textarea></label>`;
+  const corpo = `${X.nao_abrir && ed ? `<div class="faixa" style="border-color:rgba(232,179,74,.5);background:transparent">${ico("alerta")}<span class="txt"><b>O agente sugere não abrir:</b> ${esc(X.nao_abrir)}</span></div>` : ""}
+    ${st === "recusado" ? `<div class="pacote"><h4>Não aberto</h4><p>${esc((S.ch[c.id] || {}).motivo || c.motivo || "—")}</p></div>` : ""}
+    <label for="ch-tit">Título no GLPI<input type="text" id="ch-tit" value="${esc(c.titulo)}" ${ro}></label>
+    ${par("Categoria", esc(c.grupo))}${c.master ? par("Parceiro", esc(c.master)) : ""}${c.link ? par("Negócio", `<a href="${esc(c.link)}" target="_blank" rel="noopener">Abrir no HubSpot ↗</a>`) : ""}
+    ${X.entendemos ? `${ta("ch-ent", "Entendemos que", X.entendemos, 3)}${ta("ch-ped", "O que precisamos da área (um pedido por linha)", (X.pedidos || []).map((p, i) => `${i + 1}. ${p}`).join("\n"), Math.min(8, 2 + (X.pedidos || []).length * 2))}
+      ${X.prazo_motivo ? par("Prazo", esc(X.prazo_motivo)) : ""}${X.entrega ? par("Entrega esperada", esc(X.entrega)) : ""}
+      <div class="pacote"><h4>Documentos</h4>${(X.anexos || []).map(z => `<div class="check"><span class="chip ok">${ico("ok")}vai anexo</span><span>${esc(z)}</span></div>`).join("")}${(X.faltam || []).map(z => `<div class="check"><span class="chip alerta">${ico("alerta")}falta</span><span>${esc(z)}</span></div>`).join("")}${!(X.anexos || []).length && !(X.faltam || []).length ? `<p class="nota">Nenhum documento listado.</p>` : ""}</div>
+      ${X.riscos ? `<details class="grp" ${/multa|perda|prazo|glos/i.test(X.riscos) ? "open" : ""}><summary><div class="grupo-tit">Riscos</div></summary><p>${esc(X.riscos)}</p></details>` : ""}
+      ${(X.checagens || []).length ? `<details class="grp"><summary><div class="grupo-tit">Já conferido pelos agentes <span class="badge">${X.checagens.length}</span></div></summary>${X.checagens.map(z => `<div class="check">${ico("ok")}<span>${esc(z)}</span></div>`).join("")}</details>` : ""}`
+      : ta("ch-txt", "Texto do chamado", c.texto_md, 10)}
+    <details class="grp"><summary><div class="grupo-tit">Texto da triagem e conversa de origem</div></summary><div class="pacote"><div class="resposta-md">${mdH(c.original)}</div><p class="nota">Conversa: ${esc(c.conversa)}</p></div></details>
+    ${ed ? `<div id="ch-rec" hidden><label for="ch-mot">Por que não abrir?<input type="text" id="ch-mot" placeholder="Conte o motivo em uma frase. Isso ajuda o agente a aprender."></label></div>` : ""}`;
+  gaveta(c.titulo, corpo, ed ? `<button class="botao" data-chok="${esc(c.id)}">Aprovar e abrir no GLPI</button><button class="botao sec" data-chsalvar>Salvar edição</button><button class="botao sec txt-erro" data-chnao="${esc(c.id)}">Não abrir</button>` : st === "aprovado_manual" ? `<button class="botao sec" data-glpi="${esc(c.id)}">Copiar o texto para o GLPI</button>` : "", `Chamado · ${X.agente ? "escrito pelo " + agenteNome(X) : "texto da triagem"}`); }
+function abrirTarefa() { const tipos = ["Atendimento ao parceiro", "Encaminhamento a área", "Cobrança de área", "Atualização de CRM", "Reunião", "Prospecção", "Análise técnica", "Relatório", "Outro"];
+  const hoje = S.apont.filter(a => a.pessoa === S.eu), tot = hoje.reduce((a, x) => a + x.min, 0);
+  gaveta("Registrar tarefa", `<p class="nota">${hoje.length ? `Hoje: ${n(hoje.length)} tarefa(s), ${fmtMin(tot)}.` : "Primeira tarefa do dia."} Serve para medir o tempo do time (Semana 0).</p>
+    <label for="t-desc">O que você fez?<input type="text" id="t-desc" maxlength="160" placeholder="Ex.: encaminhei o contrato da Panificadora Araújo ao Tributário"></label>
+    <div><span class="rotulo">Tipo</span><div class="filtros" style="margin:6px 0 0">${tipos.map((x, i) => `<button type="button" data-mtipo="${esc(x)}" aria-pressed="${i === 0}">${esc(x)}</button>`).join("")}</div></div>
+    <label for="t-master">Master (opcional)<select id="t-master"><option value="">—</option>${D.masters.map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
+    <div><span class="rotulo">Minutos</span><div class="filtros" style="margin:6px 0 0">${[5, 15, 30, 60].map(m => `<button type="button" data-mmin="${m}" aria-pressed="${m === 15}">${m}</button>`).join("")}<input type="text" id="t-min" inputmode="numeric" value="15" aria-label="Minutos" style="width:80px"></div></div>
+    <label class="check" for="t-ponte"><input type="checkbox" id="t-ponte"><span>Foi só ponte: repassei, cobrei ou devolvi sem resolver</span></label>`, `<button class="botao" data-tsalvar>Registrar</button>`, "Semana 0 · " + PESSOAS[S.eu]); setTimeout(() => $("#t-desc")?.focus(), 50); }
+function abrirPedir(cod) { const c = D.catalogo.find(i => i.codigo === cod) || {};
+  gaveta(c.rotulo || cod, `<div class="confira"><b>O que volta:</b> ${esc(c.entrega)}<br><span class="nota">Informe: ${esc((c.precisa || []).join(", "))} · vai para ${esc(c.celula)}</span></div>
+    <label for="p-master">Master ou parceiro<select id="p-master"><option value="">—</option><option>Todos</option>${D.masters.map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
+    <label for="p-cliente">Cliente, CNPJ ou link do HubSpot<input type="text" id="p-cliente" maxlength="300"></label>
+    <label for="p-precisa">O que você precisa<textarea id="p-precisa" maxlength="1500" placeholder="Descreva a entrega que resolve o seu problema"></textarea></label>
+    <div class="mini" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"><label for="p-uso">Para que vai usar<select id="p-uso">${["Reunião", "Resposta ao parceiro", "Decisão interna", "Prospecção", "Levantamento", "Outro"].map(x => `<option>${x}</option>`).join("")}</select></label>
+      <label for="p-formato">Formato<select id="p-formato">${["Resumo na tela", "Planilha", "Word", "Rascunho de mensagem"].map(x => `<option>${x}</option>`).join("")}</select></label><label for="p-prazo">Prazo<input type="text" id="p-prazo" placeholder="dd/mm"></label></div>
+    <label for="p-contexto">Informações que ajudam<textarea id="p-contexto" maxlength="1500" placeholder="Não escreva dados bancários, CPF ou senhas."></textarea></label>`, `<button class="botao" data-penviar>Enviar pedido</button>`, "Pedido aos agentes · " + cod); }
+function abrirPedido(p) { const R = p.resposta, st = pedSt(p), pode = st === "aguardando_aprovacao";
+  gaveta((p.campos || {}).precisa || p.codigo, `${par("Pedido", `${esc(p.pid || p.id)} · ${esc(p.codigo)}`)}${par("Situação", esc((ST_PED[st] || [st])[0]))}${(p.campos || {}).master ? par("Master", esc(p.campos.master)) : ""}${(p.campos || {}).uso ? par("Para", esc(p.campos.uso) + " · " + esc(p.campos.formato || "")) : ""}
+    ${R ? `<div class="pacote"><h4>Resposta · versão ${esc(R.versao || 1)}</h4><p>${esc(R.resumo || "")}</p></div>
+      ${(R.secoes || []).map((z, i) => `<details class="grp" ${i === 0 ? "open" : ""}><summary><div class="grupo-tit">${esc(z.titulo)}</div></summary><div class="resposta-md">${mdH(z.texto)}</div></details>`).join("")}
+      ${(R.conferir || []).length ? `<div class="confira"><b>Antes de usar, confira</b><ul>${R.conferir.map(z => `<li>${esc(z)}</li>`).join("")}</ul></div>` : ""}
+      ${(R.arquivos || []).length ? `<div class="pacote"><h4>Arquivos no OneDrive</h4>${R.arquivos.map(z => `<p class="mono" style="font-size:12px">${esc(z)}</p>`).join("")}</div>` : ""}` : `<div class="vazio">${ico("info")}<span>Os agentes ainda não responderam.</span></div>`}
+    ${pode ? `<label for="p-nota">Comentário (obrigatório em "Pedir nova análise" e "Não aprovado")<textarea id="p-nota" maxlength="1500"></textarea></label>` : ""}`,
+    pode ? `<button class="botao" data-pdec="aprovado" data-id="${esc(p.id)}">Aprovado</button><button class="botao sec" data-pdec="nova_analise" data-id="${esc(p.id)}">Pedir nova análise</button><button class="botao sec txt-erro" data-pdec="nao_aprovado" data-id="${esc(p.id)}">Não aprovado</button>` : "", "Pedido aos agentes"); }
 document.addEventListener("keydown", e => {
   if (e.key === "Escape" && $("#camada").innerHTML) fechar();
+  if ((e.key === "t" || e.key === "T") && !$("#camada").innerHTML && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) abrirTarefa();
   if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.clic, .linha-m, .kpi[data-kpi], circle[data-master]")) { e.preventDefault(); e.target.click(); }
 });
 document.addEventListener("change", e => { if (e.target.id === "f-parc") { S.filtro.parc = e.target.value; S.manter = true; render(); } if (e.target.id === "f-rparc") { S.filtro.rparc = e.target.value; S.manter = true; render(); } });
@@ -743,5 +947,6 @@ document.addEventListener("input", async e => {
   if (e.target.id === "q") { S.q = e.target.value; S.cnpjRes = null; if (/\d{8,}/.test(S.q.replace(/\D/g, "")) && /^[\d.\/\-\s]+$/.test(S.q)) await buscaCnpj(S.q); $("#res-busca").innerHTML = resBusca(); return; }
   if (e.target.id === "busca") { S.filtro.busca = e.target.value; const pos = e.target.selectionStart; S.manter = true; render(); const b = $("#busca"); b.focus(); b.setSelectionRange(pos, pos); }
 });
+document.querySelectorAll(".tarefa-btn").forEach(b => b.innerHTML = b.innerHTML.replace("__ICO_TAREFA__", ico("tarefa")));
 S.animar = true; render();
 </script>
