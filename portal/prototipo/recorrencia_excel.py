@@ -13,7 +13,8 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 C = marca.cores("claro") if hasattr(marca, "cores") else json.load(open(marca.PASTA / "marca.json"))["claro"]
 hx = lambda c: c.lstrip("#").upper()
 SANS = "IBM Plex Sans"; MONO = "IBM Plex Mono"
-R = json.load(open(os.path.join(AQUI, "recorrencia-todas.json"), encoding="utf-8"))
+MASTERS = {m["parceiro"] for m in json.load(open(os.path.join(AQUI, "dados.json"), encoding="utf-8"))["masters"]} - {"Outros (fora do roster)"}
+R = [r for r in json.load(open(os.path.join(AQUI, "recorrencia-todas.json"), encoding="utf-8")) if r["parceiro"] in MASTERS]  # só clientes dos Masters (Luis, 14/10)
 HOJE = date(2026, 10, 14)
 
 fmt_cnpj = lambda c: (lambda d: f"{d[:2]}.{d[2:5]}.{d[5:8]}/{d[8:12]}-{d[12:]}" if len(d) == 14 else d)(re.sub(r"\D", "", str(c or "")).zfill(14)) if c else ""
@@ -21,7 +22,7 @@ dt = lambda s: date.fromisoformat(s[:10]) if s else None
 sim = lambda c, item: next((x for x in c if x["item"].startswith(item)), {})
 
 COLS = [("Empresa", 42, None), ("CNPJ", 20, "mono"), ("Parceiro", 18, None), ("Situação na Receita", 16, None), ("Data de abertura", 13, "data"), ("Regime (último parecer)", 17, None),
-        ("Movimentação", 24, None), ("Valor zerado no parecer: motivo", 40, None), ("Procuração", 22, None), ("UF", 6, None), ("Cidade", 16, None), ("Segmento", 32, None),
+        ("Movimentação", 24, None), ("Valor zerado no parecer: motivo", 40, None), ("UF", 6, None), ("Cidade", 16, None), ("Segmento", 32, None),
         ("Último ganho", 13, "data"), ("Recorrências já feitas", 12, "int"), ("Período apurado", 19, None), ("Período conferido no parecer", 14, None),
         ("Competências novas", 13, "int"), ("Crédito anterior (R$)", 17, "rs"), ("Potencial em negócios (R$)", 19, "rs"), ("Honorário estimado (R$)", 17, "rs"),
         ("Repasse ao parceiro (R$)", 17, "rs"), ("Ação judicial própria (L12)", 22, None), ("Tese já aproveitada", 22, None), ("Teses do ganho anterior", 40, None),
@@ -33,7 +34,7 @@ def linha(r):
     aj = sim(c, "Ação judicial"); ta = sim(c, "Tese já aproveitada")
     G = PRG.empresa(r.get("_deals") or [], r.get("_cnpj"))
     return [r["caso"], fmt_cnpj(r.get("_cnpj")), r["parceiro"], G["situacao_receita"], G["abertura"], G["regime_parecer"], G["movimentacao"], G["valor_zerado_motivo"] or "—",
-            G["procuracao"], r.get("uf") or "", r.get("_cidade") or "", r.get("segmento") or "",
+            r.get("uf") or "", r.get("_cidade") or "", r.get("segmento") or "",
             dt(r.get("ultimo_ganho")), r["recorrencias_feitas"], r.get("periodo_apurado") or "estimado pela data do ganho", "Sim" if r.get("periodo_conferido") else "Não",
             r["meses_novos"], r["credito_anterior"], r["potencial_credito"], r["potencial_honorario"], r["potencial_repasse"],
             ("Sim: Jurídico confere" if aj.get("ok") is False else "Não" if aj.get("ok") else "Não informado") if aj else "Parecer não lido",
@@ -86,10 +87,10 @@ el = [r for r in R if r["elegivel"]]; ag = [r for r in R if not r["elegivel"]]
 el.sort(key=lambda r: (not r["periodo_conferido"], -r["potencial_credito"]))
 ag.sort(key=lambda r: (r["faltam"], -r["credito_anterior"]))
 wb = Workbook()
-aba(wb, "Disponíveis para recorrência", f"{len(el)} empresas com 6 competências novas ou mais · maior potencial primeiro, com período conferido no parecer no topo · gerado em {HOJE:%d/%m/%Y}", el, True)
-aba(wb, "Aguardando 6 meses", f"{len(ag)} empresas que ainda não têm 6 competências novas · as mais próximas primeiro", ag)
+aba(wb, "Disponíveis para recorrência", f"{len(el)} empresas dos Masters com 6 competências novas ou mais · maior potencial primeiro, com período conferido no parecer no topo · gerado em {HOJE:%d/%m/%Y}", el, True)
+aba(wb, "Aguardando 6 meses", f"{len(ag)} empresas dos Masters que ainda não têm 6 competências novas · as mais próximas primeiro", ag)
 ws = wb.create_sheet("Como ler"); ws.sheet_view.showGridLines = False; ws.column_dimensions["A"].width = 30; ws.column_dimensions["B"].width = 100
-txt = [("Quem entra", "Clientes com negócio ganho, fora do Simples Nacional e do café, sem negócio aberto em nenhum pipeline (mesma raiz de CNPJ)."),
+txt = [("Quem entra", "Só clientes dos Masters (fora do roster não entra). Clientes com negócio ganho, fora do Simples Nacional e do café, sem negócio aberto em nenhum pipeline (mesma raiz de CNPJ)."),
        ("Período apurado", "Lido no parecer do último fechamento. As competências novas contam do mês seguinte ao fim do período até 09/2026."),
        ("Período conferido = Não", "O parecer do último fechamento ainda não foi lido: os meses contam da data do ganho (estimativa conservadora)."),
        ("Potencial em negócios", "Crédito anterior ÷ 60 × competências novas (até 60). Ordem de grandeza para priorizar, não promessa."),
@@ -99,7 +100,6 @@ txt = [("Quem entra", "Clientes com negócio ganho, fora do Simples Nacional e d
        ("Regime", "Só o que aparece no último parecer do técnico (regra da Geovana). Sem parecer lido: 'parecer não lido'."),
        ("Movimentação", "Tabela de faturamento do parecer só até 2025 = Empresa sem movimentação (regra da Geovana)."),
        ("Valor zerado", "Quando o último parecer não cita valor, a coluna traz o motivo escrito no arquivo."),
-       ("Procuração", "Conferência no site de procurações: aguardando liberação de acesso aos agentes."),
        ("Uso", "Uso interno da Área Partners. Pré-análise: a decisão de recorrência é da Geovana no painel.")]
 ws["A1"] = "Como ler esta planilha"; ws["A1"].font = Font(name=SANS, bold=True, size=14, color=hx(C["texto"]))
 for i, (a, b) in enumerate(txt, 3):
