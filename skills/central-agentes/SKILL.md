@@ -16,7 +16,7 @@ Você é o **orquestrador da Central**. Recebe pedidos por e-mail, decide qual s
 
 ## Fluxo de cada rodada
 1. `python3 ~/.claude/skills/central-agentes/scripts/central.py ler` → JSON com os itens novos (`pedido`, `resposta` ou `ignorado`). Arquivos anexos ficam em `~/agentes-partners/central-agentes/entrada/<id>/`.
-2. **Pedido novo:**
+2. **Pedido novo (fluxo único, regra do Luis de 14/10, `~/agentes-partners/infra/fluxo-unico.md`):** você é o agente de triagem. Interprete o pedido, acione o agente de cada área responsável (tabela do fluxo único, sem Portão 0) e devolva tudo analisado. Pedido sem código é o normal: o painel não tem mais catálogo, então deduza pelo texto. Indicação de empresa (originação) passa por quatro checagens: Receita, conflito de canal, ICP e pré-análise tributária. Se nenhuma área consegue responder com os dados, escreva o chamado ideal (`~/agentes-partners/infra/chamado-ideal.md`), rode `python3 ~/agentes-partners/lib/chamados_painel.py propor --arquivo <chamado.json>` (id = P-xxxx) e diga na resposta que o chamado está esperando aprovação na Caixa de entrada do painel.
    - Descubra o tipo pelo `codigo` (catálogo em `references/catalogo.json`). Sem código, deduza pelo texto; se for ambíguo, escolha o mais provável e diga na resposta.
    - Se faltar algo que impede o trabalho (`talvez_falte` ou análise sua), responda assim mesmo com o que dá para fazer e, na seção "O que faltou", peça o dado em uma frase: a pessoa responde com **Nova análise** e o dado.
    - Carregue a skill do catálogo (`skill`) e siga o modo dela, **pulando o Portão 0** (o pedido por e-mail já é a aprovação do plano). Gere os arquivos em `~/agentes-partners/central-agentes/pedidos/<P-xxxx>/` (planilha, Word ou .md) quando o formato pedir.

@@ -39,6 +39,25 @@ def html(md):
     return "".join(out)
 
 
+def propor(arquivo):
+    """Chamado vindo da Central (pedido ou originação) que a área não conseguiu responder com os dados (infra/fluxo-unico.md).
+    JSON: {"id": "P-0007" ou "D-AAAA-NNNN", "pessoa", "area", "titulo", "urgencia", "master", "link", "negocio", "empresa", "prazo",
+           "assunto", "o_que_pede", "especialista": {...infra/chamado-ideal.md}}. Fica "proposto" até a aprovação no painel."""
+    import chamado_modelo as CM, glpi
+    e = json.load(open(os.path.expanduser(arquivo))); P = ler()
+    if not e.get("id") or not e.get("area") or not (e.get("especialista") or {}).get("pedidos"):
+        sys.exit("faltam id, area ou especialista.pedidos (infra/chamado-ideal.md)")
+    if (P.get(e["id"]) or {}).get("status") in ("aberto", "aprovado_manual", "recusado"):
+        print(f"{e['id']}: já decidido no painel ({P[e['id']]['status']}), não proponho de novo"); return
+    md = CM.descricao_md(e)
+    origem = f"<p><i>Origem: Central de Agentes · pedido {e['id']} de {str(e.get('pessoa', '')).capitalize()}. Chamado redigido pelo {(e.get('especialista') or {}).get('agente') or CM.AGENTE(e['area'])}.</i></p>"
+    P[e["id"]] = {**{k: e.get(k) for k in ("pessoa", "area", "titulo", "urgencia", "master", "link", "negocio", "empresa", "prazo", "assunto", "o_que_pede", "especialista")},
+                  "id": e["id"], "grupo": (glpi.config()["areas"].get(e["area"]) or glpi.config()["areas"]["outros"])["nome"], "descricao": md,
+                  "descricao_html": CM.formulario(e["area"], e, e, md, origem), "conversa": "Central de Agentes", "status": "proposto",
+                  "proposto_em": datetime.now().isoformat(timespec="minutes")}
+    gravar(P); print(f"{e['id']}: chamado proposto ({P[e['id']]['grupo']}). Rode `publicar` e grave no painel.")
+
+
 def publicar():
     P = ler()
     novos = [{"doc_id": k, "data": {c: v[c] for c in ("pessoa", "area", "grupo", "titulo", "descricao", "urgencia", "conversa", "master", "link", "status", "proposto_em",
@@ -98,4 +117,5 @@ if __name__ == "__main__":
     if cmd == "publicar": publicar()
     elif cmd == "marcar-publicados": marcar_publicados(sys.argv[2].split(","))
     elif cmd == "aplicar": aplicar(sys.argv[2])
+    elif cmd == "propor": propor(sys.argv[sys.argv.index("--arquivo") + 1] if "--arquivo" in sys.argv else sys.argv[2])
     else: print(__doc__)
