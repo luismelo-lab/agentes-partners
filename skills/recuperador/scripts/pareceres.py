@@ -12,6 +12,7 @@ Nada é enviado para fora. O resumo guarda só o necessário para a análise (mo
 Uso:
   python3 pareceres.py --fila       # pareceres dos casos da fila do Recuperador
   python3 pareceres.py --ganhos     # pareceres dos negócios ganhos (padrão do que foi achado)
+  python3 pareceres.py --todos --pendentes            # depois de liberar o escopo 'files' na Private App do HubSpot
   python3 pareceres.py --todos [--refazer-ilegiveis]   # toda a base; Excel, imagem e PDF digitalizado passam por OCR local
 """
 import argparse, glob, io, json, os, re, subprocess, sys, time, zipfile
@@ -149,10 +150,26 @@ def baixar_bitrix(u, dest):
     return r.returncode == 0 and os.path.exists(dest) and os.path.getsize(dest) > 0
 
 
+_SEM_ESCOPO = []
+def baixar_hubspot(fid, dest):
+    """Arquivo do próprio HubSpot: pede a URL assinada (escopo 'files') e baixa. None = sem permissão (403); False = falhou."""
+    if _SEM_ESCOPO: return None
+    sys.path.insert(0, H("~/.claude/skills/depto-resultados/scripts")); import hubspot_fonte as HF
+    try: r = HF.call("GET", f"/files/v3/files/{fid}/signed-url", tries=3)
+    except SystemExit as e:
+        if "403" in str(e): _SEM_ESCOPO.append(1); return None
+        return False
+    u = (r or {}).get("url") if isinstance(r, dict) else None
+    if not u: return False
+    x = subprocess.run(["curl", "-sS", "-L", "-f", "-m", "120", "-o", dest, u], capture_output=True)
+    return x.returncode == 0 and os.path.exists(dest) and os.path.getsize(dest) > 0
+
+
 def main():
     ap = argparse.ArgumentParser(); g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--fila", action="store_true"); g.add_argument("--ganhos", action="store_true")
     g.add_argument("--todos", action="store_true", help="toda a base com parecer (look-alike e Revisor de Diagnóstico)")
+    ap.add_argument("--pendentes", action="store_true", help="só os pareceres que estavam no HubSpot aguardando o escopo 'files'")
     ap.add_argument("--refazer-ilegiveis", action="store_true", help="tenta de novo os marcados como ilegíveis (Excel, imagem, PDF digitalizado)")
     a = ap.parse_args()
     for p in (ARQ, TXT): os.makedirs(p, exist_ok=True)
@@ -167,6 +184,9 @@ def main():
         alvo = [i for i, d in N.items() if d["status"] == "ganho"]
     else:
         alvo = list(N)
+    if a.pendentes:  # depois de liberar o escopo 'files': só os casos que ficaram "aguardando permissão"
+        R0 = json.load(open(RES)) if os.path.exists(RES) else {}
+        alvo = [i for i in alvo if (R0.get(i) or {}).get("pendentes")]
     if a.refazer_ilegiveis:
         for f in glob.glob(os.path.join(TXT, "*.ilegivel")):
             if os.path.getsize(f) == 0: os.remove(f)
@@ -183,10 +203,12 @@ def main():
             if os.path.exists(txtp + ".ilegivel"): cont["ilegivel"] += 1; continue  # marcador vazio = ainda sem leitor para o formato
             if os.path.exists(txtp):
                 cont["ja_tinha"] += 1; textos.append((k, open(txtp).read())); continue
-            if u.isdigit():  # arquivo no HubSpot: precisa do escopo 'files'
-                pend.append(CAMPOS[k]); cont["pendente_permissao_hubspot"] += 1; continue
-            if "bitrix" not in u: continue
-            if not baixar_bitrix(u, dest): cont["falhou"] += 1; continue
+            if u.isdigit():  # arquivo no HubSpot: precisa do escopo 'files' (sem ele, fica pendente e o Luis libera na Private App)
+                ok = baixar_hubspot(u, dest)
+                if ok is None: pend.append(CAMPOS[k]); cont["pendente_permissao_hubspot"] += 1; continue
+                if not ok: cont["falhou"] += 1; continue
+            elif "bitrix" not in u: continue
+            elif not baixar_bitrix(u, dest): cont["falhou"] += 1; continue
             try: t = texto(dest)
             except Exception: t = ""
             os.remove(dest)  # guarda só o texto: o original continua no card

@@ -6,8 +6,8 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.drawing.image import Image
 
-sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
-import marca, caminhos  # noqa: E402
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); sys.path.insert(0, os.path.expanduser("~/agentes-partners/.claude/worktrees/amazing-kirch-442f46/lib"))
+import marca, caminhos, parecer_regras as PRG  # noqa: E402
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 C = marca.cores("claro") if hasattr(marca, "cores") else json.load(open(marca.PASTA / "marca.json"))["claro"]
@@ -20,7 +20,8 @@ fmt_cnpj = lambda c: (lambda d: f"{d[:2]}.{d[2:5]}.{d[5:8]}/{d[8:12]}-{d[12:]}" 
 dt = lambda s: date.fromisoformat(s[:10]) if s else None
 sim = lambda c, item: next((x for x in c if x["item"].startswith(item)), {})
 
-COLS = [("Empresa", 42, None), ("CNPJ", 20, "mono"), ("Parceiro", 18, None), ("Regime", 15, None), ("UF", 6, None), ("Cidade", 16, None), ("Segmento", 32, None),
+COLS = [("Empresa", 42, None), ("CNPJ", 20, "mono"), ("Parceiro", 18, None), ("Situação na Receita", 16, None), ("Data de abertura", 13, "data"), ("Regime (último parecer)", 17, None),
+        ("Movimentação", 24, None), ("Valor zerado no parecer: motivo", 40, None), ("Procuração", 22, None), ("UF", 6, None), ("Cidade", 16, None), ("Segmento", 32, None),
         ("Último ganho", 13, "data"), ("Recorrências já feitas", 12, "int"), ("Período apurado", 19, None), ("Período conferido no parecer", 14, None),
         ("Competências novas", 13, "int"), ("Crédito anterior (R$)", 17, "rs"), ("Potencial em negócios (R$)", 19, "rs"), ("Honorário estimado (R$)", 17, "rs"),
         ("Repasse ao parceiro (R$)", 17, "rs"), ("Ação judicial própria (L12)", 22, None), ("Tese já aproveitada", 22, None), ("Teses do ganho anterior", 40, None),
@@ -30,7 +31,9 @@ COLS = [("Empresa", 42, None), ("CNPJ", 20, "mono"), ("Parceiro", 18, None), ("R
 def linha(r):
     c = r.get("conferencias", [])
     aj = sim(c, "Ação judicial"); ta = sim(c, "Tese já aproveitada")
-    return [r["caso"], fmt_cnpj(r.get("_cnpj")), r["parceiro"], r.get("regime") or "", r.get("uf") or "", r.get("_cidade") or "", r.get("segmento") or "",
+    G = PRG.empresa(r.get("_deals") or [], r.get("_cnpj"))
+    return [r["caso"], fmt_cnpj(r.get("_cnpj")), r["parceiro"], G["situacao_receita"], G["abertura"], G["regime_parecer"], G["movimentacao"], G["valor_zerado_motivo"] or "—",
+            G["procuracao"], r.get("uf") or "", r.get("_cidade") or "", r.get("segmento") or "",
             dt(r.get("ultimo_ganho")), r["recorrencias_feitas"], r.get("periodo_apurado") or "estimado pela data do ganho", "Sim" if r.get("periodo_conferido") else "Não",
             r["meses_novos"], r["credito_anterior"], r["potencial_credito"], r["potencial_honorario"], r["potencial_repasse"],
             ("Sim: Jurídico confere" if aj.get("ok") is False else "Não" if aj.get("ok") else "Não informado") if aj else "Parecer não lido",
@@ -59,7 +62,9 @@ def aba(wb, titulo, sub, linhas, primeira=False):
     for j, r in enumerate(linhas, H + 1):
         for i, (v, (nome, _, tipo)) in enumerate(zip(linha(r), COLS), 1):
             c = ws.cell(j, i, v); c.font = Font(name=MONO if tipo in ("mono", "rs", "int") else SANS, size=10, color=hx(C["texto"])); c.border = borda
-            c.alignment = Alignment(vertical="top", wrap_text=nome in ("Sinais", "Teses do ganho anterior", "Segmento"))
+            c.alignment = Alignment(vertical="top", wrap_text=nome in ("Sinais", "Teses do ganho anterior", "Segmento", "Valor zerado no parecer: motivo", "Movimentação"))
+            if nome == "Situação na Receita" and v and v != "Ativa": c.font = Font(name=SANS, size=10, bold=True, color=hx(C["erro"]))
+            if nome == "Movimentação" and v == "Empresa sem movimentação": c.font = Font(name=SANS, size=10, bold=True, color=hx(C["alerta"]))
             if tipo == "rs": c.number_format = '#,##0'
             if tipo == "data": c.number_format = "DD/MM/YYYY"
             if tipo == "link" and v: c.value = "Abrir"; c.hyperlink = v; c.font = Font(name=SANS, size=10, color=hx(C["info"]), underline="single")
@@ -90,6 +95,11 @@ txt = [("Quem entra", "Clientes com negócio ganho, fora do Simples Nacional e d
        ("Potencial em negócios", "Crédito anterior ÷ 60 × competências novas (até 60). Ordem de grandeza para priorizar, não promessa."),
        ("Honorário e repasse", "Honorário da Save do negócio anterior (ou o típico do parceiro) e % oficial de repasse do cadastro."),
        ("Ação judicial (L12)", "Quando o parecer aponta ação judicial em alguma tese, o Jurídico confere antes de seguir."),
+       ("Situação e abertura", f"Base dos Dados Abertos da Receita Federal, referência {PRG.referencia_receita()}. Empresa que não está Ativa aparece em vermelho."),
+       ("Regime", "Só o que aparece no último parecer do técnico (regra da Geovana). Sem parecer lido: 'parecer não lido'."),
+       ("Movimentação", "Tabela de faturamento do parecer só até 2025 = Empresa sem movimentação (regra da Geovana)."),
+       ("Valor zerado", "Quando o último parecer não cita valor, a coluna traz o motivo escrito no arquivo."),
+       ("Procuração", "Conferência no site de procurações: aguardando liberação de acesso aos agentes."),
        ("Uso", "Uso interno da Área Partners. Pré-análise: a decisão de recorrência é da Geovana no painel.")]
 ws["A1"] = "Como ler esta planilha"; ws["A1"].font = Font(name=SANS, bold=True, size=14, color=hx(C["texto"]))
 for i, (a, b) in enumerate(txt, 3):
