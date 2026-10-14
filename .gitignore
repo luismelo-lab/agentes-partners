@@ -20,6 +20,7 @@
 !portal/index.html
 !portal/prototipo/modelo.html
 !portal/prototipo/dados_proto.py
+!portal/prototipo/recorrencia_excel.py
 !conselho/decisoes.md
 !departamentos/*/scripts/*.py
 !departamentos/ti/*.md

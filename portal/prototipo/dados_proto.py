@@ -424,9 +424,14 @@ for r8, ns in grupos.items():
                    "ultimo_ganho": ult["fechado"][:10], "meses_novos": mn, "recorrencias_feitas": max(len({n["fechado"][:7] for n in gs}) - 1, 0),
                    "ganhos_datas": sorted({n["fechado"][:10] for n in gs}), "elegivel": mn >= 6, "faltam": max(0, 6 - mn), "teses": teses[:4], "n_ganhos": len(gs),
                    "credito_anterior": round(cred), "potencial_credito": round(pot_cred), "potencial_honorario": round(pot_cred * hs / 100), "potencial_repasse": round(pot_cred * hs / 100 * hp / 100),
+                   "_cnpj": x.get("cnpj"), "_link": f"https://app.hubspot.com/contacts/47865021/deal/{ult['id']}", "_parecer_data": (pr or {}).get("data_analise"),
+                   "_acao": (pr or {}).get("acoes_judiciais"), "_cidade": x.get("cidade"),
                    "periodo_apurado": f"{ini:%m/%Y} a {fim:%m/%Y}" if fim and ini else (f"até {fim:%m/%Y}" if fim else None), "periodo_conferido": bool(fim), "conferencias": conf,
                    "sinais": sinais, "regra": ("V5/L11: ≥ 6 competências novas desde o fim do período apurado" if fim else "V5: ≥ 6 meses desde o ganho (período apurado não lido)") if mn >= 6 else f"V5: menos de 6 meses novos (faltam {6 - mn})"})
 recorr.sort(key=lambda r: (not r["elegivel"], not r["periodo_conferido"], -r["potencial_honorario"]))
+json.dump(recorr, open(os.path.join(AQUI, "recorrencia-todas.json"), "w", encoding="utf-8"), ensure_ascii=False, default=str)
+for r in recorr:
+    for k in [k for k in r if k.startswith("_")]: r.pop(k)
 # Revisor: diagnósticos em andamento de grupos que já são clientes (recorrência já em curso)
 rev_rec = [{"caso": cod(did(r.get("link"))), "parceiro": r.get("parceiro"), "etapa": r.get("etapa"), "lacunas": r.get("lacunas"),
             "lacunas_alta": r.get("lacunas alta"), "teses_grupo": str(r.get("grupo já é cliente"))[:120]}

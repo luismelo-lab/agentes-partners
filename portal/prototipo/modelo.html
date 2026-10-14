@@ -330,7 +330,8 @@ const ICON = {
   chamados: '<path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 5v12" stroke-dasharray="2 2"/>', resultados: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', tarefa: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
   alerta: '<path d="M12 3l10 18H2zM12 10v5M12 18v.5"/>', ok: '<path d="M4 12l5 5L20 6"/>', fechar: '<path d="M6 6l12 12M18 6L6 18"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
 const ico = (k, cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
-const GRUPOS = [["Meu dia", [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["chamados", "Chamados"], ["prazos", "Prazos e documentos"], ["pedidos", "Pedidos aos agentes"]]], ["Carteira", [["parceiros", "Parceiros"], ["recorrencia", "Recorrência"], ["resultados", "Resultados"]]], ["Ferramentas", [["busca", "Busca"], ["biblioteca", "Biblioteca"]]]];
+const GRUPOS = [["Meu dia", [["inicio", "Início"], ["caixa", "Caixa de entrada"], ["pedidos", "Pedidos aos agentes"]]], ["Carteira", [["parceiros", "Parceiros"], ["recorrencia", "Recorrência"], ["resultados", "Resultados"]]], ["Ferramentas", [["busca", "Busca e respostas prontas"]]]];
+const REDIR = {chamados: "caixa", prazos: "caixa", biblioteca: "busca"};
 const ABAS = GRUPOS.flatMap(g => g[1]);
 const S = {ch: {}, apont: [], ped: {}, dem: {}, cons: {}, recup: {}, eu: "luis", aba: "inicio", feitos: new Set(), filtro: {}, ordem: {campo: "saude", asc: true}, animar: true, origem: null};
 try { S.eu = localStorage.getItem("cp-eu") || "luis"; S.aba = localStorage.getItem("cp-aba") || "inicio"; } catch (e) {}
@@ -484,6 +485,34 @@ function grafIdade() { const fx = D.detalhe.faixas, rows = D.detalhe.heat, tot =
 
 /* ---------- cockpits ---------- */
 const V = {};
+const TIPOS_FILA = {Demanda: "Pedido de parceiro", Chamado: "Chamado para aprovar", Prazo: "Prazo da Receita", Pedido: "Resposta dos agentes", Conselho: "Decisão do Conselho"};
+function fila(p) {
+  const eu = p === "luis", it = [];
+  D.caixa.filter(x => x.grupo !== "Sentinela" && !S.feitos.has(x.id) && (eu ? x.pessoa === "luis" : x.pessoa === p)).forEach(x => {
+    const c = D.chamados.find(z => z.id === x.id && chSt(z) === "proposto"); it.push({...x, _grupo: x.grupo, _ch: c}); });
+  D.chamados.filter(c => chSt(c) === "proposto" && (eu || c.pessoa === p) && !it.some(i => i.id === c.id)).forEach(c =>
+    it.push({id: c.id, _grupo: "Chamado", _chamado: c, titulo: c.titulo, tipo: c.grupo, master: c.master, dias: c.dias, pessoa: c.pessoa, urgente: c.urgencia >= 4, valor: 0}));
+  D.prazos.filter(z => (eu || z.pessoa === p) && !S.feitos.has(z.id)).forEach(z => it.push({id: z.id, _grupo: "Prazo", _prazo: z, titulo: `${z.tipo}${z.master ? " · " + z.master : ""}`, tipo: z.prazo_txt || "prazo a confirmar", master: null, dias: null, pessoa: z.pessoa, urgente: true, valor: 0}));
+  const peso = x => (x._grupo === "Prazo" ? 3 : 0) + (x.urgente ? 2 : 0) + (x._ch || x._chamado ? 1 : 0);
+  return it.sort((a, b) => peso(b) - peso(a) || (b.dias || 0) - (a.dias || 0));
+}
+const parados = p => D.caixa.filter(x => x.grupo === "Sentinela" && !S.feitos.has(x.id) && (p === "luis" || x.pessoa === p));
+function filaHTML(xs, lim) { return xs.length ? `<div class="lista">${xs.slice(0, lim).map((x, i) => itemFila(x, i === 0)).join("")}</div>` : `<div class="vazio">${ico("ok")}<span>Tudo em dia por aqui.</span></div>`; }
+function itemFila(x, primeiro) {
+  const ch = x._ch || x._chamado, cls = x._grupo === "Prazo" || x.urgente ? "atrasado" : (x.dias || 0) > 30 ? "atrasado" : (x.dias || 0) > 7 ? "atencao" : "";
+  const chip = ch ? `<span class="chip ouro">Chamado pronto para aprovar</span>` : x._grupo === "Prazo" ? `<span class="chip erro">${ico("alerta")}Prazo</span>` : x._grupo === "Pedido" ? `<span class="chip ouro">Resposta para aprovar</span>` : pronto(x) ? `<span class="chip">${ico("ok")}Resposta pronta</span>` : "";
+  const quem = S.eu === "luis" && x.pessoa && x.pessoa !== "luis" ? `<span>· ${esc(PESSOAS[x.pessoa] || x.pessoa)}</span>` : "";
+  const alvo = x._chamado ? `data-chamado="${esc(x._chamado.id)}"` : x._prazo ? `data-prazo="${esc(x._prazo.id)}"` : `data-abrir="${esc(x.id)}"`;
+  return `<article class="item ${cls}"><span class="tarja" aria-hidden="true"></span>
+    <div class="corpo"><span class="t" title="${esc(x.titulo)}">${esc(x.titulo)}</span>
+      <div class="meta"><span>${esc(TIPOS_FILA[x._grupo] || x.tipo)}</span>${x.master ? `<span>· ${esc(x.master)}</span>` : ""}${quem}</div>
+      ${x.o_que_pede ? `<div class="pede">${esc(x.o_que_pede)}</div>` : ""}
+      <div class="meta">${chip}${x.dias != null ? `<span class="idade ${idade(x.dias)}">${esc(quando(x.dias))}</span>` : x._grupo === "Prazo" ? `<span class="idade e">${esc(x.tipo)}</span>` : ""}</div></div>
+    <span class="val">${x.valor ? rs(x.valor) : ""}</span>
+    <div><button class="botao ${primeiro ? "" : "sec"} peq" ${alvo}>Abrir</button></div></article>`;
+}
+function cartaoParados(p) { const xs = parados(p); if (!xs.length) return "";
+  return `<section><div class="tab-wrap"><div class="linha-c"><div><b>${n(xs.length)} negócios parados no HubSpot</b><br><span class="nota">Ficam fora da fila do dia. Veja em lote, uma vez por semana.</span></div><div class="acoes-l"><button class="botao sec peq" data-revisao>Abrir a revisão semanal</button></div></div></div></section>`; }
 const chamadosDe = p => D.chamados.filter(c => (p === "luis" || c.pessoa === p));
 const chAguardando = p => chamadosDe(p).filter(c => chSt(c) === "proposto");
 const consPend = () => D.conselho.filter(c => !S.feitos.has(c.id));
@@ -512,7 +541,7 @@ V.luis = () => {
       ${kpi({r: "Pipeline aberto", v: rsH(PIPE.rs), d: `${n(PIPE.n)} negócios, com agendas e indicações`, key: "pipeline"})}
     </div>
     ${riscos.length ? faixa(`<b>${n(riscos.length)} Masters com saúde abaixo de 60:</b> ${riscos.map(m => esc(m.parceiro)).join(", ")}`, "risco") : ""}
-    ${blocoChamados("luis")}
+    <section><div class="cab"><h2>Fazer agora</h2><button class="botao sec peq" data-ir="caixa">Ver todos (${n(fila("luis").length)})</button></div>${filaHTML(fila("luis").filter(x => x._grupo !== "Conselho"), 5)}</section>
     <section><div class="cab"><h2>Decisões do Conselho</h2><span class="atual">${n(c)} esperando · mais antigas primeiro</span></div>
       ${c ? `<div class="tab-wrap">${consPend().slice(0, 5).map(x => `<div class="linha-c"><div><div class="tx"><b>${esc(x.id)}</b> · ${esc(x.texto)}</div><span class="nota">${esc(quando(Math.round((new Date(HOJE) - new Date(x.data)) / 864e5)))}</span></div>
         <div class="acoes-l"><button class="botao sec peq" data-csq="${esc(x.id)}">Aprovar</button><button class="botao sec peq" data-cons-abrir="${esc(x.id)}">Decidir…</button></div></div>`).join("")}</div>
@@ -523,17 +552,16 @@ V.luis = () => {
       <div class="tab-wrap">${D.alertas.map(a => `<div class="linha-c"><div class="tx"><b>${esc(a.area)}:</b> ${esc(a.texto)}</div></div>`).join("") || `<div class="vazio">Sem alertas.</div>`}</div></section>`;
 };
 V.daniela = () => {
-  const L = minhas(), at = L.filter(x => (x.dias || 0) > 30), pr = L.filter(pronto), max = Math.max(0, ...L.map(x => x.dias || 0)), dem = L.filter(x => x.grupo === "Demanda");
+  const F = fila("daniela"), L = F, at = F.filter(x => (x.dias || 0) > 30), pr = F.filter(x => x._ch || pronto(x)), max = Math.max(0, ...F.map(x => x.dias || 0)), dem = F.filter(x => x._grupo === "Demanda");
   return `${boasVindas()}<div class="topo-cards">
       <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Responder agora</span>
-        <div class="lado">${anel(L.length ? at.length / L.length : 0, n(at.length))}<div><div class="t"><b>${n(at.length)} atrasados</b> de ${n(L.length)} itens</div><div class="nota" style="color:var(--erro)">o mais antigo espera há ${n(max)} dias</div></div></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="botao" data-prontos-ir>Encaminhar os ${n(pr.length)} prontos</button></div></div>
+        <div class="lado">${anel(L.length ? at.length / L.length : 0, n(L.length))}<div><div class="t"><b>${n(L.length)} itens</b> na sua fila · ${n(at.length)} atrasados</div><div class="nota" style="color:var(--erro)">o mais antigo espera há ${n(max)} dias</div></div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="botao" data-ir="caixa">Começar pela fila</button></div></div>
       ${kpi({r: "Demandas de parceiro", v: n(dem.length), d: "WhatsApp e e-mail", key: "minha_caixa"})}
-      ${kpi({r: "Chamados para aprovar", v: n(chAguardando("daniela").length), d: "esperando você", key: "meus_chamados"})}
+      ${kpi({r: "Prontos para encaminhar", v: n(pr.length), d: "chamado ou resposta já montados", key: "meus_chamados"})}
     </div>
-    ${blocoChamados("daniela")}
-    <section><div class="cab"><h2>Demandas de parceiro</h2></div>${lista(dem, 3)}${dem.length > 3 ? `<button class="botao sec peq" style="margin-top:8px" data-kpi="minha_caixa">Ver as ${n(dem.length)}</button>` : ""}</section>
-    <section><div class="cab"><h2>Negócios que pedem ação</h2></div>${porTipo(L.filter(x => x.grupo !== "Demanda"), 3)}</section>
+    <section><div class="cab"><h2>Fazer agora</h2><button class="botao sec peq" data-ir="caixa">Ver todos (${n(F.length)})</button></div>${filaHTML(F, 6)}</section>
+    ${cartaoParados("daniela")}
     ${blocoSeuDia("daniela")}`;
 };
 V.jenifer = () => {
@@ -550,7 +578,7 @@ V.jenifer = () => {
       <div class="bloco estreito">${empilhadaH([{r: "Jenifer", segs: [IJ.ganhos || 0, IJ.abertos || 0, IJ.perdidos || 0], extra: `${n(IJ.n)} indicadas`}, {r: "Geovana", segs: [IG.ganhos || 0, IG.abertos || 0, IG.perdidos || 0], extra: `${n(IG.n)} indicadas · ${rs(IG.valor_ganho)} ganho`}], ["var(--ouro)", "var(--serie-3)", "var(--serie-4)"], ["Ganhas", "Em aberto", "Perdidas"], {totRot: r => n(r.segs.reduce((a, b) => a + b, 0)) + " indicadas"})}
         <div class="leg"><span><i style="background:var(--ouro)"></i>ganhas</span><span><i style="background:var(--serie-3)"></i>em aberto</span><span><i style="background:var(--serie-4)"></i>perdidas ou desqualificadas</span></div>
         <p class="tese">Jenifer: ${pc(100 * (IJ.abertos || 0) / (IJ.n || 1))} seguem em aberto. Geovana: ${pc(100 * (IG.ganhos || 0) / (IG.n || 1))} viraram ganho.</p></div></section>
-    <section><div class="cab"><h2>Fazer agora</h2></div>${lista(L, 5)}</section>
+    <section><div class="cab"><h2>Fazer agora</h2></div>${filaHTML(fila("jenifer"), 5)}</section>
     <section><div class="cab"><h2>Ritmo das últimas 8 semanas</h2></div>
       <div class="grade"><div class="bloco"><h3>Negócios novos por semana</h3>${sem(J.novos, "novos")}</div><div class="bloco"><h3>Entradas em diagnóstico</h3>${sem(J.diag, "diag")}<p class="nota">O registro de entradas começa em 28/09; antes disso não há dado.</p></div></div></section>
     <section><details class="grp"><summary><div class="grupo-tit">Onde cada Master já ganha </div></summary>
@@ -567,7 +595,7 @@ V.geovana = () => {
       ${kpi({r: "Oportunidades indicadas", v: n(IG.n), d: `${rs(IG.valor)} · ${n(IG.ganhos)} ganhas`, key: "ind_geovana", count: IG.n})}
       ${kpi({r: "Recorrência para decidir", v: n(rec.length), d: `${rs(D.recorrencia.pot_credito)} em negócios`, key: "rec_parc"})}
     </div>
-    ${blocoChamados("geovana")}
+    <section><div class="cab"><h2>Fazer agora</h2></div>${filaHTML(fila("geovana"), 4)}</section>
     <section><div class="cab"><h2>Recorrência para decidir</h2><button class="botao sec peq" data-ir="recorrencia">Ver a fila completa</button></div>
       <div class="lista">${rec.slice(0, 4).map((x, i) => `<article class="item ${x.sinais.some(s => /L13|decad/.test(s)) ? "atencao" : ""}"><span class="tarja"></span><div class="corpo"><span class="t">${esc(x.caso)} · ${esc(x.parceiro)}</span><div class="meta"><span>${x.periodo_apurado ? "apurado " + esc(x.periodo_apurado) : "período estimado"}</span><span>· ${n(x.meses_novos)} meses novos</span><span>· ${n(x.recorrencias_feitas)} já feita(s)</span>${x.sinais.slice(0, 2).map(s => `<span class="chip ${/L13|decad/.test(s) ? "alerta" : ""}">${/L13|decad/.test(s) ? ico("alerta") : ""}${esc(s.split(":")[0].split(" (")[0])}</span>`).join("")}</div></div>
         <span class="val">${rs(x.potencial_credito)}</span><span class="idade"></span><div><button class="botao ${i ? "sec" : ""} peq" data-rec="${esc(x.caso)}">Decidir</button></div></article>`).join("")}</div></section>
@@ -575,7 +603,7 @@ V.geovana = () => {
       ${tab([["Caso"], ["Master"], ["Tipo"], ["Segmento"], ["Esperado", 1], ["Parecidos", 1], [""]], [...G.lote].sort((a, b) => (b.esperado || 0) - (a.esperado || 0)).map(x => [`<b>${esc(x.caso)}</b>${x.saldo === "sim" ? ` <span class="chip alerta">${ico("alerta")}saldo credor</span>` : ""}`, esc(x.parceiro), esc(x.tipo), esc(x.segmento), rs(x.esperado), esc(String(x.taxa || "").split(" ")[0]), S.feitos.has(x.caso) ? `<span class="chip ok">${ico("ok")}decidido</span>` : `<button class="botao sec peq" data-decidir="${esc(x.caso)}">Decidir</button>`]), "cartoes")}</section>
     <section><div class="grade">
       <div class="bloco"><h3>Revisor: lacunas por tese</h3><p class="tese">${n(R.revisados)} de ${n(R.selecionados)} diagnósticos revisados · ${n(R.lacunas)} lacunas.</p>${empilhadaH(G.por_tese.map(t => ({r: t.tese, segs: [t.alta, t.n - t.alta]})), ["var(--ouro)", "var(--serie-2)"], ["Alta", "Demais"], {totRot: r => `${n(r.segs[0])} de ${n(r.segs[0] + r.segs[1])}`})}<div class="leg"><span><i style="background:var(--ouro)"></i>prioridade alta</span><span><i style="background:var(--serie-2)"></i>demais</span></div></div>
-      <div class="bloco"><h3>Outros itens</h3>${lista(minhas(), 4)}</div></div></section>
+      </div></section>
     ${blocoSeuDia("geovana")}`;
 };
 
@@ -626,26 +654,18 @@ A.pedidos = () => { const sub = S.filtro.psub || "acompanhar", f = S.filtro.pf |
       <div class="kpis">${["daniela", "jenifer", "geovana"].map(p => kpi({r: PESSOAS[p], v: D.tempo[p].mediana_h == null ? "—" : String(D.tempo[p].mediana_h).replace(".", ",") + " h", d: `mediana de ${n(D.tempo[p].n)} demandas resolvidas`})).join("")}</div></details></section>`}`; };
 
 A.caixa = () => {
-  const base = minhas(), f = S.filtro, grupos = ["Tudo", ...new Set(D.caixa.map(x => x.grupo))];
-  const xs = base.filter(x => (!f.grupo || f.grupo === "Tudo" || x.grupo === f.grupo) && (!f.prontos || pronto(x)) && (!f.busca || (x.titulo + " " + x.tipo + " " + (x.master || "")).toLowerCase().includes(f.busca.toLowerCase())));
-  const at = base.filter(x => (x.dias || 0) > 30).length, sem = base.filter(x => (x.dias || 0) > 7 && (x.dias || 0) <= 30).length;
-  return `<div class="kpis">${kpi({r: "Atrasados (mais de 30 dias)", v: n(at), d: "tarja vermelha", key: "antigos"})}${kpi({r: "Em atenção (8 a 30 dias)", v: n(sem), d: "tarja listrada"})}${kpi({r: "Prontos para encaminhar", v: n(base.filter(pronto).length), d: "chamado, mensagem ou área já montados", key: "prontos"})}${kpi({r: "Total", v: n(base.length), d: S.eu === "luis" ? "de todo o time" : "seus"})}</div>
-    <section><div class="filtros" role="group" aria-label="Filtros">${grupos.map(g => `<button data-grupo="${esc(g)}" aria-pressed="${(f.grupo || "Tudo") === g}">${esc(g)}</button>`).join("")}<button data-prontos aria-pressed="${!!f.prontos}">Prontos para encaminhar</button>
-      <input type="search" id="busca" placeholder="Buscar por tipo, Master ou código" value="${esc(f.busca || "")}" aria-label="Buscar"></div>
-    ${xs.length ? porTipo(xs, 5) : `<div class="vazio">${ico("info")}<span>Nada com esses filtros. Limpe a busca ou escolha "Tudo".</span></div>`}</section>`;
+  const F = fila(S.eu), f = S.filtro, tipos = ["Tudo", ...Object.keys(TIPOS_FILA).filter(t => F.some(x => x._grupo === t))];
+  const xs = F.filter(x => (!f.tipo || f.tipo === "Tudo" || x._grupo === f.tipo) && (!f.busca || (x.titulo + " " + (x.master || "") + " " + (x.o_que_pede || "")).toLowerCase().includes(f.busca.toLowerCase())));
+  const P = parados(S.eu);
+  return `<section><div class="filtros" role="group" aria-label="Filtros">${tipos.map(t => `<button data-tipo="${esc(t)}" aria-pressed="${(f.tipo || "Tudo") === t}">${esc(t === "Tudo" ? "Tudo" : TIPOS_FILA[t])} <span class="badge">${n(t === "Tudo" ? F.length : F.filter(x => x._grupo === t).length)}</span></button>`).join("")}
+      <input type="search" id="busca" placeholder="Buscar empresa ou parceiro" value="${esc(f.busca || "")}" aria-label="Buscar"></div>
+    ${filaHTML(xs, 200)}</section>
+    ${P.length ? `<section id="revisao"><details class="grp" ${f.rev ? "open" : ""}><summary><div class="grupo-tit">Revisão semanal: negócios parados <span class="badge">${n(P.length)}</span></div></summary>${porTipo(P, 3)}</details></section>` : ""}`;
 };
-A.prazos = () => {
-  const hoje = new Date(HOJE), pz = D.prazos.map(p => { let dd = p.data; if (!dd) { const m = String(p.prazo_txt || "").match(/(\d{2})\/(\d{2})/); if (m) dd = `2026-${m[2]}-${m[1]}`; } const r = dd ? Math.round((new Date(dd) - hoje) / 864e5) : null; return {...p, dd, r}; });
-  const col = [["Vencido", p => p.r != null && p.r < 0, true], ["Hoje", p => p.r === 0, true], ["Até 5 dias", p => p.r > 0 && p.r <= 5, true], ["Depois", p => p.r > 5, false], ["Sem data", p => p.r == null, false]];
-  const dc = D.docs.filter(d => !S.filtro.parc || d.parceiro === S.filtro.parc), parcs = [...new Set(D.docs.map(d => d.parceiro))].sort();
-  const grpDoc = {}; dc.forEach(d => d.falta.forEach(k => grpDoc[k] = (grpDoc[k] || 0) + 1));
-  return `<section><div class="cab"><h2>Prazos da Receita</h2></div>
-      <div class="tl">${col.map(([t, fn, q]) => { const xs = pz.filter(fn); return `<div class="col ${q && xs.length ? "quente" : ""}"><h4>${t}<span class="badge">${n(xs.length)}</span></h4>${xs.map(p => `<button class="mk" data-prazo="${esc(p.id)}"><i></i>${esc(p.id)} · ${esc((p.master || "—").slice(0, 10))}${p.r != null ? ` · ${p.r < 0 ? Math.abs(p.r) + " d atrás" : p.r === 0 ? "hoje" : "em " + p.r + " d"}` : ""}</button>`).join("") || `<span class="nota">nenhum</span>`}</div>`; }).join("")}</div></section>
-    <section><div class="cab"><h2>Documentos por negócio</h2><span class="atual">${n(D.n_docs)} negócios em diagnóstico com algo a conferir</span></div>
-      <div class="kpis" style="margin-bottom:12px">${Object.entries(grpDoc).map(([k, v]) => kpi({r: "Não consta: " + k, v: n(v), d: "negócios"})).join("")}</div>
-      <div class="filtros"><select id="f-parc" aria-label="Filtrar por parceiro"><option value="">Todos os parceiros</option>${parcs.map(p => `<option ${S.filtro.parc === p ? "selected" : ""}>${esc(p)}</option>`).join("")}</select></div>
-      ${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Dias", 1], ["Não consta no HubSpot"], ["Teses a decidir", 1]], dc.slice(0, 40).map(d => [`<button class="botao sec peq" data-doc="${esc(d.caso)}">${esc(d.caso)}</button>`, esc(d.parceiro), esc(d.etapa), `<span class="idade ${idade(d.dias)}">${n(d.dias)}</span>`, d.falta.map(x => `<span class="chip alerta">${esc(x)}</span>`).join(" ") || "—", n(d.decide.length)]), "cartoes")}</section>`;
-};
+function docsHTML() { const dc = D.docs.filter(d => !S.filtro.parc || d.parceiro === S.filtro.parc), parcs = [...new Set(D.docs.map(d => d.parceiro))].sort();
+  return `<section><details class="grp"><summary><div class="grupo-tit">Documentos que faltam por negócio <span class="badge">${n(D.n_docs)}</span></div></summary>
+    <div class="filtros"><select id="f-parc" aria-label="Filtrar por parceiro"><option value="">Todos os parceiros</option>${parcs.map(p => `<option ${S.filtro.parc === p ? "selected" : ""}>${esc(p)}</option>`).join("")}</select></div>
+    ${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Dias", 1], ["Não consta no HubSpot"]], dc.slice(0, 40).map(d => [`<button class="botao sec peq" data-doc="${esc(d.caso)}">${esc(d.caso)}</button>`, esc(d.parceiro), esc(d.etapa), `<span class="idade ${idade(d.dias)}">${n(d.dias)}</span>`, d.falta.map(x => `<span class="chip alerta">${esc(x)}</span>`).join(" ") || "—"]), "cartoes")}</details></section>`; }
 A.parceiros = () => {
   const ms = [...D.masters].filter(m => D.ficha[m.parceiro]).sort((a, b) => a.saude - b.saude);
   const tot = ms.reduce((s, m) => s + (D.ficha[m.parceiro].comissao_12m || 0), 0), mxSp = Math.max(...ms.flatMap(m => D.ficha[m.parceiro].serie.map(x => x[1])), 1);
@@ -664,7 +684,7 @@ A.parceiros = () => {
     <section><div class="grade">
       <div class="bloco"><h3>Concentração em 12 meses</h3><p class="tese">Os 3 maiores somam ${pc((D.kpi.concentracao || {}).top3_pct)} do fechado.</p>${empilhada100(conc.map(([r, v], i) => ({r, v, cor: i === 0 ? "var(--ouro)" : ["var(--serie-3)", "var(--serie-2)", "var(--serie-4)", "var(--borda-3)"][i - 1]})))}</div>
       <div class="bloco"><h3>Esfriando</h3>${D.esfriando.slice(0, 6).map((e, i) => `<div class="check" style="justify-content:space-between;align-items:center"><span><b>${esc(e.parceiro)}</b> <span class="nota">${esc(e.tipo)} · ${n(e.dias)} dias sem negócio</span></span><button class="botao ${i ? "sec" : ""} peq" data-reativar="${i}">Reativar</button></div>`).join("")}<button class="botao sec peq" data-kpi="esfriando">Ver os ${n(D.esfriando.length)}</button></div>
-    </div></section>`;
+    </div></section>${docsHTML()}`;
 };
 const REGRAS_REC = ["V5 · cliente com ganho na mesma raiz: com 6 meses novos ou mais é recorrência; com menos, aguardar", "L11 · conta as competências desde o fim do período apurado no parecer do último fechamento (lido pelos agentes)", "Parecer \"já aproveitado\": só os meses depois do último ressarcido ou outra tese", "L13 · saldo credor de PIS/COFINS escriturado até 31/12/2026", "Decadência de 5 anos (art. 168 do CTN)", "L12 · ação judicial própria na tese: Jurídico confere antes", "Fora: Simples (V2), café (V3) e cliente com negócio aberto em qualquer pipeline", "A recorrência segue com o parceiro do ganho anterior"];
 A.recorrencia = () => {
@@ -682,7 +702,8 @@ A.recorrencia = () => {
         <td data-r="Sinais">${x.sinais.map(s => `<span class="chip ${/L13|decad/.test(s) ? "alerta" : /não registrada/.test(s) ? "erro" : ""}">${/L13|decad|não registrada/.test(s) ? ico("alerta") : ""}${esc(s.split(":")[0].split(" (")[0])}</span>`).join(" ")}</td><td><button class="botao peq" data-rec="${esc(x.caso)}">Decidir</button></td></tr>`).join("")}</tbody></table></div>
       ${fila.length > 30 ? `<p class="nota" style="margin-top:8px">Mostrando 30 de ${n(fila.length)}. Use o filtro por parceiro.</p>` : ""}</section>`;
 };
-A.busca = () => `<section><h2>Busca</h2>
+A.busca = () => A.busca0() + A.biblioteca();
+A.busca0 = () => `<section><h2>Busca</h2>
     <div class="busca-box"><input type="search" id="q" placeholder="Empresa, código, parceiro, UF ou CNPJ" value="${esc(S.q || "")}" aria-label="Buscar"></div></section><section id="res-busca">${resBusca()}</section>`;
 function resBusca() {
   const q = (S.q || "").trim(); if (!q) return `<div class="vazio">${ico("busca")}<span>Comece a digitar. Exemplo: <b>Panificadora</b>, <b>D&S</b>, <b>MG</b> ou um CNPJ.</span></div>`;
@@ -745,8 +766,9 @@ const indDet = (quem, titulo) => () => { const I = D.detalhe.indicacoes[quem] ||
     <div class="pacote"><h4>Em aberto, maiores primeiro</h4>${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Criado", 1], ["Valor", 1]], (I.abertos_l || []).map(x => [`<b>${esc(x.caso)}</b>`, esc(x.parceiro), esc(x.etapa), dt(x.criado), rs(x.valor)]), "cartoes")}</div>`]; };
 DET.ind_geovana = indDet("geovana", "Oportunidades indicadas pela Geovana"); DET.ind_jenifer = indDet("jenifer", "Agendas e indicações da Jenifer");
 ["daniela", "jenifer", "geovana"].forEach(p => DET["carga_" + p] = () => [`${PESSOAS[p]}: o que espera agora`, listaCaixa(D.caixa.filter(x => x.pessoa === p && !S.feitos.has(x.id)))]);
-DET.meus_chamados = () => [`Chamados para aprovar`, `<div class="lista">${chamadosDe(S.eu).filter(c => chSt(c) === "proposto").map((c, i) => chamadoCard(c, i === 0)).join("") || `<div class="vazio">Nenhum chamado esperando.</div>`}</div>`];
-DET.minha_caixa = () => [`Demandas de parceiro`, listaCaixa(minhas().filter(x => x.grupo === "Demanda"))];
+DET.meus_chamados = () => [`Prontos para encaminhar`, filaHTML(fila(S.eu).filter(x => x._ch || x._chamado || pronto(x)), 40)];
+DET.meus_chamados_old = () => [`Chamados para aprovar`, `<div class="lista">${chamadosDe(S.eu).filter(c => chSt(c) === "proposto").map((c, i) => chamadoCard(c, i === 0)).join("") || `<div class="vazio">Nenhum chamado esperando.</div>`}</div>`];
+DET.minha_caixa = () => [`Pedidos de parceiro`, filaHTML(fila(S.eu).filter(x => x._grupo === "Demanda"), 40)];
 DET.urgentes = () => [`Contratos parados`, listaCaixa(minhas().filter(x => x.tipo === "Contrato sem assinatura"))];
 DET.antigos = () => [`Atrasados (mais de 30 dias)`, listaCaixa([...minhas()].filter(x => (x.dias || 0) > 30).sort((a, b) => (b.dias || 0) - (a.dias || 0)))];
 DET.prontos = () => [`Prontos para encaminhar`, listaCaixa(minhas().filter(pronto))];
@@ -786,7 +808,7 @@ const nomeItem = id => { const x = D.caixa.find(i => i.id === id) || D.chamados.
 function toast(t) { document.querySelectorAll(".toast").forEach(e => e.remove()); const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 3200); }
 
 /* ---------- render ---------- */
-const contagem = () => ({caixa: minhas().length, prazos: D.prazos.length, chamados: chAguardando(S.eu).length, pedidos: D.pedidos.filter(p => pedSt(p) === "aguardando_aprovacao" && (S.eu === "luis" || p.para === S.eu)).length, recorrencia: S.eu === "geovana" || S.eu === "luis" ? D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso)).length : 0});
+const contagem = () => ({caixa: fila(S.eu).length, prazos: D.prazos.length, chamados: chAguardando(S.eu).length, pedidos: D.pedidos.filter(p => pedSt(p) === "aguardando_aprovacao" && (S.eu === "luis" || p.para === S.eu)).length, recorrencia: S.eu === "geovana" || S.eu === "luis" ? D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso)).length : 0});
 function render() {
   const cont = contagem(), falhas = Object.entries(D.operacao.rotinas).filter(([, v]) => !v.ok);
   $("#nav").innerHTML = GRUPOS.map(([g, it]) => `<div class="grupo-nav"><span class="rotulo">${g}</span>${it.map(([k, r]) => `<button class="nav-item" data-aba="${k}" ${S.aba === k ? 'aria-current="page"' : ""} title="${r}">${ico(k)}<span>${r}</span>${cont[k] ? `<span class="badge">${cont[k] > 99 ? "99+" : cont[k]}</span>` : ""}</button>`).join("")}</div>`).join("");
@@ -800,7 +822,7 @@ function render() {
   S.animar = false; if (S.manter) window.scrollTo(0, y); S.manter = false;
 }
 function contar() { if (reduz) return; document.querySelectorAll("[data-count]").forEach(el => { const fim = +el.dataset.count; if (!fim) return; const t0 = performance.now(); const passo = t => { const p = Math.min(1, (t - t0) / 600), e = 1 - Math.pow(1 - p, 3); el.textContent = n(Math.round(fim * e)); if (p < 1) requestAnimationFrame(passo); }; requestAnimationFrame(passo); }); }
-function ir(aba) { S.aba = aba; S.animar = true; try { localStorage.setItem("cp-aba", aba); } catch (x) {} render(); window.scrollTo(0, 0); }
+function ir(aba) { if (aba === "caixa" || REDIR[aba] === "caixa") S.filtro.tipo = null; if (REDIR[aba]) { if (aba === "chamados") S.filtro.tipo = "Chamado"; if (aba === "prazos") S.filtro.tipo = "Prazo"; aba = REDIR[aba]; } S.aba = aba; S.animar = true; try { localStorage.setItem("cp-aba", aba); } catch (x) {} render(); window.scrollTo(0, 0); }
 
 document.addEventListener("click", e => {
   const t = e.target.closest("button, tr.clic, .linha-m, .kpi[data-kpi], circle[data-master], .veu"); if (!t) return;
@@ -852,6 +874,8 @@ document.addEventListener("click", e => {
   if (d.mais) { S.filtro["mais-" + d.mais] = true; S.manter = true; render(); return; }
   if (d.feito) { S.feitos.add(d.feito); fechar(); S.manter = true; render(); toast("Registrado. Protótipo: nada foi gravado."); return; }
   if (d.grupo) { S.filtro.grupo = d.grupo; S.manter = true; render(); return; }
+  if (d.tipo && !d.id && !d.recok) { S.filtro.tipo = d.tipo; S.manter = true; render(); return; }
+  if ("revisao" in d) { S.filtro.rev = true; ir("caixa"); setTimeout(() => document.getElementById("revisao")?.scrollIntoView({behavior: reduz ? "auto" : "smooth"}), 50); return; }
   if ("prontos" in d) { S.filtro.prontos = !S.filtro.prontos; S.manter = true; render(); return; }
   if (d.ord) { const k = d.ord; S.ordem = {campo: k, asc: S.ordem.campo === k ? !S.ordem.asc : k === "parceiro"}; S.manter = true; render(); return; }
   if (d.copiar) { const el = document.getElementById(d.copiar); const txt = el.value ?? el.textContent; navigator.clipboard?.writeText(txt).then(() => toast("Copiado."), () => { el.select?.(); toast("Selecionado: use Copiar do teclado."); }); return; }
