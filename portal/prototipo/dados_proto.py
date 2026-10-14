@@ -44,7 +44,7 @@ for e in EV:
     if e["tipo"] == "entrou_diagnostico" and dias(e.get("primeiro")) and dias(e["primeiro"]) > 1: continue  # aviso só no 1º dia
     m = re.search(r"parceiro ([^.]+)\.", e.get("texto") or ""); par = m.group(1).strip() if m else None
     if par == "sem parceiro": par = None
-    caixa.append({"id": f"S-{str(e.get('negocio') or e['titulo'])[-5:]}-{e['tipo'][:4]}", "pessoa": e["pessoa"], "tipo": ROT.get(e["tipo"], e["tipo"]),
+    caixa.append({"id": f"S-{e.get('negocio') or __import__('hashlib').md5(e['titulo'].encode()).hexdigest()[:8]}-{e['tipo'][:4]}", "pessoa": e["pessoa"], "tipo": ROT.get(e["tipo"], e["tipo"]),
                   "grupo": "Sentinela", "titulo": cod(e.get("negocio")) if e.get("negocio") else ROT.get(e["tipo"], e["tipo"]), "codigo": codigo(e.get("negocio")), "master": par,
                   "valor": f(e.get("valor")), "dias": int(f(e.get("dias"))) if e.get("dias") else dias(e.get("primeiro")),
                   "urgente": e["tipo"] in URG, "novo": e.get("primeiro") == HOJE.isoformat(), "acao": "Abrir no HubSpot"})
@@ -76,7 +76,7 @@ for x in caixa:
 
 # ---------- pacote pronto para encaminhar (regras reais do GLPI em infra/glpi-regras.md)
 ODG = "https://gruposave-my.sharepoint.com/my?id=%2Fpersonal%2Fluis_melo_savecompany_com_br%2FDocuments%2F01%20%C2%B7%20Comercial%20e%20Parceiros%2FRelat%C3%B3rios%20das%20%C3%A1reas"
-EVX = {f"S-{str(e.get('negocio') or e['titulo'])[-5:]}-{e['tipo'][:4]}": e for e in EV}
+EVX = {f"S-{e.get('negocio') or __import__('hashlib').md5(e['titulo'].encode()).hexdigest()[:8]}-{e['tipo'][:4]}": e for e in EV}
 def form_trib(urg, emp, desc, bitrix, prazo):
     return (f"1) Urgência: {urg}\n2) Empresa: {emp}\n3) Descrição: {desc}\n"
             f"4) Link do Card: {bitrix or 'card do Bitrix não encontrado no HubSpot (conferir o campo ID Bitrix)'}\n5) Prazo de Entrega: {prazo}")

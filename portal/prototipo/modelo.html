@@ -248,8 +248,8 @@ label { display: grid; gap: 6px; font-size: 13px; color: var(--texto-2); }
 .item.cham .tarja.st-abrindo, .item.cham .tarja.st-aprovado_manual { background: var(--alerta); }
 .item.cham .tarja.st-aberto { background: var(--sucesso); }
 .item.leve { opacity: .7; }
-.toast { display: flex; gap: 14px; align-items: center; overflow: hidden; padding: 12px 16px 14px; }
-.toast .desfazer { all: unset; cursor: pointer; color: var(--ouro); font-weight: 600; padding: 6px 4px; }
+.toast { pointer-events: none; display: flex; gap: 14px; align-items: center; overflow: hidden; padding: 12px 16px 14px; }
+.toast .desfazer { pointer-events: auto; all: unset; pointer-events: auto; cursor: pointer; color: var(--ouro); font-weight: 600; padding: 6px 4px; }
 .toast .desfazer:focus-visible { outline: 2px solid var(--ouro); }
 .toast .barra { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--ouro); animation: barra 5s linear forwards; }
 @keyframes barra { from { width: 100%; } to { width: 0; } }
@@ -323,7 +323,7 @@ const pc = v => v == null ? "—" : String(Math.round(v * 10) / 10).replace(".",
 const MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
 const mesRot = m => MES[+m.slice(5,7) - 1] + "/" + m.slice(2,4);
 const dt = s => s ? s.slice(8, 10) + "/" + s.slice(5, 7) + "/" + s.slice(2, 4) : "—";
-const HOJE = "2026-10-13", MES_ATUAL = HOJE.slice(0, 7);
+const HOJE = String(D.hoje || D.atualizado || "").slice(0, 10).split("/").reverse().join("-").replace(/^(\d{2})-(\d{2})-(\d{4})$/, "$3-$2-$1") || new Date().toISOString().slice(0, 10), MES_ATUAL = HOJE.slice(0, 7), HOJE_BR = HOJE.slice(8, 10) + "/" + HOJE.slice(5, 7);
 const PESSOAS = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "Geovana"};
 const ICON = {
   inicio: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>', caixa: '<path d="M3 13h5l2 3h4l2-3h5M5 5h14l2 8v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6z"/>',
@@ -357,6 +357,7 @@ function mostraTip(el, x, y) { tip.innerHTML = el.dataset.tip; tip.hidden = fals
 document.addEventListener("mousemove", e => { const el = e.target.closest("[data-tip]"); if (el) mostraTip(el, e.clientX, e.clientY); else tip.hidden = true; });
 document.addEventListener("focusin", e => { const el = e.target.closest("[data-tip]"); if (el) { const r = el.getBoundingClientRect(); mostraTip(el, r.left + r.width / 2, r.top); } });
 document.addEventListener("focusout", () => tip.hidden = true);
+const rotuloTip = h => String(h || "").replace(/&lt;br&gt;|<br>/g, ", ").replace(/&lt;\/?b&gt;|<\/?b>/g, "").replace(/&[a-z]+;/g, " ").replace(/"/g, "").trim();
 const T = (t, linhas) => esc(`<b>${t}</b><br>${linhas.join("<br>")}`);
 
 /* ---------- gráficos (SVG em escala, 1 eixo, rótulo seletivo) ---------- */
@@ -365,13 +366,13 @@ const hachura = id => `<defs><pattern id="${id}" width="6" height="6" patternUni
 function colunas(dd, {alt = 190, fmt = n, ref = null, refRot = "", dest = dd.length - 1, cor = "var(--ouro)"} = {}) {
   const W = 380, H = alt, m = {l: 4, r: 4, t: 22, b: 24}, w = W - m.l - m.r, h = H - m.t - m.b, id = "h" + (++gid);
   const max = Math.max(...dd.map(d => d.v), ref || 0, 1), bw = w / dd.length, cw = Math.min(24, bw * .62);
-  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">${hachura(id)}`;
+  let s = `<svg class="graf" aria-label="Gráfico" viewBox="0 0 ${W} ${H}" role="img">${hachura(id)}`;
   for (let i = 1; i <= 3; i++) s += `<line x1="${m.l}" x2="${W - m.r}" y1="${m.t + h - h * i / 3}" y2="${m.t + h - h * i / 3}" stroke="var(--borda)"/>`;
   s += `<line x1="${m.l}" x2="${W - m.r}" y1="${m.t + h}" y2="${m.t + h}" stroke="var(--borda-3)"/>`;
   dd.forEach((d, i) => { const bh = Math.max(h * d.v / max, d.v ? 2 : 0), x = m.l + i * bw + (bw - cw) / 2, y = m.t + h - bh, r = Math.min(4, bh / 2);
     const dst = i === dest || d.dest, parcial = d.estado === "parcial", fill = dst ? (parcial ? `url(#${id})` : cor) : (d.estado === "sem" ? "transparent" : "var(--serie-2)");
     const path = bh ? `M${x},${m.t + h} V${y + r} Q${x},${y} ${x + r},${y} H${x + cw - r} Q${x + cw},${y} ${x + cw},${y + r} V${m.t + h} Z` : "";
-    s += `<rect x="${m.l + i * bw}" y="${m.t}" width="${bw}" height="${h}" fill="transparent" data-tip="${d.tip || T(d.r, [fmt(d.v)])}" tabindex="0"/>`;
+    s += `<rect x="${m.l + i * bw}" y="${m.t}" width="${bw}" height="${h}" fill="transparent" data-tip="${d.tip || T(d.r, [fmt(d.v)])}" tabindex="0" aria-label="${rotuloTip(d.tip || T(d.r, [fmt(d.v)]))}"/>`;
     if (path) s += `<path d="${path}" fill="${fill}" ${parcial && dst ? `stroke="var(--ouro)" stroke-width="1.5"` : ""} pointer-events="none"/>`;
     if (d.estado === "sem") s += `<text x="${x + cw / 2}" y="${m.t + h - 4}" text-anchor="middle">–</text>`;
     if (dd.length <= 8 || (dd.length - 1 - i) % 2 === 0) s += `<text x="${x + cw / 2}" y="${H - 7}" text-anchor="middle">${esc(d.r)}</text>`;
@@ -381,9 +382,9 @@ function colunas(dd, {alt = 190, fmt = n, ref = null, refRot = "", dest = dd.len
 }
 function barrasH(dd, {fmt = n, larg = 132, dest = 0, sub = null} = {}) {
   const W = 380, lh = sub ? 34 : 28, H = dd.length * lh + 4, max = Math.max(...dd.map(d => d.v), 1), w = W - larg - 74;
-  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
+  let s = `<svg class="graf" aria-label="Gráfico" viewBox="0 0 ${W} ${H}" role="img">`;
   dd.forEach((d, i) => { const y = 2 + i * lh, bw = d.v ? Math.max(w * d.v / max, 3) : 0, r = Math.min(4, bw / 2);
-    s += `<rect x="0" y="${y}" width="${W}" height="${lh}" fill="transparent" data-tip="${d.tip || T(d.r, [fmt(d.v)])}" tabindex="0"/>`;
+    s += `<rect x="0" y="${y}" width="${W}" height="${lh}" fill="transparent" data-tip="${d.tip || T(d.r, [fmt(d.v)])}" tabindex="0" aria-label="${rotuloTip(d.tip || T(d.r, [fmt(d.v)]))}"/>`;
     s += `<text class="rot" x="0" y="${y + 17}" pointer-events="none">${esc(d.r.length > 18 ? d.r.slice(0, 17) + "…" : d.r)}</text>`;
     if (bw) s += `<path d="M${larg},${y + 7} H${larg + bw - r} Q${larg + bw},${y + 7} ${larg + bw},${y + 7 + r} V${y + 21 - r} Q${larg + bw},${y + 21} ${larg + bw - r},${y + 21} H${larg} Z" fill="${i === dest || d.dest ? "var(--ouro)" : "var(--serie-2)"}" pointer-events="none"/>`;
     else s += `<text x="${larg}" y="${y + 18}" pointer-events="none">${esc(d.vazio || "sem valor")}</text>`;
@@ -393,7 +394,7 @@ function barrasH(dd, {fmt = n, larg = 132, dest = 0, sub = null} = {}) {
 }
 function linhaG(vals, rots, {alt = 170, ns = [], ref = null, refRot = ""} = {}) {
   const W = 380, H = alt, m = {l: 4, r: 52, t: 18, b: 24}, w = W - m.l - m.r, h = H - m.t - m.b, x = i => m.l + w * i / Math.max(vals.length - 1, 1), y = v => m.t + h - h * v / 100;
-  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
+  let s = `<svg class="graf" aria-label="Gráfico" viewBox="0 0 ${W} ${H}" role="img">`;
   for (let i = 0; i <= 4; i += 2) s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(i * 25)}" y2="${y(i * 25)}" stroke="var(--borda)"/><text x="${W - m.r + 6}" y="${y(i * 25) + 4}">${i * 25}%</text>`;
   if (ref != null) s += `<rect x="${m.l}" y="${y(ref) - 1}" width="${w}" height="2" fill="var(--texto-3)"/><text x="${m.l}" y="${y(ref) - 5}">${esc(refRot)}</text>`;
   s += `<path d="M${vals.map((v, i) => `${x(i)},${y(v)}`).join(" L")} L${x(vals.length - 1)},${y(0)} L${x(0)},${y(0)} Z" fill="var(--ouro)" opacity=".1"/>`;
@@ -408,11 +409,11 @@ function spark(vals, max) { const W = 200, H = 32, mx = max || Math.max(...vals,
   const lst = pts[pts.length - 1];
   return `<svg class="spk" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path d="M${pts.map(p => p.join(",")).join(" L")} L${W},${H} L0,${H} Z" fill="var(--texto-3)" opacity=".12"/><polyline points="${pts.map(p => p.join(",")).join(" ")}" fill="none" stroke="var(--texto-3)" stroke-width="1.5" vector-effect="non-scaling-stroke"/><circle cx="${lst[0]}" cy="${lst[1]}" r="3" fill="var(--ouro)" vector-effect="non-scaling-stroke"/></svg>`; }
 function empilhada100(segs, {fmt = rs} = {}) { const tot = segs.reduce((a, s) => a + s.v, 0) || 1;
-  return `<div class="comp" style="height:14px">${segs.map(s => `<i style="width:${100 * s.v / tot}%;background:${s.cor}" data-tip="${T(s.r, [fmt(s.v), pc(100 * s.v / tot)])}" tabindex="0"></i>`).join("")}</div>
+  return `<div class="comp" style="height:14px">${segs.map(s => `<i style="width:${100 * s.v / tot}%;background:${s.cor}" data-tip="${T(s.r, [fmt(s.v), pc(100 * s.v / tot)])}" tabindex="0" aria-label="${rotuloTip(T(s.r, [fmt(s.v), pc(100 * s.v / tot)]))}"></i>`).join("")}</div>
     <div class="leg">${segs.map(s => `<span><i style="background:${s.cor}"></i>${esc(s.r)} ${pc(100 * s.v / tot)}</span>`).join("")}</div>`; }
 function empilhadaH(rows, cores, nomes, {larg = 120, fmtTot = n, totRot = null} = {}) {
   const W = 380, lh = 30, H = rows.length * lh + 4, max = Math.max(...rows.map(r => r.segs.reduce((a, b) => a + b, 0)), 1), w = W - larg - 78;
-  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img">`;
+  let s = `<svg class="graf" aria-label="Gráfico" viewBox="0 0 ${W} ${H}" role="img">`;
   rows.forEach((r, i) => { const y = 2 + i * lh; let x = larg; const tot = r.segs.reduce((a, b) => a + b, 0);
     s += `<rect x="0" y="${y}" width="${W}" height="${lh}" fill="transparent" data-tip="${T(r.r, r.segs.map((v, k) => `${nomes[k]}: ${n(v)}`).concat(r.extra ? [r.extra] : []))}" tabindex="0"/>`;
     s += `<text class="rot" x="0" y="${y + 18}" pointer-events="none">${esc(r.r.length > 16 ? r.r.slice(0, 15) + "…" : r.r)}</text>`;
@@ -427,7 +428,7 @@ function anel(frac, centro, {tam = 96} = {}) { const R = 38, C = 2 * Math.PI * R
 function quadrantes(pts) {
   const W = 380, H = 280, m = {l: 30, r: 10, t: 14, b: 30}, w = W - m.l - m.r, h = H - m.t - m.b;
   const x = v => m.l + w * (Math.max(-100, Math.min(100, v)) + 100) / 200, y = v => m.t + h - h * v / 100, rmax = Math.max(...pts.map(p => p.r), 1);
-  let s = `<svg class="graf" viewBox="0 0 ${W} ${H}" role="img"><rect x="${m.l}" y="${y(60)}" width="${x(0) - m.l}" height="${y(0) - y(60)}" fill="rgba(214,69,69,.07)"/>
+  let s = `<svg class="graf" aria-label="Gráfico" viewBox="0 0 ${W} ${H}" role="img"><rect x="${m.l}" y="${y(60)}" width="${x(0) - m.l}" height="${y(0) - y(60)}" fill="rgba(214,69,69,.07)"/>
     <line x1="${x(0)}" x2="${x(0)}" y1="${m.t}" y2="${m.t + h}" stroke="var(--borda-3)"/><line x1="${m.l}" x2="${W - m.r}" y1="${y(60)}" y2="${y(60)}" stroke="var(--borda-3)"/>
         <text x="${m.l}" y="${H - 8}">−100%</text><text x="${x(0)}" y="${H - 8}" text-anchor="middle">ritmo vs média 0</text><text x="${W - m.r}" y="${H - 8}" text-anchor="end">+100%</text>
     <text x="${m.l - 6}" y="${y(100) + 4}" text-anchor="end">100</text><text x="${m.l - 6}" y="${y(60) + 4}" text-anchor="end">60</text><text x="${m.l - 6}" y="${y(0)}" text-anchor="end">0</text>`;
@@ -438,7 +439,7 @@ function quadrantes(pts) {
 }
 function mapaCalor(rows, faixas) {
   const max = Math.max(...rows.flatMap(r => r[1].map(c => c[1])), 1), rampa = v => v === 0 ? "var(--fundo-2)" : v / max > .66 ? "#F3CD60" : v / max > .33 ? "#C9A548" : v / max > .1 ? "#9C7F35" : "#6E5A25";
-  return `<div class="tab-wrap"><table><thead><tr><th>Etapa</th>${faixas.map(f => `<th class="n">${esc(f)} d</th>`).join("")}</tr></thead><tbody>${rows.filter(r => r[1].some(c => c[0])).map(([e, cs]) => `<tr><td>${esc(e)}</td>${cs.map((c, k) => `<td class="n" style="background:${rampa(c[1])};color:${c[1] / max > .33 ? "#0F1115" : "var(--texto)"}" data-tip="${T(e, [faixas[k] + " dias", n(c[0]) + " negócios", rs(c[1])])}" tabindex="0">${c[0] || ""}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+  return `<div class="tab-wrap"><table><thead><tr><th>Etapa</th>${faixas.map(f => `<th class="n">${esc(f)} d</th>`).join("")}</tr></thead><tbody>${rows.filter(r => r[1].some(c => c[0])).map(([e, cs]) => `<tr><td>${esc(e)}</td>${cs.map((c, k) => `<td class="n" style="background:${rampa(c[1])};color:${c[1] / max > .33 ? "#0F1115" : "var(--texto)"}" data-tip="${T(e, [faixas[k] + " dias", n(c[0]) + " negócios", rs(c[1])])}" tabindex="0" aria-label="${rotuloTip(T(e, [faixas[k] + " dias", n(c[0]) + " negócios", rs(c[1])]))}">${c[0] || ""}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
     <div class="leg"><span>Cor = R$ parado (mais claro = mais valor) · número = negócios</span></div>`;
 }
 const verTabela = (cols, rows) => `<details class="tabela"><summary>Ver tabela</summary>${tab(cols, rows)}</details>`;
@@ -480,7 +481,7 @@ const pctChip = nome => { const f = D.ficha[nome] || {}; return f.pct == null ? 
 /* ---------- gráficos de negócio ---------- */
 const g12 = () => D.serie.slice(-12);
 function grafGanhos() { const s = g12(), med = s.slice(0, -1).reduce((a, x) => a + x.ganhos_rs, 0) / Math.max(s.length - 1, 1);
-  return colunas(s.map(x => ({r: mesRot(x.mes), v: x.ganhos_rs, estado: x.mes === MES_ATUAL ? "parcial" : "real", tip: T(mesRot(x.mes) + (x.mes === MES_ATUAL ? " · parcial até 13/10" : ""), [rs(x.ganhos_rs), n(x.ganhos_n) + " ganhos"]), rotular: x.ganhos_rs === Math.max(...s.map(z => z.ganhos_rs))})), {fmt: rs, ref: med, refRot: "média " + rs(med)}); }
+  return colunas(s.map(x => ({r: mesRot(x.mes), v: x.ganhos_rs, estado: x.mes === MES_ATUAL ? "parcial" : "real", tip: T(mesRot(x.mes) + (x.mes === MES_ATUAL ? " · parcial até " + HOJE_BR + "" : ""), [rs(x.ganhos_rs), n(x.ganhos_n) + " ganhos"]), rotular: x.ganhos_rs === Math.max(...s.map(z => z.ganhos_rs))})), {fmt: rs, ref: med, refRot: "média " + rs(med)}); }
 function grafFunil(rows = D.detalhe.funil_rs) { const mx = Math.max(...rows.map(r => r[2])); const tot = rows.reduce((a, r) => a + r[2], 0);
   return barrasH(rows.map(([e, q, v, sv]) => ({r: e.replace("Apresentação de Diagnóstico", "Apres. Diagnóstico"), v, dest: v === mx, sub: `${n(q)} negócios${sv ? ` · ${n(sv)} sem valor` : ""}`, vazio: `sem valor no CRM (${n(q)})`, tip: T(e, [rs(v), n(q) + " negócios", pc(100 * v / (tot || 1)) + " do valor"])})), {fmt: rs, dest: -1, sub: true}); }
 function grafIdade() { const fx = D.detalhe.faixas, rows = D.detalhe.heat, tot = fx.map((f, k) => [rows.reduce((a, r) => a + r[1][k][0], 0), rows.reduce((a, r) => a + r[1][k][1], 0)]);
@@ -493,9 +494,9 @@ function fila(p) {
   const eu = p === "luis", it = [];
   D.caixa.filter(x => x.grupo !== "Sentinela" && !S.feitos.has(x.id) && (eu ? x.pessoa === "luis" : x.pessoa === p)).forEach(x => {
     const c = D.chamados.find(z => z.id === x.id && chSt(z) === "proposto"); it.push({...x, _grupo: x.grupo, _ch: c}); });
-  D.chamados.filter(c => chSt(c) === "proposto" && (eu || c.pessoa === p) && !it.some(i => i.id === c.id)).forEach(c =>
+  D.chamados.filter(c => chSt(c) === "proposto" && !S.feitos.has(c.id) && (eu || c.pessoa === p) && !it.some(i => i.id === c.id)).forEach(c =>
     it.push({id: c.id, _grupo: "Chamado", _chamado: c, titulo: c.titulo, tipo: c.grupo, master: c.master, dias: c.dias, pessoa: c.pessoa, urgente: c.urgencia >= 4, valor: 0}));
-  D.prazos.filter(z => (eu || z.pessoa === p) && !S.feitos.has(z.id)).forEach(z => it.push({id: z.id, _grupo: "Prazo", _prazo: z, titulo: `${z.tipo}${z.master ? " · " + z.master : ""}`, tipo: z.prazo_txt || "prazo a confirmar", master: null, dias: null, pessoa: z.pessoa, urgente: true, valor: 0}));
+  D.prazos.filter(z => (eu || z.pessoa === p) && !S.feitos.has(z.id)).forEach(z => it.push({id: z.id, _grupo: "Prazo", _prazo: z, titulo: `${z.tipo}${z.master && z.master !== "—" ? " · " + z.master : ""}`, tipo: z.prazo_txt || "prazo a confirmar", master: null, dias: null, pessoa: z.pessoa, urgente: true, valor: 0}));
   const peso = x => (x._grupo === "Prazo" ? 3 : 0) + (x.urgente ? 2 : 0) + (x._ch || x._chamado ? 1 : 0);
   return it.sort((a, b) => peso(b) - peso(a) || (b.dias || 0) - (a.dias || 0));
 }
@@ -518,29 +519,26 @@ function cartaoParados(p) { const xs = parados(p); if (!xs.length) return "";
   return `<section><div class="tab-wrap"><div class="linha-c"><div><b>${n(xs.length)} negócios parados no HubSpot</b><br><span class="nota">Ficam fora da fila do dia. Veja em lote, uma vez por semana.</span></div><div class="acoes-l"><button class="botao sec peq" data-revisao>Abrir a revisão semanal</button></div></div></div></section>`; }
 const chamadosDe = p => D.chamados.filter(c => (p === "luis" || c.pessoa === p));
 const chAguardando = p => chamadosDe(p).filter(c => chSt(c) === "proposto");
+const respPend = () => D.caixa.filter(x => x.grupo === "Pedido" && !S.feitos.has(x.id)).length;
 const consPend = () => D.conselho.filter(c => !S.feitos.has(c.id));
 const fmtMin = m => m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? " " + (m % 60) + " min" : ""}` : `${m} min`;
 function boasVindas() { let visto = false; try { visto = localStorage.getItem("cp-tour") === "1"; } catch (e) {} if (visto) return "";
   return `<section class="boasvindas"><h2>Primeira vez aqui?</h2><ol><li><b>O que pede a sua ação vem primeiro.</b></li><li><b>"Registrar tarefa"</b> fica sempre à mão.</li><li><b>Nada aqui vai para parceiros ou clientes</b> sem você enviar.</li></ol><div><button class="botao sec peq" data-tour-ok>Entendi</button></div></section>`; }
-function blocoChamados(p, lim = 3) { const cs = chamadosDe(p).filter(c => chSt(c) !== "recusado"), ag = cs.filter(c => chSt(c) === "proposto");
-  return `<section><div class="cab"><h2>Chamados para aprovar</h2></div>
-    ${ag.length ? `<div class="lista">${ag.slice(0, lim).map((c, i) => chamadoCard(c, i === 0)).join("")}</div>${ag.length > lim || cs.length > ag.length ? `<button class="botao sec peq" style="margin-top:8px" data-ir="chamados">Ver todos os chamados</button>` : ""}`
-      : `<div class="vazio">${ico("ok")}<span>Nenhum chamado esperando você. ${cs.length ? `<button class="botao sec peq" data-ir="chamados">Ver os já decididos</button>` : ""}</span></div>`}</section>`; }
 function blocoSeuDia(p) { const W = (D.whatsapp.pessoas || {})[p] || {}, ap = S.apont.filter(a => a.pessoa === p), min = ap.reduce((a, x) => a + x.min, 0);
   return `<section><div class="cab"><h2>Seu dia</h2></div><div class="kpis">
     ${kpi({r: "WhatsApp da rodada", v: n(W.conversas || 0), d: `${n(W.responder || 0)} para responder`})}
     ${kpi({r: "Tarefas registradas hoje", v: n(ap.length), d: ap.length ? `${fmtMin(min)} no total` : `<button class="botao sec peq" data-tarefa>Registrar a primeira</button>`})}
     </div></section>`; }
 V.luis = () => {
-  const K = D.kpi, c = consPend().length, pr = K.pedidos_prontos, ch = chAguardando("luis").length, tot = c + pr + ch;
+  const K = D.kpi, c = consPend().length, pr = respPend(), ch = chAguardando("luis").length, tot = c + pr + ch;
   const mes = K.mes || {}, cres = ((mes.crescimento || {}).ganhos_rs || {}).pct, riscos = D.masters.filter(m => m.saude < 60);
-  const carga = ["daniela", "jenifer", "geovana"].map(p => { const xs = D.caixa.filter(x => x.pessoa === p && !S.feitos.has(x.id)); return {p, n: xs.length, at: xs.filter(x => (x.dias || 0) > 30).length, max: Math.max(0, ...xs.map(x => x.dias || 0)), tar: S.apont.filter(a => a.pessoa === p).length}; });
+  const carga = ["daniela", "jenifer", "geovana"].map(p => { const xs = fila(p); return {p, n: xs.length, at: xs.filter(x => (x.dias || 0) > 30).length, max: Math.max(0, ...xs.map(x => x.dias || 0)), tar: S.apont.filter(a => a.pessoa === p).length}; });
   return `${boasVindas()}<div class="topo-cards">
       <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Esperando por você</span><div class="lado"><span class="v" data-count="${tot}">${n(tot)}</span><span class="t">decisões e aprovações para destravar o time</span></div>
         <div class="comp">${[[c, "var(--ouro)"], [pr, "var(--ouro-50)"], [ch, "var(--serie-2)"]].map(([v, cor]) => `<i style="width:${100 * v / (tot || 1)}%;background:${cor}"></i>`).join("")}</div>
         <div class="leg"><span><i style="background:var(--ouro)"></i>${n(c)} do Conselho</span><span><i style="background:var(--ouro-50)"></i>${n(pr)} respostas dos agentes</span><span><i style="background:var(--serie-2)"></i>${n(ch)} chamados</span></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="botao" data-kpi="esperando">Ver o que espera por mim</button></div></div>
-      ${kpi({r: "Ganhos no mês", v: rsH(mes.ganhos_rs), d: `${n(mes.ganhos_n)} negócios até 13/10`, delta: delta(cres, "sobre setembro"), sp: spark(g12().map(x => x.ganhos_rs)), key: "ganhos_mes"})}
+      ${kpi({r: "Ganhos no mês", v: rsH(mes.ganhos_rs), d: `${n(mes.ganhos_n)} negócios até ${HOJE_BR}`, delta: delta(cres, "sobre setembro"), sp: spark(g12().map(x => x.ganhos_rs)), key: "ganhos_mes"})}
       ${kpi({r: "Pipeline aberto", v: rsH(PIPE.rs), d: `${n(PIPE.n)} negócios, com agendas e indicações`, key: "pipeline"})}
     </div>
     ${riscos.length ? faixa(`<b>${n(riscos.length)} Masters com saúde abaixo de 60:</b> ${riscos.map(m => esc(m.parceiro)).join(", ")}`, "risco") : ""}
@@ -555,7 +553,7 @@ V.luis = () => {
       <div class="tab-wrap">${D.alertas.map(a => `<div class="linha-c"><div class="tx"><b>${esc(a.area)}:</b> ${esc(a.texto)}</div></div>`).join("") || `<div class="vazio">Sem alertas.</div>`}</div></section>`;
 };
 V.daniela = () => {
-  const F = fila("daniela"), L = F, at = F.filter(x => (x.dias || 0) > 30), pr = F.filter(x => x._ch || pronto(x)), max = Math.max(0, ...F.map(x => x.dias || 0)), dem = F.filter(x => x._grupo === "Demanda");
+  const F = fila("daniela"), L = F, at = F.filter(x => (x.dias || 0) > 30), pr = F.filter(x => x._ch || x._chamado || pronto(x)), max = Math.max(0, ...F.map(x => x.dias || 0)), dem = F.filter(x => x._grupo === "Demanda");
   return `${boasVindas()}<div class="topo-cards">
       <div class="heroi"><span class="rotulo" style="color:var(--ouro)">Responder agora</span>
         <div class="lado">${anel(L.length ? at.length / L.length : 0, n(L.length))}<div><div class="t"><b>${n(L.length)} itens</b> na sua fila · ${n(at.length)} atrasados</div><div class="nota" style="color:var(--erro)">o mais antigo espera há ${n(max)} dias</div></div></div>
@@ -665,7 +663,7 @@ A.pedidos = () => { const f = S.filtro.pf || "meus";
   </div>`; };
 
 A.caixa = () => {
-  const F = fila(S.eu), f = S.filtro, tipos = ["Tudo", ...Object.keys(TIPOS_FILA).filter(t => F.some(x => x._grupo === t))];
+  const F = fila(S.eu), f = S.filtro, tipos = ["Tudo", ...Object.keys(TIPOS_FILA).filter(t => F.some(x => x._grupo === t))]; if (f.tipo && !tipos.includes(f.tipo)) f.tipo = null;
   const xs = F.filter(x => (!f.tipo || f.tipo === "Tudo" || x._grupo === f.tipo) && (!f.busca || (x.titulo + " " + (x.master || "") + " " + (x.o_que_pede || "")).toLowerCase().includes(f.busca.toLowerCase())));
   const P = parados(S.eu);
   return `<section><div class="filtros" role="group" aria-label="Filtros">${tipos.map(t => `<button data-tipo="${esc(t)}" aria-pressed="${(f.tipo || "Tudo") === t}">${esc(t === "Tudo" ? "Tudo" : TIPOS_FILA[t])} <span class="badge">${n(t === "Tudo" ? F.length : F.filter(x => x._grupo === t).length)}</span></button>`).join("")}
@@ -740,7 +738,7 @@ function loteConselho() { const cs = D.conselho.filter(c => !S.feitos.has(c.id))
   return `<p class="sub" style="margin:0">Marque e decida de uma vez.</p><div class="filtros"><button data-cons-todas>Selecionar todas</button></div>
     ${cs.map(c => `<label class="check" for="cs-${esc(c.id)}"><input type="checkbox" class="cons" value="${esc(c.id)}" id="cs-${esc(c.id)}"><span><b>${esc(c.id)}</b> · ${esc(c.texto)} <span class="nota">desde ${dt(c.data)}</span></span></label>`).join("")}`; }
 const DET = {
-  esperando: () => [`Esperando por você`, `${par("Decisões do Conselho", n(D.kpi.conselho))}${par("Respostas para aprovar", n(D.kpi.pedidos_prontos))}${par("Chamados propostos", n(D.kpi.chamados))}<div class="pacote"><h4>Respostas e chamados</h4>${listaCaixa(D.caixa.filter(x => x.pessoa === "luis" && x.grupo !== "Conselho" && !S.feitos.has(x.id)))}</div><div class="pacote"><h4>Conselho</h4>${loteConselho()}</div>`, `<button class="botao" data-cons="aprovar">Aprovar selecionadas</button><button class="botao sec" data-cons="rejeitar">Rejeitar</button>`],
+  esperando: () => [`Esperando por você`, `${par("Decisões do Conselho", n(consPend().length))}${par("Respostas para aprovar", n(respPend()))}${par("Chamados para aprovar", n(chAguardando("luis").length))}<div class="pacote"><h4>Respostas e chamados</h4>${filaHTML(fila("luis").filter(x => x._grupo !== "Conselho"), 40)}</div><div class="pacote"><h4>Conselho</h4>${loteConselho()}</div>`, `<button class="botao" data-cons="aprovar">Aprovar selecionadas</button><button class="botao sec" data-cons="rejeitar">Rejeitar</button>`],
   lote: () => [`Conselho em lote`, loteConselho(), `<button class="botao" data-cons="aprovar">Aprovar selecionadas</button><button class="botao sec" data-cons="rejeitar">Rejeitar</button>`],
   ganhos_mes: () => { const g = D.detalhe.ganhos_mes; return [`Ganhos no mês`, `${par("Negócios", n(g.length))}${par("Valor", rs(g.reduce((s, x) => s + x.valor, 0)))}${par("Honorário estimado", rs(g.reduce((s, x) => s + x.honorario, 0)))}${par("Repasse estimado", rs(g.reduce((s, x) => s + x.repasse, 0)))}
     <div class="pacote"><h4>Por parceiro</h4>${barrasH(Object.entries(g.reduce((a, x) => (a[x.parceiro] = (a[x.parceiro] || 0) + x.valor, a), {})).sort((a, b) => b[1] - a[1]).map(([r, v]) => ({r, v})), {fmt: rs})}</div>
@@ -776,13 +774,9 @@ const indDet = (quem, titulo) => () => { const I = D.detalhe.indicacoes[quem] ||
     <div class="pacote"><h4>Por etapa</h4>${barrasH((I.etapas || []).map(([e, q]) => ({r: e || "—", v: q})), {dest: -1})}</div>
     <div class="pacote"><h4>Em aberto, maiores primeiro</h4>${tab([["Caso"], ["Parceiro"], ["Etapa"], ["Criado", 1], ["Valor", 1]], (I.abertos_l || []).map(x => [`<b>${esc(x.caso)}</b>`, esc(x.parceiro), esc(x.etapa), dt(x.criado), rs(x.valor)]), "cartoes")}</div>`]; };
 DET.ind_geovana = indDet("geovana", "Oportunidades indicadas pela Geovana"); DET.ind_jenifer = indDet("jenifer", "Agendas e indicações da Jenifer");
-["daniela", "jenifer", "geovana"].forEach(p => DET["carga_" + p] = () => [`${PESSOAS[p]}: o que espera agora`, listaCaixa(D.caixa.filter(x => x.pessoa === p && !S.feitos.has(x.id)))]);
+["daniela", "jenifer", "geovana"].forEach(p => DET["carga_" + p] = () => [`${PESSOAS[p]}: o que espera agora`, filaHTML(fila(p), 60)]);
 DET.meus_chamados = () => [`Prontos para encaminhar`, filaHTML(fila(S.eu).filter(x => x._ch || x._chamado || pronto(x)), 40)];
-DET.meus_chamados_old = () => [`Chamados para aprovar`, `<div class="lista">${chamadosDe(S.eu).filter(c => chSt(c) === "proposto").map((c, i) => chamadoCard(c, i === 0)).join("") || `<div class="vazio">Nenhum chamado esperando.</div>`}</div>`];
 DET.minha_caixa = () => [`Pedidos de parceiro`, filaHTML(fila(S.eu).filter(x => x._grupo === "Demanda"), 40)];
-DET.urgentes = () => [`Contratos parados`, listaCaixa(minhas().filter(x => x.tipo === "Contrato sem assinatura"))];
-DET.antigos = () => [`Atrasados (mais de 30 dias)`, listaCaixa([...minhas()].filter(x => (x.dias || 0) > 30).sort((a, b) => (b.dias || 0) - (a.dias || 0)))];
-DET.prontos = () => [`Prontos para encaminhar`, listaCaixa(minhas().filter(pronto))];
 
 /* ---------- conferências feitas pelos agentes (regra do Luis, 14/10) ---------- */
 const confIco = ok => ok === true ? `<span class="cf ok">${ico("ok")}</span>` : ok === false ? `<span class="cf at">${ico("alerta")}</span>` : `<span class="cf nd">?</span>`;
@@ -804,13 +798,14 @@ function pacoteHTML(x) {
 
 /* ---------- painel lateral ---------- */
 function gaveta(titulo, corpo, rodape = "", contexto = "") {
-  S.origem = document.activeElement;
+  if (!$("#camada").innerHTML) S.origem = document.activeElement;
   $("#camada").innerHTML = `<div class="veu" data-fechar></div><aside class="gaveta" role="dialog" aria-modal="true" aria-label="${esc(titulo)}">
     <div class="gaveta-cab"><div class="tt">${contexto ? `<span class="rotulo" style="color:var(--ouro)">${contexto}</span>` : ""}<h3>${esc(titulo)}</h3></div><button class="botao sec icone" data-fechar aria-label="Fechar">${ico("fechar")}</button></div>
     <div class="gaveta-corpo">${corpo}</div>${rodape ? `<div class="gaveta-rod">${rodape}</div>` : ""}</aside>`;
+  document.querySelectorAll("#camada [data-tip]").forEach(el => el.setAttribute("aria-label", rotuloTip(el.dataset.tip)));
   $(".gaveta [data-fechar]").focus();
 }
-function fechar() { $("#camada").innerHTML = ""; if (S.origem && document.contains(S.origem)) S.origem.focus(); }
+function fechar() { $("#camada").innerHTML = ""; if (S.origem && document.contains(S.origem)) S.origem.focus(); else $("#conteudo").focus({preventScroll: true}); }
 function toastD(t, desfazer) { document.querySelectorAll(".toast").forEach(e => e.remove()); const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status");
   el.innerHTML = `<span>${esc(t)}</span>${desfazer ? `<button class="desfazer">Desfazer</button>` : ""}<i class="barra"></i>`; document.body.appendChild(el);
   const tm = setTimeout(() => el.remove(), 5000); if (desfazer) el.querySelector(".desfazer").onclick = () => { clearTimeout(tm); el.remove(); desfazer(); S.manter = true; render(); toast("Desfeito."); }; }
@@ -819,7 +814,7 @@ const nomeItem = id => { const x = D.caixa.find(i => i.id === id) || D.chamados.
 function toast(t) { document.querySelectorAll(".toast").forEach(e => e.remove()); const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 3200); }
 
 /* ---------- render ---------- */
-const contagem = () => ({caixa: fila(S.eu).length, prazos: D.prazos.length, chamados: chAguardando(S.eu).length, pedidos: D.pedidos.filter(p => pedSt(p) === "aguardando_aprovacao" && (S.eu === "luis" || p.para === S.eu)).length, recorrencia: S.eu === "geovana" || S.eu === "luis" ? D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso)).length : 0});
+const contagem = () => ({caixa: fila(S.eu).length, prazos: fila(S.eu).filter(x => x._grupo === "Prazo").length, chamados: chAguardando(S.eu).length, pedidos: D.pedidos.filter(p => pedSt(p) === "aguardando_aprovacao" && (S.eu === "luis" || p.para === S.eu)).length, recorrencia: S.eu === "geovana" || S.eu === "luis" ? D.recorrencia.fila.filter(x => !S.feitos.has("rec-" + x.caso)).length : 0});
 function render() {
   const cont = contagem(), falhas = Object.entries(D.operacao.rotinas).filter(([, v]) => !v.ok);
   $("#nav").innerHTML = GRUPOS.map(([g, it]) => `<div class="grupo-nav"><span class="rotulo">${g}</span>${it.map(([k, r]) => `<button class="nav-item" data-aba="${k}" ${S.aba === k ? 'aria-current="page"' : ""} title="${r}">${ico(k)}<span>${r}</span>${cont[k] ? `<span class="badge">${cont[k] > 99 ? "99+" : cont[k]}</span>` : ""}</button>`).join("")}</div>`).join("");
@@ -831,9 +826,10 @@ function render() {
   const main = $("#conteudo"), y = scrollY; main.innerHTML = A[S.aba]();
   if (S.animar) { main.classList.remove("entra"); void main.offsetWidth; main.classList.add("entra"); contar(); }
   S.animar = false; if (S.manter) window.scrollTo(0, y); S.manter = false;
+  document.querySelectorAll("#conteudo [data-tip]").forEach(el => el.setAttribute("aria-label", rotuloTip(el.dataset.tip)));
 }
 function contar() { if (reduz) return; document.querySelectorAll("[data-count]").forEach(el => { const fim = +el.dataset.count; if (!fim) return; const t0 = performance.now(); const passo = t => { const p = Math.min(1, (t - t0) / 600), e = 1 - Math.pow(1 - p, 3); el.textContent = n(Math.round(fim * e)); if (p < 1) requestAnimationFrame(passo); }; requestAnimationFrame(passo); }); }
-function ir(aba) { if (aba === "caixa" || REDIR[aba] === "caixa") S.filtro.tipo = null; if (REDIR[aba]) { if (aba === "chamados") S.filtro.tipo = "Chamado"; if (aba === "prazos") S.filtro.tipo = "Prazo"; aba = REDIR[aba]; } S.aba = aba; S.animar = true; try { localStorage.setItem("cp-aba", aba); } catch (x) {} render(); window.scrollTo(0, 0); }
+function ir(aba) { if (!(aba === "caixa" && S.filtro.rev === "agora")) S.filtro.rev = false; else S.filtro.rev = true; if (aba === "caixa" || REDIR[aba] === "caixa") S.filtro.tipo = null; if (REDIR[aba]) { if (aba === "chamados") S.filtro.tipo = "Chamado"; if (aba === "prazos") S.filtro.tipo = "Prazo"; aba = REDIR[aba]; } S.aba = aba; S.animar = true; try { localStorage.setItem("cp-aba", aba); } catch (x) {} render(); window.scrollTo(0, 0); }
 
 document.addEventListener("click", e => {
   const t = e.target.closest("button, tr.clic, .linha-m, .kpi[data-kpi], circle[data-master], .veu"); if (!t) return;
@@ -853,7 +849,6 @@ document.addEventListener("click", e => {
     const mot = $("#ch-mot").value.trim(); if (!mot) { $("#ch-mot").focus(); $("#ch-mot").placeholder = "Conte o motivo em uma frase. Isso ajuda o agente a aprender."; return; }
     const id = d.chnao; S.ch[id] = {status: "recusado", motivo: mot}; fechar(); S.manter = true; render(); toastD("Chamado não será aberto. Motivo salvo.", () => delete S.ch[id]); return; }
   if ("chsalvar" in d) { toast("Edição salva. Protótipo: nada foi gravado."); return; }
-  if (d.chf) { S.filtro.chf = d.chf; S.manter = true; render(); return; }
   if (d.encarea) { document.querySelectorAll("[data-encarea]").forEach(b => b.setAttribute("aria-pressed", b === t)); return; }
   if (d.dem) { const id = d.id, area = (document.querySelector("[data-encarea][aria-pressed=true]") || {}).dataset?.encarea;
     if (d.dem === "encaminhado" && !area) { toast("Escolha para qual área encaminhou."); document.querySelector("[data-encarea]")?.focus(); return; }
@@ -867,40 +862,33 @@ document.addEventListener("click", e => {
     if (d.rcp !== "Aprovar para reanálise" && !v("#d-motivo")) { $("#d-motivo").focus(); $("#d-motivo").placeholder = "Conte o motivo em uma frase"; return; }
     S.recup[id] = {decisao: d.rcp, valor: v("#r-valor"), min: v("#r-min"), motivo: v("#d-motivo")};
     decidido(id, d.rcp === "Aprovar para reanálise" ? `Enviado para reanálise. R$ ${v("#r-valor")} validados, ${v("#r-min")} min.` : d.rcp === "Vetar" ? "Caso vetado. O motivo ensina o Recuperador." : "Marcado como precisa de dado.", () => delete S.recup[id]); return; }
-  if (d.psub) { S.filtro.psub = d.psub; S.manter = true; render(); return; }
   if (d.pf) { S.filtro.pf = d.pf; S.manter = true; render(); return; }
-  if (d.pedir) { abrirPedir(d.pedir); return; }
   if ("penviar" in d) { if (!$("#p-precisa").value.trim()) { $("#p-precisa").focus(); return; } ["p-precisa", "p-cliente", "p-prazo", "p-contexto"].forEach(k => { const el = document.getElementById(k); if (el) el.value = ""; }); fechar(); toast("Pedido enviado. Os agentes respondem aqui, em até 1 hora nos dias úteis. Protótipo: nada foi gravado."); return; }
   if (d.pedido) { const p = D.pedidos.find(i => i.id === d.pedido); if (p) abrirPedido(p); return; }
   if (d.pdec) { const id = d.id, nota = ($("#p-nota")?.value || "").trim(); if (d.pdec !== "aprovado" && !nota) { $("#p-nota").focus(); $("#p-nota").placeholder = "Escreva o motivo ou o que mudar"; return; }
-    S.ped[id] = {status: d.pdec}; fechar(); S.manter = true; render(); toastD({aprovado: "Resposta aprovada.", nova_analise: "Pedido de nova análise enviado ao agente.", nao_aprovado: "Resposta não aprovada. O comentário orienta o agente."}[d.pdec], () => delete S.ped[id]); return; }
-  if ("fechar" in d) { fechar(); if (!d.ir) return; }
+    S.ped[id] = {status: d.pdec}; S.feitos.add(id); const pp = D.pedidos.find(x => x.id === id); if (pp && pp.pid) S.feitos.add(pp.pid); fechar(); S.manter = true; render(); toastD({aprovado: "Resposta aprovada.", nova_analise: "Pedido de nova análise enviado ao agente.", nao_aprovado: "Resposta não aprovada. O comentário orienta o agente."}[d.pdec], () => { delete S.ped[id]; S.feitos.delete(id); if (pp && pp.pid) S.feitos.delete(pp.pid); }); return; }
+  if ("fechar" in d) { fechar(); if (!d.ir && !d.aba && !d.eu) return; }
   if (d.kpi && DET[d.kpi]) { const [ti, co, ro] = DET[d.kpi](); gaveta(ti, co, ro); return; }
   if ("lote" in d) { const [ti, co, ro] = DET.lote(); gaveta(ti, co, ro); return; }
-  if (d.eu) { S.eu = d.eu; S.aba = "inicio"; S.animar = true; try { localStorage.setItem("cp-eu", S.eu); } catch (x) {} render(); window.scrollTo(0, 0); return; }
+  if (d.eu) { S.eu = d.eu; S.aba = "inicio"; S.animar = true; S.filtro = {}; S.q = ""; S.cnpjRes = null; try { localStorage.setItem("cp-eu", S.eu); localStorage.setItem("cp-aba", "inicio"); } catch (x) {} render(); window.scrollTo(0, 0); return; }
   if (d.aba) { ir(d.aba); return; }
   if (d.ir) { ir(d.ir); return; }
   if ("maisMenu" in d) { gaveta("Mais", `${ABAS.filter(a => !["inicio", "caixa", "prazos"].includes(a[0])).map(([k, r]) => `<button class="nav-item" data-aba="${k}" data-fechar>${ico(k)}<span>${r}</span></button>`).join("")}<div class="pacote"><h4>Ver como</h4><div class="pessoas">${Object.entries(PESSOAS).map(([k, v]) => `<button class="pessoa" data-eu="${k}" data-fechar aria-pressed="${S.eu === k}" aria-label="Ver como ${v}">${v.slice(0, 2).toUpperCase()}</button>`).join("")}</div></div>`); return; }
-  if ("prontosIr" in d) { S.filtro.prontos = true; ir("caixa"); return; }
   if (d.mais) { S.filtro["mais-" + d.mais] = true; S.manter = true; render(); return; }
-  if (d.feito) { S.feitos.add(d.feito); fechar(); S.manter = true; render(); toast("Registrado. Protótipo: nada foi gravado."); return; }
-  if (d.grupo) { S.filtro.grupo = d.grupo; S.manter = true; render(); return; }
+  if (d.feito) { const id = d.feito; decidido(id, "Registrado.", null); return; }
   if (d.tipo && !d.id && !d.recok) { S.filtro.tipo = d.tipo; S.manter = true; render(); return; }
-  if ("revisao" in d) { S.filtro.rev = true; ir("caixa"); setTimeout(() => document.getElementById("revisao")?.scrollIntoView({behavior: reduz ? "auto" : "smooth"}), 50); return; }
-  if ("prontos" in d) { S.filtro.prontos = !S.filtro.prontos; S.manter = true; render(); return; }
-  if (d.ord) { const k = d.ord; S.ordem = {campo: k, asc: S.ordem.campo === k ? !S.ordem.asc : k === "parceiro"}; S.manter = true; render(); return; }
+  if ("revisao" in d) { S.filtro.rev = "agora"; ir("caixa"); setTimeout(() => document.getElementById("revisao")?.scrollIntoView({behavior: reduz ? "auto" : "smooth"}), 50); return; }
   if (d.copiar) { const el = document.getElementById(d.copiar); const txt = el.value ?? el.textContent; navigator.clipboard?.writeText(txt).then(() => toast("Copiado."), () => { el.select?.(); toast("Selecionado: use Copiar do teclado."); }); return; }
   if (d.glpi) { toast("Protótipo: no painel real o chamado é aberto no GLPI em nome de quem aprovou, assim que a TI liberar o acesso."); return; }
   if ("saude" in d) { gaveta("Saúde da operação", `${D.operacao.email_pausado ? `<div class="faixa" style="border-color:rgba(232,179,74,.5);background:transparent">${ico("alerta")}<span class="txt">E-mail pausado até a TI liberar a integração com o Office. As mensagens ficam no OneDrive.</span></div>` : ""}${par("HubSpot", esc(D.operacao.hubspot))}${par("Backup", esc(D.operacao.backup))}<div class="pacote"><h4>Rotinas nas últimas 24 h</h4>${Object.entries(D.operacao.rotinas).map(([k, v]) => par(k, `<span class="chip ${v.ok ? "ok" : "erro"}">${v.ok ? "ok" : "falha"}</span> <span class="nota">${esc(v.quando)} · ${esc(v.msg)}</span>`)).join("")}</div>`); return; }
   if ("consTodas" in d) { document.querySelectorAll("input.cons").forEach(c => c.checked = true); return; }
-  if (d.cons) { const sel = [...document.querySelectorAll("input.cons:checked")].map(c => c.value); if (!sel.length) { toast("Marque pelo menos uma decisão."); return; } sel.forEach(id => S.feitos.add(id)); fechar(); S.manter = true; render(); toast(`${sel.length} decisão(ões) ${d.cons === "aprovar" ? "aprovada(s)" : "rejeitada(s)"}. Protótipo: nada foi gravado.`); return; }
+  if (d.cons) { const sel = [...document.querySelectorAll("input.cons:checked")].map(c => c.value); if (!sel.length) { toast("Marque pelo menos uma decisão."); return; } const dec = d.cons === "aprovar" ? "aprovada" : "rejeitada"; sel.forEach(id => { S.feitos.add(id); S.cons[id] = {decisao: dec}; }); fechar(); S.manter = true; render(); toastD(`${sel.length} decisão(ões) do Conselho ${dec === "aprovada" ? "aprovada(s)" : "rejeitada(s)"}.`, () => sel.forEach(id => { S.feitos.delete(id); delete S.cons[id]; })); return; }
   if (d.reativar != null && d.reativar !== "") { const r = D.esfriando[+d.reativar]; gaveta(r.parceiro, `${par("Sem negócio novo", n(r.dias) + " dias")}${par("Ganhos em 12 meses", n(r.ganhos_12m))}${r.uf.length ? par("Onde já ganha", r.uf.map(esc).join(", ")) : ""}<div class="pacote"><h4>Mensagem de reativação <span class="chip">WhatsApp</span></h4><textarea id="pk-reat">Olá, tudo bem? Faz um tempo que não falamos sobre novos casos. Separamos algumas empresas${r.uf.length ? " em " + r.uf.join(", ") : " da sua região"} com perfil parecido com clientes que já ganhamos juntos. Podemos marcar 20 minutos esta semana?</textarea></div>`, `<button class="botao" data-copiar="pk-reat">Copiar mensagem</button><button class="botao sec" data-lista>Pedir lista de contas-alvo (JB1)</button>`, "Reativação · " + r.tipo); return; }
   if ("lista" in d || "reuniao" in d || "enviar" in d) { fechar(); toast("Pedido enviado aos agentes. Protótipo: nada foi gravado."); return; }
-  if ("novo" in d) { gaveta("Novo pedido aos agentes", `<label for="p-tipo">Tipo de pedido<select id="p-tipo"><option>DM1 · Briefing de conta Master</option><option>DM3 · Rascunho de resposta ao parceiro</option><option>JB1 · Lista de prospects por Master</option><option>GT1 · Pré-análise tributária de empresa</option><option>GE2 · Relatório do HubSpot</option></select></label><label for="p-master">Master<select id="p-master"><option value="">—</option>${D.masters.map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label><label for="p-precisa">O que você precisa<textarea id="p-precisa" placeholder="Descreva a entrega que resolve o seu problema"></textarea></label>`, `<button class="botao" data-enviar>Enviar pedido</button>`); return; }
   if (d.abrir) { const x = D.caixa.find(i => i.id === d.abrir); if (x && abrirEspecial(x)) return; if (x) gaveta(x.titulo, `${par("Responsável", esc(PESSOAS[x.pessoa]))}${x.master ? par("Master", esc(x.master)) : ""}${x.valor ? par("Valor", rs(x.valor)) : ""}${x.dias != null ? par("Esperando", `<span class="idade ${idade(x.dias)}">${n(x.dias)} dia(s)</span>`) : ""}${pacoteHTML(x)}`, `<button class="botao" data-feito="${esc(x.id)}">${pronto(x) ? "Marcar como encaminhado" : esc(x.acao.split(" / ")[0])}</button>`, pronto(x) ? "Pronto para encaminhar · " + x.tipo : x.tipo); return; }
   if ("comecar" in d) { const x = [...D.geovana.lote].sort((a, b) => (b.esperado || 0) - (a.esperado || 0)).find(i => !S.feitos.has(i.caso)); if (x) abrirLote(x); return; }
   if (d.decidir) { const x = D.geovana.lote.find(i => i.caso === d.decidir); if (x) abrirLote(x); return; }
-  if (d.prazo) { const p = D.prazos.find(i => i.id === d.prazo); gaveta(p.id + " · " + p.tipo, `${par("Master", esc(p.master || "—"))}${par("Prazo", esc(p.prazo_txt))}<div class="pacote"><h4>Chamado no GLPI <span class="chip">Jurídico > Comunicados RFB</span></h4><textarea id="pk-rfb" rows="9">DADOS\n1) Setor Solicitante: MASTER\n2) Parceiro Solicitante: ${esc(p.master || "<Master>")}\nINFORMAÇÕES GERAIS\n1) Assunto: ${esc(p.tipo)} de <EMPRESA>\n2) Classe: Interna\n3) Informações Adicionais: data de ciência <DATA>; autorização do cliente para seguir (ou não) com a manifestação: <SIM/NÃO>\n4) Documentos: despacho ou intimação, print do e-CAC</textarea></div>${conferidoHTML([{item: "Prazo", ok: p.prazo_txt && !/confirmar/i.test(p.prazo_txt) ? true : null, resultado: p.prazo_txt && !/confirmar/i.test(p.prazo_txt) ? "lido na conversa: " + p.prazo_txt : "sem data de ciência na conversa: o e-CAC ainda não está integrado"}, {item: "Autorização do cliente", ok: null, resultado: "não aparece na conversa: a Daniela pede ao parceiro (o Jurídico exige)"}, {item: "Urgência", ok: true, resultado: "o chamado sai com urgência máxima se faltarem menos de 10 dias"}])}`, `<button class="botao" data-glpi="${esc(p.id)}">Abrir chamado no GLPI</button><button class="botao sec" data-copiar="pk-rfb">Copiar descrição</button>`, "Prazo da Receita"); return; }
+  if (d.prazo) { const p = D.prazos.find(i => i.id === d.prazo); gaveta(p.id + " · " + p.tipo, `${par("Master", esc(p.master || "—"))}${par("Prazo", esc(p.prazo_txt))}<div class="pacote"><h4>Chamado no GLPI <span class="chip">Jurídico > Comunicados RFB</span></h4><textarea id="pk-rfb" rows="9">DADOS\n1) Setor Solicitante: MASTER\n2) Parceiro Solicitante: ${esc(p.master || "<Master>")}\nINFORMAÇÕES GERAIS\n1) Assunto: ${esc(p.tipo)} de <EMPRESA>\n2) Classe: Interna\n3) Informações Adicionais: data de ciência <DATA>; autorização do cliente para seguir (ou não) com a manifestação: <SIM/NÃO>\n4) Documentos: despacho ou intimação, print do e-CAC</textarea></div>${conferidoHTML([{item: "Prazo", ok: p.prazo_txt && !/confirmar/i.test(p.prazo_txt) ? true : null, resultado: p.prazo_txt && !/confirmar/i.test(p.prazo_txt) ? "lido na conversa: " + p.prazo_txt : "sem data de ciência na conversa: o e-CAC ainda não está integrado"}, {item: "Autorização do cliente", ok: null, resultado: "não aparece na conversa: a Daniela pede ao parceiro (o Jurídico exige)"}, {item: "Urgência", ok: true, resultado: "o chamado sai com urgência máxima se faltarem menos de 10 dias"}])}`, `<button class="botao" data-glpi="${esc(p.id)}">Abrir chamado no GLPI</button><button class="botao sec" data-feito="${esc(p.id)}">Marcar como encaminhado</button><button class="botao sec" data-copiar="pk-rfb">Copiar descrição</button>`, "Prazo da Receita"); return; }
   if (d.doc) { const x = D.docs.find(i => i.caso === d.doc); const falta = x.falta.join(", ") + (x.decide.length ? (x.falta.length ? "; " : "") + [...new Set(x.decide.map(z => z.doc))].join("; ") : "");
     gaveta(x.caso, `${par("Parceiro", esc(x.parceiro))}${par("Na etapa há", n(x.dias) + " dias")}<div class="pacote"><h4>No card do HubSpot</h4>${Object.entries(x.tem).map(([k, v]) => `<div class="check"><span class="chip ${v ? "ok" : "alerta"}">${v ? "consta" : "não consta"}</span><span>${esc(k)}</span></div>`).join("")}</div>${x.decide.length ? `<div class="pacote"><h4>Documento que decide cada tese <span class="chip">Revisor</span></h4>${x.decide.map(z => `<div class="check"><span class="chip ${z.prio === "alta" ? "ouro" : ""}">${esc(z.prio || "")}</span><span><b>${esc(z.tese)}</b><br><span class="nota">${esc(z.doc)}</span></span></div>`).join("")}</div>` : ""}<div class="pacote"><h4>Cobrança ao parceiro <span class="chip">WhatsApp</span></h4><textarea id="pk-doc">Olá, tudo bem? Para seguirmos com o caso ${esc(x.caso)}, precisamos de: ${esc(falta)}. Consegue pedir ao cliente e me encaminhar por aqui?</textarea></div>`, `<button class="botao" data-copiar="pk-doc">Copiar mensagem</button>`, "Documentos · " + x.etapa); return; }
   if (d.rec) { const x = D.recorrencia.fila.find(i => i.caso === d.rec); if (!x) return;
@@ -910,7 +898,7 @@ document.addEventListener("click", e => {
       ${conferidoHTML(x.conferencias)}
       <label for="rc-motivo">Motivo ou observação<input type="text" id="rc-motivo" placeholder="Ex.: período coberto até 12/2024"></label>`,
       `<button class="botao" data-recok="${esc(x.caso)}">Aprovar recorrência</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="outra">Outra tese</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="dado">Precisa de dado</button><button class="botao sec" data-recok="${esc(x.caso)}" data-tipo="nao">Não aprovar</button>`, "Recorrência · " + x.parceiro); return; }
-  if (d.recok) { S.feitos.add("rec-" + d.recok); fechar(); S.manter = true; render(); toast({outra: "Marcado como outra tese: vai para pré-análise (GT1).", dado: "Marcado como precisa de dado.", nao: "Recorrência não aprovada. O motivo ensina a fila."}[d.tipo] || "Recorrência aprovada: negócio de recorrência com o parceiro e pré-análise (GT1). Protótipo: nada foi gravado."); return; }
+  if (d.recok) { const rid = "rec-" + d.recok; S.feitos.add(rid); fechar(); S.manter = true; render(); toastD({outra: "Marcado como outra tese: vai para pré-análise (GT1).", dado: "Marcado como precisa de dado.", nao: "Recorrência não aprovada. O motivo ensina a fila."}[d.tipo] || "Recorrência aprovada: negócio de recorrência com o parceiro e pré-análise (GT1).", () => S.feitos.delete(rid)); return; }
   if (d.master) { const m = D.masters.find(i => i.parceiro === d.master); if (!m) return; const f = D.ficha[m.parceiro] || {}, rc = f.recorrencia || {};
     gaveta(m.parceiro, `<div class="kpis">${kpi({r: "Saúde", v: n(m.saude), d: selSaude(m.saude)[1]})}${kpi({r: "Repasse 12m", v: rsH(f.comissao_12m), d: pctChip(m.parceiro)})}</div>
       ${par("Abertos", `${n(m.abertos)} · ${rs(m.abertos_rs)} · ${n(m.abertos_parados)} parados`)}${par("Ganhos 90 dias", `${n(m.ganhos_90d)} · ${rs(m.fechado_90d_rs)}`)}${par("Conversão 12m", pc(m.conversao_12m_pct))}${par("Ciclo mediano", n(m.ciclo_mediano_dias) + " dias")}
@@ -965,14 +953,6 @@ function abrirTarefa() { const tipos = ["Atendimento ao parceiro", "Encaminhamen
     <label for="t-master">Master (opcional)<select id="t-master"><option value="">—</option>${D.masters.map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
     <div><span class="rotulo">Minutos</span><div class="filtros" style="margin:6px 0 0">${[5, 15, 30, 60].map(m => `<button type="button" data-mmin="${m}" aria-pressed="${m === 15}">${m}</button>`).join("")}<input type="text" id="t-min" inputmode="numeric" value="15" aria-label="Minutos" style="width:80px"></div></div>
     <label class="check" for="t-ponte"><input type="checkbox" id="t-ponte"><span>Foi só ponte: repassei, cobrei ou devolvi sem resolver</span></label>`, `<button class="botao" data-tsalvar>Registrar</button>`, "Semana 0 · " + PESSOAS[S.eu]); setTimeout(() => $("#t-desc")?.focus(), 50); }
-function abrirPedir(cod) { const c = D.catalogo.find(i => i.codigo === cod) || {};
-  gaveta(c.rotulo || cod, `<div class="confira"><b>O que volta:</b> ${esc(c.entrega)}<br><span class="nota">Informe: ${esc((c.precisa || []).join(", "))} · vai para ${esc(c.celula)}</span></div>
-    <label for="p-master">Master ou parceiro<select id="p-master"><option value="">—</option><option>Todos</option>${D.masters.map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
-    <label for="p-cliente">Cliente, CNPJ ou link do HubSpot<input type="text" id="p-cliente" maxlength="300"></label>
-    <label for="p-precisa">O que você precisa<textarea id="p-precisa" maxlength="1500" placeholder="Descreva a entrega que resolve o seu problema"></textarea></label>
-    <div class="mini" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"><label for="p-uso">Para que vai usar<select id="p-uso">${["Reunião", "Resposta ao parceiro", "Decisão interna", "Prospecção", "Levantamento", "Outro"].map(x => `<option>${x}</option>`).join("")}</select></label>
-      <label for="p-formato">Formato<select id="p-formato">${["Resumo na tela", "Planilha", "Word", "Rascunho de mensagem"].map(x => `<option>${x}</option>`).join("")}</select></label><label for="p-prazo">Prazo<input type="text" id="p-prazo" placeholder="dd/mm"></label></div>
-    <label for="p-contexto">Informações que ajudam<textarea id="p-contexto" maxlength="1500" placeholder="Não escreva dados bancários, CPF ou senhas."></textarea></label>`, `<button class="botao" data-penviar>Enviar pedido</button>`, "Pedido aos agentes · " + cod); }
 function abrirPedido(p) { const R = p.resposta, st = pedSt(p), pode = st === "aguardando_aprovacao";
   gaveta((p.campos || {}).precisa || p.codigo, `${par("Pedido", `${esc(p.pid || p.id)} · ${esc(p.codigo)}`)}${par("Situação", esc((ST_PED[st] || [st])[0]))}${(p.campos || {}).master ? par("Master", esc(p.campos.master)) : ""}${(p.campos || {}).uso ? par("Para", esc(p.campos.uso) + " · " + esc(p.campos.formato || "")) : ""}
     ${R ? `<div class="pacote"><h4>Resposta · versão ${esc(R.versao || 1)}</h4><p>${esc(R.resumo || "")}</p></div>
@@ -984,12 +964,12 @@ function abrirPedido(p) { const R = p.resposta, st = pedSt(p), pode = st === "ag
     pode ? `<button class="botao" data-pdec="aprovado" data-id="${esc(p.id)}">Aprovado</button><button class="botao sec" data-pdec="nova_analise" data-id="${esc(p.id)}">Pedir nova análise</button><button class="botao sec txt-erro" data-pdec="nao_aprovado" data-id="${esc(p.id)}">Não aprovado</button>` : "", "Pedido aos agentes"); }
 document.addEventListener("keydown", e => {
   if (e.key === "Escape" && $("#camada").innerHTML) fechar();
-  if ((e.key === "t" || e.key === "T") && !$("#camada").innerHTML && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) abrirTarefa();
+  if ((e.key === "t" || e.key === "T") && !e.metaKey && !e.ctrlKey && !e.altKey && !$("#camada").innerHTML && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) abrirTarefa();
   if ((e.key === "Enter" || e.key === " ") && e.target.matches("tr.clic, .linha-m, .kpi[data-kpi], circle[data-master]")) { e.preventDefault(); e.target.click(); }
 });
 document.addEventListener("change", e => { if (e.target.id === "f-parc") { S.filtro.parc = e.target.value; S.manter = true; render(); } if (e.target.id === "f-rparc") { S.filtro.rparc = e.target.value; S.manter = true; render(); } });
 document.addEventListener("input", async e => {
-  if (e.target.id === "q") { S.q = e.target.value; S.cnpjRes = null; if (/\d{8,}/.test(S.q.replace(/\D/g, "")) && /^[\d.\/\-\s]+$/.test(S.q)) await buscaCnpj(S.q); $("#res-busca").innerHTML = resBusca(); return; }
+  if (e.target.id === "q") { S.q = e.target.value; S.cnpjRes = null; if (/\d{8,}/.test(S.q.replace(/\D/g, "")) && /^[\d.\/\-\s]+$/.test(S.q)) { const q0 = S.q; await buscaCnpj(S.q); if (S.q !== q0) return; } $("#res-busca").innerHTML = resBusca(); return; }
   if (e.target.id === "busca") { S.filtro.busca = e.target.value; const pos = e.target.selectionStart; S.manter = true; render(); const b = $("#busca"); b.focus(); b.setSelectionRange(pos, pos); }
 });
 document.querySelectorAll(".tarefa-btn").forEach(b => b.innerHTML = b.innerHTML.replace("__ICO_TAREFA__", ico("tarefa")));
