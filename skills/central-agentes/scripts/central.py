@@ -286,7 +286,8 @@ def cmd_responder(a):
         blocos += [L.secao(s["titulo"]), L.linha(md_html(s.get("texto", "")), "0 32px 6px")]
     anexos = [H(x) for x in J.get("anexos", []) if os.path.exists(H(x))]
     if anexos: blocos += [L.secao("Arquivos anexos"), L.paragrafo("<br>".join("📎 " + L.esc(os.path.basename(x)) for x in anexos))]
-    if J.get("conferir"): blocos += [L.secao("Antes de usar, confira"), L.linha(md_html("\n".join("- " + c for c in J["conferir"])), "0 32px 6px")]
+    if J.get("conferido"): blocos += [L.secao("Já conferido pelos agentes"), L.linha(md_html("\n".join(f"- **{c.get('item', '')}:** {c.get('resultado', '')}" if isinstance(c, dict) else "- " + str(c) for c in J["conferido"])), "0 32px 6px")]
+    if J.get("conferir"): blocos += [L.secao("Só você pode conferir"), L.linha(md_html("\n".join("- " + c for c in J["conferir"])), "0 32px 6px")]
     blocos += [como_responder(), L.assinatura(),
                L.rodape("Resposta preparada pelos agentes da Área Partners. É pré-análise: nada foi enviado a parceiros ou clientes e nada foi alterado no HubSpot. "
                         "A decisão de usar é sua. Uso interno Save Company.")]

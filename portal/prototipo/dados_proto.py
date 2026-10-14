@@ -80,6 +80,37 @@ EVX = {f"S-{str(e.get('negocio') or e['titulo'])[-5:]}-{e['tipo'][:4]}": e for e
 def form_trib(urg, emp, desc, bitrix, prazo):
     return (f"1) Urgência: {urg}\n2) Empresa: {emp}\n3) Descrição: {desc}\n"
             f"4) Link do Card: {bitrix or 'card do Bitrix não encontrado no HubSpot (conferir o campo ID Bitrix)'}\n5) Prazo de Entrega: {prazo}")
+HBI = {str(n["id"]): n for n in HB}
+def conferencias(x, e):
+    """O que os agentes já conferem com os dados (regra do Luis, 14/10): ok True = conferido e certo; False = conferido e com problema;
+    None = sem fonte para conferir (diz por quê). Substitui as listas de "confira"."""
+    n = HBI.get(str((e or {}).get("negocio") or "")) or {}; X = n.get("extras") or {}; t = (e or {}).get("tipo") or x["grupo"]; C = []
+    if n:
+        de = dias(X.get("entrou_etapa") or n.get("criado"))
+        C.append({"item": "Etapa no HubSpot", "ok": True, "resultado": f"{n.get('etapa')}" + (f" há {de} dias" if de is not None else "") + (f" · última atividade há {dias(X["ultima_atividade"])} dias" if X.get("ultima_atividade") and dias(X["ultima_atividade"]) is not None else "")})
+    if t == "contrato_parado":
+        C.append({"item": "Assinatura na plataforma", "ok": None, "resultado": "sem integração com a plataforma de assinatura: a mensagem pergunta ao parceiro"})
+    if t in ("assinado_parado", "ganho_sem_bitrix", "diagnostico_parado", "apresentacao_parada") and n:
+        C.append({"item": "Card do Bitrix", "ok": bool(X.get("id_bitrix")), "resultado": f"card {X['id_bitrix']} vinculado no HubSpot" if X.get("id_bitrix") else "sem ID Bitrix no HubSpot: o chamado avisa a área"})
+    if t == "assinado_parado" and n:
+        p = PCT.get(n.get("parceiro") or "", {}); hp = pc(n.get("hParc")); hs = pc(n.get("hContr"))
+        ok = bool(hs) and (not p.get("confirmado") or hp is None or abs(hp - p["pct_parceiro"]) < .5)
+        C.append({"item": "Honorário e % do parceiro", "ok": ok, "resultado": (f"honorário {hs:g}%" if hs else "honorário da Save vazio no HubSpot") + (f" · parceiro {hp:g}%" if hp is not None else " · % do parceiro vazio") + (f" (cadastro: {p['pct_parceiro']:g}%)" if p.get("confirmado") else "")})
+    if t in ("diagnostico_parado", "apresentacao_parada") and n:
+        tem = X.get("parecer_rt") or X.get("anexo_diagnostico")
+        C.append({"item": "Parecer anexado ao card", "ok": not tem, "resultado": "parecer já anexado: entregar o status ao parceiro, sem chamado" if tem else "sem parecer no card: o chamado faz sentido"})
+    if t == "crm_incompleto" and n:
+        falt = [k for k, v in (("segmento", n.get("segmento")), ("CNAE", n.get("cnae")), ("UF", X.get("uf")), ("regime", X.get("regime")), ("CNPJ", X.get("cnpj")), ("parceiro", n.get("parceiro"))) if not v]
+        C.append({"item": "Campos vazios no HubSpot", "ok": not falt, "resultado": ", ".join(falt) if falt else "nenhum dos campos principais está vazio"})
+        if X.get("cnpj"): C.append({"item": "Dados da Receita", "ok": True, "resultado": "CNPJ no cadastro: segmento, CNAE e UF podem vir da Receita"})
+    if x["grupo"] == "Demanda":
+        it = TRI.get(x.get("_chave")) or {}
+        if it: C.append({"item": "Conversa lida e interpretada", "ok": True, "resultado": f"última rodada da triagem · {it.get('status', '')}"})
+        rota = it.get("rota") or ""
+        if re.search(r"contrat|distrat|aditivo", rota, re.I): C.append({"item": "Fora do GLPI", "ok": True, "resultado": "contrato ou distrato do parceiro vai ao time de Contratos, sem chamado"})
+        if re.search(r"repasse|financeiro|faturamento", rota, re.I): C.append({"item": "Fora do GLPI", "ok": True, "resultado": "repasse ou prestação de contas vai ao Financeiro, sem chamado"})
+    return C
+PASSO = re.compile(r"^(Conferir|Confirmar|Ver a resposta|Abrir a resposta|Ler a recomendação|Aprovar,)", re.I)
 def pacote(x):
     e = EVX.get(x["id"]); emp = x["titulo"] if e else "a empresa"; m = x.get("master") or "parceiro"
     d = x.get("dias") or 0; prazo = (HOJE + timedelta(days=2 if x["urgente"] else 5)).isoformat()
@@ -133,9 +164,10 @@ def pacote(x):
             P["glpi"] = {"categoria": "Tributário > Diagnóstico", "titulo": "Diagnóstico <EMPRESA> x <assunto do pedido>", "urgencia": "Alta" if x["urgente"] else "Média",
                          "descricao": form_trib("Alta" if x["urgente"] else "Média", "<EMPRESA>", pede[:400], None, prazo)}
         if rota: P["checklist"].insert(0, f"Rota sugerida pelos agentes: {anon(rota)[:120]}")
-        P["checklist"] += ["Conferir o texto da conversa antes de enviar", "Contrato ou distrato do parceiro vai a Contratos e repasse vai ao Financeiro, sem chamado"]
+
     elif x["grupo"] == "Conselho":
         P["checklist"] = ["Ler a recomendação na ata", "Aprovar, aprovar com ajuste ou rejeitar"]
+    P["conferido"] = conferencias(x, e); P["checklist"] = [c for c in P["checklist"] if not PASSO.search(c)]
     return P
 
 # ---------- Masters
@@ -193,12 +225,12 @@ por_tese = sorted([{"tese": k, "n": v.get("n", 0), "alta": v.get("alta", 0)} for
 NT = {"B": "Manutenção e ressarcimento", "CST": "Erro de CST", "EX_ICMS": "Exclusão do ICMS", "C": "Crédito presumido", "ST_REST": "Restituição de ICMS-ST", "PREV": "Previdenciárias", "EX_ST": "Exclusão do ICMS-ST"}
 for t in por_tese: t["tese"] = NT.get(t["tese"], t["tese"])
 
-for x in caixa: x["pacote"] = pacote(x)
 # ================= ampliação: tudo o que já temos de dados =================
 import hashlib
 _pp = [os.path.join(AP, "departamentos/operacoes-canal/percentual-parceiros.json"), os.path.join(AP, ".claude/worktrees/amazing-kirch-442f46/departamentos/operacoes-canal/percentual-parceiros.json")]
 PCT = J(next(x for x in _pp if os.path.exists(x)))["parceiros"]  # % oficial de repasse (cadastro dos parceiros)
 pc = lambda v: (float(v) * (100 if float(v) <= 1 else 1)) if v not in (None, "") else None
+for x in caixa: x["pacote"] = pacote(x)
 NOMES_M = {m["parceiro"] for m in masters}
 def comissao(n):
     """Honorário contratado (valor × % Save) × % do parceiro. Faltando, usa o típico do cadastro (marcado como estimado)."""
@@ -325,14 +357,56 @@ for n in HB:
     r8 = raiz(n)
     if r8: grupos[r8].append(n)
 CAFE = re.compile(r"caf[eé]", re.I)
+# período apurado no último fechamento: lido do parecer do RT (celulas/geovana/pareceres/resumos.json, chave = ID do negócio)
+PAR = J(os.path.join(AP, "celulas/geovana/pareceres/resumos.json"))
+def periodo(txt):
+    """'12/2020 a 10/2025' → (date início, date fim). Aceita 'a', 'até', 'à' e '01 a 12/2024'."""
+    t = str(txt or ""); ms = re.findall(r"(\d{1,2})/(\d{4})", t)
+    if not ms: return None, None
+    fim = date(int(ms[-1][1]), int(ms[-1][0]), 1)
+    if len(ms) > 1: ini = date(int(ms[0][1]), int(ms[0][0]), 1)
+    else:
+        m0 = re.match(r"\s*(\d{1,2})\s*(?:a|até|à|A)\s*\d{1,2}/\d{4}", t); ini = date(fim.year, int(m0.group(1)), 1) if m0 else None
+    return ini, fim
+def parecer_do_grupo(ns, ult):
+    """Parecer do último fechamento; sem ele, o parecer mais recente do grupo (marcado)."""
+    p = PAR.get(str(ult["id"]))
+    if p and p.get("periodo_apuracao"): return p, ult, True
+    lim = date.fromisoformat(ult["fechado"][:10]) - timedelta(days=120)   # parecer de outro negócio só vale se for do mesmo ciclo do último ganho
+    da = lambda p: (lambda m: date(int(m.group(3)), int(m.group(2)), int(m.group(1))) if m else None)(re.search(r"(\d{2})/(\d{2})/(\d{4})", str(p.get("data_analise") or "")))
+    cands = [(PAR[str(n["id"])], n) for n in ns if PAR.get(str(n["id"]), {}).get("periodo_apuracao") and (da(PAR[str(n["id"])]) or date(1900, 1, 1)) >= lim]
+    if not cands: return None, None, False
+    p, n = max(cands, key=lambda c: (periodo(c[0]["periodo_apuracao"])[1] or date(1900, 1, 1)))
+    return p, n, False
 recorr = []
 for r8, ns in grupos.items():
     gs = [n for n in ns if n["status"] == "ganho" and n.get("fechado")]
     if not gs: continue
     ult = max(gs, key=lambda n: n["fechado"]); x = ult.get("extras") or {}
-    if x.get("regime") == "Simples Nacional" or CAFE.search(ult.get("segmento") or ""): continue          # V2 Simples · V3 café
+    if x.get("regime") == "Simples Nacional" or CAFE.search(ult.get("segmento") or "") or CAFE.search(ult.get("nome") or ""): continue          # V2 Simples · V3 café
     if any(n["status"] == "aberto" for n in ns): continue                                              # V6: já há negócio aberto no grupo
-    mn = meses(date.fromisoformat(ult["fechado"][:10]), HOJE)
+    pr, pn, do_ult = parecer_do_grupo(ns, ult); ini, fim = periodo((pr or {}).get("periodo_apuracao"))
+    conf = []
+    if fim:
+        mn = max(meses(fim, HOJE) - 1, 0)   # competências fechadas depois do fim do período apurado (L11), até o mês anterior
+        conf.append({"item": "Período apurado no último fechamento", "ok": True,
+                     "resultado": f"{pr['periodo_apuracao'].strip(' .')} · parecer de {str(pr.get('data_analise') or 'data não lida').strip(' .')}" + ("" if do_ult else f" (parecer do negócio de diagnóstico do mesmo ciclo: {cod(pn["id"])})")
+                                  + f" · {mn} competência(s) nova(s), de {(fim.month % 12) + 1:02d}/{fim.year + (fim.month == 12)} a {(HOJE.month - 2) % 12 + 1:02d}/{HOJE.year - (HOJE.month == 1)}"})
+    else:
+        mn = meses(date.fromisoformat(ult["fechado"][:10]), HOJE)
+        conf.append({"item": "Período apurado no último fechamento", "ok": None,
+                     "resultado": "parecer do último fechamento não lido pelos agentes (" + ("sem parecer no HubSpot ou ainda não baixado" if not PAR.get(str(ult["id"])) else "parecer sem período legível") + f"): meses contados desde o ganho de {ult['fechado'][:10]}, estimativa conservadora"})
+    lim5 = date(HOJE.year - 5, HOJE.month, 1)
+    if fim:
+        conf.append({"item": "Decadência de 5 anos (art. 168 do CTN)", "ok": True if fim >= lim5 else False,
+                     "resultado": f"janela atual desde {lim5:%m/%Y}; os {min(mn, 60)} meses novos estão dentro dela" if fim >= lim5 else f"o período apurado terminou antes de {lim5:%m/%Y}: só cabem as competências desde {lim5:%m/%Y}"})
+    ja = [k for k, v in ((pr or {}).get("teses") or {}).items() if re.search(r"aproveitad|ressarcid", str((v or {}).get("desfecho")), re.I)]
+    if pr: conf.append({"item": "Tese já aproveitada no último parecer", "ok": not ja, "resultado": ("sim: " + ", ".join(ja) + " · só os meses depois do último ressarcido ou outra tese") if ja else "nenhuma tese marcada como já aproveitada"})
+    aj = str((pr or {}).get("acoes_judiciais") or "")
+    if pr: conf.append({"item": "Ação judicial própria (L12)", "ok": False if re.search(r"há ação", aj) else True if aj else None,
+                        "resultado": "o parecer aponta ação judicial em alguma tese: o Jurídico confere antes" if re.search(r"há ação", aj) else aj or "parecer não informa"})
+    if pr and pr.get("perdcomp"): conf.append({"item": "PER/DCOMP no período", "ok": True, "resultado": str(pr["perdcomp"])[:160]})
+    conf.append({"item": "Negócio aberto no grupo (raiz do CNPJ)", "ok": True, "resultado": "nenhum em aberto em qualquer pipeline"})
     teses = sorted({str(n.get("variante")) for n in gs if n.get("variante")})
     cred = sum(n.get("valor") or 0 for n in gs if n["fechado"] == ult["fechado"]) or (ult.get("valor") or 0)
     pot_cred = cred / 60 * min(mn, 60) if mn >= 6 else 0
@@ -342,15 +416,17 @@ for r8, ns in grupos.items():
     sinais = []
     if any(re.search(r"aquisi|insumo|cr[eé]dito", t, re.I) for t in teses): sinais.append("Saldo credor até 31/12/2026 (L13)")
     if x.get("regime") == "Lucro Real": sinais.append("Lucro Real: revisão CBS/IBS (Planejamento 2027)")
-    if mn > 54: sinais.append("Risco de decadência: períodos antigos saindo da janela")
+    if fim and fim < date(HOJE.year - 5, HOJE.month, 1): sinais.append("Decadência: parte do período novo já saiu da janela de 5 anos")
     if re.search(r"hortifr|frutas|verduras|legumes|carnes|pescado|latic|ovos", ult.get("segmento") or "", re.I): sinais.append("Tese B (manutenção e ressarcimento): revenda com alíquota zero (L7)")
-    if not teses: sinais.append("Tese do ganho anterior não registrada no HubSpot: conferir no parecer o que já foi feito")
+    if not teses and not pr: sinais.append("Tese do ganho anterior não registrada e parecer não lido")
+    if not fim: sinais.append("Período apurado não conferido (estimativa pela data do ganho)")
     recorr.append({"caso": cod(ult["id"]), "parceiro": ult.get("parceiro") or "—", "regime": x.get("regime"), "uf": x.get("uf"), "segmento": (ult.get("segmento") or "")[:40],
                    "ultimo_ganho": ult["fechado"][:10], "meses_novos": mn, "recorrencias_feitas": max(len({n["fechado"][:7] for n in gs}) - 1, 0),
                    "ganhos_datas": sorted({n["fechado"][:10] for n in gs}), "elegivel": mn >= 6, "faltam": max(0, 6 - mn), "teses": teses[:4], "n_ganhos": len(gs),
                    "credito_anterior": round(cred), "potencial_credito": round(pot_cred), "potencial_honorario": round(pot_cred * hs / 100), "potencial_repasse": round(pot_cred * hs / 100 * hp / 100),
-                   "sinais": sinais, "regra": "V5/L11: ≥ 6 meses novos desde o último período recuperado" if mn >= 6 else f"V5: menos de 6 meses novos (faltam {6 - mn})"})
-recorr.sort(key=lambda r: (not r["elegivel"], -r["potencial_honorario"]))
+                   "periodo_apurado": f"{ini:%m/%Y} a {fim:%m/%Y}" if fim and ini else (f"até {fim:%m/%Y}" if fim else None), "periodo_conferido": bool(fim), "conferencias": conf,
+                   "sinais": sinais, "regra": ("V5/L11: ≥ 6 competências novas desde o fim do período apurado" if fim else "V5: ≥ 6 meses desde o ganho (período apurado não lido)") if mn >= 6 else f"V5: menos de 6 meses novos (faltam {6 - mn})"})
+recorr.sort(key=lambda r: (not r["elegivel"], not r["periodo_conferido"], -r["potencial_honorario"]))
 # Revisor: diagnósticos em andamento de grupos que já são clientes (recorrência já em curso)
 rev_rec = [{"caso": cod(did(r.get("link"))), "parceiro": r.get("parceiro"), "etapa": r.get("etapa"), "lacunas": r.get("lacunas"),
             "lacunas_alta": r.get("lacunas alta"), "teses_grupo": str(r.get("grupo já é cliente"))[:120]}
@@ -476,9 +552,9 @@ P = {
                 "decididas": RI.get("decididas"), "revisor": {k: RV["resumo"].get(k) for k in ("selecionados", "revisados", "lacunas")} | {"alta": sum(t["alta"] for t in por_tese)},
                 "por_tese": por_tese, "diag_parado": ev_por[("geovana", "diagnostico_parado")], "aprov_parada": sum(v for (p, t), v in ev_por.items() if t == "aprovacao_parada")},
     "ficha": ficha, "esfriando": esfriando, "prazos": prazos, "docs": docs_neg[:120], "n_docs": len(docs_neg), "busca": busca, "hist": hist[:80], "tempo": tempo,
-    "recorrencia": {"fila": [r for r in recorr if r["elegivel"]][:150], "aguardar": [r for r in recorr if not r["elegivel"]][:40],
+    "recorrencia": {"fila": [r for r in recorr if r["elegivel"]], "aguardar": [r for r in recorr if not r["elegivel"]][:40],
                     "n_elegiveis": sum(r["elegivel"] for r in recorr), "n_aguardar": sum(not r["elegivel"] for r in recorr),
-                    "pot_credito": sum(r["potencial_credito"] for r in recorr), "pot_honorario": sum(r["potencial_honorario"] for r in recorr), "pot_repasse": sum(r["potencial_repasse"] for r in recorr),
+                    "pot_credito": sum(r["potencial_credito"] for r in recorr), "n_conferidos": sum(r["elegivel"] and r["periodo_conferido"] for r in recorr), "pot_honorario": sum(r["potencial_honorario"] for r in recorr), "pot_repasse": sum(r["potencial_repasse"] for r in recorr),
                     "revisor": rev_rec[:60], "n_revisor": len(rev_rec)},
     "detalhe": detalhe,
     "operacao": operacao, "biblioteca": biblioteca, "conselho": [{"id": c["id"], "data": c["data"], "ata": c.get("ata"), "texto": c["texto"], "obs": c.get("obs")} for c in PO.get("conselho", [])],
