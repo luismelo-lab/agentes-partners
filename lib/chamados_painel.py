@@ -6,7 +6,8 @@ Fluxo:
   1. chamados_whatsapp.py grava as propostas em registro/chamados-propostos.json.
   2. `publicar` gera registro/chamados-para-painel.json (as que ainda não estão no painel); a rotina do Claude grava
      cada uma no painel (coleção `chamados`, documento = ID da demanda) e roda `marcar-publicados`.
-  3. No painel, a pessoa aprova (pode editar título e descrição) ou recusa (com motivo).
+  3. No painel, a pessoa aprova (pode editar título e descrição) ou recusa (com motivo). O texto vem do especialista
+     (Gerente Tributário ou Jurídico, infra/chamado-ideal.md) e sai no formulário da área (lib/chamado_modelo.py).
   4. `aplicar <pasta baixada do painel>`: para cada aprovado, abre no GLPI com o usuário de quem atendeu
      (lib/glpi.py) e imprime as atualizações que a rotina grava de volta no painel (número e link do chamado).
      Sem integração ainda, marca "aprovado: abrir manualmente" e o chamado pronto continua no painel e no e-mail.
@@ -40,7 +41,8 @@ def html(md):
 
 def publicar():
     P = ler()
-    novos = [{"doc_id": k, "data": {c: v[c] for c in ("pessoa", "area", "grupo", "titulo", "descricao", "urgencia", "conversa", "master", "link", "status", "proposto_em") if c in v}}
+    novos = [{"doc_id": k, "data": {c: v[c] for c in ("pessoa", "area", "grupo", "titulo", "descricao", "urgencia", "conversa", "master", "link", "status", "proposto_em",
+                                                       "negocio", "empresa", "prazo", "o_que_pede", "especialista") if c in v}}
              for k, v in P.items() if not v.get("publicado")]
     json.dump(novos, open(SAIDA, "w"), ensure_ascii=False, indent=1)
     print(f"{len(novos)} chamado(s) para gravar no painel → {SAIDA}")
@@ -61,8 +63,11 @@ def aplicar(pasta):
         loc = P.get(did) or {}
         if d.get("status") == "aprovado" and loc.get("status") not in ("aberto", "aprovado_manual"):
             titulo = d.get("titulo_editado") or d.get("titulo"); desc = d.get("descricao_editada") or d.get("descricao")
-            corpo = html(desc) + (f"<p><b>Negócio no HubSpot:</b> {d['link']}</p>" if d.get("link") else "") + \
-                    f"<p><i>Chamado proposto pelos agentes da Área Partners e aprovado por {d.get('aprovado_por') or d.get('pessoa')} no painel.</i></p>"
+            import chamado_modelo as CM  # mesmo formulário da área usado na proposta; texto editado no painel entra no corpo
+            origem = (f"<p><i>Chamado redigido pelo {(loc.get('especialista') or {}).get('agente') or CM.AGENTE(d.get('area', ''))} (agente da Área Partners) "
+                      f"e aprovado por {d.get('aprovado_por') or d.get('pessoa')} no painel.</i></p>")
+            ctx = {**loc, **{k: d.get(k) for k in ("link", "master", "negocio") if d.get(k)}}
+            corpo = CM.formulario(d.get("area", "outros"), ctx, {**loc, "urgencia": d.get("urgencia", loc.get("urgencia", 3))}, desc, origem)
             r = glpi.abrir(d.get("area", "outros"), titulo, corpo, d.get("urgencia", 3), pessoa=d.get("pessoa"))
             agora = datetime.now().isoformat(timespec="minutes")
             if r.get("id"):
