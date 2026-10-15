@@ -344,12 +344,22 @@ def fluxo_produtos(s, n, tot):
     return pagina(corpo, n, tot, s.get("leg", RODAPE))
 
 
-TIPOS = {"fluxo_produtos": fluxo_produtos, "ecossistema": ecossistema, "painel": painel, "valores": valores, "lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
+def conceito(s, n, tot):
+    """Slide desenhado como módulo Python em <pasta>/conceitos/<modulo>.py (função corpo(n, tot) devolve a página completa)."""
+    import importlib.util
+    sys.path.insert(0, str(AQUI))
+    p = Path(PASTA_DECK[0]) / "conceitos" / f"{s['modulo']}.py"
+    spec = importlib.util.spec_from_file_location("conceito_" + s["modulo"], p); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    return m.corpo(n, tot)
+
+
+PASTA_DECK = [Path(".")]
+TIPOS = {"conceito": conceito, "fluxo_produtos": fluxo_produtos, "ecossistema": ecossistema, "painel": painel, "valores": valores, "lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
 
 
 def main(pasta, nome=None):
     from playwright.sync_api import sync_playwright
-    pasta = Path(pasta).resolve(); deck = json.load(open(pasta / "deck.json")); sl = deck["slides"]; tot = len(sl)
+    pasta = Path(pasta).resolve(); PASTA_DECK[0] = pasta; deck = json.load(open(pasta / "deck.json")); sl = deck["slides"]; tot = len(sl)
     nome = nome or deck.get("nome", "Apresentacao"); prev = pasta / "previas"; prev.mkdir(exist_ok=True)
     pngs = []; notas = []
     with sync_playwright() as p:
