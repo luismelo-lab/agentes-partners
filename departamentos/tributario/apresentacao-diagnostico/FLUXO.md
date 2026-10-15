@@ -11,10 +11,13 @@ Padrão definido pelo Luis em 14/10/2026. Base visual e de conteúdo: a apresent
 | 3 | **Time tributário** (`depto-tributario`, em paralelo) | Avalia **cada linha de tese** para o perfil do cliente: PIS/COFINS e ICMS; Previdenciário, passivo e processos; segmento e reforma. Veredito por linha: MANTER · AJUSTAR · RETER ATÉ VALIDAR · RETIRAR, com base legal, risco e documento que decide | `departamentos/tributario/entregas/AAAA-MM-DD-<cliente>-*.md` |
 | 4 | Jurídico | Confere promessas, números, avisos e o uso de cases (parecer-padrão em `juridico/entregas/2026-10-14-padrao-apresentacao-diagnostico-compliance.md`) | Ajustes de texto |
 | 5 | Gabinete | Preenche `diagnostico.json` só com o que passou na etapa 3: tese retirada sai; tese retida mostra "a validar", sem valor; **nunca soma o total do 1º relatório** se houver sobreposição | `diagnostico.json` revisado |
-| 6 | Gabinete | `python3 gerar_apresentacao.py <pasta> [--rascunho]` → PDF, PowerPoint editável e prévias; busca o **case do segmento** na biblioteca | `<Cliente>-Apresentacao.pdf/.pptx` |
+| 6 | Gabinete | **Apresentação comercial (padrão):** escrever `deck.json` (modelo: `brasol/deck.json`) e rodar `python3 render_comercial.py <pasta>` → PDF e PowerPoint no layout da apresentação institucional (fotos recortadas dela, slides institucionais inseridos como estão, tese por tese e slide Oxigenar/Estruturar/Escalar com os produtos da Save). Cada slide é imagem; o roteiro vai nas notas. `gerar_apresentacao.py` (motor do Marketing, layout claro, editável) fica como versão técnica | `<Cliente>-Apresentacao-Comercial.pdf/.pptx` |
 | 7 | Luis / Geovana | Aprova. Nada vai ao cliente nem ao parceiro sem a aprovação | Envio pelo Luis |
 
-## Esqueleto da apresentação (13 slides)
+## Esqueleto da apresentação comercial (20 slides, Brassol)
+Capa · Save Co. (institucional) · Ecossistema (institucional) · O que a revisão encontrou · Tese a tese · ICMS · PIS/COFINS · Folha · O que já é seu na Justiça · Dívidas federais · Reforma · Oxigenar/Estruturar/Escalar · Oxigenar · Estruturar · Escalar · Case do segmento · Jornada (institucional) · Documentos · Próximos passos · Encerramento (institucional).
+
+## Esqueleto da versão técnica (13 slides)
 Capa · Quem é a Save · Como chegamos aqui · Resumo · **Teses revisadas** · **Processos já ajuizados** · Débitos em aberto · Reforma tributária · **Oxigenar, estruturar e escalar** · **Quem já fez (case do segmento)** · Jornada · O que precisamos de vocês · Próximos passos.
 Os blocos em negrito mudam em todo diagnóstico; os demais são a base fixa. Slides que o diagnóstico não justifica saem (ex.: sem passivo, sem processo).
 
@@ -37,3 +40,6 @@ Modelo do slide e perguntas do diagnóstico que ativam cada item: `MODELO-OXIGEN
 - Quem presta cada serviço do slide "Oxigenar, estruturar e escalar" (Save ou parceiro) e o enquadramento na OAB (Jurídico humano).
 - Fontes oficiais: o Planalto e o portal da Receita não abriram durante a revisão de 14/10; dispositivos de lei marcados "conferir".
 - Descrição de Save ID e AssinePro na base de conhecimento.
+
+## Linguagem dos slides
+O slide mostra **como a Save ajuda o cliente** com cada produto (benefício, o que a Save faz por ele), não como o produto funciona por dentro. O catálogo de teses do time técnico está em `../catalogo-teses-save.md`.
