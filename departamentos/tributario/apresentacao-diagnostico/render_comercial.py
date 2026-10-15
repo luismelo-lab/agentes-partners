@@ -286,45 +286,51 @@ def ecossistema(s, n, tot):
     return pagina(corpo + svg + "</svg>" + lab, n, tot, s.get("leg", RODAPE))
 
 
-def fluxo_html():
-    """Fluxograma de produtos e serviços da Save (só divs, para servir também de artboard): Save Co. -> três marcas -> serviços por área."""
-    O, B = OURO, "#2f2f2f"
-    def linha(x, y, w=1, h=1, c=O, op=.6): return f'<div style="position:absolute;left:{x}px;top:{y}px;width:{w}px;height:{h}px;background:{c};opacity:{op}"></div>'
-    def ponto(x, y): return f'<div style="position:absolute;left:{x - 5}px;top:{y - 5}px;width:10px;height:10px;border-radius:5px;background:{O}"></div>'
+def fluxo_html(img=None):
+    """Fluxograma de produtos e serviços da Save com fotos do PowerPoint institucional: Save Co. -> três marcas -> serviços por área.
+    img: função nome -> valor de url() (padrão: foto embutida). Só divs, para servir também de artboard."""
+    img = img or (lambda n: uri(ASS / (n + ".jpg")))
+    O, B = OURO, "#2b2b2b"
+    def linha(x, y, w=1, h=1, op=.65): return f'<div style="position:absolute;left:{x}px;top:{y}px;width:{w}px;height:{h}px;background:linear-gradient(90deg,{O},#FFF1BF);opacity:{op}"></div>'
+    def ponto(x, y): return f'<div style="position:absolute;left:{x - 6}px;top:{y - 6}px;width:12px;height:12px;border-radius:6px;background:{O};box-shadow:0 0 0 5px rgba(243,205,96,.16)"></div>'
     h = ""
-    # raiz
-    h += (f'<div style="position:absolute;left:760px;top:190px;width:400px;height:70px;border:1.5px solid {O};border-radius:35px;display:flex;align-items:center;justify-content:center;gap:14px;'
-          f'background:rgba(243,205,96,.07);box-shadow:0 0 50px rgba(243,205,96,.12)"><span style="width:12px;height:12px;background:{O};transform:rotate(45deg)"></span>'
-          f'<span style="font-size:36px;font-weight:300;color:#F2F2F2;letter-spacing:.01em">Save Co.</span></div>')
-    h += linha(960, 260, 1, 38) + linha(250, 298, 1420, 1) + linha(250, 298, 1, 42) + linha(960, 298, 1, 42) + linha(1670, 298, 1, 42) + ponto(250, 340) + ponto(960, 340) + ponto(1670, 340)
-    def marca(x, w, nome, lema):
-        return (f'<div style="position:absolute;left:{x}px;top:346px;width:{w}px;height:112px;border:1px solid rgba(243,205,96,.45);border-radius:18px;background:rgba(255,255,255,.03);box-sizing:border-box;padding:22px 24px">'
-                f'<div style="font-size:32px;font-weight:500;color:#F2F2F2">{nome}</div><div style="font-size:20px;color:{O};margin-top:6px">{lema}</div></div>')
-    h += marca(80, 340, "Save Partners", "Alianças estratégicas") + marca(700, 520, "Save Co.", "Dados, tecnologia e serviços") + marca(1500, 340, "Save Educação", "Conhecimento que transforma")
+    h += (f'<div style="position:absolute;left:760px;top:178px;width:400px;height:72px;box-sizing:border-box;border:1.5px solid {O};border-radius:36px;display:flex;align-items:center;justify-content:center;gap:14px;'
+          f'background:linear-gradient(180deg,rgba(243,205,96,.14),rgba(243,205,96,.04));box-shadow:0 0 60px rgba(243,205,96,.18)"><span style="width:12px;height:12px;background:{O};transform:rotate(45deg)"></span>'
+          f'<span style="font-size:38px;font-weight:300;color:#F7F7F7;letter-spacing:.01em">Save Co.</span></div>')
+    h += linha(960, 250, 1, 46) + linha(235, 296, 1450, 1) + linha(235, 296, 1, 44) + linha(960, 296, 1, 44) + linha(1685, 296, 1, 44) + ponto(235, 340) + ponto(960, 340) + ponto(1685, 340)
+    def marca(x, w, nome, lema, foto, pos="center"):
+        return (f'<div style="position:absolute;left:{x}px;top:346px;width:{w}px;height:150px;border-radius:20px;overflow:hidden;border:1px solid rgba(243,205,96,.55);box-shadow:0 18px 40px rgba(0,0,0,.55);'
+                f'background-image:url({img(foto)});background-size:cover;background-position:{pos}">'
+                f'<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,.88) 100%)"></div>'
+                f'<div style="position:absolute;left:26px;bottom:20px;right:20px"><div style="font-size:34px;font-weight:500;color:#fff">{nome}</div><div style="font-size:20px;color:{O};margin-top:4px">{lema}</div></div></div>')
+    h += marca(80, 310, "Save Partners", "Alianças estratégicas", "colmeia", "center 30%") + marca(700, 520, "Save Co.", "Dados, tecnologia e serviços", "predio", "center 35%") + marca(1530, 310, "Save Educação", "Conhecimento que transforma", "pessoas", "center 40%")
     def desc(x, txt):
-        return (f'<div style="position:absolute;left:{x}px;top:500px;width:340px;height:250px;border:1px solid {B};border-radius:18px;box-sizing:border-box;padding:26px 26px;font-size:23px;line-height:1.42;color:#C4C4C4">{txt}</div>')
-    h += linha(250, 458, 1, 42) + ponto(250, 500) + desc(80, "É a força das relações estratégicas. Cria alianças que geram negócios, compartilham oportunidades e multiplicam resultados.")
-    h += linha(1670, 458, 1, 42) + ponto(1670, 500) + desc(1500, "Conhecimento que transforma. Converte saber em ação, unindo teoria e prática para formar mentes que decidem, constroem e fazem acontecer.")
-    # espinha dos serviços
-    grupos = [("Recuperar", "caixa e crédito", ["Recuperação Tributária", "Gestão de Passivo", "Gestão de Contas"]),
-              ("Organizar", "estrutura e segurança", ["Planejamento Tributário", "Estruturação Patrimonial", "Assessoria Jurídica"]),
-              ("Crescer", "estratégia e futuro", ["Planejamento Estratégico", "Sustentabilidade e EVP"]),
-              ("Tecnologia", "ferramentas Save", ["Save ID", "AssinePro", "RecuperaTax SaaS"])]
-    h += linha(960, 458, 1, 40) + linha(462, 498, 499, 1) + linha(462, 498, 1, 408) + ponto(960, 498)
-    y0, alt, gap = 520, 100, 12
-    for i, (nome, sub, itens) in enumerate(grupos):
-        y = y0 + i * (alt + gap); ym = y + alt // 2
-        h += linha(462, ym, 20, 1) + ponto(462, ym)
-        chips = "".join(f'<span style="display:inline-block;margin:4px 8px 4px 0;padding:8px 15px;border:1px solid rgba(243,205,96,.4);border-radius:20px;font-size:20px;color:#EDEDED;background:rgba(243,205,96,.05)">{c}</span>' for c in itens)
-        h += (f'<div style="position:absolute;left:482px;top:{y}px;width:960px;height:{alt}px;border:1px solid {B};border-radius:16px;box-sizing:border-box;display:flex;align-items:center;gap:20px;padding:0 24px;background:rgba(255,255,255,.02)">'
-              f'<div style="flex:none;width:200px"><div style="font-size:30px;font-weight:500;color:#F2F2F2">{nome}</div><div style="font-size:17px;color:{O};letter-spacing:.04em;margin-top:3px">{sub}</div></div>'
-              f'<div style="flex:1">{chips}</div></div>')
+        return (f'<div style="position:absolute;left:{x}px;top:530px;width:310px;height:300px;box-sizing:border-box;border:1px solid {B};border-radius:20px;padding:28px 26px;'
+                f'background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));font-size:23px;line-height:1.45;color:#CFCFCF">{txt}</div>')
+    h += linha(235, 496, 1, 34) + ponto(235, 530) + desc(80, "É a força das relações estratégicas. Cria alianças que geram negócios, compartilham oportunidades e multiplicam resultados.")
+    h += linha(1685, 496, 1, 34) + ponto(1685, 530) + desc(1530, "Conhecimento que transforma. Converte saber em ação, unindo teoria e prática para formar mentes que decidem, constroem e fazem acontecer.")
+    grupos = [("Recuperar", "caixa e crédito", ["Recuperação Tributária", "Gestão de Passivo", "Gestão de Contas"], "roda-grafico|55% 78%"),
+              ("Organizar", "estrutura e segurança", ["Planejamento Tributário", "Estruturação Patrimonial", "Assessoria Jurídica"], "roda-casa|45% 55%"),
+              ("Crescer", "estratégia e futuro", ["Planejamento Estratégico", "Sustentabilidade e EVP"], "roda-plantas|50% 45%"),
+              ("Tecnologia", "ferramentas Save", ["Save ID", "AssinePro", "RecuperaTax SaaS"], "roda-certificado|45% 28%")]
+    h += linha(960, 496, 1, 34) + linha(422, 530, 539, 1) + ponto(960, 530) + linha(422, 530, 1, 388)
+    y0, alt, gap = 552, 100, 8
+    for i, (nome, sub, itens, foto) in enumerate(grupos):
+        foto, fpos = foto.split("|"); y = y0 + i * (alt + gap); ym = y + alt // 2
+        h += linha(422, ym, 20, 1) + ponto(422, ym)
+        chips = "".join(f'<span style="padding:8px 15px;border:1px solid rgba(243,205,96,.45);border-radius:20px;font-size:19.5px;color:#F0F0F0;background:rgba(243,205,96,.06)">{c}</span>' for c in itens)
+        h += (f'<div style="position:absolute;left:442px;top:{y}px;width:1040px;height:{alt}px;box-sizing:border-box;border:1px solid {B};border-radius:18px;overflow:hidden;display:flex;align-items:center;gap:22px;'
+              f'background:linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,.015));box-shadow:0 12px 30px rgba(0,0,0,.4)">'
+              f'<div style="flex:none;width:170px;height:100%;background-image:url({img(foto)});background-size:125% auto;background-position:{fpos}"></div>'
+              f'<div style="flex:none;width:190px"><div style="font-size:30px;font-weight:500;color:#F7F7F7">{nome}</div><div style="font-size:17px;color:{O};letter-spacing:.04em;margin-top:3px">{sub}</div></div>'
+              f'<div style="flex:1;display:flex;flex-wrap:wrap;gap:8px;padding-right:22px">{chips}</div></div>')
     return h
 
 
 def fluxo_produtos(s, n, tot):
-    corpo = (f'<div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:radial-gradient(ellipse at 50% 30%,#14110a 0%,#050403 50%,#000 80%)"></div>'
-             f'<div style="position:absolute;left:80px;top:60px;width:1700px"><div class="rot" style="margin-bottom:12px">{esc(s["rotulo"])}</div><h1 style="font-size:52px">{esc(s["titulo"])}</h1></div>' + fluxo_html())
+    corpo = (f'<div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:radial-gradient(ellipse at 50% 28%,#1a1509 0%,#070604 50%,#000 80%)"></div>'
+             f'<img src="{uri(PADRAO / M["logos"]["simbolo_contorno_ouro"])}" style="position:absolute;right:-120px;bottom:-110px;width:640px;opacity:.05">'
+             f'<div style="position:absolute;left:80px;top:56px;width:1700px"><div class="rot" style="margin-bottom:12px">{esc(s["rotulo"])}</div><h1 style="font-size:52px">{esc(s["titulo"])}</h1></div>' + fluxo_html())
     return pagina(corpo, n, tot, s.get("leg", RODAPE))
 
 
