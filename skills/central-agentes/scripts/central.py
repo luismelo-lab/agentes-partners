@@ -72,7 +72,7 @@ def osa(script):
 
 
 def _graph():
-    if os.environ.get("AGENTES_EMAIL") != "graph": return None
+    if not (os.environ.get("AGENTES_EMAIL") == "graph" or os.path.exists(os.path.expanduser("~/agentes-partners/.email-graph"))): return None
     sys.path.insert(0, H("~/agentes-partners/lib")); import graph
     return graph
 

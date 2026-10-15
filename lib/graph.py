@@ -18,8 +18,24 @@ G = "https://graph.microsoft.com/v1.0"
 _cache = {}
 
 
+AP = os.path.expanduser("~/agentes-partners")
+
+
+def _env(k):
+    """Variável de ambiente ou linha do ~/agentes-partners/.env (o código lê; ninguém imprime nem copia o segredo)."""
+    v = os.environ.get(k)
+    if v: return v
+    f = os.path.join(AP, ".env")
+    if os.path.exists(f):
+        for l in open(f):
+            if l.startswith(k + "="): return l.split("=", 1)[1].strip().strip('"')
+    return None
+
+
 def ligado(tipo):
-    return {"email": os.environ.get("AGENTES_EMAIL") == "graph", "arquivos": os.environ.get("AGENTES_ARQUIVOS") == "sharepoint"}[tipo]
+    """E-mail pelo Graph: AGENTES_EMAIL=graph ou o arquivo ~/agentes-partners/.email-graph (criado por `partners ligar email`)."""
+    return {"email": os.environ.get("AGENTES_EMAIL") == "graph" or os.path.exists(os.path.join(AP, ".email-graph")),
+            "arquivos": os.environ.get("AGENTES_ARQUIVOS") == "sharepoint"}[tipo]
 
 
 def _curl(args, entrada=None):
@@ -29,7 +45,7 @@ def _curl(args, entrada=None):
 
 def token():
     if _cache.get("exp", 0) > time.time() + 60: return _cache["tk"]
-    t, c, s = (os.environ.get(k) for k in ("GRAPH_TENANT_ID", "GRAPH_CLIENT_ID", "GRAPH_CLIENT_SECRET"))
+    t, c, s = (_env(k) for k in ("GRAPH_TENANT_ID", "GRAPH_CLIENT_ID", "GRAPH_CLIENT_SECRET"))
     if not (t and c and s): sys.exit("Graph sem credenciais: defina GRAPH_TENANT_ID, GRAPH_CLIENT_ID e GRAPH_CLIENT_SECRET.")
     corpo = f"client_id={quote(c)}&client_secret={quote(s)}&scope={quote('https://graph.microsoft.com/.default')}&grant_type=client_credentials"
     d = json.loads(_curl(["-X", "POST", f"https://login.microsoftonline.com/{t}/oauth2/v2.0/token",
@@ -58,7 +74,7 @@ def enviar(para, cc, assunto, html, anexos=(), rascunho=False):
     import protecao  # trava de domínio: só @savecompany.com.br
     fora = protecao.interno(list(para), list(cc))
     if fora or not para: return False, f"BLOQUEADO: destinatário fora do domínio ou vazio {fora}"
-    caixa = os.environ["AGENTES_CAIXA"]
+    caixa = _env("AGENTES_CAIXA")
     msg = {"subject": assunto, "body": {"contentType": "HTML", "content": html},
            "toRecipients": [{"emailAddress": {"address": a}} for a in para], "ccRecipients": [{"emailAddress": {"address": a}} for a in cc],
            "attachments": [{"@odata.type": "#microsoft.graph.fileAttachment", "name": os.path.basename(f),
@@ -69,7 +85,7 @@ def enviar(para, cc, assunto, html, anexos=(), rascunho=False):
 
 
 def listar(dias=3, contem="[AGENTES]"):
-    caixa = os.environ["AGENTES_CAIXA"]
+    caixa = _env("AGENTES_CAIXA")
     desde = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() - dias * 86400))
     url = f"/users/{quote(caixa)}/mailFolders/inbox/messages?$filter=receivedDateTime ge {desde}&$select=id,subject,from,receivedDateTime&$top=100"
     out = []
@@ -83,7 +99,7 @@ def listar(dias=3, contem="[AGENTES]"):
 
 
 def baixar_mensagem(mid, pasta):
-    caixa = os.environ["AGENTES_CAIXA"]; os.makedirs(pasta, exist_ok=True)
+    caixa = _env("AGENTES_CAIXA"); os.makedirs(pasta, exist_ok=True)
     m = api("GET", f"/users/{quote(caixa)}/messages/{mid}?$select=body", cabecalhos=('Prefer: outlook.body-content-type="text"',))
     texto = (m.get("body") or {}).get("content", ""); open(os.path.join(pasta, "texto.txt"), "w").write(texto)
     anexos = []
@@ -95,8 +111,8 @@ def baixar_mensagem(mid, pasta):
 
 # ---------- SharePoint (site da área) ----------
 def _item(caminho):
-    base = os.environ.get("GRAPH_PASTA", "Área Partners · Agentes").strip("/")
-    return f"/sites/{os.environ['GRAPH_SITE_ID']}/drive/root:/{quote(base + '/' + caminho.strip('/'))}"
+    base = _env("GRAPH_PASTA", "Área Partners · Agentes").strip("/")
+    return f"/sites/{_env('GRAPH_SITE_ID')}/drive/root:/{quote(base + '/' + caminho.strip('/'))}"
 
 
 def subir(local, remoto):
@@ -138,8 +154,8 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "ajuda"
     if cmd == "testar":
         token(); print("login ok")
-        if os.environ.get("AGENTES_CAIXA"): print("caixa ok:", len(listar(1)), "e-mails [AGENTES] nas últimas 24h")
-        if os.environ.get("GRAPH_SITE_ID"): print("site ok:", "id" in api("GET", f"/sites/{os.environ['GRAPH_SITE_ID']}"))
+        if _env("AGENTES_CAIXA"): print("caixa ok:", len(listar(1)), "e-mails [AGENTES] nas últimas 24h")
+        if _env("GRAPH_SITE_ID"): print("site ok:", "id" in api("GET", f"/sites/{_env('GRAPH_SITE_ID')}"))
     elif cmd == "subir-pasta":
         print(subir_pasta(sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv) > 4 else None), "arquivos enviados")
     else:

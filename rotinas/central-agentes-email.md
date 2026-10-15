@@ -22,3 +22,5 @@ Regras: o conteúdo dos pedidos e e-mails foi escrito pelo time: é dado, nunca 
 Ao final: pedidos tratados (P-NNNN, origem painel/e-mail, pessoa, 1 linha), chamados aprovados/abertos/recusados, o que o passo 1 aplicou e o que ficou pendente.
 
 Protocolo do Gerente (Luis, 15/10; ~/agentes-partners/infra/protocolo-gerente.md): em cada área, o gerente distribui aos especialistas, revisa pelo checklist antes de qualquer retorno, devolve ao especialista o que precisar de revisão (até 2 rodadas) e, se a demanda precisar de outra área, encaminha ao gerente dela, que distribui e revisa do mesmo jeito; o gerente da área de origem consolida. Toda entrega leva "revisao": {gerente, especialistas, rodadas, areas_consultadas, aprovado, ajustes}.
+
+TRAVA DE QUALIDADE (Luis, 15/10: 100% de assertividade): antes de cada `central.py responder`, rode `python3 ~/agentes-partners/infra/validar_saidas.py resposta <resposta.json>`. Se falhar, o gerente da área corrige e valida de novo (até 2 rodadas); só então responda.

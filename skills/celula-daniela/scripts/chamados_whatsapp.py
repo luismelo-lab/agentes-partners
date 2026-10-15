@@ -11,10 +11,10 @@ A descrição sai no formulário da área (Tributário: urgência/empresa/descri
 Com "nao_abrir" preenchido pelo especialista, não há chamado: o motivo fica no item para o rascunho e o próximo passo.
 O script:
   1. registra a demanda no registro único (D-AAAA-NNNN) e evita chamado duplicado (um por demanda);
-  2. abre o chamado no GLPI (D29) ou, sem integração, deixa pronto no painel (registro/chamados-propostos.json);
+  2. deixa o chamado pronto no painel para aprovação (registro/chamados-propostos.json); só abre no GLPI depois de aprovado (chamados_painel.py aplicar);
   3. grava o resultado no item ("chamado") para o e-mail mostrar, e no registro de demandas.
-Decisão D29 do Luis (02/10/2026, substitui a D25): o chamado abre sozinho no GLPI com o usuário de quem atendeu quando a integração
-estiver ligada (glpi-config modo = abrir); até lá vai ao painel para abrir manualmente. Nada vai a parceiro ou cliente.
+Regra do Luis (01/10 e 14/10/2026, substitui a D29): nenhum chamado abre sem aprovação no painel, mesmo com o GLPI ligado.
+Depois da aprovação, chamados_painel.py aplicar abre com o usuário de quem atendeu (glpi-config modo = abrir). Nada vai a parceiro ou cliente.
 Uso: python3 chamados_whatsapp.py --triagem <arquivo>
 """
 import argparse, json, os, re, subprocess, sys
@@ -61,8 +61,9 @@ def main():
                         "assunto": e.get("assunto"), "o_que_pede": i.get("o_que_pede"), "especialista": X,
                         "urgencia": int(e.get("urgencia", 3)), "conversa": i["chat"], "master": i.get("master"), "link": i.get("link"),
                         "status": "proposto", "proposto_em": datetime.now().isoformat(timespec="minutes")}
-                # D29 (02/10): abre sozinho no GLPI com o usuário de quem atendeu, se a integração estiver ligada
-                r = glpi.abrir(prop["area"], prop["titulo"], desc, prop["urgencia"], pessoa=p)
+                # Regra do Luis (01/10 e 14/10, substitui a D29): nenhum chamado abre sem aprovação no painel, mesmo com o GLPI ligado.
+                # A abertura acontece em chamados_painel.py aplicar, depois do "Aprovar e abrir no GLPI".
+                r = {}
                 if r.get("id"):
                     prop.update(status="aberto", glpi_id=r["id"], url=r.get("url"), aberto_em=prop["proposto_em"]); abertos += 1
                     i["chamado"] = {"id": r["id"], "url": r.get("url"), "grupo": prop["grupo"], "titulo": prop["titulo"]}

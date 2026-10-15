@@ -143,7 +143,7 @@ def outlook(para, cc, assunto, corpo, anexos=(), enviar=False, abrir=False):
     fora = protecao.interno(list(para), list(cc))
     if fora or not para: return False, f"BLOQUEADO: destinatário fora do domínio ou vazio {fora}"
     pausa = os.path.expanduser("~/agentes-partners/.email-pausado")
-    if os.path.exists(pausa) and os.environ.get("AGENTES_EMAIL") != "graph":
+    if os.path.exists(pausa) and not (os.environ.get("AGENTES_EMAIL") == "graph" or os.path.exists(os.path.expanduser("~/agentes-partners/.email-graph"))):
         # E-mail pausado (Luis, 13/10: sem Outlook no Mac, aguardando a TI liberar o Graph): a mensagem vira página
         # no OneDrive em vez de falhar. Para religar: apagar ~/agentes-partners/.email-pausado (ou AGENTES_EMAIL=graph).
         import re as _re, shutil as _sh, time as _t; import caminhos
@@ -154,7 +154,7 @@ def outlook(para, cc, assunto, corpo, anexos=(), enviar=False, abrir=False):
         for x in anexos or ():
             if x and os.path.exists(x): _sh.copy2(x, os.path.join(d, os.path.basename(x)))
         return True, f"salvo no OneDrive (e-mail pausado): {nome}"
-    if os.environ.get("AGENTES_EMAIL") == "graph":
+    if (os.environ.get("AGENTES_EMAIL") == "graph" or os.path.exists(os.path.expanduser("~/agentes-partners/.email-graph"))):
         import sys as _s; _s.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); import graph
         return graph.enviar(list(para), list(cc), assunto, corpo, [a for a in anexos if a], rascunho=not enviar)
     hf = tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8"); hf.write(corpo); hf.close()

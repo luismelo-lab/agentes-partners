@@ -6,7 +6,7 @@ compilação de todos os scripts, pasta do OneDrive e destinos do padrão 00–9
 de teste, Outlook instalado, acesso de leitura ao HubSpot (sem mostrar o token), backup recente e skills em uso
 iguais ao repositório. Sai com erro se algo crítico falhar. Uso: python3 infra/teste_fumaca.py [--rapido]
 """
-import glob, os, subprocess, sys, time
+import json, glob, os, subprocess, sys, time
 
 AP = os.path.expanduser("~/agentes-partners"); SK = os.path.expanduser("~/.claude/skills")
 sys.path.insert(0, os.path.join(AP, "lib")); sys.path.insert(0, os.path.join(SK, "depto-marketing/scripts"))
@@ -49,9 +49,20 @@ def _():
     return "Save Co." in html and L.FONTE.startswith("'IBM Plex Sans'"), f"e-mail montado ({len(html)} bytes), sem envio"
 
 
+@checa("Qualidade das entregas (7 dias)", critico=False)
+def _():
+    f = os.path.join(AP, "registro", "execucoes.jsonl")
+    if not os.path.exists(f): return True, "sem validações registradas ainda"
+    lim = time.strftime("%Y-%m-%d", time.localtime(time.time() - 7 * 86400))
+    xs = [json.loads(l) for l in open(f) if l.strip()]; xs = [x for x in xs if x.get("quando", "") >= lim and x.get("itens")]
+    if not xs: return True, "sem entregas validadas nos últimos 7 dias"
+    tot = sum(x["itens"] for x in xs); falha = sum(x["com_falha"] for x in xs); conf = round(100 * (tot - falha) / tot)
+    return conf >= 95, f"conformidade {conf}% em {tot} item(ns) validados (meta: 100%; abaixo de 95% vira alerta)"
+
+
 @checa("Canal de e-mail")
 def _():
-    if os.environ.get("AGENTES_EMAIL") == "graph": return True, "Microsoft Graph"
+    if (os.environ.get("AGENTES_EMAIL") == "graph" or os.path.exists(os.path.expanduser("~/agentes-partners/.email-graph"))): return True, "Microsoft Graph"
     if os.path.exists(os.path.join(AP, ".email-pausado")):
         R.append((False, False, "E-mail pausado", "aguardando a TI liberar o Graph; mensagens salvas em 04 · Gestão/Central de Agentes/Caixa de saída (e-mail pausado)"))
         return True, "pausado de propósito (as mensagens vão para o OneDrive)"

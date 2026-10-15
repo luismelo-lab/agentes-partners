@@ -25,6 +25,7 @@ Rotina diária (dias úteis, 7h40) da Área Partners: as ÁREAS analisam os aler
    - **Supervisor:** quem está travando e a ação de destrave.
    - **TI:** causa provável e correção.
 3. Junte tudo em ~/agentes-partners/registro/analises-<AAAA-MM-DD>.json (lista) e rode `python3 ~/agentes-partners/lib/operacao.py gravar-analises <arquivo>`. Rascunho reprovado pela Qualidade é descartado automaticamente.
+3b. TRAVA DE QUALIDADE (Luis, 15/10: 100% de assertividade): se o passo 3 recusou análises (~/agentes-partners/registro/analises-rejeitadas.json, cada uma com "erros"), devolva cada item ao gerente da área com os erros, corrija e rode gravar-analises de novo (até 2 rodadas). O que ainda for recusado não entra no plano: diga no resumo final.
 4. Rode `~/agentes-partners/bin/partners plano`. Ele envia o plano do dia por pessoa, já com os três blocos das áreas; se o plano de hoje já saiu, não reenvia.
 5. Só às segundas: leia os relatórios semanais das áreas em ~/agentes-partners/departamentos/ (operacoes-canal/conferencia-repasses-*.json, contratos/controle-contratos-*, partner-success/, intel-comercial/icp-*). Grave ~/agentes-partners/registro/achados-areas-<AAAA-MM-DD>.json com até 3 achados por área no formato {area, achado, impacto, acao, falta}. O Conselho e o relatório semanal leem o arquivo mais recente.
 

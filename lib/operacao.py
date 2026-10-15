@@ -324,17 +324,21 @@ def para_areas():
 
 def gravar_analises(arq):
     """Análises devolvidas pelas áreas: [{chave, area, fazer, precisa, falta, rascunho?}]. O rascunho passa pela auditoria da Qualidade."""
-    E = ler(EVT, {}); A = ler(ANA, {}); n = 0
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "infra")); import validar_saidas as VS
+    E = ler(EVT, {}); A = ler(ANA, {}); n = 0; rej = []
     for x in ler(arq, []):
         e = E.get(x.get("chave"))
         if not e: continue
+        erros = VS.checar_item(x, ("fazer", "precisa", "falta"), x.get("chave"))
+        if erros: rej.append({**x, "erros": erros}); continue  # trava de qualidade: volta ao gerente da área, não entra no plano
         r = limpo(x.get("rascunho") or "") or None
         if r and not auditar(r): r = None
         A[x["chave"]] = {"area": x.get("area"), "fazer": limpo(x.get("fazer") or ""), "precisa": limpo(x.get("precisa") or ""), "falta": limpo(x.get("falta") or ""),
                          "rascunho": r, "quando": HOJE.isoformat(), "texto_base": e.get("texto"), "revisao": x.get("revisao")}
         n += 1
     A = {k: v for k, v in A.items() if k in E and E[k].get("ativo")}  # some quando o alerta se resolve
-    gravar(ANA, A); print(f"{n} análise(s) gravada(s) →", ANA)
+    gravar(ANA, A); gravar(os.path.join(REG, "analises-rejeitadas.json"), rej)
+    print(f"{n} análise(s) gravada(s) →", ANA, f"· {len(rej)} recusada(s) pela trava de qualidade → registro/analises-rejeitadas.json" if rej else "")
 
 
 def execucao(N, E, marca):
