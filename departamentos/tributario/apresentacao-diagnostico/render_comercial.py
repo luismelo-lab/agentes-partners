@@ -145,20 +145,40 @@ def timeline(s, n, tot):
 
 
 def roadmap(s, n, tot):
-    et = s["etapas"]; w = (1920 - 160 - 2 * 70) // 3
-    corpo = (f'<div class="foto" style="right:0;top:0;width:760px;height:1080px;{foto_css(s.get("foto", "pessoas"), "center")};opacity:.5"></div>'
-             f'<div style="position:absolute;right:0;top:0;width:760px;height:1080px;background:linear-gradient(90deg,#000 0%,rgba(0,0,0,0) 60%)"></div>'
+    """Três etapas em pilares ascendentes, ligados por uma curva dourada (arte da Save: preto, ouro, linhas finas)."""
+    et = s["etapas"]; GANHO = {"Oxigenar": "Mais caixa e menos dívida", "Estruturar": "Previsibilidade e controle", "Escalar": "Crescimento sustentável"}
+    W, GAP = 540, 70; tops = [530, 450, 370]; bottom = 975; xs = [80 + i * (W + GAP) for i in range(3)]
+    marca = uri(PADRAO / M["logos"]["simbolo_contorno_ouro"])
+    pts = [(xs[i] + W / 2, tops[i] - 62) for i in range(3)]
+    curva = (f"M 20 {pts[0][1] + 70} C 140 {pts[0][1] + 40}, 230 {pts[0][1] + 8}, {pts[0][0]} {pts[0][1]} "
+             f"C {pts[0][0] + 230} {pts[0][1] - 8}, {pts[1][0] - 230} {pts[1][1] + 10}, {pts[1][0]} {pts[1][1]} "
+             f"C {pts[1][0] + 230} {pts[1][1] - 8}, {pts[2][0] - 230} {pts[2][1] + 10}, {pts[2][0]} {pts[2][1]} "
+             f"C {pts[2][0] + 110} {pts[2][1] - 12}, {pts[2][0] + 190} {pts[2][1] - 30}, {pts[2][0] + 250} {pts[2][1] - 52}")
+    grade = "".join(f'<line x1="0" y1="{y}" x2="1920" y2="{y}" stroke="{OURO}" stroke-opacity=".05"/>' for y in range(120, 1080, 90))
+    grade += "".join(f'<line x1="{x}" y1="0" x2="{x}" y2="1080" stroke="{OURO}" stroke-opacity=".035"/>' for x in range(80, 1920, 180))
+    svg = (f'<svg style="position:absolute;left:0;top:0" width="1920" height="1080" viewBox="0 0 1920 1080"><defs>'
+           f'<linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="{OURO}" stop-opacity=".15"/><stop offset=".5" stop-color="{OURO}" stop-opacity=".9"/><stop offset="1" stop-color="#FFF1BF"/></linearGradient>'
+           f'<filter id="b"><feGaussianBlur stdDeviation="6"/></filter></defs>{grade}'
+           f'<path d="{curva}" fill="none" stroke="{OURO}" stroke-width="7" stroke-opacity=".25" filter="url(#b)"/>'
+           f'<path d="{curva}" fill="none" stroke="url(#g)" stroke-width="2.4" stroke-linecap="round"/>'
+           + "".join(f'<line x1="{x}" y1="{y + 10}" x2="{x}" y2="{y + 62}" stroke="{OURO}" stroke-opacity=".55" stroke-dasharray="3 5"/><circle cx="{x}" cy="{y}" r="24" fill="{OURO}" fill-opacity=".14"/><circle cx="{x}" cy="{y}" r="9" fill="{OURO}"/><circle cx="{x}" cy="{y}" r="3.5" fill="#000"/>' for x, y in pts)
+           + f'<path d="M {pts[2][0] + 228} {pts[2][1] - 70} L {pts[2][0] + 250} {pts[2][1] - 52} L {pts[2][0] + 230} {pts[2][1] - 36}" fill="none" stroke="#FFF1BF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+    corpo = (f'<div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:radial-gradient(ellipse at 72% 38%,#17130a 0%,#070604 45%,#000 75%)"></div>'
+             f'<img src="{marca}" style="position:absolute;right:-90px;bottom:-70px;width:760px;opacity:.07">' + svg +
              f'<div style="position:absolute;left:80px;top:70px;width:1300px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1 style="font-size:66px">{esc(s["titulo"])}</h1></div>')
     for i, e in enumerate(et):
-        x = 80 + i * (w + 70); y = 330
-        destaque = e.get("destaque")
-        corpo += (f'<div class="card" style="left:{x}px;top:{y}px;width:{w}px;height:610px;{"background:#0c0c0c;border-color:" + OURO if destaque else ""}">'
-                  f'<div class="mono" style="color:{OURO};font-size:20px">{i + 1:02d}</div>'
-                  f'<div style="font-size:60px;font-weight:300;margin:8px 0 8px;color:#EDEDED">{esc(e["titulo"])}</div>'
-                  f'<div style="font-size:23px;line-height:1.35;color:#BDBDBD;margin-bottom:26px;min-height:64px">{esc(e["texto"])}</div>'
-                  + "".join(f'<div style="border-top:1px solid {BORDA};padding:14px 0;font-size:24px;color:#EAEAEA">{esc(p)}</div>' for p in e["produtos"]) + "</div>")
-        if i < 2:
-            corpo += f'<div style="position:absolute;left:{x + w + 14}px;top:{y + 270}px;color:{OURO};font-size:44px">›</div>'
+        top = tops[i]; h = bottom - top; dest = e.get("destaque")
+        borda = f"1.5px solid {OURO}" if dest else "1px solid rgba(243,205,96,.32)"
+        glow = f"box-shadow:0 0 60px rgba(243,205,96,.13), inset 0 0 40px rgba(243,205,96,.05);" if dest else ""
+        prods = "".join(f'<div style="display:flex;align-items:center;gap:14px;padding:9px 0;border-top:1px solid rgba(255,255,255,.09);font-size:23px;color:#EDEDED">'
+                        f'<span style="flex:none;width:9px;height:9px;background:{OURO};transform:rotate(45deg)"></span>{esc(p)}</div>' for p in e["produtos"])
+        corpo += (f'<div style="position:absolute;left:{xs[i]}px;top:{top}px;width:{W}px;height:{h}px;border:{borda};border-radius:22px;{glow}'
+                  f'background:linear-gradient(180deg,rgba(243,205,96,.075),rgba(255,255,255,.012) 55%,rgba(0,0,0,.2));padding:34px 38px;box-sizing:border-box">'
+                  f'<div style="position:absolute;left:38px;top:-1px;width:70px;height:3px;background:{OURO};border-radius:2px"></div>'
+                  f'<div class="mono" style="color:{OURO};font-size:20px;letter-spacing:.14em">{i + 1:02d}</div>'
+                  f'<div style="font-size:60px;font-weight:300;color:#F0F0F0;line-height:1.1;margin:6px 0 8px">{esc(e["titulo"])}</div>'
+                  f'<div style="font-size:22px;line-height:1.35;color:#BDBDBD;margin-bottom:14px">{esc(e["texto"])}</div>{prods}'
+                  f'<div style="position:absolute;left:38px;right:38px;bottom:26px;font-size:20px;color:{OURO};letter-spacing:.02em">{esc(e.get("ganho", GANHO.get(e["titulo"], "")))}</div></div>')
     return pagina(corpo, n, tot, s.get("leg", RODAPE))
 
 
