@@ -14,3 +14,5 @@ Tarefa desta execução (relatório semanal):
 6. Se o custo realizado do mês anterior ainda estiver vazio na planilha, inclua nas decisões pedidas: "Lançar o realizado de <mês> no BI".
 
 Regras: é um RASCUNHO para o Luis. Não envie nada a ninguém, não altere o HubSpot, não mexa em outros arquivos além dos listados. Ao final, responda com: manchete, 3 números principais (fechado na semana, fechado no mês até hoje vs mesmo período, lucro antes de impostos/ROI líquido do trimestre), alertas de dados e os caminhos do deck e do one-pager.
+
+Padrão de entrega (Luis, 15/10; ~/agentes-partners/infra/padrao-entrega.md): além do que é pedido, traga "o que você também precisa" (riscos, decisões, oportunidades que os números mostram) e "o que falta e quem fornece" (dado ausente que limita a análise, com a fonte e o responsável). Leia também o arquivo mais recente ~/agentes-partners/registro/achados-areas-*.json (achados semanais de Contratos, Operações de Canal, Partner Success e Inteligência Comercial) e ~/agentes-partners/registro/analises-areas.json (análises do dia por área) e use o que for relevante.

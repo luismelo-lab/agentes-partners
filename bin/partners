@@ -85,6 +85,8 @@ case "${1:-ajuda}" in
                 rodar whatsapp-auto python3 "$SK/celula-daniela/scripts/email_whatsapp.py" --triagem "$f" ;;
   central)      # só em dias úteis, das 8h às 18h59 (o launchd chama a cada 15 min); "partners central agora" força
                 if [ "${2:-}" != "agora" ]; then d=$(date +%u); h=$(date +%H); { [ $d -le 5 ] && [ $h -ge 8 ] && [ $h -le 18 ]; } || exit 0; fi
+                # reserva do plano do dia: se a rotina das áreas não rodou até as 9h, o plano sai assim mesmo (não reenvia se já saiu)
+                [ "${2:-}" != "agora" ] && [ $(date +%H%M) -ge 0900 ] && ! grep -q "\"plano|luis\": \"$(date +%F)\"" "$AP/registro/plano-enviado.json" 2>/dev/null && "$0" plano
                 [ -e "$AP/.email-pausado" ] && [ "${AGENTES_EMAIL:-}" != "graph" ] && { log central "pulado: e-mail pausado (aguardando a TI liberar o Graph)"; exit 0; }
                 rodar central python3 "$SK/central-agentes/scripts/central.py" ler --enfileirar ;;
   central-fila) python3 "$SK/central-agentes/scripts/central.py" fila ;;
@@ -112,11 +114,13 @@ case "${1:-ajuda}" in
                 rodar bitrix python3 "$AP/lib/bitrix.py" baixar ;;
   medicao)      rodar medicao python3 "$AP/lib/medicao_respostas.py" atualizar ;;   # D28: acerto das respostas sugeridas ao parceiro
   sentinelas)   rodar sentinelas python3 "$AP/lib/operacao.py" sentinelas ;;      # mapeia: HubSpot, WhatsApp, Central, chamados, rotinas
-  plano)        rodar plano python3 "$AP/lib/operacao.py" plano ;;                # plano do dia por pessoa + supervisor (e-mail interno)
+  plano)        rodar plano python3 "$AP/lib/operacao.py" plano ;;
+  para-areas)   rodar para-areas python3 "$AP/lib/operacao.py" para-areas ;;   # alertas que pedem análise da área (rotina operacao-areas)                # plano do dia por pessoa + supervisor (e-mail interno)
   tarde)        # rodada da tarde (13h30): HubSpot de novo, sentinelas e aviso só do que é novo e urgente
                 "$0" hubspot forcar && "$0" sentinelas && rodar plano python3 "$AP/lib/operacao.py" avisos ;;
   manha)        # preparação diária (dias úteis, 7h30). Se o download falhar, NÃO segue com dado velho
-                "$0" hubspot && { "$0" bitrix; "$0" caixa; "$0" medicao; "$0" sentinelas; "$0" plano; "$0" dados-bi; "$0" portal; "$0" onedrive; } ;;
+                "$0" hubspot && { "$0" bitrix; "$0" caixa; "$0" medicao; "$0" sentinelas; "$0" para-areas; "$0" dados-bi; "$0" portal; "$0" onedrive; } ;;
+                # o plano sai depois que as áreas analisam (rotina com IA operacao-areas, 7h40); reserva: rodada central das 9h
   segunda)      # preparação da segunda (6h): números da semana, Recuperador, Revisor e relatórios das áreas
                 "$0" hubspot && { "$0" resultados; "$0" recuperador; "$0" revisor; "$0" areas; "$0" onedrive; } ;;
   status)       echo "Últimas execuções:"; tail -n 25 "$LOG/partners.log" 2>/dev/null
@@ -127,7 +131,7 @@ case "${1:-ajuda}" in
   instalar)     "$AP/infra/launchd/instalar.sh" ;;
   ajuda|*)      cat <<'TXT'
 partners <comando>
-  Operação     sentinelas · plano (7h30, e-mail por pessoa) · tarde (13h30, só urgentes novos) · operacao.py resumo
+  Operação     sentinelas · para-areas · plano (depois da rotina operacao-areas das 7h40; reserva às 9h, e-mail por pessoa) · tarde (13h30, só urgentes novos) · operacao.py resumo
   Dados        hubspot [forcar] · dados-bi · areas · receita (mensal) · portal · onedrive · backup
   WhatsApp     caixa [forcar] · whatsapp-auto (rodada sem IA, e-mail só se houver pedido novo)
   Central      central [agora] (lê e-mails [AGENTES] e enfileira) · central-fila

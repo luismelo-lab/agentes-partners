@@ -30,6 +30,13 @@ def montar(lote):
     alta = sum(1 for r in casos if r.get("aderência") == "alta")
     mi = lambda v: ("R$ " + f"{v/1e6:.2f}".replace(".", ",") + " mi") if v >= 1e6 else ("R$ " + f"{round(v/1e3):,}".replace(",", ".") + " mil")
     hoje = date.today().strftime("%d/%m/%Y")
+    # leitura do lote escrita pelo Recuperador com o Tributário (padrão de entrega, Luis 15/10): resumo-lote-<N>.json
+    fr = os.path.join(DIR, f"resumo-lote-{lote}.json"); RL = json.load(open(fr)) if os.path.exists(fr) else {}
+    perfil = RL.get("perfil_alta") or "aderência ao perfil dos ganhos"
+    extra = []
+    if RL.get("destaques"): extra.append(L.passos("Casos que merecem atenção primeiro", [L.esc(x) for x in RL["destaques"][:5]]))
+    if RL.get("tambem"): extra += [L.secao("O que você também precisa"), L.paragrafo(L.esc(RL["tambem"]))]
+    if RL.get("falta") and str(RL["falta"]).strip().lower() != "nada": extra += [L.secao("O que falta e quem fornece"), L.paragrafo(L.esc(RL["falta"]))]
     corpo = L.documento(
         L.cabecalho("Célula Técnica · Recuperador", f"Lote {lote} da semana", f"{hoje} · {len(casos)} casos"),
         L.paragrafo("Olá, Geovana!", "28px 32px 12px"),
@@ -38,7 +45,8 @@ def montar(lote):
                     f"(a fila completa tem {F['fila']} casos). "
                     "A ordem considera o histórico de clientes parecidos que já foram ganhos e o que o técnico registrou no parecer de cada card."),
         L.kpis([("Potencial do lote", mi(tot), "honorário esperado"), ("Casos no lote", len(casos), f"{nz} zerados · {na} abertos"),
-                ("Aderência alta", f"{alta} de {len(casos)}", "Lucro Real · alimentos")]),
+                ("Aderência alta", f"{alta} de {len(casos)}", perfil)]),
+        *extra,
         L.paragrafo("Para cada caso, a planilha traz o perfil da empresa, a hipótese de tese, o que o técnico concluiu no parecer, "
                     "a taxa de sucesso de clientes parecidos e os documentos a pedir. O nome do negócio abre o card no HubSpot."),
         L.passos("Próximos passos", [f"Abra a planilha anexa, aba <b>Fila</b>, e filtre o <b>lote {lote}</b>.",

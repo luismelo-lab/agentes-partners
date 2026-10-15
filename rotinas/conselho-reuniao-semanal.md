@@ -14,3 +14,5 @@ Dossiê desta execução:
 Regras: o Conselho só aconselha. Não envie nada a ninguém, não altere HubSpot, planilhas do time ou outros arquivos além da ata e do registro previsto na skill (salve a ata em ~/agentes-partners/conselho/atas/<hoje>-reuniao-semanal.md e acrescente novas decisões como "pendente" em conselho/decisoes.md). A tese de alíquota zero é considerada pelo entendimento da Save e feita sempre via PER (ressarcimento).
 
 Ao final, responda com: 3 conclusões principais, as decisões novas aguardando aprovação do Luis, as pendentes antigas que ele precisa responder e o caminho da ata.
+
+Padrão de entrega (Luis, 15/10; ~/agentes-partners/infra/padrao-entrega.md): além do que é pedido, traga "o que você também precisa" (riscos, decisões, oportunidades que os números mostram) e "o que falta e quem fornece" (dado ausente que limita a análise, com a fonte e o responsável). Leia também o arquivo mais recente ~/agentes-partners/registro/achados-areas-*.json (achados semanais de Contratos, Operações de Canal, Partner Success e Inteligência Comercial) e ~/agentes-partners/registro/analises-areas.json (análises do dia por área) e use o que for relevante.

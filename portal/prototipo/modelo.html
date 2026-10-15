@@ -957,6 +957,8 @@ function abrirPedido(p) { const R = p.resposta, st = pedSt(p), pode = st === "ag
   gaveta((p.campos || {}).precisa || p.codigo, `${par("Pedido", `${esc(p.pid || p.id)} · ${esc(p.codigo)}`)}${par("Situação", esc((ST_PED[st] || [st])[0]))}${(p.campos || {}).master ? par("Master", esc(p.campos.master)) : ""}${(p.campos || {}).uso ? par("Para", esc(p.campos.uso) + " · " + esc(p.campos.formato || "")) : ""}
     ${R ? `<div class="pacote"><h4>Resposta · versão ${esc(R.versao || 1)}</h4><p>${esc(R.resumo || "")}</p></div>
       ${(R.secoes || []).map((z, i) => `<details class="grp" ${i === 0 ? "open" : ""}><summary><div class="grupo-tit">${esc(z.titulo)}</div></summary><div class="resposta-md">${mdH(z.texto)}</div></details>`).join("")}
+      ${R.tambem ? `<div class="pacote destaque"><h4>O que você também precisa</h4><div class="resposta-md">${mdH(R.tambem)}</div></div>` : ""}
+      ${R.falta && String(R.falta).trim().toLowerCase() !== "nada" ? `<div class="pacote"><h4>O que falta e quem fornece</h4><div class="resposta-md">${mdH(R.falta)}</div></div>` : ""}
       ${conferidoHTML((R.conferido || []).map(c => typeof c === "string" ? {item: c, ok: true, resultado: ""} : {ok: true, ...c}))}
       ${(R.conferir || []).length ? `<div class="confira"><b>${(R.conferido || []).length ? "Só você pode conferir" : "Antes de usar, confira"}</b><ul>${R.conferir.map(z => `<li>${esc(z)}</li>`).join("")}</ul></div>` : ""}
       ${(R.arquivos || []).length ? `<div class="pacote"><h4>Arquivos no OneDrive</h4>${R.arquivos.map(z => `<p class="mono" style="font-size:12px">${esc(z)}</p>`).join("")}</div>` : ""}` : `<div class="vazio">${ico("info")}<span>Os agentes ainda não responderam.</span></div>`}

@@ -15,10 +15,17 @@ Sentinelas (comparam o download do HubSpot de hoje com o histórico e com os reg
   rotina_falhou         rotina do terminal com erro hoje                               → Luis (TI)
   ganho_sem_execucao    ganho no HubSpot há 7+ dias sem card de execução no Bitrix      → Daniela (Pós-venda)
   execucao_parada       execução em fase ativa no Bitrix há 30+ dias                    → Daniela (Pós-venda; cobrar o técnico)
+  prazo_receita         despacho, intimação ou comunicado da Receita nas demandas         → Daniela (Jurídico · Controle de Prazos)
+  repasse_bloqueado     Master com ganhos de repasse bloqueado na conferência semanal   → Luis (Operações de Canal)
+
+Áreas (regra do Luis, 15/10: usar 100% dos agentes; infra/padrao-entrega.md): `para-areas` gera registro/para-areas.json com
+cada evento sem análise recente e a área dona (AREA). A rotina com IA "operacao-areas" (7h40) passa cada grupo ao agente da área,
+que devolve os 3 blocos (o que fazer · o que também precisa · o que falta e quem fornece) e o rascunho; `gravar-analises` guarda em
+registro/analises-areas.json e o plano usa esse texto. Sem análise, o plano mostra só a situação (nada de texto fixo ao parceiro).
 
 Executores encadeados (agente → agente, sem aprovação, decisão D26 do Luis em 01/10/2026):
   entrou_diagnostico → Revisor de Diagnóstico nos negócios novos (segunda opinião no mesmo dia)
-  contrato_parado    → rascunho de cobrança ao parceiro, auditado pela Qualidade (só vai no plano; quem envia é a Daniela)
+  contrato_parado    → o rascunho ao parceiro agora vem da área de Contratos (operacao-areas), auditado pela Qualidade
   crm_incompleto     → cadastro oficial da Receita ao lado, para a correção já sair pronta
 Continua proibido sem pessoa: falar com parceiro ou cliente, alterar HubSpot ou GLPI, abrir chamado.
 
@@ -27,6 +34,8 @@ Uso:
   operacao.py plano [--previa]      e-mail do plano do dia para cada pessoa (e o resumo do supervisor para o Luis)
   operacao.py avisos                só os eventos novos e urgentes desde a última rodada (rodada da tarde)
   operacao.py resumo                imprime o quadro de eventos ativos
+  operacao.py para-areas            eventos que pedem análise da área (registro/para-areas.json)
+  operacao.py gravar-analises <arq> grava as análises das áreas (lista de {chave, area, fazer, precisa, falta, rascunho})
 """
 import argparse, glob, json, os, re, subprocess, sys, tempfile
 from collections import defaultdict
@@ -58,7 +67,18 @@ NOME = {"contrato_parado": "Contrato sem assinatura", "entrou_diagnostico": "Ent
         "demanda_atrasada": "Demanda do WhatsApp atrasada", "aprovacao_parada": "Aprovação esperando", "rotina_falhou": "Rotina com falha",
         "ganho_sem_execucao": "Ganho sem execução no Bitrix", "execucao_parada": "Execução parada no Bitrix",
         "assinado_parado": "Contrato assinado sem fechar o negócio", "ganho_sem_bitrix": "Ganho sem card no Bitrix"}
-URGENTE = {"conflito_novo", "demanda_atrasada", "rotina_falhou"}
+NOME.update({"prazo_receita": "Prazo da Receita", "repasse_bloqueado": "Repasse bloqueado"})
+URGENTE = {"conflito_novo", "demanda_atrasada", "rotina_falhou", "prazo_receita"}
+# área dona de cada alerta (infra/fluxo-unico.md): (área, skills do agente que analisa)
+AREA = {"contrato_parado": ("Contratos", "depto-contratos"), "assinado_parado": ("Contratos", "depto-contratos + depto-pos-venda"),
+        "ganho_sem_execucao": ("Pós-venda", "depto-pos-venda"), "ganho_sem_bitrix": ("Pós-venda", "depto-pos-venda"), "execucao_parada": ("Pós-venda", "depto-pos-venda + depto-tributario"),
+        "conflito_novo": ("Operações de Canal", "depto-operacoes-canal"), "repasse_bloqueado": ("Operações de Canal", "depto-operacoes-canal"),
+        "parceiro_inativo": ("Partner Success", "depto-partner-success + depto-marketing"),
+        "entrou_diagnostico": ("Tributário", "revisor-diagnostico + apresentacao-diagnostico"), "apresentacao_parada": ("Comercial", "celula-daniela + depto-tributario + depto-marketing"),
+        "diagnostico_parado": ("Tributário", "depto-tributario"), "comercial_parado": ("Comercial", "celula-jenifer ou celula-daniela + depto-marketing"),
+        "crm_incompleto": ("Dados", "depto-dados + depto-intel-comercial (Receita)"), "prazo_receita": ("Jurídico", "depto-juridico (Controle de Prazos)"),
+        "demanda_atrasada": ("Supervisor", "celula-daniela"), "aprovacao_parada": ("Supervisor", "celula-daniela"), "rotina_falhou": ("TI", "depto-ti")}
+ANA = os.path.join(REG, "analises-areas.json"); PARA = os.path.join(REG, "para-areas.json")
 AVISO_TARDE = {"conflito_novo", "rotina_falhou", "entrou_diagnostico"}  # demanda atrasada já vai no WhatsApp das 14h (Células, 02/10)
 from protecao import limpo, auditar  # noqa: E402  (mascaramento e auditor únicos: lib/protecao.py)
 
@@ -115,7 +135,7 @@ def ev(E, chave, tipo, pessoa, titulo, texto, depto, negocio=None, valor=None, e
     e = E.get(chave)
     if not e:
         e = E[chave] = {"tipo": tipo, "pessoa": pessoa, "depto": depto, "primeiro": HOJE.isoformat(), "inicial": INICIAL[0]}
-    e.update({"titulo": titulo, "texto": texto, "ultimo": HOJE.isoformat(), "ativo": True, "negocio": negocio, "valor": valor,
+    e.update({"chave": chave, "titulo": titulo, "texto": texto, "ultimo": HOJE.isoformat(), "ativo": True, "negocio": negocio, "valor": valor,
               "link": LINK.format(negocio) if negocio else None,
               "bitrix": BX_LINK.format(BITRIX[negocio]) if negocio and BITRIX.get(negocio) else None, **(extra or {})})
     e.pop("resolvido_em", None)
@@ -131,7 +151,7 @@ def sentinelas():
     ant = {d["id"] for d in ler(arqs[-2], {}).get("negocios", [])} if len(arqs) > 1 else None
     INICIAL[0] = not os.path.exists(EVT)  # primeira rodada = linha de base: nada aparece como "novo"
     E = ler(EVT, {})
-    for e in E.values(): e["_visto"] = False
+    for e in E.values(): e["_visto"] = False; e.pop("rascunho", None)  # rascunho fixo antigo sai; o novo vem da área
     marca = lambda e: e.__setitem__("_visto", True)
     abertos = [d for d in N if d.get("status") == "aberto"]
     rev_ids = []
@@ -189,14 +209,7 @@ def sentinelas():
         if prob:
             marca(ev(E, f"crm|{d['id']}", "crm_incompleto", dono(d), nm, f"{base}. " + "; ".join(prob) + ".", "Dados", d["id"], d.get("valor")))
 
-    # um rascunho de cobrança por Master, com os negócios dele (Células, 02/10), auditado pela Qualidade
-    for m, ns in contratos.items():
-        lista = "; ".join(f"{n} ({'assinatura' if et == 'Contrato Enviado' else 'pendência de fechamento'})" for n, et in ns[:8])
-        rasc = (f"Oi! Passando para alinhar os contratos em andamento: {lista}. Se algum cliente tiver dúvida ou precisar de ajuda, "
-                f"podemos marcar uma conversa rápida. Obrigada!")
-        ok = auditar(rasc)
-        for e in E.values():
-            if e.get("tipo") == "contrato_parado" and e.get("_visto") and e.get("master") == m: e["rascunho"] = limpo(rasc) if ok else None
+    # o rascunho ao parceiro vem da área de Contratos (operacao-areas), não de modelo fixo (Luis, 15/10)
 
     # ganho sem card no Bitrix: a execução não tem como começar (Pós-venda, 02/10)
     for d in N:
@@ -248,6 +261,8 @@ def sentinelas():
                      f"Costuma ficar no máximo {p90} dias entre indicações ({len(ds)} dias com negócio em 12 meses); a última entrou há {gap} dias ({ds[-1].strftime('%d/%m/%Y')}).",
                      "Partner Success", extra={"dias": gap}))
 
+    prazos_receita(E, marca)
+    repasses_bloqueados(E, marca)
     execucao(N, E, marca)
     supervisao(E, marca)
     for k, e in E.items():
@@ -259,6 +274,67 @@ def sentinelas():
     if rev_ids and not os.environ.get("OPERACAO_REG"): revisor(rev_ids)  # na simulação o Revisor não roda
     at = [e for e in E.values() if e.get("ativo")]
     print(f"eventos ativos: {len(at)} · novos hoje: {sum(1 for e in at if novo(e))} · revisor: {len(rev_ids)} negócio(s)")
+
+
+def prazos_receita(E, marca):
+    """Despacho, intimação ou comunicado da Receita nas demandas do WhatsApp (última triagem com IA): vai ao Controle de Prazos do Jurídico."""
+    fs = [f for f in sorted(glob.glob(os.path.join(AP, "celulas", "whatsapp-triagem-*.json")), key=os.path.getmtime)
+          if not str(ler(f, {}).get("leitura_geral", "")).startswith("Rodada automática")][-1:]  # só a última triagem com IA
+    if not fs: return
+    T = ler(fs[-1], {}); pad = re.compile(r"despacho|intima[çc][ãa]o|comunicado|e-?cac|manifesta[çc][ãa]o de inconformidade|auto de infra", re.I)
+    for p, P in (T.get("pessoas") or {}).items():
+        for i in P.get("itens", []):
+            enc = (i.get("encaminhar") or {}); txt = " ".join(str(i.get(k) or "") for k in ("o_que_pede", "entrega")) + " " + str(enc.get("assunto") or "")
+            if not (str(enc.get("area", "")).startswith(("jur_comunicados", "jur_manifestacao", "jur_contencioso_adm")) or pad.search(txt)): continue
+            marca(ev(E, f"prazo|{p}|{i.get('chat')}", "prazo_receita", "daniela", (i.get("negocio") or enc.get("empresa") or i.get("chat") or "Comunicado da Receita"),
+                     limpo(f"{i.get('o_que_pede') or ''} Prazo informado: {i.get('prazo') or enc.get('prazo') or 'não informado (confirmar a data de ciência)'}."),
+                     "Jurídico", extra={"master": i.get("master"), "prazo": i.get("prazo") or enc.get("prazo")}))
+
+
+def repasses_bloqueados(E, marca):
+    """Conferência semanal de repasses (Operações de Canal): Master com ganhos de repasse bloqueado vira alerta ao Luis."""
+    fs = sorted(glob.glob(os.path.join(AP, "departamentos/operacoes-canal/conferencia-repasses-*.json")))
+    if not fs: return
+    C = ler(fs[-1], {})
+    for r in C.get("por_parceiro", []):
+        if r.get("Tipo de canal") != "Master" or not r.get("Bloqueados"): continue
+        marca(ev(E, f"repasse|{r['Parceiro']}", "repasse_bloqueado", "luis", r["Parceiro"],
+                 f"{r['Bloqueados']} de {r.get('Ganhos')} ganhos com repasse bloqueado (faltam honorário, % do parceiro ou dado do ganho); conferência de {C.get('data')}.",
+                 "Operações de Canal", extra={"master": r["Parceiro"]}))
+
+
+def para_areas():
+    """Eventos ativos sem análise da área (ou com a situação mudada desde a análise): entrada da rotina operacao-areas."""
+    E = ler(EVT, {}); A = ler(ANA, {}); out = []
+    for k, e in E.items():
+        if not e.get("ativo") or e["tipo"] not in AREA: continue
+        a = A.get(k) or {}
+        if a and a.get("texto_base") == e.get("texto") and (dia(a.get("quando")) or HOJE) >= HOJE - timedelta(days=7): continue
+        area, skill = AREA[e["tipo"]]
+        out.append({"chave": k, "tipo": e["tipo"], "nome_tipo": NOME.get(e["tipo"]), "area": area, "agente": skill, "pessoa": e["pessoa"], "titulo": e["titulo"],
+                    "situacao": e["texto"], "negocio": e.get("negocio"), "link": e.get("link"), "bitrix": e.get("bitrix"), "valor": e.get("valor"), "master": e.get("master"),
+                    "revisor": e.get("revisor")})
+    # por rodada, no máximo 80: urgentes e novos primeiro, depois maior valor (o resto entra nas rodadas seguintes)
+    out.sort(key=lambda x: (x["tipo"] not in URGENTE, not novo(E[x["chave"]]), -(x.get("valor") or 0)))
+    out = sorted(out[:80], key=lambda x: (x["area"], -(x.get("valor") or 0)))
+    gravar(PARA, out)
+    from collections import Counter
+    print(f"{len(out)} evento(s) para as áreas →", PARA, dict(Counter(x["area"] for x in out)))
+
+
+def gravar_analises(arq):
+    """Análises devolvidas pelas áreas: [{chave, area, fazer, precisa, falta, rascunho?}]. O rascunho passa pela auditoria da Qualidade."""
+    E = ler(EVT, {}); A = ler(ANA, {}); n = 0
+    for x in ler(arq, []):
+        e = E.get(x.get("chave"))
+        if not e: continue
+        r = limpo(x.get("rascunho") or "") or None
+        if r and not auditar(r): r = None
+        A[x["chave"]] = {"area": x.get("area"), "fazer": limpo(x.get("fazer") or ""), "precisa": limpo(x.get("precisa") or ""), "falta": limpo(x.get("falta") or ""),
+                         "rascunho": r, "quando": HOJE.isoformat(), "texto_base": e.get("texto")}
+        n += 1
+    A = {k: v for k, v in A.items() if k in E and E[k].get("ativo")}  # some quando o alerta se resolve
+    gravar(ANA, A); print(f"{n} análise(s) gravada(s) →", ANA)
 
 
 def execucao(N, E, marca):
@@ -353,8 +429,10 @@ def _ord(e):
     return (not novo(e), -(e.get("valor") or 0), -(e.get("dias") or 0))
 
 
+ANALISES = {}
 def plano(previa=False, so_urgentes=False):
     import email_layout as L
+    ANALISES.update(ler(ANA, {}))
     E = ler(EVT, {}); at = [e for e in E.values() if e.get("ativo")]
     fest = os.path.join(REG, "plano-enviado.json"); est = ler(fest, {}); falhas = 0
     chave = lambda e: f"{HOJE.isoformat()}|{e['tipo']}|{e['titulo']}"  # aviso: uma vez por item por dia
@@ -391,7 +469,7 @@ def plano(previa=False, so_urgentes=False):
             continue
         if not so_urgentes and not previa and est.get(f"plano|{p}") == HOJE.isoformat():
             print(p, "plano de hoje já enviado"); continue
-        ordem = ["rotina_falhou", "conflito_novo", "demanda_atrasada", "aprovacao_parada", "entrou_diagnostico", "contrato_parado", "assinado_parado", "ganho_sem_bitrix",
+        ordem = ["rotina_falhou", "prazo_receita", "conflito_novo", "repasse_bloqueado", "demanda_atrasada", "aprovacao_parada", "entrou_diagnostico", "contrato_parado", "assinado_parado", "ganho_sem_bitrix",
              "ganho_sem_execucao", "execucao_parada",
                  "diagnostico_parado", "comercial_parado", "apresentacao_parada", "crm_incompleto", "parceiro_inativo"]
         for t in ordem:
@@ -408,7 +486,12 @@ def plano(previa=False, so_urgentes=False):
             else:
                 lim = 6 if t == "crm_incompleto" else 10
             for e in xs[:lim]:
+                an = ANALISES.get(e.get("chave")) or {}
                 ls = [("Situação", L.esc(limpo(e["texto"])))]
+                if an.get("fazer"): ls.append((f"O que fazer · {an.get('area')}", L.esc(an["fazer"])))
+                if an.get("precisa"): ls.append(("O que você também precisa", L.esc(an["precisa"])))
+                if an.get("falta"): ls.append(("O que falta e quem fornece", L.esc(an["falta"])))
+                if an.get("rascunho"): e = {**e, "rascunho": an["rascunho"]}
                 if e.get("tambem"): ls.append(("Também", L.esc(limpo(e["tambem"]))))
                 if e.get("revisor"): ls.append(("Revisor", L.esc(e["revisor"]) + (f" · planilha {L.esc(os.path.basename(e['arquivo']))} na pasta da Geovana" if e.get("arquivo") else "")))
                 if e.get("rascunho"): ls.append(("Rascunho para o parceiro", "<i>" + L.esc(e["rascunho"]) + "</i> (revisado pela Qualidade; você decide se envia)"))
@@ -494,6 +577,8 @@ def resumo():
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(); ap.add_argument("cmd", choices=["sentinelas", "plano", "avisos", "resumo"]); ap.add_argument("--previa", action="store_true")
+    ap = argparse.ArgumentParser(); ap.add_argument("cmd", choices=["sentinelas", "plano", "avisos", "resumo", "para-areas", "gravar-analises"]); ap.add_argument("arq", nargs="?")
+    ap.add_argument("--previa", action="store_true")
     a = ap.parse_args()
-    {"sentinelas": sentinelas, "resumo": resumo}.get(a.cmd, lambda: plano(a.previa, a.cmd == "avisos"))()
+    if a.cmd == "gravar-analises": gravar_analises(a.arq)
+    else: {"sentinelas": sentinelas, "resumo": resumo, "para-areas": para_areas}.get(a.cmd, lambda: plano(a.previa, a.cmd == "avisos"))()

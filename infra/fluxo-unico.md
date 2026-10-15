@@ -37,6 +37,7 @@ O agente aciona o agente da área com o caso, sem Portão 0 (o pedido vem de out
 - pré-análise tributária (teses prováveis e documentos para o diagnóstico).
 
 ## 3. Devolve analisado
+No formato de três blocos de `infra/padrao-entrega.md`: o que você pediu, o que você também precisa e o que falta e quem fornece.
 A resposta chega à pessoa pronta para usar:
 - o que foi encontrado;
 - a resposta ou o rascunho para o parceiro;

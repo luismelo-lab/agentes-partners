@@ -74,12 +74,13 @@ def main():
             pend_midia = ev.get("audios") or any(x["tipo"] == "imagem" and not x.get("texto") for x in ev.get("anexos", []))
             if esperando < a.aguardando and not (ev and pend_midia): continue
             if (p, c["chat"]) in calados and agora.timestamp() - esperando * 3600 <= t_ia: continue
-            ultimas = [m for m in (ev.get("mensagens") or c["conversa"]) if m.get("texto")][-2:]
-            pede = " / ".join(m["texto"].replace("\n", " ")[:160] for m in ultimas)
+            # fluxo único (Luis, 14/10 e 15/10): o time não recebe a mensagem crua do parceiro; a análise com as áreas sai na rodada com IA
+            quem = c.get("master") or ("grupo " + c["chat"] if c.get("tipo") == "grupo" else c["chat"])
+            pede = f"Mensagem nova de {quem}, sem resposta há {esperando:.0f}h. Os agentes analisam com a área responsável na próxima rodada (8h ou 14h)."
             neg = (c.get("negocios") or [{}])[0]
             itens.append({"grupo": c.get("tipo") == "grupo", "nova": (p, c["chat"]) not in vistos, "chat": c["chat"], "master": c.get("master"), "status": "responder" if esperando >= a.aguardando else "acompanhar",
-                          "aguardando_h": esperando, "o_que_pede": "Última mensagem: " + pede, "entrega": entrega(ev) if ev else "",
-                          "proximo_passo": "Ler a conversa e responder" if esperando >= a.aguardando else "Ouvir o áudio ou ver a imagem",
+                          "aguardando_h": esperando, "o_que_pede": pede, "entrega": entrega(ev) if ev else "",
+                          "proximo_passo": "Se for urgente (prazo hoje, multa, reclamação), abra a conversa agora; senão, a resposta pronta chega na próxima rodada" if esperando >= a.aguardando else "Há áudio ou imagem: a transcrição sai na próxima rodada",
                           "negocio": neg.get("nome"), "link": neg.get("link")})
         T["pessoas"][p] = {"conversas": len(caixa), "itens": itens,
                            "leitura": f"Rodada automática (sem IA): {sum(i['status'] == 'responder' for i in itens)} conversa(s) sem resposta há {a.aguardando:g}h ou mais. A rodada com análise completa sai às 8h e às 14h."}
