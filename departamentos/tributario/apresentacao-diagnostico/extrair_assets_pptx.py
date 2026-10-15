@@ -90,6 +90,12 @@ def main(pptx):
             shot(html, 2032, 2048, SAIDA / f"roda-{nome}.jpg", 1, clip={"x": x0, "y": y0, "width": x1 - x0, "height": y1 - y0})
         b.close()
     shutil.rmtree(tmp, ignore_errors=True)
+    # amplia 2x (Lanczos + nitidez leve) o que veio em 1920 px; o PowerPoint recebido não tem resolução maior
+    import subprocess
+    sw = AQUI / "ampliar.swift"; exe = Path("/tmp/ampliar_save")
+    if sw.exists():
+        subprocess.run(["swiftc", "-O", str(sw), "-o", str(exe)], check=False, capture_output=True)
+        if exe.exists(): subprocess.run([str(exe)] + [str(x) for x in list(SAIDA.glob("*.jpg")) + list((SAIDA / "slides").glob("*.jpg"))], check=False)
     print("ok:", ", ".join(sorted(x.name for x in SAIDA.glob("*.jpg"))), "| slides:", ", ".join(sorted(x.name for x in (SAIDA / "slides").glob("*.jpg"))))
 
 

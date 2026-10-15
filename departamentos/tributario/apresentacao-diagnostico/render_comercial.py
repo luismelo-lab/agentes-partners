@@ -58,9 +58,9 @@ h1{{font-weight:300;font-size:76px;line-height:1.04;letter-spacing:-.01em;color:
 """
 
 
-def pagina(corpo, n, tot, leg=RODAPE, rodape=True):
+def pagina(corpo, n, tot, leg=RODAPE, rodape=True, leg_left=300):
     r = (f'<div class="rodape"><img src="{uri(PADRAO / M["logos"]["fundo_escuro"])}"><span class="pg">{n:02d} / {tot:02d}</span></div>'
-         f'<div class="leg">{esc(leg)}</div>') if rodape else ""
+         f'<div class="leg" style="left:{leg_left}px">{esc(leg)}</div>') if rodape else ""
     return f"<!doctype html><meta charset=utf-8><style>{css()}</style><body>{corpo}{r}</body>"
 
 
@@ -206,7 +206,43 @@ def lateral(s, n, tot):
     return pagina(corpo, n, tot, s.get("leg", RODAPE))
 
 
-TIPOS = {"lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
+def painel(s, n, tot):
+    """Layout da apresentação institucional: foto à esquerda (44% do slide, na resolução do arquivo) e conteúdo à direita."""
+    pw = 845; x0 = pw + 70; w = 1920 - 80 - x0
+    corpo = (f'<div class="foto" style="left:0;top:0;width:{pw}px;height:1080px;{foto_css(s["foto"], "center")}"></div>'
+             f'<div style="position:absolute;left:{x0}px;top:70px;width:{w}px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1 style="font-size:{s.get("tit", 46)}px">{esc(s["titulo"])}</h1></div>')
+    blocos = ""
+    for b in s["blocos"]:
+        val = (f'<div style="flex:none;width:{s.get("wval", 250)}px;text-align:right"><div class="mono" style="font-size:{s.get("fval", 28)}px;color:{OURO};line-height:1.1">{esc(b["valor"])}</div>'
+               f'<div style="font-size:16px;color:#9a9a9a;margin-top:6px">{esc(b.get("valor_leg", ""))}</div></div>') if b.get("valor") else ""
+        blocos += (f'<div style="display:flex;gap:30px;align-items:flex-start;padding:{s.get("pad", 15)}px 0;border-top:1px solid #333"><div style="flex:1">'
+                   f'<div class="rot" style="font-size:16px;margin-bottom:8px">{esc(b.get("tag", ""))}</div>'
+                   f'<div style="font-size:{s.get("fh3", 28)}px;font-weight:500;line-height:1.2;color:#F2F2F2;margin-bottom:8px">{esc(b["titulo"])}</div>'
+                   f'<div style="font-size:{s.get("ftx", 21)}px;line-height:1.38;color:#C4C4C4">{md(b["texto"])}</div></div>{val}</div>')
+    corpo += f'<div style="position:absolute;left:{x0}px;top:{s.get("topo", 300)}px;width:{w}px">{blocos}</div>'
+    return pagina(corpo, n, tot, s.get("leg", RODAPE), leg_left=x0)
+
+
+def valores(s, n, tot):
+    """Valor identificado: número grande e barras por tese, sobre foto escurecida."""
+    itens = s["itens"]; mx = max(i["valor"] for i in itens)
+    corpo = (fundo(s["foto"], s.get("op", .3)) +
+             f'<div style="position:absolute;left:80px;top:70px;width:1700px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1 style="font-size:60px">{esc(s["titulo"])}</h1></div>'
+             f'<div style="position:absolute;left:80px;top:330px;width:700px"><div class="mono" style="font-size:20px;color:{OURO};letter-spacing:.1em">{esc(s["total_rot"]).upper()}</div>'
+             f'<div style="font-size:112px;font-weight:300;line-height:1.05;color:#EDEDED;margin-top:12px;white-space:nowrap">{esc(s["total"])}</div>'
+             f'<div style="font-size:25px;line-height:1.4;color:#C4C4C4;margin-top:18px">{md(s["total_leg"])}</div></div>')
+    rows = ""
+    for it in itens:
+        wd = max(3, round(it["valor"] / mx * 100))
+        rows += (f'<div style="margin-bottom:26px"><div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:25px;color:#F2F2F2;font-weight:500">{esc(it["rotulo"])}</div>'
+                 f'<div class="mono" style="font-size:25px;color:{OURO}">{esc(it["texto"])}</div></div>'
+                 f'<div style="height:12px;background:#1c1c1c;border-radius:6px;margin-top:10px"><div style="height:12px;width:{wd}%;background:{OURO};border-radius:6px"></div></div>'
+                 f'<div style="font-size:19px;color:#9a9a9a;margin-top:6px">{esc(it.get("nota", ""))}</div></div>')
+    corpo += f'<div style="position:absolute;left:800px;top:320px;width:1040px">{rows}</div>'
+    return pagina(corpo, n, tot, s.get("leg", RODAPE))
+
+
+TIPOS = {"painel": painel, "valores": valores, "lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
 
 
 def main(pasta, nome=None):

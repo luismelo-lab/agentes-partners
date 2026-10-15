@@ -25,7 +25,7 @@ Vias: **ADM** (PER/DCOMP, revisão de débitos, retificações) · **JUD** (deci
 | Creditamento ACT/CCT · 04/03/2026 | JUD (MS) | Art. 3º II; Tema 779; IN RFB 2.121/22 art. 177 par. único sem amparo legal | Real com ACT/CCT que obrigue itens essenciais | JUD idem |
 | Crédito presumido sobre aquisições de PF (agroindústria) · 22/06/2026 | JUD (MS) depois PER/DCOMP | Art. 8º Lei 10.925/2004; arts. 56-A/56-B Lei 12.350/2010; AgInt REsp 1.693.878/RS | Agroindústria Real, cooperativas | JUD idem |
 | Funrural | ADM | Tema 1.079 STJ (citado no resumo); eSocial/DCTFWeb/GFIP | Produtores rurais, cooperativas | Diagnóstico grátis; 30%; planejamento ampliado a partir de R$ 9 mil |
-| Planejamento Tributário · 22/05/2026 | Consultivo | LC 214/2025, Decreto 12.955/2026, Res. CGSN 186/2026 (regime híbrido do Simples) | Faturamento > R$ 1 mi/ano | Sob proposta, após reunião de alinhamento |
+| Planejamento Tributário · 22/05/2026 | Consultivo (impacto citado no resumo: pode reduzir a carga tributária em até 30%) | LC 214/2025, Decreto 12.955/2026, Res. CGSN 186/2026 (regime híbrido do Simples) | Faturamento > R$ 1 mi/ano | Sob proposta, após reunião de alinhamento |
 | Planejamento Estratégico | Consultivo | Metas, indicadores, workshops | Empresas em expansão ou profissionalização | Reunião inicial gratuita; orçamento após diagnóstico |
 
 Observação do resumo geral: a recuperação pode ser por compensação (mesma natureza, PIS, COFINS, IRPJ, CSLL, previdenciárias), restituição (pagamento indevido, em espécie) ou ressarcimento (não cumulativo com operações desoneradas).

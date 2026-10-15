@@ -15,7 +15,7 @@ Padrão definido pelo Luis em 14/10/2026. Base visual e de conteúdo: a apresent
 | 7 | Luis / Geovana | Aprova. Nada vai ao cliente nem ao parceiro sem a aprovação | Envio pelo Luis |
 
 ## Esqueleto da apresentação comercial (20 slides, Brassol)
-Corpo (18): capa · Save Co. (institucional) · case do segmento (institucional, com logos) · o que a revisão encontrou · urgência (linha do tempo) · oito frentes · dívidas federais · três etapas · Oxigenar · Gestão de Contas · Estruturar · Escalar · quem faz o quê · jornada · perguntas para a proposta · documentos · próximo passo (chamada para ação) · encerramento (institucional). Anexo técnico (3): ICMS, PIS/COFINS, folha, só se o dono pedir detalhe.
+Esqueleto (15 slides, Brassol): capa · ecossistema (institucional) · case do segmento (institucional, com logos) · **INFORMATIVO: o que o cliente já fez** (ações já ajuizadas, sem valor nem proposta) · **PROPOSTA: o que a Save levantou** (valor total e por tese, com barras; PIS/COFINS; ICMS e folha; novas frentes a quantificar) · por que agir agora (reforma) · oxigenar, estruturar e escalar (como a Save pode continuar ajudando, com benefício e valor por produto) · jornada · próximo passo (documentos, prazos) · encerramento (institucional). Regra do Luis (15/10): o que o cliente já fez é informativo e nunca se mistura com o que a Save levantou; produtos mostram o valor que a Save entrega, não o que a Save precisa do cliente; usar só imagens e slides do PowerPoint institucional.
 
 ## Esqueleto da versão técnica (13 slides)
 Capa · Quem é a Save · Como chegamos aqui · Resumo · **Teses revisadas** · **Processos já ajuizados** · Débitos em aberto · Reforma tributária · **Oxigenar, estruturar e escalar** · **Quem já fez (case do segmento)** · Jornada · O que precisamos de vocês · Próximos passos.
@@ -44,7 +44,7 @@ Modelo do slide e perguntas do diagnóstico que ativam cada item: `MODELO-OXIGEN
 ## Linguagem dos slides
 O slide mostra **como a Save ajuda o cliente** com cada produto (benefício, o que a Save faz por ele), não como o produto funciona por dentro. O catálogo de teses do time técnico está em `../catalogo-teses-save.md`.
 
-## Fotos e slides institucionais
+## Fotos e slides institucionais (ampliados 2x com Lanczos e nitidez leve: o PowerPoint recebido tem 1920 px por slide)
 `python3 extrair_assets_pptx.py "<01. Save Co..pptx>"` recria `assets-institucionais/` (fotos de prédio, colmeia, pessoas, relógio, mãos e escada; recortes do círculo do ecossistema; slides Save Co., case Alimentício e encerramento). Se vier um PowerPoint em resolução maior, rode de novo e regere o deck. O slide de case usa a imagem institucional com os logos, por decisão do Luis (15/10/2026); o Jurídico recomenda termo de autorização por logo e data-base.
 
 ## Revisão antes de entregar
