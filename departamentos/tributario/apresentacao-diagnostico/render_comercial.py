@@ -45,14 +45,14 @@ body{{width:1920px;height:1080px;background:#000;color:{TEXTO};font-family:'IBM 
 .rot{{font-family:'IBM Plex Mono',monospace;font-size:20px;letter-spacing:.12em;text-transform:uppercase;color:{OURO}}}
 h1{{font-weight:300;font-size:76px;line-height:1.04;letter-spacing:-.01em;color:#E9E9E9}}
 .foto{{position:absolute;background-size:cover}}
-.rodape{{position:absolute;left:80px;right:80px;bottom:34px;display:flex;align-items:center;justify-content:space-between;color:#777;font-size:15px}}
+.rodape{{position:absolute;left:80px;right:80px;bottom:30px;display:flex;align-items:center;justify-content:space-between;color:#777;font-size:15px}}
 .rodape img{{height:30px}} .rodape .pg{{font-family:'IBM Plex Mono';color:{OURO};font-size:18px}}
-.leg{{position:absolute;left:310px;right:200px;bottom:40px;font-size:14px;color:#6f6f6f}}
+.leg{{position:absolute;left:300px;right:190px;bottom:30px;font-size:16px;line-height:1.3;color:#8c8c8c}}
 .regua{{position:absolute;left:80px;right:80px;height:1px;background:#3a3a3a}}
 .col{{position:absolute}} .col .tg{{font-family:'IBM Plex Mono';font-size:18px;letter-spacing:.1em;text-transform:uppercase;color:{OURO};margin-bottom:12px}}
 .col h3{{font-weight:500;font-size:31px;line-height:1.18;margin-bottom:14px;color:#F2F2F2}}
-.col p{{font-size:23px;line-height:1.38;color:#BDBDBD}} .col p b{{color:#F2F2F2;font-weight:500}}
-.col .sa{{margin-top:14px;font-size:23px;line-height:1.38;color:#BDBDBD}} .col .sa b{{color:{OURO};font-weight:500}}
+.col p{{font-size:24px;line-height:1.38;color:#C4C4C4}} .col p b{{color:#F2F2F2;font-weight:500}}
+.col .sa{{margin-top:14px;font-size:24px;line-height:1.38;color:#C4C4C4}} .col .sa b{{color:{OURO};font-weight:500}}
 .chip{{display:inline-block;margin-top:16px;padding:6px 14px;border:1px solid {OURO};border-radius:20px;font-family:'IBM Plex Mono';font-size:16px;letter-spacing:.06em;color:{OURO};text-transform:uppercase}}
 .card{{position:absolute;background:{CARTAO};border:1px solid {BORDA};border-radius:16px;padding:26px 28px}}
 """
@@ -64,17 +64,27 @@ def pagina(corpo, n, tot, leg=RODAPE, rodape=True):
     return f"<!doctype html><meta charset=utf-8><style>{css()}</style><body>{corpo}{r}</body>"
 
 
+def fundo(nome, op=0.28, blur=2):
+    return (f'<div class="foto" style="left:0;top:0;width:1920px;height:1080px;{foto_css(nome)};opacity:{op};filter:blur({blur}px)"></div>'
+            f'<div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:linear-gradient(180deg,rgba(0,0,0,.2),#000 85%)"></div>')
+
+
 def foto_css(nome, pos="center"):
     return f"background-image:url({uri(ASS / (nome + '.jpg'))});background-position:{pos}"
+
+
+def faixa(s, topo):
+    if s.get("fundo"): return fundo(s["foto"], s.get("op", 0.3))
+    return (f'<div class="foto" style="left:0;top:0;width:1920px;height:{topo}px;{foto_css(s["foto"], s.get("pos", "center"))}"></div>'
+            f'<div style="position:absolute;left:0;top:0;width:1920px;height:{topo + 20}px;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,.15) 40%,#000 100%)"></div>')
 
 
 def banner(s, n, tot):
     """Foto no topo (como as divisórias da apresentação institucional), título grande e colunas de texto."""
     cols = s["cols"]; k = len(cols); w = (1920 - 160 - (k - 1) * 48) // k
-    topo = 410
-    corpo = (f'<div class="foto" style="left:0;top:0;width:1920px;height:{topo}px;{foto_css(s["foto"], s.get("pos", "center"))}"></div>'
-             f'<div style="position:absolute;left:0;top:0;width:1920px;height:{topo + 20}px;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,.15) 40%,#000 100%)"></div>'
-             f'<div style="position:absolute;left:80px;top:{topo - 150}px;width:1500px"><div class="rot" style="margin-bottom:16px">{esc(s.get("rotulo", ""))}</div><h1>{esc(s["titulo"])}</h1></div>'
+    topo = s.get('topo', 410)
+    corpo = (faixa(s, topo) +
+                          f'<div style="position:absolute;left:80px;top:{topo - 150}px;width:1500px"><div class="rot" style="margin-bottom:16px">{esc(s.get("rotulo", ""))}</div><h1>{esc(s["titulo"])}</h1></div>'
              f'<div class="regua" style="top:{topo + 60}px"></div>')
     for i, c in enumerate(cols):
         x = 80 + i * (w + 48)
@@ -96,48 +106,47 @@ def capa(s, n, tot):
 
 
 def numeros(s, n, tot):
-    k = len(s["itens"]); w = (1920 - 160 - (k - 1) * 60) // k; topo = 410
-    corpo = (f'<div class="foto" style="left:0;top:0;width:1920px;height:{topo}px;{foto_css(s["foto"], s.get("pos", "center"))}"></div>'
-             f'<div style="position:absolute;left:0;top:0;width:1920px;height:{topo + 20}px;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,.15) 40%,#000 100%)"></div>'
-             f'<div style="position:absolute;left:80px;top:{topo - 150}px;width:1500px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1>{esc(s["titulo"])}</h1></div>'
+    k = len(s["itens"]); w = (1920 - 160 - (k - 1) * 60) // k; topo = s.get('topo', 410)
+    corpo = (faixa(s, topo) +
+                          f'<div style="position:absolute;left:80px;top:{topo - 150}px;width:1500px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1>{esc(s["titulo"])}</h1></div>'
              f'<div class="regua" style="top:{topo + 60}px"></div>')
     for i, it in enumerate(s["itens"]):
         x = 80 + i * (w + 60)
         corpo += (f'<div class="col" style="left:{x}px;top:{topo + 120}px;width:{w}px"><div style="font-size:128px;font-weight:300;line-height:1;color:#EDEDED">{esc(it["valor"])}'
                   f'<span style="font-size:44px;color:{OURO};margin-left:10px">{esc(it.get("unidade", ""))}</span></div>'
                   f'<p style="margin-top:22px;font-size:26px">{md(it["legenda"])}</p></div>')
+    if s.get("dor"): corpo += f'<div style="position:absolute;left:80px;top:{topo + 520}px;width:1500px;font-size:30px;font-weight:300;color:{OURO}">{esc(s["dor"])}</div>'
     return pagina(corpo, n, tot, s.get("leg", RODAPE))
 
 
 def grade(s, n, tot):
-    itens = s["itens"]; cols = 4; w = (1920 - 160 - (cols - 1) * 28) // cols; h = 300
+    itens = s["itens"]; cols = 4; w = (1920 - 160 - (cols - 1) * 28) // cols; h = 330
     corpo = (f'<div style="position:absolute;left:80px;top:70px;width:1600px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1 style="font-size:64px">{esc(s["titulo"])}</h1></div>')
     for i, it in enumerate(itens):
         x = 80 + (i % cols) * (w + 28); y = 300 + (i // cols) * (h + 28)
         corpo += (f'<div class="card" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px"><div class="mono" style="color:{OURO};font-size:17px;letter-spacing:.1em">{esc(it["via"]).upper()}</div>'
                   f'<div style="font-size:29px;font-weight:500;line-height:1.2;margin:12px 0 10px;color:#F2F2F2">{esc(it["nome"])}</div>'
-                  f'<div style="font-size:20px;line-height:1.35;color:#A9A9A9">{esc(it["linha"])}</div>'
+                  f'<div style="font-size:22px;line-height:1.35;color:#B5B5B5">{esc(it["linha"])}</div>'
                   f'<span class="chip" style="position:absolute;left:28px;bottom:24px;margin:0">{esc(it["status"])}</span></div>')
     return pagina(corpo, n, tot, s.get("leg", RODAPE))
 
 
 def timeline(s, n, tot):
-    itens = s["itens"]; k = len(itens); w = (1920 - 160 - (k - 1) * 30) // k; topo = 410
-    corpo = (f'<div class="foto" style="left:0;top:0;width:1920px;height:{topo}px;{foto_css(s["foto"], s.get("pos", "center"))}"></div>'
-             f'<div style="position:absolute;left:0;top:0;width:1920px;height:{topo + 20}px;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,.15) 40%,#000 100%)"></div>'
-             f'<div style="position:absolute;left:80px;top:{topo - 150}px;width:1500px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1>{esc(s["titulo"])}</h1></div>'
+    itens = s["itens"]; k = len(itens); w = (1920 - 160 - (k - 1) * 30) // k; topo = s.get('topo', 410)
+    corpo = (faixa(s, topo) +
+                          f'<div style="position:absolute;left:80px;top:{topo - 150}px;width:1500px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1>{esc(s["titulo"])}</h1></div>'
              f'<div class="regua" style="top:{topo + 90}px;background:{OURO}"></div>')
     for i, it in enumerate(itens):
         x = 80 + i * (w + 30)
         corpo += (f'<div style="position:absolute;left:{x}px;top:{topo + 78}px;width:24px;height:24px;border-radius:12px;background:{OURO}"></div>'
-                  f'<div class="col" style="left:{x}px;top:{topo + 125}px;width:{w}px"><div class="tg">{esc(it["marco"])}</div><h3 style="font-size:28px">{esc(it["titulo"])}</h3>'
-                  f'<p style="font-size:21px">{md(it["texto"])}</p><span class="chip" style="font-size:15px">{esc(it["chip"])}</span></div>')
+                  f'<div class="col" style="left:{x}px;top:{topo + 125}px;width:{w}px"><div class="tg" style="font-size:{30 if k <= 4 else 20}px;margin-bottom:18px">{esc(it["marco"])}</div><h3 style="font-size:{36 if k <= 4 else 29}px">{esc(it["titulo"])}</h3>'
+                  f'<p style="font-size:{27 if k <= 4 else 22}px">{md(it["texto"])}</p>' + (f'<span class="chip" style="font-size:17px">{esc(it["chip"])}</span>' if it.get("chip") else "") + '</div>')
     return pagina(corpo, n, tot, s.get("leg", RODAPE))
 
 
 def roadmap(s, n, tot):
     et = s["etapas"]; w = (1920 - 160 - 2 * 70) // 3
-    corpo = (f'<div class="foto" style="right:0;top:0;width:760px;height:1080px;{foto_css("escada", "center")};opacity:.55"></div>'
+    corpo = (f'<div class="foto" style="right:0;top:0;width:760px;height:1080px;{foto_css(s.get("foto", "pessoas"), "center")};opacity:.5"></div>'
              f'<div style="position:absolute;right:0;top:0;width:760px;height:1080px;background:linear-gradient(90deg,#000 0%,rgba(0,0,0,0) 60%)"></div>'
              f'<div style="position:absolute;left:80px;top:70px;width:1300px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1 style="font-size:66px">{esc(s["titulo"])}</h1></div>')
     for i, e in enumerate(et):
@@ -180,7 +189,24 @@ def passos(s, n, tot):
     return pagina(corpo, n, tot, s.get("leg", RODAPE))
 
 
-TIPOS = {"capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
+def lateral(s, n, tot):
+    """Foto em cartão à esquerda (na resolução original), título no topo e blocos em 2 colunas à direita."""
+    fw, fh = s.get("fw", 520), s.get("fh", 480); cols = s["cols"]
+    corpo = (f'<div style="position:absolute;left:80px;top:70px;width:1700px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1 style="font-size:66px">{esc(s["titulo"])}</h1></div>'
+             f'<div class="foto" style="left:80px;top:330px;width:{fw}px;height:{fh}px;border-radius:18px;border:1px solid {BORDA};{foto_css(s["foto"], s.get("pos", "center"))}"></div>')
+    x0 = 80 + fw + 56; per = s.get('por_linha', 2 if len(cols) > 2 else 1); w = (1920 - 80 - x0 - (per - 1) * 44) // per; hcell = s.get('hcell', 330 if per == 2 else 500)
+    if s.get("destaque"):
+        d = s["destaque"]; xd = x0 + (w + 44) * (len(cols) % per); yd = 330 + (len(cols) // per) * (hcell + 14)
+        corpo += (f'<div style="position:absolute;left:{xd}px;top:{yd}px;width:{w}px"><div class="tg">Referência</div><span class="mono" style="font-size:96px;color:#EDEDED;line-height:1">{esc(d["valor"])}</span>'
+                  f'<div style="font-size:23px;line-height:1.38;color:#C4C4C4;margin-top:10px">{esc(d["legenda"])}</div></div>')
+    for i, c in enumerate(cols):
+        x = x0 + (i % per) * (w + 44); y = 330 + (i // per) * (hcell + 14)
+        corpo += (f'<div class="col" style="left:{x}px;top:{y}px;width:{w}px"><div class="tg">{esc(c.get("tag", ""))}</div><h3 style="font-size:29px">{esc(c["titulo"])}</h3>'
+                  f'<p style="font-size:24px">{md(c["texto"])}</p>' + (f'<span class="chip" style="font-size:16px">{esc(c["chip"])}</span>' if c.get("chip") else "") + "</div>")
+    return pagina(corpo, n, tot, s.get("leg", RODAPE))
+
+
+TIPOS = {"lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
 
 
 def main(pasta, nome=None):
@@ -189,15 +215,15 @@ def main(pasta, nome=None):
     nome = nome or deck.get("nome", "Apresentacao"); prev = pasta / "previas"; prev.mkdir(exist_ok=True)
     pngs = []; notas = []
     with sync_playwright() as p:
-        b = p.chromium.launch(channel="chrome"); pg = b.new_page(viewport={"width": 1920, "height": 1080})
+        b = p.chromium.launch(channel="chrome"); pg = b.new_page(viewport={"width": 1920, "height": 1080}, device_scale_factor=2)
         for i, s in enumerate(sl, 1):
-            dest = prev / f"{i:02d}.png"
+            dest = prev / f"{i:02d}.jpg"
             if s["tipo"] == "imagem":
                 src = ASS / "slides" / s["arquivo"]
                 pg.set_content(f"<body style='margin:0;background:#000'><img src='{uri(src)}' style='width:1920px;height:1080px;display:block'>")
             else:
                 pg.set_content(TIPOS[s["tipo"]](s, i, tot))
-            pg.wait_for_timeout(250); pg.screenshot(path=str(dest)); pngs.append(str(dest)); notas.append(s.get("notas", ""))
+            pg.wait_for_timeout(250); pg.screenshot(path=str(dest), type="jpeg", quality=93); pngs.append(str(dest)); notas.append(s.get("notas", ""))
         # PDF: uma imagem por página
         corpo = "".join(f"<img src='{uri(x)}' style='width:1920px;height:1080px;display:block;page-break-after:always'>" for x in pngs)
         pg.set_content(f"<style>@page{{size:1920px 1080px;margin:0}}body{{margin:0}}</style>{corpo}")
