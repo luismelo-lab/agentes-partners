@@ -71,14 +71,39 @@ def faturamento(deal_id):
     anos = set()
     for f in glob.glob(os.path.join(PAR, "textos", f"{deal_id}_*.txt")):
         t = open(f, errors="ignore").read()
-        if re.search(r"faturamento", t, re.I): anos |= {int(a) for a, v in ANO.findall(t) if float(v.replace(".", "").replace(",", ".")) > 0}
+        if re.search(r"faturamento", t, re.I):
+            anos |= {int(a) for a, v in ANO.findall(t) if float(v.replace(".", "").replace(",", ".")) > 0}
+            # tabela colada como imagem (EMF): "Período / Faturamento Total / 2021 / 40.191.318,88 / R$ / ..." (uma célula por linha)
+            m = re.search(r"Faturamento Total\n(.*?)(?:\nTOTAL|\n\n|$)", t, re.S)
+            if m: anos |= {int(a) for a, v in re.findall(r"^(20[12]\d)\n(?:R\$\s*)?([\d.]+,\d{2})", m.group(1), re.M) if float(v.replace(".", "").replace(",", ".")) > 0}
     return sorted(anos) or None
 
 
+TRI = re.compile(r"([1-4])º\s*Trimestre\s*(20\d\d)", re.I)
+def per_periodo(deal_ids):
+    """Último período já pedido em PER/DCOMP (tabela "Tipo de Crédito / Tipo de Documento / Período" colada no parecer).
+    Devolve (texto, date do fim do trimestre) do pedido que termina mais tarde, ou (None, None)."""
+    from datetime import date as _d
+    melhor = (None, None)
+    for did in deal_ids:
+        for f in glob.glob(os.path.join(PAR, "textos", f"{did}_*.txt")):
+            t = open(f, errors="ignore").read()
+            if "Tipo de Documento" not in t and "PER/DCOMP" not in t: continue
+            for m in re.finditer(r"([1-4]º\s*Trimestre\s*20\d\d)\s*a\s*([1-4]º\s*Trimestre\s*20\d\d)", t, re.I):
+                q, y = TRI.search(m.group(2)).groups(); fim = _d(int(y), int(q) * 3, 1)
+                if not melhor[1] or fim > melhor[1]: melhor = (f"{m.group(1)} a {m.group(2)}", fim)
+    return melhor
+
+
 def movimentacao(deal_id):
+    """Regra da Geovana: faturamento só até 2025 = empresa sem movimentação. Só vale quando o parecer é de 2026 (já poderia
+    trazer 2026); parecer feito em 2025 naturalmente termina em 2025 e fica como "sem dado de 2026"."""
     anos = faturamento(deal_id)
     if not anos: return "tabela de faturamento não encontrada no parecer"
-    return "Empresa sem movimentação" if max(anos) <= 2025 else f"com faturamento até {max(anos)}"
+    d = _data(resumos().get(str(deal_id)))
+    if max(anos) >= 2026: return f"com faturamento em {max(anos)}"
+    if d and d.year >= 2026: return "Empresa sem movimentação"
+    return f"faturamento até {max(anos)} (parecer de {d.year if d else 'data não lida'}): sem dado de 2026"
 
 
 def receita(cnpj):

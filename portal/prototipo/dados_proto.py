@@ -387,6 +387,12 @@ for r8, ns in grupos.items():
     if any(n["status"] == "aberto" for n in ns): continue                                              # V6: já há negócio aberto no grupo
     pr, pn, do_ult = parecer_do_grupo(ns, ult); ini, fim = periodo((pr or {}).get("periodo_apuracao"))
     conf = []
+    # período já pedido em PER/DCOMP (tabela colada no parecer): é o "último período recuperado" da regra L11
+    sys.path.insert(0, "/Users/luisfernandomelo/agentes-partners/.claude/worktrees/amazing-kirch-442f46/lib"); import parecer_regras as PRG
+    per_txt, per_fim = PRG.per_periodo([str(n["id"]) for n in ns])
+    if per_fim and pr and (not fim or per_fim > fim):
+        conf.append({"item": "Último período já pedido (PER/DCOMP)", "ok": True, "resultado": f"{per_txt}: as competências novas contam a partir daqui"})
+        fim = per_fim; ini = ini or None
     if fim:
         mn = max(meses(fim, HOJE) - 1, 0)   # competências fechadas depois do fim do período apurado (L11), até o mês anterior
         conf.append({"item": "Período apurado no último fechamento", "ok": True,

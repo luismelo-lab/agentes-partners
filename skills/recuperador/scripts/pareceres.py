@@ -55,6 +55,23 @@ def ocr(caminho):
     return r.stdout if r.returncode == 0 else ""
 
 
+def emf_texto(b):
+    """Texto das tabelas coladas como imagem EMF no Word (Excel colado): registros EMR_EXTTEXTOUTW. Uma célula por linha."""
+    import struct
+    out, i = [], 0
+    while i + 8 <= len(b):
+        t, sz = struct.unpack_from("<II", b, i)
+        if sz < 8: break
+        if t == 84 and i + 52 <= len(b):
+            try:
+                n, off = struct.unpack_from("<II", b, i + 44)
+                s = b[i + off:i + off + 2 * n].decode("utf-16-le").strip()
+                if s: out.append(s)
+            except Exception: pass
+        i += sz
+    return "\n".join(out)
+
+
 def texto(caminho):
     """Word, PDF (com OCR se for digitalizado), Excel, imagem ou texto puro. Formato pelo conteúdo, não pela extensão."""
     b = open(caminho, "rb").read(8)
@@ -65,7 +82,11 @@ def texto(caminho):
                 xml = z.read("word/document.xml").decode("utf-8", "ignore")
                 xml = re.sub(r"</w:p>", "\n", xml); xml = re.sub(r"<w:tab/>", "\t", xml)
                 t = re.sub(r"<[^>]+>", "", xml)
-                return re.sub(r"&amp;", "&", re.sub(r"&lt;", "<", re.sub(r"&gt;", ">", t)))
+                t = re.sub(r"&amp;", "&", re.sub(r"&lt;", "<", re.sub(r"&gt;", ">", t)))
+                # tabelas coladas como imagem EMF (faturamento por ano, PER/DCOMP): o texto está dentro da imagem (Geovana, 15/10)
+                emf = [emf_texto(z.read(n)) for n in nomes if n.startswith("word/media/") and n.lower().endswith(".emf")]
+                emf = [x for x in emf if x.strip()]
+                return t + ("\n\n[TABELAS DO PARECER]\n" + "\n\n".join(emf) if emf else "")
         if any(n.startswith("xl/") for n in nomes):
             from openpyxl import load_workbook
             wb = load_workbook(caminho, read_only=True, data_only=True)
@@ -169,6 +190,7 @@ def main():
     ap = argparse.ArgumentParser(); g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--fila", action="store_true"); g.add_argument("--ganhos", action="store_true")
     g.add_argument("--todos", action="store_true", help="toda a base com parecer (look-alike e Revisor de Diagnóstico)")
+    ap.add_argument("--refazer", help="arquivo com IDs de negócios para ler de novo")
     ap.add_argument("--pendentes", action="store_true", help="só os pareceres que estavam no HubSpot aguardando o escopo 'files'")
     ap.add_argument("--refazer-ilegiveis", action="store_true", help="tenta de novo os marcados como ilegíveis (Excel, imagem, PDF digitalizado)")
     a = ap.parse_args()
@@ -184,6 +206,11 @@ def main():
         alvo = [i for i, d in N.items() if d["status"] == "ganho"]
     else:
         alvo = list(N)
+    if a.refazer:  # relê os pareceres destes negócios (ex.: depois de melhorar o leitor); um ID por linha
+        ids = {l.strip() for l in open(a.refazer) if l.strip()}
+        alvo = [i for i in alvo if i in ids]
+        for i in alvo:
+            for f in glob.glob(os.path.join(TXT, f"{i}_*.txt*")): os.remove(f)
     if a.pendentes:  # depois de liberar o escopo 'files': só os casos que ficaram "aguardando permissão"
         R0 = json.load(open(RES)) if os.path.exists(RES) else {}
         alvo = [i for i in alvo if (R0.get(i) or {}).get("pendentes")]
