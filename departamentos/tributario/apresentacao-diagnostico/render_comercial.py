@@ -370,7 +370,18 @@ def capa_cliente(s, n, tot):
     return pagina(corpo, n, tot, rodape=False)
 
 
-TIPOS = {"capa_cliente": capa_cliente, "conceito": conceito, "fluxo_produtos": fluxo_produtos, "ecossistema": ecossistema, "painel": painel, "valores": valores, "lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
+def capa_logos(s, n, tot):
+    """Capa no fundo padrão (foto do prédio à direita): só a logo da Save e a logo do cliente."""
+    cli = uri(AQUI / s["logo"])
+    corpo = (f'<div class="foto" style="right:0;top:0;width:820px;height:1080px;{foto_css(s.get("foto", "predio"), "center")}"></div>'
+             f'<div style="position:absolute;right:0;top:0;width:820px;height:1080px;background:linear-gradient(90deg,#000 0%,rgba(0,0,0,.0) 45%)"></div>'
+             f'<img src="{uri(PADRAO / M["logos"]["fundo_escuro"])}" style="position:absolute;left:80px;top:70px;width:250px">'
+             f'<img src="{cli}" style="position:absolute;left:80px;top:50%;transform:translateY(-50%);width:{s.get("logo_w", 640)}px">'
+             f'<div style="position:absolute;left:80px;bottom:110px;width:140px;height:5px;background:{OURO}"></div>')
+    return pagina(corpo, n, tot, rodape=False)
+
+
+TIPOS = {"capa_logos": capa_logos, "capa_cliente": capa_cliente, "conceito": conceito, "fluxo_produtos": fluxo_produtos, "ecossistema": ecossistema, "painel": painel, "valores": valores, "lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
 
 
 def main(pasta, nome=None):
