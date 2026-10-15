@@ -358,7 +358,19 @@ def conceito(s, n, tot):
 
 
 PASTA_DECK = [Path(".")]
-TIPOS = {"conceito": conceito, "fluxo_produtos": fluxo_produtos, "ecossistema": ecossistema, "painel": painel, "valores": valores, "lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
+def capa_cliente(s, n, tot):
+    """Capa só com o nome da empresa e a logo dela, centralizados, sobre preto com brilho dourado suave."""
+    logo = ""
+    if s.get("logo") and (AQUI / s["logo"]).exists():
+        logo = f'<img src="{uri(AQUI / s["logo"])}" style="display:block;margin:0 auto 56px;height:{s.get("logo_h", 140)}px">'
+    corpo = (f'<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,#1b1608 0%,#070604 50%,#000 78%)"></div>'
+             f'<div style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center">{logo}'
+             f'<div style="font-size:{s.get("nome_px", 120)}px;font-weight:300;letter-spacing:-.02em;color:#F5F5F5;line-height:1.05">{esc(s["nome"])}</div>'
+             f'<div style="width:120px;height:3px;background:{OURO};margin:44px auto 0;border-radius:2px"></div></div>')
+    return pagina(corpo, n, tot, rodape=False)
+
+
+TIPOS = {"capa_cliente": capa_cliente, "conceito": conceito, "fluxo_produtos": fluxo_produtos, "ecossistema": ecossistema, "painel": painel, "valores": valores, "lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
 
 
 def main(pasta, nome=None):
