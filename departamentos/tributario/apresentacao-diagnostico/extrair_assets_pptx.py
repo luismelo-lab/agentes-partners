@@ -19,7 +19,7 @@ FOTOS = {2: ("predio", 0, 0, .44, 1), 3: ("colmeia", 0, 0, .44, 1), 4: ("pessoas
          16: ("maos", .42, 0, 1, .92), 23: ("escada", .72, 0, 1, 1)}
 # recortes do círculo (px da imagem 2032x2048)
 RODA = {"casa": (60, 600, 560, 980), "time": (540, 50, 980, 520), "reuniao": (1120, 60, 1560, 500), "plantas": (1520, 600, 1940, 960),
-        "certificado": (60, 1080, 500, 1560), "assinatura": (420, 1500, 960, 1960), "investidores": (1520, 1080, 2000, 1520), "grafico": (1190, 1600, 1620, 1990)}
+        "certificado": (60, 1080, 500, 1560), "assinatura": (420, 1500, 960, 1960), "investidores": (1520, 1080, 2000, 1520), "grafico": (1190, 1600, 1620, 1990), "completa": (0, 0, 2032, 2048)}
 SLIDES = {2: "save.jpg", 19: "case-alimenticio.jpg", 24: "encerramento.jpg"}
 
 

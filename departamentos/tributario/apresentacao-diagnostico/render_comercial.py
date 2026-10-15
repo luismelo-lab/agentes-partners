@@ -262,7 +262,31 @@ def valores(s, n, tot):
     return pagina(corpo, n, tot, s.get("leg", RODAPE))
 
 
-TIPOS = {"painel": painel, "valores": valores, "lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
+def ecossistema(s, n, tot):
+    """Ecossistema Save refeito: círculo do PowerPoint (resolução original) com os rótulos em texto nítido e linhas-guia douradas."""
+    Wd = 660; left = 630; top = 285; k = Wd / 1016
+    # ponto de cada fatia (coordenadas da imagem exibida em 1016 px) e rótulo
+    esq = [(330, 120, "Assessoria Empresarial", ""), (150, 420, "Planejamento Patrimonial", ""), (110, 690, "Save ID", "Certificado Digital"), (300, 880, "AssinePro", "Assinador Digital")]
+    dire = [(690, 110, "Gestão de Passivo Empresarial", ""), (900, 380, "Sustentabilidade e EVP", ""), (900, 690, "Consultoria Tributária", ""), (710, 900, "RecuperaTax SaaS", "Mercado Tributário")]
+    corpo = (f'<div style="position:absolute;left:80px;top:70px;width:1700px"><div class="rot" style="margin-bottom:16px">{esc(s["rotulo"])}</div><h1 style="font-size:58px">{esc(s["titulo"])}</h1></div>'
+             f'<div class="foto" style="left:{left}px;top:{top}px;width:{Wd}px;height:{round(Wd * 2048 / 2032)}px;background-size:100% 100%;{foto_css("roda-completa")}"></div>')
+    svg = f'<svg style="position:absolute;left:0;top:0" width="1920" height="1080" viewBox="0 0 1920 1080">'
+    lab = ""
+    for lado, itens in (("e", esq), ("d", dire)):
+        for x, y, nome, sub in itens:
+            px = left + x * k; py = top + y * k
+            if lado == "e":
+                xe = left - 60; svg += f'<line x1="{xe}" y1="{py}" x2="{px}" y2="{py}" stroke="{OURO}" stroke-opacity=".55" stroke-width="1.4"/><circle cx="{px}" cy="{py}" r="5" fill="{OURO}"/>'
+                lab += (f'<div style="position:absolute;right:{1920 - xe + 18}px;top:{py - 28}px;text-align:right;width:420px"><div style="font-size:26px;font-weight:500;color:#F2F2F2">{esc(nome)}</div>'
+                        f'<div style="font-size:20px;color:#A9A9A9;margin-top:2px">{esc(sub)}</div></div>')
+            else:
+                xe = left + Wd + 60; svg += f'<line x1="{px}" y1="{py}" x2="{xe}" y2="{py}" stroke="{OURO}" stroke-opacity=".55" stroke-width="1.4"/><circle cx="{px}" cy="{py}" r="5" fill="{OURO}"/>'
+                lab += (f'<div style="position:absolute;left:{xe + 18}px;top:{py - 28}px;width:420px"><div style="font-size:26px;font-weight:500;color:#F2F2F2">{esc(nome)}</div>'
+                        f'<div style="font-size:20px;color:#A9A9A9;margin-top:2px">{esc(sub)}</div></div>')
+    return pagina(corpo + svg + "</svg>" + lab, n, tot, s.get("leg", RODAPE))
+
+
+TIPOS = {"ecossistema": ecossistema, "painel": painel, "valores": valores, "lateral": lateral, "capa": capa, "numeros": numeros, "grade": grade, "banner": banner, "timeline": timeline, "roadmap": roadmap, "case": case, "passos": passos}
 
 
 def main(pasta, nome=None):
