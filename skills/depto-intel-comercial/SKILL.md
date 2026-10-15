@@ -39,3 +39,16 @@ Script `scripts/receita_cnpj.py`, com filtros em `~/agentes-partners/departament
 1. Garanta um download recente do HubSpot (se o de hoje não existir: `python3 ~/.claude/skills/depto-resultados/scripts/hubspot_fonte.py --baixar`).
 2. `python3 ~/.claude/skills/depto-intel-comercial/scripts/icp.py` → `~/agentes-partners/departamentos/intel-comercial/ICP-AAAA-MM-DD.xlsx` + `icp-AAAA-MM-DD.json`.
 3. Entregue: o ICP em 5 linhas (quem priorizar e por quê), o mapa de território resumido, o lead scoring v1 para o Luis validar e as ressalvas.
+
+## Revisão do Gerente (obrigatória, regra do Luis de 15/10/2026)
+Siga `~/agentes-partners/infra/protocolo-gerente.md`.
+- **Distribuir:** o gerente desta área distribui o trabalho aos especialistas certos.
+- **Revisar:** antes de qualquer retorno, o gerente revisa pelo checklist do protocolo:
+  - responde o pedido;
+  - entrega os 3 blocos de `infra/padrao-entrega.md`;
+  - está correto e pronto para usar;
+  - segue as regras da casa;
+  - diz se precisa de outra área.
+- **Devolver:** se algo falhar, devolve ao especialista responsável com o que corrigir e reavalia, no máximo 2 rodadas. Se ainda faltar algo, a lacuna vai em "o que falta e quem fornece".
+- **Outra área:** se a demanda precisar dela, o gerente encaminha ao gerente da outra área. Lá, o gerente distribui aos especialistas e revisa da mesma forma. Depois, o gerente desta área faz a revisão final e consolida uma resposta única.
+- **Registro:** toda entrega leva o registro `"revisao": {gerente, especialistas, rodadas, areas_consultadas, aprovado, ajustes}`.

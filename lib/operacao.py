@@ -331,7 +331,7 @@ def gravar_analises(arq):
         r = limpo(x.get("rascunho") or "") or None
         if r and not auditar(r): r = None
         A[x["chave"]] = {"area": x.get("area"), "fazer": limpo(x.get("fazer") or ""), "precisa": limpo(x.get("precisa") or ""), "falta": limpo(x.get("falta") or ""),
-                         "rascunho": r, "quando": HOJE.isoformat(), "texto_base": e.get("texto")}
+                         "rascunho": r, "quando": HOJE.isoformat(), "texto_base": e.get("texto"), "revisao": x.get("revisao")}
         n += 1
     A = {k: v for k, v in A.items() if k in E and E[k].get("ativo")}  # some quando o alerta se resolve
     gravar(ANA, A); print(f"{n} análise(s) gravada(s) →", ANA)
@@ -492,6 +492,8 @@ def plano(previa=False, so_urgentes=False):
                 if an.get("precisa"): ls.append(("O que você também precisa", L.esc(an["precisa"])))
                 if an.get("falta"): ls.append(("O que falta e quem fornece", L.esc(an["falta"])))
                 if an.get("rascunho"): e = {**e, "rascunho": an["rascunho"]}
+                rv = an.get("revisao") or {}
+                if rv.get("gerente"): ls.append(("Revisado por", L.esc(f"{rv['gerente']} · {rv.get('rodadas') or 1} rodada(s)" + (f" · consultou {', '.join(rv['areas_consultadas'])}" if rv.get("areas_consultadas") else ""))))
                 if e.get("tambem"): ls.append(("Também", L.esc(limpo(e["tambem"]))))
                 if e.get("revisor"): ls.append(("Revisor", L.esc(e["revisor"]) + (f" · planilha {L.esc(os.path.basename(e['arquivo']))} na pasta da Geovana" if e.get("arquivo") else "")))
                 if e.get("rascunho"): ls.append(("Rascunho para o parceiro", "<i>" + L.esc(e["rascunho"]) + "</i> (revisado pela Qualidade; você decide se envia)"))

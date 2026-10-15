@@ -50,6 +50,8 @@ def cartoes(itens, com_rascunho=True):
         if i.get("entrega"): ls.append(("O que os agentes levantaram", L.md(i["entrega"])))
         if i.get("precisa"): ls.append(("O que você também precisa", e(i["precisa"])))   # padrão de entrega (Luis, 15/10)
         if i.get("falta") and str(i["falta"]).strip().lower() != "nada": ls.append(("O que falta e quem fornece", e(i["falta"])))
+        rv = i.get("revisao") or {}
+        if rv.get("gerente"): ls.append(("Revisado por", e(f"{rv['gerente']} · {rv.get('rodadas') or 1} rodada(s)" + (f" · consultou {', '.join(rv['areas_consultadas'])}" if rv.get("areas_consultadas") else ""))))
         if com_rascunho and i.get("rascunho"):
             ls.append(("Sugestão de resposta", f"<i>“{e(i['rascunho'])}”</i> (revisada pela Qualidade; você decide se envia)" if PR.auditar(i["rascunho"])
                        else "retida pela Qualidade: o texto sugerido tinha possível promessa de resultado. Responda com suas palavras."))

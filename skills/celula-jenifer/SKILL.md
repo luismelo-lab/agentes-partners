@@ -76,3 +76,16 @@ O Eazybe já grava no HubSpot, minutos depois, as conversas individuais e de gru
 `python3 ~/.claude/skills/celula-daniela/scripts/whatsapp_hubspot.py --pessoa jenifer [--horas 24] [--aguardando 4]`
 → `~/agentes-partners/celulas/jenifer/whatsapp/caixa-AAAA-MM-DD-HHhMM.md` (+ .json): conversa, tipo (grupo/individual), Master, negócio associado, **aguardando resposta do time há X h** e as mensagens.
 Depois, a Triagem trata cada conversa sinalizada como se tivesse sido colada: ficha, pendência, rascunho de resposta. **Só leitura; a resposta é sempre dela, no próprio WhatsApp.** Pasta 700, retenção de 30 dias, nada sai da máquina. Quem falou é identificado por `~/agentes-partners/celulas/whatsapp-config.json` (nomes/telefones do time).
+
+## Revisão do Gerente (obrigatória, regra do Luis de 15/10/2026)
+Siga `~/agentes-partners/infra/protocolo-gerente.md`.
+- **Distribuir:** o gerente desta área distribui o trabalho aos especialistas certos.
+- **Revisar:** antes de qualquer retorno, o gerente revisa pelo checklist do protocolo:
+  - responde o pedido;
+  - entrega os 3 blocos de `infra/padrao-entrega.md`;
+  - está correto e pronto para usar;
+  - segue as regras da casa;
+  - diz se precisa de outra área.
+- **Devolver:** se algo falhar, devolve ao especialista responsável com o que corrigir e reavalia, no máximo 2 rodadas. Se ainda faltar algo, a lacuna vai em "o que falta e quem fornece".
+- **Outra área:** se a demanda precisar dela, o gerente encaminha ao gerente da outra área. Lá, o gerente distribui aos especialistas e revisa da mesma forma. Depois, o gerente desta área faz a revisão final e consolida uma resposta única.
+- **Registro:** toda entrega leva o registro `"revisao": {gerente, especialistas, rodadas, areas_consultadas, aprovado, ajustes}`.

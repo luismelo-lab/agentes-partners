@@ -286,6 +286,8 @@ def cmd_responder(a):
         blocos += [L.secao(s["titulo"]), L.linha(md_html(s.get("texto", "")), "0 32px 6px")]
     anexos = [H(x) for x in J.get("anexos", []) if os.path.exists(H(x))]
     if anexos: blocos += [L.secao("Arquivos anexos"), L.paragrafo("<br>".join("📎 " + L.esc(os.path.basename(x)) for x in anexos))]
+    rv = J.get("revisao") or {}
+    if rv.get("gerente"): blocos += [L.paragrafo(f"<i>Revisado por {L.esc(rv['gerente'])} · {rv.get('rodadas') or 1} rodada(s)" + (f" · consultou {L.esc(', '.join(rv['areas_consultadas']))}" if rv.get("areas_consultadas") else "") + "</i>")]
     if J.get("tambem"): blocos += [L.secao("O que você também precisa"), L.linha(md_html(J["tambem"]), "0 32px 6px")]   # padrão de entrega (15/10)
     if J.get("falta") and str(J["falta"]).strip().lower() != "nada": blocos += [L.secao("O que falta e quem fornece"), L.linha(md_html(J["falta"]), "0 32px 6px")]
     if J.get("conferido"): blocos += [L.secao("Já conferido pelos agentes"), L.linha(md_html("\n".join(f"- **{c.get('item', '')}:** {c.get('resultado', '')}" if isinstance(c, dict) else "- " + str(c) for c in J["conferido"])), "0 32px 6px")]

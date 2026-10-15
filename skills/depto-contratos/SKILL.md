@@ -60,3 +60,16 @@ Checklist completo (`references/checklist-conferencia.md`) + divergências com o
 - Entregas: `~/agentes-partners/departamentos/contratos/entregas/AAAA-MM-DD-<tema>.md` (com log: especialistas, fontes com data, pontos para validação).
 - Controle: `~/agentes-partners/departamentos/contratos/Controle-Contratos-AAAA-MM-DD.xlsx` + `.json`.
 - Leia antes e atualize depois: `aprendizados.md` e `perguntas-areas.md` na mesma pasta.
+
+## Revisão do Gerente (obrigatória, regra do Luis de 15/10/2026)
+Siga `~/agentes-partners/infra/protocolo-gerente.md`.
+- **Distribuir:** o gerente desta área distribui o trabalho aos especialistas certos.
+- **Revisar:** antes de qualquer retorno, o gerente revisa pelo checklist do protocolo:
+  - responde o pedido;
+  - entrega os 3 blocos de `infra/padrao-entrega.md`;
+  - está correto e pronto para usar;
+  - segue as regras da casa;
+  - diz se precisa de outra área.
+- **Devolver:** se algo falhar, devolve ao especialista responsável com o que corrigir e reavalia, no máximo 2 rodadas. Se ainda faltar algo, a lacuna vai em "o que falta e quem fornece".
+- **Outra área:** se a demanda precisar dela, o gerente encaminha ao gerente da outra área. Lá, o gerente distribui aos especialistas e revisa da mesma forma. Depois, o gerente desta área faz a revisão final e consolida uma resposta única.
+- **Registro:** toda entrega leva o registro `"revisao": {gerente, especialistas, rodadas, areas_consultadas, aprovado, ajustes}`.

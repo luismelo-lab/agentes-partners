@@ -32,3 +32,16 @@ Você prepara trabalho para a **Geovana**; quem decide é ela. Português do Bra
 5. **Entrega à Geovana:** e-mail enviado automaticamente à Geovana com cópia para o Luis (decisão D27, 01/10/2026: `python3 ~/.claude/skills/recuperador/scripts/email_outlook.py --para geovana.goncalves@savecompany.com.br --cc luis.melo@savecompany.com.br --lote N --enviar`): resumo do lote no corpo e a planilha anexada. Só aceita destinatários @savecompany.com.br. Se o Outlook falhar, roda sem `--enviar` (rascunho) ou gera um `.eml`. O e-mail traz o lote + as instruções para ela marcar, na planilha, "Aprovar para reanálise / Vetar / Precisa de dado", o motivo, o valor validado e os minutos gastos.
 6. **Indicadores (D2):** leia a fila com as decisões e calcule: fichas geradas, aprovadas, vetadas (**% de falsos positivos** = vetadas ÷ decididas), valor validado, reanálises encaminhadas e minutos por caso contra a linha de base da Semana 0. Envie ao depto-resultados para o relatório semanal.
 7. **Aprendizado:** cada veto com motivo vira regra em `~/agentes-partners/celulas/geovana/recuperador/aprendizados.md` (ex.: "CNAE X + regime Y: não sugerir tese Z").
+
+## Revisão do Gerente (obrigatória, regra do Luis de 15/10/2026)
+Siga `~/agentes-partners/infra/protocolo-gerente.md`.
+- **Distribuir:** o gerente desta área distribui o trabalho aos especialistas certos.
+- **Revisar:** antes de qualquer retorno, o gerente revisa pelo checklist do protocolo:
+  - responde o pedido;
+  - entrega os 3 blocos de `infra/padrao-entrega.md`;
+  - está correto e pronto para usar;
+  - segue as regras da casa;
+  - diz se precisa de outra área.
+- **Devolver:** se algo falhar, devolve ao especialista responsável com o que corrigir e reavalia, no máximo 2 rodadas. Se ainda faltar algo, a lacuna vai em "o que falta e quem fornece".
+- **Outra área:** se a demanda precisar dela, o gerente encaminha ao gerente da outra área. Lá, o gerente distribui aos especialistas e revisa da mesma forma. Depois, o gerente desta área faz a revisão final e consolida uma resposta única.
+- **Registro:** toda entrega leva o registro `"revisao": {gerente, especialistas, rodadas, areas_consultadas, aprovado, ajustes}`.

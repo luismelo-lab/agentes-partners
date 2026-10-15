@@ -17,3 +17,5 @@ Detalhes desta execução:
 - Regras do SKILL.md: tese de alíquota zero pelo entendimento da Save, sempre via PER; café fora da meta desde abr/2026; tudo é pré-análise (N1).
 
 Não altere o HubSpot, não mande mensagens a ninguém além do e-mail do passo 5 e não mexa em arquivos fora de ~/agentes-partners/celulas/geovana/ e das saídas dos scripts. Ao final: nº do lote, casos, honorário esperado do lote, indicadores D2 (se houver decisões), alertas de dados e o caminho da planilha e das fichas.
+
+Protocolo do Gerente (Luis, 15/10; ~/agentes-partners/infra/protocolo-gerente.md): em cada área, o gerente distribui aos especialistas, revisa pelo checklist antes de qualquer retorno, devolve ao especialista o que precisar de revisão (até 2 rodadas) e, se a demanda precisar de outra área, encaminha ao gerente dela, que distribui e revisa do mesmo jeito; o gerente da área de origem consolida. Toda entrega leva "revisao": {gerente, especialistas, rodadas, areas_consultadas, aprovado, ajustes}.
