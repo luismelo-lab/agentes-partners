@@ -115,7 +115,7 @@ def numeros(s, n, tot):
         corpo += (f'<div class="col" style="left:{x}px;top:{topo + 120}px;width:{w}px"><div style="font-size:128px;font-weight:300;line-height:1;color:#EDEDED">{esc(it["valor"])}'
                   f'<span style="font-size:44px;color:{OURO};margin-left:10px">{esc(it.get("unidade", ""))}</span></div>'
                   f'<p style="margin-top:22px;font-size:26px">{md(it["legenda"])}</p></div>')
-    if s.get("dor"): corpo += f'<div style="position:absolute;left:80px;top:{topo + 520}px;width:1500px;font-size:30px;font-weight:300;color:{OURO}">{esc(s["dor"])}</div>'
+    if s.get("dor"): corpo += f'<div style="position:absolute;left:80px;top:{topo + 470}px;width:1760px;font-size:32px;font-weight:300;color:{OURO}">{esc(s["dor"])}</div>'
     return pagina(corpo, n, tot, s.get("leg", RODAPE))
 
 
