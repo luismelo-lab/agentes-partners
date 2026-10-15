@@ -58,7 +58,11 @@ h1{{font-weight:300;font-size:76px;line-height:1.04;letter-spacing:-.01em;color:
 """
 
 
+RODAPE_ATIVO = False   # decisão do Luis (15/10/2026): apresentação sem rodapé; o texto da legenda vai para as notas
+
+
 def pagina(corpo, n, tot, leg=RODAPE, rodape=True, leg_left=300):
+    rodape = rodape and RODAPE_ATIVO
     r = (f'<div class="rodape"><img src="{uri(PADRAO / M["logos"]["fundo_escuro"])}"><span class="pg">{n:02d} / {tot:02d}</span></div>'
          f'<div class="leg" style="left:{leg_left}px">{esc(leg)}</div>') if rodape else ""
     return f"<!doctype html><meta charset=utf-8><style>{css()}</style><body>{corpo}{r}</body>"
@@ -371,7 +375,7 @@ def main(pasta, nome=None):
                 pg.set_content(f"<body style='margin:0;background:#000'><img src='{uri(src)}' style='width:1920px;height:1080px;display:block'>")
             else:
                 pg.set_content(TIPOS[s["tipo"]](s, i, tot))
-            pg.wait_for_timeout(250); pg.screenshot(path=str(dest), type="jpeg", quality=93); pngs.append(str(dest)); notas.append(s.get("notas", ""))
+            pg.wait_for_timeout(250); pg.screenshot(path=str(dest), type="jpeg", quality=93); pngs.append(str(dest)); notas.append((s.get("notas", "") + (f"\n\n[Legenda retirada da tela; manter como aviso oral/escrito quando houver envio] {s['leg']}" if s.get("leg") else "")).strip())
         # PDF: uma imagem por página
         corpo = "".join(f"<img src='{uri(x)}' style='width:1920px;height:1080px;display:block;page-break-after:always'>" for x in pngs)
         pg.set_content(f"<style>@page{{size:1920px 1080px;margin:0}}body{{margin:0}}</style>{corpo}")
