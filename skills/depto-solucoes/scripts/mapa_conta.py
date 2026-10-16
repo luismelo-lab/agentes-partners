@@ -84,6 +84,8 @@ def r_aliquota_zero(s):
 def r_previdenciaria(s):
     if not s["teses"]: return None
     if "Teses previdenciárias" not in s["teses"] and s["regime"] in ("Lucro Real", "Lucro Presumido"):
+        if s["setor"] in ("Confecção e têxtil", "Transporte de carga"):
+            return ("alta", "setor intensivo em folha, com reoneração da CPP até 2027 (playbook): CPP sobre verbas indenizatórias e Sistema S não aparecem nos pareceres")
         return ("média", "CPP sobre verbas indenizatórias e Sistema S não aparecem nos pareceres (confirmar folha)")
 
 
