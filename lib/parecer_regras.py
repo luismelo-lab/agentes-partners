@@ -95,15 +95,21 @@ def per_periodo(deal_ids):
     return melhor
 
 
-def movimentacao(deal_id):
-    """Regra da Geovana: faturamento só até 2025 = empresa sem movimentação. Só vale quando o parecer é de 2026 (já poderia
-    trazer 2026); parecer feito em 2025 naturalmente termina em 2025 e fica como "sem dado de 2026"."""
+def movimentacao(deal_id, ultimo_ganho=None):
+    """Regra da Geovana e do Luis (16/10): a análise considera o faturamento. Para quem gerou recorrência, se o parecer da
+    ÚLTIMA VENDA traz a tabela de faturamento só até 2025 (e o período dessa venda contempla os anos da tabela), a empresa
+    fica "Empresa sem movimentação". Parecer de outro negócio que não a última venda: a regra não se aplica."""
+    if ultimo_ganho and str(deal_id) != str(ultimo_ganho):
+        return "parecer não é da última venda: regra não se aplica"
     anos = faturamento(deal_id)
     if not anos: return "tabela de faturamento não encontrada no parecer"
-    d = _data(resumos().get(str(deal_id)))
     if max(anos) >= 2026: return f"com faturamento em {max(anos)}"
-    if d and d.year >= 2026: return "Empresa sem movimentação"
-    return f"faturamento até {max(anos)} (parecer de {d.year if d else 'data não lida'}): sem dado de 2026"
+    ini, fim = None, None
+    m = re.findall(r"(\d{1,2})/(\d{4})", str((resumos().get(str(deal_id)) or {}).get("periodo_apuracao") or ""))
+    if m: fim = int(m[-1][1])
+    if fim and fim < max(anos):  # o período da venda não contempla os anos da tabela
+        return f"faturamento até {max(anos)}, fora do período da última venda (até {fim})"
+    return "Empresa sem movimentação"
 
 
 def receita(cnpj):
@@ -125,8 +131,10 @@ def referencia_receita():
     except Exception: return None
 
 
-def empresa(deal_ids, cnpj):
+def empresa(deal_ids, cnpj, ultimo_ganho=None):
     did, p = ultimo_parecer(deal_ids); rf = receita(cnpj)
+    # movimentação: parecer da última venda (regra de 16/10); sem ele lido, diz isso
+    dmov = str(ultimo_ganho) if ultimo_ganho and str(ultimo_ganho) in resumos() else did
     return {"parecer_negocio": did, "parecer_data": _data(p), "regime_parecer": regime(p, did) or ("parecer não lido" if not p else "não informado no parecer"),
-            "valor_zerado_motivo": zerado(p), "movimentacao": movimentacao(did) if did else "parecer não lido",
+            "valor_zerado_motivo": zerado(p), "movimentacao": movimentacao(dmov, ultimo_ganho) if dmov else "parecer não lido",
             "situacao_receita": rf["situacao"], "abertura": rf["abertura"], "procuracao": "a conferir (acesso ao site ainda não liberado aos agentes)"}

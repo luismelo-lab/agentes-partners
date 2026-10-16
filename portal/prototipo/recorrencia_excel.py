@@ -32,7 +32,7 @@ COLS = [("Empresa", 42, None), ("CNPJ", 20, "mono"), ("Parceiro", 18, None), ("S
 def linha(r):
     c = r.get("conferencias", [])
     aj = sim(c, "Ação judicial"); ta = sim(c, "Tese já aproveitada")
-    G = PRG.empresa(r.get("_deals") or [], r.get("_cnpj"))
+    G = PRG.empresa(r.get("_deals") or [], r.get("_cnpj"), (r.get("_link") or "").rsplit("/", 1)[-1] or None)
     return [r["caso"], fmt_cnpj(r.get("_cnpj")), r["parceiro"], G["situacao_receita"], G["abertura"], G["regime_parecer"], G["movimentacao"], G["valor_zerado_motivo"] or "—",
             r.get("uf") or "", r.get("_cidade") or "", r.get("segmento") or "",
             dt(r.get("ultimo_ganho")), r["recorrencias_feitas"], r.get("periodo_apurado") or "estimado pela data do ganho", "Sim" if r.get("periodo_conferido") else "Não",
@@ -98,7 +98,7 @@ txt = [("Quem entra", "Só clientes dos Masters (fora do roster não entra). Cli
        ("Ação judicial (L12)", "Quando o parecer aponta ação judicial em alguma tese, o Jurídico confere antes de seguir."),
        ("Situação e abertura", f"Base dos Dados Abertos da Receita Federal, referência {PRG.referencia_receita()}. Empresa que não está Ativa aparece em vermelho."),
        ("Regime", "Só o que aparece no último parecer do técnico (regra da Geovana). Sem parecer lido: 'parecer não lido'."),
-       ("Movimentação", "Tabela de faturamento do parecer só até 2025 = Empresa sem movimentação (regra da Geovana)."),
+       ("Movimentação", "Parecer da ÚLTIMA VENDA com a tabela de faturamento só até 2025 (e o período da venda contemplando esses anos) = Empresa sem movimentação. A análise considera o faturamento (Geovana e Luis, 16/10). Parecer de outro negócio: a regra não se aplica."),
        ("Valor zerado", "Quando o último parecer não cita valor, a coluna traz o motivo escrito no arquivo."),
        ("Uso", "Uso interno da Área Partners. Pré-análise: a decisão de recorrência é da Geovana no painel.")]
 ws["A1"] = "Como ler esta planilha"; ws["A1"].font = Font(name=SANS, bold=True, size=14, color=hx(C["texto"]))
