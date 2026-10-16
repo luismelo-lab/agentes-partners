@@ -138,6 +138,7 @@ const parte1 = [
   H2("Ações já ajuizadas pela Brassol (informativo)"), ...ACOES.flatMap(itemPT),
   P("A verba indenizatória da ação de 2009 é a mesma tese da T12, acima.", { run: { color: CINZA, size: 19 } }),
   H2("Passivo federal"), tituloTese("Gestão de Passivo (texto institucional)"), subTese("Parecer: pendências ativas na Receita e na PGFN; possibilidade de redução do passivo, sem valor"), ...PASSIVO.map((l) => P(l, { after: 70, run: { size: 20 } })),
+  ...(fs.existsSync(path.join(__dirname, "dados-hubspot.json")) ? (() => { const H = JSON.parse(fs.readFileSync(path.join(__dirname, "dados-hubspot.json"), "utf8")); return [GAP(60), caixa("Passivo da Brassol nos cards do HubSpot · " + H.consulta, H.linhas)]; })() : []),
   H2("Economia futura e parametrização da contabilidade"), tituloTese("P01 · Planejamento Tributário"), subTese("Parecer: redução das contribuições futuras (0,9% a 1,5%) e parametrização da contabilidade"), ...textoExato(P01),
 ];
 
