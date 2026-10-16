@@ -93,7 +93,7 @@ const ITENS = [
   { cod: "T08", ini: "## T08", titulo: "Crédito de PIS e COFINS em conta gráfica", parecer: "Linha do parecer: Crédito de PIS/Cofins acumulado em conta gráfica (ADM) · R$ 1.103.564,10", f: "F2" },
   { cod: "T02", ini: "## T02", titulo: "Crédito de PIS e COFINS sobre insumos", parecer: "Linha do parecer: PIS/COFINS · Insumos (ADM) · R$ 237.110,65", f: "F3" },
   { cod: "T01", nota: true, titulo: "Aquisições de produtos industrializados (mesma tese T01)", parecer: "Linha do parecer: PIS/COFINS · Aquisições de Produtos Industrializados (ADM) · R$ 29.849,44", f: "F4",
-    aviso: "É a mesma tese T01, aplicada às aquisições de produtos industrializados. A tese T01 vale tanto para produtos apenas comercializados quanto para industrializados, e as mesmas regras se aplicam: texto, fundamento, análise de aptidão, período e perfil são os da T01, na página anterior. O parecer separa a linha só para mostrar o valor de cada grupo." },
+    aviso: "É a mesma tese T01, aplicada às aquisições de produtos industrializados. A tese T01 vale tanto para produtos apenas comercializados quanto para industrializados, e as mesmas regras se aplicam: texto, fundamento, análise de aptidão, período e perfil são os da T01, no início desta parte. O parecer separa a linha só para mostrar o valor de cada grupo." },
   { cod: "T04", ini: "## T04", titulo: "Exclusão do ICMS-ST da base de cálculo do PIS e da COFINS", parecer: "Linha do parecer: PIS/COFINS · Exclusão do ICMS/ST da Base de Cálculo (ADM) · R$ 96.409,47", f: "F5" },
   { cod: "T12", ini: "## T12", titulo: "Revisão da Contribuição Previdenciária Patronal (CPP): verbas indenizatórias", parecer: "Linha do parecer: Previdenciário · Verbas Indenizatórias (PREV) · R$ 312.823,97", f: "F6" },
 ];
