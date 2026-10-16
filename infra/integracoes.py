@@ -75,6 +75,16 @@ def v_hubspot():
               "no HubSpot: Configurações → Integrações → Aplicativos privados → app dos agentes → Escopos → files (leitura)")
 
 
+def v_eazybe():
+    import eazybe
+    if not (eazybe._env("EAZYBE_API_URL") and eazybe._env("EAZYBE_API_KEY")):
+        return linha("WhatsApp (Eazybe direto)", None, "faltam EAZYBE_API_URL e EAZYBE_API_KEY no .env", "pegar no painel da Eazybe (API de mensagens) e colar no ~/agentes-partners/.env")
+    try:
+        d = eazybe.baixar(int((time.time() - 3600) * 1000))
+        linha("WhatsApp (Eazybe direto)", True, f"acesso ok: {len(d)} conversa(s) na última hora")
+    except SystemExit as e: linha("WhatsApp (Eazybe direto)", False, str(e)[:160])
+
+
 def ligar_email():
     import graph
     v_graph()
@@ -113,7 +123,7 @@ def ligar_pareceres():
 if __name__ == "__main__":
     a = sys.argv[1:] or ["verificar"]
     if a[0] == "verificar":
-        v_graph(); v_glpi(); v_hubspot()
+        v_graph(); v_glpi(); v_hubspot(); v_eazybe()
         ok = sum(1 for r in RES if r[1] is True); print(f"\n{ok} de {len(RES)} integrações prontas.")
     elif a[:2] == ["ligar", "email"]: ligar_email()
     elif a[:2] == ["ligar", "glpi"]: ligar_glpi()
