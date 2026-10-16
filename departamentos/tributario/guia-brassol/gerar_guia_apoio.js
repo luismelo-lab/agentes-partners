@@ -92,8 +92,8 @@ const ITENS = [
   { cod: "T01", ini: "## T01", titulo: "Crédito de PIS e COFINS nas aquisições", parecer: "Linha do parecer: PIS/COFINS · Aquisições (ADM) · R$ 5.692.410,47", f: "F1" },
   { cod: "T08", ini: "## T08", titulo: "Crédito de PIS e COFINS em conta gráfica", parecer: "Linha do parecer: Crédito de PIS/Cofins acumulado em conta gráfica (ADM) · R$ 1.103.564,10", f: "F2" },
   { cod: "T02", ini: "## T02", titulo: "Crédito de PIS e COFINS sobre insumos", parecer: "Linha do parecer: PIS/COFINS · Insumos (ADM) · R$ 237.110,65", f: "F3" },
-  { cod: "—", nota: true, titulo: "Aquisições de produtos industrializados", parecer: "Linha do parecer: PIS/COFINS · Aquisições de Produtos Industrializados (ADM) · R$ 29.849,44", f: "F4",
-    aviso: "Não há resumo específico desta linha entre os textos enviados. O mais próximo é a T01 (aquisições), acima. Antes da reunião, pedir ao time técnico o critério da linha; até lá, tratar junto com Aquisições, para não contar duas vezes." },
+  { cod: "T01", nota: true, titulo: "Aquisições de produtos industrializados (mesma tese T01)", parecer: "Linha do parecer: PIS/COFINS · Aquisições de Produtos Industrializados (ADM) · R$ 29.849,44", f: "F4",
+    aviso: "É a mesma tese T01, aplicada às aquisições de produtos industrializados. A tese T01 vale tanto para produtos apenas comercializados quanto para industrializados, e as mesmas regras se aplicam: texto, fundamento, análise de aptidão, período e perfil são os da T01, na página anterior. O parecer separa a linha só para mostrar o valor de cada grupo." },
   { cod: "T04", ini: "## T04", titulo: "Exclusão do ICMS-ST da base de cálculo do PIS e da COFINS", parecer: "Linha do parecer: PIS/COFINS · Exclusão do ICMS/ST da Base de Cálculo (ADM) · R$ 96.409,47", f: "F5" },
   { cod: "T12", ini: "## T12", titulo: "Revisão da Contribuição Previdenciária Patronal (CPP): verbas indenizatórias", parecer: "Linha do parecer: Previdenciário · Verbas Indenizatórias (PREV) · R$ 312.823,97", f: "F6" },
 ];
@@ -101,7 +101,7 @@ const ACOES = [
   { cod: "T05", ini: "## T05", titulo: "Exclusão do PIS e da COFINS de suas próprias bases", parecer: "Ações já ajuizadas pela Brassol (2009, trânsito em julgado em 10/03/2022, e 2024, aguardando decisão). Informativo, fora da proposta.", f: "F7" },
   { cod: "T03", ini: "## T03", titulo: "Exclusão do ICMS da base de cálculo do PIS e da COFINS", parecer: "Ação já ajuizada pela Brassol (2007, trânsito em julgado em 19/07/2023). Informativo, fora da proposta.", f: "F7" },
 ];
-const itemPT = (it) => [tituloTese(`${it.cod !== "—" ? it.cod + " · " : ""}${it.titulo}`), subTese(it.parecer), ...(it.aviso ? [caixa("Atenção", it.aviso)] : textoExato(bloco(CAT, it.ini)))];
+const itemPT = (it) => [tituloTese(`${it.cod !== "—" ? it.cod + " · " : ""}${it.titulo}`), subTese(it.parecer), ...(it.aviso ? [caixa("Mesma regra da T01", it.aviso)] : textoExato(bloco(CAT, it.ini)))];
 
 const VISAO = bloco(CAT, "## Visão geral: recuperação tributária");
 const P01 = bloco(CAT, "## P01");
@@ -125,7 +125,7 @@ const usar = [
   H1("Como usar", "s_usar", false),
   P("**Parte 1** traz, sem alteração, o texto do time técnico de cada tese e produto que aparece no parecer da Brassol. É para estudar antes da reunião e para consultar quando o cliente perguntar. **Parte 2** traz as objeções mais prováveis e como responder, com base nesses mesmos textos."),
   tabela(["Linha do parecer", "Valor estimado", "Texto na Parte 1", "Objeções (Parte 2)"],
-    [["PIS/COFINS · Aquisições", "R$ 5.692.410,47", "T01", "página da Parte 2"], ["PIS/COFINS · Crédito acumulado em conta gráfica", "R$ 1.103.564,10", "T08", ""], ["PIS/COFINS · Insumos", "R$ 237.110,65", "T02", ""], ["PIS/COFINS · Aquisições de produtos industrializados", "R$ 29.849,44", "sem texto específico (ver aviso)", ""], ["PIS/COFINS · Exclusão do ICMS/ST da base", "R$ 96.409,47", "T04", ""], ["Previdenciário · Verbas indenizatórias", "R$ 312.823,97", "T12", ""], ["Ações já ajuizadas (informativo)", "sem valor", "T05, T03 e T12", ""], ["Passivo federal e economia futura", "sem valor no parecer", "Gestão de Passivo e P01", ""]].map((r, i) => [r[0], r[1], r[2], ["Aquisições", "Conta gráfica", "Insumos", "Prod. industrializados", "ICMS/ST", "Previdenciário", "Ações ajuizadas", "Passivo e serviço"][i]]), [0.38, 0.17, 0.25, 0.2]),
+    [["PIS/COFINS · Aquisições", "R$ 5.692.410,47", "T01", "página da Parte 2"], ["PIS/COFINS · Crédito acumulado em conta gráfica", "R$ 1.103.564,10", "T08", ""], ["PIS/COFINS · Insumos", "R$ 237.110,65", "T02", ""], ["PIS/COFINS · Aquisições de produtos industrializados", "R$ 29.849,44", "T01 (mesma tese)", ""], ["PIS/COFINS · Exclusão do ICMS/ST da base", "R$ 96.409,47", "T04", ""], ["Previdenciário · Verbas indenizatórias", "R$ 312.823,97", "T12", ""], ["Ações já ajuizadas (informativo)", "sem valor", "T05, T03 e T12", ""], ["Passivo federal e economia futura", "sem valor no parecer", "Gestão de Passivo e P01", ""]].map((r, i) => [r[0], r[1], r[2], ["Aquisições", "Conta gráfica", "Insumos", "Prod. industrializados", "ICMS/ST", "Previdenciário", "Ações ajuizadas", "Passivo e serviço"][i]]), [0.38, 0.17, 0.25, 0.2]),
   GAP(),
   caixa("Três cuidados em qualquer resposta", ["Os valores são **estimativas de análise parcial** (10/2021 a 08/2026), sujeitas a ajuste na execução. Não são promessa.", "Não prometer resultado nem prazo de recebimento. Preço e percentual de êxito só em campo interno (item 8 de cada texto).", "O que for jurídico (ações, autos, prazos) é com advogado habilitado. Crédito e funding são com instituição autorizada."]),
 ];
@@ -146,7 +146,10 @@ const QTD = { F1: 3, F2: 3, F3: 3, F4: 2, F5: 3, F6: 3, F7: 3, F8: 3, F9: 3 };
 const parte2 = [
   H1("Parte 2 · Objeções e como responder", "s_p2"),
   P("Respostas curtas, apoiadas nos textos da Parte 1. Admitir o limite quando ele existe, não prometer valor e terminar com uma pergunta ou próximo passo.", { run: { color: CINZA } }),
-  ...C.fichas.flatMap((f) => [
+  ...C.fichas.map((f) => f.id !== "F4" ? f : { ...f, objecoes: [
+    { o: "Por que essa linha é separada de Aquisições?", r: "É a mesma tese, aplicada às compras de produtos industrializados. O parecer mostra o valor de cada grupo em separado, e as regras são as mesmas. Só seguimos se a análise das notas confirmar." },
+    { o: "O valor é pequeno, vale a pena?", r: "É estimativa preliminar, e o valor final só sai depois de conferir as notas. A análise é a mesma das Aquisições, então não acrescenta trabalho. Posso pedir o relatório de entradas?" },
+    { o: "Sorvete é industrializado, então não dá crédito?", r: "A tese olha as compras para revenda sem PIS/COFINS, sejam comercializadas ou industrializadas. Sorvete é tributado e já gera crédito comum, então não é o foco. O time confere quais produtos entram na linha." }] }).flatMap((f) => [
     H2(`${f.nome}`),
     tabela(["O cliente diz", "Como responder"], f.objecoes.slice(0, QTD[f.id] || 3).map((x) => [`“${x.o}”`, x.r]), [0.3, 0.7]),
   ]),
