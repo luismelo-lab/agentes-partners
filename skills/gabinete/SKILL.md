@@ -26,7 +26,7 @@ Extraia do pedido: **tema**, **tipo de entrega** (construir algo novo · validar
 ## Passo 3 — Escolher as áreas
 Use `references/matriz-roteamento.md` (tema → áreas obrigatórias, opcionais e quando escalar a humanos). Para cada área escolhida, diga **por que ela entra** e **o que vai entregar**. Área que não tem motivo claro fica fora.
 
-Departamentos disponíveis (skills): `depto-pessoas`, `depto-tributario`, `depto-juridico`, `depto-marketing`, `depto-resultados`, `depto-dados`, `depto-intel-comercial`, `depto-ti`, `depto-partner-success`, `depto-operacoes-canal`, `depto-contratos`, `depto-pos-venda`, `depto-qualidade`, `conselho-partners`. Células: `celula-daniela` (Central Masters), `celula-jenifer` (Central BDR), `recuperador` e `revisor-diagnostico` (Central Técnica da Geovana). Todas as áreas estão construídas em v1; Customer Success do cliente final segue como futuro.
+Departamentos disponíveis (skills): `depto-pessoas`, `depto-tributario`, `depto-juridico`, `depto-marketing`, `depto-resultados`, `depto-dados`, `depto-intel-comercial`, `depto-ti`, `depto-partner-success`, `depto-operacoes-canal`, `depto-contratos`, `depto-pos-venda`, `depto-qualidade`, `depto-internacional` (crédito internacional, maquila e ecossistema financeiro), `conselho-partners`. Células: `celula-daniela` (Central Masters), `celula-jenifer` (Central BDR), `recuperador` e `revisor-diagnostico` (Central Técnica da Geovana). Todas as áreas estão construídas em v1; Customer Success do cliente final segue como futuro.
 
 ## Passo 4 — Ficha de Rota (Portão 0)
 Antes de acionar qualquer área, mostre ao Luis:

@@ -56,3 +56,12 @@ Legenda: **O** = obrigatória · o = opcional (entra se a condição valer) · �
 | Demanda de Master, caixa do WhatsApp, briefing de conta | `celula-daniela` | conforme a demanda |
 | Prospecção, listas, follow-up, novos indicadores | `celula-jenifer` | `depto-intel-comercial` |
 | Revisão de diagnóstico (teses não levantadas) | `revisor-diagnostico` | `depto-tributario` |
+
+## Atualização 16/10: Produtos Internacionais e Financeiros
+| Necessidade | Nível típico | Áreas | Escalar a humano |
+|---|---|---|---|
+| Cliente serve para crédito internacional, funding ou maquila? | 2 | **O** Produtos Internacionais · o Tributário (recuperação que encaixa) · o Operações de Canal (conflito) | 👤 Luis antes de levar ao João |
+| Dúvida de produto (garantia, prazo, moeda, IOF, papel da Save) | 1 | **O** Produtos Internacionais · o Jurídico/Tributário (se exigir parecer) | 👤 João quando estiver "a confirmar" |
+| Caixa apertado, dívida cara, carteira a receber (Gestão de Contas, antecipação, FIDC, home equity) | 2 | **O** Produtos Internacionais (Analista do Ecossistema) · o Resultados | — |
+| Material ou comunicação de produto novo | 2 | **O** Produtos Internacionais (Guardião do portão) · **O** Marketing · **O** Qualidade · o Jurídico | 👤 só depois do G2 |
+| Remuneração do parceiro em produto novo | 3 | **O** Operações de Canal · **O** Produtos Internacionais · **O** Jurídico | 👤 Luis decide |

@@ -371,7 +371,7 @@ def cmd_modelos(a):
               "Mande um e-mail para **luis.melo@savecompany.com.br** com **[AGENTES]** no assunto, usando o modelo de pedido: abra o arquivo *Modelo de pedido aos agentes* desta pasta (dois cliques abre no Outlook), clique em **Responder**, preencha os campos e envie. Também dá para escrever um e-mail novo com [AGENTES] no assunto e os mesmos campos.",
               "Os agentes leem a caixa a cada 15 minutos em dias úteis, das 8h às 18h, e respondem em até 1 hora. Na resposta, escreva na primeira linha: **Aprovado**, **Não aprovado** (com o motivo) ou **Nova análise** (com o que mudar).", "",
               "## Catálogo de pedidos"]
-    for cel in ["Central Masters", "Central BDR", "Central Técnica", "Gabinete"]:
+    for cel in ["Central Masters", "Central BDR", "Central Técnica", "Produtos Internacionais", "Gabinete"]:
         linhas += ["", f"### {cel}"] + [f"- **{k} · {v['rotulo']}:** {v['entrega']}. Informe: {', '.join(v['precisa'])}." for k, v in CAT.items() if v["celula"] == cel]
     linhas += ["", "## Dicas para uma boa resposta", "- Diga para que vai usar: muda o formato e o nível de detalhe.",
                "- Um pedido por e-mail. Para dois assuntos, mande dois e-mails.", "- Anexe o que já tem (parecer, conversa, planilha): o agente usa.",

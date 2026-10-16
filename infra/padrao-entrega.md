@@ -22,6 +22,7 @@ Formato nos arquivos: `fazer`, `precisa`, `falta` e `rascunho` (alertas do plano
 | Comunicado, despacho, intimação, prazo | `depto-juridico` (Controle de Prazos, com dupla checagem) |
 | Originação | `depto-intel-comercial` + `depto-operacoes-canal` (conflito) + `depto-tributario` (pré-análise) |
 | Recorrência, perdidos e zerados | `recuperador` + `depto-tributario` |
+| Pergunta ou oportunidade de produto internacional ou financeiro (crédito internacional, fundo, funding, fidc, antecipação, gestão de contas, home equity, maquila, paraguai, internacionalização) | `depto-internacional` (+ `depto-juridico`/`depto-tributario` quando exigir parecer) |
 | Rascunho para parceiro ou cliente | passa por `depto-qualidade` (auditoria) antes de sair |
 
 ## O que não se faz mais

@@ -26,8 +26,9 @@ Cada área tem um **Gerente** (agente que recebe, planeja e distribui) e **espec
   NÚCLEO TÉCNICO (core)   │  CRESCIMENTO DE CANAL          │  OPERAÇÃO E BASE
   • Tributário & Contábil │  • Partner Success & Enablement │  • Operações de Canal
   • Jurídico              │  • Inteligência Comercial       │    & Comissionamento
-                          │  • Marketing de Canal           │  • Contratos
-                          │                                 │  • Pós-venda
+  PRODUTOS NOVOS          │  • Marketing de Canal           │  • Contratos
+  • Produtos Internacionais│                                 │  • Pós-venda
+    e Financeiros         │                                 │
                           │                                 │  • Dados & BI
                           │                                 │  • TI, Automação & Gov. IA
                           │                                 │  • Qualidade & Ouvidoria
@@ -72,6 +73,9 @@ Gerente Jurídico · **Controle de Prazos** ★ · Contencioso Administrativo Tr
 ---
 
 ## CRESCIMENTO DE CANAL
+
+### Produtos Internacionais e Financeiros — ✅ construído 16/10 (skill `depto-internacional`) · ★ área nova
+*Base:* reunião com o João Mattos (30/09), reunião de estruturação comercial do fundo/crédito internacional para café e agro (02/10), documento interno v2.3 (07/10), Maquila v0.9 (09/10) e ecossistema financeiro (13/10). *Equipe:* Gerente de Produtos Internacionais · Qualificador de Crédito Internacional · Estruturador de Garantias & Projeto · Especialista Café & Agro · Especialista Maquila & Internacionalização · Analista do Ecossistema Financeiro · Regulatório & Câmbio · Guardião do Produto Novo · Revisor de Linguagem & Promessas. *Trava:* nada de taxa, prazo ou fee com parceiro ou cliente antes do G2; a Save é estruturadora, nunca credora; o dono do produto (João) decide. Pedidos PI1–PI5 na Central.
 
 ### Partner Success & Enablement — ✅ construído 29/09 (skill `depto-partner-success`) · ★ área nova (maior valor segundo a pesquisa)
 *Por quê:* é o modelo de receita da Save. Parceiro capacitado indica mais e melhor.

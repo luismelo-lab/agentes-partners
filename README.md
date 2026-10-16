@@ -25,6 +25,7 @@ Estrutura de agentes da Área Partners da Save Company (gestor: Luis Fernando de
 | `depto-dados` · `depto-intel-comercial` | Qualidade do CRM, saúde dos parceiros, ICP, base da Receita |
 | `depto-partner-success` · `depto-operacoes-canal` | Onboarding, Academia, níveis · repasses e conflito de canal |
 | `depto-contratos` · `depto-pos-venda` · `depto-qualidade` | Contratos, pós-venda, NPS, reclamações e auditoria de promessas |
+| `depto-internacional` | Produtos internacionais e financeiros: crédito internacional, maquila (Paraguai), gestão de contas, FIDC |
 | `depto-ti` | GLPI pronto para agente, inventário de agentes, segurança e LGPD técnica |
 | `depto-pessoas` · `arquiteto-agentes` | Pessoas e o mentor do projeto |
 

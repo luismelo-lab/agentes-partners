@@ -193,6 +193,56 @@
    "precisa": [
     "o critério do levantamento"
    ]
+  },
+  "PI1": {
+   "rotulo": "Qualificar para crédito internacional (funding)",
+   "celula": "Produtos Internacionais",
+   "skill": "depto-internacional",
+   "entrega": "Faixa seguir, preparar ou não seguir, com os eliminatórios, o próximo passo e os documentos a pedir; sem taxa, prazo ou fee",
+   "precisa": [
+    "CNPJ ou link do negócio",
+    "necessidade (valor e finalidade), se souber",
+    "garantias disponíveis, se souber"
+   ]
+  },
+  "PI2": {
+   "rotulo": "Descoberta para Maquila (Paraguai)",
+   "celula": "Produtos Internacionais",
+   "skill": "depto-internacional",
+   "entrega": "Perfil para o MQ (corte e anti-perfil), roteiro de descoberta e o que não dizer; sem preço nem número",
+   "precisa": [
+    "CNPJ ou link do negócio",
+    "o que a empresa produz e para onde vende, se souber"
+   ]
+  },
+  "PI3": {
+   "rotulo": "Dúvida sobre produto internacional ou financeiro",
+   "celula": "Produtos Internacionais",
+   "skill": "depto-internacional",
+   "entrega": "Resposta com fonte e data, a frase segura para o parceiro e, se estiver a confirmar, a pergunta registrada ao dono do produto",
+   "precisa": [
+    "a dúvida e o contexto (quem perguntou)"
+   ]
+  },
+  "PI4": {
+   "rotulo": "Encaixe no ecossistema financeiro (caixa, dívida, carteira)",
+   "celula": "Produtos Internacionais",
+   "skill": "depto-internacional",
+   "entrega": "Sinais financeiros lidos, produto que entra primeiro (Gestão de Contas, antecipação, alongamento, FIDC, funding ou home equity) e o que pedir",
+   "precisa": [
+    "CNPJ ou link do negócio",
+    "DRE, balanço ou SCR, se tiver"
+   ]
+  },
+  "PI5": {
+   "rotulo": "Preparar reunião de produto (cliente ou João Mattos)",
+   "celula": "Produtos Internacionais",
+   "skill": "depto-internacional",
+   "entrega": "Pauta, perguntas priorizadas, o que não dizer, documentos e ata para preencher",
+   "precisa": [
+    "com quem é a reunião e o objetivo",
+    "data"
+   ]
   }
  }
 }
