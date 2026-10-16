@@ -68,8 +68,8 @@ function caixa(rotulo, texto, fill = SUAVE, faixa = OURO_FAIXA) {
 
 
 // ---------- fontes literais (texto exato enviado pelo Luis)
-const CAT = fs.readFileSync(path.join(__dirname, "../catalogo-teses-save-completo.md"), "utf8");
-const FONTES = fs.readFileSync(path.join(__dirname, "../../produtos/fontes-produtos-guia-parceiro.md"), "utf8");
+const CAT = fs.readFileSync(path.join(__dirname, "textos-apoio.md"), "utf8");
+
 function bloco(md, inicio) {
   const i = md.indexOf(inicio); if (i < 0) throw new Error("não achei: " + inicio);
   const resto = md.slice(i);
@@ -105,7 +105,7 @@ const itemPT = (it) => [tituloTese(`${it.cod !== "—" ? it.cod + " · " : ""}${
 
 const VISAO = bloco(CAT, "## Visão geral: recuperação tributária");
 const P01 = bloco(CAT, "## P01");
-const PASSIVO = bloco(FONTES, "## Gestão de Passivo (institucional)");
+const PASSIVO = bloco(CAT, "## Gestão de Passivo (institucional)");
 
 // ---------- documento
 const M = C.meta;
@@ -142,19 +142,17 @@ const parte1 = [
 ];
 
 // parte 2: 3 objeções por ficha, as mais prováveis
+const OBJ = JSON.parse(fs.readFileSync(path.join(__dirname, "objecoes-apoio.json"), "utf8"));
 const QTD = { F1: 3, F2: 3, F3: 3, F4: 2, F5: 3, F6: 3, F7: 3, F8: 3, F9: 3 };
 const parte2 = [
   H1("Parte 2 · Objeções e como responder", "s_p2"),
   P("Respostas curtas, apoiadas nos textos da Parte 1. Admitir o limite quando ele existe, não prometer valor e terminar com uma pergunta ou próximo passo.", { run: { color: CINZA } }),
-  ...C.fichas.map((f) => f.id !== "F4" ? f : { ...f, objecoes: [
-    { o: "Por que essa linha é separada de Aquisições?", r: "É a mesma tese, aplicada às compras de produtos industrializados. O parecer mostra o valor de cada grupo em separado, e as regras são as mesmas. Só seguimos se a análise das notas confirmar." },
-    { o: "O valor é pequeno, vale a pena?", r: "É estimativa preliminar, e o valor final só sai depois de conferir as notas. A análise é a mesma das Aquisições, então não acrescenta trabalho. Posso pedir o relatório de entradas?" },
-    { o: "Sorvete é industrializado, então não dá crédito?", r: "A tese olha as compras para revenda sem PIS/COFINS, sejam comercializadas ou industrializadas. Sorvete é tributado e já gera crédito comum, então não é o foco. O time confere quais produtos entram na linha." }] }).flatMap((f) => [
+  ...OBJ.fichas.flatMap((f) => [
     H2(`${f.nome}`),
-    tabela(["O cliente diz", "Como responder"], f.objecoes.slice(0, QTD[f.id] || 3).map((x) => [`“${x.o}”`, x.r]), [0.3, 0.7]),
+    tabela(["O cliente diz", "Como responder"], f.objecoes.map((x) => [`“${x.o}”`, x.r]), [0.3, 0.7]),
   ]),
   GAP(160),
-  caixa("Se perguntarem algo que não consta do parecer", C.roteiro && C.roteiro.se_perguntarem_do_que_nao_consta ? C.roteiro.se_perguntarem_do_que_nao_consta : "Anotar a pergunta e responder depois com o time técnico."),
+  caixa("Se perguntarem algo que não consta do parecer", OBJ.se_perguntarem_do_que_nao_consta),
 ];
 
 const doc = new Document({
