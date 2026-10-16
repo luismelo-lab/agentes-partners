@@ -1,0 +1,6 @@
+{
+ "_nota": "Formulário Novas Oportunidades (HubSpot). parceiros: nome do Master no painel → ID do Parceiro no HubSpot (tirado da exportação de prospecções de 14/10; A CONFIRMAR com o Luis se é este o ID que o formulário espera). gestor_padrao: nome exatamente como aparece na lista do formulário. opcoes: valores aceitos nas listas; preencher quando o escopo de leitura das propriedades de contato for liberado.",
+ "parceiros": {"G.S.H": "41928236619", "GERSON": "37454095113", "AGILE": "40879209863", "JGM": "24859141284", "COSTA e GAUDENCIO": "26033946674"},
+ "gestor_padrao": null,
+ "opcoes": {}
+}
