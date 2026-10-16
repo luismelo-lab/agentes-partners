@@ -89,17 +89,17 @@ const subTese = (t) => new Paragraph({ spacing: { before: 0, after: 80 }, keepNe
 
 // itens da parte 1, na ordem do parecer
 const ITENS = [
-  { cod: "T01", ini: "## T01", titulo: "Crédito de PIS e COFINS nas aquisições", parecer: "Linha do parecer: PIS/COFINS · Aquisições (ADM) · R$ 5.692.410,47", f: "F1" },
-  { cod: "T08", ini: "## T08", titulo: "Crédito de PIS e COFINS em conta gráfica", parecer: "Linha do parecer: Crédito de PIS/Cofins acumulado em conta gráfica (ADM) · R$ 1.103.564,10", f: "F2" },
-  { cod: "T02", ini: "## T02", titulo: "Crédito de PIS e COFINS sobre insumos", parecer: "Linha do parecer: PIS/COFINS · Insumos (ADM) · R$ 237.110,65", f: "F3" },
+  { cod: "T01", ini: "## T01", titulo: "Crédito de PIS/COFINS nas aquisições", parecer: "Linha do parecer: PIS/COFINS · Aquisições (ADM) · R$ 5.692.410,47", f: "F1" },
+  { cod: "T08", ini: "## T08", titulo: "Crédito de PIS/COFINS em conta gráfica", parecer: "Linha do parecer: Crédito de PIS/Cofins acumulado em conta gráfica (ADM) · R$ 1.103.564,10", f: "F2" },
+  { cod: "T02", ini: "## T02", titulo: "Crédito de PIS/COFINS sobre insumos", parecer: "Linha do parecer: PIS/COFINS · Insumos (ADM) · R$ 237.110,65", f: "F3" },
   { cod: "T01", nota: true, titulo: "Aquisições de produtos industrializados (mesma tese T01)", parecer: "Linha do parecer: PIS/COFINS · Aquisições de Produtos Industrializados (ADM) · R$ 29.849,44", f: "F4",
     aviso: "É a mesma tese T01, aplicada às aquisições de produtos industrializados. A tese T01 vale tanto para produtos apenas comercializados quanto para industrializados, e as mesmas regras se aplicam: texto, fundamento, análise de aptidão, período e perfil são os da T01, no início desta parte. O parecer separa a linha só para mostrar o valor de cada grupo." },
-  { cod: "T04", ini: "## T04", titulo: "Exclusão do ICMS-ST da base de cálculo do PIS e da COFINS", parecer: "Linha do parecer: PIS/COFINS · Exclusão do ICMS/ST da Base de Cálculo (ADM) · R$ 96.409,47", f: "F5" },
+  { cod: "T04", ini: "## T04", titulo: "Exclusão do ICMS-ST da base de cálculo do PIS/COFINS", parecer: "Linha do parecer: PIS/COFINS · Exclusão do ICMS/ST da Base de Cálculo (ADM) · R$ 96.409,47", f: "F5" },
   { cod: "T12", ini: "## T12", titulo: "Revisão da Contribuição Previdenciária Patronal (CPP): verbas indenizatórias", parecer: "Linha do parecer: Previdenciário · Verbas Indenizatórias (PREV) · R$ 312.823,97", f: "F6" },
 ];
 const ACOES = [
-  { cod: "T05", ini: "## T05", titulo: "Exclusão do PIS e da COFINS de suas próprias bases", parecer: "Ações já ajuizadas pela Brassol (2009, trânsito em julgado em 10/03/2022, e 2024, aguardando decisão). Informativo, fora da proposta.", f: "F7" },
-  { cod: "T03", ini: "## T03", titulo: "Exclusão do ICMS da base de cálculo do PIS e da COFINS", parecer: "Ação já ajuizada pela Brassol (2007, trânsito em julgado em 19/07/2023). Informativo, fora da proposta.", f: "F7" },
+  { cod: "T05", ini: "## T05", titulo: "Exclusão do PIS/COFINS de suas próprias bases", parecer: "Ações já ajuizadas pela Brassol (2009, trânsito em julgado em 10/03/2022, e 2024, aguardando decisão). Informativo, fora da proposta.", f: "F7" },
+  { cod: "T03", ini: "## T03", titulo: "Exclusão do ICMS da base de cálculo do PIS/COFINS", parecer: "Ação já ajuizada pela Brassol (2007, trânsito em julgado em 19/07/2023). Informativo, fora da proposta.", f: "F7" },
 ];
 const itemPT = (it) => [tituloTese(`${it.cod !== "—" ? it.cod + " · " : ""}${it.titulo}`), subTese(it.parecer), ...(it.aviso ? [caixa("Mesma regra da T01", it.aviso)] : textoExato(bloco(CAT, it.ini)))];
 
