@@ -429,7 +429,7 @@ for r8, ns in grupos.items():
     if PRG.movimentacao(str(ult["id"]), str(ult["id"])) == "Empresa sem movimentação":
         sinais.insert(0, "Sem movimentação: faturamento só até 2025 no parecer da última venda (Geovana analisa)")
     recorr.append({"caso": cod(ult["id"]), "parceiro": ult.get("parceiro") or "—", "regime": x.get("regime"), "uf": x.get("uf"), "segmento": (ult.get("segmento") or "")[:40],
-                   "ultimo_ganho": ult["fechado"][:10], "meses_novos": mn, "recorrencias_feitas": max(len({n["fechado"][:7] for n in gs}) - 1, 0),
+                   "ultimo_ganho": ult["fechado"][:10], "meses_novos": mn, "meses_disponiveis": min(mn, 60), "recorrencias_feitas": max(len({n["fechado"][:7] for n in gs}) - 1, 0),
                    "ganhos_datas": sorted({n["fechado"][:10] for n in gs}), "elegivel": mn >= 6, "faltam": max(0, 6 - mn), "teses": teses[:4], "n_ganhos": len(gs),
                    "credito_anterior": round(cred), "potencial_credito": round(pot_cred), "potencial_honorario": round(pot_cred * hs / 100), "potencial_repasse": round(pot_cred * hs / 100 * hp / 100),
                    "_cnpj": x.get("cnpj"), "_link": f"https://app.hubspot.com/contacts/47865021/deal/{ult['id']}", "_parecer_data": (pr or {}).get("data_analise"),

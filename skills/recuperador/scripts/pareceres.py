@@ -24,6 +24,7 @@ BASE = H("~/agentes-partners/celulas/geovana/pareceres")
 ARQ = os.path.join(BASE, "arquivos"); TXT = os.path.join(BASE, "textos"); RES = os.path.join(BASE, "resumos.json")
 FILA = H("~/agentes-partners/celulas/geovana/recuperador")
 CAMPOS = {"parecer_rt": "Parecer Complementar RT", "anexo_diagnostico": "Anexo do Diagnóstico", "parecer_juridico": "Parecer Complementar Jurídico"}
+CAMPOS_NOTA = {"anexo_nota": "Anexo de nota do negócio"}
 
 MOTIVOS = [  # (categoria, padrões) — a primeira que casar vira o motivo principal
     ("Sem oportunidade identificada", r"n[ãa]o (foram|foi) (encontrad|identificad)|sem oportunidade|n[ãa]o h[áa] (cr[ée]dito|oportunidade)|inexist[êe]ncia de cr[ée]dito|resultado (nulo|zerado)"),
@@ -72,9 +73,22 @@ def emf_texto(b):
     return "\n".join(out)
 
 
+def compactado(caminho):
+    """RAR ou ZIP sem Office dentro (relatórios PER/DCOMP): extrai com bsdtar e junta o texto dos arquivos."""
+    import tempfile
+    d = tempfile.mkdtemp(); subprocess.run(["bsdtar", "-xf", caminho, "-C", d], capture_output=True, timeout=120)
+    partes = []
+    for raiz, _, fs in os.walk(d):
+        for f in fs:
+            try: partes.append(texto(os.path.join(raiz, f)))
+            except Exception: pass
+    subprocess.run(["rm", "-rf", d]); return "\n".join(p for p in partes if p)
+
+
 def texto(caminho):
     """Word, PDF (com OCR se for digitalizado), Excel, imagem ou texto puro. Formato pelo conteúdo, não pela extensão."""
     b = open(caminho, "rb").read(8)
+    if b.startswith(b"Rar!"): return compactado(caminho)
     if b.startswith(b"PK"):
         with zipfile.ZipFile(caminho) as z:
             nomes = z.namelist()
@@ -87,6 +101,7 @@ def texto(caminho):
                 emf = [emf_texto(z.read(n)) for n in nomes if n.startswith("word/media/") and n.lower().endswith(".emf")]
                 emf = [x for x in emf if x.strip()]
                 return t + ("\n\n[TABELAS DO PARECER]\n" + "\n\n".join(emf) if emf else "")
+        if not any(n.startswith(("xl/", "word/", "ppt/")) for n in nomes): return compactado(caminho)  # .zip comum
         if any(n.startswith("xl/") for n in nomes):
             from openpyxl import load_workbook
             wb = load_workbook(caminho, read_only=True, data_only=True)
@@ -171,14 +186,27 @@ def baixar_bitrix(u, dest):
     return r.returncode == 0 and os.path.exists(dest) and os.path.getsize(dest) > 0
 
 
-_SEM_ESCOPO = []
-def baixar_hubspot(fid, dest):
+_SEM_ESCOPO = []; _SEM_OCULTO = []
+def anexos_notas(did):
+    """Arquivos anexados às notas do negócio (pareceres, planilha analítica, relatório PER/DCOMP). IDs de arquivo do HubSpot."""
+    sys.path.insert(0, H("~/.claude/skills/depto-resultados/scripts")); import hubspot_fonte as HF
+    try: ns = [x["toObjectId"] for x in HF.call("GET", f"/crm/v4/objects/deals/{did}/associations/notes", tries=2).get("results", [])]
+    except SystemExit: return []
+    out = []
+    for nid in ns[:20]:
+        try: p = HF.call("GET", f"/crm/v3/objects/notes/{nid}?properties=hs_attachment_ids", tries=2).get("properties", {})
+        except SystemExit: continue
+        out += [f for f in (p.get("hs_attachment_ids") or "").split(";") if f.strip().isdigit()]
+    return out
+
+
+def baixar_hubspot(fid, dest, oculto=False):
     """Arquivo do próprio HubSpot: pede a URL assinada (escopo 'files') e baixa. None = sem permissão (403); False = falhou."""
-    if _SEM_ESCOPO: return None
+    if _SEM_ESCOPO or (oculto and _SEM_OCULTO): return None
     sys.path.insert(0, H("~/.claude/skills/depto-resultados/scripts")); import hubspot_fonte as HF
     try: r = HF.call("GET", f"/files/v3/files/{fid}/signed-url", tries=3)
     except SystemExit as e:
-        if "403" in str(e): _SEM_ESCOPO.append(1); return None
+        if "403" in str(e): (_SEM_OCULTO if oculto else _SEM_ESCOPO).append(1); return None  # anexo de nota: escopo files.ui_hidden.read
         return False
     u = (r or {}).get("url") if isinstance(r, dict) else None
     if not u: return False
@@ -190,6 +218,7 @@ def main():
     ap = argparse.ArgumentParser(); g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--fila", action="store_true"); g.add_argument("--ganhos", action="store_true")
     g.add_argument("--todos", action="store_true", help="toda a base com parecer (look-alike e Revisor de Diagnóstico)")
+    ap.add_argument("--notas", action="store_true", help="sem arquivo nos campos de parecer: busca os anexos das notas do negócio")
     ap.add_argument("--refazer", help="arquivo com IDs de negócios para ler de novo")
     ap.add_argument("--pendentes", action="store_true", help="só os pareceres que estavam no HubSpot aguardando o escopo 'files'")
     ap.add_argument("--refazer-ilegiveis", action="store_true", help="tenta de novo os marcados como ilegíveis (Excel, imagem, PDF digitalizado)")
@@ -223,6 +252,7 @@ def main():
         d = N.get(did)
         if not d: continue
         itens = [(k, u.strip()) for k in CAMPOS for u in (d["extras"].get(k) or "").split(";") if u.strip()]
+        if not itens and a.notas: itens = [("anexo_nota", f) for f in anexos_notas(did)]  # parecer anexado em nota (Luis, 16/10)
         if not itens: cont["sem_parecer"] += 1; continue
         textos, pend = [], []
         for i, (k, u) in enumerate(itens):
@@ -230,7 +260,11 @@ def main():
             if os.path.exists(txtp + ".ilegivel"): cont["ilegivel"] += 1; continue  # marcador vazio = ainda sem leitor para o formato
             if os.path.exists(txtp):
                 cont["ja_tinha"] += 1; textos.append((k, open(txtp).read())); continue
-            if u.isdigit():  # arquivo no HubSpot: precisa do escopo 'files' (sem ele, fica pendente e o Luis libera na Private App)
+            if k == "anexo_nota":
+                ok = baixar_hubspot(u, dest, oculto=True)
+                if ok is None: pend.append("Anexo de nota"); cont["pendente_permissao_hubspot"] += 1; continue
+                if not ok: cont["falhou"] += 1; continue
+            elif u.isdigit():  # arquivo no HubSpot: precisa do escopo 'files' (sem ele, fica pendente e o Luis libera na Private App)
                 ok = baixar_hubspot(u, dest)
                 if ok is None: pend.append(CAMPOS[k]); cont["pendente_permissao_hubspot"] += 1; continue
                 if not ok: cont["falhou"] += 1; continue
@@ -243,7 +277,11 @@ def main():
             open(txtp, "w").write(t); cont["baixados"] += 1; textos.append((k, t)); time.sleep(0.3)
         if textos:
             rt = next((t for k, t in textos if k == "parecer_rt"), None) or textos[0][1]
-            s = resumo("\n".join(t for _, t in textos)); s["fontes"] = [CAMPOS[k] for k, _ in textos]
+            s = resumo("\n".join(t for _, t in textos)); s["fontes"] = [CAMPOS.get(k) or CAMPOS_NOTA.get(k, k) for k, _ in textos]
+            if not s.get("periodo_apuracao"):  # planilha analítica anexada: período pelas competências que aparecem nela
+                ms = sorted({(int(y), int(m)) for m, y in re.findall(r"\b(0[1-9]|1[0-2])/(20[12]\d)\b", "\n".join(t for _, t in textos))}
+                            | {(int(y), int(m)) for y, m in re.findall(r"\b(20[12]\d)-(0[1-9]|1[0-2])-\d{2}", "\n".join(t for _, t in textos))})
+                if len(ms) >= 3: s["periodo_apuracao"] = f"{ms[0][1]:02d}/{ms[0][0]} a {ms[-1][1]:02d}/{ms[-1][0]}"; s["periodo_fonte"] = "competências da planilha anexa"
             partes = [f"{k.replace('Teses de ', '').capitalize()}: {v['desfecho']}" for k, v in s["teses"].items()]
             if s.get("perdcomp"): partes.append(f"PER/DCOMP: {s['perdcomp']}")
             if s.get("acoes_judiciais"): partes.append(f"Prevenção processual: {s['acoes_judiciais']}")
