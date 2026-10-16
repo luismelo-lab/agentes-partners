@@ -148,7 +148,7 @@ const OBJ = JSON.parse(fs.readFileSync(path.join(__dirname, "objecoes-apoio.json
 const QTD = { F1: 3, F2: 3, F3: 3, F4: 2, F5: 3, F6: 3, F7: 3, F8: 3, F9: 3 };
 const parte2 = [
   H1("Parte 2 · Objeções e como responder", "s_p2"),
-  P("Respostas curtas, apoiadas nos textos da Parte 1. Admitir o limite quando ele existe, não prometer valor e terminar com uma pergunta ou próximo passo.", { run: { color: CINZA } }),
+  P("Respostas curtas, apoiadas nos textos da Parte 1. Admitir o limite quando ele existe e não prometer valor nem prazo.", { run: { color: CINZA } }),
   ...OBJ.fichas.flatMap((f) => [
     H2(`${f.nome}`),
     tabela(["O cliente diz", "Como responder"], f.objecoes.map((x) => [`“${x.o}”`, x.r]), [0.3, 0.7]),
