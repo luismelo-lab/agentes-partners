@@ -77,11 +77,10 @@ def v_hubspot():
 
 def v_eazybe():
     import eazybe
-    if not (eazybe._env("EAZYBE_API_URL") and eazybe._env("EAZYBE_API_KEY")):
-        return linha("WhatsApp (Eazybe direto)", None, "faltam EAZYBE_API_URL e EAZYBE_API_KEY no .env", "pegar no painel da Eazybe (API de mensagens) e colar no ~/agentes-partners/.env")
     try:
-        d = eazybe.baixar(int((time.time() - 3600) * 1000))
-        linha("WhatsApp (Eazybe direto)", True, f"acesso ok: {len(d)} conversa(s) na última hora")
+        d = eazybe.ler_pasta(24)
+        linha("WhatsApp (Eazybe direto)", True if d else None, f"{len(d)} conversa(s) recebidas pelo webhook nas últimas 24h",
+              "" if d else "o receptor do webhook ainda não gravou nada (docs/whatsapp-webhook.md)")
     except SystemExit as e: linha("WhatsApp (Eazybe direto)", False, str(e)[:160])
 
 

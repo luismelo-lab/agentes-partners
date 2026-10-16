@@ -9,7 +9,11 @@ Vantagem sobre a leitura pelo HubSpot (whatsapp_hubspot.py): chega na hora, a di
 time pelo nome) e o arquivo vem com nome e link. A saída tem o mesmo formato da caixa atual (celulas/<pessoa>/whatsapp/caixa-*.json),
 então triagem, demandas e painel continuam iguais.
 
-Acesso (o Luis cola no ~/agentes-partners/.env; ninguém mostra nem copia o valor):
+COMO CHEGA (página Integrations do Eazybe, 16/10): o Eazybe NÃO tem API de consulta; ele ENVIA cada mensagem (recebida e
+enviada) para um webhook. O receptor fica no ambiente Microsoft da Save (Power Automate ou Azure Function, docs/whatsapp-webhook.md)
+e grava cada envio como um arquivo .json numa pasta do OneDrive/SharePoint; este script lê a pasta (modo "pasta", o padrão).
+  EAZYBE_PASTA     pasta sincronizada onde o receptor grava os .json (padrão: Área Partners · Agentes/WhatsApp · Eazybe/entrada)
+Modo API (só se a Eazybe um dia oferecer consulta):
   EAZYBE_API_URL   endereço da chamada de mensagens que a Eazybe forneceu (ex.: .../messages)
   EAZYBE_API_KEY   chave de acesso da API
   EAZYBE_AUTH      opcional: "Bearer" (padrão) ou o nome do cabeçalho que a Eazybe pede (ex.: "x-api-key")
@@ -49,6 +53,26 @@ def baixar(desde_ms=None):
     if not code.startswith("2"): sys.exit(f"Eazybe respondeu HTTP {code}: {txt[:200]}")
     d = json.loads(txt or "{}")
     return d.get("data", d) if isinstance(d, dict) else d
+
+
+def ler_pasta(horas=24):
+    """Junta os envios do webhook gravados na pasta (um .json por envio, no formato {chatid: [mensagens]})."""
+    sys.path.insert(0, os.path.join(AP, "lib"))
+    try:
+        import caminhos; base = _env("EAZYBE_PASTA") or os.path.join(caminhos.area(), "WhatsApp · Eazybe", "entrada")
+    except SystemExit: base = _env("EAZYBE_PASTA") or ""
+    if not base or not os.path.isdir(base): sys.exit(f"Pasta do webhook do Eazybe não encontrada: {base or '(sem EAZYBE_PASTA)'}")
+    lim = time.time() - max(horas, 24) * 3600; out = {}
+    for f in sorted(glob.glob(os.path.join(base, "**", "*.json"), recursive=True)):
+        if os.path.getmtime(f) < lim: continue
+        try: d = json.load(open(f))
+        except Exception: continue
+        d = d.get("body", d) if isinstance(d, dict) else d  # Power Automate pode embrulhar em "body"
+        if isinstance(d, dict) and "Chatid" in d: d = {d["Chatid"]: [d]}  # um envio = uma mensagem solta
+        for chat, ms in (d or {}).items():
+            vistos = {m.get("MessageId") for m in out.get(chat, [])}
+            out.setdefault(chat, []).extend(m for m in (ms if isinstance(ms, list) else [ms]) if m.get("MessageId") not in vistos)
+    return out
 
 
 def caixa(dados, pessoa, horas=24, aguardando=4, canais=None):
@@ -100,9 +124,10 @@ if __name__ == "__main__":
     ap.add_argument("--gravar", action="store_true", help="grava a caixa em celulas/<pessoa>/whatsapp (sem isso, só mostra)")
     a = ap.parse_args()
     if a.cmd == "testar":
-        d = baixar(int((time.time() - 3600) * 1000)); print(f"acesso ok: {len(d)} conversa(s) na última hora")
+        d = baixar(int((time.time() - 3600) * 1000)) if _env("EAZYBE_API_URL") else ler_pasta(24)
+        print(f"acesso ok: {len(d)} conversa(s) recebidas pelo webhook nas últimas 24h")
         sys.exit(0)
-    dados = json.load(open(a.arquivo)) if a.arquivo else baixar(int((time.time() - a.horas * 3600) * 1000))
+    dados = json.load(open(a.arquivo)) if a.arquivo else (baixar(int((time.time() - a.horas * 3600) * 1000)) if _env("EAZYBE_API_URL") else ler_pasta(a.horas))
     cfg = json.load(open(CFG)) if os.path.exists(CFG) else {}
     canais = [str(x) for x in (cfg.get("eazybe_canais") or {}).get(a.pessoa, [])] or None
     s = caixa(dados, a.pessoa, a.horas, a.aguardando, canais)
