@@ -43,7 +43,7 @@ def linha(r):
 
 
 borda = Border(bottom=Side(style="thin", color=hx(C["borda"])))
-def aba(wb, titulo, sub, linhas, primeira=False):
+def aba(wb, titulo, sub, linhas, primeira=False, decisao=False):
     ws = wb.active if primeira else wb.create_sheet()
     ws.title = titulo[:31]; ws.sheet_view.showGridLines = False
     ws.row_dimensions[1].height = 44
@@ -72,7 +72,19 @@ def aba(wb, titulo, sub, linhas, primeira=False):
             if nome == "Período conferido no parecer": c.font = Font(name=SANS, size=10, bold=True, color=hx(C["sucesso"] if v == "Sim" else C["alerta"]))
             if nome == "Ação judicial própria (L12)" and str(v).startswith("Sim"): c.font = Font(name=SANS, size=10, bold=True, color=hx(C["alerta"]))
     ws.freeze_panes = ws.cell(H + 1, 2)
-    ws.auto_filter.ref = f"A{H}:{get_column_letter(len(COLS))}{H + len(linhas)}"
+    nc = len(COLS)
+    if decisao:  # Geovana analisa mesmo assim (Luis, 16/10): decisão e observação na própria aba
+        from openpyxl.worksheet.datavalidation import DataValidation
+        for k, (nome, larg) in enumerate((("Decisão da Geovana", 24), ("Observação da Geovana", 40)), nc + 1):
+            c = ws.cell(H, k, nome); c.font = Font(name=SANS, bold=True, size=10, color=hx(C["texto"])); c.fill = PatternFill("solid", fgColor=hx(C["ouro"]))
+            c.alignment = Alignment(vertical="center", wrap_text=True); ws.column_dimensions[get_column_letter(k)].width = larg
+            ws.cell(3, k).fill = PatternFill("solid", fgColor=hx(C["ouro"]))
+        dv = DataValidation(type="list", formula1='"Gerar recorrência mesmo assim,Descartar: sem movimentação,Precisa de dado"', allow_blank=True)
+        ws.add_data_validation(dv); dv.add(f"{get_column_letter(nc + 1)}{H + 1}:{get_column_letter(nc + 1)}{H + max(len(linhas), 1)}")
+        for j in range(H + 1, H + len(linhas) + 1):
+            for k in (nc + 1, nc + 2): ws.cell(j, k).border = borda; ws.cell(j, k).font = Font(name=SANS, size=10, color=hx(C["texto"]))
+        nc += 2
+    ws.auto_filter.ref = f"A{H}:{get_column_letter(nc)}{H + len(linhas)}"
     # totais
     t = H + len(linhas) + 2
     ws.cell(t, 1, f"Total: {len(linhas)} empresas").font = Font(name=SANS, bold=True, size=10, color=hx(C["texto"]))
@@ -85,9 +97,13 @@ def aba(wb, titulo, sub, linhas, primeira=False):
 
 el = [r for r in R if r["elegivel"]]; ag = [r for r in R if not r["elegivel"]]
 el.sort(key=lambda r: (not r["periodo_conferido"], -r["potencial_credito"]))
+# sem movimentação (parecer da última venda com faturamento só até 2025): sai da lista de disponíveis e vai para a análise da Geovana
+mov = lambda r: PRG.empresa(r.get("_deals") or [], r.get("_cnpj"), (r.get("_link") or "").rsplit("/", 1)[-1] or None)["movimentacao"]
+sm = [r for r in el if mov(r) == "Empresa sem movimentação"]; el = [r for r in el if r not in sm]
 ag.sort(key=lambda r: (r["faltam"], -r["credito_anterior"]))
 wb = Workbook()
 aba(wb, "Disponíveis para recorrência", f"{len(el)} empresas dos Masters com 6 competências novas ou mais · maior potencial primeiro, com período conferido no parecer no topo · gerado em {HOJE:%d/%m/%Y}", el, True)
+aba(wb, "Sem movimentação · Geovana", f"{len(sm)} empresas cujo parecer da última venda traz faturamento só até 2025: fora do potencial, mas a Geovana analisa cada uma e registra a decisão nas duas últimas colunas", sm, decisao=True)
 aba(wb, "Aguardando 6 meses", f"{len(ag)} empresas dos Masters que ainda não têm 6 competências novas · as mais próximas primeiro", ag)
 ws = wb.create_sheet("Como ler"); ws.sheet_view.showGridLines = False; ws.column_dimensions["A"].width = 30; ws.column_dimensions["B"].width = 100
 txt = [("Quem entra", "Só clientes dos Masters (fora do roster não entra). Clientes com negócio ganho, fora do Simples Nacional e do café, sem negócio aberto em nenhum pipeline (mesma raiz de CNPJ)."),
@@ -98,6 +114,7 @@ txt = [("Quem entra", "Só clientes dos Masters (fora do roster não entra). Cli
        ("Ação judicial (L12)", "Quando o parecer aponta ação judicial em alguma tese, o Jurídico confere antes de seguir."),
        ("Situação e abertura", f"Base dos Dados Abertos da Receita Federal, referência {PRG.referencia_receita()}. Empresa que não está Ativa aparece em vermelho."),
        ("Regime", "Só o que aparece no último parecer do técnico (regra da Geovana). Sem parecer lido: 'parecer não lido'."),
+       ("Sem movimentação · Geovana", "Empresas tiradas da lista de disponíveis porque o parecer da última venda mostra faturamento só até 2025. A Geovana analisa cada uma e escolhe: gerar recorrência mesmo assim, descartar ou precisa de dado."),
        ("Movimentação", "Parecer da ÚLTIMA VENDA com a tabela de faturamento só até 2025 (e o período da venda contemplando esses anos) = Empresa sem movimentação. A análise considera o faturamento (Geovana e Luis, 16/10). Parecer de outro negócio: a regra não se aplica."),
        ("Valor zerado", "Quando o último parecer não cita valor, a coluna traz o motivo escrito no arquivo."),
        ("Uso", "Uso interno da Área Partners. Pré-análise: a decisão de recorrência é da Geovana no painel.")]
@@ -107,4 +124,4 @@ for i, (a, b) in enumerate(txt, 3):
 
 dest = os.path.join(caminhos.onedrive(), caminhos.LUIS["areas"], f"Recorrência - empresas disponíveis - {HOJE:%Y-%m-%d}.xlsx")
 os.makedirs(os.path.dirname(dest), exist_ok=True); wb.save(dest)
-print(dest); print(caminhos.web(dest)); print(len(el), len(ag), sum(r["potencial_credito"] for r in el))
+print(dest); print(caminhos.web(dest)); print(len(el), len(sm), len(ag), sum(r["potencial_credito"] for r in el), sum(r["potencial_credito"] for r in sm))
