@@ -125,3 +125,25 @@ def dias_uteis_depois(inicio, n):
 
 def slug(s):
     return re.sub(r"[^a-z0-9]+", "-", norm(s)).strip("-")
+
+
+def cfg_time():
+    """Quem é do time no WhatsApp: nomes (celulas/whatsapp-config.json) + números (celulas/whatsapp-numeros-time.json, local)."""
+    import json as _j
+    cfg = _j.load(open(os.path.join(AP, "celulas", "whatsapp-config.json"))) if os.path.exists(os.path.join(AP, "celulas", "whatsapp-config.json")) else {}
+    nomes = list(cfg.get("nomes_time") or ["Daniela Maciel", "Jenifer Carvalho", "Geovana", "Luis Fernando", "Luis Melo"])
+    tels = [re.sub(r"\D", "", t) for t in cfg.get("telefones_time", [])]
+    f = os.path.join(AP, "celulas", "whatsapp-numeros-time.json")
+    if os.path.exists(f):
+        for p in (_j.load(open(f)).get("pessoas") or {}).values():
+            if p.get("nome"): nomes.append(p["nome"])
+            tels += [re.sub(r"\D", "", t) for t in p.get("numeros", [])]
+    cfg["nomes_time"] = sorted(set(nomes)); cfg["telefones_time"] = sorted({t for t in tels if t})
+    return cfg
+
+
+def e_do_time(remetente, cfg):
+    """Mensagem do time? Pelo número (últimos 8 dígitos: aceita com ou sem +55 e o 9) ou pelo nome."""
+    r = norm(remetente or ""); dig = re.sub(r"\D", "", remetente or "")
+    if len(dig) >= 8 and any(t[-8:] == dig[-8:] for t in cfg.get("telefones_time", []) if len(t) >= 8): return True
+    return any(norm(n) and norm(n) in r for n in cfg.get("nomes_time", []))

@@ -143,8 +143,8 @@ def main():
         c = re.sub(r"\D", "", (d.get("extras") or {}).get("cnpj") or "")
         if len(c) >= 8: por_raiz.setdefault(c.zfill(14)[:8], []).append(d)
     R = json.load(open(RESUMOS)) if os.path.exists(RESUMOS) else {}
-    cfg = json.load(open(os.path.join(AP, "celulas/whatsapp-config.json")))
-    time_ = [n.lower() for n in cfg.get("nomes_time", [])]
+    from comum import cfg_time, e_do_time
+    cfg = cfg_time()
     limite = datetime.now(TZ) - timedelta(hours=a.horas)
     saida = []
     for conv in C:
@@ -152,7 +152,7 @@ def main():
         for m in conv["conversa"]:
             try: q = datetime.strptime(f"{datetime.now().year}/{m['quando']}", "%Y/%d/%m %H:%M").replace(tzinfo=TZ)
             except ValueError: continue
-            if q >= limite and not any(t in m["de"].lower() for t in time_): externas.append(m)
+            if q >= limite and not e_do_time(m["de"], cfg): externas.append(m)
         if not externas: continue
         ev = {"chat": conv["chat"], "tipo": conv["tipo"], "master": conv.get("master"), "negocios_da_conversa": conv.get("negocios"),
               "mensagens": [{"de": m["de"], "quando": m["quando"], "texto": ANEXO.sub("[anexo]", m["texto"])[:1500]} for m in externas[-15:]],

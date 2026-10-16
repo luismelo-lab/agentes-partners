@@ -92,11 +92,7 @@ def ignorar(texto):
     return bool(SISTEMA.match(t) or CORTESIA.match(t) or re.fullmatch(r"(rs|kk|ha|\W)+", t.lower() or "x"))
 
 
-def e_do_time(remetente, cfg):
-    r = norm(remetente); dig = re.sub(r"\D", "", remetente)
-    if dig and dig in {re.sub(r"\D", "", t) for t in cfg.get("telefones_time", [])}:
-        return True
-    return any(norm(n) and norm(n) in r for n in cfg.get("nomes_time", []))
+from comum import e_do_time, cfg_time  # noqa: E402  (número com ou sem +55 e o 9; nomes e números do time)
 
 
 def master_do_texto(texto, R):
@@ -121,8 +117,7 @@ def main():
     ap.add_argument("--aguardando", type=float, default=4, help="horas sem resposta do time para sinalizar (padrão 4)")
     a = ap.parse_args()
     tk = token(); oid, nome_pessoa = OWNERS[a.pessoa]
-    cfg = json.load(open(CFG)) if os.path.exists(CFG) else {}
-    cfg.setdefault("nomes_time", ["Daniela Maciel", "Jenifer Carvalho", "Geovana", "Luis Fernando", "Luis Melo"])
+    cfg = cfg_time()
     R, _ = roster()
     _, D = fonte_hubspot()
     N = {d["id"]: d for d in D["negocios"]}

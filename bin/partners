@@ -135,7 +135,7 @@ case "${1:-ajuda}" in
 partners <comando>
   Operação     sentinelas · para-areas · plano (depois da rotina operacao-areas das 7h40; reserva às 9h, e-mail por pessoa) · tarde (13h30, só urgentes novos) · operacao.py resumo
   Dados        hubspot [forcar] · dados-bi · areas · receita (mensal) · portal · onedrive · backup
-  WhatsApp     caixa [forcar] · whatsapp-auto (rodada sem IA, e-mail só se houver pedido novo)
+  WhatsApp     caixa [forcar] (dias úteis 7h45 e a cada 30 min das 8h15 às 18h45) · whatsapp-auto (rodada sem IA, e-mail só se houver pedido novo)
   Central      central [agora] (lê e-mails [AGENTES] e enfileira) · central-fila
   Técnica      recuperador (pareceres + fila) · revisor · resultados (métricas da semana)
   Pacotes      manha (dias úteis 7h30) · segunda (segunda 6h)
