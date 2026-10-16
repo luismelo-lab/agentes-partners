@@ -6,7 +6,7 @@ Precisa da licença Premium por causa do gatilho HTTP. Crie um fluxo:
 1. **Gatilho:** "Quando uma solicitação HTTP é recebida" (método POST).
 2. **Condição:** o cabeçalho `Authorization` (ou o campo de token que o Eazybe envia) é igual ao token combinado. Se não for, responda 401 e pare.
 3. **Ação:** OneDrive for Business (conta do Luis) ou SharePoint → "Criar arquivo"
-   - Pasta: `Área Partners · Agentes/WhatsApp · Eazybe/entrada`
+   - Pasta: `04 · Gestão, Metas e Estratégia/Central de Agentes/WhatsApp · Eazybe/entrada`, privada do Luis e não compartilhada com o time
    - Nome: `@{utcNow('yyyyMMdd-HHmmssfff')}-@{guid()}.json`
    - Conteúdo: `@{triggerBody()}`
 4. **Resposta:** 200.

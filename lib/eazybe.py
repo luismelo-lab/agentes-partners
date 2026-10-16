@@ -12,7 +12,7 @@ então triagem, demandas e painel continuam iguais.
 COMO CHEGA (página Integrations do Eazybe, 16/10): o Eazybe NÃO tem API de consulta; ele ENVIA cada mensagem (recebida e
 enviada) para um webhook. O receptor fica no ambiente Microsoft da Save (Power Automate ou Azure Function, docs/whatsapp-webhook.md)
 e grava cada envio como um arquivo .json numa pasta do OneDrive/SharePoint; este script lê a pasta (modo "pasta", o padrão).
-  EAZYBE_PASTA     pasta sincronizada onde o receptor grava os .json (padrão: Área Partners · Agentes/WhatsApp · Eazybe/entrada)
+  EAZYBE_PASTA     pasta sincronizada onde o receptor grava os .json (padrão: 04 · Gestão/Central de Agentes/WhatsApp · Eazybe/entrada, privada do Luis)
 Modo API (só se a Eazybe um dia oferecer consulta):
   EAZYBE_API_URL   endereço da chamada de mensagens que a Eazybe forneceu (ex.: .../messages)
   EAZYBE_API_KEY   chave de acesso da API
@@ -59,7 +59,7 @@ def ler_pasta(horas=24):
     """Junta os envios do webhook gravados na pasta (um .json por envio, no formato {chatid: [mensagens]})."""
     sys.path.insert(0, os.path.join(AP, "lib"))
     try:
-        import caminhos; base = _env("EAZYBE_PASTA") or os.path.join(caminhos.area(), "WhatsApp · Eazybe", "entrada")
+        import caminhos; base = _env("EAZYBE_PASTA") or os.path.join(caminhos.luis("central"), "WhatsApp · Eazybe", "entrada")  # pasta privada do Luis
     except SystemExit: base = _env("EAZYBE_PASTA") or ""
     if not base or not os.path.isdir(base): sys.exit(f"Pasta do webhook do Eazybe não encontrada: {base or '(sem EAZYBE_PASTA)'}")
     lim = time.time() - max(horas, 24) * 3600; out = {}
