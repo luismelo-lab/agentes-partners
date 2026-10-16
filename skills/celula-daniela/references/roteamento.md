@@ -13,6 +13,7 @@ Princípio do Gabinete: **só entra quem agrega**. Na dúvida, a Daniela decide.
 | Apoio jurídico em reunião | `depto-juridico` | D · Apoio Jurídico Comercial | Daniela |
 | Dúvida de tese, norma, julgamento | `depto-tributario` | especialista da linha | Técnico tributário (1º nível: Geovana) |
 | Crédito internacional, fundo, funding, FIDC, antecipação, gestão de contas, home equity, maquila, Paraguai, internacionalização | `depto-internacional` | Qualificador, Maquila ou Ecossistema (modo A ou B) | Luis (ponto focal) e o João Mattos (dono do produto) |
+| O que mais o cliente pode contratar, carteira do Master, QBR | `depto-solucoes` | Modo A (conta) ou B (carteira) | Daniela (conduz com o Master) |
 | Reanálise de perdido/zerado | `recuperador` | fila e ficha | Geovana |
 | Material novo, co-branding, kit | `depto-marketing` | Enablement de Vendas do Parceiro / Co-branding | Marketing real |
 | Números do parceiro, saúde, qualidade do CRM | `depto-dados` | Performance de Canal / Guardião de Qualidade | Daniela / Luis |

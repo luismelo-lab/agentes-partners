@@ -10,8 +10,12 @@
 **Prática da Save (confirmada pelo Luis, 29/09/2026):** a tese de alíquota zero é feita via **PER (ressarcimento)**, nunca por DCOMP, o que afasta o risco de compensação não declarada (art. 74, §12, Lei 9.430/96).
 
 ## Prazos
-- Manifestação de inconformidade: 30 dias (art. 74, §9º, Lei 9.430/96)
-- Impugnação: 30 dias (art. 15, Decreto 70.235/72) · Recurso voluntário: 30 dias (art. 33) — http://www.planalto.gov.br/ccivil_03/decreto/d70235cons.htm
+- Manifestação de inconformidade: 30 dias (art. 74, §9º, Lei 9.430/96; não alterado pela LC 227/2026)
+- **Impugnação: 20 dias úteis** (art. 15, Decreto 70.235/72) · **Recurso voluntário: 20 dias úteis** (art. 33) · exigência no auto: 20 dias úteis (art. 10, V). Redação da LC 227/2026 (art. 173), em vigor desde 14/01/2026. Antes eram 30 dias corridos. Fontes: https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp227.htm · http://www.planalto.gov.br/ccivil_03/decreto/d70235cons.htm (lidos em 16/10/2026, radar jurídico).
+- **Suspensão de prazos de 20/12 a 20/01**, inclusive (art. 5º-A do Decreto 70.235). Dúvida a validar: alcança a manifestação de inconformidade? Na dúvida, conte o prazo **menor**.
+- Transição: intimações até 31/03/2026 seguem o prazo que terminar por último (ADI RFB 2/2026).
+- Todo prazo: identifique o ato (impugnação, recurso ou manifestação de inconformidade) antes de contar, e conte duas vezes.
+- **DTE:** desde jan/2026, a ciência é presumida 15 dias após a mensagem chegar na Caixa Postal, mesmo sem leitura. [VALIDAR advogado(a)]
 - Homologação tácita da DCOMP: 5 anos (art. 74, §5º)
 - Restituição/compensação: 5 anos do pagamento (art. 168 do CTN c/c art. 3º da LC 118/05) · Lançamento pelo Fisco: 5 anos (arts. 150, §4º, e 173, I, do CTN) — https://www.planalto.gov.br/ccivil_03/leis/l5172compilado.htm
 

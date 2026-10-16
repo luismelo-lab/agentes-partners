@@ -33,7 +33,7 @@ Sem o link do card, a área de Tributário costuma devolver pedindo o card: a tr
 - **Prioridade ou reanálise de diagnóstico:** conferir a etapa do negócio no HubSpot. Boa parte desses chamados volta com "já se encontra em apresentação de diagnóstico" ou "parecer já anexado ao card". Se o negócio já passou do diagnóstico ou o parecer está no card, **não propor**: entregar o status e o parecer na resposta.
 - **Pendência de documento:** dizer qual documento falta e se já está no card. A área responde "documento já anexado" quando não é conferido antes.
 - **Despacho decisório ou comunicado da RFB:** o Jurídico pede a **autorização do parceiro/cliente para seguir (ou não) com a manifestação de inconformidade**. Se a conversa já tem a autorização, dizer isso no assunto ("… autorizado seguir com manifestação de inconformidade"); se não tem, o chamado registra o comunicado e a Partners busca a autorização.
-- **Prazo:** despacho e intimação têm prazo de defesa (em geral 30 dias da ciência). Informar a data de ciência quando aparecer no print; com menos de 10 dias, urgência 5.
+- **Prazo:** despacho e intimação têm prazo de defesa: 30 dias para manifestação de inconformidade (PER/DCOMP) e 20 dias úteis para impugnação e recurso (LC 227/2026, desde 14/01/2026; prazos suspensos de 20/12 a 20/01; ciência presumida 15 dias após chegar no DTE). Informar a data de ciência quando aparecer no print; com menos de 10 dias, urgência 5.
 
 ## Fora do GLPI (encaminhar para outra equipe, sem chamado)
 - **Contrato do parceiro, aditivo do parceiro e distrato do parceiro:** time de Contratos (o Jurídico só entra em distrato com litígio ou análise de cláusula).

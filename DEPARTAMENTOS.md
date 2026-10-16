@@ -26,9 +26,10 @@ Cada área tem um **Gerente** (agente que recebe, planeja e distribui) e **espec
   NÚCLEO TÉCNICO (core)   │  CRESCIMENTO DE CANAL          │  OPERAÇÃO E BASE
   • Tributário & Contábil │  • Partner Success & Enablement │  • Operações de Canal
   • Jurídico              │  • Inteligência Comercial       │    & Comissionamento
-  PRODUTOS NOVOS          │  • Marketing de Canal           │  • Contratos
+  CONTAS E PRODUTOS       │  • Marketing de Canal           │  • Contratos
   • Produtos Internacionais│                                 │  • Pós-venda
     e Financeiros         │                                 │
+  • Contas e Soluções     │                                 │
                           │                                 │  • Dados & BI
                           │                                 │  • TI, Automação & Gov. IA
                           │                                 │  • Qualidade & Ouvidoria
@@ -73,6 +74,9 @@ Gerente Jurídico · **Controle de Prazos** ★ · Contencioso Administrativo Tr
 ---
 
 ## CRESCIMENTO DE CANAL
+
+### Desenvolvimento de Contas e Soluções — ✅ construído 16/10 (skill `depto-solucoes`) · ★ área nova
+*Papel:* o Client Service Partner de uma Big Four: para cada cliente da Save, o que mais ele pode consumir, em que ordem (esteira Oxigenar → Estruturar → Expandir), quem entrega e como demonstrar valor. *Equipe:* Gerente de Contas e Soluções · Analista de Sinais (`mapa_conta.py`: HubSpot em todos os funis + pareceres + Receita) · Arquiteto de Soluções · Especialistas setoriais (proteína animal, café e grãos, varejo alimentar, combustíveis e GLP, confecção, transporte, alimentos) · Planejador da Esteira · Analista de Valor (mapa de valor, QBR) · Revisor de Promessas. Pedidos SC1–SC3 na Central.
 
 ### Produtos Internacionais e Financeiros — ✅ construído 16/10 (skill `depto-internacional`) · ★ área nova
 *Base:* reunião com o João Mattos (30/09), reunião de estruturação comercial do fundo/crédito internacional para café e agro (02/10), documento interno v2.3 (07/10), Maquila v0.9 (09/10) e ecossistema financeiro (13/10). *Equipe:* Gerente de Produtos Internacionais · Qualificador de Crédito Internacional · Estruturador de Garantias & Projeto · Especialista Café & Agro · Especialista Maquila & Internacionalização · Analista do Ecossistema Financeiro · Regulatório & Câmbio · Guardião do Produto Novo · Revisor de Linguagem & Promessas. *Trava:* nada de taxa, prazo ou fee com parceiro ou cliente antes do G2; a Save é estruturadora, nunca credora; o dono do produto (João) decide. Pedidos PI1–PI5 na Central.

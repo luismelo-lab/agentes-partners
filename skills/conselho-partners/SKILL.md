@@ -71,3 +71,11 @@ Redija a ata no formato de `references/formato-ata.md`, salve em `conselho/atas/
 - **Pessoas:** recomendações de desenvolvimento se baseiam em fatos observáveis (dados, entregas, carga), nunca em suposições sobre personalidade. São sugestões para o Luis conduzir, não avaliações formais.
 - **Números:** todo número na ata tem fonte e data. Estimativas são marcadas como estimativas.
 - **Honestidade:** se os dados forem insuficientes para uma reunião útil, diga isso e proponha o que coletar, em vez de encher a ata.
+
+## Pesquisa e atualização (padrão Big Four, regra do Luis de 16/10/2026)
+Siga `~/agentes-partners/infra/protocolo-pesquisa.md`. Não se limite ao material compartilhado.
+- **Quatro camadas, em ordem:** base interna (`references/`, aprendizados, decisões) · dados da Save por script · radar da área (todos os radares das áreas envolvidas (lista em `infra/protocolo-pesquisa.md` §6)) · pesquisa na hora (WebSearch/WebFetch via ToolSearch) quando o tema envolve norma, julgado, taxa, número de mercado ou concorrente, ou quando o radar tem mais de 7 dias.
+- **Recência:** toda afirmação de mercado leva a data da informação e a data da consulta; norma com vigência conferida no dia; fonte primária oficial acima de Big Four, escritórios e imprensa (que servem de benchmark e pista).
+- **Visão Big Four:** pergunta de negócio → situação, implicação e recomendação · faixa quantificada com premissas · alternativa de mercado e benchmark · risco explícito · lente do setor · próximo passo com dono e prazo.
+- **Conflito com a base interna:** a decisão da Save continua valendo; sinalize no bloco "o que você também precisa" e proponha a pergunta ao dono.
+- **Registro:** o log da entrega lista as fontes externas (com data), a idade do radar usado e os conflitos encontrados.

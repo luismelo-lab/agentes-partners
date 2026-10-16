@@ -65,3 +65,10 @@ Legenda: **O** = obrigatória · o = opcional (entra se a condição valer) · �
 | Caixa apertado, dívida cara, carteira a receber (Gestão de Contas, antecipação, FIDC, home equity) | 2 | **O** Produtos Internacionais (Analista do Ecossistema) · o Resultados | — |
 | Material ou comunicação de produto novo | 2 | **O** Produtos Internacionais (Guardião do portão) · **O** Marketing · **O** Qualidade · o Jurídico | 👤 só depois do G2 |
 | Remuneração do parceiro em produto novo | 3 | **O** Operações de Canal · **O** Produtos Internacionais · **O** Jurídico | 👤 Luis decide |
+
+## Atualização 16/10: Contas e Soluções
+| Necessidade | Nível típico | Áreas | Escalar a humano |
+|---|---|---|---|
+| O que mais o cliente pode contratar, esteira, mapa de valor | 2 | **O** Contas e Soluções · o Tributário · o Jurídico · o Produtos Internacionais (conforme a onda) | — |
+| Carteira do Master, QBR, onde crescer | 2 | **O** Contas e Soluções · **O** Resultados · o célula Daniela | 👤 Daniela conduz com o Master |
+| Oferta integrada por setor | 3 | **O** Contas e Soluções · **O** Tributário · o Marketing · o Qualidade · o Jurídico | 👤 Luis aprova |

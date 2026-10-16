@@ -26,7 +26,7 @@ Extraia do pedido: **tema**, **tipo de entrega** (construir algo novo · validar
 ## Passo 3 — Escolher as áreas
 Use `references/matriz-roteamento.md` (tema → áreas obrigatórias, opcionais e quando escalar a humanos). Para cada área escolhida, diga **por que ela entra** e **o que vai entregar**. Área que não tem motivo claro fica fora.
 
-Departamentos disponíveis (skills): `depto-pessoas`, `depto-tributario`, `depto-juridico`, `depto-marketing`, `depto-resultados`, `depto-dados`, `depto-intel-comercial`, `depto-ti`, `depto-partner-success`, `depto-operacoes-canal`, `depto-contratos`, `depto-pos-venda`, `depto-qualidade`, `depto-internacional` (crédito internacional, maquila e ecossistema financeiro), `conselho-partners`. Células: `celula-daniela` (Central Masters), `celula-jenifer` (Central BDR), `recuperador` e `revisor-diagnostico` (Central Técnica da Geovana). Todas as áreas estão construídas em v1; Customer Success do cliente final segue como futuro.
+Departamentos disponíveis (skills): `depto-pessoas`, `depto-tributario`, `depto-juridico`, `depto-marketing`, `depto-resultados`, `depto-dados`, `depto-intel-comercial`, `depto-ti`, `depto-partner-success`, `depto-operacoes-canal`, `depto-contratos`, `depto-pos-venda`, `depto-qualidade`, `depto-internacional` (crédito internacional, maquila e ecossistema financeiro), `depto-solucoes` (contas e cross-sell: esteira e mapa de valor), `conselho-partners`. Células: `celula-daniela` (Central Masters), `celula-jenifer` (Central BDR), `recuperador` e `revisor-diagnostico` (Central Técnica da Geovana). Todas as áreas estão construídas em v1; Customer Success do cliente final segue como futuro.
 
 ## Passo 4 — Ficha de Rota (Portão 0)
 Antes de acionar qualquer área, mostre ao Luis:
@@ -73,3 +73,11 @@ Siga `~/agentes-partners/infra/protocolo-gerente.md`.
 - **Devolver:** se algo falhar, devolve ao especialista responsável com o que corrigir e reavalia, no máximo 2 rodadas. Se ainda faltar algo, a lacuna vai em "o que falta e quem fornece".
 - **Outra área:** se a demanda precisar dela, o gerente encaminha ao gerente da outra área. Lá, o gerente distribui aos especialistas e revisa da mesma forma. Depois, o gerente desta área faz a revisão final e consolida uma resposta única.
 - **Registro:** toda entrega leva o registro `"revisao": {gerente, especialistas, rodadas, areas_consultadas, aprovado, ajustes}`.
+
+## Pesquisa e atualização (padrão Big Four, regra do Luis de 16/10/2026)
+Siga `~/agentes-partners/infra/protocolo-pesquisa.md`. Não se limite ao material compartilhado.
+- **Quatro camadas, em ordem:** base interna (`references/`, aprendizados, decisões) · dados da Save por script · radar da área (todos os radares das áreas envolvidas (lista em `infra/protocolo-pesquisa.md` §6)) · pesquisa na hora (WebSearch/WebFetch via ToolSearch) quando o tema envolve norma, julgado, taxa, número de mercado ou concorrente, ou quando o radar tem mais de 7 dias.
+- **Recência:** toda afirmação de mercado leva a data da informação e a data da consulta; norma com vigência conferida no dia; fonte primária oficial acima de Big Four, escritórios e imprensa (que servem de benchmark e pista).
+- **Visão Big Four:** pergunta de negócio → situação, implicação e recomendação · faixa quantificada com premissas · alternativa de mercado e benchmark · risco explícito · lente do setor · próximo passo com dono e prazo.
+- **Conflito com a base interna:** a decisão da Save continua valendo; sinalize no bloco "o que você também precisa" e proponha a pergunta ao dono.
+- **Registro:** o log da entrega lista as fontes externas (com data), a idade do radar usado e os conflitos encontrados.

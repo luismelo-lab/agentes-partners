@@ -45,3 +45,11 @@ Siga `~/agentes-partners/infra/protocolo-gerente.md`.
 - **Devolver:** se algo falhar, devolve ao especialista responsável com o que corrigir e reavalia, no máximo 2 rodadas. Se ainda faltar algo, a lacuna vai em "o que falta e quem fornece".
 - **Outra área:** se a demanda precisar dela, o gerente encaminha ao gerente da outra área. Lá, o gerente distribui aos especialistas e revisa da mesma forma. Depois, o gerente desta área faz a revisão final e consolida uma resposta única.
 - **Registro:** toda entrega leva o registro `"revisao": {gerente, especialistas, rodadas, areas_consultadas, aprovado, ajustes}`.
+
+## Pesquisa e atualização (padrão Big Four, regra do Luis de 16/10/2026)
+Siga `~/agentes-partners/infra/protocolo-pesquisa.md`. Não se limite ao material compartilhado.
+- **Quatro camadas, em ordem:** base interna (`references/`, aprendizados, decisões) · dados da Save por script · radar da área (`depto-tributario/references/radar-mercado.md`) · pesquisa na hora (WebSearch/WebFetch via ToolSearch) quando o tema envolve norma, julgado, taxa, número de mercado ou concorrente, ou quando o radar tem mais de 7 dias.
+- **Recência:** toda afirmação de mercado leva a data da informação e a data da consulta; norma com vigência conferida no dia; fonte primária oficial acima de Big Four, escritórios e imprensa (que servem de benchmark e pista).
+- **Visão Big Four:** pergunta de negócio → situação, implicação e recomendação · faixa quantificada com premissas · alternativa de mercado e benchmark · risco explícito · lente do setor · próximo passo com dono e prazo.
+- **Conflito com a base interna:** a decisão da Save continua valendo; sinalize no bloco "o que você também precisa" e proponha a pergunta ao dono.
+- **Registro:** o log da entrega lista as fontes externas (com data), a idade do radar usado e os conflitos encontrados.

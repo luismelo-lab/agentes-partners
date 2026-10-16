@@ -56,3 +56,12 @@ Esta lista junta `credito-internacional/05-perguntas-para-o-joao.md` e `maquila/
 | Data | # | Resposta | Fonte |
 |---|---|---|---|
 | | | | |
+
+## Do radar de mercado (16/10/2026, `radar-mercado-credito.md`)
+Os itens abaixo contradizem a base interna. Eles vão ao João antes de qualquer material:
+- **Hedge:** pela paridade de juros, o hedge custa cerca de 9,7% ao ano em dólar e 14% em franco suíço, não ~1 p.p. Com hedge e IR na fonte, o custo em reais fica perto do crédito PJ médio no Brasil. Qual é o argumento econômico?
+- **IOF:** é zero no ingresso com prazo médio acima de 364 dias e 3,5% até 364 dias (Decreto 12.499/2025). O "via token, sem IOF" não traz ganho, e fluxo com token é câmbio desde 02/02/2026 (Res. BCB 521).
+- **Estrutura da Flórida:** se a credora for LLC transparente com sócio de fora, ela pode ser tratada como regime fiscal privilegiado (Cosit 56/2026). Nesse caso, valem o limite de dívida e a dedutibilidade condicionada dos juros. Qual é a forma jurídica da credora?
+- **IR na fonte e gross-up:** 15% para os EUA, sem tratado. Na Suíça, 10% só para banco, com prazo de 5 anos ou mais. Quem paga?
+- **O fee de 10% do exemplo** está acima do benchmark de assessoria (1% a 3%).
+- **PLD:** a Save provavelmente é pessoa obrigada (Lei 9.613, art. 9º) e precisa de cadastro no Coaf. Isso vai ao Jurídico.

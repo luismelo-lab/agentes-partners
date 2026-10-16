@@ -243,6 +243,33 @@
     "com quem é a reunião e o objetivo",
     "data"
    ]
+  },
+  "SC1": {
+   "rotulo": "Mapa da conta: o que mais este cliente pode contratar",
+   "celula": "Contas e Soluções",
+   "skill": "depto-solucoes",
+   "entrega": "Esteira em 3 ondas (produto, motivo e evidência, quem entrega), mapa de valor da conta e rascunho ao Master; sem promessa de valor",
+   "precisa": [
+    "CNPJ ou link do negócio"
+   ]
+  },
+  "SC2": {
+   "rotulo": "Carteira do Master: onde crescer",
+   "celula": "Contas e Soluções",
+   "skill": "depto-solucoes",
+   "entrega": "Excel com a aderência de cada cliente por onda, os 10 prioritários e a pauta do QBR",
+   "precisa": [
+    "nome do Master"
+   ]
+  },
+  "SC3": {
+   "rotulo": "Oferta integrada para um setor",
+   "celula": "Contas e Soluções",
+   "skill": "depto-solucoes",
+   "entrega": "Pacote por onda, público na base, valor em faixa, quem entrega e o que precisa existir antes",
+   "precisa": [
+    "setor (ex.: frigoríficos, café, supermercados)"
+   ]
   }
  }
 }

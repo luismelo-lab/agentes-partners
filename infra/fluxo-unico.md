@@ -29,6 +29,7 @@ O agente aciona o agente da área com o caso, sem Portão 0 (o pedido vem de out
 | Números do HubSpot, relatórios | `depto-dados` / `depto-resultados` |
 | ICP, Receita, prospecção | `depto-intel-comercial` |
 | Recorrência, reanálise de casos | `recuperador` / `revisor-diagnostico` |
+| O que mais o cliente pode contratar, cross-sell, esteira, mapa de valor, carteira do Master | `depto-solucoes` |
 | Crédito internacional, fundo, funding, FIDC, antecipação, gestão de contas, home equity, maquila, Paraguai, internacionalização | `depto-internacional` (sem taxa, prazo ou fee antes do G2) |
 
 **Originação** sempre passa por quatro checagens antes de devolver:
