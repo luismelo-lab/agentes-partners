@@ -21,7 +21,8 @@ const PRETO = hex(K.texto), OURO = hex(K.ouro_texto), OURO_FAIXA = hex(K.ouro), 
   ZEBRA = hex(K.fundo_2), BORDA = hex(K.borda), CAB_TABELA = hex(MARCA.escuro.fundo);
 const FONTE = MARCA.fontes.sans;  // IBM Plex Sans; o Word troca por uma fonte parecida se ela não estiver instalada
 const BASE = path.resolve(__dirname, "..");
-const MD = fs.readFileSync(path.join(BASE, process.env.DOC_MD || "13-manual-operacional-interno.md"), "utf8");
+const MD_ARQ = path.resolve(BASE, process.env.DOC_MD || "13-manual-operacional-interno.md");  // aceita caminho absoluto
+const MD = fs.readFileSync(MD_ARQ, "utf8");
 const SAIDA = process.argv[2] || path.join(BASE, "Credito-Internacional-Manual-Operacional-Interno-v1.0.docx");
 
 const LARGURA = 11906 - 2 * 1134; // A4, margens de 2 cm
@@ -118,7 +119,7 @@ function tabela(linhas) {
 const linhas = MD.split("\n");
 const filhos = [];
 let i = 0;
-let refAtual = null, ultimoNum = null; // lista numerada em andamento
+let refAtual = null, ultimoNum = null, m0; // lista numerada em andamento
 const espaco = () => new Paragraph({ spacing: { before: 0, after: 60 }, children: [] });
 
 // a primeira linha (# título) vai para a capa
@@ -142,6 +143,19 @@ while (i < linhas.length) {
       children: [R({ text: t.slice(3) })] }));
     i++; continue;
   }
+  if (t.startsWith("### ")) { // subtítulo
+    filhos.push(new Paragraph({ spacing: { before: 220, after: 100 }, keepNext: true,
+      children: [R({ text: t.slice(4), bold: true, size: 24, color: PRETO })] }));
+    i++; continue;
+  }
+  if ((m0 = t.match(/^!\[(.*?)\]\((.+?)\)$/))) { // imagem: ![legenda](arquivo.png), largura da página
+    const arq = path.isAbsolute(m0[2]) ? m0[2] : path.join(path.dirname(MD_ARQ), m0[2]);
+    const png = fs.readFileSync(arq), w0 = png.readUInt32BE(16), h0 = png.readUInt32BE(20), w = 620;
+    filhos.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 120, after: 40 }, keepNext: true,
+      children: [new ImageRun({ type: "png", data: png, transformation: { width: w, height: Math.round(w * h0 / w0) } })] }));
+    if (m0[1]) filhos.push(new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 0, after: 160 }, children: [R({ text: m0[1], size: 16, color: CINZA, italics: true })] }));
+    i++; continue;
+  }
   if (t.startsWith("|")) {
     const bloco = [];
     while (i < linhas.length && linhas[i].trim().startsWith("|")) bloco.push(linhas[i++]);
@@ -160,7 +174,7 @@ while (i < linhas.length) {
     i++; continue;
   }
   let m;
-  if ((m = l.match(/^(\s*)- (.*)$/))) {
+  if ((m = l.match(/^(\s*)[-*] (.*)$/))) {
     const nivel = m[1].length >= 2 ? 1 : 0;
     filhos.push(new Paragraph({ numbering: { reference: "bolinha", level: nivel },
       spacing: { before: 0, after: 70, line: 276 }, children: runs(m[2]) }));
@@ -193,7 +207,7 @@ const capa = [
     children: [R({ text: tit1 + " ·", bold: true, size: 64, color: PRETO })] }),
   new Paragraph({ spacing: { before: 0, after: 480 }, children: [R({ text: tit2, bold: true, size: 64, color: PRETO })] }),
   new Paragraph({ spacing: { before: 0, after: 120 }, children: [R({ text: process.env.DOC_VERSAO || "Versão 1.0 · 02/10/2026", size: 28, color: CINZA })] }),
-  new Paragraph({ spacing: { before: 0, after: 0 }, children: [R({ text: "Uso interno · Confidencial", bold: true, size: 28, color: OURO })] }),
+  new Paragraph({ spacing: { before: 0, after: 0 }, children: [R({ text: process.env.DOC_SELO || "Uso interno · Confidencial", bold: true, size: 28, color: OURO })] }),
   new Paragraph({ children: [new PageBreak()] }),
 ];
 
@@ -240,7 +254,7 @@ const doc = new Document({
         children: [
           logo(78),
           R({ text: "   " + (process.env.DOC_CABECALHO || "Crédito Internacional · Manual Operacional Interno"), size: 16, color: CINZA }),
-          R({ text: "\tUso interno · Confidencial", size: 16, color: CINZA }),
+          R({ text: "\t" + (process.env.DOC_SELO || "Uso interno · Confidencial"), size: 16, color: CINZA }),
         ] })] }),
       first: new Header({ children: [new Paragraph({ children: [] })] }),
     },

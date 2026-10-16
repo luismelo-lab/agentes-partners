@@ -50,6 +50,13 @@ A pergunta que a área responde: *"Fizemos a recuperação tributária deste fri
 
    Junto vai o **one-pager "Mapa de Valor da Conta"** (Word no padrão Save, `demonstracao-valor.md`).
 
+### A2. Dossiê da conta (estudo padrão Big Four) — modelo aprovado no exemplo do Frigorífico Calafate (16/10/2026)
+1. Gerente e especialistas escrevem `dossie.md` (até 10 seções com títulos que dizem a conclusão, sumário executivo em 1 página, tabelas de no máximo 5 colunas, anexos de fontes, do que falta e do registro da revisão), `mapa-valor.md` (1 a 2 páginas, sem dado interno sensível) e 5 gráficos SVG (cascata, faixas, linha do tempo, matriz de risco, esteira) no padrão Save.
+2. **Revisão obrigatória de todas as áreas, em paralelo:** Tributário (teses, faixa, PER), Jurídico (prazos, riscos, linguagem, procuração e contrato), Produtos Internacionais (travas), Operações de Canal + Resultados + Dados (números contra o HubSpot, dono, duplicidade) e Qualidade + Marketing (`auditar_texto.py`, narrativa e layout). Cada uma grava `revisao-<area>.md` com veredito.
+3. O Gerente consolida (fica com a posição mais conservadora quando houver divergência) e registra `revisao-final.json` com as pendências do Luis.
+4. Converta os SVG em PNG (Playwright) e gere os Word com `departamentos/produtos/credito-internacional/scripts/gerar_manual_docx.js` (`DOC_MD`, `DOC_VERSAO`, `DOC_CABECALHO`, `DOC_SELO`). Publique no OneDrive em `01 · Comercial e Parceiros/Relatórios das áreas/Contas e Soluções/`, com o link do Office Online.
+5. O mapa de valor só vai ao Master depois do ok do Luis.
+
 ### B. Carteira do Master (priorizar onde crescer)
 1. Rode `python3 scripts/mapa_conta.py --carteira [--master X]`. Ele gera o Excel com um cliente por linha, as ondas e o índice de aderência.
 2. O Gerente escolhe os 10 clientes com mais aderência e menos pendência. O Analista de Valor monta a pauta do QBR com o Master: o que foi entregue, as oportunidades por cliente e o plano dos próximos 90 dias.
