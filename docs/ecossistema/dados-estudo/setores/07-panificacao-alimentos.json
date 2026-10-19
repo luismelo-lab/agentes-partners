@@ -48,7 +48,7 @@
     {
      "nome": "Gestão de Contas",
      "porque": "A empresa vende a prazo a supermercados e food service. A cobrança por IA organiza o caixa e abre o acesso a DRE e balanço.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Tributário, com revisão do diagnóstico; Contas e Soluções para a cobrança"
@@ -71,12 +71,12 @@
     {
      "nome": "Antecipação de recebíveis",
      "porque": "Duplicatas de rede podem ser antecipadas por instituição autorizada. A Save estrutura e não antecipa.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     },
     {
      "nome": "Estruturação patrimonial",
      "porque": "Planta e marca familiares pedem organização do patrimônio, em especial diante de sucessão.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Tributário; Jurídico; Produtos Financeiros com instituição autorizada"
@@ -104,7 +104,7 @@
     {
      "nome": "Fundo de recebíveis (FIDC)",
      "porque": "Indicado apenas para indústria de grande volume mensal de recebíveis. Para os demais, a antecipação cobre a necessidade.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Produtos Financeiros; Internacional; Jurídico para a estruturação"
@@ -184,7 +184,8 @@
   "Decadência de 5 anos: crédito não recuperado dentro do prazo se perde. Quanto antes o levantamento, menor a perda.",
   "Em 2027 a CBS cheia substitui o PIS/COFINS e o IPI vai a zero. O saldo credor de IPI precisa ser usado antes disso.",
   "O tratamento na reforma depende da NCM de cada produto (zero, 60% ou cheio). O texto consolidado é conferido pelo Tributário.",
-  "Todo número é estimativa preliminar sujeita a validação técnica. A Save não promete valor, prazo nem êxito; a decisão de crédito é da instituição."
+  "Todo número é estimativa preliminar sujeita a validação técnica. A Save não promete valor, prazo nem êxito; a decisão de crédito é da instituição.",
+  "Antecipação é operação de instituição autorizada; a Save estrutura e organiza a carteira, nunca é credora."
  ],
  "interno": [
   "Crédito internacional: só descoberta até o G2 (15/12/2026). Sem taxa, prazo ou fee. Faixas de porte do funding seguem pendentes (v2.3 x reunião de 13/10).",

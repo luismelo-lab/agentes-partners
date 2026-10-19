@@ -19,7 +19,7 @@ Cada parceiro (escritório contábil ou consultor) tem uma **carteira de empresa
 1. **Entrada:** CSV do parceiro com CNPJ (obrigatório) e o que ele souber: regime, faturamento, vende a prazo a empresas, tem imóvel quitado, exporta, quantos bancos, mês em que o caixa aperta.
 2. **Enriquecimento local:** base da Receita (CNAE, porte, capital, situação). **Faturamento da Receita só dá um piso** (porte "Demais" = acima de R$ 4,8 mi) e é marcado como estimado. Regime só vem do parceiro ou da consulta a prospects já prevista no `depto-intel-comercial`.
 3. **Aderência:** as mesmas regras do cliente ganho, mais três produtos por questionário (alongamento de dívida bancária, home equity, captação de capital). Cada oportunidade sai com **motivo**, **onda** e **estado do produto**.
-4. **Porta de entrada:** primeiro produto **pronto** com aderência média ou alta (por onda). Se só houver produto em definição, vira **descoberta**, sem taxa, prazo ou fee. Para quem não abre e-CAC, DRE e balanço, a alternativa é **Gestão de Contas** (regra de 13/10).
+4. **Porta de entrada:** primeiro produto **pronto** com aderência média ou alta (por onda). Prontos desde 19/10: Gestão de Contas, antecipação, FIDC (Save Invest), estruturação patrimonial (jurídico) e tax internacional e comércio exterior (Paulo e João Mattos). Crédito internacional, Maquila, captação de capital e home equity (João Mattos) saem como **descoberta**, sem taxa, prazo ou fee. Para quem não abre e-CAC, DRE e balanço, a alternativa é **Gestão de Contas** (regra de 13/10).
 
 ## 4. Qual produto abre qual empresa
 | Perfil da empresa na base | Entrada | Depois |
@@ -44,7 +44,7 @@ Preenche o que o dado público não mostra e alimenta o CSV: (1) vende a prazo a
 ## 7. Regras de proteção
 1. **LGPD:** a carteira é do parceiro. Antes de o CSV entrar, o Jurídico define o papel (parceiro controlador, Save operadora) e o contrato. Sem lista comprada e sem contato de sócio sem a base de legítimo interesse validada.
 2. **Canal:** o motor consulta o HubSpot pela raiz do CNPJ e sinaliza empresa já cliente, em negociação ou de outro parceiro. A decisão de conflito é do Luis.
-3. **Travas de produto:** crédito internacional, FIDC, Maquila, antecipação, Gestão de Contas e estruturação patrimonial saem como **descoberta**. A Save é estruturadora, nunca credora.
+3. **Travas de produto:** crédito internacional, Maquila, captação de capital e home equity saem como **descoberta**. Em todos, a Save Partners é estruturadora e indica; antecipação é de instituição autorizada e cotas de fundo exigem a estrutura regulada da Save Invest.
 4. **Nada é gravado no HubSpot.** O resultado é rascunho; o técnico confirma as teses; o `depto-qualidade` audita o material antes de sair.
 
 ## 8. Métricas do funil por parceiro
@@ -53,7 +53,7 @@ Empresas na carteira · com CNPJ válido e ativo · com aderência média ou alt
 ## 9. Limites do protótipo (testado só com base fictícia)
 - Não rodou com dados reais: a base da Receita e o HubSpot estão na máquina do Luis, não no ambiente em nuvem.
 - Os motivos reaproveitados de `mapa_conta.py` falam em "parecer" e "débitos no parecer"; para prospect, o dado veio do parceiro. Ajustar o texto.
-- As regras de alongamento, home equity e captação são **provisórias** (ficha sem dono nem critério). Validar com o João e o Júnior.
+- As regras de alongamento, home equity e captação são **provisórias** (sem ficha nem critério). Validar com o João Mattos e o Júnior; o dono do alongamento ainda precisa ser definido.
 - Hoje quase toda empresa entra por recuperação tributária, porque o catálogo cobre o perfil; o peso dos demais produtos precisa de calibragem com dados reais de conversão.
 - Não há ainda o Excel do parceiro nem o roteiro de abordagem gerados automaticamente.
 

@@ -10,7 +10,9 @@ Reaproveita as regras de mapa_conta.py (tabela PRODUTOS, teses por segmento) e a
   - o resumo para o parceiro e a lista de dados a pedir.
 
 Somente leitura e local. Nenhum CNPJ sai da máquina. Não lê .env. Não grava no HubSpot. Saída é rascunho para revisão.
-Produto em validação, estruturação ou definição aparece só como descoberta (sem taxa, prazo ou fee).
+Estado dos produtos (Luis, 19/10/2026): Gestão de Contas, antecipação e FIDC (Save Invest), estruturação patrimonial (jurídico) e tax internacional
+e comércio exterior (Paulo e João Mattos) são prontos. Crédito internacional, Maquila, captação de capital e home equity (João Mattos) seguem
+como descoberta (sem taxa, prazo ou fee). Alongamento de dívida: dono ainda a definir.
 
 Uso:
   python3 mapa_base_parceiro.py --csv base.csv --parceiro "Nome do parceiro" [--hubspot download.json] [--saida pasta]
@@ -28,7 +30,7 @@ PESO, ONDA = mc.PESO, mc.ONDA
 LINHA = {"RT": "L1 Tributário e Reforma", "PLAN": "L1 Tributário e Reforma", "PAS": "L2 Passivo e Reestruturação", "JUR": "L2 Passivo e Reestruturação",
          "ALONG": "L2 Passivo e Reestruturação", "GC": "L3 Caixa e Capital de Giro", "ANT": "L3 Caixa e Capital de Giro", "FIDC": "L3 Caixa e Capital de Giro",
          "CI": "L4 Capital e Transações", "CAP": "L4 Capital e Transações", "HE": "L4 Capital e Transações", "EP": "L5 Estrutura e Patrimônio",
-         "MQ": "L6 Mercados Externos"}
+         "MQ": "L6 Mercados Externos", "TIN": "L6 Mercados Externos"}
 SIM = lambda v: str(v or "").strip().lower() in ("sim", "s", "1", "true", "x")
 
 # produtos que dependem de resposta do dono: (id, nome, onda, status, área, regra)
@@ -51,10 +53,16 @@ def r_ci_extra(s):
     if s["imovel"] and f >= 50e6 and (s["exporta"] or s["setor"] in ("Proteína animal", "Café e grãos")):
         return ("média", "porte e ativo relevante: confirmar garantia livre (~2x) e necessidade (≥ US$ 5 mi) antes de qualquer conversa")
 
+def r_tax_internacional(s):
+    f = s["faturamento"] or 0
+    if s["exporta"] and f >= 4.8e6:
+        return ("média", "o dono confirma exportação: tributação, regimes e conformidade do comércio exterior. Falta confirmar operações, destinos e regime aduaneiro")
+
 EXTRA = [
-    ("ALONG", "Alongamento e carência de dívida bancária", 2, "em definição", "depto-internacional (ecossistema)", r_alongamento),
-    ("HE", "Home equity", 3, "em definição", "depto-internacional (ecossistema)", r_home_equity),
-    ("CAP", "Captação de capital (dívida, equity, sócio)", 3, "em definição", "depto-internacional (ecossistema)", r_captacao),
+    ("ALONG", "Alongamento e carência de dívida bancária", 2, "em definição", "a definir (Save Invest ou João Mattos)", r_alongamento),
+    ("HE", "Home equity", 3, "em definição", "João Mattos", r_home_equity),
+    ("CAP", "Captação de capital (dívida, equity, sócio)", 3, "em definição", "João Mattos", r_captacao),
+    ("TIN", "Tax internacional e comércio exterior", 3, "pronto", "Paulo e João Mattos", r_tax_internacional),
 ]
 ABERTURA = {  # pergunta de abertura por produto (linguagem de caixa, sem oferta)
     "RT": "Há anos em que sua empresa pagou PIS/COFINS sobre compras que não geram débito? Posso olhar suas notas e dizer, sem custo, se há crédito.",
@@ -66,6 +74,7 @@ ABERTURA = {  # pergunta de abertura por produto (linguagem de caixa, sem oferta
     "ANT": "Você antecipa recebíveis? A que custo e com quantos bancos?",
     "FIDC": "Quanto sua empresa paga a bancos para antecipar recebíveis dos seus clientes ou fornecedores?",
     "CI": "Existe ativo livre (terra, imóvel, planta) e um projeto de uso que justifique uma captação de longo prazo?",
+    "TIN": "Você exporta ou importa? Como estão hoje os tributos e a conformidade dessas operações?",
     "MQ": "A sua fábrica tem mais custo de mão de obra e energia do que o produto suporta?",
     "ALONG": "Quantos bancos você tem e quanto paga de parcelas por mês? Uma carência mudaria o seu ano?",
     "HE": "Há imóvel quitado que poderia sustentar capital mais barato?",
@@ -113,7 +122,7 @@ def mapear(s, ja_hubspot):
         if x: ops.append({"id": pid, "produto": nome, "aderencia": x[0], "motivo": x[1], "onda": ONDA[onda], "status": status, "area": area})
     if s["b2b"] and not any(o["id"] == "GC" for o in ops):
         ops.append({"id": "GC", "produto": "Gestão de Contas (cobrança com IA)", "aderencia": "média", "motivo": "o dono confirma venda a prazo a empresas (B2B); faltam carteira e vencidos",
-                    "onda": ONDA[1], "status": "em definição", "area": "depto-internacional (ecossistema)"})
+                    "onda": ONDA[1], "status": "pronto", "area": "Save Invest"})
     ops = [{**o, "linha": LINHA.get(o["id"], "—")} for o in ops if o["aderencia"] in PESO]
     ops.sort(key=lambda o: (o["onda"], -PESO[o["aderencia"]]))
     cand = [o for o in ops if PESO[o["aderencia"]] >= 2]

@@ -1,92 +1,188 @@
 {
-"id":"combustiveis-glp","titulo":"Combustíveis e GLP","subtitulo":"postos, distribuidoras e revendas de gás",
-"base_clientes":"71 clientes da Save: 34 postos de combustíveis (CNAE 4731) e 37 revendas de GLP (CNAE 4784).",
-"retrato":[
-"Volume de 2025: diesel B 69,47 bi de litros (+3%), gasolina C 46,65 bi (+5,1%) e etanol hidratado 21,24 bi (−2,3%) — ANP, via NovaCana, 30/01/2026",
-"GLP: 7,6 Mt em 2025, 67,5% em botijão P13; expectativa de passar de 8 Mt em 2026 com o Gás do Povo, hoje programa permanente (Lei 15.348/2026) — Sindigás, jun/2026",
-"Margem bruta de distribuição e revenda em torno de 15% sem frete (referência de mercado) — Fecombustíveis; margem líquida do setor: não localizada",
-"Revenda ganha cerca de R$ 0,89 por litro no diesel (abr/2025) e R$ 0,90 na gasolina (jun/2025), referência de mercado — Ibeps com dados da ANP",
-"Operação Carbono Oculto (28/08/2025) apontou irregularidades em mais de 1.000 postos e bloqueou mais de R$ 1 bi; a Receita passou a rastrear postos e fintechs — Fenacon, ago/2025"
-],
-"dores":[
-"Ganho por litro é pequeno e o preço fica na placa para todo mundo ver. Qualquer custo a mais come a margem.",
-"O cartão e a antecipação do recebível pesam no meu resultado todo mês.",
-"Tenho medo de uma fiscalização e de ser confundido com quem frauda o setor, mesmo estando em dia.",
-"As frotas e os clientes de gás a prazo atrasam, e eu pago a distribuidora à vista ou em poucos dias.",
-"O imóvel do posto e as unidades estão misturados com o patrimônio da família, e a sucessão ainda não está resolvida."
-],
-"gatilhos":[
-"Intimação ou auto de infração da Receita ou do estado.",
-"Renovação do contrato com a distribuidora ou troca de bandeira, quando a certidão negativa é exigida.",
-"Compra ou venda de posto, ou reforma de pista.",
-"Mudança no Gás do Povo, como reajuste no leilão ou revenda avaliando sair do programa.",
-"Sucessão familiar ou retenção de dividendos pela Lei 15.270/2025."
-],
-"jornada":[
-{"onda":"Oxigenar","janela":"0 a 6 meses","objetivo":"Liberar caixa com o que a empresa já pagou a mais e organizar o recebimento de frotas e clientes de gás a prazo.",
-"solucoes":[
-{"nome":"Recuperação de contribuição previdenciária (verbas da folha)","porque":"Frentistas e entregadores pesam na folha; o sinal é o volume de folha e a análise do parecer.","status":"disponível"},
-{"nome":"Teses fora do combustível (loja de conveniência e lubrificantes)","porque":"O combustível é monofásico, com pouco efeito para teses de ICMS; a conveniência e outros itens seguem alíquota cheia e podem ter crédito.","status":"disponível"},
-{"nome":"Gestão de Contas (cobrança de frotas e de GLP a prazo)","porque":"Frotas e clientes de comércio e indústria compram a prazo; o sinal é o atraso na carteira. Pago no êxito, sem mensalidade.","status":"em avaliação conjunta"}],
-"entrega":"Tributário (análise e teses), Contas e Soluções (cobrança)"},
-{"onda":"Estruturar","janela":"3 a 12 meses","objetivo":"Resolver débitos e autuações, obter a certidão negativa e proteger o patrimônio da família antes de crescer.",
-"solucoes":[
-{"nome":"Gestão de Passivo","porque":"Débitos frequentes e a exigência de certidão negativa pela distribuidora; o sinal é o débito apontado no parecer ou na consulta.","status":"disponível"},
-{"nome":"Defesa administrativa e acompanhamento jurídico","porque":"Fiscalização mais intensa após a Carbono Oculto; o sinal é a intimação ou o auto recebido.","status":"disponível"},
-{"nome":"Estruturação patrimonial","porque":"Imóvel do posto e várias unidades no mesmo patrimônio; a Lei 15.270/2025 e a sucessão pedem organização.","status":"em avaliação conjunta"},
-{"nome":"Planejamento tributário e reforma (CBS/IBS)","porque":"Monofásico por unidade no combustível, alíquota cheia na conveniência e possível Simples híbrido: a simulação mostra o efeito da transição.","status":"disponível"}],
-"entrega":"Jurídico (passivo e defesa, estruturação patrimonial), Tributário (planejamento e reforma)"},
-{"onda":"Expandir","janela":"6 a 12 meses","objetivo":"Reduzir o custo de receber o cartão e as duplicatas, com a casa em ordem e a certidão em dia.",
-"solucoes":[
-{"nome":"Antecipação de recebíveis de cartão e duplicatas","porque":"Cartão cai em D+30 e o GLP vende a prazo; a operação é feita por instituição autorizada e exige certidão negativa.","status":"em avaliação conjunta"}],
-"entrega":"Contas e Soluções, Produtos Financeiros (estruturação da operação com instituição autorizada)"}
-],
-"aderencia":[
-{"solucao":"Gestão de Passivo","nivel":"Alta","observacao":"Posto Alta; GLP Média. Débitos frequentes e certidão negativa exigida pela bandeira. Sinal: débito no parecer."},
-{"solucao":"Produtos jurídicos (defesa administrativa)","nivel":"Alta","observacao":"Posto Alta; GLP Média. Fiscalização intensificada pós-Carbono Oculto. Sinal: intimação ou auto."},
-{"solucao":"Estruturação patrimonial","nivel":"Alta","observacao":"Posto Alta; GLP Média. Imóvel do posto e várias unidades. Gatilho: Lei 15.270/2025. Em avaliação conjunta."},
-{"solucao":"Gestão de Contas","nivel":"Alta","observacao":"GLP Alta; posto Média (frotas a prazo). Vendas a prazo a comércio e indústria. Em avaliação conjunta."},
-{"solucao":"Planejamento tributário e reforma","nivel":"Média","observacao":"Monofásico por unidade no combustível; conveniência na alíquota cheia; Simples híbrido a avaliar."},
-{"solucao":"Recuperação de contribuição previdenciária (verbas)","nivel":"Média","observacao":"Frentistas e entregadores. Sinal: volume de folha."},
-{"solucao":"Antecipação de recebíveis","nivel":"Média","observacao":"Cartão no posto e duplicatas no GLP. Feita por instituição autorizada. Em avaliação conjunta."},
-{"solucao":"Teses de PIS/COFINS e ICMS sobre a receita de combustível","nivel":"Baixa","observacao":"Combustível é monofásico: pouco efeito. Só a conveniência e outros itens, e o Tributário valida caso a caso."}
-],
-"kpis":[
-{"indicador":"Débito regularizado e desconto obtido","como_medir":"Débitos no parecer e na consulta, antes e depois da regularização, em reais."},
-{"indicador":"Certidão negativa emitida","como_medir":"Sim ou não, com data, para renovação de contrato com a distribuidora."},
-{"indicador":"Prazo médio de recebimento de frotas e GLP a prazo","como_medir":"Aging da carteira; dado a solicitar ao cliente."},
-{"indicador":"Custo do cartão sobre o faturamento","como_medir":"Percentual do faturamento mensal, conforme extrato das adquirentes."},
-{"indicador":"Crédito recuperado e abatido","como_medir":"Valor apurado pelo Tributário e valor efetivamente recebido ou compensado."}
-],
-"frase_valor":"No posto, a margem por litro é pequena. O ganho está em resolver o passivo, organizar o recebimento das frotas e proteger o patrimônio da família.",
-"big_four":[
-"Compliance fiscal e defesa em autos de ICMS monofásico e PIS/COFINS. A Save replica com Tributário e Jurídico acompanhando o auto até o fim.",
-"Due diligence em compra e venda de redes e reorganização societária. A Save replica no mapa de débitos e de imóveis antes do negócio.",
-"Simulação da reforma para distribuidoras (alíquota por unidade) e revendas. A Save replica a simulação por posto e por conveniência.",
-"Prevenção à lavagem de dinheiro e compliance de pagamentos pós-Carbono Oculto. A Save replica com organização documental e dos fluxos de recebimento."
-],
-"cuidados":[
-"Crédito tributário e débito têm prazo de 5 anos (decadência): o levantamento deve começar cedo, pois cada mês perdido pode reduzir o que é recuperável.",
-"Reforma: em 2027 o PIS/COFINS acaba e a CBS começa cheia; no combustível, a compra para revenda não dá crédito (art. 180 da LC 214, segundo consultorias). O Tributário confere o texto.",
-"Teses de exclusão do ICMS têm pouco efeito na receita monofásica de combustível; todo caso é validado pelo Tributário antes de qualquer expectativa.",
-"Valores só em estimativa preliminar sujeita a validação técnica. A Save estrutura; a antecipação é feita por instituição autorizada."
-],
-"interno":[
-"Gestão de Contas, antecipação, FIDC, estruturação patrimonial e crédito internacional seguem em validação ou definição: só descoberta, sem taxa, prazo ou fee, até a decisão do dono e o portão G2.",
-"FIDC só faz sentido para rede grande ou distribuidora acima de R$ 10 mi por mês; crédito internacional fora do perfil do setor; Maquila sem aderência (não oferecer).",
-"Dados não localizados: margem líquida e endividamento setorial. Vigência do decreto de publicação de margens do diesel (anunciado em 14/04/2026) não confirmada. Aging dos clientes: pedir.",
-"Próximo edital de transação da PGFN após o Edital 6/2026: não localizado. Acompanhar no radar antes de propor transação."
-],
-"fontes":[
-"NovaCana (Reuters/ANP): vendas de combustíveis em 2025 — https://www.novacana.com/noticias/vendas-diesel-gasolina-atingiram-recordes-brasil-2025-anp-300126 — 30/01/2026",
-"Sindigás: panorama GLP em movimento — https://www.sindigas.org.br/Download/PANORAMAS/NOVO%20GLP%20EM%20MOVIMENTO_JUN_2026.pdf — jun/2026",
-"eixos: Gás do Povo e vendas de botijões — https://eixos.com.br/combustiveis-e-bioenergia/gas-do-povo-deve-incrementar-vendas-de-botijoes-em-8-calcula-sindigas/ — s/d (2025)",
-"Brasilagro: margens dos postos (Ibeps/ANP) — https://www.brasilagro.com.br/conteudo/postos-turbinam-margens-de-lucro-e-motoristas-gastam-bilhoes-a-mais.html — 2025",
-"eixos: decreto de publicação de margens do diesel — https://eixos.com.br/combustiveis-e-bioenergia/decreto-vai-obrigar-distribuidoras-a-publicarem-margens-brutas/ — 14/04/2026",
-"Fenacon: Receita rastreia postos (Carbono Oculto) — https://fenacon.org.br/noticias/receita-federal-rastreia-dinheiro-de-postos-de-combustiveis-envolvidos-com-o-crime-organizado/ — ago/2025",
-"NetCPA: reforma tributária e combustíveis (monofásico) — https://netcpa.com.br/colunas/a-reforma-tributaria-e-o-setor-de-combustiveis/25438 — s/d",
-"Jornal Contábil: Lei 15.270/2025 (dividendos) — https://jornalcontabil.com.br/noticia/lei-15-270-define-regras-para-taxacao-de-lucros-e-dividendos-a-partir-de-2026/ — s/d (2025)",
-"NetCPA: cronograma da reforma tributária — https://netcpa.com.br/colunas/confira-o-cronograma-de-implementacao-da-reforma-tributaria/27214 — 2026",
-"Contábeis: Edital PGFN 6/2026 — https://www.contabeis.com.br/noticias/77182/pgfn-abre-edital-de-transacao-tributaria-para-dividas-ate-r-45-mi/ — jun/2026"
-]
+ "id": "combustiveis-glp",
+ "titulo": "Combustíveis e GLP",
+ "subtitulo": "postos, distribuidoras e revendas de gás",
+ "base_clientes": "71 clientes da Save: 34 postos de combustíveis (CNAE 4731) e 37 revendas de GLP (CNAE 4784).",
+ "retrato": [
+  "Volume de 2025: diesel B 69,47 bi de litros (+3%), gasolina C 46,65 bi (+5,1%) e etanol hidratado 21,24 bi (−2,3%) — ANP, via NovaCana, 30/01/2026",
+  "GLP: 7,6 Mt em 2025, 67,5% em botijão P13; expectativa de passar de 8 Mt em 2026 com o Gás do Povo, hoje programa permanente (Lei 15.348/2026) — Sindigás, jun/2026",
+  "Margem bruta de distribuição e revenda em torno de 15% sem frete (referência de mercado) — Fecombustíveis; margem líquida do setor: não localizada",
+  "Revenda ganha cerca de R$ 0,89 por litro no diesel (abr/2025) e R$ 0,90 na gasolina (jun/2025), referência de mercado — Ibeps com dados da ANP",
+  "Operação Carbono Oculto (28/08/2025) apontou irregularidades em mais de 1.000 postos e bloqueou mais de R$ 1 bi; a Receita passou a rastrear postos e fintechs — Fenacon, ago/2025"
+ ],
+ "dores": [
+  "Ganho por litro é pequeno e o preço fica na placa para todo mundo ver. Qualquer custo a mais come a margem.",
+  "O cartão e a antecipação do recebível pesam no meu resultado todo mês.",
+  "Tenho medo de uma fiscalização e de ser confundido com quem frauda o setor, mesmo estando em dia.",
+  "As frotas e os clientes de gás a prazo atrasam, e eu pago a distribuidora à vista ou em poucos dias.",
+  "O imóvel do posto e as unidades estão misturados com o patrimônio da família, e a sucessão ainda não está resolvida."
+ ],
+ "gatilhos": [
+  "Intimação ou auto de infração da Receita ou do estado.",
+  "Renovação do contrato com a distribuidora ou troca de bandeira, quando a certidão negativa é exigida.",
+  "Compra ou venda de posto, ou reforma de pista.",
+  "Mudança no Gás do Povo, como reajuste no leilão ou revenda avaliando sair do programa.",
+  "Sucessão familiar ou retenção de dividendos pela Lei 15.270/2025."
+ ],
+ "jornada": [
+  {
+   "onda": "Oxigenar",
+   "janela": "0 a 6 meses",
+   "objetivo": "Liberar caixa com o que a empresa já pagou a mais e organizar o recebimento de frotas e clientes de gás a prazo.",
+   "solucoes": [
+    {
+     "nome": "Recuperação de contribuição previdenciária (verbas da folha)",
+     "porque": "Frentistas e entregadores pesam na folha; o sinal é o volume de folha e a análise do parecer.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Teses fora do combustível (loja de conveniência e lubrificantes)",
+     "porque": "O combustível é monofásico, com pouco efeito para teses de ICMS; a conveniência e outros itens seguem alíquota cheia e podem ter crédito.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Contas (cobrança de frotas e de GLP a prazo)",
+     "porque": "Frotas e clientes de comércio e indústria compram a prazo; o sinal é o atraso na carteira. Pago no êxito, sem mensalidade.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Tributário (análise e teses), Contas e Soluções (cobrança)"
+  },
+  {
+   "onda": "Estruturar",
+   "janela": "3 a 12 meses",
+   "objetivo": "Resolver débitos e autuações, obter a certidão negativa e proteger o patrimônio da família antes de crescer.",
+   "solucoes": [
+    {
+     "nome": "Gestão de Passivo",
+     "porque": "Débitos frequentes e a exigência de certidão negativa pela distribuidora; o sinal é o débito apontado no parecer ou na consulta.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Defesa administrativa e acompanhamento jurídico",
+     "porque": "Fiscalização mais intensa após a Carbono Oculto; o sinal é a intimação ou o auto recebido.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Estruturação patrimonial",
+     "porque": "Imóvel do posto e várias unidades no mesmo patrimônio; a Lei 15.270/2025 e a sucessão pedem organização.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Planejamento tributário e reforma (CBS/IBS)",
+     "porque": "Monofásico por unidade no combustível, alíquota cheia na conveniência e possível Simples híbrido: a simulação mostra o efeito da transição.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Jurídico (passivo e defesa, estruturação patrimonial), Tributário (planejamento e reforma)"
+  },
+  {
+   "onda": "Expandir",
+   "janela": "6 a 12 meses",
+   "objetivo": "Reduzir o custo de receber o cartão e as duplicatas, com a casa em ordem e a certidão em dia.",
+   "solucoes": [
+    {
+     "nome": "Antecipação de recebíveis de cartão e duplicatas",
+     "porque": "Cartão cai em D+30 e o GLP vende a prazo; a operação é feita por instituição autorizada e exige certidão negativa.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Contas e Soluções, Produtos Financeiros (estruturação da operação com instituição autorizada)"
+  }
+ ],
+ "aderencia": [
+  {
+   "solucao": "Gestão de Passivo",
+   "nivel": "Alta",
+   "observacao": "Posto Alta; GLP Média. Débitos frequentes e certidão negativa exigida pela bandeira. Sinal: débito no parecer."
+  },
+  {
+   "solucao": "Produtos jurídicos (defesa administrativa)",
+   "nivel": "Alta",
+   "observacao": "Posto Alta; GLP Média. Fiscalização intensificada pós-Carbono Oculto. Sinal: intimação ou auto."
+  },
+  {
+   "solucao": "Estruturação patrimonial",
+   "nivel": "Alta",
+   "observacao": "Posto Alta; GLP Média. Imóvel do posto e várias unidades. Gatilho: Lei 15.270/2025."
+  },
+  {
+   "solucao": "Gestão de Contas",
+   "nivel": "Alta",
+   "observacao": "GLP Alta; posto Média (frotas a prazo). Vendas a prazo a comércio e indústria."
+  },
+  {
+   "solucao": "Planejamento tributário e reforma",
+   "nivel": "Média",
+   "observacao": "Monofásico por unidade no combustível; conveniência na alíquota cheia; Simples híbrido a avaliar."
+  },
+  {
+   "solucao": "Recuperação de contribuição previdenciária (verbas)",
+   "nivel": "Média",
+   "observacao": "Frentistas e entregadores. Sinal: volume de folha."
+  },
+  {
+   "solucao": "Antecipação de recebíveis",
+   "nivel": "Média",
+   "observacao": "Cartão no posto e duplicatas no GLP. Feita por instituição autorizada."
+  },
+  {
+   "solucao": "Teses de PIS/COFINS e ICMS sobre a receita de combustível",
+   "nivel": "Baixa",
+   "observacao": "Combustível é monofásico: pouco efeito. Só a conveniência e outros itens, e o Tributário valida caso a caso."
+  }
+ ],
+ "kpis": [
+  {
+   "indicador": "Débito regularizado e desconto obtido",
+   "como_medir": "Débitos no parecer e na consulta, antes e depois da regularização, em reais."
+  },
+  {
+   "indicador": "Certidão negativa emitida",
+   "como_medir": "Sim ou não, com data, para renovação de contrato com a distribuidora."
+  },
+  {
+   "indicador": "Prazo médio de recebimento de frotas e GLP a prazo",
+   "como_medir": "Aging da carteira; dado a solicitar ao cliente."
+  },
+  {
+   "indicador": "Custo do cartão sobre o faturamento",
+   "como_medir": "Percentual do faturamento mensal, conforme extrato das adquirentes."
+  },
+  {
+   "indicador": "Crédito recuperado e abatido",
+   "como_medir": "Valor apurado pelo Tributário e valor efetivamente recebido ou compensado."
+  }
+ ],
+ "frase_valor": "No posto, a margem por litro é pequena. O ganho está em resolver o passivo, organizar o recebimento das frotas e proteger o patrimônio da família.",
+ "big_four": [
+  "Compliance fiscal e defesa em autos de ICMS monofásico e PIS/COFINS. A Save replica com Tributário e Jurídico acompanhando o auto até o fim.",
+  "Due diligence em compra e venda de redes e reorganização societária. A Save replica no mapa de débitos e de imóveis antes do negócio.",
+  "Simulação da reforma para distribuidoras (alíquota por unidade) e revendas. A Save replica a simulação por posto e por conveniência.",
+  "Prevenção à lavagem de dinheiro e compliance de pagamentos pós-Carbono Oculto. A Save replica com organização documental e dos fluxos de recebimento."
+ ],
+ "cuidados": [
+  "Crédito tributário e débito têm prazo de 5 anos (decadência): o levantamento deve começar cedo, pois cada mês perdido pode reduzir o que é recuperável.",
+  "Reforma: em 2027 o PIS/COFINS acaba e a CBS começa cheia; no combustível, a compra para revenda não dá crédito (art. 180 da LC 214, segundo consultorias). O Tributário confere o texto.",
+  "Teses de exclusão do ICMS têm pouco efeito na receita monofásica de combustível; todo caso é validado pelo Tributário antes de qualquer expectativa.",
+  "Valores só em estimativa preliminar sujeita a validação técnica. A Save estrutura; a antecipação é feita por instituição autorizada."
+ ],
+ "interno": [
+  "Atualização de 19/10/2026 (Luis): Gestão de Contas, antecipação e FIDC (Save Invest) e estruturação patrimonial (jurídico) são produtos prontos; crédito internacional e Maquila (João Mattos) seguem só em descoberta até o G2 (15/12/2026), sem taxa, prazo ou fee. A confirmar com o Jurídico e a Save Invest: empresa que contrata e presta, habilitação, taxa da antecipação e remuneração do parceiro.",
+  "FIDC só faz sentido para rede grande ou distribuidora acima de R$ 10 mi por mês; crédito internacional fora do perfil do setor; Maquila sem aderência (não oferecer).",
+  "Dados não localizados: margem líquida e endividamento setorial. Vigência do decreto de publicação de margens do diesel (anunciado em 14/04/2026) não confirmada. Aging dos clientes: pedir.",
+  "Próximo edital de transação da PGFN após o Edital 6/2026: não localizado. Acompanhar no radar antes de propor transação."
+ ],
+ "fontes": [
+  "NovaCana (Reuters/ANP): vendas de combustíveis em 2025 — https://www.novacana.com/noticias/vendas-diesel-gasolina-atingiram-recordes-brasil-2025-anp-300126 — 30/01/2026",
+  "Sindigás: panorama GLP em movimento — https://www.sindigas.org.br/Download/PANORAMAS/NOVO%20GLP%20EM%20MOVIMENTO_JUN_2026.pdf — jun/2026",
+  "eixos: Gás do Povo e vendas de botijões — https://eixos.com.br/combustiveis-e-bioenergia/gas-do-povo-deve-incrementar-vendas-de-botijoes-em-8-calcula-sindigas/ — s/d (2025)",
+  "Brasilagro: margens dos postos (Ibeps/ANP) — https://www.brasilagro.com.br/conteudo/postos-turbinam-margens-de-lucro-e-motoristas-gastam-bilhoes-a-mais.html — 2025",
+  "eixos: decreto de publicação de margens do diesel — https://eixos.com.br/combustiveis-e-bioenergia/decreto-vai-obrigar-distribuidoras-a-publicarem-margens-brutas/ — 14/04/2026",
+  "Fenacon: Receita rastreia postos (Carbono Oculto) — https://fenacon.org.br/noticias/receita-federal-rastreia-dinheiro-de-postos-de-combustiveis-envolvidos-com-o-crime-organizado/ — ago/2025",
+  "NetCPA: reforma tributária e combustíveis (monofásico) — https://netcpa.com.br/colunas/a-reforma-tributaria-e-o-setor-de-combustiveis/25438 — s/d",
+  "Jornal Contábil: Lei 15.270/2025 (dividendos) — https://jornalcontabil.com.br/noticia/lei-15-270-define-regras-para-taxacao-de-lucros-e-dividendos-a-partir-de-2026/ — s/d (2025)",
+  "NetCPA: cronograma da reforma tributária — https://netcpa.com.br/colunas/confira-o-cronograma-de-implementacao-da-reforma-tributaria/27214 — 2026",
+  "Contábeis: Edital PGFN 6/2026 — https://www.contabeis.com.br/noticias/77182/pgfn-abre-edital-de-transacao-tributaria-para-dividas-ate-r-45-mi/ — jun/2026"
+ ]
 }

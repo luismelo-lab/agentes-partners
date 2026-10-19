@@ -1,6 +1,7 @@
 # Mix de serviços da Save, a partir das linhas de serviço das Big Four
 
 > 19/10/2026 · Uso interno · Dono: Luis. Base: o quadro das Big Four colado pelo Luis (descrições aceitas como recebidas, **não conferi cada afirmação** nas fontes das firmas), os produtos da Save (`ecossistema-produtos-servicos.md`), as reuniões de 13/10 e 24/09 e os playbooks setoriais.
+> **Estados e donos corrigidos pelo Luis em 19/10/2026:** Gestão de Contas, antecipação e FIDC são produtos prontos, ofertados pela **Save Invest**. Estruturação patrimonial e empresarial é pronta, conduzida pelo **jurídico**. **Tax internacional e comércio exterior** é pronto, conduzido por **Paulo e João Mattos**. Crédito internacional, captação de capital, home equity e internacionalização de empresas são conduzidos pelo **João Mattos**.
 > Regra: o mix é **inspirado** na estrutura das Big Four, não uma cópia. A Save só oferece o que tem produto, dono e trava jurídica resolvidos. Produto em validação ou definição segue como **descoberta**.
 
 ## 1. Leitura do quadro das Big Four
@@ -19,11 +20,11 @@
 | # | Linha Save | Equivalente nas Big Four | Serviços (ids do motor) | Estado | Quem sustenta |
 |---|---|---|---|---|---|
 | L1 | **Tributário e Reforma** | Tax | Recuperação por tese e recorrência (RT), crédito presumido agro, planejamento e reforma CBS/IBS (PLAN), tax tech e SPED | Pronto | `depto-tributario`, `recuperador`, `revisor-diagnostico` |
-| L2 | **Passivo e Reestruturação** | Financial Advisory (reestruturação) + Legal | Gestão de passivo e transação (PAS), defesa e contencioso (JUR), alongamento e carência de dívida bancária (ALONG) | PAS e JUR prontos; ALONG em definição | `depto-juridico`, `depto-tributario`, `depto-internacional` |
-| L3 | **Caixa e Capital de Giro** | Consulting (finanças) | Gestão de Contas, cobrança com IA (GC), antecipação por instituição autorizada (ANT), FIDC e multicedente (FIDC) | GC em implantação; ANT e FIDC em definição | `depto-internacional` (ecossistema) |
-| L4 | **Capital e Transações** | Deals / Strategy and Transactions | Crédito internacional (CI), captação de capital: dívida, equity, sócio (CAP), home equity (HE) | CI em validação; CAP e HE em definição | `depto-internacional` |
-| L5 | **Estrutura e Patrimônio** | Tax e Legal (estruturação) | Estruturação patrimonial e sucessória (EP), certificado digital | EP em definição | `depto-juridico` |
-| L6 | **Mercados Externos** | Tax internacional e comércio exterior | Maquila no Paraguai (MQ), internacionalização turnkey | MQ em estruturação | `depto-internacional` |
+| L2 | **Passivo e Reestruturação** | Financial Advisory (reestruturação) + Legal | Gestão de passivo e transação (PAS), defesa e contencioso (JUR), alongamento e carência de dívida bancária (ALONG) | PAS e JUR prontos; ALONG em definição (dono a definir) | `depto-juridico`, `depto-tributario`; ALONG: Save Invest ou João Mattos |
+| L3 | **Caixa e Capital de Giro** | Consulting (finanças) | Gestão de Contas, cobrança com IA (GC), antecipação por instituição autorizada (ANT), FIDC e multicedente (FIDC) | **Pronto** | **Save Invest** |
+| L4 | **Capital e Transações** | Deals / Strategy and Transactions | Crédito internacional (CI), captação de capital: dívida, equity, sócio (CAP), home equity (HE) | CI em validação (trava do G2); CAP e HE em definição | **João Mattos** |
+| L5 | **Estrutura e Patrimônio** | Tax e Legal (estruturação) | Estruturação patrimonial e sucessória (EP), certificado digital | **Pronto** | Time jurídico (`depto-juridico`) |
+| L6 | **Mercados Externos** | Tax internacional e comércio exterior | **Tax internacional e comércio exterior (TIN)**, Maquila no Paraguai (MQ), internacionalização turnkey | TIN **pronto**; MQ em estruturação | Paulo e João Mattos |
 
 **Camadas transversais (não vendidas à parte, como nas Big Four):**
 - **Inteligência setorial** (KPMG): 7 playbooks e especialistas por setor, que dizem qual serviço faz sentido.
@@ -45,11 +46,12 @@
 | Pacote | Perfil | Serviços, em ordem | Entrada |
 |---|---|---|---|
 | **A · Oxigenar** | Lucro Real, alimentos ou agro, com crédito a recuperar | L1 (RT, recorrência, crédito presumido) → L2 (PAS se houver débito) | Recuperação tributária |
-| **B · Caixa B2B** | Vende a prazo a empresas, R$ 4,8 mi/ano ou mais | L3 (cobrança → antecipação) → L1 (planejamento e reforma) | Gestão de Contas; serve a quem ainda não abre dados |
+| **B · Caixa B2B** | Vende a prazo a empresas, R$ 4,8 mi/ano ou mais | L3 (cobrança → antecipação) → L1 (planejamento e reforma); FIDC a partir de R$ 10 mi/mês | Gestão de Contas, **pronta para proposta**; serve a quem ainda não abre dados |
 | **C · Organizar para crescer** | Débito fiscal, muitos bancos, pouca certidão | L2 (PAS, JUR, ALONG) → L1 (créditos abatem débito) → L3 | Gestão de passivo |
-| **D · Escalar com ativos** | Faturamento ≥ R$ 50 mi, ativos relevantes, projeto de uso | L5 (estruturação patrimonial) → L4 (CI em descoberta) → L3 (FIDC, ≥ R$ 10 mi/mês) | Estruturação e conversa de descoberta |
+| **D · Escalar com ativos** | Faturamento ≥ R$ 50 mi, ativos relevantes, projeto de uso | L5 (estruturação patrimonial, pronta) → L3 (FIDC, ≥ R$ 10 mi/mês, pronto) → L4 (CI em descoberta) | Estruturação patrimonial |
 | **E · Crescer e exportar** | Demanda acima da capacidade, EBITDA pressionado por investimento | L4 (CAP: dívida, equity, sócio) → L6 (exportação, 2ª rodada) | Captação de capital em descoberta |
 | **F · Indústria de mão de obra** | Confecção, têxtil, calçados no Real | L1 (CPP e folha) → L6 (MQ, descoberta) | Recuperação (folha) |
+| **G · Comércio exterior** | Exporta ou importa, a partir de R$ 4,8 mi/ano | L6 (tax internacional e comércio exterior, pronto) → L1 → L4 (CI, se houver ativo) | Tax internacional e comércio exterior |
 
 **Mix por setor (resumo dos playbooks):** proteína animal e café: A, B, D · varejo alimentar: A, C, e FIDC multicedente em escala · combustíveis e transporte: C, B · confecção: B, F · panificação e alimentos: A, B, E.
 
@@ -61,9 +63,10 @@
 ## 6. Prioridades para fechar o mix
 | Prioridade | Ação | Dono sugerido |
 |---|---|---|
-| P1 | Pacotes A e B prontos para o parceiro (produtos prontos ou em implantação) | Contas e Soluções, Luis |
-| P1 | Ficha própria de ALONG, CAP e HE (sem dono, critério nem preço) | João, Júnior |
-| P1 | Definir quem contrata e quem presta a Gestão de Contas e a antecipação | Júnior, Jurídico |
+| P1 | Pacotes A, B e G prontos para o parceiro (produtos prontos) | Contas e Soluções, Luis |
+| P1 | Ficha própria de ALONG (dono a definir), CAP e HE (João Mattos): critério e preço | João Mattos, Júnior |
+| P1 | Confirmar a empresa que contrata e presta (Save Invest), habilitação, taxa da antecipação e a remuneração do parceiro em GC, ANT e FIDC | Júnior, Jurídico |
+| P1 | Fichas de GC, ANT, FIDC, EP e Tax internacional no padrão `depto-internacional`, com materiais de venda | Save Invest, jurídico, Paulo |
 | P2 | Pacotes D e E para o café e agro (primeiro case real do Luis) | Luis, Júnior |
 | P2 | Parecer externo sobre OAB (L1 e L2), CVM (L3 e L4) e BCB | Jurídico |
 | P3 | Parceiros para M&A, valuation, ESG e perícia | Luis |

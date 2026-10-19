@@ -5,6 +5,15 @@
 > **Lacuna conhecida:** o detalhamento das teses tributárias e serviços colado na conversa "Operação agentes" não estava acessível nesta sessão. A Parte 3 usa o catálogo do repositório. Cole o texto e eu concilio (seção 9).
 > Sem nomes de clientes: use `<EMPRESA>`.
 
+> **Atualização do Luis, 19/10/2026 (vale sobre o que está abaixo quando houver divergência):**
+> | Produto | Estado | Quem conduz |
+> |---|---|---|
+> | Gestão de Contas, antecipação de recebíveis, FIDC/FIDIC | **Pronto para venda** | **Save Invest** |
+> | Estruturação patrimonial e empresarial | **Pronto** | Time jurídico |
+> | Tax internacional e comércio exterior | **Pronto** | Paulo e João Mattos |
+> | Crédito internacional, captação de capital, home equity, internacionalização de empresas (inclui Maquila) | Conduzidos pelo **João Mattos**; crédito internacional segue com a trava do G2 | João Mattos |
+> As cautelas jurídicas continuam: a Save Partners estrutura e indica; antecipar é operação de instituição autorizada e cotas de fundo são valor mobiliário (CVM). A confirmar com o Jurídico e a Save Invest: empresa que contrata e presta, habilitação, taxa da antecipação e remuneração do parceiro.
+
 ---
 
 ## 1. A ideia central
@@ -48,7 +57,7 @@ Regras de sequência (vigentes em `skills/depto-solucoes/references/esteira.md`)
 
 ## 3. Catálogo de produtos e serviços
 
-Legenda de status: **Maduro** (vende hoje) · **Em definição** (desenho feito, falta decisão do dono) · **MVP / em validação** (só descoberta) · **Em estruturação** (sem cliente).
+Legenda de status (ver a atualização de 19/10 no topo): **Maduro** (vende hoje) · **Em definição** (desenho feito, falta decisão do dono) · **MVP / em validação** (só descoberta) · **Em estruturação** (sem cliente).
 
 ### ONDA 1 · OXIGENAR
 
@@ -75,7 +84,7 @@ Legenda de status: **Maduro** (vende hoje) · **Em definição** (desenho feito,
 - **Quem faz o quê:** cobrança é desenvolvida pela SEI; antecipação é da Federal Invest, em pool (comitê de 4 pessoas, voto do originador com peso 2, 3 a 4 agências dividem o risco). **A Save nunca se apresenta como quem antecipa.**
 - **ICP:** venda a prazo B2B; contas a receber alto, vencidos acima do faturamento mensal, despesa financeira alta, dívida de curto prazo de 3 a 4 faturamentos.
 - **Estatísticas de mercado** (B2B: ~20% não pagam no vencimento, ~90% recuperado no total) **não são dados próprios**. Não apresentar como métrica da Save.
-- **Status:** tratado como Maduro (cobrança em produção há semanas, carteira interna rodando, 1º cliente externo previsto). **Fora do Padrão de Produto Novo.**
+- **Status:** **pronto para venda, oferta da Save Invest** (Luis, 19/10). Cobrança em produção desde outubro, com carteira interna rodando e 1º cliente externo previsto. Fora do Padrão de Produto Novo.
 - **Em aberto:** empresa que contrata, taxa da antecipação, regra de remuneração do parceiro, escopo exato, habilitação de quem presta.
 
 ### ONDA 2 · ESTRUTURAR
@@ -87,7 +96,7 @@ Legenda de status: **Maduro** (vende hoje) · **Em definição** (desenho feito,
 - **O que é:** reestruturar dívida bancária (alongamento, carência de até 2 anos, recuperação bancária) para dar fôlego. **Exemplo da reunião:** faturamento de ~R$ 8 mi/mês, ~15 bancos, ~R$ 1 mi/mês de parcelas, prejuízo acumulado ~R$ 9 mi.
 - **Insumos:** DRE, balanço, **curva ABC de endividamento** e **SCR/Bacen** (prazo, carência, taxa, endividamento). **Abordagem:** "faria sentido parar de pagar parcela por dois anos mediante estrutura adequada?"
 - **Janela:** quando o caixa começa a apertar, mas a empresa não está insolvente. Pergunta-chave: *"tem algum mês do ano em que o seu caixa aperta mais?"*; registrar o mês e retomar.
-- **Status:** em definição (não há ficha própria, dono nem preço nas fontes).
+- **Status:** em definição; sem ficha própria, preço ou critério. Quem conduz: a definir (Save Invest ou João Mattos).
 
 #### P7. Produtos Jurídicos
 - Defesa e acompanhamento de débito suspenso, intimação, ação. Entrega: `depto-juridico`. **Maduro.**
@@ -112,14 +121,14 @@ Legenda de status: **Maduro** (vende hoje) · **Em definição** (desenho feito,
 - **Garantias possíveis:** fazendas, galpões, silos, imóveis, lojas, áreas rurais (ex.: ativo de R$ 100 mi para captar R$ 50 mi).
 - **Usos:** quitar dívida bancária cara, caixa, estruturar FIDC, expansão, projetos de energia. Exige projeto, governança e acompanhamento. Distinguir de **Carry Trade** (captar barato e aplicar em CDI); o funding para empresa é para **investir no negócio**.
 - **Modelo comercial:** fee de êxito, só depois da liberação; sem pagamento antecipado. Parceiro: 10% do líquido Save, teto de 30% (D61), **não comunicar antes do G2**.
-- **Status:** MVP / em validação. **Nada de taxa, prazo ou fee antes do G2 (15/12/2026).** Só descoberta.
+- **Status:** em validação, conduzido pelo **João Mattos**. **Nada de taxa, prazo ou fee antes do G2 (15/12/2026).** Só descoberta.
 
 #### P13. FIDC / FIDIC e multicedente / multissacado
 - **O que é:** o cliente cria o próprio mecanismo de bancarização: captura receita financeira, antecipa dentro do grupo, melhora lucratividade e fideliza (quem tem FIDC cota menos com concorrente).
 - **ICP:** faturamento **≥ ~R$ 10 mi por mês** (não por ano). Custo do fundo ~R$ 80 mil/mês (gestor ~R$ 30 mil). Empresa de R$ 25 mi/ano não sustenta.
 - **Multicedente/multissacado:** supermercados (cerca de 80% da receita é custo de mercadoria; fornecedores poderiam antecipar para o varejista capturar a receita financeira), café, produtores, cadeias de fornecedores. **A aprofundar em reunião futura.**
 - **Save:** receita **recorrente** de administração/gestão operacional. **Não distribui cotas** (valor mobiliário, CVM).
-- **Status:** MVP. Sem dono, parceiro, preço ou portão registrados.
+- **Status:** **pronto para venda, oferta da Save Invest** (Luis, 19/10). Antes tratado como MVP.
 
 #### P14. Home equity
 - Alternativa intermediária para quem não tem escala para FIDC ou funding. **Lacuna:** sem descrição, dono, parceiro, preço ou critério.
@@ -201,7 +210,7 @@ Agentes que sustentam (já no repositório): `depto-solucoes` (esteira e sinais)
 ## 8. Regras e travas (valem para todos os produtos)
 
 1. A Save é estruturadora e facilitadora. **Nunca credora, nunca quem antecipa, nunca distribui cotas.**
-2. Nada de taxa, prazo, percentual ou fee ao cliente/parceiro antes do G2 nos produtos em validação.
+2. Nada de taxa, prazo, percentual ou fee ao cliente/parceiro antes do G2 no crédito internacional e na Maquila (produtos conduzidos pelo João Mattos em validação).
 3. Tributário e Jurídico: só pré-análise, fonte oficial datada, validação humana.
 4. Estatística de mercado não é dado próprio.
 5. Conta escrow: camada adicional de proteção, não blindagem.

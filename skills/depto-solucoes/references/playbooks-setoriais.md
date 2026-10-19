@@ -8,7 +8,7 @@
 ## Como ler
 
 - **Aderência:** alta, média, baixa ou não. Sempre com o sinal que confirma e a restrição.
-- **Status do produto** segue `esteira.md`. Crédito Internacional (CI), Maquila (MQ), FIDC, Gestão de Contas, antecipação e estruturação patrimonial: **só descoberta até o G2 (15/12/2026)**. Sem taxa, prazo, fee ou número ao cliente. A Save nunca é credora. Antecipar recebíveis é operação de instituição autorizada.
+- **Status do produto** segue `esteira.md`. Crédito Internacional (CI) e Maquila (MQ), conduzidos pelo João Mattos: **só descoberta até o G2 (15/12/2026)**, sem taxa, prazo, fee ou número ao cliente. Gestão de Contas, antecipação e FIDC (oferta da Save Invest) e estruturação patrimonial (jurídico) são produtos prontos (decisão do Luis, 19/10/2026). A Save nunca é credora; antecipar recebíveis é operação de instituição autorizada.
 - **Frigoríficos estão bloqueados no piloto da Maquila** (D59).
 - **Restrição do catálogo:** a tese de alíquota zero na revenda (PER) **não serve para supermercado/mercado nem para café**.
 - **Toda tese** passa pela análise de aptidão do `depto-tributario` (CNAE, mercadorias, CFOP, regime).

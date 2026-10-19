@@ -9,7 +9,7 @@ from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 
-REPO = Path("/home/user/agentes-partners")
+REPO = Path(__file__).resolve().parents[3]
 SCR = Path(sys.argv[1])
 OUT = Path(sys.argv[2])
 M = json.load(open(REPO / "departamentos/marketing-marca/padrao/marca.json"))
@@ -164,7 +164,7 @@ caixa("A tese em uma frase", "Caixa primeiro, estrutura depois, expansão por ú
 tabela(["Etapa", "Pergunta do dono", "O que a Save faz", "Janela"],
        [["1. Oxigenar", "Onde está o dinheiro que já é meu?", "Recuperação tributária, recorrência, crédito presumido, cobrança e gestão de contas", "0 a 6 meses"],
         ["2. Estruturar", "Como organizo o passivo e a carga para crescer?", "Gestão de passivo, defesa, planejamento e reforma tributária, antecipação, estruturação patrimonial", "3 a 12 meses"],
-        ["3. Expandir", "Como financio o próximo salto?", "Crédito internacional, FIDC, captação de capital, novos mercados (em avaliação conjunta)", "6 a 24 meses"]],
+        ["3. Expandir", "Como financio o próximo salto?", "FIDC, estruturação patrimonial, crédito internacional, captação de capital e novos mercados (os dois últimos em avaliação conjunta)", "6 a 24 meses"]],
        [2.6, 4.2, 7.0, 2.8], 9)
 para("O que este documento entrega", 10.5, True, before=6)
 bullets(["Um método de diagnóstico: os sinais que mostram qual serviço faz sentido, com o dado que o sustenta.",
@@ -183,7 +183,7 @@ tabela(["#", "Regra", "Por que importa"],
         ["2", "O crédito recuperado é o primeiro dinheiro novo", "A conversa da segunda onda começa mostrando o que a primeira trouxe."],
         ["3", "A reforma tributária cria urgência", "O PIS/COFINS acaba em 2027. A revisão das competências abertas deve ser fechada antes da transição."],
         ["4", "No máximo dois serviços novos por vez", "Para não sobrecarregar a empresa nem a equipe que entrega."],
-        ["5", "Serviço em avaliação entra como conversa de descoberta", "Sem proposta, taxa ou prazo até a validação técnica e jurídica."]],
+        ["5", "Serviço em avaliação entra como conversa de descoberta", "Crédito internacional, captação de capital e maquila: sem proposta, taxa ou prazo até a validação técnica e jurídica."]],
        [0.8, 6.0, 9.8], 9)
 h("Onda 1 · Oxigenar", 2)
 para("Objetivo: liberar caixa com risco baixo e abrir o acesso aos dados. Quem entrega: Tributário, com revisão técnica, e Contas e Soluções.")
@@ -196,10 +196,10 @@ para("Objetivo: organizar o passivo, a carga e a governança. Quem entrega: Jur�
 bullets(["Gestão de passivo: transação, parcelamento e compensação com o próprio crédito, até a certidão negativa.",
          "Defesa e acompanhamento de débitos, intimações e ações.",
          "Planejamento tributário e reforma (CBS e IBS): regime, mix de produtos, créditos antes da extinção.",
-         "Antecipação de recebíveis, por instituição autorizada, e alongamento de dívida bancária com carência.",
+         "Antecipação de recebíveis, por instituição autorizada (Save Invest), e alongamento de dívida bancária com carência.",
          "Estruturação patrimonial (proteção do patrimônio e preparação de garantias para a etapa seguinte)."])
 h("Onda 3 · Expandir", 2)
-para("Objetivo: financiar crescimento. Em avaliação conjunta, caso a caso, depois de passivo organizado e demonstrações em dia.")
+para("Objetivo: financiar crescimento, caso a caso, depois de passivo organizado e demonstrações em dia. FIDC e comércio exterior estão disponíveis; crédito internacional e captação de capital seguem em avaliação conjunta.")
 bullets(["Crédito internacional em moeda forte, estruturado com projeto de uso dos recursos e acompanhamento. A Save estrutura; não concede crédito.",
          "FIDC próprio, para empresas com escala de recebíveis, capturando a receita financeira que hoje fica com bancos e fundos.",
          "Captação de capital: parceiros e investidores, nacionais e estrangeiros, com dossiê preparado.",
@@ -215,8 +215,8 @@ tabela(["Sinal no diagnóstico", "O que indica", "Serviço a considerar"],
         ["Dívida de curto prazo de 3 a 4 faturamentos", "Risco de insolvência", "Alongamento e carência, depois gestão de passivo"],
         ["Débito fiscal em aberto, sem certidão", "Bloqueio de crédito e de licitação", "Gestão de passivo e defesa"],
         ["Saldo credor, compras com alíquota zero, alimentos no Lucro Real", "Crédito a recuperar", "Recuperação tributária, recorrência, crédito presumido"],
-        ["Faturamento acima de cerca de R$ 10 mi por mês e antecipação a banco", "Receita financeira capturada por terceiros", "FIDC próprio (em avaliação)"],
-        ["Cadeia grande de fornecedores", "Oportunidade multicedente e multissacado", "FIDC (em avaliação)"],
+        ["Faturamento acima de cerca de R$ 10 mi por mês e antecipação a banco", "Receita financeira capturada por terceiros", "FIDC próprio (Save Invest)"],
+        ["Cadeia grande de fornecedores", "Oportunidade multicedente e multissacado", "FIDC (Save Invest)"],
         ["Ativos relevantes (terra, silo, galpão, lojas quitadas)", "Base para garantir crédito de longo prazo", "Estruturação patrimonial; crédito internacional"],
         ["Crescimento acima da capacidade; investimento antes de gerar caixa", "Necessidade de capital de expansão", "Captação de capital (dívida, equity, sócio estratégico)"]],
        [6.0, 4.4, 6.2], 8.5)
@@ -234,10 +234,10 @@ para("Seis frentes, cada uma com dono técnico dentro da Save e com a validaçã
 tabela(["Frente", "Serviços", "Estado", "Remuneração"],
        [["Tributário", "Recuperação por tese, recorrência, crédito presumido, planejamento e reforma, análise de créditos antes da extinção do PIS/COFINS", "Disponível", "Honorário de êxito, no resultado"],
         ["Jurídico", "Gestão de passivo (transação, parcelamento, compensação), defesa administrativa, contencioso e acompanhamento", "Disponível", "Conforme escopo"],
-        ["Contas e caixa", "Cobrança por IA, antecipação por instituição autorizada, limite automático sobre a carteira registrada, integração gratuita ao sistema do cliente", "Em implantação e avaliação conjunta", "Cobrança paga no êxito; demais itens definidos na proposta"],
-        ["Estrutura e patrimônio", "Estruturação patrimonial, certificado digital, apoio documental", "Em avaliação conjunta", "Conforme escopo"],
-        ["Crédito e capital", "Crédito internacional, FIDC, captação de capital, home equity", "Em avaliação conjunta", "Êxito, só após a liberação; sem cobrança antecipada de análise"],
-        ["Mercados externos", "Internacionalização, produção no Paraguai pelo regime de maquila (estudo de viabilidade)", "Conversa de descoberta", "A definir após o estudo"]],
+        ["Contas e caixa", "Cobrança por IA, antecipação por instituição autorizada, limite automático sobre a carteira registrada, integração gratuita ao sistema do cliente", "Disponível (Save Invest)", "Cobrança paga no êxito; demais itens definidos na proposta"],
+        ["Estrutura e patrimônio", "Estruturação patrimonial e empresarial, certificado digital, apoio documental", "Disponível (time jurídico)", "Conforme escopo"],
+        ["Crédito e capital", "Crédito internacional, captação de capital, home equity", "Em avaliação conjunta (conduzido pelo João Mattos)", "Êxito, só após a liberação; sem cobrança antecipada de análise"],
+        ["Mercados externos", "Tax internacional e comércio exterior; internacionalização e produção no Paraguai pelo regime de maquila (estudo de viabilidade)", "Tax internacional disponível; maquila em descoberta", "A definir após o estudo"]],
        [3.0, 7.2, 3.0, 3.4], 8.5)
 h("Como a Save trabalha em cada serviço", 3)
 bullets(["Estrutura, nunca concede crédito: crédito internacional e antecipação são realizados por instituições autorizadas.",

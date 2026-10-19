@@ -64,6 +64,7 @@ COM_DEB = re.compile(r"possui d[ée]bitos|d[ée]bitos? (em aberto|com exigibilid
 # ── produtos: (id, nome, onda da esteira, status, área/skill, regra(s) → (aderência, motivo) ou None) ─────────
 # onda: 1 Oxigenar (caixa rápido, risco baixo) · 2 Estruturar (passivo, carga, governança) · 3 Expandir (funding, novos mercados)
 # status: pronto · em validação (trava do G2: sem taxa/prazo/fee) · em estruturação · em definição
+# 19/10/2026 (Luis): GC, ANT e FIDC são prontos, ofertados pela Save Invest; EP é pronto, conduzido pelo jurídico; CI e MQ conduzidos pelo João Mattos
 
 
 def r_recorrencia(s):
@@ -125,7 +126,7 @@ def r_planejamento(s):
 def r_gestao_contas(s):
     f = s["faturamento"] or 0
     b2b = ATACADO(s["cnae"]) or INDUSTRIA(s["cnae"]) or s["setor"] == "Transporte de carga"
-    if b2b and f >= 4.8e6: return ("alta" if f >= 10e6 else "média", "vende a prazo para empresas (B2B): cobrança organizada e porta para DRE e balanço (produto em definição)")
+    if b2b and f >= 4.8e6: return ("alta" if f >= 10e6 else "média", "vende a prazo para empresas (B2B): cobrança organizada e porta para DRE e balanço (oferta da Save Invest)")
     if VAREJO(s["cnae"]) and f >= 4.8e6: return ("baixa", "varejo recebe à vista ou no cartão: só se houver venda a prazo relevante")
 
 
@@ -212,15 +213,15 @@ def r_rt(s):
 
 PRODUTOS = [
     ("RT", "Recuperação Tributária", 1, "pronto", "depto-tributario + recuperador + revisor-diagnostico", r_rt),
-    ("GC", "Gestão de Contas (cobrança com IA)", 1, "em definição", "depto-internacional (ecossistema)", r_gestao_contas),
+    ("GC", "Gestão de Contas (cobrança com IA)", 1, "pronto", "Save Invest", r_gestao_contas),
     ("PAS", "Gestão de Passivo (transação e parcelamento)", 2, "pronto", "depto-juridico + depto-tributario", r_passivo),
     ("JUR", "Produtos Jurídicos (defesa e acompanhamento)", 2, "pronto", "depto-juridico", r_juridico),
     ("PLAN", "Planejamento tributário e reforma (CBS/IBS)", 2, "pronto", "depto-tributario", r_planejamento),
-    ("EP", "Estruturação patrimonial", 2, "em definição", "depto-juridico", r_patrimonial),
-    ("ANT", "Antecipação de recebíveis (instituição autorizada)", 2, "em definição", "depto-internacional (ecossistema)", r_antecipacao),
-    ("FIDC", "FIDC", 3, "em definição", "depto-internacional (ecossistema)", r_fidc),
-    ("CI", "Crédito Internacional (funding)", 3, "em validação", "depto-internacional", r_ci),
-    ("MQ", "Maquila no Paraguai", 3, "em estruturação", "depto-internacional", r_maquila),
+    ("EP", "Estruturação patrimonial", 2, "pronto", "depto-juridico", r_patrimonial),
+    ("ANT", "Antecipação de recebíveis (instituição autorizada)", 2, "pronto", "Save Invest", r_antecipacao),
+    ("FIDC", "FIDC", 3, "pronto", "Save Invest", r_fidc),
+    ("CI", "Crédito Internacional (funding)", 3, "em validação", "João Mattos (depto-internacional)", r_ci),
+    ("MQ", "Maquila no Paraguai", 3, "em estruturação", "João Mattos e Paulo (depto-internacional)", r_maquila),
 ]
 ONDA = {1: "1 · Oxigenar", 2: "2 · Estruturar", 3: "3 · Expandir"}
 PESO = {"alta": 3, "média": 2, "baixa": 1, "bloqueado": 0}
@@ -343,7 +344,7 @@ def excel(linhas, destino):
     for t in ["Mapa de aderência da carteira (Desenvolvimento de Contas e Soluções). Uso interno.",
               "Onda 1 Oxigenar: caixa rápido e risco baixo. Onda 2 Estruturar: passivo, carga e governança. Onda 3 Expandir: funding e novos mercados.",
               "Recuperação Tributária aparece como um produto só; a coluna ao lado lista as teses do catálogo que cabem no segmento e no regime (perfil, não diagnóstico: o técnico confirma). Aderência alta ou média aparece nas ondas; o motivo de cada uma está no mapa individual (mapa_conta.py --negocio <id>).",
-              "Produtos em validação, estruturação ou definição (Crédito Internacional, Maquila, Gestão de Contas, antecipação, FIDC): só descoberta, sem taxa, prazo ou fee.",
+              "Crédito Internacional e Maquila (conduzidos pelo João Mattos) seguem em validação ou estruturação: só descoberta, sem taxa, prazo ou fee. Gestão de Contas, antecipação e FIDC (Save Invest) e estruturação patrimonial (jurídico) são produtos prontos.",
               "Índice de aderência: alta = 3, média = 2, baixa = 1. Serve para priorizar a conversa com o Master, não é valor em R$.",
               "RT ganha: soma do valor dos ganhos de Recuperação Tributária (crédito do cliente, não receita da Save), sem os cards com duplicidade suspeita. O campo recebido ainda não é preenchido no HubSpot.",
               "Alertas: duplicidade suspeita (ganho importado repetindo outro do mesmo dia) e conflito de canal (mais de um parceiro na mesma raiz de CNPJ). Tratar antes de falar com o Master."]:

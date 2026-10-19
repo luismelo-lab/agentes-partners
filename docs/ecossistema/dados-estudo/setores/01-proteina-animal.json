@@ -48,7 +48,7 @@
     {
      "nome": "Gestão de Contas (atacado)",
      "porque": "Sinal: venda a prazo ao varejo e ao food service, com carteira B2B e vencidos.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Tributário, com Diagnóstico; Contas e Soluções para a cobrança."
@@ -76,7 +76,7 @@
     {
      "nome": "Antecipação de recebíveis, por instituição autorizada",
      "porque": "Sinal: contas a receber acima do faturamento mensal, em duplicatas de varejo e food service. A Save estrutura; não antecipa.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Jurídico e Tributário; Contas e Soluções e Produtos Financeiros para a antecipação."
@@ -94,12 +94,12 @@
     {
      "nome": "Estrutura de recebíveis (FIDC)",
      "porque": "Só para porte alto de faturamento mensal e carteira pulverizada.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     },
     {
      "nome": "Estruturação patrimonial",
      "porque": "Empresa familiar com terra, gado e plantas; a retenção sobre dividendos desde 2026 é gatilho para planejar.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Produtos Financeiros, com Jurídico para a estruturação patrimonial."
@@ -179,11 +179,12 @@
   "Prazo de 5 anos (decadência): cada mês de espera pode fazer competências saírem da janela de recuperação.",
   "O PIS/COFINS acaba em 2027 e a janela de análise dos saldos credores fecha com a transição. Toda tese passa por análise de aptidão e validação técnica.",
   "Crédito presumido da agroindústria sofre corte de 10% pela LC 224/2025. O efeito de benefícios estaduais de ICMS no IRPJ/CSLL é avaliado por competência.",
-  "Valores só em faixa e como estimativa preliminar sujeita a validação técnica. A Save não promete resultado, prazo ou aprovação, e produtos financeiros dependem da decisão da instituição."
+  "Valores só em faixa e como estimativa preliminar sujeita a validação técnica. A Save não promete resultado, prazo ou aprovação, e produtos financeiros dependem da decisão da instituição.",
+  "Antecipação é operação de instituição autorizada; a Save estrutura e organiza a carteira, nunca é credora."
  ],
  "interno": [
   "Frigoríficos estão bloqueados no piloto da Maquila (D59): não oferecer.",
-  "Crédito Internacional, FIDC, Gestão de Contas, antecipação e estruturação patrimonial só em descoberta até o G2 (15/12/2026): sem taxa, prazo, fee ou nome de instituição ao cliente.",
+  "Atualização de 19/10/2026 (Luis): Gestão de Contas, antecipação e FIDC (Save Invest) e estruturação patrimonial (jurídico) são produtos prontos; crédito internacional e Maquila (João Mattos) seguem só em descoberta até o G2 (15/12/2026), sem taxa, prazo ou fee. A confirmar com o Jurídico e a Save Invest: empresa que contrata e presta, habilitação, taxa da antecipação e remuneração do parceiro.",
   "Margem do frigorífico médio, ciclo de caixa exato e endividamento setorial: não localizados. A referência de margem líquida de 1% a 3% é prática de mercado, sem fonte primária.",
   "Pendências do radar: ato anual dos percentuais de crédito presumido do produtor rural e texto consolidado do Anexo I com a LC 227/2026."
  ],

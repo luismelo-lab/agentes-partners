@@ -1,12 +1,19 @@
 {
  "versao": "2026-10-19",
+ "produtos": {
+  "RT": {"estado": "pronto", "conduz": "Tributário"}, "PLAN": {"estado": "pronto", "conduz": "Tributário"},
+  "PAS": {"estado": "pronto", "conduz": "Jurídico e Tributário"}, "JUR": {"estado": "pronto", "conduz": "Jurídico"}, "ALONG": {"estado": "em definição", "conduz": "a definir (Save Invest ou João Mattos)"},
+  "GC": {"estado": "pronto", "conduz": "Save Invest"}, "ANT": {"estado": "pronto", "conduz": "Save Invest"}, "FIDC": {"estado": "pronto", "conduz": "Save Invest"},
+  "CI": {"estado": "em validação (G2)", "conduz": "João Mattos"}, "CAP": {"estado": "conduzido pelo João Mattos", "conduz": "João Mattos"}, "HE": {"estado": "conduzido pelo João Mattos", "conduz": "João Mattos"},
+  "EP": {"estado": "pronto", "conduz": "Jurídico"}, "TIN": {"estado": "pronto", "conduz": "Paulo e João Mattos"}, "MQ": {"estado": "em estruturação (internacionalização)", "conduz": "João Mattos e Paulo"}
+ },
  "linhas": {
   "L1": {"nome": "Tributário e Reforma", "equivalente_big4": "Tax", "produtos": ["RT", "PLAN"]},
   "L2": {"nome": "Passivo e Reestruturação", "equivalente_big4": "Financial Advisory (reestruturação) e Legal", "produtos": ["PAS", "JUR", "ALONG"]},
   "L3": {"nome": "Caixa e Capital de Giro", "equivalente_big4": "Consulting (finanças)", "produtos": ["GC", "ANT", "FIDC"]},
   "L4": {"nome": "Capital e Transações", "equivalente_big4": "Deals e Strategy and Transactions", "produtos": ["CI", "CAP", "HE"]},
   "L5": {"nome": "Estrutura e Patrimônio", "equivalente_big4": "Tax e Legal (estruturação)", "produtos": ["EP"]},
-  "L6": {"nome": "Mercados Externos", "equivalente_big4": "Tax internacional e comércio exterior", "produtos": ["MQ"]}
+  "L6": {"nome": "Mercados Externos", "equivalente_big4": "Tax internacional e comércio exterior", "produtos": ["TIN", "MQ"]}
  },
  "fora_do_mix": ["auditoria e asseguração", "cibersegurança", "nuvem, ERP e IA como projeto", "people advisory", "cadeia de suprimentos"],
  "por_parceiro": ["M&A", "valuation", "IPO", "perícia e forense", "ESG e rastreabilidade"]

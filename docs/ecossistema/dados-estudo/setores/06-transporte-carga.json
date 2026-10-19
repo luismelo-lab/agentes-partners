@@ -43,7 +43,7 @@
     {
      "nome": "Gestão de Contas",
      "porque": "Frete a prazo e carteira de embarcadores concentrada. Sinal: contas a receber alto. Cobrança organizada, pago no êxito.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Tributário, com Contas e Soluções para a carteira de recebíveis"
@@ -71,7 +71,7 @@
     {
      "nome": "Antecipação do recebível de frete",
      "porque": "Frete a 30 a 60 dias, documentado em CT-e. Operação de instituição autorizada; a Save organiza a carteira.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Jurídico, Tributário e Produtos Financeiros, com instituição autorizada na antecipação"
@@ -84,12 +84,12 @@
     {
      "nome": "Mecanismo próprio de recebíveis (FIDC)",
      "porque": "Só faz sentido para transportadora grande, com volume mensal de recebíveis que sustente o custo da estrutura.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     },
     {
      "nome": "Estruturação patrimonial",
      "porque": "Frota e imóveis em nome da empresa, sinal de patrimônio exposto. Entra depois da regularização de débitos.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Produtos Financeiros e Jurídico"
@@ -122,17 +122,17 @@
    "observacao": "Débitos previdenciários e de PIS/COFINS. Certidão negativa exigida por embarcador."
   },
   {
-   "solucao": "Gestão de Contas (em avaliação conjunta)",
+   "solucao": "Gestão de Contas",
    "nivel": "Alta",
    "observacao": "Frete a prazo e carteira de embarcadores. Sinal: contas a receber alto."
   },
   {
-   "solucao": "Antecipação de recebíveis (em avaliação conjunta)",
+   "solucao": "Antecipação de recebíveis",
    "nivel": "Alta",
    "observacao": "Recebível de frete em CT-e, prazo de 30 a 60 dias. Operada por instituição autorizada."
   },
   {
-   "solucao": "FIDC (em avaliação conjunta)",
+   "solucao": "FIDC",
    "nivel": "Baixa",
    "observacao": "Só transportadora grande, com alto volume mensal de recebíveis."
   }
@@ -169,7 +169,8 @@
   "Decadência de 5 anos: créditos antigos prescrevem mês a mês. Quanto antes o levantamento, maior o período recuperável. Todo valor é estimativa preliminar sujeita a validação técnica.",
   "Reforma: em 2027 a CBS cheia substitui PIS/COFINS. Crédito do diesel e do autônomo depende de regra e percentual anual; o Tributário confere o texto consolidado.",
   "Reoneração da folha: contribuição patronal de 10% em 2026, 15% em 2027 e 20% em 2028. Teses de crédito presumido de ICMS correm por via judicial, sem prazo ou êxito prometidos.",
-  "Antecipação é operação de instituição autorizada; a Save estrutura e organiza a carteira, nunca é credora. Produtos em avaliação conjunta não têm condição definida."
+  "Crédito internacional, captação de capital e Maquila estão em avaliação conjunta e não têm condições definidas; Gestão de Contas, antecipação, FIDC e estruturação patrimonial são serviços disponíveis.",
+  "Antecipação é operação de instituição autorizada; a Save estrutura e organiza a carteira, nunca é credora."
  ],
  "interno": [
   "Margem setorial, endividamento do setor e composição por porte e regime da base: não localizados. Aging dos embarcadores deve ser pedido ao cliente.",

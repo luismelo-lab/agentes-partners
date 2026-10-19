@@ -48,7 +48,7 @@
     {
      "nome": "Gestão de Contas (atacado de hortifruti)",
      "porque": "Atacado vende a prazo a varejo e food service; a cobrança estruturada pode reduzir o prazo médio de recebimento.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Tributário, com Contas e Soluções"
@@ -71,7 +71,7 @@
     {
      "nome": "Antecipação de recebíveis, por instituição autorizada",
      "porque": "Varejo tem recebível de cartão e atacado tem duplicatas; a operação é de instituição autorizada, com a Save como estruturadora.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Tributário e Jurídico, com Produtos Financeiros"
@@ -84,7 +84,7 @@
     {
      "nome": "FIDC e modelo multicedente/multissacado",
      "porque": "Rede regional de porte, com muitos fornecedores, pode avaliar capturar a receita financeira da antecipação dos fornecedores.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     },
     {
      "nome": "Crédito internacional (atacado de hortifruti com porte)",
@@ -94,7 +94,7 @@
     {
      "nome": "Estruturação patrimonial",
      "porque": "Rede familiar com imóveis próprios pode organizar patrimônio e sucessão; também apoia garantias para funding.",
-     "status": "em avaliação conjunta"
+     "status": "disponível"
     }
    ],
    "entrega": "Contas e Soluções, Produtos Financeiros e Jurídico"
@@ -177,7 +177,7 @@
   "Produtos financeiros dependem de instituição autorizada e de análise de crédito; a Save estrutura e não concede crédito."
  ],
  "interno": [
-  "Antecipação, FIDC, Gestão de Contas, Crédito Internacional e estruturação patrimonial estão só em descoberta até o G2 (15/12/2026); sem taxa, prazo ou fee ao cliente.",
+  "Atualização de 19/10/2026 (Luis): Gestão de Contas, antecipação e FIDC (Save Invest) e estruturação patrimonial (jurídico) são produtos prontos; crédito internacional e Maquila (João Mattos) seguem só em descoberta até o G2 (15/12/2026), sem taxa, prazo ou fee. A confirmar com o Jurídico e a Save Invest: empresa que contrata e presta, habilitação, taxa da antecipação e remuneração do parceiro.",
   "Multicedente/multissacado: aprofundamento em reunião futura; sem dono, parceiro, preço ou portão. Referência interna de ICP do FIDC: faturamento a partir de ~R$ 10 mi por mês.",
   "Crédito Internacional: ICP interno de porte, garantia real e necessidade a partir de US$ 5 mi; estrutura abaixo disso é pergunta em aberto.",
   "Maquila: sem aderência no setor, não oferecer. Alíquota zero na revenda: fora para supermercado (restrição do catálogo). Insumos no varejo: controvertido, não usar como tese principal."
