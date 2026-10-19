@@ -51,6 +51,8 @@ API da Central (Azure Functions, Python) ── valida JWT (assinatura via JWKS,
   - `api://<API_CLIENT_ID>/Central.Acesso` (do registro 2).
 - **Tipos de conta:** "Somente minha organização", single-tenant, como está.
 
+> **Atualização de 19/10/2026:** para simplificar a administração, a proposta passa a ser **um registro só**. O SAVE-SSO-MASTERS expõe a própria API (`api://<CLIENT_ID>/Central.Acesso`) e os papéis abaixo. A API aceita `aud` = `<CLIENT_ID>` ou `api://<CLIENT_ID>`. Roteiro da TI em `orientacoes-ti-2026-10-19.md`. O registro 2 abaixo fica como alternativa.
+
 **Registro 2: SAVE-SSO-MASTERS-API (backend, a criar)**
 - **Expor uma API:** URI `api://<API_CLIENT_ID>`, escopo delegado `Central.Acesso` ("Acessar a Central Partners").
 - **Funções de aplicativo (App roles), atribuíveis a usuários e grupos:**

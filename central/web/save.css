@@ -1,0 +1,64 @@
+/* Save Co. · Design System Save v0.5 · base para web, aplicativo e PDF gerado de HTML.
+   Padrão de tudo o que a Área Partners produz desde 07/10/2026. Valores = marca.json.
+   Uso: <link rel="stylesheet" href="save.css">  (claro por padrão; class="escuro" no <html> ou num bloco para o modo escuro) */
+
+:root {
+  --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* modo claro: cliente, parceiro, relatórios */
+  --fundo: #F6F7F9; --fundo-2: #F1F2F5; --cartao: #FFFFFF;
+  --borda: #E6E8EC; --borda-2: #DEE0E5; --borda-3: #C9CCD3;
+  --texto: #0F1115; --texto-2: #4A4F58; --texto-3: #838892;
+  --ouro: #F3CD60; --ouro-texto: #B58A1F; --ouro-suave: #FBF1D7;
+  --sucesso: #1E8E3E; --alerta: #B5790F; --erro: #C5221F; --info: #1A56DB;
+  /* escala */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
+  --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 24px;
+  --t-micro: 11px; --t-legenda: 12px; --t-pequeno: 14px; --t-corpo: 16px; --t-corpo-g: 18px;
+  --t-h4: 24px; --t-h3: 30px; --t-h2: 36px; --t-h1: 48px; --t-display: 56px;
+  --sombra-1: 0 1px 2px rgba(15,17,21,.06); --sombra-2: 0 4px 12px rgba(15,17,21,.08);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1); --d-hover: 120ms; --d-abre: 180ms; --d-modal: 240ms;
+  color-scheme: light;
+}
+/* modo escuro: painéis, dashboards, faixas de destaque */
+.escuro {
+  --fundo: #000000; --fundo-2: #111111; --cartao: #171717; --elevado: #1E1E1E;
+  --borda: #2A2A2A; --borda-2: #2A2A2A; --borda-3: #3A3A3A;
+  --texto: #F5F5F5; --texto-2: #A1A1A1; --texto-3: #6B6B6B;
+  --ouro: #F3CD60; --ouro-texto: #F3CD60; --ouro-suave: rgba(243,205,96,.12);
+  --sucesso: #44C653; --alerta: #E8B34A; --erro: #D64545; --info: #6E92E8;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--fundo); color: var(--texto); font: 400 var(--t-corpo)/1.55 var(--sans);
+       -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { margin: 0 0 var(--s-3); font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+h1 { font-size: var(--t-h1); } h2 { font-size: var(--t-h2); } h3 { font-size: var(--t-h3); } h4 { font-size: var(--t-h4); }
+p { margin: 0 0 var(--s-4); color: var(--texto-2); }
+a { color: var(--ouro-texto); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+code, .mono, .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.rotulo { font: 500 var(--t-micro)/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ouro-texto); }
+.apoio { color: var(--texto-2); font-size: var(--t-pequeno); }
+.cartao { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: var(--s-5); }
+.faixa-ouro { height: 3px; background: var(--ouro); border: 0; margin: var(--s-5) 0; }
+.selo { display: inline-block; padding: 2px var(--s-2); border-radius: var(--r-xs); font: 500 var(--t-micro)/1.6 var(--mono);
+        letter-spacing: .06em; text-transform: uppercase; background: var(--ouro-suave); color: var(--ouro-texto); }
+
+.botao { display: inline-flex; align-items: center; gap: var(--s-2); min-height: 44px; padding: 0 var(--s-5);
+         border-radius: var(--r-sm); border: 1px solid transparent; font: 600 var(--t-pequeno)/1 var(--sans); cursor: pointer;
+         background: var(--ouro); color: #0F1115; transition: filter var(--d-hover) var(--ease); }
+.botao:hover { filter: brightness(.96); }
+.botao.secundario { background: transparent; color: var(--texto); border-color: var(--borda-3); }
+:focus-visible { outline: 3px solid var(--ouro); outline-offset: 2px; }
+
+table { width: 100%; border-collapse: collapse; font-size: var(--t-pequeno); }
+th { text-align: left; font: 500 var(--t-micro)/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase;
+     color: var(--texto-2); padding: var(--s-3); border-bottom: 1px solid var(--borda-3); }
+td { padding: var(--s-3); border-bottom: 1px solid var(--borda); color: var(--texto); vertical-align: top; }
+td.num, th.num { text-align: right; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+@media print { body { background: #FFFFFF; } .cartao { break-inside: avoid; } }

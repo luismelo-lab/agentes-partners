@@ -1,0 +1,15 @@
+{
+  "globalHeaders": {
+    "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://login.microsoftonline.com; frame-src https://login.microsoftonline.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://login.microsoftonline.com",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+  },
+  "routes": [
+    { "route": "/config.js", "headers": { "Cache-Control": "no-store" } },
+    { "route": "/api/*", "headers": { "Cache-Control": "no-store" } }
+  ],
+  "navigationFallback": { "rewrite": "/index.html", "exclude": ["/api/*", "/vendor/*", "/fontes/*", "*.{css,js,png,ttf,json}"] }
+}

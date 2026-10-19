@@ -1,0 +1,2 @@
+azure-functions==1.21.3
+PyJWT[crypto]==2.12.1

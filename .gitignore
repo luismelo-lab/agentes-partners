@@ -32,6 +32,8 @@
 # Scripts de produtos (inclui gerar_manual_docx.js, gerador oficial de Word). Os .json ao lado são dados: ficam fora
 !departamentos/produtos/*/scripts/*.py
 !departamentos/produtos/*/scripts/*.js
+# Central com SSO (código do painel e da API; os IDs locais ficam fora, ver o fim do arquivo)
+!central/**
 # Mesmo dentro das pastas liberadas, nunca entram:
 .env
 *.env
@@ -57,3 +59,9 @@ skills/**/references/*-dados*.json
 dados-publicos/whisper/**
 # Worktrees do Claude (cópias de trabalho, nunca versionar)
 .claude/
+
+# Central (SSO): configuração local com os IDs do Entra fica fora do repositório
+central/web/config.js
+central/api/local.settings.json
+central/api/.venv/
+**/__pycache__/

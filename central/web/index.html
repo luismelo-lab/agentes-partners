@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Central Partners</title>
+  <link rel="stylesheet" href="save.css">
+  <link rel="stylesheet" href="central.css">
+</head>
+<body class="escuro">
+  <main class="tela">
+    <header class="topo">
+      <img src="logo-save-fundo-escuro.png" alt="Save Co." class="logo">
+      <span class="rotulo">Área Partners</span>
+    </header>
+
+    <section id="entrar" class="cartao bloco" hidden>
+      <h2>Central Partners</h2>
+      <p>Entre com a sua conta Microsoft da Save. O acesso vale só para quem foi autorizado pela TI.</p>
+      <button id="botao-entrar" class="botao" type="button">Entrar com a Microsoft</button>
+    </section>
+
+    <section id="carregando" class="cartao bloco">
+      <p class="apoio">Conferindo a sua sessão…</p>
+    </section>
+
+    <section id="sem-acesso" class="cartao bloco" hidden>
+      <span class="selo">Sem acesso</span>
+      <h3>Você entrou, mas ainda não tem um papel na Central</h3>
+      <p>Peça ao Luis para a TI atribuir o seu papel no aplicativo SAVE-SSO-MASTERS. Ter e-mail da Save não dá acesso sozinho.</p>
+      <button class="botao secundario sair" type="button">Sair</button>
+    </section>
+
+    <section id="painel" class="cartao bloco" hidden>
+      <span class="rotulo">Conectado</span>
+      <h3 id="ola"></h3>
+      <table>
+        <tbody>
+          <tr><th>Pessoa na Central</th><td id="pessoa"></td></tr>
+          <tr><th>Papéis</th><td id="papeis"></td></tr>
+          <tr><th>Pode</th><td id="pode"></td></tr>
+        </tbody>
+      </table>
+      <p class="apoio">Etapa 1 e 2 do SSO: login e API validando o token. O painel completo entra na etapa 3.</p>
+      <button class="botao secundario sair" type="button">Sair</button>
+    </section>
+
+    <section id="erro" class="cartao bloco" hidden>
+      <span class="selo">Erro</span>
+      <p id="erro-texto"></p>
+      <button class="botao secundario sair" type="button">Sair</button>
+    </section>
+  </main>
+  <script src="vendor/msal-browser-5.24.0.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
