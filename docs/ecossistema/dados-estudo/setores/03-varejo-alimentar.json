@@ -1,0 +1,197 @@
+{
+ "id": "varejo-alimentar",
+ "titulo": "Varejo alimentar",
+ "subtitulo": "supermercado, hortifruti e atacado de hortifruti",
+ "base_clientes": "190 empresas na base: 99 supermercados, 71 hortifrutis de varejo e 20 atacados de hortifruti (posição de 16/10/2026).",
+ "retrato": [
+  "O varejo alimentar movimentou R$ 1,14 trilhão em 2025 (+7,32% nominal, +3,68% real), 9,02% do PIB — Ranking ABRAS 2026",
+  "Atacado distribuidor: R$ 616,6 bi em 2025 (+17,27% nominal); até abr/2026, +4,8% em faturamento e +1,1% em volume — ABAD/NielsenIQ, mai/2026",
+  "Margem líquida do setor em 2025: não localizado. Em grande rede, a dívida líquida/EBITDA foi a 2,4x no fim de 2025, contra 1,6x em 2024 — GPA, referência de mercado",
+  "Selic em 13,75% desde 16/09/2026 e capital de giro PJ acima de 1 ano a 22,55% ao ano — Banco Central, set/2026 e ago/2026",
+  "Cesta básica e hortifruti/ovos terão alíquota zero de IBS/CBS a partir de 2027; o tratamento depende da classificação fiscal (NCM) — Anexos I e XV da LC 214; EY, jun/2026"
+ ],
+ "dores": [
+  "Minha margem é curta e o cartão e a antecipação de recebível comem o que sobra.",
+  "Pago ICMS-ST a mais e não sei quanto de crédito deixo de aproveitar.",
+  "No hortifruti, perco mercadoria todo dia e o preço varia com safra e clima.",
+  "Folha pesada e rotatividade alta: cada contratação e cada saída pesam no resultado.",
+  "Não sei como ficam meu preço e meu sistema em 2027, quando a regra do imposto muda."
+ ],
+ "gatilhos": [
+  "Abertura de loja ou reforma, que exige caixa.",
+  "Troca de ERP ou adequação à nota fiscal da reforma tributária.",
+  "Fiscalização estadual sobre substituição tributária.",
+  "Aperto do banco ou da adquirente de cartão.",
+  "Sucessão na família dona da rede."
+ ],
+ "jornada": [
+  {
+   "onda": "Oxigenar",
+   "janela": "0 a 6 meses",
+   "objetivo": "Revisar o que já foi pago a maior e liberar caixa sem novo endividamento.",
+   "solucoes": [
+    {
+     "nome": "Recuperação de ICMS-ST e ICMS na base do PIS/COFINS",
+     "porque": "Varejo com ST de bebidas e alimentos paga imposto sobre imposto; o sinal é o ICMS-ST no SPED e faturamento acima de R$ 300 mil/mês.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Recuperação de contribuições sobre a folha (CPP)",
+     "porque": "Folha intensiva abre espaço para revisar verbas sobre as quais a contribuição incide; o sinal é o número de empregados.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Alíquota zero na revenda (hortifruti)",
+     "porque": "Para hortifruti e atacado de hortifruti, a aptidão por NCM está no perfil ideal; não se aplica a supermercado.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Contas (atacado de hortifruti)",
+     "porque": "Atacado vende a prazo a varejo e food service; a cobrança estruturada pode reduzir o prazo médio de recebimento.",
+     "status": "em avaliação conjunta"
+    }
+   ],
+   "entrega": "Tributário, com Contas e Soluções"
+  },
+  {
+   "onda": "Estruturar",
+   "janela": "3 a 12 meses",
+   "objetivo": "Preparar o mix por NCM e o preço para 2027 e organizar débitos para manter certidões em dia.",
+   "solucoes": [
+    {
+     "nome": "Planejamento tributário e reforma (mix por NCM)",
+     "porque": "Anexos I, VII e XV mudam o crédito; o fim do ST muda o desenho de preço; o sinal é o cadastro de produtos.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Passivo",
+     "porque": "Débito apontado no parecer bloqueia certidão; o crédito recuperado pode compensar o débito.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Antecipação de recebíveis, por instituição autorizada",
+     "porque": "Varejo tem recebível de cartão e atacado tem duplicatas; a operação é de instituição autorizada, com a Save como estruturadora.",
+     "status": "em avaliação conjunta"
+    }
+   ],
+   "entrega": "Tributário e Jurídico, com Produtos Financeiros"
+  },
+  {
+   "onda": "Expandir",
+   "janela": "6 a 24 meses",
+   "objetivo": "Abrir fontes de funding e capturar valor financeiro da própria cadeia de fornecedores.",
+   "solucoes": [
+    {
+     "nome": "FIDC e modelo multicedente/multissacado",
+     "porque": "Rede regional de porte, com muitos fornecedores, pode avaliar capturar a receita financeira da antecipação dos fornecedores.",
+     "status": "em avaliação conjunta"
+    },
+    {
+     "nome": "Crédito internacional (atacado de hortifruti com porte)",
+     "porque": "Exige porte, garantia real e necessidade de capital relevante; sujeito a análise da instituição credora.",
+     "status": "em avaliação conjunta"
+    },
+    {
+     "nome": "Estruturação patrimonial",
+     "porque": "Rede familiar com imóveis próprios pode organizar patrimônio e sucessão; também apoia garantias para funding.",
+     "status": "em avaliação conjunta"
+    }
+   ],
+   "entrega": "Contas e Soluções, Produtos Financeiros e Jurídico"
+  }
+ ],
+ "aderencia": [
+  {
+   "solucao": "Exclusão do ICMS-ST da base (Tema 1.125 STJ)",
+   "nivel": "Alta",
+   "observacao": "Alta no supermercado; média em hortifruti e atacado. Sinal: ST no SPED."
+  },
+  {
+   "solucao": "Exclusão do ICMS da base do PIS/COFINS",
+   "nivel": "Alta",
+   "observacao": "Alta no supermercado; média nos demais. Regime Real ou Presumido, faturamento acima de R$ 300 mil/mês."
+  },
+  {
+   "solucao": "Contribuições sobre a folha (CPP)",
+   "nivel": "Alta",
+   "observacao": "Alta no supermercado, pela folha intensiva; média nos demais."
+  },
+  {
+   "solucao": "Alíquota zero na revenda",
+   "nivel": "Alta",
+   "observacao": "Alta em hortifruti e atacado de hortifruti, conforme NCM. Não se aplica a supermercado."
+  },
+  {
+   "solucao": "Planejamento e reforma tributária",
+   "nivel": "Alta",
+   "observacao": "Alta nos três perfis: mix por NCM, fim do ST e preço em 2027."
+  },
+  {
+   "solucao": "Gestão de Contas",
+   "nivel": "Média",
+   "observacao": "Alta no atacado de hortifruti, que vende a prazo; baixa no varejo, que vende à vista."
+  },
+  {
+   "solucao": "Antecipação de recebíveis",
+   "nivel": "Média",
+   "observacao": "Alta no atacado (duplicatas); média no supermercado (cartão); baixa no hortifruti de varejo."
+  },
+  {
+   "solucao": "FIDC / multicedente",
+   "nivel": "Baixa",
+   "observacao": "Média apenas em rede regional de porte; baixa no atacado; não se aplica ao hortifruti de varejo."
+  }
+ ],
+ "kpis": [
+  {
+   "indicador": "Caixa liberado (R$)",
+   "como_medir": "Valor recuperado e recebido, registrado no CRM, contra o parecer e os SPED analisados."
+  },
+  {
+   "indicador": "ICMS-ST recuperado sobre ICMS-ST pago",
+   "como_medir": "Razão entre crédito apurado e ST pago no SPED do período analisado."
+  },
+  {
+   "indicador": "Custo da antecipação do cartão (% a.a.)",
+   "como_medir": "Custo efetivo anual das antecipações, antes e depois da revisão."
+  },
+  {
+   "indicador": "Prazo médio de recebimento (atacado)",
+   "como_medir": "Dias de venda a receber, a partir do contas a receber."
+  },
+  {
+   "indicador": "Carga efetiva antes e depois de 2027, por NCM",
+   "como_medir": "Simulação por item a partir do cadastro de produtos."
+  }
+ ],
+ "frase_valor": "No supermercado, margem curta não aceita imposto pago a maior. Revemos o que já foi pago e preparamos o mix de produtos para a regra de 2027.",
+ "big_four": [
+  "Revisão de ST e de créditos, com tecnologia fiscal (motor fiscal e cadastro de NCM). A Save replica a revisão e usa o SPED como evidência.",
+  "Simulação de preço e margem por item na reforma; KPMG e EY publicam sobre consumo e varejo. A Save replica por NCM, com o cadastro do cliente.",
+  "Capital de giro, recebíveis de cartão e cadeia de fornecedores. A Save replica como estruturadora, com instituições autorizadas nas operações financeiras."
+ ],
+ "cuidados": [
+  "Decadência de 5 anos: cada competência não revisada perde direito a recuperação com o passar do tempo.",
+  "Reforma: em 2027 começa a CBS cheia e o PIS/COFINS acaba; saldos e créditos devem ser analisados antes da transição.",
+  "Toda tese passa por análise de aptidão (CNAE, NCM, CFOP e regime). Valores só em faixa: estimativa preliminar sujeita a validação técnica.",
+  "Produtos financeiros dependem de instituição autorizada e de análise de crédito; a Save estrutura e não concede crédito."
+ ],
+ "interno": [
+  "Antecipação, FIDC, Gestão de Contas, Crédito Internacional e estruturação patrimonial estão só em descoberta até o G2 (15/12/2026); sem taxa, prazo ou fee ao cliente.",
+  "Multicedente/multissacado: aprofundamento em reunião futura; sem dono, parceiro, preço ou portão. Referência interna de ICP do FIDC: faturamento a partir de ~R$ 10 mi por mês.",
+  "Crédito Internacional: ICP interno de porte, garantia real e necessidade a partir de US$ 5 mi; estrutura abaixo disso é pergunta em aberto.",
+  "Maquila: sem aderência no setor, não oferecer. Alíquota zero na revenda: fora para supermercado (restrição do catálogo). Insumos no varejo: controvertido, não usar como tese principal."
+ ],
+ "fontes": [
+  "Ranking ABRAS 2026 (Central do Varejo): https://centraldovarejo.com.br/varejo-alimentar-brasileiro-faturou-r-114-trilhao-em-2025-aponta-ranking-abras-2026/?amp=1 (2026)",
+  "Ranking ABAD/NielsenIQ 2026 (Mercado & Consumo): https://mercadoeconsumo.com.br/12/05/2026/noticias-varejo/com-atacadao-na-lideranca-setor-atacadista-movimenta-r-6166-bilhoes-veja-os-10-maiores/ (12/05/2026)",
+  "NSC Total, alavancagem do GPA: https://www.nsctotal.com.br/?p=7838469 (s/d, 2026)",
+  "EY, impactos da reforma em bens de consumo e varejo: https://www.ey.com/pt_br/newsroom/2026/06/impactos-reforma-tributaria-setor-bens-consumo-varejo (jun/2026)",
+  "KPMG, reforma tributária no consumo e varejo: https://kpmg.com/br/pt/services/tax/consultoria-reforma-tributaria/reforma-tributaria-no-setor-de-consumo-e-varejo.html (s/d)",
+  "Atlas Público (BCB), Selic em 13,75%: https://atlaspublico.com.br/bcb/noticias/copom-reduz-selic-para-13-75pct-ao-ano-em-decisao-unanime-87748 (16/09/2026)",
+  "Serasa Experian, inadimplência das empresas: https://www.serasaexperian.com.br/sala-de-imprensa/indicadores/recorde-inadimplencia-das-empresas-superou-9-milhoes-de-reais-em-junho-e-dividas-chegaram-a-232-bilhoes-de-reais-revela-serasa-experian/ (17/08/2026)",
+  "IOB, alíquota zero e manutenção de crédito (art. 52): https://noticias.iob.com.br/reforma-tributaria-isencao-cesta-basica/ (2026)",
+  "NetCPA, cronograma da reforma tributária: https://netcpa.com.br/colunas/confira-o-cronograma-de-implementacao-da-reforma-tributaria/27214 (2026)",
+  "Capital de giro PJ a 22,55% a.a. (BCB, ago/2026): citado no playbook interno de produtos, sem URL própria"
+ ]
+}

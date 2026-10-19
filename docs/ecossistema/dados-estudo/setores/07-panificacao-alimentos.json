@@ -1,0 +1,213 @@
+{
+ "id": "panificacao-alimentos",
+ "titulo": "Panificação e indústria de alimentos",
+ "subtitulo": "padarias, indústria de alimentos e torrefação",
+ "base_clientes": "16 clientes: panificação industrial (CNAE 1091) e torrefação e moagem de café (CNAE 1081). A torrefação também usa a lente do café e do agro.",
+ "retrato": [
+  "Indústria de alimentos e bebidas: R$ 1,388 trilhão em 2025 (+8,02%), cerca de 10,8% a 10,9% do PIB — ABIA, mar/2026",
+  "Panificação: R$ 164,12 bi em 2025 (1,29% do PIB), com mais de 70 mil padarias — ABIP, out/2026",
+  "63,83% das empresas de panificação são MEI — Monitor Mercantil, citando dados do setor (s/d)",
+  "Importação de trigo de 2,772 Mt até jun/2026 (−22,3%); Argentina com 70,4%; moinhos buscam trigo fora do Mercosul, mais caro — Cepea e Abitrigo, 2026",
+  "Selic em 13,75% e capital de giro PJ acima de 1 ano a 22,55% ao ano — BCB, set/2026 e ago/2026 (referência de mercado)"
+ ],
+ "dores": [
+  "O trigo e o dólar sobem e eu não consigo repassar na mesma velocidade. A margem some antes de eu rever o preço.",
+  "A rede de supermercado impõe prazo e verba, e eu financio o varejo com o meu caixa.",
+  "Tenho saldo credor de imposto acumulado e ele não vira dinheiro na minha conta.",
+  "Meus produtos terão regras diferentes na reforma (zero, 60% ou cheio) e eu não sei qual é a carga de cada linha em 2027.",
+  "Preciso de capital de giro para o fim de ano e para o inverno do café, e o banco cobra caro."
+ ],
+ "gatilhos": [
+  "Alta do trigo ou do dólar que pressiona a margem",
+  "Novo contrato com rede de supermercado com prazo maior de pagamento",
+  "Expansão de linha ou de planta, com necessidade de capital",
+  "Revisão de preço para 2027, com a mudança da carga tributária",
+  "Sucessão familiar na planta e na marca"
+ ],
+ "jornada": [
+  {
+   "onda": "Oxigenar",
+   "janela": "0 a 6 meses",
+   "objetivo": "Recuperar o crédito que já existe e organizar a cobrança das redes, para gerar caixa antes das demais decisões.",
+   "solucoes": [
+    {
+     "nome": "Recuperação de créditos sobre insumos",
+     "porque": "Indústria no Lucro Real tem embalagem, energia, manutenção e frete. A receita com alíquota zero exige proporcionalização.",
+     "status": "disponível"
+    },
+    {
+     "nome": "ICMS fora da base e ICMS-ST",
+     "porque": "Há ST em biscoitos e massas em vários estados. Indicado quando o faturamento passa de R$ 300 mil por mês.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Crédito sobre verbas da folha (CPP)",
+     "porque": "A folha relevante da indústria sustenta a revisão das verbas que entram na base.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Contas",
+     "porque": "A empresa vende a prazo a supermercados e food service. A cobrança por IA organiza o caixa e abre o acesso a DRE e balanço.",
+     "status": "em avaliação conjunta"
+    }
+   ],
+   "entrega": "Tributário, com revisão do diagnóstico; Contas e Soluções para a cobrança"
+  },
+  {
+   "onda": "Estruturar",
+   "janela": "3 a 12 meses",
+   "objetivo": "Montar o mapa do mix por NCM para 2027 e dar ao caixa uma base mais estável.",
+   "solucoes": [
+    {
+     "nome": "Planejamento tributário e reforma",
+     "porque": "Cada produto terá regra própria em 2027. O mapa por NCM e o uso do saldo credor de IPI antes do IPI zero decidem a carga.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Passivo",
+     "porque": "Débito apontado no parecer bloqueia certidão. A compensação com o próprio crédito pode abatê-lo.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Antecipação de recebíveis",
+     "porque": "Duplicatas de rede podem ser antecipadas por instituição autorizada. A Save estrutura e não antecipa.",
+     "status": "em avaliação conjunta"
+    },
+    {
+     "nome": "Estruturação patrimonial",
+     "porque": "Planta e marca familiares pedem organização do patrimônio, em especial diante de sucessão.",
+     "status": "em avaliação conjunta"
+    }
+   ],
+   "entrega": "Tributário; Jurídico; Produtos Financeiros com instituição autorizada"
+  },
+  {
+   "onda": "Expandir",
+   "janela": "12 a 24 meses",
+   "objetivo": "Financiar a ampliação de capacidade com a alternativa que o caixa e a estrutura comportarem.",
+   "solucoes": [
+    {
+     "nome": "Captação de capital: sócio, investidores ou equity",
+     "porque": "Jornada-modelo anonimizada: indústria de alimentos com demanda acima da capacidade pode comparar dívida, sócio estratégico e equity.",
+     "status": "em avaliação conjunta"
+    },
+    {
+     "nome": "Crédito internacional",
+     "porque": "Só para indústria de maior porte, com patrimônio e garantia real. A Save estrutura o projeto; a decisão é da instituição.",
+     "status": "em avaliação conjunta"
+    },
+    {
+     "nome": "Exportação e abertura de mercados",
+     "porque": "Entra em segunda rodada, depois de resolver capacidade produtiva e capital. Não lidera a primeira conversa.",
+     "status": "em avaliação conjunta"
+    },
+    {
+     "nome": "Fundo de recebíveis (FIDC)",
+     "porque": "Indicado apenas para indústria de grande volume mensal de recebíveis. Para os demais, a antecipação cobre a necessidade.",
+     "status": "em avaliação conjunta"
+    }
+   ],
+   "entrega": "Produtos Financeiros; Internacional; Jurídico para a estruturação"
+  }
+ ],
+ "aderencia": [
+  {
+   "solucao": "Recuperação sobre insumos",
+   "nivel": "Alta",
+   "observacao": "Indústria no Lucro Real. Receita com alíquota zero ou suspensão exige proporcionalização dos créditos."
+  },
+  {
+   "solucao": "ICMS fora da base e ICMS-ST",
+   "nivel": "Alta",
+   "observacao": "Faturamento acima de R$ 300 mil por mês. ST em biscoitos e massas em vários estados."
+  },
+  {
+   "solucao": "Crédito sobre verbas da folha (CPP)",
+   "nivel": "Alta",
+   "observacao": "Folha relevante na indústria."
+  },
+  {
+   "solucao": "Planejamento tributário e reforma",
+   "nivel": "Alta",
+   "observacao": "Mix por NCM, proporcionalização de créditos e IPI zero em 2027."
+  },
+  {
+   "solucao": "Gestão de Contas",
+   "nivel": "Alta",
+   "observacao": "Venda a prazo a supermercados e food service."
+  },
+  {
+   "solucao": "Antecipação de recebíveis",
+   "nivel": "Alta",
+   "observacao": "Duplicatas de rede. Operação de instituição autorizada; a Save estrutura."
+  },
+  {
+   "solucao": "Gestão de Passivo",
+   "nivel": "Média",
+   "observacao": "Aplicável quando o parecer aponta débito em aberto."
+  },
+  {
+   "solucao": "Crédito internacional",
+   "nivel": "Baixa",
+   "observacao": "Só para indústria com patrimônio, porte e garantia real. Descoberta, nunca proposta."
+  }
+ ],
+ "kpis": [
+  {
+   "indicador": "Caixa liberado (R$)",
+   "como_medir": "Soma dos créditos recuperados e recebidos, conferida no SPED e no parecer, por tese."
+  },
+  {
+   "indicador": "Carga efetiva por linha de produto",
+   "como_medir": "Carga por NCM antes e depois de 2027, com base no cadastro de produtos."
+  },
+  {
+   "indicador": "Prazo médio de recebimento das redes (DSO)",
+   "como_medir": "Contas a receber sobre vendas a prazo, por rede, mês a mês."
+  },
+  {
+   "indicador": "Custo do giro na sazonalidade",
+   "como_medir": "Despesa financeira do fim de ano sobre o capital de giro usado."
+  },
+  {
+   "indicador": "Saldo credor de IPI utilizado antes de 2027",
+   "como_medir": "Saldo inicial menos saldo aproveitado, na conta gráfica."
+  }
+ ],
+ "frase_valor": "Na indústria de alimentos, cada produto terá uma regra em 2027. Primeiro recuperamos o crédito que já existe; depois montamos o mapa do mix para o preço do ano que vem.",
+ "big_four": [
+  "Revisão de créditos e de ICMS-ST, com simulação da reforma por NCM e por canal. A Save replica a revisão e o mapa por NCM.",
+  "Revenue growth management, precificação e gestão da cadeia (hedge de trigo, câmbio, capital de giro). A Save replica a leitura de margem e caixa.",
+  "M&A em alimentos e due diligence fiscal. A Save replica o dossiê e a organização do passivo antes de sócio ou capital."
+ ],
+ "cuidados": [
+  "Decadência de 5 anos: crédito não recuperado dentro do prazo se perde. Quanto antes o levantamento, menor a perda.",
+  "Em 2027 a CBS cheia substitui o PIS/COFINS e o IPI vai a zero. O saldo credor de IPI precisa ser usado antes disso.",
+  "O tratamento na reforma depende da NCM de cada produto (zero, 60% ou cheio). O texto consolidado é conferido pelo Tributário.",
+  "Todo número é estimativa preliminar sujeita a validação técnica. A Save não promete valor, prazo nem êxito; a decisão de crédito é da instituição."
+ ],
+ "interno": [
+  "Crédito internacional: só descoberta até o G2 (15/12/2026). Sem taxa, prazo ou fee. Faixas de porte do funding seguem pendentes (v2.3 x reunião de 13/10).",
+  "Gestão de Contas, antecipação e FIDC: empresa contratante, taxa e remuneração do parceiro em aberto; FIDC sem dono, parceiro, preço ou portão.",
+  "Captação de equity: linha a formalizar; taxas e prazos citados na reunião de 24/09 não constam do v2.3 e não vão ao cliente. Pendente estrutura abaixo de US$ 5 mi.",
+  "Maquila: baixa aderência (perecível, pouco intensivo em mão de obra) e fora do piloto; D59 e estudo pago só após 30/06/2027. Margem e endividamento do setor: não localizados."
+ ],
+ "fontes": [
+  "ABIA via O Povo/Agência Brasil, indústria de alimentos em 2025: https://www.opovo.com.br/noticias/economia/2026/03/10/industria-de-alimentos-e-bebidas-cresceu-8-em-2025-diz-abia.html (10/03/2026)",
+  "Folha de Pernambuco, ABIP, faturamento da panificação em 2025: https://www.folhape.com.br/noticias/parque-da-jaqueira-recebe-acao-pelo-dia-mundial-do-pao-nesta/518340/ (out/2026)",
+  "Monitor Mercantil, panificação e MEI: https://monitormercantil.com.br/panificacao-6383-das-empresas-sao-registradas-como-mei/ (s/d)",
+  "Forbes Agro, importação de trigo em 2026 (Abitrigo): https://forbes.com.br/forbes-agro/2026/05/brasil-projeta-alta-na-importacao-de-trigo-em-2026-e-reduz-dependencia-do-cereal-argentino/ (mai/2026)",
+  "Atlas Público (BCB), Copom reduz a Selic para 13,75%: https://atlaspublico.com.br/bcb/noticias/copom-reduz-selic-para-13-75pct-ao-ano-em-decisao-unanime-87748 (16/09/2026)",
+  "BCB, capital de giro PJ acima de 1 ano a 22,55% ao ano (ago/2026), citado na base interna de produtos; sem URL no playbook",
+  "Band, preço do arábica cai em setembro: https://www.band.com.br/agro/preco-do-cafe-arabica-cai-em-setembro-com-safra-e-estoques (30/09/2026)",
+  "IOB, isenção e alíquota zero da cesta básica (manutenção de crédito, art. 52): https://noticias.iob.com.br/reforma-tributaria-isencao-cesta-basica/ (2026)",
+  "Simtax, lista da cesta básica (café NCM 09.01 e 2101.1): https://simtax.com.br/cesta-basica-nacional-ibs-cbs-lista/ (s/d)",
+  "NetCPA, publicada a LC 227/2026: https://netcpa.com.br/colunas/publicada-lei-complementar-no-2272026-sobre-a-reforma-tributaria/27120 (jan/2026)",
+  "NetCPA, cronograma da reforma tributária: https://netcpa.com.br/colunas/confira-o-cronograma-de-implementacao-da-reforma-tributaria/27214 (2026)",
+  "EY, impactos da reforma em bens de consumo e varejo: https://www.ey.com/pt_br/newsroom/2026/06/impactos-reforma-tributaria-setor-bens-consumo-varejo (jun/2026)",
+  "PwC, publicação da LC 224/2025: https://www.pwc.com.br/pt/thinking-about-taxes/tax-intelligence/2025/tax-intelligence-express-ed42-publicacao-da-lc-n224-25.pdf (dez/2025)",
+  "Barbieri Advogados, LC 224/2025, exceções e disputas: https://barbieriadvogados.com/?p=9086 (atualizado jul/2026)",
+  "Jornal Contábil, Lei 15.270/2025 (dividendos): https://jornalcontabil.com.br/noticia/lei-15-270-define-regras-para-taxacao-de-lucros-e-dividendos-a-partir-de-2026/ (s/d, 2025)",
+  "Serasa Experian, inadimplência das empresas em junho de 2026: https://www.serasaexperian.com.br/sala-de-imprensa/indicadores/recorde-inadimplencia-das-empresas-superou-9-milhoes-de-reais-em-junho-e-dividas-chegaram-a-232-bilhoes-de-reais-revela-serasa-experian/ (17/08/2026)"
+ ]
+}

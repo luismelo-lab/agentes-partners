@@ -1,0 +1,18 @@
+{
+ "intro": "As grandes consultorias não vendem serviços soltos: organizam o relacionamento em torno de um responsável por conta, de um plano vivo e de uma prestação de contas periódica. O quadro abaixo resume práticas observadas em fontes públicas de mercado (vagas, publicações e análises, consultadas em 19/10/2026) e como a Save as adapta. São práticas de mercado, não metodologia oficial de nenhuma firma.",
+ "praticas": [
+  {"pratica":"Um responsável por conta","descricao":"Um sócio ou líder responde pelo cliente e é apoiado por um gerente de conta que conduz planejamento e cadência (modelo de líder de serviço ao cliente, descrito em vagas de grandes firmas).","replica":"Um consultor de negócio por empresa, com carteira pequena, apoiado pela área de Contas e Soluções."},
+  {"pratica":"Plano de conta vivo","descricao":"Uma visão por cliente com objetivos, serviços contratados, oportunidades e riscos, atualizada com regularidade.","replica":"Mapa de aderência da conta, atualizado a cada novo dado fiscal, financeiro ou comercial."},
+  {"pratica":"Cadência fixa","descricao":"Reunião interna periódica e encontros regulares com o cliente (trimestrais ou semestrais).","replica":"Encontro trimestral de 45 minutos com o dono, com pauta e ata."},
+  {"pratica":"Painel de valor","descricao":"Relatório periódico com o valor entregue por linha de serviço, usado como base para a conversa seguinte.","replica":"Mapa de Valor da Conta: o que entregamos, o que significou para o caixa e o que ainda está disponível."},
+  {"pratica":"Escuta do cliente","descricao":"Entrevistas de feedback e revisão de ganhos e perdas para ajustar a abordagem.","replica":"Pesquisa de satisfação do cliente e análise das reclamações, com plano de correção."},
+  {"pratica":"Oferta por gatilho, não por calendário","descricao":"O serviço seguinte é proposto quando um evento o justifica (por exemplo, um débito apontado, uma habilitação de exportação, uma mudança de regime).","replica":"Mapa de sinais: cada serviço só entra com a evidência que o sustenta."},
+  {"pratica":"Barreira de conflito antes da oferta","descricao":"Grandes firmas limitam a venda de certos serviços ao mesmo cliente para preservar independência, e o mercado regulado trata conflitos de interesse com regras específicas.","replica":"Antes de propor mais de um serviço, a Save confere incompatibilidades, apresenta a alternativa de mercado e informa por escrito quem se beneficia de cada decisão."}
+ ],
+ "referencias": [
+  {"dado":"Taxa Selic","valor":"13,75% ao ano, decisão de 16/09/2026; próxima reunião em 3 e 4/11/2026","fonte":"Banco Central do Brasil, via imprensa (consulta em 19/10/2026)"},
+  {"dado":"Reforma tributária do consumo","valor":"2026 teste (CBS 0,9% e IBS 0,1%); 2027 CBS plena e fim do PIS/COFINS; 2029 a 2032 transição ICMS e ISS para IBS; 2033 transição completa","fonte":"LC 214/2025 e LC 227/2026, via resumos de escritórios (consulta em 19/10/2026)"},
+  {"dado":"Transação tributária com a PGFN","valor":"Edital 6/2026 com adesão até 30/09/2026 (encerrado); novo edital não localizado","fonte":"PGFN, via resumos de escritórios (consulta em 19/10/2026)"},
+  {"dado":"Maquila no Paraguai","valor":"Lei 7.547/2025 em vigor; tributo único de 1% sobre o maior valor entre valor agregado e fatura de exportação","fonte":"Imprensa paraguaia e brasileira (abr/2026); conferir no diário oficial"}
+ ]
+}
