@@ -24,6 +24,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mapa_conta as mc  # noqa: E402
 
 PESO, ONDA = mc.PESO, mc.ONDA
+# linha de serviço de cada produto (catálogo: docs/ecossistema/catalogo-mix-servicos.json)
+LINHA = {"RT": "L1 Tributário e Reforma", "PLAN": "L1 Tributário e Reforma", "PAS": "L2 Passivo e Reestruturação", "JUR": "L2 Passivo e Reestruturação",
+         "ALONG": "L2 Passivo e Reestruturação", "GC": "L3 Caixa e Capital de Giro", "ANT": "L3 Caixa e Capital de Giro", "FIDC": "L3 Caixa e Capital de Giro",
+         "CI": "L4 Capital e Transações", "CAP": "L4 Capital e Transações", "HE": "L4 Capital e Transações", "EP": "L5 Estrutura e Patrimônio",
+         "MQ": "L6 Mercados Externos"}
 SIM = lambda v: str(v or "").strip().lower() in ("sim", "s", "1", "true", "x")
 
 # produtos que dependem de resposta do dono: (id, nome, onda, status, área, regra)
@@ -109,7 +114,7 @@ def mapear(s, ja_hubspot):
     if s["b2b"] and not any(o["id"] == "GC" for o in ops):
         ops.append({"id": "GC", "produto": "Gestão de Contas (cobrança com IA)", "aderencia": "média", "motivo": "o dono confirma venda a prazo a empresas (B2B); faltam carteira e vencidos",
                     "onda": ONDA[1], "status": "em definição", "area": "depto-internacional (ecossistema)"})
-    ops = [o for o in ops if o["aderencia"] in PESO]
+    ops = [{**o, "linha": LINHA.get(o["id"], "—")} for o in ops if o["aderencia"] in PESO]
     ops.sort(key=lambda o: (o["onda"], -PESO[o["aderencia"]]))
     cand = [o for o in ops if PESO[o["aderencia"]] >= 2]
     pronto = [o for o in cand if o["status"] == "pronto"]
@@ -156,8 +161,9 @@ def main():
     res.sort(key=lambda m: (-(m["indice"]), m["nome"]))
     cont = collections.Counter(o["id"] for m in res for o in m["oportunidades"] if PESO[o["aderencia"]] >= 2)
     entradas = collections.Counter(m["entrada"]["id"] for m in res if m["entrada"])
+    por_linha = collections.Counter(l for m in res for l in {o["linha"] for o in m["oportunidades"] if PESO[o["aderencia"]] >= 2})
     resumo = {"parceiro": a.parceiro, "gerado": date.today().isoformat(), "empresas": len(res), "com_entrada": sum(1 for m in res if m["entrada"]),
-              "oportunidades_alta_media_por_produto": dict(cont.most_common()), "porta_de_entrada": dict(entradas.most_common()),
+              "oportunidades_alta_media_por_produto": dict(cont.most_common()), "porta_de_entrada": dict(entradas.most_common()), "empresas_por_linha": dict(sorted(por_linha.items())),
               "pedir_ao_parceiro": dict(collections.Counter(f for m in res for f in m["falta"]).most_common()),
               "fonte_receita": bool(db), "fonte_hubspot": a.hubspot or None}
     os.makedirs(a.saida, exist_ok=True)

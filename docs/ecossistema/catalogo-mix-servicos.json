@@ -1,0 +1,13 @@
+{
+ "versao": "2026-10-19",
+ "linhas": {
+  "L1": {"nome": "Tributário e Reforma", "equivalente_big4": "Tax", "produtos": ["RT", "PLAN"]},
+  "L2": {"nome": "Passivo e Reestruturação", "equivalente_big4": "Financial Advisory (reestruturação) e Legal", "produtos": ["PAS", "JUR", "ALONG"]},
+  "L3": {"nome": "Caixa e Capital de Giro", "equivalente_big4": "Consulting (finanças)", "produtos": ["GC", "ANT", "FIDC"]},
+  "L4": {"nome": "Capital e Transações", "equivalente_big4": "Deals e Strategy and Transactions", "produtos": ["CI", "CAP", "HE"]},
+  "L5": {"nome": "Estrutura e Patrimônio", "equivalente_big4": "Tax e Legal (estruturação)", "produtos": ["EP"]},
+  "L6": {"nome": "Mercados Externos", "equivalente_big4": "Tax internacional e comércio exterior", "produtos": ["MQ"]}
+ },
+ "fora_do_mix": ["auditoria e asseguração", "cibersegurança", "nuvem, ERP e IA como projeto", "people advisory", "cadeia de suprimentos"],
+ "por_parceiro": ["M&A", "valuation", "IPO", "perícia e forense", "ESG e rastreabilidade"]
+}
