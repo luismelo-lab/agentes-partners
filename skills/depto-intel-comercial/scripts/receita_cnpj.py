@@ -14,6 +14,7 @@ Privacidade e disco:
 Uso:
   python3 receita_cnpj.py --listar                      # meses disponíveis e tamanho
   python3 receita_cnpj.py --carregar [--mes AAAA-MM]    # baixa e monta a base local filtrada (≈ 30–90 min)
+  python3 receita_cnpj.py --bairros [--mes AAAA-MM]     # acrescenta bairro e logradouro à base já carregada (≈ 30–60 min)
   python3 receita_cnpj.py --enriquecer                  # cruza com o HubSpot → cnae/porte/situação oficiais
   python3 receita_cnpj.py --prospectar                  # lista de empresas-alvo (sem clientes atuais)
   python3 receita_cnpj.py --regime --permitir-externo   # regime tributário (Minha Receita) para a lista de prospects
@@ -90,7 +91,7 @@ def carregar(mes):
     con = sqlite3.connect(DB + ".novo"); cur = con.cursor()
     cur.executescript("""
       CREATE TABLE estab(cnpj TEXT PRIMARY KEY, basico TEXT, matriz TEXT, fantasia TEXT, situacao TEXT, data_situacao TEXT, inicio TEXT,
-        cnae TEXT, cnaes_sec TEXT, uf TEXT, municipio TEXT, cep TEXT, telefone TEXT, email TEXT, no_hubspot INTEGER);
+        cnae TEXT, cnaes_sec TEXT, uf TEXT, municipio TEXT, cep TEXT, telefone TEXT, email TEXT, no_hubspot INTEGER, bairro TEXT, logradouro TEXT);
       CREATE TABLE empresa(basico TEXT PRIMARY KEY, razao TEXT, natureza TEXT, capital REAL, porte TEXT);
       CREATE TABLE simples(basico TEXT PRIMARY KEY, simples TEXT, mei TEXT);
       CREATE TABLE ref(tipo TEXT, codigo TEXT, descricao TEXT, PRIMARY KEY(tipo, codigo));
@@ -110,8 +111,9 @@ def carregar(mes):
                 if r[19] not in ufs or not r[11].startswith(alvo): continue
             tel = (f"({r[21]}) {r[22]}" if r[22] else "") if c["incluir_contatos"] else None
             mail = (r[27] or None) if c["incluir_contatos"] else None
-            cur.execute("INSERT OR REPLACE INTO estab VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                        (cnpj, r[0], "matriz" if r[3] == "1" else "filial", r[4], SITUACAO.get(r[5], r[5]), r[6], r[10], r[11], r[12], r[19], r[20], r[18], tel, mail, int(em_hs)))
+            cur.execute("INSERT OR REPLACE INTO estab VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                        (cnpj, r[0], "matriz" if r[3] == "1" else "filial", r[4], SITUACAO.get(r[5], r[5]), r[6], r[10], r[11], r[12], r[19], r[20], r[18], tel, mail, int(em_hs),
+                         r[17].strip() or None, " ".join(x for x in (r[13], r[14], r[15]) if x).strip() or None))
             basicos.add(r[0]); n += 1
         con.commit(); os.remove(z); print(f"    {n} estabelecimentos mantidos", flush=True)
     for i in range(10):
@@ -125,6 +127,30 @@ def carregar(mes):
     cur.executemany("INSERT OR REPLACE INTO meta VALUES (?,?)", [("mes_referencia", mes), ("carregado_em", time.strftime("%Y-%m-%d %H:%M")), ("fonte", f"Receita Federal · Dados Abertos do CNPJ · {mes}")])
     con.commit(); con.close(); os.replace(DB + ".novo", DB)
     print(f"Base local pronta: {DB} ({os.path.getsize(DB)/1e6:.0f} MB) · referência {mes}")
+
+
+def bairros(mes=None):
+    """Acrescenta bairro e logradouro (endereço da empresa, dado público do CNPJ) aos estabelecimentos já carregados,
+    sem refazer a base. Usa o mesmo mês da base, para manter tudo coerente. Um arquivo por vez, apagado depois."""
+    con = sqlite3.connect(DB); cur = con.cursor()
+    cols = {r[1] for r in cur.execute("PRAGMA table_info(estab)")}
+    for c in ("bairro", "logradouro"):
+        if c not in cols: cur.execute(f"ALTER TABLE estab ADD COLUMN {c} TEXT")
+    mes = mes or dict(cur.execute("SELECT chave, valor FROM meta")).get("mes_referencia") or ultimo_mes()
+    tem = {r[0] for r in cur.execute("SELECT cnpj FROM estab")}
+    arquivos = dict(propfind(mes + "/")); tmp = os.path.join(BASE, "tmp"); os.makedirs(tmp, exist_ok=True)
+    for i in range(10):
+        nome = f"Estabelecimentos{i}.zip"; z = os.path.join(tmp, nome)
+        print(f"  baixando {nome} ({arquivos.get(nome, 0)/1e6:.0f} MB)…", flush=True); baixar(mes, nome, z); n = 0
+        for r in linhas(z):
+            if len(r) < 21: continue
+            cnpj = r[0] + r[1] + r[2]
+            if cnpj in tem:
+                cur.execute("UPDATE estab SET bairro=?, logradouro=? WHERE cnpj=?",
+                            (r[17].strip() or None, " ".join(x for x in (r[13], r[14], r[15]) if x).strip() or None, cnpj)); n += 1
+        con.commit(); os.remove(z); print(f"    {n} endereços atualizados", flush=True)
+    cur.execute("INSERT OR REPLACE INTO meta VALUES ('bairros_carregados_em', ?)", (time.strftime("%Y-%m-%d %H:%M"),)); con.commit(); con.close()
+    print("Bairros prontos.")
 
 
 def q(sql, args=()):
@@ -254,13 +280,14 @@ def regime(permitir, somente_com_master=True):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); g = ap.add_mutually_exclusive_group(required=True)
-    for o in ("listar", "carregar", "enriquecer", "prospectar", "regime"): g.add_argument("--" + o, action="store_true")
+    for o in ("listar", "carregar", "bairros", "enriquecer", "prospectar", "regime"): g.add_argument("--" + o, action="store_true")
     ap.add_argument("--mes"); ap.add_argument("--permitir-externo", action="store_true")
     ap.add_argument("--cnaes", help="prefixos separados por vírgula para restringir a lista (ex.: 1011,1012,1013,4634,4633)"); a = ap.parse_args()
     if a.listar:
         for m in sorted(h for h, _ in propfind() if re.fullmatch(r"\d{4}-\d{2}", h))[-3:]:
             print(m, f"{sum(s for _, s in propfind(m + '/'))/1e9:.2f} GB")
     elif a.carregar: carregar(a.mes)
+    elif a.bairros: bairros(a.mes)
     elif a.enriquecer: enriquecer()
     elif a.prospectar: prospectar(a.cnaes.split(",") if a.cnaes else None)
     else: regime(a.permitir_externo)
