@@ -1,6 +1,6 @@
 # Funrural · ADI 4.395 · Estratégia comercial
 
-PRÉ-ANÁLISE — sujeita a validação técnica e jurídica. Validador: [nome a preencher]. Data-base: 20/10/2026.
+PRÉ-ANÁLISE — sujeita a validação técnica e jurídica. Validador: [nome a preencher]. Data-base: 20/10/2026 (revisada no mesmo dia com a notícia oficial do STF).
 
 ## 1. Resposta curta: o valor está no passivo e nos processos, não na restituição
 - **O que o STF decidiu em 15/10/2026 (ADI 4.395):**
@@ -17,7 +17,20 @@ PRÉ-ANÁLISE — sujeita a validação técnica e jurídica. Validador: [nome a
   4. **reavaliar** ações perdidas depois de 2017. Esta frente é uma hipótese a validar com o Jurídico.
 - **Para a Save:** é um produto de **Gestão de Passivo e Jurídico** para adquirentes da produção rural, como frigoríficos, laticínios, cerealistas, cafés e cooperativas, onde a carteira dos Masters é forte. Não é uma tese nova de recuperação para vender a todos.
 
-## 2. O que mudou e o que não mudou
+## 2. O que as fontes oficiais confirmam (conferido em 20/10/2026)
+| Ponto | STF (notícia oficial de 15/10/2026, 20h57) | Certidão de julgamento | Imprensa | Leitura correta |
+|---|---|---|---|---|
+| Contribuição do empregador rural PF antes de 2018 | Inconstitucional | Inconstitucional (vício formal) | Todos concordam | **Inconstitucional antes de 1º/1/2018** |
+| Sub-rogação das empresas compradoras antes de 2018 | **Inconstitucional**, segundo a maioria | Inconstitucional "também apenas até 2018" | Migalhas e Canal Rural: afastada. **Agência Brasil: "não analisada" (diverge)** | **Inconstitucional antes de 2018.** O texto oficial prevalece sobre a Agência Brasil |
+| A partir de 2018 (Lei 13.606/2018) | Contribuição e retenção pelas compradoras **constitucionais** | Marco de 1º/1/2018 | Todos concordam | **Devido e retido normalmente** |
+| Modulação dos efeitos | "Não analisou os limites"; embargos podem tratar, inclusive com ministros novos | Maioria não modulou "nesta assentada"; Toffoli e Fachin vencidos | Agência Brasil: Moraes lembrou que os sucessores podem rever a modulação **e até o mérito** | **Aberta.** Maior risco da tese |
+| Placar | Não informa número | 5 × 5 no art. 25, decidido pelo voto médio de Toffoli | Agência Brasil: 6 × 5 | Maioria formada pelo voto médio de Toffoli |
+| Acórdão | Toffoli redige | idem | — | **Ainda não publicado.** Aplicar com segurança só depois |
+| Receita e PGFN | — | — | Nenhuma nota oficial localizada até 20/10 | Acompanhar. A Transação Funrural da PGFN (2022) está encerrada |
+
+Observação: a própria notícia do STF traz uma frase antiga ("julgamento suspenso para proclamação do resultado"), que conflita com o título. A certidão de julgamento de 15/10/2026 registra o resultado proclamado.
+
+## 2b. O que mudou e o que não mudou
 | Ponto | Situação em 20/10/2026 | Fonte |
 |---|---|---|
 | Produtor rural pessoa física como contribuinte (art. 12, V e VII) | **Constitucional** | Decisão de julgamento, 15/10/2026 |
@@ -41,6 +54,10 @@ Placar no mérito do art. 25: 5 votos pela constitucionalidade (Gilmar Mendes, M
 | **Ação perdida com trânsito em julgado depois de 2017** (após o Tema 669) | Hipótese de ação rescisória ou de inexigibilidade do título, com base em decisão posterior do STF (CPC, arts. 525, §15, e 535, §8º) | **Incerta.** Prazos e alcance devem ser validados pelo Jurídico | Jurídico (avaliação caso a caso) |
 | **Pagou e nunca questionou** | Os pagamentos até 2017 estão fora do prazo de 5 anos (art. 168 do CTN). A restituição administrativa é praticamente nula | **Baixa** | Não vender |
 | **Fatos a partir de 2018** | Continua devido | Nenhuma tese nova | Planejamento: opção receita bruta × folha (anual, em janeiro) e reforma tributária (CBS/IBS do produtor rural) |
+
+## 3b. Tema novo, a validar: aumento do Funrural pela LC 224/2025
+- Desde **1º/4/2026**, a Receita aplica o corte de 10% de benefícios da LC 224/2025 também ao Funrural sobre a receita bruta. Pela IN RFB 2.321/2026, a pessoa física passa a 1,32% + 0,11% de RAT (mais 0,2% de SENAR) e a pessoa jurídica a 1,98% (2,23% com SENAR).
+- Há questionamento de que a lei não alcança essa contribuição. É um **tema para o Jurídico e o Tributário avaliarem** como tese corrente, pós-2018, para produtores e adquirentes. **Não vender antes do parecer.**
 
 ## 4. O que já temos na base (HubSpot de 16/10/2026 + Receita + pareceres)
 - **412 empresas adquirentes da produção rural no HubSpot** (CNAE de frigorífico, produtos de carne, laticínios, atacado de café, cereais, carnes e animais vivos). **199 já são clientes** (ganho em RT), e 391 estão no Lucro Real.
@@ -84,7 +101,7 @@ Para produtores pessoa física e para quem compra deles, a escolha anual entre r
 - qualquer valor ou prazo antes da ficha validada.
 
 ## 7. Riscos e cuidados
-1. **Modulação:** pode restringir os efeitos a processos pendentes até a data da ata ou da sessão. Não prometer restituição.
+1. **Modulação e composição nova do STF:** a modulação pode restringir os efeitos a processos pendentes até a data da ata ou da sessão. Quatro ministros da maioria se aposentaram, e os sucessores votarão nos embargos; Moraes indicou que podem rever até o mérito. Não prometer restituição nem cancelamento.
 2. **Acórdão e embargos:** a PGFN deve embargar. Só aplicar com segurança depois da publicação da ata. Acompanhar no radar semanal.
 3. **Prescrição:** pagamentos anteriores a 2018 estão fora do prazo de 5 anos, salvo ação ou pedido anterior.
 4. **Legitimidade:** na sub-rogação, quem suportou o tributo foi o produtor, retido pelo adquirente. Definir caso a caso quem pode pedir o quê (CTN, art. 166). A validar com o Jurídico.
@@ -98,6 +115,11 @@ Para produtores pessoa física e para quem compra deles, a escolha anual entre r
 4. Corrigir o **catálogo de teses**: a linha do Funrural cita "Tema 1.079 STJ" e via administrativa. Ela passa a ser "ADI 4.395 (STF, 15/10/2026) · via judicial e de passivo".
 
 ## 9. Fontes
+- **STF, notícia oficial (15/10/2026):** https://noticias.stf.jus.br/postsnoticias/stf-considera-inconstitucional-cobranca-do-funrural-a-empresas-que-compram-producao-rural/
+- Agência Brasil (15/10/2026): https://agenciabrasil.ebc.com.br/radioagencia-nacional/justica/audio/2026-10/stf-derruba-cobranca-do-funrural-antes-de-2018
+- Migalhas (16/10/2026): https://www.migalhas.com.br/quentes/466462/stf-derruba-cobranca-do-funrural-de-empregador-rural-anterior-a-2018
+- PGFN, Transação Funrural: https://www.gov.br/pgfn/pt-br/servicos/orientacoes-contribuintes/acordo-de-transacao/transacao-funrural
+- LC 224/2025 e Funrural (pista, conferir a IN RFB 2.321/2026): https://revistacultivar.com.br/noticias/nova-lei-eleva-aliquotas-do-funrural-a-partir-de-abril
 - STF, ADI 4.395, decisão de julgamento do Plenário em 15/10/2026. Texto reproduzido em: https://www.tributo.com.br/wp-content/uploads/2026/10/STF-ADI-4395-Decisao-de-julgamento-Plenario-15-10-2026.pdf, consultado em 20/10/2026. **Conferir a ata no portal do STF.**
 - Análise da decisão (Tributo.com.br, 15/10/2026): https://www.tributo.com.br/2026/10/15/stf-julga-funrural-e-sub-rogacao-na-adi-4395/
 - Contexto e histórico (ConJur, 11/10/2026): https://conjur.com.br/2026-out-11/stf-vai-julgar-novamente-o-funrural/
