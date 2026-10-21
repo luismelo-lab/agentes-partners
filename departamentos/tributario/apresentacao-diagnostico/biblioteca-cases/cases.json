@@ -1,0 +1,191 @@
+{
+ "_leia": "Biblioteca de cases por segmento. O Luis sobe os cases; o gerador escolhe o do segmento do diagnóstico. Só entra case com autorizacao_uso preenchida e aprovado=true. Campos e checklist em README.md. Os seis cases abaixo são os totais por segmento da apresentação institucional (aprovado=false até o Jurídico e o Depto Dados confirmarem a definição de 'reconectado' e a data-base). Quando o Luis subir cases individuais anonimizados, eles passam a ter prioridade sobre o agregado.",
+ "segmentos": {
+  "alimenticio": {
+   "nome": "Alimentício",
+   "cnae_divisoes": [
+    "10",
+    "11",
+    "46.3",
+    "47.1",
+    "47.2"
+   ],
+   "_nota": "46.3 = atacado de alimentos, bebidas e fumo; 47.1/47.2 = varejo de alimentos"
+  },
+  "agro": {
+   "nome": "Agro",
+   "cnae_divisoes": [
+    "01",
+    "02",
+    "03",
+    "46.2",
+    "46.1"
+   ]
+  },
+  "industria": {
+   "nome": "Indústria",
+   "cnae_divisoes": [
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "20",
+    "22",
+    "23",
+    "24",
+    "25",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33"
+   ]
+  },
+  "saude": {
+   "nome": "Medicina e Odontologia",
+   "cnae_divisoes": [
+    "86"
+   ]
+  },
+  "transporte": {
+   "nome": "Transportadoras",
+   "cnae_divisoes": [
+    "49",
+    "50",
+    "51",
+    "52",
+    "53"
+   ]
+  },
+  "folha_alta": {
+   "nome": "Empresas com folha acima de R$ 60 mil",
+   "cnae_divisoes": []
+  }
+ },
+ "cases": [
+  {
+   "id": "alimenticio-agregado",
+   "segmento": "alimenticio",
+   "tipo": "agregado_segmento",
+   "perfil": "Empresas do setor alimentício (supermercados, atacado e indústria de alimentos)",
+   "titulo_cliente": "empresas do segmento alimentício",
+   "valor": 408095013.74,
+   "resumo_cliente": "Revisão tributária em empresas do segmento alimentício: créditos e oportunidades reconectados após análise técnica de cada caso.",
+   "teses": [],
+   "valor_tipo": "reconectado",
+   "periodo": "a confirmar",
+   "data_base": "a confirmar",
+   "fonte": "Apresentação institucional Save Co. 2026 (Cases por segmento), subida pelo Luis em 14/10/2026; definição de 'reconectado' e data-base a confirmar com o João ou o Depto Dados",
+   "identificacao": "anonimo",
+   "autorizacao_uso": "",
+   "aprovado": false,
+   "aprovado_por": "",
+   "aprovado_em": "",
+   "origem": "agregado do segmento (logos da apresentação não usados)"
+  },
+  {
+   "id": "agro-agregado",
+   "segmento": "agro",
+   "tipo": "agregado_segmento",
+   "perfil": "Empresas do agro (produtores e agropecuárias)",
+   "titulo_cliente": "empresas do agro",
+   "valor": 250224001.37,
+   "resumo_cliente": "Revisão tributária em empresas do agro: créditos e oportunidades reconectados após análise técnica de cada caso.",
+   "teses": [],
+   "valor_tipo": "reconectado",
+   "periodo": "a confirmar",
+   "data_base": "a confirmar",
+   "fonte": "Apresentação institucional Save Co. 2026 (Cases por segmento), subida pelo Luis em 14/10/2026; definição de 'reconectado' e data-base a confirmar com o João ou o Depto Dados",
+   "identificacao": "anonimo",
+   "autorizacao_uso": "",
+   "aprovado": false,
+   "aprovado_por": "",
+   "aprovado_em": "",
+   "origem": "agregado do segmento (logos da apresentação não usados)"
+  },
+  {
+   "id": "industria-agregado",
+   "segmento": "industria",
+   "tipo": "agregado_segmento",
+   "perfil": "Empresas da indústria",
+   "titulo_cliente": "empresas da indústria",
+   "valor": 101215307.46,
+   "resumo_cliente": "Revisão tributária em empresas da indústria: créditos e oportunidades reconectados após análise técnica de cada caso.",
+   "teses": [],
+   "valor_tipo": "reconectado",
+   "periodo": "a confirmar",
+   "data_base": "a confirmar",
+   "fonte": "Apresentação institucional Save Co. 2026 (Cases por segmento), subida pelo Luis em 14/10/2026; definição de 'reconectado' e data-base a confirmar com o João ou o Depto Dados",
+   "identificacao": "anonimo",
+   "autorizacao_uso": "",
+   "aprovado": false,
+   "aprovado_por": "",
+   "aprovado_em": "",
+   "origem": "agregado do segmento (logos da apresentação não usados)"
+  },
+  {
+   "id": "saude-agregado",
+   "segmento": "saude",
+   "tipo": "agregado_segmento",
+   "perfil": "Clínicas e consultórios (medicina e odontologia)",
+   "titulo_cliente": "clínicas de medicina e odontologia",
+   "valor": 2279485.9,
+   "resumo_cliente": "Revisão tributária em clínicas de medicina e odontologia: créditos e oportunidades reconectados após análise técnica de cada caso.",
+   "teses": [],
+   "valor_tipo": "reconectado",
+   "periodo": "a confirmar",
+   "data_base": "a confirmar",
+   "fonte": "Apresentação institucional Save Co. 2026 (Cases por segmento), subida pelo Luis em 14/10/2026; definição de 'reconectado' e data-base a confirmar com o João ou o Depto Dados",
+   "identificacao": "anonimo",
+   "autorizacao_uso": "",
+   "aprovado": false,
+   "aprovado_por": "",
+   "aprovado_em": "",
+   "origem": "agregado do segmento (logos da apresentação não usados)"
+  },
+  {
+   "id": "transporte-agregado",
+   "segmento": "transporte",
+   "tipo": "agregado_segmento",
+   "perfil": "Transportadoras",
+   "titulo_cliente": "transportadoras",
+   "valor": 19905720.48,
+   "resumo_cliente": "Revisão tributária em transportadoras: créditos e oportunidades reconectados após análise técnica de cada caso.",
+   "teses": [],
+   "valor_tipo": "reconectado",
+   "periodo": "a confirmar",
+   "data_base": "a confirmar",
+   "fonte": "Apresentação institucional Save Co. 2026 (Cases por segmento), subida pelo Luis em 14/10/2026; definição de 'reconectado' e data-base a confirmar com o João ou o Depto Dados",
+   "identificacao": "anonimo",
+   "autorizacao_uso": "",
+   "aprovado": false,
+   "aprovado_por": "",
+   "aprovado_em": "",
+   "origem": "agregado do segmento (logos da apresentação não usados)"
+  },
+  {
+   "id": "folha_alta-agregado",
+   "segmento": "folha_alta",
+   "tipo": "agregado_segmento",
+   "perfil": "Empresas com mais de 30 funcionários e folha acima de R$ 60 mil",
+   "titulo_cliente": "empresas com folha acima de R$ 60 mil",
+   "valor": 1200000.0,
+   "resumo_cliente": "Revisão tributária em empresas com folha acima de R$ 60 mil: créditos e oportunidades reconectados após análise técnica de cada caso.",
+   "teses": [],
+   "valor_tipo": "reconectado",
+   "periodo": "a confirmar",
+   "data_base": "a confirmar",
+   "fonte": "Apresentação institucional Save Co. 2026 (Cases por segmento), subida pelo Luis em 14/10/2026; definição de 'reconectado' e data-base a confirmar com o João ou o Depto Dados",
+   "identificacao": "anonimo",
+   "autorizacao_uso": "",
+   "aprovado": false,
+   "aprovado_por": "",
+   "aprovado_em": "",
+   "origem": "agregado do segmento (logos da apresentação não usados)"
+  }
+ ]
+}
