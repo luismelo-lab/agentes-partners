@@ -261,4 +261,12 @@ s.addText([
   { text: "Pré-análise de caráter geral, sem acesso aos dados internos da cooperativa. Não constitui parecer jurídico ou tributário nem oferta de crédito. As faixas são ilustrativas, com premissas indicadas, e dependem de documentos e de validação técnica. Valor, prazo e êxito não são prometidos; não há garantia de resultado.", options: { fontFace: F, fontSize: 10, color: C.texto_2 } },
 ], { x: MX, y: TOPO - 0.1, w: W - 2 * MX, h: 4.9, margin: 0, valign: "top", isTextBox: true, paraSpaceAfter: 2 });
 
+// ───────────── ORDEM FINAL: 12 slides na mesa + divisória do anexo + 8 de anexo (corte para ~45 min, Luis 21/10/2026)
+s = pres.addSlide({ masterName: "SAVE_ESCURO" });
+s.addText("ANEXO", { x: MX, y: 2.6, w: 8, h: 0.4, fontFace: FM, fontSize: 13, color: E.ouro, charSpacing: 2, margin: 0 });
+s.addText("Dados de apoio e detalhamento por negócio", { x: MX, y: 3.1, w: 11.5, h: 1.3, fontFace: F, fontSize: 38, bold: true, color: E.texto, margin: 0 });
+s.addText("Para abrir se a conversa pedir: mercado de leite, suínos e varejo, crédito rural, os passos da esteira por negócio e as fontes.", { x: MX, y: 4.5, w: 10, h: 0.8, fontFace: F, fontSize: 15, color: E.texto_2, margin: 0, valign: "top" });
+const orig = pres._slides.slice();
+const ordem = [1, 2, 3, 4, 6, 10, 12, 13, 14, 15, 19, 20, orig.length, 5, 7, 8, 9, 16, 17, 18, 21];
+pres._slides = ordem.map((n, i) => { const sl = orig[n - 1]; sl._slideNum = i + 1; return sl; });
 pres.writeFile({ fileName: OUT }).then(() => console.log("ok", OUT));
