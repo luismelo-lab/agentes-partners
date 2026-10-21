@@ -63,7 +63,7 @@ elos.forEach((e, i) => cartao(s, MX + i * 2.45, TOPO, 2.3, 4.3, e[0], e[1], { fs
 fonte(s, "Cooperativa Santa Clara, site (quem somos, produtos e blog de jul e ago/2026); SuperVarejo (mar/2025: frigoríficos, suinoculturas, rações, lojas e centrais); Jornal do Comércio (ago/2024 e ago/2025). Números de estrutura variam entre publicações; a confirmar com a cooperativa.");
 
 // ───────────── 4. MATRIZ DE PRESSÕES
-s = nova("2 · Dificuldades dos negócios", "Cada negócio da Santa Clara enfrenta uma pressão diferente sobre a margem");
+s = nova("Visão geral · Pressões por negócio", "Cada negócio da Santa Clara enfrenta uma pressão diferente sobre a margem");
 tabela(s, MX, TOPO, [2.3, 5.2, 4.63], ["Negócio", "O que os dados oficiais mostram", "Fonte"], [
   ["Campo e leite", "Preço pago ao produtor: R$ 2,76 (1T25) → R$ 2,21 (4T25) → R$ 2,70 (2T26), com volume recorde de leite no país", "IBGE, Pesquisa Trimestral do Leite"],
   ["Laticínios", "Importação de lácteos +26% no 1T26; antidumping ao leite em pó da Argentina e do Uruguai; preço ao consumidor: leites e derivados +6,3% em 12 meses", "DERAL/SEAB-PR; MDIC (Gecex 907/2026); IBGE, IPCA"],
@@ -79,7 +79,7 @@ const qs = Object.keys(ibge.BR.vol).slice(-16);
 const lab = (q) => q.replace("º trimestre ", "T/").replace(/^(\d)T\/(\d{4})$/, (m, a, b) => a + "T" + b.slice(2));
 const sum = (o, y) => Object.entries(o).filter(([k]) => k.endsWith(String(y))).reduce((a, [, v]) => a + v, 0);
 const a25 = sum(ibge.BR.vol, 2025) / 1e6, a24 = sum(ibge.BR.vol, 2024) / 1e6, r25 = sum(ibge.RS.vol, 2025) / 1e6, r24 = sum(ibge.RS.vol, 2024) / 1e6;
-s = nova("1 · O mercado · Campo e laticínios", "O Brasil nunca captou tanto leite: 2025 foi o maior volume da série");
+s = nova("1 · O mercado · Campo e laticínios", "A captação de leite bateu recorde em 2025, o maior volume da série do IBGE consultada");
 s.addChart(pres.charts.BAR, [{ name: "Leite adquirido (bilhões de litros)", labels: qs.map(lab), values: qs.map(q => +(ibge.BR.vol[q] / 1e6).toFixed(2)) }],
   { x: MX, y: TOPO, w: 8.2, h: 4.3, barDir: "col", chartColors: [GRAFICO.claro[0]], showValue: true, dataLabelFontSize: 8, dataLabelFormatCode: "0.0", dataLabelColor: C.texto,
     catAxisLabelFontSize: 9, valAxisLabelFontSize: 9, catAxisLabelFontFace: F, valAxisLabelFontFace: F, valGridLine: { color: C.borda, size: 0.5 }, showLegend: false,
@@ -91,7 +91,7 @@ fonte(s, "IBGE, Pesquisa Trimestral do Leite (SIDRA, tabela 1086), série 3º tr
 
 // ───────────── 6. LEITE: PREÇO
 const pq = Object.keys(ibge.BR.preco).slice(-16);
-s = nova("1 · O mercado · Campo e laticínios", "O produtor recebeu 20% menos em 2025 e o consumidor paga mais: a margem está no meio");
+s = nova("1 · O mercado · Campo e laticínios", "O preço ao produtor caiu 20% ao longo de 2025 e se recuperou em 2026, enquanto o consumidor paga mais");
 s.addChart(pres.charts.LINE, [{ name: "Brasil", labels: pq.map(lab), values: pq.map(q => ibge.BR.preco[q]) }, { name: "Rio Grande do Sul", labels: pq.map(lab), values: pq.map(q => ibge.RS.preco[q]) }],
   { x: MX, y: TOPO, w: 8.2, h: 4.3, chartColors: [GRAFICO.claro[0], GRAFICO.claro[1]], lineSize: 2.5, lineDataSymbolSize: 7, showLegend: true, legendPos: "b", legendFontSize: 10, legendFontFace: F,
     catAxisLabelFontSize: 9, valAxisLabelFontSize: 9, catAxisLabelFontFace: F, valAxisLabelFontFace: F, valGridLine: { color: C.borda, size: 0.5 }, valAxisMinVal: 1.8, valAxisMaxVal: 3.2, valAxisLabelFormatCode: "0.00",
@@ -163,7 +163,7 @@ tabela(s, MX, TOPO, [2.1, 5.1, 4.93], ["Negócio", "O que já se sabe da coopera
 fonte(s, "Cooperativa Santa Clara (site, jul e ago/2026); SuperVarejo (mar/2025); Jornal do Comércio (ago/2024 e ago/2025).");
 
 // ───────────── 13. RÉGUA
-s = nova("5 · O tamanho do que está em jogo", "Com R$ 3 bilhões de faturamento, cada fração de margem e cada dia de prazo pesam");
+s = nova("3 · O espelho · O tamanho do que está em jogo", "Com R$ 3 bilhões de faturamento, cada fração de margem e cada dia de prazo pesam");
 const dia = 3e9 / 365 / 1e6;
 S.kpi(s, MX, TOPO, 2.95, "1 ponto de margem", "R$ 30 mi", "por ano, sobre R$ 3 bi");
 S.kpi(s, MX + 3.05, TOPO, 2.95, "0,1 ponto de margem", "R$ 3 mi", "por ano");
