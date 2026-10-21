@@ -112,6 +112,73 @@ def cenarios(s, n, tot):
     return pagina(c, n, tot, s.get("fonte", ""))
 
 
+def cadeia(s, n, tot):
+    c = f'<h1 style="position:absolute;left:80px;top:70px;width:1700px;font-size:76px">{s["titulo"]}</h1><div class="reg" style="top:280px"></div>'
+    k = len(s["blocos"]); w = 1760 // k
+    for i, (v, cap) in enumerate(s["blocos"]):
+        x = 80 + i * w
+        c += (f'<div style="position:absolute;left:{x}px;top:330px;width:{w - 30}px"><div style="font-size:62px;font-weight:300;line-height:1.05;color:{TXT}">{v}</div>'
+              f'<div style="margin-top:14px;font-size:24px;line-height:1.3;color:{CIN}">{cap}</div></div>')
+    c += f'<div class="reg" style="top:640px"></div>'
+    for i, (num, tx) in enumerate(s["dores"]):
+        x = 80 + i * 440
+        c += (f'<div style="position:absolute;left:{x}px;top:680px;width:410px"><span style="font-size:40px;color:{OURO}">{num}</span>'
+              f'<span style="margin-left:14px;font-size:30px;color:{TXT}">{tx}</span></div>')
+    c += f'<div style="position:absolute;left:80px;top:790px;width:1700px;font-size:24px;color:{CIN}">{s["rodape"]}</div>'
+    return pagina(c, n, tot, s.get("fonte", ""))
+
+
+def dor(s, n, tot):
+    c = foto(s["foto"], "right:0;top:0;width:620px;height:1080px", pos=s.get("pos", "center"), br=.55)
+    c += '<div style="position:absolute;right:0;top:0;width:620px;height:1080px;background:linear-gradient(90deg,#000 0%,rgba(0,0,0,0) 40%)"></div>'
+    c += (f'<div style="position:absolute;left:80px;top:70px;width:1100px;font-size:24px;letter-spacing:.06em;color:{OURO}">{s["rotulo"]}</div>'
+          f'<h1 style="position:absolute;left:80px;top:120px;width:1150px;font-size:66px">{s["titulo"]}</h1>'
+          f'<div style="position:absolute;left:80px;top:360px;width:1100px;font-size:{s.get("nf", 120)}px;font-weight:300;line-height:1;color:{TXT};white-space:nowrap">{s["numero"]}</div>'
+          f'<div style="position:absolute;left:80px;top:{360 + s.get("nf", 120) + 20}px;width:1000px;font-size:25px;line-height:1.3;color:{CIN}">{s["legenda"]}</div>')
+    c += '<div class="reg" style="top:700px;right:700px"></div>'
+    c += (f'<div style="position:absolute;left:80px;top:725px;width:520px"><div style="font-size:21px;color:{OURO};letter-spacing:.05em">{s["frente"]}</div>'
+          f'<div style="margin-top:10px;font-size:26px;line-height:1.35;color:{TXT}">{s["entrega"]}</div></div>'
+          f'<div style="position:absolute;left:660px;top:725px;width:520px"><div style="font-size:21px;color:{OURO};letter-spacing:.05em">A PERGUNTA</div>'
+          f'<div style="margin-top:10px;font-size:26px;line-height:1.35;color:{TXT}">{s["pergunta"]}</div></div>')
+    return pagina(c, n, tot, s.get("fonte", ""))
+
+
+def matriz(s, n, tot):
+    c = f'<h1 style="position:absolute;left:80px;top:50px;width:1700px;font-size:60px">{s["titulo"]}</h1>'
+    xs = [80, 540, 1000, 1460]; w = 420
+    c += f'<div style="position:absolute;left:80px;top:170px;width:420px;font-size:22px;color:{OURO};letter-spacing:.05em">A DOR</div>'
+    for i, (a, b) in enumerate(s["frentes"]):
+        c += (f'<div style="position:absolute;left:{xs[i + 1]}px;top:160px;width:{w}px"><div style="font-size:30px;color:{OURO}">{a}</div>'
+              f'<div style="font-size:20px;color:{CIN};margin-top:4px">{b}</div></div>')
+    for r, (num, dortx, big, cels) in enumerate(s["linhas"]):
+        y = 250 + r * 170
+        c += f'<div class="reg" style="top:{y - 6}px"></div>'
+        c += (f'<div style="position:absolute;left:80px;top:{y + 10}px;width:420px"><span style="font-size:34px;color:{OURO}">{num}</span><span style="margin-left:12px;font-size:26px;color:{TXT}">{dortx}</span>'
+              f'<div style="margin-top:6px;font-size:36px;font-weight:300;color:{TXT}">{big}</div></div>')
+        for j, (tx, key) in enumerate(cels):
+            x = xs[j + 1]
+            if tx == "—":
+                c += f'<div style="position:absolute;left:{x}px;top:{y + 20}px;font-size:30px;color:#555">—</div>'
+            else:
+                bd = f"border:1px solid {OURO};" if key else ""
+                c += (f'<div style="position:absolute;left:{x - 10}px;top:{y + 4}px;width:{w}px;height:140px;{bd}border-radius:10px;padding:14px 16px;font-size:23px;line-height:1.3;color:{TXT}">{tx}</div>')
+    c += f'<div style="position:absolute;left:80px;top:945px;width:1700px;font-size:22px;color:{CIN}">{s["rodape"]}</div>'
+    return pagina(c, n, tot, s.get("fonte", ""))
+
+
+def esteira(s, n, tot):
+    c = f'<h1 style="position:absolute;left:80px;top:80px;width:1700px;font-size:72px">{s["titulo"]}</h1><div class="reg" style="top:300px"></div>'
+    for i, (rot, tx) in enumerate(s["etapas"]):
+        x = 80 + i * 600
+        c += (f'<div style="position:absolute;left:{x}px;top:360px;width:500px;height:230px;border:1px solid {OURO};border-radius:14px;padding:30px"><div style="font-size:40px;color:{OURO}">{rot}</div>'
+              f'<div style="margin-top:12px;font-size:25px;line-height:1.35;color:{TXT}">{tx[0]}</div></div>')
+        if i < 2:
+            c += f'<div style="position:absolute;left:{x + 515}px;top:455px;width:70px;height:2px;background:{OURO}"></div><div style="position:absolute;left:{x + 563}px;top:445px;font-size:28px;color:{OURO}">›</div>'
+        c += f'<div style="position:absolute;left:{x}px;top:620px;width:500px;font-size:24px;line-height:1.35;color:{CIN}"><span class="ouro">Abre: </span>{tx[1]}</div>'
+    c += f'<div style="position:absolute;left:80px;top:850px;width:1700px;font-size:28px;color:{TXT}">{s["barra"]}</div>'
+    return pagina(c, n, tot, s.get("fonte", ""))
+
+
 def fim(s, n, tot):
     c = (f'<h1 style="position:absolute;left:160px;top:120px;width:1500px;font-size:84px">{s["titulo"]}</h1>'
          f'<img src="{uri(PAD / M["logos"]["fundo_escuro"])}" style="position:absolute;left:160px;top:330px;width:360px">'
@@ -129,7 +196,7 @@ def fontes(s, n, tot):
     return pagina(c, n, tot)
 
 
-T = {"cenarios": cenarios, "numeros": numeros, "capa": capa, "frase": frase, "espelho": espelho, "frente": frente, "fim": fim, "fontes": fontes}
+T = {"cadeia": cadeia, "dor": dor, "matriz": matriz, "esteira": esteira, "cenarios": cenarios, "numeros": numeros, "capa": capa, "frase": frase, "espelho": espelho, "frente": frente, "fim": fim, "fontes": fontes}
 
 
 def main():

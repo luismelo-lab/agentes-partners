@@ -1,110 +1,55 @@
 #!/usr/bin/env python3
-"""Conteúdo macro da apresentação Santa Clara (21/10/2026): dificuldades do mercado e as 3 frentes, no layout do PPT institucional.
-Roteiro do agente de Soluções + Marketing, ajustado. Uso: python3 montar_ppt.py && python3 render_ppt.py"""
+"""Santa Clara v3 (21/10/2026): uma ideia, quatro dores, o ecossistema numa tela. Briefing do gerente de Soluções (clareza).
+Uso: python3 montar_ppt.py && python3 render_ppt.py   (a versão anterior ficou em montar_ppt_v2_anterior.py)"""
 import json
 from pathlib import Path
 S = []
 A = S.append
-A(dict(tipo="capa", foto="pex-13340333.jpg", titulo="Margem, do campo à gôndola", sub="Uma conversa sobre onde cada ponto de margem pode estar escondido. Apresentação à presidência da Cooperativa Santa Clara · outubro de 2026",
-       notas="Abertura (1 min). O objetivo é conversar sobre margem negócio por negócio: primeiro o mercado de vocês, depois como a Save atua em três frentes. Pré-análise, sem acesso aos dados internos; nenhuma promessa de valor, prazo ou êxito."))
-A(dict(tipo="numeros", titulo="Uma cadeia inteira: do campo à gôndola.", itens=[
-    ("R$ 3 bi", "projeção de faturamento em 2026", "divulgada pela imprensa; não é balanço"),
-    ("~5 mil", "famílias associadas", "cerca de 2,3 mil fornecem leite"),
-    ("360 mi L", "de leite por ano", "mais de 1 milhão por dia, em 3 indústrias"),
-    ("419", "itens com a marca", "291 de laticínios e 128 de carnes e embutidos"),
-    ("7 · 2 · 2", "suinoculturas, frigoríficos e fábricas de ração", "do grão ao embutido, dentro de casa"),
-    ("30", "lojas próprias", "supermercados e 15 lojas agropecuárias"),
-    ("60%", "da produção vendida fora do RS", "7 centrais de distribuição e um novo centro"),
-    ("2,3 mil+", "colaboradores", "unidades com FSSC 22000 (2025)")],
-    fonte="Cooperativa Santa Clara (site e blog, 2025-26); Jornal do Comércio (jul/2026 e ago/2025); SuperVarejo; Jornal Novo Tempo (ago/2026). ",
-    notas="A Santa Clara em números (2 min): a cadeia inteira, não só o leite. Dados públicos; divergem entre fontes (colaboradores 2,3 a 2,7 mil; lojas 30 ou 31; centrais 7 ou 8): usar faixas e pedir a confirmação. O 360 mi L/ano e o 1 mi L/dia são o mesmo número. Não há balanço público: faturamento realizado, sobras e patrimônio, abate real, produção de ração, exportação por produto e país e investimentos aprovados entram na lista de documentos. Perguntar: qual a divisão do faturamento entre laticínios, carnes, ração e varejo?"))
-A(dict(tipo="frase", foto="pex-2771640.jpg", titulo="Cada ponto de margem vale R$ 30 mi.", numero="R$ 30", unidade="mi por ano", legenda="para cada ponto de margem sobre R$ 3 bi de receita projetada. Não é meta nem estimativa de ganho", fs=110, top=170,
-       fonte="Jornal do Comércio, jul/2026 (projeção de faturamento).",
-       notas="Régua (1 min). Margem: R$ 30 mi por ponto sobre R$ 3 bi; 0,1 ponto = R$ 3 mi. É aritmética sobre a projeção pública, não estimativa de ganho. Pedir o faturamento realizado de 2025."))
-A(dict(tipo="frase", foto="pex-2887112.jpg", pos="center 40%", titulo="O leite oscila. O produtor sente primeiro.", numero="−19,9", unidade="%", legenda="no preço ao produtor de 1T25 a 4T25 (R$ 2,76 para R$ 2,21); em 12 meses até o 2T26, −1,5%. Média Brasil", fs=92, top=210,
-       fonte="IBGE, Pesquisa Trimestral do Leite (SIDRA 1086). Consulta em 21/10/2026.",
-       notas="Dificuldade 1. Média Brasil. Em 12 meses (2T25 a 2T26) o preço ficou em −1,5%: R$ 2,74 para R$ 2,70; o 2T26 já voltou a R$ 2,70. Apoio: importação de lácteos +26% no 1T26 (DERAL/SEAB-PR). Pergunta: o preço pago ao produtor acompanhou o preço de venda em cada linha?"))
-A(dict(tipo="frase", foto="racoes.jpg", titulo="No suíno, a ração decide a margem.", numero="65% a 72%", unidade="", legenda="do custo de produção do suíno é ração, de 64,8% (GO) a 72,1% (SC), no 1T26", fs=96, top=210,
-       fonte="Embrapa Suínos e Aves (CIAS), custo de produção, 1T26.",
-       notas="Dificuldade 2. Apoio: carne de porco ao consumidor −8,3% em 12 meses até set/2026 (IPCA). Pergunta: qual a margem por produto e por planta, e quanto pesa a ração?"))
-A(dict(tipo="frase", foto="varejo.jpg", titulo="No varejo, a receita sobe mais que o volume.", numero="+3,9% × +0,6%", unidade="", legenda="receita nominal × volume nos supermercados do Brasil, agosto/2026", fs=92, top=210,
-       fonte="IBGE, Pesquisa Mensal de Comércio (SIDRA 8882). Consulta em 21/10/2026.",
-       notas="Dificuldade 3. A diferença reflete em boa parte preços (alimentação no domicílio +4,2% em 12 meses). Pergunta: qual a margem por categoria e por loja, e o prazo de venda ao associado?"))
-A(dict(tipo="frase", foto="centro-distribuicao.jpg", titulo="O dinheiro de mercado custa mais que o dobro do crédito rural.", numero="22,89% × 9%", unidade="ao ano", legenda="capital de giro de mercado (média) × taxa de custeio rural oficial, quando elegível. Não é o custo da cooperativa", fs=80, top=190, w=1150,
-       fonte="Banco Central (SGS 20725, ago/2026); Plano Safra 2026/27 (30/06/2026).",
-       notas="Dificuldade 4. Elegibilidade às linhas oficiais analisada caso a caso; a Save não concede crédito. Pergunta: quanto custa hoje a dívida média e em quantos dias a cooperativa recebe?"))
-A(dict(tipo="frase", foto="pex-221369.jpg", titulo="2026 muda o imposto. 2027 muda de novo.", numero="90%", unidade="", legenda="teto do crédito presumido de PIS/COFINS desde 01/04/2026, a confirmar para leite e queijos (cesta básica) · CBS plena em 2027 · saldos de PIS/COFINS precisam estar escriturados até dez/2026", fs=92, top=210,
-       fonte="LC 224/2025 (art. 4º, §8º, III); LC 214/2025; Lei 10.925/2004.",
-       notas="Dificuldade 5. Ressalva obrigatória: leite e queijos estão na cesta básica da LC 214 e o corte de 90% pode não alcançá-los; o tributário confirma. Em 2027 a CBS é plena e o PIS/COFINS acaba. Pergunta: o crédito do leite e dos suínos está sendo aproveitado por inteiro e a cooperativa está pronta para 2027?"))
-A(dict(tipo="espelho", titulo="Cinco perguntas que só vocês respondem.", itens=[
-    ("O preço do leite", "O preço pago ao produtor acompanhou o preço de venda em cada linha?"),
-    ("O custo da ração", "Quanto pesa a ração na margem por produto e por planta?"),
-    ("A margem por loja", "Qual a margem por categoria e o prazo de venda ao associado?"),
-    ("O custo da dívida", "Quanto custa a dívida hoje e em quantos dias a cooperativa recebe?"),
-    ("O crédito de 2026 e 2027", "Os créditos do leite e dos suínos são aproveitados por inteiro? Estamos prontos para a reforma?")],
-    fonte="Cooperativa Santa Clara (site); SuperVarejo; Jornal do Comércio.",
-    notas="Espelho (3 min): é aqui que conduzimos a conversa perguntando. As respostas viram a lista de documentos do próximo passo."))
-A(dict(tipo="frase", foto="pex-12380134.jpg", titulo="Oxigenar olha o caixa de hoje. Estruturar ajuda a manter o ganho. Escalar prepara o crescimento.", fs=76, top=250, w=1250, br=.5,
-       notas="Transição para as três frentes (1 min). Um gestor de projeto conduz as três. As frentes se encadeiam: o que for liberado pode ajudar a organizar o que está atrasado e vira base para estruturar; com controle e margem por negócio, qualquer investimento pode ser medido e apresentado a quem financia."))
-A(dict(tipo="frente", titulo="Oxigenar: devolver caixa à operação.", intro="Olhar o caixa e o custo da dívida sem depender só da safra. Entra quando o caixa aperta ou o prazo de recebimento é longo.", itens=[
-    ("Revisão tributária", "Levantamento de créditos possíveis (leite, suínos, saldo credor), sujeito a análise e validação."),
-    ("Gestão de Contas", "Visão de recebíveis, vencidos e prazo para destravar o caixa."),
-    ("Antecipação e FIDC", "Operados por instituições autorizadas (Save Invest); a Save não concede crédito. Sujeito a análise jurídica e do estatuto.")],
-    fonte="",
-    notas="Oxigenar (3 min). Com 70% das vendas a prazo, 1 dia a menos de prazo libera R$ 5,8 mi de caixa (uma vez) e cerca de R$ 1,3 mi por ano em juros a 22,89%. Os R$ 8,2 mi por dia são a receita diária, o teto. Crédito Internacional só como pergunta, até o G2 com o João Mattos; nunca 'fundo'."))
-A(dict(tipo="frente", titulo="Estruturar: chegar pronto a 2027.", intro="Ajudar a manter o ganho e os números sob controle. Entra quando o caixa respira ou a reforma bate à porta.", itens=[
-    ("Planejamento tributário e reforma", "Enquadramento tributário correto e preparação para a CBS em 2027."),
-    ("Estruturação patrimonial e societária", "Com o jurídico da cooperativa, respeitando a Lei 5.764/1971."),
-    ("Prazos e certidões", "Controle de prazos e certidões fiscais, com advogado habilitado.")],
-    fonte="",
-    notas="Estruturar (3 min). Para cooperativa, o ato cooperativo e a Lei 5.764 exigem validação do Jurídico antes de qualquer fala além do nome do serviço. Sem 'holding'."))
-A(dict(tipo="frente", titulo="Escalar: crescer com custo sob controle.", intro="Investir e vender mais longe com custo de capital e imposto sob controle. Só entra depois das outras duas.", itens=[
-    ("Tax internacional", "Se houver exportação ou importação: tributação e comércio exterior."),
-    ("Vendas além do RS", "60% da produção já sai do estado: o que mais pode ir ao exterior?")],
-    fonte="",
-    notas="Escalar (3 min). Capital para crescer e crédito da cadeia só como pergunta (descoberta até o G2). Capital para crescer e crédito da cadeia ficaram só na fala, como pergunta (descoberta até o G2). Home equity e Maquila fora."))
-A(dict(tipo="numeros", fs=68, titulo="Exportação de carne suína: o volume cresce e o preço pressiona.", itens=[
-    ("1,19 mi t", "exportadas de jan a set/2026", "+6,2% sobre o mesmo período de 2025"),
-    ("US$ 2,74 bi", "de receita no período", "+1,3%: cresce bem menos que o volume"),
-    ("−21,5%", "na receita de setembro", "US$ 289 mi; volume de 135 mil t (−11%)"),
-    ("2º", "Rio Grande do Sul entre os estados", "33,8 mil t em setembro; SC lidera com 64,5 mil t"),
-    ("Filipinas", "principal destino em setembro", "25,7 mil t, −47,7%; Japão +38,9% e Chile +72%"),
-    ("1,51 mi t", "exportadas em 2025", "US$ 3,6 bi; produção de 5,59 mi t"),
-    ("1,6 mi t", "projeção ABPA de exportação em 2026, no máximo", "produção projetada de 5,87 mi t"),
-    ("3º", "maior exportador mundial de carne suína", "4º maior produtor (ABPA, 2025)")],
-    fonte="ABPA: balanço de set/2026 (divulgado em 07/10/2026) e Relatório Anual 2026 (dados de 2025). Consulta em 21/10/2026.",
-    notas="Exportação de carne suína (2 min): dados ABPA. Volume cresce 6,2% e a receita só 1,3%: o preço internacional pressiona a margem de quem exporta; setembro caiu 11% em volume e 21,5% em receita (base alta e preços médios menores, segundo a ABPA). RS é o segundo estado exportador. Os números do briefing (1,03 mi t, US$ 2,53 bi) podem ser só in natura; usar o da ABPA, que cobre todos os produtos. Não há acumulado por estado ou destino nas matérias consultadas: baixar do relatório da ABPA se a presidência pedir."))
-A(dict(tipo="frente", titulo="Internacionalização: vender mais longe pede imposto e câmbio sob controle.", intro="Para uma cooperativa com carnes e lácteos, o mercado externo pesa. Começa pelo imposto e pela pergunta certa.", itens=[
-    ("Tributação das vendas externas", "Imposto das operações fora do país, avaliado caso a caso."),
-    ("Exportação de suínos e charcutaria", "Quais produtos e mercados fazem sentido para o frigorífico."),
-    ("Câmbio e caixa", "Quanto da receita e da dívida está em moeda estrangeira."),
-    ("Financiamento da exportação", "Em avaliação: como organizar o dossiê para instituições autorizadas.")],
-    nota="Quanto do crescimento da Santa Clara depende de vender fora do país, e em que moeda estão o caixa e a dívida hoje?", fonte="",
-    notas="Internacionalização (3 min). Autorizada pelo Luis em 21/10 por ser central ao segmento. Pronto: tax internacional e comércio exterior. Descoberta (só pergunta): câmbio, financiamento à exportação (ACC/ACE e seguro de crédito, sem ficha nem condição), Crédito Internacional (até o G2, alvo 15/12/2026; nunca 'fundo'). Maquila e Paraguai: o Paraguai aparece no slide próprio como diferencial autorizado pelo Luis (21/10); Maquila não é citada. Lei 60/90 foi substituída pela 7.548/2025. Antidumping de leite em pó: Camex reconheceu o dumping mas suspendeu as tarifas; não falar como proteção em vigor. Número suíno: ABPA 1,192 mi t (todos os produtos); o 1,03 mi t do briefing pode ser só in natura (Comex Stat). Frase: 'Pela importância da exportação, incluímos o tema como pergunta e como tributação das vendas externas, que já temos pronta; crédito internacional e maquila estão em validação e aparecem só como perguntas.'"))
-A(dict(tipo="frase", foto="pex-8291490.jpg", titulo="Quem exporta precisa de uma resposta lá fora.", fs=82, top=170, w=1300, br=.4, linhas=[
-    ("A dor", "Carga tributária e custo de produção comprimem a margem na exportação."),
-    ("A nossa entrega", "A Save atua no Paraguai e avalia, com especialistas locais, onde produzir ou industrializar faz sentido."),
-    ("A pergunta", "Qual parte da produção ou da logística da Santa Clara ganharia competitividade fora do Brasil?")],
-    fonte="",
-    notas="Paraguai, o diferencial da Save (2 min). Autorizado pelo Luis em 21/10/2026: apresentar como entrega que resolve a dor, sem explicar como funciona. Não citar percentuais, leis, regime ou simulações (as simulações do handoff são ilustrativas e não vão a cliente; números precisam de validação com especialista paraguaio). Se perguntarem como funciona: o regime de maquila é um caminho possível (Lei 1.064/97); a Lei 60/90 foi substituída pela Lei 7.548/2025, conferir antes de citar; o lucro de controlada no exterior segue tributado no Brasil (Lei 12.973, art. 77). Pendências internas: frigorífico bloqueado no simulador (D59) e MQ-Q6 (encaixe da carne) sem resposta do João Mattos; confirmação escrita do escritório em Assunção (MQ-Q1). Por isso a frase é 'avaliar onde faz sentido'. Fonte interna: handoff-ecossistema-save.md, seção 6."))
-A(dict(tipo="fim", titulo="Vamos olhar o primeiro número juntos?", a="<b>Próximo passo</b><br>Reunião com a diretoria financeira e fiscal.", b="<b>Confidencialidade</b><br>Assinatura do NDA antes de abrir qualquer dado.", c="<b>Documentos</b><br>Lista do que precisamos ver em cada negócio.",
-       notas="Chamada para ação: peço a reunião com a diretoria financeira e fiscal, o NDA e a lista de documentos. Usamos os documentos só para esta análise, conforme a LGPD; nunca pedimos senhas; certificado digital só mediante contrato e procuração."))
-A(dict(tipo="fontes", texto="IBGE, SIDRA: Pesquisa Trimestral do Leite (1086), Pesquisa Mensal de Comércio (8882) e IPCA (7060), consulta em 21/10/2026. Banco Central, SGS 20725 (capital de giro de pessoas jurídicas, ago/2026). Embrapa Suínos e Aves, CIAS (1T26). Governo federal, Plano Safra 2026/27 (30/06/2026). DERAL/SEAB-PR (importação de lácteos, 1T26). ABPA (balanço de set/2026, divulgado em 07/10/2026, e Relatório Anual 2026). Jornal Novo Tempo (ago/2026). LC 214/2025, LC 224/2025, Lei 10.925/2004 e Lei 5.764/1971. Cooperativa Santa Clara (site, jul e ago/2026: 60% da produção fora do RS, estrutura), SuperVarejo (mar/2025), Jornal do Comércio (jul/2026). Cesta básica: LC 214/2025, Anexo I. Imagens ilustrativas: acervo do site da cooperativa e banco de imagens Pexels (licença gratuita); não representam necessariamente a operação.", notas="Fontes e avisos: fora da fala; vai no PDF enviado depois."))
-A(dict(tipo="frente", titulo="Um método: esteira única e um gestor conduzindo tudo.", intro="Perguntamos antes de propor. Nada avança sem o passo anterior entregue.", itens=[
-    ("Diagnóstico com os seus documentos", "Começamos pelos números de vocês, não pelos nossos."),
-    ("Três frentes encadeadas", "Oxigenar, estruturar e escalar: uma abre a outra."),
-    ("Um gestor de projeto", "Conduz todos os negócios e conecta as equipes tributária, jurídica e financeira.")],
-    notas="Método (1 min). Prova de viabilidade pelo método, sem citar cliente nem resultado de outros clientes. Se houver caso anonimizado aprovado pelo Tributário e pelo auditor, entra aqui; senão, não."))
-A(dict(tipo="cenarios", titulo="Se três coisas mudarem pouco, o que muda no resultado?", cols=[
-    ("Conservador", [("Receber 1 dia antes", "R$ 5,8 mi de caixa, uma vez · R$ 1,3 mi de juros por ano"), ("Margem +0,1 ponto", "R$ 3 mi por ano"), ("Custo da dívida −2 pontos", "R$ 2 mi por ano a cada R$ 100 mi")]),
-    ("Base", [("Receber 3 dias antes", "R$ 17,3 mi de caixa, uma vez · R$ 4,0 mi de juros por ano"), ("Margem +0,3 ponto", "R$ 9 mi por ano"), ("Custo da dívida −4 pontos", "R$ 4 mi por ano a cada R$ 100 mi")]),
-    ("Ambicioso", [("Receber 5 dias antes", "R$ 28,8 mi de caixa, uma vez · R$ 6,6 mi de juros por ano"), ("Margem +0,5 ponto", "R$ 15 mi por ano"), ("Custo da dívida −6 pontos", "R$ 6 mi por ano a cada R$ 100 mi")])],
-    premissa="Premissas: R$ 3 bi de receita projetada, 70% das vendas a prazo, juros de 22,89% ao ano (média de mercado), dívida de R$ 100 mi. As linhas são independentes e não se somam; o crédito do leite fica para dimensionar com os seus documentos.",
+A(dict(tipo="capa", foto="pex-13340333.jpg", titulo="Do campo à gôndola: como o ecossistema Save apoia a Santa Clara", sub="As quatro maiores pressões do seu segmento e o que fazemos diante de cada uma. Apresentação à presidência · outubro de 2026",
+       notas="Abertura (1 min). Faremos 4 perguntas, não 40 afirmações. Pré-análise com dado público, sem acesso aos dados internos; nenhuma promessa de valor, prazo ou êxito."))
+A(dict(tipo="cadeia", titulo="Preço e regra de imposto vêm de fora. Caixa, créditos, dívida e margem ficam dentro de casa.", blocos=[
+    ("R$ 3 bi", "receita projetada para 2026"), ("~5 mil · 360 mi L", "famílias associadas · leite por ano"), ("7 · 2 · 2", "suinoculturas, frigoríficos e fábricas de ração"), ("30", "lojas próprias"), ("60%", "da produção fora do RS")],
+    dores=[("1", "Leite"), ("2", "Caixa e capital"), ("3", "Imposto"), ("4", "Exportação")], rodape="Quatro pressões atravessam essa cadeia. Para cada uma: o que a Save entrega e uma pergunta.",
+    fonte="Cooperativa Santa Clara (site, 2025-26); Jornal do Comércio (jul/2026). R$ 3 bi é projeção da imprensa, não balanço.",
+    notas="A cadeia em uma tela (1 min). Os dados divergem entre fontes: usar faixas e pedir confirmação. Pergunta: qual a divisão do faturamento entre laticínios, carnes, ração e varejo?"))
+A(dict(tipo="dor", foto="pex-2887112.jpg", pos="center 40%", rotulo="DOR 1 · LEITE", titulo="O leite oscila, e a margem sente primeiro.", numero="−19,9%", legenda="no preço ao produtor de 1T25 a 4T25 (R$ 2,76 para R$ 2,21). Em 12 meses, −1,5%. Média Brasil.",
+    frente="A SAVE ENTREGA · OXIGENAR", entrega="Análise com os seus documentos: a margem e o imposto de cada negócio, do leite à loja.", pergunta="O preço pago ao produtor acompanhou o preço de venda em cada linha?",
+    fonte="IBGE, Pesquisa Trimestral do Leite (SIDRA 1086); Embrapa (CIAS, 1T26); IBGE, PMC (SIDRA 8882). Consulta em 21/10/2026.",
+    notas="Dor 1. A Save não mexe no preço; entra onde a cooperativa tem controle. Apoio: ração é 64,8% a 72,1% do custo do suíno (1T26); varejo: receita +3,9% contra volume +0,6% (ago/2026); importação de lácteos +26% no 1T26 (DERAL). Pedir a margem por produto, por planta e por loja."))
+A(dict(tipo="dor", foto="pex-221369.jpg", rotulo="DOR 2 · CAIXA E CAPITAL", titulo="O caixa fica preso, e o dinheiro de mercado custa mais que o dobro.", numero="22,89% × 9%", nf=100, legenda="ao ano: capital de giro de mercado (média) × custeio rural oficial, quando elegível. Não é o custo da cooperativa.",
+    frente="A SAVE ENTREGA · OXIGENAR", entrega="Gestão de Contas, antecipação e FIDC por instituições autorizadas (Save Invest), e revisão tributária. A Save não concede crédito.", pergunta="Quanto custa hoje a dívida média, e em quantos dias a cooperativa recebe?",
+    fonte="Banco Central (SGS 20725, ago/2026); Plano Safra 2026/27 (30/06/2026).",
+    notas="Dor 2. A Save não concede crédito; a elegibilidade às linhas oficiais é analisada caso a caso. Crédito Internacional, captação e home equity só como pergunta: como a cooperativa financiará o crescimento? A premissa de 70% a prazo é nossa."))
+A(dict(tipo="dor", foto="laticinios.jpg", rotulo="DOR 3 · IMPOSTO", titulo="2026 muda o imposto. 2027 muda de novo.", numero="2027", legenda="CBS plena e fim do PIS/COFINS. Antes, desde 01/04/2026, a LC 224 limita a 90% o crédito presumido de PIS/COFINS (a confirmar para leite e queijos)",
+    frente="A SAVE ENTREGA · ESTRUTURAR", entrega="Revisão dos créditos, planejamento e reforma, prazos e certidões, e estrutura societária com o jurídico da cooperativa.", pergunta="Os créditos do leite e dos suínos estão apurados e documentados? Estão prontos para 2027?",
+    fonte="LC 224/2025 (art. 4º, §8º, III); LC 214/2025; Lei 10.925/2004.",
+    notas="Dor 3. Leite e queijos estão na cesta básica da LC 214 e o corte pode não alcançá-los: o Tributário confirma antes da reunião; sem confirmação, trocar o número grande por 'CBS plena em 2027'. Respeitar a Lei 5.764/1971 e o ato cooperativo, com validação do Jurídico. Sem 'holding'. Sem valor, prazo ou êxito."))
+A(dict(tipo="dor", foto="frigorifico.jpg", rotulo="DOR 4 · EXPORTAÇÃO", titulo="Na exportação de suínos, o volume cresce e a receita não acompanha.", numero="+6,2% × +1,3%", nf=100, legenda="volume × receita em US$, jan–set/2026. Em setembro: −11% em volume e −21,5% em receita.",
+    frente="A SAVE ENTREGA · ESCALAR", entrega="A Save atua no Paraguai e conversa com especialistas locais, caso a caso. Tax internacional nas vendas externas.", pergunta="O que mudaria se parte da operação fosse fora do Brasil?",
+    fonte="ABPA, balanço de set/2026 (divulgado em 07/10/2026).",
+    notas="Dor 4. Paraguai só como dor, entrega e pergunta (autorizado pelo Luis em 21/10); sem explicar como funciona, sem percentuais, leis ou simulações. Se perguntarem: estudamos caso a caso com especialistas locais. Câmbio, financiamento à exportação e Crédito Internacional só como pergunta: em que moeda estão o caixa e a dívida? Usar o número da ABPA (1,192 mi t; US$ 2,737 bi), não o 1,03 mi t. Pendências internas: MQ-Q1, MQ-Q6 e D59 com o João Mattos."))
+A(dict(tipo="matriz", titulo="Quatro dores, três frentes: o que fazemos diante de cada uma.", frentes=[("OXIGENAR", "respirar: caixa e dívida"), ("ESTRUTURAR", "manter o ganho: imposto e estrutura"), ("ESCALAR", "crescer: mercado e capital")],
+    linhas=[("1", "Leite", "−19,9%", [("Análise com seus documentos: margem e imposto por negócio", True), ("Planejamento tributário por negócio", False), ("—", False)]),
+            ("2", "Caixa e capital", "22,89% × 9%", [("Gestão de Contas, antecipação e FIDC (Save Invest)", True), ("—", False), ("Pergunta: como financiar o crescimento?", False)]),
+            ("3", "Imposto", "90%", [("Revisão dos créditos de PIS/COFINS, com ressalvas", False), ("Planejamento e reforma, prazos, estrutura societária", True), ("—", False)]),
+            ("4", "Exportação", "+6,2% × +1,3%", [("—", False), ("Tax internacional nas vendas externas", False), ("Paraguai: avaliação caso a caso", True)])],
+    rodape="Um gestor de projeto conduz as três frentes. A Save não concede crédito; antecipação e FIDC por instituições autorizadas.",
+    notas="Matriz (3 min). Leitura em diagonal: Oxigenar cobre caixa, Estruturar cobre imposto, Escalar cobre mercado. Células de pergunta (capital, câmbio) são descoberta, nunca oferta. Linha 3, Estruturar: Lei 5.764 e ato cooperativo com validação do Jurídico. Pedir: qual linha pesa mais hoje? A resposta define por qual frente começar."))
+A(dict(tipo="esteira", titulo="Uma frente abre a próxima, com um gestor conduzindo.", etapas=[
+    ("Oxigenar", ("Respirar: caixa e dívida sob controle.", "se houver caixa liberado, ajuda a organizar o que está atrasado.")),
+    ("Estruturar", ("Manter o ganho: imposto e estrutura.", "com margem e imposto organizados, qualquer investimento pode ser medido.")),
+    ("Escalar", ("Crescer: mercado e capital.", "o crescimento pode ser medido contra o custo de capital e o imposto."))],
+    barra="Um gestor de projeto conduz as três frentes e conecta as equipes tributária, jurídica e financeira.",
+    notas="Esteira (1 min). Escalar só depois de respirar: não adianta falar de expansão a quem não fecha a conta do mês (lógica do Luis, 19/10). Prova só pelo método, sem citar cliente."))
+A(dict(tipo="cenarios", titulo="Quanto cada alavanca pesa: três cenários, nenhuma meta.", cols=[
+    ("Conservador", [("Prazo de recebimento (dor 2) · 1 dia", "R$ 5,8 mi de caixa, uma vez · R$ 1,3 mi de juros por ano"), ("Margem (dor 1) · +0,1 ponto", "R$ 3 mi por ano"), ("Custo da dívida (dor 2) · −2 pontos", "R$ 2 mi por ano a cada R$ 100 mi")]),
+    ("Base", [("Prazo de recebimento (dor 2) · 3 dias", "R$ 17,3 mi de caixa, uma vez · R$ 4,0 mi de juros por ano"), ("Margem (dor 1) · +0,3 ponto", "R$ 9 mi por ano"), ("Custo da dívida (dor 2) · −4 pontos", "R$ 4 mi por ano a cada R$ 100 mi")]),
+    ("Maior", [("Prazo de recebimento (dor 2) · 5 dias", "R$ 28,8 mi de caixa, uma vez · R$ 6,6 mi de juros por ano"), ("Margem (dor 1) · +0,5 ponto", "R$ 15 mi por ano"), ("Custo da dívida (dor 2) · −6 pontos", "R$ 6 mi por ano a cada R$ 100 mi")])],
+    premissa="Premissas: R$ 3 bi de receita projetada, 70% das vendas a prazo, juros de 22,89% ao ano (média de mercado), dívida de R$ 100 mi. As linhas são independentes e não se somam. Caixa liberado não é lucro, e os juros valem se o caixa abater dívida a 22,89%. O prazo atual de recebimento é desconhecido; o crédito tributário fica para dimensionar com os seus documentos.",
     fonte="Cálculos Save; Banco Central (SGS 20725, ago/2026); Jornal do Comércio (jul/2026).",
-    notas="Cenários (4 min). Condução: 1) 'Não estamos dizendo que vocês vão chegar aqui; estamos mostrando quanto cada alavanca pesa.' 2) 'Troquem os números pelos de vocês e vejam qual pesa mais.' 3) 'O simulador em Excel fica com a diretoria para essa conversa.' Simulador: Santa-Clara-Simulador-Cenarios.xlsx. Caixa liberado não é lucro; as colunas não se somam; juros de mercado, não o custo da cooperativa."))
-order = [0, 2, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 18, 19, 13, 14, 15, 16, 17]
-Path(__file__).resolve()
+    notas="Cenários (4 min). 'Não estamos dizendo que vão chegar aqui; mostramos quanto cada alavanca pesa. Troquem pelos seus números.' Cada ponto de margem equivale a R$ 30 mi sobre R$ 3 bi. Caixa liberado não é lucro. Simulador em Excel (Santa-Clara-Simulador-Cenarios.xlsx): entregar só depois do NDA."))
+A(dict(tipo="fim", titulo="Vamos olhar o primeiro número juntos?", a="<b>Próximo passo</b><br>Reunião com a diretoria financeira e fiscal.", b="<b>Confidencialidade</b><br>NDA antes de abrir qualquer dado.", c="<b>Documentos</b><br>Lista do que precisamos ver em cada negócio.",
+    notas="Documentos usados só para esta análise (LGPD). Nunca pedimos senhas; certificado digital só mediante contrato e procuração. A ordem do trabalho sai da resposta à pergunta da matriz."))
+A(dict(tipo="fontes", texto="IBGE, SIDRA: Pesquisa Trimestral do Leite (1086), Pesquisa Mensal de Comércio (8882) e IPCA (7060), consulta em 21/10/2026. Banco Central, SGS 20725 (capital de giro de pessoas jurídicas, ago/2026). Embrapa Suínos e Aves, CIAS (1T26). Governo federal, Plano Safra 2026/27 (30/06/2026). ABPA (balanço de set/2026, divulgado em 07/10/2026, e Relatório Anual 2026). DERAL/SEAB-PR (importação de lácteos, 1T26). LC 214/2025, LC 224/2025, Lei 10.925/2004 e Lei 5.764/1971. Cooperativa Santa Clara (site, jul e ago/2026), SuperVarejo (mar/2025), Jornal do Comércio (jul/2026), Jornal Novo Tempo (ago/2026). Imagens ilustrativas: acervo do site da cooperativa e banco de imagens Pexels (licença gratuita); não representam necessariamente a operação.", notas="Fontes: fora da fala; vai no PDF."))
 dest = Path.home() / "agentes-partners/departamentos/tributario/apresentacao-diagnostico/santa-clara/deck_ppt.json"
-S = S[:]
-S = [S[i] for i in order]
 json.dump({"slides": S}, open(dest, "w"), ensure_ascii=False, indent=1); print(len(S), "slides ->", dest)
