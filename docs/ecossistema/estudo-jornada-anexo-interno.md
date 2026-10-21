@@ -2,7 +2,7 @@
 
 > **Atualização de 19/10/2026 (Luis):** Gestão de Contas, antecipação e FIDC são produtos prontos (Save Invest); estruturação patrimonial é pronta (jurídico); tax internacional e comércio exterior é pronto (Paulo e João Mattos). Crédito internacional, captação de capital, home equity e internacionalização são conduzidos pelo João Mattos. O Word e os dados setoriais já refletem isso; as observações da seção 1 abaixo foram reescritas nessa linha.
 
-> 19/10/2026. Acompanha `estudo-jornada-cliente-modelo.docx`. Gerado por `skills/depto-solucoes/scripts/gerar_estudo_jornada.py <pasta-dados> <saida.docx>` com os JSON de `dados-estudo/`.
+> 19/10/2026. Acompanha `esteira-do-cliente.docx` (substitui o estudo por produto, 21/10). Gerado por `skills/depto-solucoes/scripts/gerar_esteira_cliente.py <pasta-dados> <saida.docx>` com os JSON de `dados-estudo/`.
 
 ## 1. Pontos em aberto por setor (do Especialista setorial)
 

@@ -45,10 +45,10 @@
 ## 4. Pacotes de mix por perfil (o que oferecer junto)
 | Pacote | Perfil | Serviços, em ordem | Entrada |
 |---|---|---|---|
-| **A · Oxigenar** | Lucro Real, alimentos ou agro, com crédito a recuperar | L1 (RT, recorrência, crédito presumido) → L2 (PAS se houver débito) | Recuperação tributária |
+| **A · Destravar caixa** | Lucro Real, alimentos ou agro, com crédito a recuperar | L1 (RT, recorrência, crédito presumido) → L2 (PAS se houver débito) | Recuperação tributária |
 | **B · Caixa B2B** | Vende a prazo a empresas, R$ 4,8 mi/ano ou mais | L3 (cobrança → antecipação) → L1 (planejamento e reforma); FIDC a partir de R$ 10 mi/mês | Gestão de Contas, **pronta para proposta**; serve a quem ainda não abre dados |
 | **C · Organizar para crescer** | Débito fiscal, muitos bancos, pouca certidão | L2 (PAS, JUR, ALONG) → L1 (créditos abatem débito) → L3 | Gestão de passivo |
-| **D · Escalar com ativos** | Faturamento ≥ R$ 50 mi, ativos relevantes, projeto de uso | L5 (estruturação patrimonial, pronta) → L3 (FIDC, ≥ R$ 10 mi/mês, pronto) → L4 (CI em descoberta) | Estruturação patrimonial |
+| **D · Crescer com ativos** | Faturamento ≥ R$ 50 mi, ativos relevantes, projeto de uso | L5 (estruturação patrimonial, pronta) → L3 (FIDC, ≥ R$ 10 mi/mês, pronto) → L4 (CI em descoberta) | Estruturação patrimonial |
 | **E · Crescer e exportar** | Demanda acima da capacidade, EBITDA pressionado por investimento | L4 (CAP: dívida, equity, sócio) → L6 (exportação, 2ª rodada) | Captação de capital em descoberta |
 | **F · Indústria de mão de obra** | Confecção, têxtil, calçados no Real | L1 (CPP e folha) → L6 (MQ, descoberta) | Recuperação (folha) |
 | **G · Comércio exterior** | Exporta ou importa, a partir de R$ 4,8 mi/ano | L6 (tax internacional e comércio exterior, pronto) → L1 → L4 (CI, se houver ativo) | Tax internacional e comércio exterior |

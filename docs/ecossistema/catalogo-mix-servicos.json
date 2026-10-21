@@ -152,20 +152,22 @@
   ]
  },
  "movimentos": {
-  "Oxigenar": [
+  "Destravar caixa": [
    "L1",
    "L2",
    "L3"
   ],
-  "Estruturar": [
+  "Proteger e controlar": [
    "L1",
    "L2",
    "L5"
   ],
-  "Escalar": [
+  "Crescer": [
    "L3",
    "L4",
    "L6"
   ]
- }
+ },
+ "nomenclatura": "Destravar caixa, Proteger e controlar, Crescer (decisão do Luis, 21/10/2026)",
+ "classificacao_proprio_x_parceiro": "adiada para um segundo momento (Luis, 21/10/2026); a proposta de 20/10 fica guardada em novos_servicos_proposta"
 }

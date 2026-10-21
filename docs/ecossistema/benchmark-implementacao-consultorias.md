@@ -1,6 +1,6 @@
 # Benchmark: como as grandes consultorias descrevem a implementação e a captura de valor
 
-> 19/10/2026 · Uso interno · Alimenta o capítulo 7 do `estudo-jornada-cliente-modelo.docx`.
+> 19/10/2026 · Uso interno · Alimenta o capítulo 7 do `esteira-do-cliente.docx`.
 > **Limite da pesquisa:** a página pedida (mckinsey.com/capabilities/implementation/how-we-help-clients) **não pôde ser aberta**: o host `mckinsey.com` está bloqueado pela política de rede do ambiente. O conteúdo da McKinsey abaixo vem de **resumos de busca** (inclusive de uma versão em português da própria página e de páginas irmãs), não da leitura da página. Tudo é material de marketing das firmas, ou seja, **autodeclarado**. Consulta em 19/10/2026. Para ler a página inteira, libere o host em *Network access* do ambiente e peça de novo.
 
 ## 1. O que cada firma diz fazer
@@ -21,7 +21,7 @@
 ## 2. Padrões comuns (o que todas dizem, com palavras diferentes)
 1. **Do plano ao resultado:** o diferencial declarado é a execução, não o diagnóstico. A Save já parte da execução (êxito), o que é vantagem.
 2. **Valor definido antes de começar:** linha de base, meta e KPI de resultado (KPMG, EY, BCG).
-3. **Caixa e balanço entram cedo:** geração rápida de caixa (McKinsey), capital de giro (BCG). Confirma a ordem Oxigenar primeiro.
+3. **Caixa e balanço entram cedo:** geração rápida de caixa (McKinsey), capital de giro (BCG). Confirma a ordem "destravar caixa" primeiro.
 4. **Capacidade transferida:** o cliente fica mais capaz (McKinsey, BCG, EY). Hoje o estudo não trata disso.
 5. **Governança de valor contínua:** escritório ou comitê que acompanha o benefício depois da entrega (PwC, Deloitte, KPMG).
 6. **Risco de execução gerido desde o dia 1** (Bain).
