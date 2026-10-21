@@ -230,7 +230,7 @@ Nenhum valor definido. Ao cliente: "escopo e honorários definidos depois da con
 
 > **Atualização do Luis, 19/10/2026:** Gestão de Contas, antecipação e FIDC são **produtos prontos para venda**, ofertados pela **Save Invest**. Estruturação patrimonial e empresarial é produto pronto, conduzido pelo jurídico. Tax internacional e comércio exterior é produto pronto, conduzido pelo Paulo e pelo João Mattos. Crédito internacional, captação de capital, home equity e internacionalização de empresas são conduzidos pelo João Mattos. Onde esta seção diz "MVP", "em definição" ou "fora do Padrão de Produto Novo" para GC, antecipação e FIDC, vale esta atualização. As cautelas jurídicas (a Save não é credora, não antecipa e não distribui cotas) continuam; confirmar com o Jurídico qual empresa contrata e presta.
 
-Organização da oferta: **Oxigenar → Estruturar → Expandir/Escalar** (narrativa validada em 13/10). A Gestão de Contas é a porta de entrada; depois vêm passivo bancário, alongamento, funding, FIDC, recuperação tributária, certificado digital, estruturação patrimonial e planejamento tributário.
+Organização da oferta: **Destravar caixa → Proteger e controlar → Crescer** (narrativa validada em 13/10). A Gestão de Contas é a porta de entrada; depois vêm passivo bancário, alongamento, funding, FIDC, recuperação tributária, certificado digital, estruturação patrimonial e planejamento tributário.
 Regra da reunião: separar **produto maduro** (Gestão de Contas, recuperação tributária) de **MVP** (funding internacional, FIDC). Produto só é "validado" quando o 1º recurso cai. Remuneração de parceiros em MVP só depois da validação.
 Fonte: resumo automático. Números e termos a confirmar com o Júnior e o João antes de uso externo.
 

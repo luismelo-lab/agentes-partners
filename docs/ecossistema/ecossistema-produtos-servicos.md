@@ -21,7 +21,7 @@
 O ecossistema é **uma só conta, vários produtos, uma ordem de entrada**. A reunião de 13/10 fixou três regras que organizam tudo:
 
 1. **A porta de entrada é a dor de caixa, não o produto que queremos vender.** Quem ainda não abre e-CAC, DRE e balanço abre a conversa por cobrança e caixa (Gestão de Contas). A confiança vem depois e destrava os dados.
-2. **Narrativa em três verbos: Oxigenar → Estruturar → Expandir.** Caixa primeiro; o caixa paga a onda seguinte.
+2. **Narrativa em três verbos: Destravar caixa → Proteger e controlar → Crescer.** Caixa primeiro; o caixa paga a onda seguinte.
 3. **Produto maduro ≠ MVP.** Só se chama de validado quando o primeiro recurso efetivamente cai. Remuneração de parceiro em MVP só depois da validação.
 
 Meta do João: até 2027 ter produtos validados para a Save se posicionar de fato como **consultoria**, e não como vendedora de produtos.

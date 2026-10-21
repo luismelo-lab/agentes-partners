@@ -6,7 +6,7 @@ Reaproveita as regras de mapa_conta.py (tabela PRODUTOS, teses por segmento) e a
   - modo prospect: a empresa ainda não é cliente, então não há parecer nem negócio no HubSpot; os sinais vêm do CSV do
     parceiro e, se existir, da base local da Receita (somente leitura);
   - produtos que não saem de dado público e dependem de resposta do dono (alongamento de dívida, home equity, captação);
-  - a "porta de entrada" (primeiro produto a abrir, pela esteira Oxigenar > Estruturar > Expandir);
+  - a "porta de entrada" (primeiro produto a abrir, pela esteira Destravar caixa > Proteger e controlar > Crescer);
   - o resumo para o parceiro e a lista de dados a pedir.
 
 Somente leitura e local. Nenhum CNPJ sai da máquina. Não lê .env. Não grava no HubSpot. Saída é rascunho para revisão.

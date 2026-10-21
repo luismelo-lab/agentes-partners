@@ -62,7 +62,7 @@ SEM_DEB = re.compile(r"n[ãa]o (possui|consta|tem)|sem d[ée]bitos|n[ãa]o foi n
 COM_DEB = re.compile(r"possui d[ée]bitos|d[ée]bitos? (em aberto|com exigibilidade|inscrit)|parcelamento|PGFN|d[íi]vida ativa|transa[çc][ãa]o", re.I)
 
 # ── produtos: (id, nome, onda da esteira, status, área/skill, regra(s) → (aderência, motivo) ou None) ─────────
-# onda: 1 Oxigenar (caixa rápido, risco baixo) · 2 Estruturar (passivo, carga, governança) · 3 Expandir (funding, novos mercados)
+# onda: 1 Destravar caixa (caixa rápido, risco baixo) · 2 Proteger e controlar (passivo, carga, governança) · 3 Crescer (funding, novos mercados)
 # status: pronto · em validação (trava do G2: sem taxa/prazo/fee) · em estruturação · em definição
 # 19/10/2026 (Luis): GC, ANT e FIDC são prontos, ofertados pela Save Invest; EP é pronto, conduzido pelo jurídico; CI e MQ conduzidos pelo João Mattos
 
@@ -223,7 +223,7 @@ PRODUTOS = [
     ("CI", "Crédito Internacional (funding)", 3, "em validação", "João Mattos (depto-internacional)", r_ci),
     ("MQ", "Maquila no Paraguai", 3, "em estruturação", "João Mattos e Paulo (depto-internacional)", r_maquila),
 ]
-ONDA = {1: "1 · Oxigenar", 2: "2 · Estruturar", 3: "3 · Expandir"}
+ONDA = {1: "1 · Destravar caixa", 2: "2 · Proteger e controlar", 3: "3 · Crescer"}
 PESO = {"alta": 3, "média": 2, "baixa": 1, "bloqueado": 0}
 FUNIL_PRODUTO = {"Gestão de Passivo": "PAS", "Produtos Jurídicos": "JUR", "Planejamento Tributário": "PLAN"}
 
@@ -322,7 +322,7 @@ def excel(linhas, destino):
     M = marca.MARCA if hasattr(marca, "MARCA") else json.load(open(os.path.join(AP, "departamentos/marketing-marca/padrao/marca.json")))
     fonte, ouro = M["fontes"]["sans"], M["claro"]["ouro"].lstrip("#")
     wb = openpyxl.Workbook(); ws = wb.active; ws.title = "Carteira"
-    cab = ["Master", "Cliente", "CNPJ", "Setor", "UF", "Regime", "Faixa de faturamento", "RT ganha (R$, sem duplicidade)", "Índice de aderência", "Recuperação Tributária", "Teses que cabem no segmento", "Onda 1 · Oxigenar", "Onda 2 · Estruturar", "Onda 3 · Expandir", "Falta", "Alertas", "Link"]
+    cab = ["Master", "Cliente", "CNPJ", "Setor", "UF", "Regime", "Faixa de faturamento", "RT ganha (R$, sem duplicidade)", "Índice de aderência", "Recuperação Tributária", "Teses que cabem no segmento", "Onda 1 · Destravar caixa", "Onda 2 · Proteger e controlar", "Onda 3 · Crescer", "Falta", "Alertas", "Link"]
     ws.append(cab)
     for c in ws[1]: c.font = Font(name=fonte, bold=True, color="000000"); c.fill = PatternFill("solid", fgColor=ouro); c.alignment = Alignment(wrap_text=True, vertical="center")
     for m in linhas:
@@ -342,7 +342,7 @@ def excel(linhas, destino):
     ws.freeze_panes = "C2"; ws.auto_filter.ref = ws.dimensions
     l = wb.create_sheet("Como ler")
     for t in ["Mapa de aderência da carteira (Desenvolvimento de Contas e Soluções). Uso interno.",
-              "Onda 1 Oxigenar: caixa rápido e risco baixo. Onda 2 Estruturar: passivo, carga e governança. Onda 3 Expandir: funding e novos mercados.",
+              "Onda 1 Destravar caixa: caixa rápido e risco baixo. Onda 2 Proteger e controlar: passivo, carga e governança. Onda 3 Crescer: funding e novos mercados.",
               "Recuperação Tributária aparece como um produto só; a coluna ao lado lista as teses do catálogo que cabem no segmento e no regime (perfil, não diagnóstico: o técnico confirma). Aderência alta ou média aparece nas ondas; o motivo de cada uma está no mapa individual (mapa_conta.py --negocio <id>).",
               "Crédito Internacional e Maquila (conduzidos pelo João Mattos) seguem em validação ou estruturação: só descoberta, sem taxa, prazo ou fee. Gestão de Contas, antecipação e FIDC (Save Invest) e estruturação patrimonial (jurídico) são produtos prontos.",
               "Índice de aderência: alta = 3, média = 2, baixa = 1. Serve para priorizar a conversa com o Master, não é valor em R$.",

@@ -1,4 +1,4 @@
-# Passagem de contexto: Ecossistema Save (Oxigenar, Estruturar, Escalar)
+# Passagem de contexto: Ecossistema Save (Destravar caixa, Proteger e controlar, Crescer)
 
 > **Para o Claude que ler este arquivo:** esta é a continuação de uma sessão de consultoria estratégica com Luís Fernando de Melo, Gerente de Parcerias e Canais da Save. Responda em português. Luís **não quer concordância automática**: quer ser desafiado e "afiar o machado" rumo a ideias escaláveis. Continue de onde a conversa parou (última pergunta no fim deste arquivo).
 

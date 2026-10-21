@@ -1,8 +1,8 @@
 # Esteira do cliente: 3 ondas
 
-A organização segue a narrativa validada em 13/10/2026: **Oxigenar → Estruturar → Expandir**. A regra é **gerar caixa primeiro**. O caixa paga a onda seguinte e abre os dados (DRE, balanço e débitos) de que a próxima onda precisa.
+A organização segue a narrativa validada em 13/10/2026: **Destravar caixa → Proteger e controlar → Crescer**. A regra é **gerar caixa primeiro**. O caixa paga a onda seguinte e abre os dados (DRE, balanço e débitos) de que a próxima onda precisa.
 
-## Onda 1 · Oxigenar (0 a 6 meses): caixa rápido, risco baixo
+## Onda 1 · Destravar caixa (0 a 6 meses): caixa rápido, risco baixo
 | Produto | Status | Quem entrega | Depende de | Abre caminho para |
 |---|---|---|---|---|
 | Recuperação tributária: teses do catálogo que o parecer não levantou | pronto | `depto-tributario` + `revisor-diagnostico` | parecer lido, CNAE e regime | Passivo (o crédito abate o débito) e Planejamento |
@@ -10,7 +10,7 @@ A organização segue a narrativa validada em 13/10/2026: **Oxigenar → Estrutu
 | Crédito presumido de compras de PF e Funrural (agroindústria) | pronto | `depto-tributario` | compras de produtor PF | Planejamento agro |
 | Gestão de Contas (cobrança com IA, paga no êxito) | pronto | Save Invest | venda a prazo B2B | Acesso a DRE e balanço, antecipação e funding |
 
-## Onda 2 · Estruturar (3 a 12 meses): passivo, carga e governança
+## Onda 2 · Proteger e controlar (3 a 12 meses): passivo, carga e governança
 | Produto | Status | Quem entrega | Depende de | Abre caminho para |
 |---|---|---|---|---|
 | Gestão de Passivo (transação, parcelamento, compensação com o próprio crédito) | pronto | `depto-juridico` + `depto-tributario` | débito apontado no parecer ou na consulta | Certidão negativa, que é pré-requisito de crédito |
@@ -19,7 +19,7 @@ A organização segue a narrativa validada em 13/10/2026: **Oxigenar → Estrutu
 | Antecipação de recebíveis (instituição autorizada) | pronto | Save Invest | carteira B2B registrada | FIDC |
 | Estruturação patrimonial | pronto | `depto-juridico` | porte e patrimônio | Garantias para o funding |
 
-## Onda 3 · Expandir (6 a 24 meses): funding e novos mercados
+## Onda 3 · Crescer (6 a 24 meses): funding e novos mercados
 | Produto | Status | Quem entrega | Depende de | Observação |
 |---|---|---|---|---|
 | Crédito Internacional (funding) | em validação (trava do G2) | `depto-internacional` | faturamento ≥ R$ 50 mi, garantia ~2x, 2 anos de demonstrações, passivo organizado | Só descoberta até o G2 |

@@ -28,7 +28,7 @@ Dar ao parceiro **um racional único** que conecte o que a Save já faz (tribut�
 7. **Camada contínua** que segura o cliente por anos: revisão tributária anual, painel cruzando DRE, SCR e E-CAC, consultor próximo ao dono (consultor + PO + times, 15 a 30 clientes por consultor).
 
 ## 4. Os três movimentos, reconciliados com o mix de seis linhas
-Nomes: **Oxigenar, Estruturar, Escalar** (ver 5.1). O mapa de seis linhas (L1 a L6) fica por baixo, como organização interna.
+Nomes: **Destravar caixa, Proteger e controlar, Crescer** (ver 5.1). O mapa de seis linhas (L1 a L6) fica por baixo, como organização interna.
 
 | Movimento | O que o cliente sente | Já faz (estado de 19/10) | Novos serviços levantados | Linha |
 |---|---|---|---|---|
@@ -49,7 +49,7 @@ Nomes: **Oxigenar, Estruturar, Escalar** (ver 5.1). O mapa de seis linhas (L1 a 
 
 ## 5. Onde a conversa contraria a base da casa (o desafio)
 ### 5.1 Três vocabulários para a mesma ideia
-O documento no Claude Docs usa **"Destravar caixa, Proteger e controlar, Crescer"**; a conversa decidiu **"Oxigenar, Estruturar, Escalar"**; a esteira do repositório usa **"Oxigenar, Estruturar, Expandir"**. **Proposta:** padronizar em **Oxigenar, Estruturar, Escalar** (decisão D1 e o padrão da apresentação de diagnóstico) e trocar "Expandir" na esteira e no Word.
+O documento no Claude Docs usa **"Destravar caixa, Proteger e controlar, Crescer"**; a conversa decidiu **"Destravar caixa, Proteger e controlar, Crescer"**; a esteira do repositório usa **"Oxigenar, Estruturar, Expandir"**. **Proposta:** padronizar em **Destravar caixa, Proteger e controlar, Crescer** (decisão D1 e o padrão da apresentação de diagnóstico) e trocar "Expandir" na esteira e no Word.
 
 ### 5.2 Maquila: lei desatualizada e simulação que contraria decisões
 - O documento cita a **Lei 1.064/97**. A base da casa e a pesquisa de 19/10 indicam que a norma vigente é a **Lei 7.547/2025** (regulamentada em 2026), e que material que cita só a lei antiga está desatualizado. Zona Franca (Lei 523/95) e Lei 60/90 não foram reconferidas.
@@ -113,7 +113,7 @@ Critérios: mostra o ecossistema funcionando, tem relação já estabelecida, d�
 **Recomendação:** apresentar o ecossistema aos parceiros com o **caso de vegetais congelados** (movimento 1 entregue, 2 em curso, 3 desenhado), usando o presunto cru como o caso de **capital** quando houver o primeiro recurso. Em ambos, **anonimizar e pedir autorização por escrito**.
 
 ## 8. O que falta decidir para fechar (e a ordem)
-1. **Nomenclatura** (5.1): confirmar Oxigenar, Estruturar, Escalar.
+1. **Nomenclatura** (5.1): confirmar Destravar caixa, Proteger e controlar, Crescer.
 2. **Classificação própria × parceiro** (seção 6): aprovar ou ajustar.
 3. **Caso-piloto** (seção 7).
 4. **Maquila** (5.2): aceitar que as simulações 4.2 e 4.3 fiquem fora do material do parceiro e corrigir a lei no documento do Claude Docs.
