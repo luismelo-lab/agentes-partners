@@ -1,20 +1,171 @@
 {
  "versao": "2026-10-19",
  "produtos": {
-  "RT": {"estado": "pronto", "conduz": "Tributário"}, "PLAN": {"estado": "pronto", "conduz": "Tributário"},
-  "PAS": {"estado": "pronto", "conduz": "Jurídico e Tributário"}, "JUR": {"estado": "pronto", "conduz": "Jurídico"}, "ALONG": {"estado": "em definição", "conduz": "a definir (Save Invest ou João Mattos)"},
-  "GC": {"estado": "pronto", "conduz": "Save Invest"}, "ANT": {"estado": "pronto", "conduz": "Save Invest"}, "FIDC": {"estado": "pronto", "conduz": "Save Invest"},
-  "CI": {"estado": "em validação (G2)", "conduz": "João Mattos"}, "CAP": {"estado": "conduzido pelo João Mattos", "conduz": "João Mattos"}, "HE": {"estado": "conduzido pelo João Mattos", "conduz": "João Mattos"},
-  "EP": {"estado": "pronto", "conduz": "Jurídico"}, "TIN": {"estado": "pronto", "conduz": "Paulo e João Mattos"}, "MQ": {"estado": "em estruturação (internacionalização)", "conduz": "João Mattos e Paulo"}
+  "RT": {
+   "estado": "pronto",
+   "conduz": "Tributário"
+  },
+  "PLAN": {
+   "estado": "pronto",
+   "conduz": "Tributário"
+  },
+  "PAS": {
+   "estado": "pronto",
+   "conduz": "Jurídico e Tributário"
+  },
+  "JUR": {
+   "estado": "pronto",
+   "conduz": "Jurídico"
+  },
+  "ALONG": {
+   "estado": "em definição",
+   "conduz": "a definir (Save Invest ou João Mattos)"
+  },
+  "GC": {
+   "estado": "pronto",
+   "conduz": "Save Invest"
+  },
+  "ANT": {
+   "estado": "pronto",
+   "conduz": "Save Invest"
+  },
+  "FIDC": {
+   "estado": "pronto",
+   "conduz": "Save Invest"
+  },
+  "CI": {
+   "estado": "em validação (G2)",
+   "conduz": "João Mattos"
+  },
+  "CAP": {
+   "estado": "conduzido pelo João Mattos",
+   "conduz": "João Mattos"
+  },
+  "HE": {
+   "estado": "conduzido pelo João Mattos",
+   "conduz": "João Mattos"
+  },
+  "EP": {
+   "estado": "pronto",
+   "conduz": "Jurídico"
+  },
+  "TIN": {
+   "estado": "pronto",
+   "conduz": "Paulo e João Mattos"
+  },
+  "MQ": {
+   "estado": "em estruturação (internacionalização)",
+   "conduz": "João Mattos e Paulo"
+  }
  },
  "linhas": {
-  "L1": {"nome": "Tributário e Reforma", "equivalente_big4": "Tax", "produtos": ["RT", "PLAN"]},
-  "L2": {"nome": "Passivo e Reestruturação", "equivalente_big4": "Financial Advisory (reestruturação) e Legal", "produtos": ["PAS", "JUR", "ALONG"]},
-  "L3": {"nome": "Caixa e Capital de Giro", "equivalente_big4": "Consulting (finanças)", "produtos": ["GC", "ANT", "FIDC"]},
-  "L4": {"nome": "Capital e Transações", "equivalente_big4": "Deals e Strategy and Transactions", "produtos": ["CI", "CAP", "HE"]},
-  "L5": {"nome": "Estrutura e Patrimônio", "equivalente_big4": "Tax e Legal (estruturação)", "produtos": ["EP"]},
-  "L6": {"nome": "Mercados Externos", "equivalente_big4": "Tax internacional e comércio exterior", "produtos": ["TIN", "MQ"]}
+  "L1": {
+   "nome": "Tributário e Reforma",
+   "equivalente_big4": "Tax",
+   "produtos": [
+    "RT",
+    "PLAN"
+   ]
+  },
+  "L2": {
+   "nome": "Passivo e Reestruturação",
+   "equivalente_big4": "Financial Advisory (reestruturação) e Legal",
+   "produtos": [
+    "PAS",
+    "JUR",
+    "ALONG"
+   ]
+  },
+  "L3": {
+   "nome": "Caixa e Capital de Giro",
+   "equivalente_big4": "Consulting (finanças)",
+   "produtos": [
+    "GC",
+    "ANT",
+    "FIDC"
+   ]
+  },
+  "L4": {
+   "nome": "Capital e Transações",
+   "equivalente_big4": "Deals e Strategy and Transactions",
+   "produtos": [
+    "CI",
+    "CAP",
+    "HE"
+   ]
+  },
+  "L5": {
+   "nome": "Estrutura e Patrimônio",
+   "equivalente_big4": "Tax e Legal (estruturação)",
+   "produtos": [
+    "EP"
+   ]
+  },
+  "L6": {
+   "nome": "Mercados Externos",
+   "equivalente_big4": "Tax internacional e comércio exterior",
+   "produtos": [
+    "TIN",
+    "MQ"
+   ]
+  }
  },
- "fora_do_mix": ["auditoria e asseguração", "cibersegurança", "nuvem, ERP e IA como projeto", "people advisory", "cadeia de suprimentos"],
- "por_parceiro": ["M&A", "valuation", "IPO", "perícia e forense", "ESG e rastreabilidade"]
+ "fora_do_mix": [
+  "auditoria e asseguração",
+  "cibersegurança",
+  "nuvem, ERP e IA como projeto",
+  "people advisory",
+  "cadeia de suprimentos"
+ ],
+ "por_parceiro": [
+  "M&A",
+  "valuation",
+  "IPO",
+  "perícia e forense",
+  "ESG e rastreabilidade"
+ ],
+ "novos_servicos_proposta": {
+  "_nota": "PROPOSTA de 21/10/2026 aguardando decisão do Luis (seção 6 de racional-e-fechamento-ecossistema-save.md). Nenhum entra no motor até a aprovação.",
+  "proprios": [
+   "revisão tributária anual",
+   "preparação para a reforma (CBS, IBS, split payment)",
+   "Lei do Bem e incentivos fiscais",
+   "sucessão e governança familiar",
+   "compliance, integridade e LGPD",
+   "reestruturação e recuperação extrajudicial (com jurídico e Save Invest)"
+  ],
+  "via_parceiro_coordenado": [
+   "CFO terceirizado e controladoria",
+   "passivo trabalhista e folha",
+   "monetização de ICMS acumulado",
+   "precatórios com deságio",
+   "seguro garantia e seguros (crédito, D&O, safra, exportação)",
+   "sale-leaseback, CPR e CRA",
+   "hedge de câmbio e commodities",
+   "financiamento à exportação (ACC, ACE)",
+   "M&A, valuation e preparação para IPO",
+   "subvenções (Finep, BNDES, Sudene, Sudam)",
+   "energia e créditos de carbono"
+  ],
+  "adiado": [
+   "programa de formalização"
+  ]
+ },
+ "movimentos": {
+  "Oxigenar": [
+   "L1",
+   "L2",
+   "L3"
+  ],
+  "Estruturar": [
+   "L1",
+   "L2",
+   "L5"
+  ],
+  "Escalar": [
+   "L3",
+   "L4",
+   "L6"
+  ]
+ }
 }
