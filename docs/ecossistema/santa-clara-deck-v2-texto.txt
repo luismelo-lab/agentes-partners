@@ -1,0 +1,393 @@
+## ppt/slides/slide1.xml
+APRESENTAÇÃO À PRESIDÊNCIA · OUTUBRO DE 2026
+Mais lucro e mais margem em todo o ecossistema da Cooperativa Santa Clara
+Do campo à gôndola: o mercado, as dificuldades de cada negócio, o espelho na cooperativa, como podemos ajudar e os resultados possíveis
+PRÉ-ANÁLISE · ESTIMATIVAS PRELIMINARES · SEM PROMESSA DE VALOR, PRAZO OU ÊXITO
+## ppt/slides/slide2.xml
+NOSSO PONTO DE PARTIDA
+Todo o trabalho serve a um objetivo: mais lucro e mais margem
+1
+O mercado
+O que os dados oficiais mostram nos negócios em que a Santa Clara atua
+2
+As dificuldades
+Onde a margem está sob pressão, negócio por negócio
+3
+O espelho
+Como cada pressão chega ao ecossistema da cooperativa, com o que é público
+4
+Como podemos ajudar
+Uma esteira única, em que o fim de um passo abre o próximo e um negócio abre outro
+5
+Os resultados possíveis
+O que cada fração de margem, de prazo e de custo de capital representa
+Regra desta apresentação: dados de mercado de fontes oficiais ou, quando indicado, da imprensa, sempre com fonte e data. Sobre a cooperativa, só informações públicas. Onde falta dado da empresa, mostramos o que precisamos ver para dimensionar.
+2
+## ppt/slides/slide3.xml
+O ECOSSISTEMA SANTA CLARA
+Do campo à gôndola: uma cooperativa com cinco frentes que se alimentam entre si
+Campo e associados
+Quase 5 mil famílias associadas; cerca de 2,4 mil fornecem leite em 166 municípios. Rebanho de 48 mil vacas em lactação (2024), genética própria e sete suinoculturas.
+Laticínios
+3 indústrias que processam mais de 1 milhão de litros de leite por dia. Mais de 200 itens: leite UHT, 51 tipos de queijo, requeijão, bebidas lácteas e proteicas.
+Frigorífico e charcutaria
+2 frigoríficos, com a unidade de Vila Lângaro assumida em 2025 (600 suínos por dia). Mais de 100 itens: embutidos, salames, presunto cru e carnes.
+Rações, doces e food service
+2 fábricas de ração, doces de frutas e linha para food service (queijos, cremes, recheios, carnes).
+Distribuição e varejo
+7 centrais de distribuição e novo centro em Carlos Barbosa. 30 lojas de varejo, entre supermercados e 15 lojas agropecuárias. 60% da produção vai para fora do RS.
+Fonte: Cooperativa Santa Clara, site (quem somos, produtos e blog de jul e ago/2026); SuperVarejo (mar/2025: frigoríficos, suinoculturas, rações, lojas e centrais); Jornal do Comércio (ago/2024 e ago/2025). Números de estrutura variam entre publicações e estão sujeitos a confirmação.
+3
+## ppt/slides/slide4.xml
+VISÃO GERAL · PRESSÕES POR NEGÓCIO
+Cada negócio da Santa Clara enfrenta uma pressão diferente sobre a margem
+Negócio
+O que os dados oficiais mostram
+Fonte
+Campo e leite
+Preço pago ao produtor: R$ 2,76 (1T25) → R$ 2,21 (4T25) → R$ 2,70 (2T26), com volume recorde de leite no país
+IBGE, Pesquisa Trimestral do Leite
+Laticínios
+Importação de lácteos +26% no 1T26; antidumping ao leite em pó da Argentina e do Uruguai; preço ao consumidor: leites e derivados +6,3% em 12 meses
+DERAL/SEAB-PR; MDIC (Gecex 907/2026); IBGE, IPCA
+Frigorífico suíno
+Abate de suínos +4,3% no Brasil e +6,8% no RS em 2025; carne de porco ao consumidor −8,3% em 12 meses; ração pesa de 65% a 72% do custo de produção
+IBGE, abate de animais e IPCA; Embrapa Suínos e Aves
+Varejo e supermercados
+Nos supermercados, a receita nominal cresce muito mais do que o volume: +3,9% contra +0,6% em agosto/2026
+IBGE, Pesquisa Mensal de Comércio
+Insumos e lojas agropecuárias
+Crédito rural de custeio a 9% ao ano no Plano Safra 2026/27, contra 22,89% do capital de giro de mercado
+Governo federal (Plano Safra); Banco Central
+Capital e tributos (todos)
+Selic em 13,75%; crédito presumido de PIS/COFINS limitado a 90% desde abril/2026; reforma tributária: CBS plena em 2027
+Banco Central; LC 224/2025; LC 214/2025
+Fonte: IBGE (SIDRA, tabelas 1086, 1093, 7060 e 8882); MDIC; DERAL/SEAB-PR; Embrapa; Banco Central; Receita Federal; Planalto. Datas e consultas no último slide.
+4
+## ppt/slides/slide5.xml
+1 · O MERCADO · CAMPO E LATICÍNIOS
+Captação de leite recorde em 2025, o maior volume da série do IBGE consultada
+BRASIL, 2025
+27,6 bi L
++8,9% sobre 2024
+RIO GRANDE DO SUL, 2025
+3,62 bi L
++16,5% sobre 2024, ano das cheias
+4º TRI DE 2025
+7,37 bi L
+maior trimestre da série consultada
+Fonte: IBGE, Pesquisa Trimestral do Leite (SIDRA, tabela 1086), série 3º tri/2021 a 2º tri/2026. Consulta em 21/10/2026.
+5
+## ppt/slides/slide6.xml
+1 · O MERCADO · CAMPO E LATICÍNIOS
+Em 12 meses o produtor ficou estável (−1,5%) e o consumidor pagou 6,3% a mais
+PREÇO AO PRODUTOR, 1T25 → 4T25
+R$ 2,76 → 2,21
+queda de 19,9% no Brasil
+AO CONSUMIDOR, EM 12 MESES
++6,3%
+leites e derivados · leite longa vida: +10,8%
+QUEIJO E LEITE FERMENTADO
++3,8% e +9,4%
+variação em 12 meses até set/2026
+Fonte: IBGE, Pesquisa Trimestral do Leite (SIDRA 1086) e IPCA (SIDRA 7060, 12 meses até setembro/2026). Produtor: 2T25 R$ 2,74 → 2T26 R$ 2,70; em 2025, de R$ 2,76 (1T) a R$ 2,21 (4T). Consulta em 21/10/2026.
+6
+## ppt/slides/slide7.xml
+1 · O MERCADO · FRIGORÍFICO E CHARCUTARIA
+Mais suínos e carne de porco mais barata: a margem exige eficiência
+ABATE NO BRASIL, 2025
+60,7 mi cab.
++4,3% · RS: 10,9 mi (+6,8%)
+CARNE DE PORCO AO CONSUMIDOR
+−8,3%
+em 12 meses até set/2026 (IPCA)
+EXPORTAÇÃO JAN–SET/2026
++4,8% em volume
+1,03 mi t · receita +0,4% (US$ 2,53 bi)
+Fonte: IBGE, Pesquisa Trimestral do Abate de Animais (SIDRA 1093) e IPCA (SIDRA 7060); Secex/MDIC, dados consolidados jan–set/2026; Embrapa Suínos e Aves: ração responde por 64,8% (GO) a 72,1% (SC) do custo de produção no 1T26.
+7
+## ppt/slides/slide8.xml
+1 · O MERCADO · VAREJO E LOJAS
+Nos supermercados, a receita cresce mais que o volume, reflexo sobretudo de preços
+AGOSTO/2026 SOBRE AGOSTO/2025
++3,9% × +0,6%
+receita nominal × volume
+ACUMULADO EM 12 MESES
++3,8% × +1,1%
+receita nominal × volume
+ALIMENTAÇÃO NO DOMICÍLIO
++4,2%
+IPCA em 12 meses até set/2026
+Fonte: IBGE, Pesquisa Mensal de Comércio (SIDRA 8882), hipermercados e supermercados; IPCA (SIDRA 7060). Consulta em 21/10/2026.
+8
+## ppt/slides/slide9.xml
+1 · O MERCADO · INSUMOS, LOJAS AGROPECUÁRIAS E ASSOCIADOS
+O crédito rural oficial custa menos da metade do capital de giro de mercado
+PLANO SAFRA 2026/27
+R$ 525,1 bi
+agricultura empresarial (+R$ 9 bi)
+COOPERATIVAS E OUTROS
+R$ 452,5 bi
+recursos programados
+CUSTEIO (PRONAMP)
+9% ao ano
+para quem é elegível
+CAPITAL DE GIRO PJ (MERCADO)
+22,89% ao ano
+agosto/2026
+O que isso significa para a cadeia
+A diferença entre o capital de giro de mercado e o crédito rural de custeio é de 13,9 pontos percentuais ao ano. Quem é elegível às linhas oficiais pode reduzir o custo do capital, no associado e na cooperativa. A elegibilidade é analisada caso a caso.
+O campo sob pressão
+As cheias de maio/2024 atingiram, segundo a cooperativa, 20% dos produtores com perdas graves e 50% com perdas moderadas. Juros e perdas climáticas pressionam a margem do associado e, por consequência, a da cooperativa.
+Fonte: Governo federal, lançamento do Plano Safra 2026/2027 (30/06/2026); Banco Central (SGS 20725); Jornal do Comércio (ago/2024). Custo de mercado: média do Banco Central, não o da cooperativa. Elegibilidade às linhas a confirmar caso a caso.
+9
+## ppt/slides/slide10.xml
+2 · DIFICULDADES DOS NEGÓCIOS
+Três pressões atravessam todos os negócios: capital, tributos e concorrência
+Capital caro
+Meta Selic em 13,75% ao ano e capital de giro de pessoas jurídicas em 22,89% ao ano (agosto/2026).
+A cooperativa investe de forma contínua: planta de Casca (R$ 130 milhões), nova central de distribuição, frigorífico de Vila Lângaro e lojas. Cada ponto de custo financeiro pesa em todos os negócios.
+Tributação em transição
+Desde 01/04/2026, a LC 224/2025 limita a 90% os créditos presumidos do art. 8º da Lei 10.925; a aplicação ao leite e aos queijos será confirmada no diagnóstico.
+Reforma: CBS plena em 2027, com fim do PIS/COFINS; IBS em transição. Leite e carnes in natura listados no Anexo I da LC 214/2025 têm alíquota zero; queijos, bebidas lácteas e embutidos dependem da classificação.
+Cooperativa: o resultado do ato cooperativo e do não cooperativo tem tratamento distinto (Lei 5.764/1971).
+Concorrência
+Importação de lácteos +26% no 1T26, com direito antidumping para o leite em pó da Argentina e do Uruguai desde junho/2026.
+A diretoria da cooperativa cita a importação e as empresas nacionais como o grande desafio de competitividade (2025).
+No varejo, a receita sobe mais que o volume: ganhar espaço exige preço, mix e serviço.
+Fonte: Banco Central; Receita Federal (EFD-Contribuições); LC 214/2025 e LC 224/2025; Lei 5.764/1971; DERAL/SEAB-PR; MDIC (Gecex 907/2026); IBGE; Jornal do Comércio (17/08/2025).
+10
+## ppt/slides/slide11.xml
+3 · O ESPELHO
+Como isso aparece em cada negócio da Santa Clara
+Com o que é público. Onde falta dado da cooperativa, mostramos a pergunta que os números dela respondem.
+11
+## ppt/slides/slide12.xml
+3 · O ESPELHO
+Cada negócio tem um ponto de verificação na conta da Santa Clara
+Negócio
+O que já se sabe da cooperativa (público)
+A pergunta que os números dela respondem
+Campo e leite
+Cerca de 2,4 mil fornecedores em 166 municípios; pagamento do leite pela qualidade desde os anos 1990; compra de outras cooperativas
+O preço pago ao produtor acompanhou o preço de venda em cada linha?
+Laticínios
+UHT em Casca, queijos em Carlos Barbosa e Getúlio Vargas; 51 tipos de queijo; metade da produção em leite longa vida e metade em queijos e derivados
+Qual a margem por categoria e contra o importado?
+Frigorífico e charcutaria
+2 frigoríficos, 7 suinoculturas; Vila Lângaro (600 suínos por dia) assumida em 2025; integração de desossa em estudo
+Qual a margem por produto e quanto custa a ração?
+Rações
+2 fábricas de ração, que sustentam a suinocultura e o leite
+O custo da ração acompanha o preço do milho e do farelo de soja?
+Varejo e lojas
+30 lojas, entre supermercados (novos em Barão, Salvador do Sul e Carlos Barbosa) e 15 lojas agropecuárias
+Qual a margem por categoria e o prazo de venda a associados?
+Logística e financeiro
+7 centrais de distribuição e novo centro em Carlos Barbosa; 60% da produção fora do RS
+Qual o custo por tonelada, o prazo de recebimento e o custo da dívida?
+Fonte: Cooperativa Santa Clara (site, jul e ago/2026); SuperVarejo (mar/2025); Jornal do Comércio (ago/2024 e ago/2025).
+12
+## ppt/slides/slide13.xml
+3 · O ESPELHO · O TAMANHO DO QUE ESTÁ EM JOGO
+Sobre a projeção de R$ 3 bi, cada fração de margem e cada dia de prazo pesam
+1 PONTO DE MARGEM
+R$ 30 mi
+por ano, sobre R$ 3 bi
+0,1 PONTO DE MARGEM
+R$ 3 mi
+por ano
+PRAZO: 1 DIA A MENOS
+R$ 8,2 mi
+de caixa parado na carteira
+R$ 0,01 POR LITRO DE LEITE
+R$ 3,7 mi
+por ano, em 365 mi de litros
+Como lemos o número
+Margem: pontos percentuais sobre a receita projetada de R$ 3 bilhões. Para qualquer negócio, basta aplicar sobre a receita dele: cada R$ 1 bilhão de receita rende R$ 10 milhões por ponto de margem.
+Prazo: o caixa liberado por dia de recebimento a menos é a receita diária; a 22,89% ao ano, vale cerca de R$ 1,9 milhão por ano em juros.
+Premissas
+Faturamento: projeção de R$ 3 bilhões para 2026, divulgada pela imprensa (jul/2026).
+Volume: mais de 1 milhão de litros por dia, conforme a cooperativa (jul/2026).
+Custo de capital: média de mercado (Banco Central), não o custo da cooperativa.
+A divisão da receita entre os negócios não é pública: fica para o diagnóstico.
+Fonte: Cálculos Save sobre dados públicos: Jornal do Comércio (jul/2026); Cooperativa Santa Clara (jul/2026); Banco Central (SGS 20725, agosto/2026). Estimativas preliminares sujeitas a validação técnica.
+13
+## ppt/slides/slide14.xml
+4 · COMO PODEMOS AJUDAR
+Uma esteira única: o fim de cada passo é o começo do próximo
+Destravar caixa
+1 · Enxergar a empresa por inteiro
+2 · Conferir o que pode ser aproveitado
+3 · Receber mais cedo
+4 · Aliviar a dívida que pesa
+Proteger e controlar
+5 · Deixar a empresa em dia
+6 · Conferir o imposto e preparar 2027
+7 · Dar governança ao dinheiro
+8 · Proteger o patrimônio
+Crescer
+9 · Avaliar capital para crescer
+10 · Organizar o crédito da cadeia
+11 · Exportação e tax internacional
+12 · Manter a esteira rodando
+Um gestor de projeto conduz a esteira em todos os negócios, conecta as equipes tributária, jurídica, financeira e de estruturação de crédito junto a instituições, e só avança quando o passo anterior entregou o que o próximo precisa.
+14
+## ppt/slides/slide15.xml
+4 · COMO PODEMOS AJUDAR
+A esteira conecta os negócios entre si, e a margem pode crescer aí
+Conta do associado
+A loja agropecuária vende insumo e ração a prazo, o leite entregue paga a conta e o crédito rural financia a safra.
+NA ESTEIRA
+Organizar a conta corrente do associado e o crédito da cadeia: menos capital parado e produtor com margem.
+Compras de leite e de suínos
+Cada litro e cada suíno comprado pode gerar crédito, conforme o fornecedor, o regime e o enquadramento da cooperativa.
+NA ESTEIRA
+Conferir o aproveitamento integral do crédito presumido e do saldo credor nos laticínios e no frigorífico.
+Varejo próprio como canal
+30 lojas vendem o que a indústria produz e geram dados de venda por categoria.
+NA ESTEIRA
+Usar o dado de venda para decidir mix e preço e organizar o prazo entre indústria e varejo.
+Logística e centrais
+7 centrais e um novo centro em Carlos Barbosa servem leite, queijos e carnes.
+NA ESTEIRA
+Medir o custo por tonelada e liberar capital de giro no estoque e no prazo.
+Rações e suinocultura
+A ração é de 65% a 72% do custo de produção do suíno (GO a SC, 1T26) e abastece também o leite.
+NA ESTEIRA
+Margem por produto e por planta, e compras de milho e farelo com governança.
+Genética e qualidade
+Genética própria, concurso de qualidade e pagamento do leite pela qualidade.
+NA ESTEIRA
+Transformar produtividade do associado em margem da cooperativa, com crédito certo para o investimento.
+Fonte: Cooperativa Santa Clara (site e imprensa); Embrapa Suínos e Aves; Governo federal (Plano Safra). Hipóteses a validar com os números da cooperativa.
+15
+## ppt/slides/slide16.xml
+4 · COMO PODEMOS AJUDAR · DESTRAVAR CAIXA
+Destravar caixa: ver a margem de cada negócio e liberar o que está parado
+Passo
+Campo, leite e laticínios
+Frigorífico, charcutaria e rações
+Varejo, lojas e logística
+1 · Enxergar por inteiro
+Margem por linha (UHT, queijos, bebidas, requeijão) e por região de captação; linha de base de prazo e dívida
+Margem por produto (carne, charcutaria, presunto cru) e por planta; custo da ração
+Margem por loja e por categoria; custo logístico por tonelada
+2 · Conferir o que pode ser aproveitado
+Crédito presumido do leite e saldo credor, conforme o regime; créditos de energia, frio e embalagem; ato cooperativo e não cooperativo
+Crédito presumido na compra de suínos; créditos de insumos e energia; saldo credor
+Conferir a exclusão do ICMS e do ICMS-ST da base do PIS/COFINS (STF Tema 69; STJ Tema 1.125); créditos de energia e aluguel; contribuições previdenciárias
+3 · Receber mais cedo
+Prazo das grandes redes e do food service; cobrança organizada
+Carteira de atacado e redes; antecipação e gestão de contas, por instituições autorizadas
+Conta corrente do associado nas lojas agropecuárias; recebíveis de cartão
+4 · Aliviar a dívida
+Perfil da dívida das plantas e do capital de giro da safra
+Perfil da dívida da aquisição de Vila Lângaro e do capital de giro
+Perfil da dívida de lojas e do novo centro; alternativas de alongamento a discutir na descoberta
+Fonte: Lei 10.925/2004 (art. 8º); LC 224/2025; Lei 5.764/1971; EFD-Contribuições (NT 012/2026, escrituração). Pré-análise: possibilidades a validar. Estimativas preliminares sujeitas a validação técnica.
+16
+## ppt/slides/slide17.xml
+4 · COMO PODEMOS AJUDAR · PROTEGER E CONTROLAR
+Proteger e controlar: manter a margem conquistada e preparar 2027
+Passo
+Campo, leite e laticínios
+Frigorífico, charcutaria e rações
+Varejo, lojas e logística
+5 · Deixar em dia
+Certidões, autos e processos de todas as unidades, com prazos sob dupla checagem
+Idem, incluindo a unidade assumida em 2025
+Idem, por loja e por central
+6 · Conferir o imposto e 2027
+2026: crédito presumido de PIS/COFINS limitado a 90%, a confirmar para leite e queijos. 2027: alíquota zero de CBS e IBS conforme a classificação; saldos credores de PIS/COFINS preservados se escriturados
+Carnes in natura da cesta (Anexo I) com alíquota zero; embutidos conforme a classificação; créditos de insumos
+Mix por classificação fiscal do produto (NCM) nas lojas; tratamento de ICMS-ST; preços e sistemas para CBS e IBS
+7 · Governança
+Painel mensal de margem por linha, associado e região
+Painel por planta e por produto, com custo de ração
+Painel por loja e categoria; conferência de estoque e prazo
+8 · Patrimônio
+Avaliar a estrutura societária e patrimonial com o jurídico da cooperativa, respeitando a Lei 5.764/1971
+Estrutura das suinoculturas, frigoríficos e fábricas de ração
+Organização dos imóveis das lojas e centrais
+Fonte: LC 214/2025 (Anexo I, cesta básica; conferência por NCM); LC 224/2025. Estimativas preliminares sujeitas a validação técnica.
+17
+## ppt/slides/slide18.xml
+4 · COMO PODEMOS AJUDAR · CRESCER
+Crescer: capital certo, produtor forte e mais valor por quilo vendido
+Passo
+Campo, leite e laticínios
+Frigorífico, charcutaria e rações
+Varejo, lojas e logística
+9 · Avaliar capital para crescer
+Que investimentos a cooperativa projeta e com que prazo? (R$ 28 mi em 2024 e R$ 35 mi em 2025, segundo a imprensa)
+Expansão do abate e integração da desossa: qual o projeto e o capital necessário?
+Novo centro de distribuição e expansão do varejo: qual o plano?
+10 · Financiar a cadeia
+Como organizar, com instituições, o crédito ao produtor com base na entrega de leite
+Idem para o suinocultor integrado, com base na entrega de animais
+Conta corrente do associado nas lojas agropecuárias organizada
+11 · Além da fronteira
+Queijos nobres, bebidas proteicas e whey: mais valor por litro
+Exportação de carne suína e charcutaria premium (presunto cru, jamón serrano)
+Vendas fora do RS (60% da produção): tributação interestadual e logística
+12 · Esteira rodando
+Revisão anual, novas competências e encontro trimestral com a diretoria
+Margem por planta acompanhada a cada trimestre
+Painel de valor por loja e por central
+Fonte: Cooperativa Santa Clara; Jornal do Comércio. Etapa em descoberta: avaliado caso a caso, após a análise dos documentos.
+18
+## ppt/slides/slide19.xml
+5 · RESULTADOS POSSÍVEIS
+Quanto vale cada fração: sensibilidades com premissas à vista
+Alavanca
+Premissa
+Sensibilidade por ano (não é meta)
+Prazo de recebimento
+Redução de 1, 3 ou 5 dias sobre R$ 3 bi de receita; custo de capital de mercado de 22,89% ao ano (BCB, ago/2026), não o da cooperativa
+Caixa liberado, uma única vez: R$ 8, 25 e 41 mi. Juros evitados, por ano: R$ 1,9, 5,6 e 9,4 mi
+Custo da dívida
+Valor de cada ponto de custo: 2, 4 ou 6 pontos percentuais sobre R$ 100 mi de dívida
+R$ 2, 4 ou 6 mi por R$ 100 mi, como sensibilidade
+Crédito do leite
+Depende de habilitação, regime de apuração e separação entre ato cooperativo e não cooperativo
+Dimensionado no diagnóstico, com os documentos; sem estimativa antecipada
+Margem por negócio
+Valor de cada fração: 0,1, 0,3 ou 0,5 ponto percentual na receita de cada negócio
+R$ 1, 3 ou 5 mi por R$ 1 bi de receita; R$ 3, 9 ou 15 mi em R$ 3 bi
+Frigorífico, varejo e lojas
+Créditos de insumos, ICMS-ST, contribuições previdenciárias e saldo credor, conforme a apuração
+A dimensionar no diagnóstico, com os documentos de cada negócio
+As linhas não se somam e não são metas nem promessa: são o valor de cada fração, para dimensionar a conversa. Caixa liberado não é lucro. Taxas e elegibilidade a linhas oficiais são das instituições e dos programas. Valor, prazo e êxito só se confirmam depois do diagnóstico com os documentos; não há garantia de resultado.
+Fonte: Cálculos Save. Banco Central (SGS 20725); Lei 10.925/2004 (art. 8º); LC 224/2025. Estimativa preliminar sujeita a validação técnica.
+19
+## ppt/slides/slide20.xml
+COMO COMEÇAMOS
+Os primeiros 90 dias e o que precisamos ver em cada negócio
+O que precisamos ver (sob confidencialidade)
+• DRE e balanço dos dois últimos anos, por negócio quando houver
+• Apuração de PIS/COFINS e do crédito presumido (leite e suínos); EFD-Contribuições, com os créditos escriturados até dez/2026
+• Separação do ato cooperativo e não cooperativo
+• Extrato de dívidas e custo médio
+• Carteira a receber com prazos, por canal
+• Composição das compras de leite, suínos, milho e farelo
+• Margem por linha, planta e loja, se houver
+O caminho em 90 dias
+Semanas 1–2: conversa com a diretoria, confidencialidade e documentos.
+Semanas 3–4: mapa do ecossistema e linha de base de margem, prazo e dívida (passo 1).
+Semanas 5–8: primeiro passo de execução, no negócio em que os documentos mostrarem maior potencial.
+Semanas 9–13: primeiro mapa de valor e encontro trimestral com a diretoria.
+Vocês terão um gestor de projeto que conduz tudo e conecta as nossas equipes aos negócios.
+Próximo passo: 
+reunião com a diretoria financeira e fiscal para assinar a confidencialidade e listar os documentos. Data a combinar.
+20
+## ppt/slides/slide21.xml
+FONTES E AVISOS
+Fontes oficiais e públicas, com data de consulta
+Oficiais
+IBGE, SIDRA: Pesquisa Trimestral do Leite (tabela 1086), Pesquisa Trimestral do Abate de Animais (1093), IPCA (7060, variação em 12 meses até set/2026) e Pesquisa Mensal de Comércio (8882, até ago/2026). Consulta em 21/10/2026.
+Públicas, sobre a cooperativa
+Cooperativa Santa Clara: site (quem somos, produtos, blog de 29/07 e 14/08/2026). SuperVarejo (mar/2025). Jornal do Comércio: ago/2024, 17/08/2025 e jul/2026.
+Avisos
+Pré-análise de caráter geral, sem acesso aos dados internos da cooperativa. Não constitui parecer jurídico ou tributário nem oferta de crédito. As faixas são ilustrativas, com premissas indicadas, e dependem de documentos e de validação técnica. Valor, prazo e êxito não são prometidos; não há garantia de resultado.
+21
