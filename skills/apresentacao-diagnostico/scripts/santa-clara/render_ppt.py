@@ -99,8 +99,22 @@ def numeros(s, n, tot):
     return pagina(c, n, tot, s.get("fonte", ""))
 
 
+def cenarios(s, n, tot):
+    c = f'<h1 style="position:absolute;left:80px;top:70px;width:1700px;font-size:72px">{s["titulo"]}</h1><div class="reg" style="top:250px"></div>'
+    for i, (rot, linhas) in enumerate(s["cols"]):
+        x = 80 + i * 600
+        c += f'<div style="position:absolute;left:{x}px;top:285px;width:560px;font-size:34px;color:{OURO}">{rot}</div>'
+        for j, (a, b) in enumerate(linhas):
+            y = 360 + j * 160
+            c += (f'<div style="position:absolute;left:{x}px;top:{y}px;width:560px"><div style="font-size:30px;color:{TXT}">{a}</div>'
+                  f'<div style="margin-top:8px;font-size:24px;line-height:1.3;color:{CIN}">{b}</div></div>')
+    c += f'<div style="position:absolute;left:80px;top:860px;width:1740px;font-size:21px;line-height:1.35;color:{CIN}">{s["premissa"]}</div>'
+    return pagina(c, n, tot, s.get("fonte", ""))
+
+
 def fim(s, n, tot):
-    c = (f'<img src="{uri(PAD / M["logos"]["fundo_escuro"])}" style="position:absolute;left:160px;top:330px;width:360px">'
+    c = (f'<h1 style="position:absolute;left:160px;top:120px;width:1500px;font-size:84px">{s["titulo"]}</h1>'
+         f'<img src="{uri(PAD / M["logos"]["fundo_escuro"])}" style="position:absolute;left:160px;top:330px;width:360px">'
          f'<img src="{uri(PASTA / "fotos/logo-santa-clara.png")}" style="position:absolute;left:620px;top:300px;width:200px">'
          f'<div class="reg" style="top:500px"></div>'
          f'<div style="position:absolute;left:160px;top:530px;width:520px;font-size:30px;line-height:1.4">{s["a"]}</div>'
@@ -115,7 +129,7 @@ def fontes(s, n, tot):
     return pagina(c, n, tot)
 
 
-T = {"numeros": numeros, "capa": capa, "frase": frase, "espelho": espelho, "frente": frente, "fim": fim, "fontes": fontes}
+T = {"cenarios": cenarios, "numeros": numeros, "capa": capa, "frase": frase, "espelho": espelho, "frente": frente, "fim": fim, "fontes": fontes}
 
 
 def main():
