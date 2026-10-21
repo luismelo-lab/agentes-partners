@@ -69,13 +69,14 @@ RAIZ_WEB = "/personal/luis_melo_savecompany_com_br/Documents"
 
 
 def web(caminho):
-    """Link do navegador para um arquivo ou pasta do OneDrive. Pasta abre a lista; arquivo abre no visualizador do Office Online."""
+    """Link do navegador para um arquivo ou pasta do OneDrive. Pasta abre a lista; para arquivo, devolve a pasta onde ele está."""
     import urllib.parse
     rel = os.path.relpath(os.path.realpath(caminho), os.path.realpath(onedrive()))
     q = lambda x: urllib.parse.quote(x, safe="")
     alvo = f"{RAIZ_WEB}/{rel}"
     if os.path.isdir(caminho): return f"{WEB}/my?id={q(alvo)}"
-    return f"{WEB}/my?id={q(alvo)}&parent={q(os.path.dirname(alvo))}"
+    # arquivo: o link direto (id=arquivo&parent=pasta) não abre (Luis, 19 e 21/10/2026); o link da pasta abre e mostra o arquivo
+    return f"{WEB}/my?id={q(os.path.dirname(alvo))}"
 
 
 def luis(chave):
