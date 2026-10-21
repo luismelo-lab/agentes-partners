@@ -1,83 +1,95 @@
 ## Slide 1 (capa)
-titulo: Mais margem, do campo à gôndola
+titulo: Margem, do campo à gôndola
 sub: Apresentação à presidência da Cooperativa Santa Clara · outubro de 2026
 notas: Abertura (1 min). O objetivo é conversar sobre margem negócio por negócio: primeiro o mercado de vocês, depois como a Save atua em três frentes. Pré-análise, sem acesso aos dados internos; nenhuma promessa de valor, prazo ou êxito.
-## Slide 2 (frase)
+## Slide 2 (numeros)
+titulo: A Santa Clara em números: uma cadeia inteira, do campo à gôndola
+itens: R$ 3 bi | projeção de faturamento em 2026 | divulgada pela imprensa; não é balanço; ~5 mil | famílias associadas | cerca de 2,3 mil fornecem leite; 360 mi L | de leite por ano | mais de 1 milhão por dia, em 3 indústrias; 419 | itens com a marca | 291 de laticínios e 128 de carnes e embutidos; 7 · 2 · 2 | suinoculturas, frigoríficos e fábricas de ração | do grão ao embutido, dentro de casa; 30 | lojas próprias | supermercados e 15 lojas agropecuárias; 60% | da produção vendida fora do RS | 7 centrais de distribuição e um novo centro; 2,3 mil+ | colaboradores | unidades com FSSC 22000 (2025)
+fonte: Cooperativa Santa Clara (site e blog, 2025-26); Jornal do Comércio (jul/2026 e ago/2025); SuperVarejo; Jornal Novo Tempo (ago/2026). Números públicos; variam entre publicações.
+notas: A Santa Clara em números (2 min): a cadeia inteira, não só o leite. Dados públicos; divergem entre fontes (colaboradores 2,3 a 2,7 mil; lojas 30 ou 31; centrais 7 ou 8): usar faixas e pedir a confirmação. O 360 mi L/ano e o 1 mi L/dia são o mesmo número. Não há balanço público: faturamento realizado, sobras e patrimônio, abate real, produção de ração, exportação por produto e país e investimentos aprovados entram na lista de documentos. Perguntar: qual a divisão do faturamento entre laticínios, carnes, ração e varejo?
+## Slide 3 (frase)
 titulo: Cada ponto de margem pesa.
 numero: R$ 30
 unidade: mi por ano
-legenda: para cada ponto de margem sobre R$ 3 bi de receita projetada
+legenda: para cada ponto de margem sobre R$ 3 bi de receita projetada. Não é meta nem estimativa de ganho
 fonte: Estimativa Save sobre a projeção divulgada pela imprensa (Jornal do Comércio, jul/2026). Não é meta.
 notas: Régua (1 min). Margem: R$ 30 mi por ponto sobre R$ 3 bi; 0,1 ponto = R$ 3 mi. É aritmética sobre a projeção pública, não estimativa de ganho. Pedir o faturamento realizado de 2025.
-## Slide 3 (frase)
+## Slide 4 (frase)
 titulo: O leite oscila, e o produtor sente primeiro.
 numero: −19,9
 unidade: %
-legenda: no preço ao produtor de 1T25 a 4T25: de R$ 2,76 para R$ 2,21 por litro
+legenda: no preço ao produtor de 1T25 a 4T25 (R$ 2,76 para R$ 2,21); em 12 meses até o 2T26, −1,5%. Média Brasil
 fonte: IBGE, Pesquisa Trimestral do Leite (SIDRA 1086). Consulta em 21/10/2026.
 notas: Dificuldade 1. Média Brasil. Em 12 meses (2T25 a 2T26) o preço ficou em −1,5%: R$ 2,74 para R$ 2,70; o 2T26 já voltou a R$ 2,70. Apoio: importação de lácteos +26% no 1T26 (DERAL/SEAB-PR). Pergunta: o preço pago ao produtor acompanhou o preço de venda em cada linha?
-## Slide 4 (frase)
+## Slide 5 (frase)
 titulo: No suíno, a ração decide a margem.
 numero: 65% a 72%
 unidade: 
-legenda: do custo de produção do suíno é ração (GO a SC, 1T26)
+legenda: do custo de produção do suíno é ração, de 64,8% (GO) a 72,1% (SC), no 1T26
 fonte: Embrapa Suínos e Aves (CIAS), custo de produção, 1T26.
 notas: Dificuldade 2. Apoio: carne de porco ao consumidor −8,3% em 12 meses até set/2026 (IPCA). Pergunta: qual a margem por produto e por planta, e quanto pesa a ração?
-## Slide 5 (frase)
+## Slide 6 (frase)
 titulo: No varejo, a receita sobe mais que o volume.
 numero: +3,9% × +0,6%
 unidade: 
-legenda: receita nominal × volume nos supermercados, agosto/2026
+legenda: receita nominal × volume nos supermercados do Brasil, agosto/2026
 fonte: IBGE, Pesquisa Mensal de Comércio (SIDRA 8882). Consulta em 21/10/2026.
-notas: Dificuldade 3. A diferença reflete sobretudo preços (alimentação no domicílio +4,2% em 12 meses). Pergunta: qual a margem por categoria e por loja, e o prazo de venda ao associado?
-## Slide 6 (frase)
+notas: Dificuldade 3. A diferença reflete em boa parte preços (alimentação no domicílio +4,2% em 12 meses). Pergunta: qual a margem por categoria e por loja, e o prazo de venda ao associado?
+## Slide 7 (frase)
 titulo: O dinheiro de mercado custa mais que o dobro do crédito rural.
 numero: 22,89% × 9%
 unidade: ao ano
-legenda: capital de giro de mercado × custeio rural oficial (para quem é elegível)
+legenda: capital de giro de mercado (média) × taxa de custeio rural oficial, quando elegível. Não é o custo da cooperativa
 fonte: Banco Central (SGS 20725, ago/2026); Plano Safra 2026/27 (30/06/2026). Média de mercado, não o custo da cooperativa.
 notas: Dificuldade 4. Elegibilidade às linhas oficiais analisada caso a caso; a Save não concede crédito. Pergunta: quanto custa hoje a dívida média e em quantos dias a cooperativa recebe?
-## Slide 7 (frase)
+## Slide 8 (frase)
 titulo: O imposto muda em 2026 e de novo em 2027.
 numero: 90%
 unidade: 
-legenda: teto do crédito presumido de PIS/COFINS desde abril/2026 · CBS plena em 2027
-fonte: LC 224/2025; LC 214/2025; Lei 10.925/2004. A aplicação a leite e queijos será confirmada no diagnóstico.
+legenda: teto do crédito presumido de PIS/COFINS desde 01/04/2026, a confirmar para leite e queijos (cesta básica) · CBS plena em 2027
+fonte: LC 224/2025 (art. 4º, §8º, III); LC 214/2025; Lei 10.925/2004. A aplicação a leite e queijos será confirmada no diagnóstico.
 notas: Dificuldade 5. Ressalva obrigatória: leite e queijos estão na cesta básica da LC 214 e o corte de 90% pode não alcançá-los; o tributário confirma. Em 2027 a CBS é plena e o PIS/COFINS acaba. Pergunta: o crédito do leite e dos suínos está sendo aproveitado por inteiro e a cooperativa está pronta para 2027?
-## Slide 8 (espelho)
+## Slide 9 (espelho)
 titulo: Cinco perguntas que só os números de vocês respondem.
 itens: O preço do leite | O preço pago ao produtor acompanhou o preço de venda em cada linha?; O custo da ração | Quanto pesa a ração na margem por produto e por planta?; A margem por loja | Qual a margem por categoria e o prazo de venda ao associado?; O custo da dívida | Quanto custa a dívida hoje e em quantos dias a cooperativa recebe?; O crédito de 2026 e 2027 | Os créditos do leite e dos suínos são aproveitados por inteiro? Estamos prontos para a reforma?
 fonte: Perguntas a partir de informações públicas da cooperativa (site, SuperVarejo, Jornal do Comércio).
 notas: Espelho (3 min): é aqui que conduzimos a conversa perguntando. As respostas viram a lista de documentos do próximo passo.
-## Slide 9 (frase)
-titulo: Oxigenar paga a conta de hoje. Estruturar impede que ela volte. Escalar usa o que sobrou para crescer.
-notas: Transição para as três frentes (1 min). Um gestor de projeto conduz as três. As frentes se encadeiam: o caixa e o crédito recuperados pagam o que estava atrasado e viram base para estruturar; com controle e margem por negócio, qualquer investimento pode ser medido e apresentado a quem financia.
-## Slide 10 (frente)
-titulo: Oxigenar: liberar o caixa que está parado.
-intro: Mais dinheiro livre e menos dívida cara, sem esperar a safra. Entra quando o caixa aperta ou o prazo de recebimento é longo.
-itens: Recuperação tributária | Créditos que podem ser aproveitados, conforme a análise (leite, suínos, saldo credor).; Gestão de Contas | Visão de recebíveis, vencidos e prazo para destravar o caixa.; Antecipação e FIDC | Receber antes, por instituições autorizadas (Save Invest).; Gestão de passivo | Organizar e regularizar o que pesa na operação.
-nota: Em avaliação: trocar dívida cara por capital de longo prazo. É caixa, não lucro.
-fonte: Sem promessa de valor, prazo ou êxito. Crédito, antecipação e fundos por instituições autorizadas.
-notas: Oxigenar (3 min). 1 dia de prazo = R$ 8,2 mi de caixa sobre R$ 3 bi (uma vez; a 22,89% ao ano, cerca de R$ 1,9 mi por ano em juros). Crédito Internacional só como pergunta, até o G2 com o João Mattos; nunca 'fundo'.
+## Slide 10 (frase)
+titulo: Oxigenar olha o caixa de hoje. Estruturar ajuda a manter o ganho. Escalar prepara o crescimento.
+notas: Transição para as três frentes (1 min). Um gestor de projeto conduz as três. As frentes se encadeiam: o que for liberado pode ajudar a organizar o que está atrasado e vira base para estruturar; com controle e margem por negócio, qualquer investimento pode ser medido e apresentado a quem financia.
 ## Slide 11 (frente)
+titulo: Oxigenar: liberar o caixa que está parado.
+intro: Olhar o caixa e o custo da dívida sem depender só da safra. Entra quando o caixa aperta ou o prazo de recebimento é longo.
+itens: Revisão tributária | Levantamento de créditos possíveis (leite, suínos, saldo credor), sujeito a análise e validação.; Gestão de Contas | Visão de recebíveis, vencidos e prazo para destravar o caixa.; Antecipação e FIDC | Operados por instituições autorizadas (Save Invest); a Save não concede crédito. Sujeito a análise jurídica e do estatuto.; Passivo tributário | Avaliar transação e parcelamento, se houver.
+nota: Em avaliação: a cooperativa considera trocar dívida cara por capital de longo prazo? Liberar caixa não é lucro.
+fonte: Sem promessa de valor, prazo ou êxito. A Save Co. não é instituição financeira.
+notas: Oxigenar (3 min). 1 dia de prazo = R$ 8,2 mi de caixa sobre R$ 3 bi (uma vez; a 22,89% ao ano, cerca de R$ 1,9 mi por ano em juros). Crédito Internacional só como pergunta, até o G2 com o João Mattos; nunca 'fundo'.
+## Slide 12 (frente)
 titulo: Estruturar: manter o ganho e chegar pronto a 2027.
-intro: A margem conquistada não escorre e os números ficam sob controle. Entra quando o caixa respira ou a reforma bate à porta.
-itens: Planejamento tributário e reforma | Imposto no lugar certo e preparação para a CBS em 2027.; Estruturação patrimonial e societária | Com o jurídico da cooperativa, respeitando a Lei 5.764/1971.; Jurídico e prazos | Certidões, processos e prazos em dia.; BPO e certificado digital | Rotina contábil e fiscal mais leve e segura.
+intro: Ajudar a manter o ganho e os números sob controle. Entra quando o caixa respira ou a reforma bate à porta.
+itens: Planejamento tributário e reforma | Enquadramento tributário correto e preparação para a CBS em 2027.; Estruturação patrimonial e societária | Com o jurídico da cooperativa, respeitando a Lei 5.764/1971.; Prazos e contencioso | Controle de prazos e certidões fiscais; contencioso administrativo com advogado habilitado.; BPO fiscal e contábil | Rotina organizada, com acesso por procuração eletrônica, sem entrega de senhas.
 nota: Com controle e margem por negócio, qualquer investimento pode ser medido.
 fonte: Sem promessa de valor, prazo ou êxito.
 notas: Estruturar (3 min). Para cooperativa, o ato cooperativo e a Lei 5.764 exigem validação do Jurídico antes de qualquer fala além do nome do serviço. Sem 'holding'.
-## Slide 12 (frente)
-titulo: Escalar: crescer com o capital certo e vender além do RS.
-intro: Investir e vender mais longe, com custo de capital e imposto já resolvidos. Só entra depois das outras duas.
-itens: Tax internacional e comércio exterior | Tributação das vendas e operações fora do país.; Mercados além do RS | 60% da produção já sai do estado: logística e tributação interestadual.; Capital para crescer | Em avaliação: que investimento pede capital de longo prazo?; Crédito da cadeia | Em avaliação: como organizar, com instituições, o crédito ao produtor.
+## Slide 13 (frente)
+titulo: Escalar: preparar o crescimento com custo de capital e imposto sob controle.
+intro: Investir e vender mais longe com custo de capital e imposto sob controle. Só entra depois das outras duas.
+itens: Tax internacional | Se houver exportação ou importação: tributação e comércio exterior.; Vendas além do RS | 60% da produção já sai do estado: o que mais pode ir ao exterior?; Capital para crescer | Em avaliação: que investimento pede capital de longo prazo?; Crédito da cadeia | Em avaliação: como organizar, com instituições, o crédito ao produtor.
 nota: Itens em avaliação são perguntas, não oferta.
-fonte: Sem promessa de valor, prazo ou êxito. Captação e Crédito Internacional em validação.
+fonte: Sem promessa de valor, prazo ou êxito. Câmbio e financiamento à exportação só como pergunta; itens em avaliação não são oferta.
 notas: Escalar (3 min). Capital para crescer e crédito da cadeia só como pergunta (descoberta até o G2). Maquila, Paraguai e home equity ficaram de fora: sem aderência a cooperativa de leite e suínos ou em validação.
-## Slide 13 (fim)
+## Slide 14 (frente)
+titulo: Internacionalização: vender mais longe pede imposto e câmbio sob controle.
+intro: Para uma cooperativa com carnes e lácteos, o mercado externo pesa. Começa pelo imposto e pela pergunta certa.
+itens: Tributação das vendas externas | Imposto das operações fora do país, avaliado caso a caso.; Exportação de suínos e charcutaria | Quais produtos e mercados fazem sentido para o frigorífico.; Câmbio e caixa | Quanto da receita e da dívida está em moeda estrangeira.; Financiamento da exportação | Em avaliação: como organizar o dossiê para instituições autorizadas.
+nota: Brasil: 1,19 mi t de carne suína exportada de jan a set/2026 (ABPA). Quanto do crescimento depende de vender fora?
+fonte: ABPA, exportações jan–set/2026 (consulta em 21/10/2026). Sem promessa de valor, prazo ou êxito; itens em avaliação são perguntas, não oferta.
+notas: Internacionalização (3 min). Autorizada pelo Luis em 21/10 por ser central ao segmento. Pronto: tax internacional e comércio exterior. Descoberta (só pergunta): câmbio, financiamento à exportação (ACC/ACE e seguro de crédito, sem ficha nem condição), Crédito Internacional (até o G2, alvo 15/12/2026; nunca 'fundo'). Maquila e Paraguai fora: frigorífico bloqueado (D59) e baixa aderência a perecíveis. Lei 60/90 foi substituída pela 7.548/2025. Antidumping de leite em pó: Camex reconheceu o dumping mas suspendeu as tarifas; não falar como proteção em vigor. Número suíno: ABPA 1,192 mi t (todos os produtos); o 1,03 mi t do briefing pode ser só in natura (Comex Stat). Frase: 'Pela importância da exportação, incluímos o tema como pergunta e como tributação das vendas externas, que já temos pronta; crédito internacional e maquila estão em validação e aparecem só como perguntas.'
+## Slide 15 (fim)
 a:  Próximo passo  Reunião com a diretoria financeira e fiscal.
 b:  Confidencialidade  Assinatura do NDA antes de abrir qualquer dado.
 c:  Documentos  Lista do que precisamos ver em cada negócio.
-notas: Chamada para ação: peço a reunião com a diretoria financeira e fiscal, o NDA e a lista de documentos. Usamos os documentos só para esta análise, conforme a LGPD; nunca pedimos senhas nem certificado.
-## Slide 14 (fontes)
-texto: IBGE, SIDRA: Pesquisa Trimestral do Leite (1086), Pesquisa Mensal de Comércio (8882) e IPCA (7060), consulta em 21/10/2026. Banco Central, SGS 20725 (capital de giro de pessoas jurídicas, ago/2026). Embrapa Suínos e Aves, CIAS (1T26). Governo federal, Plano Safra 2026/27 (30/06/2026). DERAL/SEAB-PR (importação de lácteos, 1T26). LC 214/2025, LC 224/2025, Lei 10.925/2004 e Lei 5.764/1971. Cooperativa Santa Clara (site, jul e ago/2026), SuperVarejo (mar/2025), Jornal do Comércio (jul/2026). Fotos: acervo do site da Cooperativa Santa Clara e banco de imagens Pexels (licença gratuita).  Pré-análise de caráter geral, sem acesso aos dados internos da cooperativa. Não constitui parecer jurídico ou tributário nem oferta de crédito. Valores são ilustrativos e dependem de documentos e validação técnica. Valor, prazo e êxito não são prometidos; não há garantia de resultado.
+notas: Chamada para ação: peço a reunião com a diretoria financeira e fiscal, o NDA e a lista de documentos. Usamos os documentos só para esta análise, conforme a LGPD; nunca pedimos senhas; certificado digital só mediante contrato e procuração.
+## Slide 16 (fontes)
+texto: IBGE, SIDRA: Pesquisa Trimestral do Leite (1086), Pesquisa Mensal de Comércio (8882) e IPCA (7060), consulta em 21/10/2026. Banco Central, SGS 20725 (capital de giro de pessoas jurídicas, ago/2026). Embrapa Suínos e Aves, CIAS (1T26). Governo federal, Plano Safra 2026/27 (30/06/2026). DERAL/SEAB-PR (importação de lácteos, 1T26). LC 214/2025, LC 224/2025, Lei 10.925/2004 e Lei 5.764/1971. Cooperativa Santa Clara (site, jul e ago/2026: 60% da produção fora do RS, estrutura), SuperVarejo (mar/2025), Jornal do Comércio (jul/2026). Cesta básica: LC 214/2025, Anexo I. Imagens ilustrativas: acervo do site da cooperativa e banco de imagens Pexels (licença gratuita); não representam necessariamente a operação.  Pré-análise de caráter geral, sem acesso aos dados internos da cooperativa. Não constitui parecer jurídico ou tributário nem oferta de crédito. Valores são ilustrativos e dependem de documentos e validação técnica. Valor, prazo e êxito não são prometidos; não há garantia de resultado.
 notas: Fontes e avisos: fora da fala; vai no PDF enviado depois.

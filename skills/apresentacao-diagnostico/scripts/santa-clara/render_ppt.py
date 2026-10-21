@@ -84,6 +84,16 @@ def frente(s, n, tot):
     return pagina(c, n, tot, s.get("fonte", ""))
 
 
+def numeros(s, n, tot):
+    c = f'<h1 style="position:absolute;left:80px;top:70px;width:1600px;font-size:72px">{s["titulo"]}</h1><div class="reg" style="top:250px"></div>'
+    for i, (v, cap, sub) in enumerate(s["itens"]):
+        x = 80 + (i % 4) * 450; y = 290 + (i // 4) * 300
+        c += (f'<div style="position:absolute;left:{x}px;top:{y}px;width:420px"><div style="font-size:88px;font-weight:300;line-height:1;color:{TXT};white-space:nowrap">{v}</div>'
+              f'<div style="margin-top:14px;font-size:26px;line-height:1.25;color:{OURO}">{cap}</div>'
+              f'<div style="margin-top:8px;font-size:21px;line-height:1.3;color:{CIN}">{sub}</div></div>')
+    return pagina(c, n, tot, s.get("fonte", ""))
+
+
 def fim(s, n, tot):
     c = (f'<img src="{uri(PAD / M["logos"]["fundo_escuro"])}" style="position:absolute;left:160px;top:330px;width:360px">'
          f'<img src="{uri(PASTA / "fotos/logo-santa-clara.png")}" style="position:absolute;left:620px;top:300px;width:200px">'
@@ -100,7 +110,7 @@ def fontes(s, n, tot):
     return pagina(c, n, tot)
 
 
-T = {"capa": capa, "frase": frase, "espelho": espelho, "frente": frente, "fim": fim, "fontes": fontes}
+T = {"numeros": numeros, "capa": capa, "frase": frase, "espelho": espelho, "frente": frente, "fim": fim, "fontes": fontes}
 
 
 def main():

@@ -7,6 +7,17 @@ S = []
 A = S.append
 A(dict(tipo="capa", foto="pex-13340333.jpg", titulo="Margem, do campo à gôndola", sub="Apresentação à presidência da Cooperativa Santa Clara · outubro de 2026",
        notas="Abertura (1 min). O objetivo é conversar sobre margem negócio por negócio: primeiro o mercado de vocês, depois como a Save atua em três frentes. Pré-análise, sem acesso aos dados internos; nenhuma promessa de valor, prazo ou êxito."))
+A(dict(tipo="numeros", titulo="A Santa Clara em números: uma cadeia inteira, do campo à gôndola", itens=[
+    ("R$ 3 bi", "projeção de faturamento em 2026", "divulgada pela imprensa; não é balanço"),
+    ("~5 mil", "famílias associadas", "cerca de 2,3 mil fornecem leite"),
+    ("360 mi L", "de leite por ano", "mais de 1 milhão por dia, em 3 indústrias"),
+    ("419", "itens com a marca", "291 de laticínios e 128 de carnes e embutidos"),
+    ("7 · 2 · 2", "suinoculturas, frigoríficos e fábricas de ração", "do grão ao embutido, dentro de casa"),
+    ("30", "lojas próprias", "supermercados e 15 lojas agropecuárias"),
+    ("60%", "da produção vendida fora do RS", "7 centrais de distribuição e um novo centro"),
+    ("2,3 mil+", "colaboradores", "unidades com FSSC 22000 (2025)")],
+    fonte="Cooperativa Santa Clara (site e blog, 2025-26); Jornal do Comércio (jul/2026 e ago/2025); SuperVarejo; Jornal Novo Tempo (ago/2026). Números públicos; variam entre publicações.",
+    notas="A Santa Clara em números (2 min): a cadeia inteira, não só o leite. Dados públicos; divergem entre fontes (colaboradores 2,3 a 2,7 mil; lojas 30 ou 31; centrais 7 ou 8): usar faixas e pedir a confirmação. O 360 mi L/ano e o 1 mi L/dia são o mesmo número. Não há balanço público: faturamento realizado, sobras e patrimônio, abate real, produção de ração, exportação por produto e país e investimentos aprovados entram na lista de documentos. Perguntar: qual a divisão do faturamento entre laticínios, carnes, ração e varejo?"))
 A(dict(tipo="frase", foto="pex-2771640.jpg", titulo="Cada ponto de margem pesa.", numero="R$ 30", unidade="mi por ano", legenda="para cada ponto de margem sobre R$ 3 bi de receita projetada. Não é meta nem estimativa de ganho", fs=110, top=170,
        fonte="Estimativa Save sobre a projeção divulgada pela imprensa (Jornal do Comércio, jul/2026). Não é meta.",
        notas="Régua (1 min). Margem: R$ 30 mi por ponto sobre R$ 3 bi; 0,1 ponto = R$ 3 mi. É aritmética sobre a projeção pública, não estimativa de ganho. Pedir o faturamento realizado de 2025."))
@@ -51,11 +62,18 @@ A(dict(tipo="frente", titulo="Estruturar: manter o ganho e chegar pronto a 2027.
     notas="Estruturar (3 min). Para cooperativa, o ato cooperativo e a Lei 5.764 exigem validação do Jurídico antes de qualquer fala além do nome do serviço. Sem 'holding'."))
 A(dict(tipo="frente", titulo="Escalar: preparar o crescimento com custo de capital e imposto sob controle.", intro="Investir e vender mais longe com custo de capital e imposto sob controle. Só entra depois das outras duas.", itens=[
     ("Tax internacional", "Se houver exportação ou importação: tributação e comércio exterior."),
-    ("Vendas além do RS", "60% da produção sai do estado: logística e tributação interestadual."),
+    ("Vendas além do RS", "60% da produção já sai do estado: o que mais pode ir ao exterior?"),
     ("Capital para crescer", "Em avaliação: que investimento pede capital de longo prazo?"),
     ("Crédito da cadeia", "Em avaliação: como organizar, com instituições, o crédito ao produtor.")],
-    nota="Itens em avaliação são perguntas, não oferta.", fonte="Sem promessa de valor, prazo ou êxito. Itens em avaliação são perguntas, não oferta.",
+    nota="Itens em avaliação são perguntas, não oferta.", fonte="Sem promessa de valor, prazo ou êxito. Câmbio e financiamento à exportação só como pergunta; itens em avaliação não são oferta.",
     notas="Escalar (3 min). Capital para crescer e crédito da cadeia só como pergunta (descoberta até o G2). Maquila, Paraguai e home equity ficaram de fora: sem aderência a cooperativa de leite e suínos ou em validação."))
+A(dict(tipo="frente", titulo="Internacionalização: vender mais longe pede imposto e câmbio sob controle.", intro="Para uma cooperativa com carnes e lácteos, o mercado externo pesa. Começa pelo imposto e pela pergunta certa.", itens=[
+    ("Tributação das vendas externas", "Imposto das operações fora do país, avaliado caso a caso."),
+    ("Exportação de suínos e charcutaria", "Quais produtos e mercados fazem sentido para o frigorífico."),
+    ("Câmbio e caixa", "Quanto da receita e da dívida está em moeda estrangeira."),
+    ("Financiamento da exportação", "Em avaliação: como organizar o dossiê para instituições autorizadas.")],
+    nota="Brasil: 1,19 mi t de carne suína exportada de jan a set/2026 (ABPA). Quanto do crescimento depende de vender fora?", fonte="ABPA, exportações jan–set/2026 (consulta em 21/10/2026). Sem promessa de valor, prazo ou êxito; itens em avaliação são perguntas, não oferta.",
+    notas="Internacionalização (3 min). Autorizada pelo Luis em 21/10 por ser central ao segmento. Pronto: tax internacional e comércio exterior. Descoberta (só pergunta): câmbio, financiamento à exportação (ACC/ACE e seguro de crédito, sem ficha nem condição), Crédito Internacional (até o G2, alvo 15/12/2026; nunca 'fundo'). Maquila e Paraguai fora: frigorífico bloqueado (D59) e baixa aderência a perecíveis. Lei 60/90 foi substituída pela 7.548/2025. Antidumping de leite em pó: Camex reconheceu o dumping mas suspendeu as tarifas; não falar como proteção em vigor. Número suíno: ABPA 1,192 mi t (todos os produtos); o 1,03 mi t do briefing pode ser só in natura (Comex Stat). Frase: 'Pela importância da exportação, incluímos o tema como pergunta e como tributação das vendas externas, que já temos pronta; crédito internacional e maquila estão em validação e aparecem só como perguntas.'"))
 A(dict(tipo="fim", a="<b>Próximo passo</b><br>Reunião com a diretoria financeira e fiscal.", b="<b>Confidencialidade</b><br>Assinatura do NDA antes de abrir qualquer dado.", c="<b>Documentos</b><br>Lista do que precisamos ver em cada negócio.",
        notas="Chamada para ação: peço a reunião com a diretoria financeira e fiscal, o NDA e a lista de documentos. Usamos os documentos só para esta análise, conforme a LGPD; nunca pedimos senhas; certificado digital só mediante contrato e procuração."))
 A(dict(tipo="fontes", texto="IBGE, SIDRA: Pesquisa Trimestral do Leite (1086), Pesquisa Mensal de Comércio (8882) e IPCA (7060), consulta em 21/10/2026. Banco Central, SGS 20725 (capital de giro de pessoas jurídicas, ago/2026). Embrapa Suínos e Aves, CIAS (1T26). Governo federal, Plano Safra 2026/27 (30/06/2026). DERAL/SEAB-PR (importação de lácteos, 1T26). LC 214/2025, LC 224/2025, Lei 10.925/2004 e Lei 5.764/1971. Cooperativa Santa Clara (site, jul e ago/2026: 60% da produção fora do RS, estrutura), SuperVarejo (mar/2025), Jornal do Comércio (jul/2026). Cesta básica: LC 214/2025, Anexo I. Imagens ilustrativas: acervo do site da cooperativa e banco de imagens Pexels (licença gratuita); não representam necessariamente a operação.<br><br>Pré-análise de caráter geral, sem acesso aos dados internos da cooperativa. Não constitui parecer jurídico ou tributário nem oferta de crédito. Valores são ilustrativos e dependem de documentos e validação técnica. Valor, prazo e êxito não são prometidos; não há garantia de resultado.", notas="Fontes e avisos: fora da fala; vai no PDF enviado depois."))
