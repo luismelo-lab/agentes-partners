@@ -74,7 +74,8 @@ def fundo(nome, op=0.28, blur=2):
 
 
 def foto_css(nome, pos="center"):
-    return f"background-image:url({uri(ASS / (nome + '.jpg'))});background-position:{pos}"
+    extra = Path(PASTA_DECK[0]) / "fotos" / (nome + ".jpg")   # fotos do cliente têm prioridade sobre as institucionais (Santa Clara, 21/10/2026)
+    return f"background-image:url({uri(extra if extra.exists() else ASS / (nome + '.jpg'))});background-position:{pos}"
 
 
 def faixa(s, topo):
