@@ -110,7 +110,7 @@ def fim(s, n, tot):
 
 
 def fontes(s, n, tot):
-    c = f'<h1 style="position:absolute;left:80px;top:80px;font-size:70px">Fontes e avisos</h1><div class="reg" style="top:230px"></div>'
+    c = f'<h1 style="position:absolute;left:80px;top:80px;font-size:70px">Fontes</h1><div class="reg" style="top:230px"></div>'
     c += f'<div style="position:absolute;left:80px;top:260px;width:1760px;font-size:22px;line-height:1.5;color:{CIN}">{s["texto"]}</div>'
     return pagina(c, n, tot)
 
