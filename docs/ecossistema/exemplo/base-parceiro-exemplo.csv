@@ -1,0 +1,10 @@
+cnpj,nome,cnae,regime,faturamento,uf,debito_fiscal,vende_prazo_b2b,tem_imovel_quitado,exporta,bancos,mes_caixa_aperta
+11111111000191,Frigorifico Exemplo Ltda,1013901,Lucro Real,48000000,MG,sim,sim,sim,sim,6,julho
+22222222000191,Atacado de Carnes Exemplo,4634601,Lucro Real,22000000,SP,nao,sim,nao,nao,3,
+33333333000191,Supermercado Exemplo,4711302,Lucro Presumido,15000000,RS,nao,nao,sim,nao,2,dezembro
+44444444000191,Confeccao Exemplo,1412601,Lucro Real,18000000,SC,sim,sim,nao,sim,5,marco
+55555555000191,Transportadora Exemplo,4930202,Lucro Presumido,9000000,PR,sim,sim,nao,nao,7,
+66666666000191,Posto Exemplo,4731800,Lucro Presumido,6000000,GO,nao,nao,nao,nao,1,
+77777777000191,Cafe Exportador Exemplo,4621400,Lucro Real,140000000,MG,sim,sim,sim,sim,8,outubro
+88888888000191,Padaria Exemplo,1091102,Simples,2000000,SP,nao,nao,nao,nao,1,
+99999999000191,Industria Alimentos Exemplo,1099699,,,SP,,,,,,

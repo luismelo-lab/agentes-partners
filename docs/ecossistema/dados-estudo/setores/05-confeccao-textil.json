@@ -1,0 +1,202 @@
+{
+ "id": "confeccao-textil",
+ "titulo": "Confecção e têxtil",
+ "subtitulo": "indústria de confecção e vestuário",
+ "base_clientes": "21 clientes da Save na confecção (CNAE 1412), indústrias que vendem principalmente ao lojista multimarca e produzem por coleção.",
+ "retrato": [
+  "Produção em 2026: têxtil e vestuário projetados com alta de 1,1%, importados com +5,1% e varejo com +0,7% — referência de mercado, ABIT, jan/2026",
+  "Remessas internacionais: 26,5 milhões em ago/2026 (+74% sobre ago/2025), após o fim da taxa das blusinhas — referência de mercado, ABIT, set/2026",
+  "Carga de cerca de 40% sobre o produto final de vestuário — referência de mercado, ABIT",
+  "Folha mais cara: CPP de 10% em 2026, 15% em 2027 e 20% em 2028 (Lei 14.973/2024) — Migalhas, jan/2026",
+  "Inadimplência PJ recorde: mais de 9,1 milhões de CNPJs negativados e R$ 232,9 bi em dívidas — referência de mercado, Serasa, jun/2026"
+ ],
+ "dores": [
+  "O importado chega mais barato e o meu preço está travado. Cada pedido perdido é coleção parada no estoque.",
+  "A folha fica mais cara todo ano até 2028 e eu não consigo repassar isso ao lojista.",
+  "O lojista multimarca atrasa ou não paga, e eu já produzi, já paguei o tecido e a facção.",
+  "Preciso comprar tecido antes de vender a coleção. O capital de giro aperta justamente na hora de produzir.",
+  "Não sei qual regime vale mais em 2027 (Simples, Presumido, Real ou Simples híbrido) e tenho medo de errar a escolha."
+ ],
+ "gatilhos": [
+  "Virada de ano com mais CPP sobre a folha, em janeiro de 2027.",
+  "Planejamento da próxima coleção, que exige capital de giro.",
+  "Perda de cliente ou de pedido para produto importado.",
+  "Decisão sobre a opção pelo Simples híbrido, que é semestral.",
+  "Convite para produzir fora do Brasil, como no Paraguai."
+ ],
+ "jornada": [
+  {
+   "onda": "Oxigenar",
+   "janela": "0 a 6 meses",
+   "objetivo": "Liberar caixa com o crédito que a confecção já tem e organizar a cobrança do lojista.",
+   "solucoes": [
+    {
+     "nome": "Recuperação tributária: ICMS fora da base de PIS/COFINS",
+     "porque": "Vale para empresa no Real ou no Presumido com faturamento acima de R$ 300 mil por mês; no Simples a regra é própria.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Recuperação tributária: créditos de insumos",
+     "porque": "Tecido, aviamentos, energia e facção entram na análise de quem está no Lucro Real.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Recuperação de contribuição previdenciária sobre verbas da folha",
+     "porque": "Folha intensiva e reonerada pede revisão de verbas sobre as quais a contribuição pode ter sido paga a maior.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Saldo de IPI e IPI sobre compras de atacadista",
+     "porque": "O IPI vai a zero em 2027; saldo credor acumulado precisa ser usado antes.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Contas (cobrança do lojista)",
+     "porque": "Venda a prazo com carteira pulverizada e inadimplência do lojista.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Tributário e revisão do diagnóstico, com apoio de Contas e Soluções."
+  },
+  {
+   "onda": "Estruturar",
+   "janela": "3 a 12 meses",
+   "objetivo": "Escolher o regime certo para 2027, tratar débitos e dar previsibilidade ao fluxo de recebimento.",
+   "solucoes": [
+    {
+     "nome": "Planejamento tributário e reforma",
+     "porque": "Compara Simples, Presumido, Real e Simples híbrido para 2027, com efeito da folha. Quem vende ao lojista pode ganhar ao dar crédito ao comprador.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Passivo",
+     "porque": "Entra quando o parecer aponta débito; débito em aberto trava certidão e novos caminhos de financiamento.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Antecipação de recebíveis",
+     "porque": "Duplicatas de lojista e contas a receber acima do faturamento mensal. Operação de instituição autorizada; a Save estrutura.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Estruturação patrimonial",
+     "porque": "Empresa familiar com galpão próprio pode organizar patrimônio e sucessão. Só depois do passivo organizado.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Tributário, Jurídico, Produtos Financeiros e instituição autorizada, quando houver antecipação."
+  },
+  {
+   "onda": "Expandir",
+   "janela": "12 a 24 meses",
+   "objetivo": "Abrir conversa sobre novos modelos de produção e de financiamento, depois que caixa e passivo estiverem em ordem.",
+   "solucoes": [
+    {
+     "nome": "Maquila: conversa de descoberta",
+     "porque": "Indústria intensiva em mão de obra no Lucro Real pode avaliar produzir parte da linha no Paraguai. Só o estudo com os números dela diz se faz sentido.",
+     "status": "em avaliação conjunta"
+    },
+    {
+     "nome": "Crédito internacional e FIDC",
+     "porque": "Raros na confecção, que poucas vezes atinge a escala exigida. Entram apenas se o porte e a carteira justificarem.",
+     "status": "disponível (FIDC); crédito internacional em avaliação conjunta"
+    }
+   ],
+   "entrega": "Internacional e Produtos Financeiros, com Tributário na análise."
+  }
+ ],
+ "aderencia": [
+  {
+   "solucao": "Recuperação: ICMS fora da base de PIS/COFINS",
+   "nivel": "Alta",
+   "observacao": "Real ou Presumido acima de R$ 300 mil por mês. No Simples a regra é própria."
+  },
+  {
+   "solucao": "Recuperação: créditos de insumos",
+   "nivel": "Alta",
+   "observacao": "Real: tecido, aviamentos, energia e terceirização de facção."
+  },
+  {
+   "solucao": "Recuperação: contribuição previdenciária sobre verbas",
+   "nivel": "Alta",
+   "observacao": "Folha intensiva e reonerada aumenta o valor em análise."
+  },
+  {
+   "solucao": "Planejamento e reforma",
+   "nivel": "Alta",
+   "observacao": "Escolha de regime para 2027, Simples híbrido e efeito da folha."
+  },
+  {
+   "solucao": "Gestão de Contas",
+   "nivel": "Alta",
+   "observacao": "Venda a prazo ao lojista multimarca; carteira pulverizada e inadimplência."
+  },
+  {
+   "solucao": "Antecipação de recebíveis",
+   "nivel": "Alta",
+   "observacao": "Sinal: contas a receber acima do faturamento mensal. Operada por instituição autorizada."
+  },
+  {
+   "solucao": "Maquila (conversa de descoberta)",
+   "nivel": "Alta",
+   "observacao": "Indústria intensiva em mão de obra. Apenas descoberta, sem estudo, preço ou número."
+  },
+  {
+   "solucao": "FIDC e crédito internacional",
+   "nivel": "Baixa",
+   "observacao": "Poucas confecções têm a escala necessária. Avaliar só por exceção."
+  }
+ ],
+ "kpis": [
+  {
+   "indicador": "Caixa liberado (R$)",
+   "como_medir": "Soma dos créditos reconhecidos e compensados, conferida no parecer e no extrato fiscal."
+  },
+  {
+   "indicador": "Custo da folha (% da receita)",
+   "como_medir": "Folha e encargos sobre receita, antes e depois da reoneração, a partir da folha mensal."
+  },
+  {
+   "indicador": "DSO (prazo médio de recebimento)",
+   "como_medir": "Contas a receber sobre receita, em dias, mês a mês."
+  },
+  {
+   "indicador": "Inadimplência do lojista",
+   "como_medir": "Percentual vencido sobre carteira; exige o aging fornecido pelo cliente."
+  },
+  {
+   "indicador": "Carga efetiva por regime",
+   "como_medir": "Tributos pagos sobre receita, comparando regimes no mesmo período."
+  }
+ ],
+ "frase_valor": "A folha fica mais cara todo ano até 2028. Começamos pelo crédito que a sua confecção já tem e pela cobrança do lojista; depois escolhemos o regime certo para 2027.",
+ "big_four": [
+  "Revisão de créditos e escolha de regime, com simulação da reforma e do Simples híbrido. A Save replica com o Tributário e o diagnóstico de recuperação.",
+  "Defesa comercial e comércio exterior contra importados. A Save não atua nisso e orienta o cliente a buscar a entidade setorial.",
+  "Supply chain, nearshoring e financiamento da cadeia de fornecedores. A Save replica com a conversa de descoberta de produção no Paraguai e com a cobrança do lojista."
+ ],
+ "cuidados": [
+  "Decadência de 5 anos: crédito não pedido a tempo se perde competência a competência. Por isso o diagnóstico vem primeiro.",
+  "Reforma em 2027: CBS substitui PIS/COFINS, o IPI vai a zero e saldo credor de IPI deve ser usado antes. Valores só em faixa, como estimativa preliminar sujeita a validação técnica.",
+  "Simples tem regra própria; cada tese depende de regime, faturamento e documentos. Crédito presumido de ICMS varia por estado e exige validação.",
+  "Crédito internacional, captação de capital e Maquila estão em avaliação conjunta e não têm condições definidas; Gestão de Contas, antecipação, FIDC e estruturação patrimonial são serviços disponíveis.",
+  "Antecipação é operação de instituição autorizada; a Save estrutura e organiza a carteira, nunca é credora."
+ ],
+ "interno": [
+  "Maquila: decisão interna prevê ao menos 5 conversas de descoberta com confecção, têxtil e embalagens no Q4. Sem peça, preço, estudo pago ou número; depende do portão G2 (15/12/2026).",
+  "Atualização de 19/10/2026 (Luis): Gestão de Contas, antecipação e FIDC (Save Invest) e estruturação patrimonial (jurídico) são produtos prontos; crédito internacional e Maquila (João Mattos) seguem só em descoberta até o G2 (15/12/2026), sem taxa, prazo ou fee. A confirmar com o Jurídico e a Save Invest: empresa que contrata e presta, habilitação, taxa da antecipação e remuneração do parceiro.",
+  "Dados não localizados no playbook: margem do setor, endividamento setorial, faturamento 2025 consolidado e próximo edital de transação PGFN. Não citar número.",
+  "Crédito internacional e FIDC: baixa aderência; só conversar após o G2, com validação jurídica humana."
+ ],
+ "fontes": [
+  "Mercado & Consumo: ABIT projeta produção têxtil 2026 — https://mercadoeconsumo.com.br/22/01/2026/economia/producao-da-industria-textil-brasileira-deve-crescer-11-em-2026-preve-abit/amp/ — 22/01/2026",
+  "Mercado & Consumo: ABIT e remessas após o fim da taxa das blusinhas — https://mercadoeconsumo.com.br/23/09/2026/ecommerce/compras-internacionais-disparam-desde-o-fim-da-taxa-das-blusinhas-diz-abit/amp/ — 23/09/2026",
+  "Barbieri Advogados: reoneração da folha (Lei 14.973/2024) — https://www.barbieriadvogados.com/?p=1121 — s/d",
+  "Migalhas: reoneração da folha em 2026 — https://www.migalhas.com.br/depeso/447519/reoneracao-da-folha-de-salarios--2026 — jan/2026",
+  "Tactus: Simples híbrido — https://tactus.com.br/?p=46798 — s/d",
+  "Serasa Experian: inadimplência das empresas em junho de 2026 — https://www.serasaexperian.com.br/sala-de-imprensa/indicadores/recorde-inadimplencia-das-empresas-superou-9-milhoes-de-reais-em-junho-e-dividas-chegaram-a-232-bilhoes-de-reais-revela-serasa-experian/ — 17/08/2026",
+  "Atlas Público (BCB): Copom reduz a Selic para 13,75% — https://atlaspublico.com.br/bcb/noticias/copom-reduz-selic-para-13-75pct-ao-ano-em-decisao-unanime-87748 — 16/09/2026",
+  "NetCPA: publicada a LC 227/2026 — https://netcpa.com.br/colunas/publicada-lei-complementar-no-2272026-sobre-a-reforma-tributaria/27120 — jan/2026",
+  "NetCPA: cronograma da reforma tributária — https://netcpa.com.br/colunas/confira-o-cronograma-de-implementacao-da-reforma-tributaria/27214 — 2026"
+ ]
+}

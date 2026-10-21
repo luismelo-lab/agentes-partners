@@ -1,0 +1,210 @@
+{
+ "id": "cafe-graos",
+ "titulo": "Café e grãos",
+ "subtitulo": "atacado, cerealista, trade e produtor",
+ "base_clientes": "124 clientes de atacado de café e grãos (CNAE 4621), mais a cadeia do café de clientes de torrefação (CNAE 1081), acompanhada junto com o setor de alimentos.",
+ "retrato": [
+  "Safra de café recorde: 67,6 milhões de sacas em 2026, alta de 19,6% — Conab, 3º levantamento, 24/09/2026",
+  "Arábica a R$ 1.653,92 por saca em média em maio/2026, a menor média real desde out/2004, com nova queda em setembro — Cepea, jun/2026 e set/2026",
+  "Exportação de café em 2025: 40,05 milhões de sacas (−20,8%) e receita recorde de US$ 15,586 bi (+24,1%) — Cecafé, jan/2026",
+  "Safra de grãos recorde: 360,8 Mt em 2025/26 (+3,0%), com soja perto de 180 Mt — Conab, 11º levantamento, ago/2026",
+  "Recuperação judicial no agro: 474 pedidos no 1º tri/2026, com pessoas jurídicas em alta de 73,5% — Serasa Experian, ago/2026"
+ ],
+ "dores": [
+  "O café caiu e eu estou com estoque alto. Cada saca parada vale menos a cada semana.",
+  "Na colheita eu preciso de caixa, e o giro da safra sai caro e com deságio pesado.",
+  "Tenho crédito de PIS/COFINS acumulado e ele não vira dinheiro no meu caixa.",
+  "Tenho medo de glosa de crédito nas compras de intermediários e a exigência de rastreabilidade do comprador europeu só aumenta.",
+  "Com o preço em queda, produtor e comprador atrasam o pagamento, e eu financio os dois."
+ ],
+ "gatilhos": [
+  "Início da colheita, quando a necessidade de caixa chega ao pico.",
+  "Queda de preço com estoque alto, que leva a empresa a buscar giro e crédito acumulado.",
+  "Contrato de exportação novo ou exigência de rastreabilidade do comprador europeu.",
+  "Banco reduzindo limite ou pedindo garantia; pedido de recuperação judicial de cliente ou fornecedor.",
+  "Intimação sobre crédito, ressarcimento ou origem da mercadoria."
+ ],
+ "jornada": [
+  {
+   "onda": "Oxigenar",
+   "janela": "0 a 6 meses",
+   "objetivo": "Transformar em caixa o crédito que a empresa já tem e organizar o giro da safra.",
+   "solucoes": [
+    {
+     "nome": "Crédito de PIS/COFINS em conta gráfica e insumos",
+     "porque": "Exportação e vendas com suspensão geram saldo credor. O sinal é saldo credor no SPED e Lucro Real.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Alíquota zero na revenda (somente grãos)",
+     "porque": "Tese aplicável a grãos, conforme NCM e CFOP. Não se aplica a café. O sinal é revenda de grãos no SPED.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Funrural do adquirente",
+     "porque": "Quem compra de produtor pessoa física e retém Funrural pode revisar o que pagou. O sinal vem da DCTFWeb e do eSocial.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Antecipação de recebíveis, por instituição autorizada",
+     "porque": "Recebível de safra e de contrato a termo pode ganhar liquidez. O sinal é contas a receber alto. A Save estrutura; não é credora.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Tributário, com apoio do revisor de diagnóstico e de Contas e Soluções"
+  },
+  {
+   "onda": "Estruturar",
+   "janela": "3 a 12 meses",
+   "objetivo": "Reduzir o risco de glosa e de débito, e preparar a empresa para 2027.",
+   "solucoes": [
+    {
+     "nome": "Defesa de glosas e ressarcimento negado",
+     "porque": "Protege o crédito acumulado. O sinal é despacho decisório ou intimação no parecer.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Passivo",
+     "porque": "Débito em aberto trava certidão, e sem certidão não há crédito novo. O crédito recuperado pode abater o débito.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Planejamento tributário e reforma",
+     "porque": "Café com alíquota zero de IBS/CBS em 2027, regime agro e saldo credor pedem simulação por NCM antes da virada.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Estruturação patrimonial",
+     "porque": "Família com terra, armazém e estoque. A Lei 15.270/2025 e a sucessão são os sinais.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Jurídico e Tributário"
+  },
+  {
+   "onda": "Expandir",
+   "janela": "6 a 24 meses",
+   "objetivo": "Abrir fontes de funding de prazo mais longo para o giro da safra e para investir no negócio.",
+   "solucoes": [
+    {
+     "nome": "Crédito internacional",
+     "porque": "Empresas de café e agro com terra e ativos livres podem ter perfil. Depende de certidão, garantias reais livres e 2 anos de demonstrações.",
+     "status": "em avaliação conjunta"
+    },
+    {
+     "nome": "FIDC e multicedente",
+     "porque": "Atacado de maior porte, com carteira de recebíveis ou cadeia de produtores, pode montar o próprio mecanismo de bancarização.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Contas",
+     "porque": "Venda a prazo à indústria e ao varejo, e produtor inadimplente, pedem cobrança e organização da carteira.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Produtos Financeiros, com apoio de Jurídico e Contas e Soluções"
+  }
+ ],
+ "aderencia": [
+  {
+   "solucao": "Crédito de PIS/COFINS em conta gráfica",
+   "nivel": "Alta",
+   "observacao": "Saldo acumulado por exportação ou suspensão; pedido específico para compensar com CBS. Sinal: saldo credor no SPED."
+  },
+  {
+   "solucao": "Recuperação de insumos",
+   "nivel": "Alta",
+   "observacao": "Para Lucro Real com receita exportada ou com suspensão, com proporcionalização dos créditos."
+  },
+  {
+   "solucao": "Planejamento e reforma",
+   "nivel": "Alta",
+   "observacao": "Café com alíquota zero em 2027, regime agro, saldo credor e efeito da LC 224/2025."
+  },
+  {
+   "solucao": "Antecipação (instituição autorizada)",
+   "nivel": "Alta",
+   "observacao": "Recebível de safra e contrato a termo. Sinal: contas a receber alto."
+  },
+  {
+   "solucao": "Estruturação patrimonial",
+   "nivel": "Alta",
+   "observacao": "Família com terra, armazém e estoque. Gatilhos: Lei 15.270/2025 e sucessão."
+  },
+  {
+   "solucao": "Crédito internacional",
+   "nivel": "Alta",
+   "observacao": "Aderência na descoberta para café e agro com ativos livres. Exige certidão e garantias reais. Em avaliação conjunta."
+  },
+  {
+   "solucao": "Gestão de Passivo",
+   "nivel": "Média",
+   "observacao": "Aplica-se quando há débito no parecer ou recuperação judicial de cliente."
+  },
+  {
+   "solucao": "FIDC",
+   "nivel": "Média",
+   "observacao": "Só para atacado grande, com carteira relevante de recebíveis."
+  }
+ ],
+ "kpis": [
+  {
+   "indicador": "Saldo credor convertido em caixa (R$)",
+   "como_medir": "Saldo credor do SPED ou do parecer, comparado ao valor compensado ou ressarcido."
+  },
+  {
+   "indicador": "Custo do giro de safra",
+   "como_medir": "Taxa ao ano e deságio das operações de giro, comparados ao período anterior à esteira."
+  },
+  {
+   "indicador": "Prazo médio de estoque",
+   "como_medir": "Dias de estoque sobre o custo vendido, por produto, a cada trimestre."
+  },
+  {
+   "indicador": "Prazo médio de recebimento (DSO)",
+   "como_medir": "Contas a receber sobre receita diária, com aging da carteira."
+  },
+  {
+   "indicador": "Carga efetiva de PIS/COFINS",
+   "como_medir": "Tributo pago sobre a receita, após a recuperação de créditos."
+  }
+ ],
+ "frase_valor": "Com o café mais barato, cada real parado pesa mais. Começamos pelo crédito que a empresa já tem acumulado e, depois, organizamos o giro da safra.",
+ "big_four": [
+  "Recuperação de saldos credores e defesa em glosas, sobretudo para o exportador. A Save replica pela esteira de crédito acumulado e defesa administrativa.",
+  "Simulação do regime agro e da cesta básica na reforma. A Save replica com o planejamento por NCM antes de 2027.",
+  "Estruturação de risco de commodity, trade finance, rastreabilidade e sucessão. A Save replica o diagnóstico integrado de caixa, crédito e patrimônio, sem ser credora."
+ ],
+ "cuidados": [
+  "Crédito tributário prescreve em 5 anos: cada mês sem análise pode fazer competências saírem da janela de recuperação.",
+  "Em 2027 começa a CBS cheia e o PIS/COFINS se extingue; saldos credores e pedidos devem ser analisados antes da transição.",
+  "A LC 224/2025 corta 10% em créditos presumidos de PIS/COFINS, inclusive o da exportação de café. O efeito é avaliado por competência.",
+  "Valores de recuperação são estimativa preliminar sujeita a validação técnica. Crédito internacional, captação de capital e Maquila, em avaliação conjunta, não têm condições definidas.",
+  "Antecipação é operação de instituição autorizada; a Save estrutura e organiza a carteira, nunca é credora."
+ ],
+ "interno": [
+  "Crédito internacional: só descoberta até o portão G2. Contrato futuro e CPR como garantia estão em aberto (item 13). Sem condição ao cliente.",
+  "Atualização de 19/10/2026 (Luis): Gestão de Contas, antecipação e FIDC (Save Invest) e estruturação patrimonial (jurídico) são produtos prontos; crédito internacional e Maquila (João Mattos) seguem só em descoberta até o G2 (15/12/2026), sem taxa, prazo ou fee. A confirmar com o Jurídico e a Save Invest: empresa que contrata e presta, habilitação, taxa da antecipação e remuneração do parceiro.",
+  "Compromissos do Luis (13/10): mapear exportadores de café com ativos acima de R$ 60 mi e marcar o 1º cliente do café com um caso real.",
+  "Maquila não se aplica ao setor. Percentuais de remuneração de parceiros seguem a definir após validação."
+ ],
+ "fontes": [
+  "Conab via Revista Cultivar, safra de café 2026 (3º levantamento): https://revistacultivar.com.br/noticias/safra-de-cafe-deve-atingir-recorde-de-67-6-milhoes-de-sacas (24/09/2026)",
+  "Cepea via Band, arábica na menor média real em 20 anos: https://www.band.com.br/agro/noticias/preco-do-cafe-arabica-despenca-em-maio-e-atinge-menor-nivel-real-em-20-anos-202606030905 (03/06/2026)",
+  "Band, preço do arábica cai em setembro: https://www.band.com.br/agro/preco-do-cafe-arabica-cai-em-setembro-com-safra-e-estoques (30/09/2026)",
+  "Cecafé via Itatiaia, exportação de café em 2025: https://www.itatiaia.com.br/agro/brasil-bate-recorde-de-us-15-6-bilhoes-com-cafe-em-2025-apesar-de-queda-no-volume/ (jan/2026)",
+  "Ministério da Fazenda, levantamento de safras (Conab, 11º lev.): https://www.gov.br/fazenda/pt-br/central-de-conteudo/publicacoes/conjuntura-economica/agricola/defeso-eleitoral-2026/2026-08-13_levantamento-de-safras.pdf (13/08/2026)",
+  "Bloomberg Línea, EUA retiram tarifa de 40% sobre café e carne: https://www.bloomberglinea.com.br/internacional/trump-retira-tarifas-de-40-sobre-cafe-suco-de-laranja-e-carne-bovina-do-brasil/ (20/11/2025)",
+  "Serasa Experian, RJ no agro no 1º tri/2026: https://www.serasaexperian.com.br/sala-de-imprensa/agronegocios/recuperacao-judicial-agro-tem-alta-de-22-por-cento-e-acumula-474-pedidos-do-recurso-no-primeiro-trimestre-de-2026-mostram-dados-ineditos-da-serasa-experian/ (ago/2026)",
+  "Simtax, lista da cesta básica (café NCM 09.01 e 2101.1): https://simtax.com.br/cesta-basica-nacional-ibs-cbs-lista/ (s/d)",
+  "Conjur, reforma e agronegócio, regimes diferenciados: https://www.conjur.com.br/2025-out-08/reforma-tributaria-e-agronegocio-regimes-diferenciados-do-ibs-e-da-cbs//?print=1 (08/10/2025)",
+  "PwC, Tax Intelligence sobre a LC 224/2025: https://www.pwc.com.br/pt/thinking-about-taxes/tax-intelligence/2025/tax-intelligence-express-ed42-publicacao-da-lc-n224-25.pdf (dez/2025)",
+  "Barbieri Advogados, LC 224/2025, exceções e disputas: https://barbieriadvogados.com/?p=9086 (atualizado jul/2026)",
+  "Jornal Contábil, Lei 15.270/2025 (dividendos): https://jornalcontabil.com.br/noticia/lei-15-270-define-regras-para-taxacao-de-lucros-e-dividendos-a-partir-de-2026/ (s/d, 2025)",
+  "Agrolink, EUDR 2026, rastreabilidade de soja, café e carne: https://www.agrolink.com.br/noticias/eudr-2026--regra-da-ue-aumenta-exigencia-de-rastreabilidade-para-soja--cafe-e-carne_517838.html (2026)",
+  "PwC Brasil, agronegócio: https://www.pwc.com.br/pt/setores-atividade/agronegocio.html (s/d)",
+  "Reforma Tributária (portal), EY compra a MB Agro: https://www.reformatributaria.com/como-anda-o-mercado/ey-compra-a-mb-agro/ (s/d)",
+  "Base interna: catálogo de teses da Save, departamentos/tributario/catalogo-teses-save.md (15/10/2026)",
+  "Base interna: produtos internacionais e financeiros, skills/depto-internacional/references/produtos.md (16/10/2026)"
+ ]
+}

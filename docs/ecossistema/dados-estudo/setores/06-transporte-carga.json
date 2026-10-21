@@ -1,0 +1,194 @@
+{
+ "id": "transporte-carga",
+ "titulo": "Transporte rodoviário de carga",
+ "subtitulo": "transportadoras e operadores logísticos",
+ "base_clientes": "20 clientes da base (CNAE 4930), transporte rodoviário de carga. Composição por porte e regime tributário: não localizada.",
+ "retrato": [
+  "Confiança baixa: índice CNT do 1º semestre de 2026 em 41,2% em SP (menor da série desde 2023), 42,4% no RS e 43,0% no RJ — CNT, jul/2026",
+  "Combustível pesa 43,2% do custo operacional, veículos 29,1% e motoristas 19,5% — NTC&Logística (referência de mercado), data não identificada",
+  "Frete médio de R$ 7,99 por km em mar/2026 — Edenred/Repom (referência de mercado, citada no playbook)",
+  "Em 2025, 55,6% das transportadoras reajustaram preço, com média de 6%; 88% têm dificuldade para contratar motorista — NTC (referência de mercado)",
+  "Inadimplência PJ em recorde: mais de 9,1 milhões de CNPJs negativados e R$ 232,9 bi em dívidas — Serasa Experian, jun/2026"
+ ],
+ "dores": [
+  "O diesel e a manutenção comem a minha margem, e eu repasso só parte do aumento ao embarcador.",
+  "Pago diesel, pedágio e motorista na hora, mas o embarcador me paga em 30 a 60 dias.",
+  "A folha ficou mais cara e eu não encontro motorista para rodar com a frota que tenho.",
+  "Financiei a frota e as parcelas pesam, com a Selic ainda em 13,75% ao ano.",
+  "Não sei que crédito o diesel e o autônomo vão gerar na reforma, nem como me preparar para 2027."
+ ],
+ "gatilhos": [
+  "Alta do diesel que o contrato não repassa.",
+  "Contrato novo com embarcador que alonga o prazo de pagamento.",
+  "Renovação ou ampliação da frota, com nova parcela de financiamento.",
+  "Virada da contribuição previdenciária patronal em janeiro de 2027 (de 10% para 15% na regra de reoneração).",
+  "Débito que trava a certidão negativa exigida pelo embarcador."
+ ],
+ "jornada": [
+  {
+   "onda": "Oxigenar",
+   "janela": "0 a 6 meses",
+   "objetivo": "Trazer caixa de volta com créditos que já existem na operação e organizar a carteira de embarcadores.",
+   "solucoes": [
+    {
+     "nome": "Recuperação de créditos de insumos",
+     "porque": "Diesel, pneus, peças, manutenção, pedágio e seguro de carga podem gerar crédito. Sinal: empresa no Lucro Real.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Revisão de verbas da folha (CPP)",
+     "porque": "Folha relevante e reonerada em 2026 abre espaço para revisar verbas sobre as quais a contribuição incide. Sinal: folha alta no parecer.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Contas",
+     "porque": "Frete a prazo e carteira de embarcadores concentrada. Sinal: contas a receber alto. Cobrança organizada, pago no êxito.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Tributário, com Contas e Soluções para a carteira de recebíveis"
+  },
+  {
+   "onda": "Estruturar",
+   "janela": "3 a 12 meses",
+   "objetivo": "Regularizar débitos, proteger a certidão e preparar a empresa para a reforma de 2027.",
+   "solucoes": [
+    {
+     "nome": "Gestão de Passivo",
+     "porque": "Débitos previdenciários e de PIS/COFINS travam a certidão do embarcador. O crédito recuperado pode abater o débito.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Crédito presumido de ICMS fora do IRPJ/CSLL",
+     "porque": "Transportadora que usa o crédito presumido de ICMS pode discutir a exclusão da base. Sinal: crédito presumido no SPED. Via judicial.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Planejamento e reforma 2027",
+     "porque": "Crédito do diesel e do transportador autônomo na CBS/IBS, regime e folha precisam de simulação antes da virada.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Antecipação do recebível de frete",
+     "porque": "Frete a 30 a 60 dias, documentado em CT-e. Operação de instituição autorizada; a Save organiza a carteira.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Jurídico, Tributário e Produtos Financeiros, com instituição autorizada na antecipação"
+  },
+  {
+   "onda": "Expandir",
+   "janela": "12 a 24 meses",
+   "objetivo": "Abrir alternativas de funding e de organização patrimonial para as empresas com porte para isso.",
+   "solucoes": [
+    {
+     "nome": "Mecanismo próprio de recebíveis (FIDC)",
+     "porque": "Só faz sentido para transportadora grande, com volume mensal de recebíveis que sustente o custo da estrutura.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Estruturação patrimonial",
+     "porque": "Frota e imóveis em nome da empresa, sinal de patrimônio exposto. Entra depois da regularização de débitos.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Produtos Financeiros e Jurídico"
+  }
+ ],
+ "aderencia": [
+  {
+   "solucao": "Créditos de insumos (Tema 779)",
+   "nivel": "Alta",
+   "observacao": "Diesel, pneus, peças, manutenção, pedágio e seguro de carga. Sinal: Lucro Real."
+  },
+  {
+   "solucao": "Verbas da folha (CPP)",
+   "nivel": "Alta",
+   "observacao": "Folha relevante e reonerada pela Lei 14.973/2024."
+  },
+  {
+   "solucao": "Crédito presumido de ICMS fora do IRPJ/CSLL",
+   "nivel": "Alta",
+   "observacao": "Sinal: crédito presumido no SPED. Tema 1.182 do STJ. Via judicial."
+  },
+  {
+   "solucao": "Planejamento e reforma",
+   "nivel": "Alta",
+   "observacao": "Crédito do diesel e do autônomo em 2027, regime tributário e folha."
+  },
+  {
+   "solucao": "Gestão de Passivo",
+   "nivel": "Alta",
+   "observacao": "Débitos previdenciários e de PIS/COFINS. Certidão negativa exigida por embarcador."
+  },
+  {
+   "solucao": "Gestão de Contas",
+   "nivel": "Alta",
+   "observacao": "Frete a prazo e carteira de embarcadores. Sinal: contas a receber alto."
+  },
+  {
+   "solucao": "Antecipação de recebíveis",
+   "nivel": "Alta",
+   "observacao": "Recebível de frete em CT-e, prazo de 30 a 60 dias. Operada por instituição autorizada."
+  },
+  {
+   "solucao": "FIDC",
+   "nivel": "Baixa",
+   "observacao": "Só transportadora grande, com alto volume mensal de recebíveis."
+  }
+ ],
+ "kpis": [
+  {
+   "indicador": "Caixa liberado (R$)",
+   "como_medir": "Créditos e economias efetivamente recebidos ou compensados, conforme registro financeiro."
+  },
+  {
+   "indicador": "Crédito por litro de diesel",
+   "como_medir": "Crédito apurado sobre compras de diesel e insumos no SPED, dividido pelo volume comprado."
+  },
+  {
+   "indicador": "Custo da folha (% da receita)",
+   "como_medir": "Folha e encargos do parecer sobre a receita bruta, antes e depois da revisão."
+  },
+  {
+   "indicador": "Prazo médio de recebimento dos embarcadores",
+   "como_medir": "Contas a receber sobre receita diária; aging da carteira será solicitado ao cliente."
+  },
+  {
+   "indicador": "Débito regularizado (R$)",
+   "como_medir": "Saldo de débitos do parecer parcelado, transacionado ou compensado, e certidão obtida."
+  }
+ ],
+ "frase_valor": "O diesel é quase metade do custo da transportadora. Revemos o crédito que ele gera, a folha e o prazo do embarcador, para que o caixa que volta reduza a dependência do banco. Resultados dependem de validação técnica.",
+ "big_four": [
+  "Abordagem: revisão de créditos de insumos e de ICMS e defesa em autos. A Save replica com a esteira de recuperação e o acompanhamento jurídico.",
+  "Abordagem: simulação da reforma para diesel, transportador autônomo e CT-e. A Save replica a simulação 2027 a 2033 por cliente.",
+  "Abordagem: eficiência de custos, renovação de frota e reestruturação de dívida. A Save replica o diagnóstico de caixa e passivo, sem ser credora."
+ ],
+ "cuidados": [
+  "Decadência de 5 anos: créditos antigos prescrevem mês a mês. Quanto antes o levantamento, maior o período recuperável. Todo valor é estimativa preliminar sujeita a validação técnica.",
+  "Reforma: em 2027 a CBS cheia substitui PIS/COFINS. Crédito do diesel e do autônomo depende de regra e percentual anual; o Tributário confere o texto consolidado.",
+  "Reoneração da folha: contribuição patronal de 10% em 2026, 15% em 2027 e 20% em 2028. Teses de crédito presumido de ICMS correm por via judicial, sem prazo ou êxito prometidos.",
+  "Crédito internacional, captação de capital e Maquila estão em avaliação conjunta e não têm condições definidas; Gestão de Contas, antecipação, FIDC e estruturação patrimonial são serviços disponíveis.",
+  "Antecipação é operação de instituição autorizada; a Save estrutura e organiza a carteira, nunca é credora."
+ ],
+ "interno": [
+  "Margem setorial, endividamento do setor e composição por porte e regime da base: não localizados. Aging dos embarcadores deve ser pedido ao cliente.",
+  "Gestão de Contas e antecipação: em aberto quem contrata, habilitação de quem presta, taxa e escopo. Nada de condição ao cliente antes da decisão do dono do produto.",
+  "FIDC: MVP sem dono, parceiro, preço ou portão registrados. Só transportadora com mais de R$ 10 mi/mês. Crédito internacional fora do perfil do setor; Maquila sem aderência.",
+  "Pendências do radar: ato anual dos percentuais do crédito presumido do TAC (até setembro), texto consolidado dos anexos com a LC 227/2026 e vigência do decreto de margens do diesel."
+ ],
+ "fontes": [
+  "CNT, Índice de Confiança do Transportador SP (1º sem/2026): https://data.cnt.org.br/wp-content/uploads/2026/07/ICT-Sao-Paulo.pdf (jul/2026)",
+  "Mundo Logística, conta do TRC (NTC&Logística): https://mundologistica.com.br/noticias/conta-do-transporte-rodoviario-de-cargas (s/d)",
+  "Mundo Logística, falta de motoristas (NTC): https://mundologistica.com.br/noticias/falta-motoristas-transporte-rodoviario-cargas (s/d)",
+  "Transp.net, TAC não contribuinte e crédito presumido (art. 169 LC 214): https://www.transp.net/blog/posts/tac-nao-contribuinte-ibs-cbs-lc-214-2025/ (s/d)",
+  "Barbieri Advogados, reoneração da folha (Lei 14.973/2024): https://www.barbieriadvogados.com/?p=1121 (s/d)",
+  "Migalhas, reoneração da folha em 2026: https://www.migalhas.com.br/depeso/447519/reoneracao-da-folha-de-salarios--2026 (jan/2026)",
+  "Serasa Experian, inadimplência das empresas em jun/2026: https://www.serasaexperian.com.br/sala-de-imprensa/indicadores/recorde-inadimplencia-das-empresas-superou-9-milhoes-de-reais-em-junho-e-dividas-chegaram-a-232-bilhoes-de-reais-revela-serasa-experian/ (17/08/2026)",
+  "Atlas Público (BCB), Copom reduz a Selic para 13,75%: https://atlaspublico.com.br/bcb/noticias/copom-reduz-selic-para-13-75pct-ao-ano-em-decisao-unanime-87748 (16/09/2026)",
+  "NetCPA, cronograma da reforma tributária: https://netcpa.com.br/colunas/confira-o-cronograma-de-implementacao-da-reforma-tributaria/27214 (2026)",
+  "Base interna: catálogo de teses da Save, ~/agentes-partners/departamentos/tributario/catalogo-teses-save.md (15/10/2026)",
+  "Frete médio (Edenred/Repom) e índices CNT RS/RJ: citados no playbook setorial, sem URL na tabela de fontes (consulta de 16/10/2026)"
+ ]
+}

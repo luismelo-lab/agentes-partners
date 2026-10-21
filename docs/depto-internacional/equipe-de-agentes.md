@@ -7,7 +7,7 @@
 - Reunião de estruturação comercial do fundo e crédito internacional para café e agro (02/10).
 - Documento interno do Crédito Internacional v2.3 (07/10), FAQ (02/10), qualificação e estudo de tomadores.
 - Maquila: documento oficial v0.9 (09/10), GTM e as 24 perguntas ao dono (K03).
-- Ecossistema financeiro (13/10): Gestão de Contas como porta de entrada, FIDC, funding e home equity, na trilha Oxigenar → Estruturar → Expandir.
+- Ecossistema financeiro (13/10): Gestão de Contas como porta de entrada, FIDC, funding e home equity, na trilha Destravar caixa → Proteger e controlar → Crescer.
 
 ## Produtos atendidos
 | Produto | O que é | Portão hoje |

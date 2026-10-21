@@ -1,0 +1,208 @@
+{
+ "id": "proteina-animal",
+ "titulo": "Proteína animal",
+ "subtitulo": "frigorífico, atacado de carnes e açougue",
+ "base_clientes": "184 empresas na base de clientes ganhos: 32 frigoríficos (CNAE 1011/1013), 28 atacados de carnes (4634) e 124 açougues e peixarias (4722).",
+ "retrato": [
+  "Abate recorde em 2025: 42,94 milhões de bovinos (+8,2%), 60,69 milhões de suínos e 6,69 bilhões de frangos (+3,1%) — IBGE, mar/2026",
+  "Exportação bovina recorde em 2025: 3,5 Mt (+20,9%) e US$ 18,03 bi (+40,1%), China com 48% — ABIEC, jan/2026",
+  "Arroba do boi gordo em recorde de R$ 356,00 em mar/2026; retenção de fêmeas e bezerro caro — Cepea, abr/2026",
+  "Margem EBITDA de 10,1% em grande listada (3º tri/2025), com margens menores esperadas para 2026; margem do frigorífico médio: não localizado",
+  "Capital de giro PJ acima de 1 ano a 22,55% ao ano, com Selic em 13,75% desde 16/09/2026 — BCB, ago e set/2026"
+ ],
+ "dores": [
+  "Pago o boi à vista e só recebo do cliente em 21 a 45 dias. O caixa fica travado no meio.",
+  "A arroba sobe mais rápido que a carne e o preço de venda não acompanha. A margem encolhe.",
+  "O crédito é caro e curto, e o banco ainda pede garantia e certidão.",
+  "Tenho saldo credor de PIS/COFINS e ICMS que não vira caixa.",
+  "Tenho medo de autuação em crédito presumido e em Funrural."
+ ],
+ "gatilhos": [
+  "Arroba subindo e margem caindo na entressafra do boi, de julho a outubro.",
+  "Banco cortando limite ou pedindo certidão.",
+  "Nova habilitação de planta para exportar, que exige capital de giro e certidão.",
+  "Notificação ou intimação da Receita ou do estado.",
+  "Sucessão familiar ou entrada de sócio."
+ ],
+ "jornada": [
+  {
+   "onda": "Oxigenar",
+   "janela": "0 a 6 meses",
+   "objetivo": "Liberar o caixa que já é da empresa, antes de buscar qualquer recurso de fora, e agir antes do fim do PIS/COFINS em 2027.",
+   "solucoes": [
+    {
+     "nome": "Recuperação tributária: alíquota zero na revenda e insumos",
+     "porque": "Hipótese a validar: carne com CFOP de revenda, CNAE 1011/1013/4634, Lucro Real ou Presumido. Não se aplica ao Simples. Depende de análise de aptidão.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Crédito presumido de compras de produtor pessoa física e Funrural",
+     "porque": "Sinal: compras de produtor PF no SPED e retenção de Funrural no eSocial. Aplica-se à agroindústria no Lucro Real.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Verbas indenizatórias na contribuição patronal",
+     "porque": "Sinal: folha relevante, típica do abate. A análise confirma o enquadramento.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Gestão de Contas (atacado)",
+     "porque": "Sinal: venda a prazo ao varejo e ao food service, com carteira B2B e vencidos.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Tributário, com Diagnóstico; Contas e Soluções para a cobrança."
+  },
+  {
+   "onda": "Estruturar",
+   "janela": "3 a 12 meses",
+   "objetivo": "Organizar débitos e defesa, preparar a reforma de 2027 e dar previsibilidade ao recebimento.",
+   "solucoes": [
+    {
+     "nome": "Gestão de Passivo",
+     "porque": "Sinal: débito no parecer ou certidão positiva. O crédito recuperado pode abater o débito e destravar a certidão.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Defesa administrativa",
+     "porque": "Sinal: intimação ou auto sobre crédito presumido ou Funrural.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Planejamento tributário e reforma 2027",
+     "porque": "Carnes passam a alíquota zero de IBS/CBS em 2027 com crédito mantido; simulação por NCM. Sinal: Lucro Real ou Presumido.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Antecipação de recebíveis, por instituição autorizada",
+     "porque": "Sinal: contas a receber acima do faturamento mensal, em duplicatas de varejo e food service. A Save estrutura; não antecipa.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Jurídico e Tributário; Contas e Soluções e Produtos Financeiros para a antecipação."
+  },
+  {
+   "onda": "Expandir",
+   "janela": "6 a 24 meses",
+   "objetivo": "Com certidão e passivo organizados, abrir fontes de funding mais longas para quem tem escala.",
+   "solucoes": [
+    {
+     "nome": "Crédito internacional",
+     "porque": "Para frigorífico grande, com terra e planta, que passe nos critérios de porte e garantia real. Depende de certidão e demonstrações.",
+     "status": "em avaliação conjunta"
+    },
+    {
+     "nome": "Estrutura de recebíveis (FIDC)",
+     "porque": "Só para porte alto de faturamento mensal e carteira pulverizada.",
+     "status": "disponível"
+    },
+    {
+     "nome": "Estruturação patrimonial",
+     "porque": "Empresa familiar com terra, gado e plantas; a retenção sobre dividendos desde 2026 é gatilho para planejar.",
+     "status": "disponível"
+    }
+   ],
+   "entrega": "Produtos Financeiros, com Jurídico para a estruturação patrimonial."
+  }
+ ],
+ "aderencia": [
+  {
+   "solucao": "Recuperação tributária: alíquota zero na revenda",
+   "nivel": "Alta",
+   "observacao": "Frigorífico e atacado: alta. Açougue: média, só no Real ou Presumido. Simples não. Hipótese a validar."
+  },
+  {
+   "solucao": "Crédito presumido de compras de produtor PF",
+   "nivel": "Alta",
+   "observacao": "Frigorífico no Lucro Real que compra boi, suíno ou frango de PF. Atacado baixa; açougue não se aplica."
+  },
+  {
+   "solucao": "Planejamento tributário e reforma 2027",
+   "nivel": "Alta",
+   "observacao": "Alíquota zero de IBS/CBS em carnes com crédito mantido. Alta em frigorífico e atacado, média em açougue."
+  },
+  {
+   "solucao": "Defesa administrativa",
+   "nivel": "Alta",
+   "observacao": "Alta no frigorífico com autos sobre crédito presumido e Funrural; média no atacado; baixa no açougue."
+  },
+  {
+   "solucao": "Antecipação de recebíveis, por instituição autorizada",
+   "nivel": "Alta",
+   "observacao": "Frigorífico e atacado com duplicatas de varejo e food service. Baixa no açougue, que vende à vista ou no cartão."
+  },
+  {
+   "solucao": "Gestão de Contas",
+   "nivel": "Média",
+   "observacao": "Alta no atacado, com carteira B2B a prazo; média no frigorífico; baixa no açougue."
+  },
+  {
+   "solucao": "Gestão de Passivo",
+   "nivel": "Média",
+   "observacao": "Depende de débito no parecer ou certidão positiva. Média nos três perfis."
+  },
+  {
+   "solucao": "Crédito internacional",
+   "nivel": "Baixa",
+   "observacao": "Média só em frigorífico grande, com porte e garantia real; baixa no atacado; não se aplica ao açougue."
+  }
+ ],
+ "kpis": [
+  {
+   "indicador": "Caixa liberado (R$)",
+   "como_medir": "Valor efetivamente recebido da recuperação, conforme registro comercial e confirmação do período."
+  },
+  {
+   "indicador": "Carga efetiva de PIS/COFINS",
+   "como_medir": "Crédito dividido pelo tributo pago, a partir do parecer fiscal do período."
+  },
+  {
+   "indicador": "Dias de ciclo de caixa",
+   "como_medir": "Prazo entre o pagamento do boi e o recebimento da venda."
+  },
+  {
+   "indicador": "DSO (prazo médio de recebimento)",
+   "como_medir": "Aging da carteira e contas a receber sobre o faturamento do período."
+  },
+  {
+   "indicador": "Custo da dívida (% ao ano)",
+   "como_medir": "Taxa média dos contratos no SCR comparada à referência de 22,55% ao ano do capital de giro."
+  }
+ ],
+ "frase_valor": "O frigorífico paga o boi antes de receber da venda. Primeiro olhamos o crédito que já é seu, depois organizamos o recebimento. Assim sua empresa precisa de menos banco.",
+ "big_four": [
+  "Revisão de créditos (PIS/COFINS, crédito presumido, ICMS) e defesa em autuações. A Save replica com o catálogo de teses e a análise de aptidão por CNAE, regime e CFOP.",
+  "Simulação da reforma por NCM, com cesta básica e crédito presumido de produtor. A Save replica no planejamento para 2027.",
+  "Oferta integrada de tributos, capital de giro e rastreabilidade para o exportador. A Save replica a ordem: caixa, passivo e depois funding."
+ ],
+ "cuidados": [
+  "Prazo de 5 anos (decadência): cada mês de espera pode fazer competências saírem da janela de recuperação.",
+  "O PIS/COFINS acaba em 2027 e a janela de análise dos saldos credores fecha com a transição. Toda tese passa por análise de aptidão e validação técnica.",
+  "Crédito presumido da agroindústria sofre corte de 10% pela LC 224/2025. O efeito de benefícios estaduais de ICMS no IRPJ/CSLL é avaliado por competência.",
+  "Valores só em faixa e como estimativa preliminar sujeita a validação técnica. A Save não promete resultado, prazo ou aprovação, e produtos financeiros dependem da decisão da instituição.",
+  "Antecipação é operação de instituição autorizada; a Save estrutura e organiza a carteira, nunca é credora."
+ ],
+ "interno": [
+  "Frigoríficos estão bloqueados no piloto da Maquila (D59): não oferecer.",
+  "Atualização de 19/10/2026 (Luis): Gestão de Contas, antecipação e FIDC (Save Invest) e estruturação patrimonial (jurídico) são produtos prontos; crédito internacional e Maquila (João Mattos) seguem só em descoberta até o G2 (15/12/2026), sem taxa, prazo ou fee. A confirmar com o Jurídico e a Save Invest: empresa que contrata e presta, habilitação, taxa da antecipação e remuneração do parceiro.",
+  "Margem do frigorífico médio, ciclo de caixa exato e endividamento setorial: não localizados. A referência de margem líquida de 1% a 3% é prática de mercado, sem fonte primária.",
+  "Pendências do radar: ato anual dos percentuais de crédito presumido do produtor rural e texto consolidado do Anexo I com a LC 227/2026."
+ ],
+ "fontes": [
+  "IBGE via Mercado & Consumo, abate recorde em 2025: https://mercadoeconsumo.com.br/18/03/2026/economia/abate-de-bovinos-frango-e-suinos-foi-recorde-no-brasil-em-2025-aponta-ibge/ (18/03/2026)",
+  "ABIEC via Forbes Agro: https://forbes.com.br/forbesagro/2026/01/brasil-encerra-2025-com-maior-exportacao-de-carne-bovina-da-historia-diz-abiec/ (jan/2026)",
+  "ABPA via Safras: https://safras.com.br/exportacoes-de-carne-de-frango-confirmam-projecoes-positivas-e-fecham-2025-com-alta-de-06-abpa/ (jan/2026)",
+  "Cepea via Band, arroba recorde: https://www.band.com.br/agro/noticias/arroba-do-boi-gordo-atinge-r-356-e-bate-recorde-historico-em-marco-202604021037 (02/04/2026)",
+  "The AgriBiz, margens da Minerva: https://www.theagribiz.com/empresas/frigorificos/na-minerva-a-projecao-e-boa-mas-o-mercado-nao-quer-pagar-para-ver/ (s/d, 2026)",
+  "Money Times, prévia BTG dos frigoríficos 1T26: https://www.moneytimes.com.br/tempestade-perfeita-a-vista-o-que-o-btg-espera-do-resultado-dos-frigorificos-no-1t26-ceci/ (abr/2026)",
+  "Bloomberg Línea, fim da tarifa de 40% dos EUA: https://www.bloomberglinea.com.br/internacional/trump-retira-tarifas-de-40-sobre-cafe-suco-de-laranja-e-carne-bovina-do-brasil/ (20/11/2025)",
+  "Serasa Experian, RJ no agro 1º tri/2026: https://www.serasaexperian.com.br/sala-de-imprensa/agronegocios/recuperacao-judicial-agro-tem-alta-de-22-por-cento-e-acumula-474-pedidos-do-recurso-no-primeiro-trimestre-de-2026-mostram-dados-ineditos-da-serasa-experian/ (ago/2026)",
+  "Serasa Experian, inadimplência em junho/2026: https://www.serasaexperian.com.br/sala-de-imprensa/indicadores/recorde-inadimplencia-das-empresas-superou-9-milhoes-de-reais-em-junho-e-dividas-chegaram-a-232-bilhoes-de-reais-revela-serasa-experian/ (17/08/2026)",
+  "Atlas Público (BCB), Selic a 13,75%: https://atlaspublico.com.br/bcb/noticias/copom-reduz-selic-para-13-75pct-ao-ano-em-decisao-unanime-87748 (16/09/2026)",
+  "IOB, cesta básica e manutenção de crédito: https://noticias.iob.com.br/reforma-tributaria-isencao-cesta-basica/ (2026)",
+  "Contadores CNT, isenção da cesta básica (carnes): https://contadores.cnt.br/projetos/38/noticias/tecnicas/2026/04/27/reforma-saiba-como-sera-a-isencao-de-tributos-da-cesta-basica.html (27/04/2026)",
+  "PwC, LC 224/2025: https://www.pwc.com.br/pt/thinking-about-taxes/tax-intelligence/2025/tax-intelligence-express-ed42-publicacao-da-lc-n224-25.pdf (dez/2025)",
+  "Agrolink, EUDR e rastreabilidade: https://www.agrolink.com.br/noticias/eudr-2026--regra-da-ue-aumenta-exigencia-de-rastreabilidade-para-soja--cafe-e-carne_517838.html (2026)",
+  "Base interna: catálogo de teses da Save (15/10/2026) e produtos internacionais e financeiros (16/10/2026); capital de giro de 22,55% ao ano (BCB, ago/2026) citado nessa base"
+ ]
+}
