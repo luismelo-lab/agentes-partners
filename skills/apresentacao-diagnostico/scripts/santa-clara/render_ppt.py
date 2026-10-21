@@ -27,7 +27,7 @@ body{{width:1920px;height:1080px;background:#000;color:{TXT};font-family:'IBM Pl
 h1{{font-weight:300;line-height:1.08;letter-spacing:-.01em;color:{TXT}}}
 .ouro{{color:{OURO}}} .cin{{color:{CIN}}}
 .rod{{position:absolute;left:80px;bottom:44px;height:34px}} .pg{{position:absolute;right:80px;bottom:50px;font-size:20px;color:{CIN}}}
-.fonte{{position:absolute;left:330px;right:200px;bottom:48px;font-size:17px;line-height:1.3;color:#8a8a8a}}
+.fonte{{position:absolute;left:330px;right:200px;bottom:48px;font-size:18px;line-height:1.3;color:#B0B0B0}}
 .reg{{position:absolute;left:80px;right:80px;height:1px;background:#4a4742}}"""
 
 
@@ -92,10 +92,10 @@ def frente(s, n, tot):
 def numeros(s, n, tot):
     c = f'<h1 style="position:absolute;left:80px;top:70px;width:1600px;font-size:72px">{s["titulo"]}</h1><div class="reg" style="top:250px"></div>'
     for i, (v, cap, sub) in enumerate(s["itens"]):
-        x = 80 + (i % 4) * 450; y = 290 + (i // 4) * 300
+        x = 80 + (i % 4) * 450; y = (400 if s.get("big") else 290) + (i // 4) * 300
         c += (f'<div style="position:absolute;left:{x}px;top:{y}px;width:420px"><div style="font-size:{s.get("fs", 88)}px;font-weight:300;line-height:1;color:{TXT};white-space:nowrap">{v}</div>'
-              f'<div style="margin-top:14px;font-size:26px;line-height:1.25;color:{OURO}">{cap}</div>'
-              f'<div style="margin-top:8px;font-size:21px;line-height:1.3;color:{CIN}">{sub}</div></div>')
+              f'<div style="margin-top:16px;font-size:{34 if s.get("big") else 26}px;line-height:1.25;color:{OURO}">{cap}</div>'
+              f'<div style="margin-top:10px;font-size:{27 if s.get("big") else 21}px;line-height:1.3;color:{CIN}">{sub}</div></div>')
     return pagina(c, n, tot, s.get("fonte", ""))
 
 
@@ -133,13 +133,13 @@ def dor(s, n, tot):
     c += '<div style="position:absolute;right:0;top:0;width:620px;height:1080px;background:linear-gradient(90deg,#000 0%,rgba(0,0,0,0) 40%)"></div>'
     c += (f'<div style="position:absolute;left:80px;top:70px;width:1100px;font-size:24px;letter-spacing:.06em;color:{OURO}">{s["rotulo"]}</div>'
           f'<h1 style="position:absolute;left:80px;top:120px;width:1150px;font-size:66px">{s["titulo"]}</h1>'
-          f'<div style="position:absolute;left:80px;top:360px;width:1100px;font-size:{s.get("nf", 120)}px;font-weight:300;line-height:1;color:{TXT};white-space:nowrap">{s["numero"]}</div>'
-          f'<div style="position:absolute;left:80px;top:{360 + s.get("nf", 120) + 20}px;width:1000px;font-size:25px;line-height:1.3;color:{CIN}">{s["legenda"]}</div>')
+          f'<div style="position:absolute;left:80px;top:320px;width:1100px;font-size:{s.get("nf", 120)}px;font-weight:300;line-height:1;color:{TXT};white-space:nowrap">{s["numero"]}</div>'
+          f'<div style="position:absolute;left:80px;top:{320 + s.get("nf", 120) + 20}px;width:1050px;font-size:28px;line-height:1.3;color:{CIN}">{s["legenda"]}</div>')
     c += '<div class="reg" style="top:700px;right:700px"></div>'
-    c += (f'<div style="position:absolute;left:80px;top:725px;width:520px"><div style="font-size:21px;color:{OURO};letter-spacing:.05em">{s["frente"]}</div>'
-          f'<div style="margin-top:10px;font-size:26px;line-height:1.35;color:{TXT}">{s["entrega"]}</div></div>'
+    c += (f'<div style="position:absolute;left:80px;top:725px;width:520px"><div style="font-size:22px;color:{OURO};letter-spacing:.05em">{s["frente"]}</div>'
+          f'<div style="margin-top:10px;font-size:28px;line-height:1.35;color:{TXT}">{s["entrega"]}</div></div>'
           f'<div style="position:absolute;left:660px;top:725px;width:520px"><div style="font-size:21px;color:{OURO};letter-spacing:.05em">A PERGUNTA</div>'
-          f'<div style="margin-top:10px;font-size:26px;line-height:1.35;color:{TXT}">{s["pergunta"]}</div></div>')
+          f'<div style="margin-top:10px;font-size:28px;line-height:1.35;color:{OURO}">{s["pergunta"]}</div></div>')
     return pagina(c, n, tot, s.get("fonte", ""))
 
 
@@ -174,25 +174,25 @@ def esteira(s, n, tot):
               f'<div style="margin-top:12px;font-size:25px;line-height:1.35;color:{TXT}">{tx[0]}</div></div>')
         if i < 2:
             c += f'<div style="position:absolute;left:{x + 515}px;top:455px;width:70px;height:2px;background:{OURO}"></div><div style="position:absolute;left:{x + 563}px;top:445px;font-size:28px;color:{OURO}">›</div>'
-        c += f'<div style="position:absolute;left:{x}px;top:620px;width:500px;font-size:24px;line-height:1.35;color:{CIN}"><span class="ouro">Abre: </span>{tx[1]}</div>'
+        c += f'<div style="position:absolute;left:{x}px;top:620px;width:500px;font-size:24px;line-height:1.35;color:{CIN}"><span class="ouro">Quando: </span>{tx[1]}</div>'
     c += f'<div style="position:absolute;left:80px;top:850px;width:1700px;font-size:28px;color:{TXT}">{s["barra"]}</div>'
     return pagina(c, n, tot, s.get("fonte", ""))
 
 
 def fim(s, n, tot):
-    c = (f'<h1 style="position:absolute;left:160px;top:120px;width:1500px;font-size:84px">{s["titulo"]}</h1>'
-         f'<img src="{uri(PAD / M["logos"]["fundo_escuro"])}" style="position:absolute;left:160px;top:330px;width:360px">'
-         f'<img src="{uri(PASTA / "fotos/logo-santa-clara.png")}" style="position:absolute;left:620px;top:300px;width:200px">'
-         f'<div class="reg" style="top:500px"></div>'
-         f'<div style="position:absolute;left:160px;top:530px;width:520px;font-size:30px;line-height:1.4">{s["a"]}</div>'
-         f'<div style="position:absolute;left:760px;top:530px;width:480px;font-size:30px;line-height:1.4">{s["b"]}</div>'
-         f'<div style="position:absolute;left:1300px;top:530px;width:480px;font-size:30px;line-height:1.4">{s["c"]}</div>')
+    c = (f'<h1 style="position:absolute;left:80px;top:120px;width:1700px;font-size:88px">{s["titulo"]}</h1>'
+         f'<img src="{uri(PAD / M["logos"]["fundo_escuro"])}" style="position:absolute;left:80px;top:330px;width:360px">'
+         f'<img src="{uri(PASTA / "fotos/logo-santa-clara.png")}" style="position:absolute;left:520px;top:300px;width:200px">'
+         f'<div class="reg" style="top:520px"></div>'
+         f'<div style="position:absolute;left:80px;top:560px;width:520px;font-size:30px;line-height:1.4">{s["a"]}</div>'
+         f'<div style="position:absolute;left:700px;top:560px;width:480px;font-size:30px;line-height:1.4">{s["b"]}</div>'
+         f'<div style="position:absolute;left:1300px;top:560px;width:480px;font-size:30px;line-height:1.4">{s["c"]}</div>')
     return pagina(c, n, tot, rodape=False)
 
 
 def fontes(s, n, tot):
     c = f'<h1 style="position:absolute;left:80px;top:80px;font-size:70px">Fontes</h1><div class="reg" style="top:230px"></div>'
-    c += f'<div style="position:absolute;left:80px;top:260px;width:1760px;font-size:22px;line-height:1.5;color:{CIN}">{s["texto"]}</div>'
+    c += f'<div style="position:absolute;left:80px;top:260px;width:1760px;font-size:28px;line-height:1.6;color:{CIN}">{s["texto"]}</div>'
     return pagina(c, n, tot)
 
 
