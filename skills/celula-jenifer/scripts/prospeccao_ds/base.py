@@ -1,6 +1,7 @@
 """Base da análise D&S: perfil dos clientes da planilha e universo de prospects (Receita local + HubSpot), sem chamada externa."""
 import openpyxl, sqlite3, json, glob, re, collections, os, unicodedata, pickle
-AP=os.path.expanduser("~/agentes-partners"); S = os.environ.get("PROSPECCAO_DS", os.path.expanduser("~/agentes-partners/departamentos/intel-comercial/prospeccao-ds"))  # dados (fora do repositório)
+AP=os.path.expanduser("~/agentes-partners")
+S = os.environ.get("PROSPECCAO_DS", os.path.expanduser("~/agentes-partners/departamentos/intel-comercial/prospeccao-ds"))  # dados (fora do repositório)
 def norm(s): return re.sub(r"[^A-Z ]","",unicodedata.normalize("NFKD",str(s or "")).encode("ascii","ignore").decode().upper().replace("-"," ")).strip()
 db=sqlite3.connect("file:"+AP+"/dados-publicos/receita/cnpj.sqlite?mode=ro",uri=True)
 MUN=dict(db.execute("select codigo,descricao from ref where tipo='municipio'"))
@@ -12,7 +13,7 @@ def ibge(cod,uf):
     n=norm(MUN.get(cod,"")); return IB.get((n,uf)) or IB.get((n.replace(" D "," D"),uf))
 
 # ── clientes da D&S (planilha) ──
-F="/Users/luisfernandomelo/Library/CloudStorage/OneDrive-SAVECOMPANY/00 · Entrada/EMPRESAS DA D&S.xlsx"
+F=os.environ.get("PLANILHA_MASTER", "/Users/luisfernandomelo/Library/CloudStorage/OneDrive-SAVECOMPANY/00 · Entrada/EMPRESAS DA D&S.xlsx")  # planilha de clientes do Master
 lin=list(openpyxl.load_workbook(F,read_only=True,data_only=True).active.iter_rows(values_only=True))[1:]
 # HubSpot: todos os negócios pela raiz
 n=json.load(open(sorted(glob.glob(AP+"/departamentos/resultados/dados/hubspot-*.json"))[-1]))["negocios"]

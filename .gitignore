@@ -6,6 +6,7 @@
 !.gitattributes
 !.github/**
 !README.md
+!CLAUDE.md
 !RUNBOOK.md
 !ARQUITETURA.md
 !DEPARTAMENTOS.md

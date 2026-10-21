@@ -2,9 +2,10 @@
 Só CNPJs de prospects (nunca clientes: o universo já exclui toda raiz que está no HubSpot). Cache compartilhado."""
 import json, os, pickle, subprocess, threading, time
 from concurrent.futures import ThreadPoolExecutor
-S = os.environ.get("PROSPECCAO_DS", os.path.expanduser("~/agentes-partners/departamentos/intel-comercial/prospeccao-ds"))  # dados (fora do repositório); CP = os.path.expanduser("~/agentes-partners/dados-publicos/receita/regime-cache.json")
-cache = json.load(open(CP)); M = pickle.load(open(S + "/modelo-completo.pkl", "rb")); trava = threading.Lock()  # universo inteiro (SO_LUCRO_REAL=0)
-alvo = [p for p in M["pros"] if (p["capital"] or 0) >= 10000 and p["cnpj"] not in cache]
+S = os.environ.get("PROSPECCAO_DS", os.path.expanduser("~/agentes-partners/departamentos/intel-comercial/prospeccao-ds")); CP = os.path.expanduser("~/agentes-partners/dados-publicos/receita/regime-cache.json")
+cache = json.load(open(CP)); M = pickle.load(open(S + "/modelo-completo.pkl", "rb")); trava = threading.Lock()
+UFS = set((os.environ.get("UFS") or "MG").split(","))
+alvo = [p for p in M["pros"] if p["uf"] in UFS and (p["capital"] or 0) >= 10000 and p["cnpj"] not in cache]
 alvo.sort(key=lambda p: (-p["similaridade"], p["nivel_geo"], -(p["capital"] or 0)))
 print(len(alvo), "a consultar", flush=True); feitos = [0]
 def um(p):

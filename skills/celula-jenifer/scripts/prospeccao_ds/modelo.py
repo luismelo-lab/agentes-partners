@@ -10,7 +10,7 @@ do segmento na própria carteira da D&S (ganho ÷ ganho + cancelado, suavizada p
 import collections, math, os, pickle, re, sqlite3, unicodedata
 import numpy as np
 
-S = os.environ.get("PROSPECCAO_DS", os.path.expanduser("~/agentes-partners/departamentos/intel-comercial/prospeccao-ds"))  # dados (fora do repositório); AP = os.path.expanduser("~/agentes-partners")
+S = os.environ.get("PROSPECCAO_DS", os.path.expanduser("~/agentes-partners/departamentos/intel-comercial/prospeccao-ds")); AP = os.path.expanduser("~/agentes-partners")
 B = pickle.load(open(S + "/base.pkl", "rb")); cli, pros = B["cli"], B["pros"]
 db = sqlite3.connect("file:" + AP + "/dados-publicos/receita/cnpj.sqlite?mode=ro", uri=True)
 TEM_BAIRRO = "bairro" in {r[1] for r in db.execute("pragma table_info(estab)")}

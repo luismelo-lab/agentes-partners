@@ -3,6 +3,8 @@
 **Fase atual:** 1 — Diagnóstico (time) · em paralelo: Conselho do Luis em Fase 5 (construção v1 pronta, falta teste real)
 **Última atualização:** 2026-10-02
 
+> **21/10/2026 · padrão único:** toda sessão segue `CLAUDE.md` (raiz). O estado por tema está em `~/agentes-partners/gabinete/SESSOES.md`, nas seções 1 a 12. Desde 15/10 entraram: o protocolo do gerente, o padrão de entrega em 3 blocos, o fluxo único, a pesquisa Big Four com radar semanal, os departamentos `depto-internacional` e `depto-solucoes`, o SSO Entra (`central/`), a prospecção para Master (`skills/celula-jenifer/scripts/prospeccao_ds/`), o fluxo de apresentação de diagnóstico e a estratégia do Funrural. O histórico abaixo fica como registro.
+
 ## Checklist para 100% rodando (revisão de 29/09)
 **Bloqueios de terceiros:** escopo `files` no HubSpot (CRM) · links públicos do Bitrix24 (TI; **ainda ativo**: o Recuperador lê pareceres por esses links. O webhook de consulta, docs/BITRIX.md, cobre a fase da execução, não os arquivos) · obrigatoriedade dos campos de pagamento/% honorário (CRM, D18) · validação LGPD de contatos · marca-save.md (Marketing) · estrutura societária × remuneração de parceiros (Jurídico).
 **Decisões do Luis:** D7-b a D15 (exceto D14) · e-mail/cópia/frequência da Geovana · honorários >50% · campos honorarios_vendedor/gestor/indicador · horário do Conselho semanal · rotina do Jornal · refresh mensal da Receita · plano G.S.H/JGM.

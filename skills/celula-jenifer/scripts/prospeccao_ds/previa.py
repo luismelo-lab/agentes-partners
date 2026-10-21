@@ -2,7 +2,7 @@
 import collections, html, os, pickle, statistics as st
 from playwright.sync_api import sync_playwright
 
-S = os.environ.get("PROSPECCAO_DS", os.path.expanduser("~/agentes-partners/departamentos/intel-comercial/prospeccao-ds"))  # dados (fora do repositório); AP = os.path.expanduser("~/agentes-partners")
+S = os.environ.get("PROSPECCAO_DS", os.path.expanduser("~/agentes-partners/departamentos/intel-comercial/prospeccao-ds")); AP = os.path.expanduser("~/agentes-partners")
 M = pickle.load(open(S + "/modelo.pkl", "rb")); cli, anc, pros = M["cli"], M["anc"], M["pros"]
 FONTES = AP + "/departamentos/marketing-marca/padrao/fontes"; LOGO = AP + "/departamentos/marketing-marca/padrao/logo-save-fundo-escuro.png"
 e = html.escape
