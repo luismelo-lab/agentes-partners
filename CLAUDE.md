@@ -4,7 +4,7 @@ Vale para toda conversa, fork, worktree e rotina neste repositório. O objetivo 
 
 ## 1. Antes de começar
 1. Leia `ESTADO.md` e a seção do seu tema em `~/agentes-partners/gabinete/SESSOES.md`. É uma conversa por tema. Tema novo ganha uma seção.
-2. Rode `git branch --no-merged main` e veja se outra sessão já mexeu nos mesmos arquivos. Se mexeu, junte a branch dela à sua antes de alterar, em vez de refazer.
+2. Rode `git fetch && git branch -a --no-merged main` e veja se outra sessão já mexeu nos mesmos arquivos. Isso inclui as sessões na nuvem, que publicam em `origin/claude/*`. Se mexeu, junte a branch dela à sua antes de alterar, em vez de refazer. Sessão na nuvem sempre faz push da branch, para o trabalho não ficar só lá.
 3. Use a skill da área (`skills/`). Toda demanda passa pelo fluxo único (`infra/fluxo-unico.md`).
 
 ## 2. Como os agentes trabalham (obrigatório)
@@ -15,7 +15,7 @@ Vale para toda conversa, fork, worktree e rotina neste repositório. O objetivo 
 
 ## 3. Regras da casa
 - Nunca leia `.env`. Não altere HubSpot nem GLPI: só leitura e rascunho. Nada é enviado sem aprovação.
-- Nunca prometa valor, prazo ou êxito. A alíquota zero sai sempre via PER, nunca DCOMP. Produtos novos (Crédito Internacional, Maquila, ecossistema financeiro) só entram como descoberta até o G2.
+- Nunca prometa valor, prazo ou êxito. A alíquota zero sai sempre via PER, nunca DCOMP. Produtos em validação (Crédito Internacional, Maquila, captação de capital e home equity, com o João Mattos) só entram como descoberta até o G2. Gestão de Contas, antecipação e FIDC (Save Invest), estruturação patrimonial e tax internacional são produtos prontos (Luis, 19/10/2026).
 - LGPD: dado de cliente fica no Mac. Dados de sócios e contatos ficam só em `dados-publicos/receita/prospects-contatos.json` (permissão 600). Não se busca celular pessoal fora do cadastro público da empresa.
 - Visual: Design System Save v0.5 (`departamentos/marketing-marca/padrao/`). Word pelo `departamentos/produtos/credito-internacional/scripts/gerar_manual_docx.js`, que aceita `DOC_MD`, `DOC_VERSAO`, `DOC_CABECALHO` e `DOC_SELO`.
 
