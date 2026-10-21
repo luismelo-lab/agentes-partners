@@ -1,7 +1,8 @@
 # Maquila no Paraguai: o que as fontes oficiais dizem
 
 > 21/10/2026 · Uso interno · Pedido do Luis: usar fontes oficiais, não só o que foi discutido.
-> **Limite desta leitura:** o ambiente em nuvem bloqueia os sites oficiais (`mic.gov.py`, `bacn.gov.py`, `silpy.congreso.gov.py`, entre outros). Eu **não abri os textos da lei nem do decreto**. Consegui, por busca restrita a domínios oficiais, os **resumos das páginas oficiais** (MIC, Presidência, BACN, SILpy, MEF) e o **endereço exato dos documentos**. Tudo abaixo está marcado: **confirmado em fonte oficial** (a página oficial diz) ou **a conferir no texto**. Para fechar, preciso do texto integral (seção 6).
+> **Atualização de 21/10 (tarde):** com a liberação de rede do Luis, baixei e li o **texto integral do Decreto 5714/2026** (30 páginas, em `scratchpad`, OCR). A Lei 7547 (BACN fora do ar, erro 522) e a Res. 14/2026 ainda precisam de leitura. O decreto confirmou o limite de 10% para vendas internas da maquila pura (item 2 da seção 3).
+> **Limite da leitura anterior:** o ambiente em nuvem bloqueava os sites oficiais (`mic.gov.py`, `bacn.gov.py`, `silpy.congreso.gov.py`, entre outros). Eu **não abri os textos da lei nem do decreto**. Consegui, por busca restrita a domínios oficiais, os **resumos das páginas oficiais** (MIC, Presidência, BACN, SILpy, MEF) e o **endereço exato dos documentos**. Tudo abaixo está marcado: **confirmado em fonte oficial** (a página oficial diz) ou **a conferir no texto**. Para fechar, preciso do texto integral (seção 6).
 
 ## 1. A norma vigente e a cadeia oficial
 | Norma | O que é | Datas | Fonte oficial |
@@ -29,7 +30,7 @@
 | # | Ponto | Por que importa |
 |---|---|---|
 | 1 | **Prazo de permanência dos insumos importados:** o art. 13 da Lei fala em **12 meses**; a FAQ do MIC fala em **24 meses** (12 mais 12, art. 14) | Muda o planejamento de caixa e a garantia na DNIT. Ler os arts. 13 e 14 e o decreto |
-| 2 | **Venda ao mercado paraguaio:** a base da casa cita "até 10% do volume exportado". Nas fontes oficiais, o **10%** aparece como teto de vendas internas da **Zona Franca** (Lei 523/95, art. 16). Não consegui confirmar um percentual na Lei 7547 | Possível troca de regimes. Conferir no texto da 7547 antes de repetir |
+| 2 | **Venda ao mercado paraguaio:** **confirmado no texto do Decreto 5714/2026** (cap. V, seção I, "Comercialização no mercado interno", art. 39 pela numeração do OCR; conferir): a maquiladora pura deve **comunicar previamente** à Secretaria Executiva; o percentual máximo de vendas internas é de **10% do volume exportado no último ano**; as nacionalizações são registradas na conta corrente; a receita das vendas internas paga os tributos internos. O 10% da Zona Franca (Lei 523/95, art. 16) é outro regime | Resolvido para a maquila pura. Modalidades de capacidade ociosa e de serviços: ler a Lei 7547 |
 | 3 | **Base do tributo único:** "o que for maior" entre valor agregado e valor da fatura de exportação. Em maquila de exportação, a fatura costuma ser maior do que o valor agregado | A simulação do Mapa de Entregas usa 1% sobre o valor agregado (ex.: R$ 0,5 mi sobre R$ 50 mi). Se a base for a fatura de R$ 200 mi, o imposto seria R$ 2,0 mi. Só o texto do art. 37 e do decreto dizem qual vale em cada modelo |
 | 4 | **Prazos de tramitação** (60 a 90 dias; 120 dias para o contrato após a resolução biministerial): vêm de guias de 2023 e 2024, do marco antigo | Não repetir como prazo da lei nova. Conferir o Anexo I da Res. 14/2026 e o decreto |
 | 5 | **Norma de transição** do decreto para programas vigentes | Relevante para quem já opera sob a Lei 1064 |
