@@ -57,6 +57,11 @@ def frase(s, n, tot):
     c = foto(s["foto"], pos=s.get("pos", "center"), br=s.get("br", .42))
     c += '<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.25) 65%,rgba(0,0,0,.05) 100%)"></div>'
     c += f'<h1 style="position:absolute;left:80px;top:{s.get("top", 250)}px;width:{s.get("w", 1000)}px;font-size:{s.get("fs", 96)}px">{s["titulo"]}</h1>'
+    if s.get("linhas"):
+        for i, (rot, tx) in enumerate(s["linhas"]):
+            x = 80 + i * 590
+            c += (f'<div style="position:absolute;left:{x}px;top:600px;width:540px"><div style="font-size:24px;color:{OURO};letter-spacing:.02em">{rot}</div>'
+                  f'<div style="margin-top:12px;font-size:29px;line-height:1.35;color:{TXT}">{tx}</div></div>')
     if s.get("numero"):
         c += (f'<div style="position:absolute;left:80px;bottom:190px;width:1400px"><div style="font-size:150px;font-weight:300;line-height:1;color:{TXT}">{s["numero"]}'
               f'<span class="ouro" style="font-size:44px;margin-left:16px">{s.get("unidade", "")}</span></div>'
@@ -88,7 +93,7 @@ def numeros(s, n, tot):
     c = f'<h1 style="position:absolute;left:80px;top:70px;width:1600px;font-size:72px">{s["titulo"]}</h1><div class="reg" style="top:250px"></div>'
     for i, (v, cap, sub) in enumerate(s["itens"]):
         x = 80 + (i % 4) * 450; y = 290 + (i // 4) * 300
-        c += (f'<div style="position:absolute;left:{x}px;top:{y}px;width:420px"><div style="font-size:88px;font-weight:300;line-height:1;color:{TXT};white-space:nowrap">{v}</div>'
+        c += (f'<div style="position:absolute;left:{x}px;top:{y}px;width:420px"><div style="font-size:{s.get("fs", 88)}px;font-weight:300;line-height:1;color:{TXT};white-space:nowrap">{v}</div>'
               f'<div style="margin-top:14px;font-size:26px;line-height:1.25;color:{OURO}">{cap}</div>'
               f'<div style="margin-top:8px;font-size:21px;line-height:1.3;color:{CIN}">{sub}</div></div>')
     return pagina(c, n, tot, s.get("fonte", ""))
