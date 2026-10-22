@@ -58,3 +58,8 @@
 ## 6. Confirmado pelo Luis em 22/10/2026 (D96)
 - O cliente contrata a Save Invest, que presta o serviço. A **Federal Invest é a financiadora**: ela antecipa, avalia o limite especial e tem o registro na CVM. A Save Invest não é credora, não antecipa e não concede limite.
 - O conflito C2 (§5) está resolvido nesse sentido. Os conflitos C1, C3, C4 e C5 continuam abertos.
+
+## 7. WhatsApp sem a API oficial (D97, 22/10/2026)
+- A cobrança roda hoje **fora da API oficial do WhatsApp**. Riscos: o número pode ser bloqueado, os termos do WhatsApp proíbem automação não oficial, a política de 23/09/2026 proíbe "cobrança de dívidas" e há exposição na LGPD quanto à base legal e ao opt-out.
+- O que os agentes fazem: não prometem canal "garantido" e não descrevem o envio como "oficial". Na qualificação, perguntam se o cliente aceita outros canais de reserva (e-mail, SMS, boleto registrado, Pix Cobrança). Registram o risco no parecer para o Junior.
+- O que só o Junior e o Jurídico decidem: a migração para a API oficial, o enquadramento como lembrete de fatura e o plano de contingência. O produto segue enquanto isso.

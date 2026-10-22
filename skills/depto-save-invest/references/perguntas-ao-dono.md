@@ -44,3 +44,15 @@ Aberta em 22/10/2026. Dono: **Junior** (responsável pela Save Invest). Quando a
 | P17 · registro na CVM | **Sim, pela Federal Invest** | O registro é da Federal Invest, não da Save Invest. Ainda falta saber em qual papel (administrador, gestor ou consultoria) e para quais fundos |
 
 Seguem em aberto: P8 (WhatsApp e a política da Meta de 23/09/2026), P15 (papel no pool e no comitê), P16 (base do "líquido Save" da D78) e P21 (FIDC já estruturado).
+
+## Respondidas pelo Luis em 22/10/2026, segunda rodada (D97)
+| Pergunta | Resposta | O que muda |
+|---|---|---|
+| P8 · WhatsApp e política da Meta | **Não usamos a API oficial** | O risco **aumenta**. Os termos do WhatsApp proíbem automação por cliente não oficial, e a política de 23/09/2026 proíbe "cobrança de dívidas" mesmo na API oficial. O número pode ser bloqueado sem aviso. Ver Regulatório e a regra 7 em `regras-e-proibidos.md`. O produto continua: o risco fica registrado e é tratado com o Junior |
+| P15 · papel no comitê e no pool | A Save Invest é a **intermediadora** entre o cliente e a Federal Invest | A Save Invest não assume risco de crédito, que fica com a Federal Invest. A regra "a Save não é credora" fica confirmada |
+| P16 · base do "líquido Save" (D78) | Valor do contrato × % do honorário da Save = líquido Save; o parceiro ganha 10% desse valor | Exemplo: em um contrato de R$ 1.000.000 com honorário de 20%, o líquido Save é R$ 200.000 e o parceiro recebe R$ 20.000. *Leitura a confirmar: se há dedução de tributos ou custos antes dos 10%. Enquanto não houver resposta, use a conta do exemplo.* |
+| P21 · FIDC já estruturado | **Nós estruturamos** (a Save Invest estrutura FIDC) | Resolve em parte o conflito C3: a Save Invest estrutura. Os papéis de administrador, gestor e custodiante continuam com instituição habilitada |
+| P17 · papel da Federal Invest na CVM | **A checar** | Pendente. Não impede a construção |
+| P1 · razão social e CNPJ da Save Invest | **Sem a informação** | Pendente. Nos esqueletos de contrato, fica o campo [razão social e CNPJ a preencher] |
+
+**Regra do Luis (22/10/2026):** o dado que falta não impede a construção. Siga com o que existe, marque o ponto como [pendente: quem fornece] e não invente o dado.

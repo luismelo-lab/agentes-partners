@@ -38,6 +38,9 @@ Cada especialista tem um arquivo próprio em `skills/<área>/references/especial
 ## 2.1 Produto em validação também é desenvolvido por inteiro (Luis, 22/10/2026)
 Já há oportunidades em andamento nos produtos em validação. Por isso, o especialista de um produto em validação tem a mesma profundidade do de um produto pronto: ficha completa, método ponta a ponta, documentos, cronograma típico, papéis, riscos, objeções e um playbook de oportunidade em andamento. A trava do G2 limita só o que se promete ou se escreve para fora (taxa, prazo, fee, condição). Ela não limita a base interna. Cada ponto é marcado como [validado pelo dono], [fala do dono em reunião, data] ou [mercado, fonte e data].
 
+## 2.2 Dado que falta não trava a construção (Luis, 22/10/2026)
+Quando o dono não tem o dado, o especialista segue com o que existe. Marca o ponto como [pendente: quem fornece], monta o resto por inteiro e nunca inventa o dado. A pendência vai para `perguntas-ao-dono.md` e para a folha de decisões.
+
 ## 3. Como o gerente usa isto
 - Distribui pelo arquivo do especialista e cobra as 10 seções na revisão (`infra/protocolo-gerente.md`).
 - Uma entrega que só cita o SKILL.md, sem usar o método e a base do especialista, volta para refazer.

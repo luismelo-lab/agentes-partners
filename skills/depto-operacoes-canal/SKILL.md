@@ -102,3 +102,6 @@ Siga `~/agentes-partners/infra/protocolo-pesquisa.md`. Não se limite ao materia
 ## Repasse e remuneração (decisões de 22/10/2026)
 - **Repasse da recuperação (D64):** cada parceiro tem o seu percentual negociado. Não há regra única de 50% ou mais, e o percentual será revisto com os novos produtos.
 - **Produtos 2027 (D78):** a remuneração do parceiro começa em 10% do líquido Save, definida pelo Gilberto.
+
+## Base dos 10% nos produtos 2027 (D97, 22/10/2026)
+Líquido Save = valor do contrato × % do honorário da Save. O parceiro recebe 10% desse valor. Exemplo: contrato de R$ 1.000.000 com honorário de 20% dá R$ 200.000 de líquido Save, e o parceiro recebe R$ 20.000. Leitura a confirmar: se há dedução de tributos ou custos antes dos 10%. Até a resposta, use esta conta e mostre o exemplo.
