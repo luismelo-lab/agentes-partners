@@ -20,12 +20,12 @@ Arquivos: `references/produtos.md`, `elegibilidade.md`, `faq-validado.md`, `regr
 | 9 | **Revisor de Linguagem & Promessas** | Passa o texto pela lista de frases proibidas e troca pelo que dizer; checa papel da Save, promessa de taxa, prazo ou aprovação, nome de instituição e dado de cliente | "O texto está seguro para sair?" | regras-e-proibidos |
 
 ## Checklist do Revisor (toda entrega)
-- [ ] Nenhuma taxa, prazo, custo, fee ou percentual (antes do G2).
+- [ ] Nenhuma taxa, prazo, custo, fee ou percentual (antes do G2). Única exceção: one-page confidencial com 7% a 10% como exemplo, definido pelo fundo (D88).
 - [ ] A Save aparece como estruturadora, nunca como credora, financiadora ou antecipadora.
 - [ ] "Crédito internacional", não "fundo internacional"; nenhuma frase da lista de proibidas.
 - [ ] Nada de "aprovado", "garantido", "certo": decisão é da instituição, depois da análise.
-- [ ] Remuneração do parceiro só como "em definição" (ou D61 depois do G2).
-- [ ] Sem nome de instituição, de representante ou de cliente em material.
+- [ ] Remuneração do parceiro: CI pela D61 depois do G2; produtos 2027 começam em 10% do líquido Save (D78, 22/10/2026).
+- [ ] Sem nome de instituição, de representante ou de cliente em material. Exceção: UBS no one-page e na proposta Canex (D77).
 - [ ] Toda resposta "a confirmar" está marcada e tem pergunta registrada.
 - [ ] Os 3 blocos do padrão de entrega estão presentes.
 
