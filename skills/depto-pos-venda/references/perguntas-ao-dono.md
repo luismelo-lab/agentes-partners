@@ -21,3 +21,6 @@ O que só um humano responde. Cada pergunta tem por que importa e o especialista
 10. **Dono da rotina de recorrência:** a lista mensal vai para a Daniela levar aos Masters, ou para a Geovana junto com o lote do Recuperador (D27)?
 11. **Recorrência tem novo contrato ou aditivo?** Muda se a recorrência é execução (Pós-venda) ou venda nova (Master).
 12. **Fonte oficial do realizado:** o extrato do Pós-venda passa a ser a fonte da coluna "realizado" da D17, e o campo `recebido` volta ao HubSpot? Quem preenche?
+
+## Respondida pelo Luis em 22/10/2026 (D95)
+- **Pergunta 9:** sim. O honorário de êxito incide sobre o valor compensado de ofício, com a Selic. Explique isso ao parceiro e ao cliente antes do faturamento, para evitar chamado. A cláusula padrão do contrato fica com o depto-contratos.

@@ -34,3 +34,13 @@ Aberta em 22/10/2026. Dono: **Junior** (responsável pela Save Invest). Quando a
 ## Fora do escopo desta lista
 - Venda gerencial e conta escrow (D82): **não entram em lista escrita**. Perguntas sobre os dois vão ao Junior presencialmente, pelo Luis.
 - Crédito internacional, funding, home equity, Maquila: `skills/depto-internacional/references/perguntas-ao-dono.md` (dono: João Mattos).
+
+## Respondidas pelo Luis em 22/10/2026 (D96, a partir do Junior)
+| Pergunta | Resposta | O que muda |
+|---|---|---|
+| P1 · quem contrata e quem presta | O **cliente contrata** o serviço e a **Save Invest presta** | Contrato de prestação de serviço entre o cliente e a Save Invest. A razão social e o CNPJ continuam pendentes |
+| P3 e P4 · Federal Invest e quem compra o título | A **Federal Invest é a financiadora** das operações | Quem antecipa e assume o crédito é a Federal Invest. A Save Invest presta o serviço e não é credora: a regra "a Save não antecipa" está confirmada (resolve o conflito C2) |
+| P14 · limite especial | É uma **avaliação feita pela Federal Invest** | A Save Invest não concede limite. Diga "a financiadora avalia o limite", nunca "a Save libera" |
+| P17 · registro na CVM | **Sim, pela Federal Invest** | O registro é da Federal Invest, não da Save Invest. Ainda falta saber em qual papel (administrador, gestor ou consultoria) e para quais fundos |
+
+Seguem em aberto: P8 (WhatsApp e a política da Meta de 23/09/2026), P15 (papel no pool e no comitê), P16 (base do "líquido Save" da D78) e P21 (FIDC já estruturado).

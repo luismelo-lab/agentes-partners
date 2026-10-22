@@ -54,3 +54,7 @@
 | C3 | **FIDC pronto × MVP.** O Luis classificou FIDC como pronto em 19/10. Na reunião de 13/10, o FIDC foi tratado como MVP ("validado só quando o 1º recurso cai") e o multicedente ficou "a aprofundar". Não há caso de FIDC estruturado pela Save Invest nas fontes | 19/10; 13/10 T32 e T35; `ecossistema-financeiro-reuniao-2026-10-13.md` | Luis com Junior (P21) |
 | C4 | **Remuneração do parceiro.** A D78 fixa 10% do líquido Save. Em 13/10 ficou "remuneração de parceiro em MVP só depois da validação"; o estudo de preços propôs faixas de 10 a 20% para produto financeiro maduro (`precos-fees.md`, proposta, não decisão) | D78; 13/10 T32 | Vale a D78. Falta base de cálculo (P16, P22) |
 | C5 | **"Cobrança de dívidas" no WhatsApp.** A política da Meta lista cobrança de dívidas entre usos proibidos; o produto é cobrança por WhatsApp | Política WhatsApp Business 23/09/2026; 13/10 T6 | Jurídico + Junior (P8) |
+
+## 6. Confirmado pelo Luis em 22/10/2026 (D96)
+- O cliente contrata a Save Invest, que presta o serviço. A **Federal Invest é a financiadora**: ela antecipa, avalia o limite especial e tem o registro na CVM. A Save Invest não é credora, não antecipa e não concede limite.
+- O conflito C2 (§5) está resolvido nesse sentido. Os conflitos C1, C3, C4 e C5 continuam abertos.
