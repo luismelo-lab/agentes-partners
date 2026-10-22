@@ -65,3 +65,7 @@ Os itens abaixo contradizem a base interna. Eles vão ao João antes de qualquer
 - **IR na fonte e gross-up:** 15% para os EUA, sem tratado. Na Suíça, 10% só para banco, com prazo de 5 anos ou mais. Quem paga?
 - **O fee de 10% do exemplo** está acima do benchmark de assessoria (1% a 3%).
 - **PLD:** a Save provavelmente é pessoa obrigada (Lei 9.613, art. 9º) e precisa de cadastro no Coaf. Isso vai ao Jurídico.
+
+## Decisões do Luis no one-page do cliente (22/10/2026), para o João confirmar por escrito antes do envio
+- **Taxa:** citar 7% a 10% ao ano como média de referência, em moeda estrangeira, definida pelo fundo após a análise, sem câmbio, hedge, impostos e custos. Isso substitui, só neste material, a frase padrão da regra B1.
+- **UBS como a instituição suíça:** confirmar o nome e a autorização para citá-lo em material de cliente (uso de marca de terceiro).

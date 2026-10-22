@@ -8,7 +8,9 @@ dentro das travas de references/regras-e-proibidos.md. Até o G2 não entram tax
 Cada cópia sai nominal e numerada, com marca d'água CONFIDENCIAL, para desestimular o repasse.
 
 Uso:  python3 one_page_cliente.py --empresa "Nome da empresa" [--copia 001] [--responsavel "nome, cargo, canal corporativo"] [--saida <pasta>]
-Revisado por Produtos Internacionais, Jurídico e Qualidade/Marketing em 22/10/2026. Distribuição só depois do G2 ou por decisão do Luis.
+Revisado por Produtos Internacionais, Jurídico e Qualidade/Marketing em 22/10/2026.
+Decisão do Luis (22/10/2026): citar a taxa média de 7% a 10% ao ano como exemplo (definida pelo fundo) e a UBS como instituição suíça.
+Confirmar com o João Mattos por escrito (perguntas-ao-dono.md) antes de enviar. Distribuição só depois do G2 ou por decisão do Luis.
 Gera <saida>/Credito-Internacional-One-Page-<empresa>-<copia>.pdf e .png (prévia).
 """
 import argparse, html, os, re, sys
@@ -21,7 +23,7 @@ e = html.escape
 TEXTO = {
     "titulo": "Crédito Internacional",
     "sub": "Capital internacional de médio e longo prazo para empresas brasileiras, estruturado caso a caso.",
-    "oque": "Crédito de instituições financeiras dos Estados Unidos e da Suíça, em moeda forte (dólar ou franco suíço), para projetos com garantia real. Cada operação é estruturada individualmente. A instituição credora analisa, decide e libera os recursos.",
+    "oque": "Crédito de instituições financeiras dos Estados Unidos e da Suíça (UBS), em moeda forte (dólar ou franco suíço), para projetos com garantia real. Cada operação é estruturada individualmente. A instituição credora analisa, decide e libera os recursos.",
     "save": "A Save é a estruturadora da operação. Ela monta o projeto da empresa antes de levá-lo à instituição, apoia o plano de aplicação dos recursos nos aspectos fiscais, contábeis e financeiros e acompanha o processo até a liberação. A Save não concede crédito.",
     "perfil": ["Empresa consolidada, com histórico e reputação no setor", "Faturamento anual a partir de cerca de R$ 50 milhões, comprovado",
                "Necessidade a partir de cerca de US$ 5 milhões", "Garantia real robusta, avaliada caso a caso", "Projeto claro de uso dos recursos e capacidade de pagamento"],
@@ -30,7 +32,7 @@ TEXTO = {
                ("Análise e decisão", "pela instituição credora"), ("Contrato e liberação", "na forma e no cronograma definidos pela instituição")],
     "garantias": "Imóveis, terras produtivas e fazendas, recebíveis, marcas avaliadas e garantias de terceiros. A garantia não precisa estar em nome da empresa. Garantias alternativas, como recebíveis, são avaliadas caso a caso pela instituição.",
     "docs": "Kit bancário, balancetes e DREs dos últimos 2 anos, declarações de impostos, comprovação de faturamento, detalhe das garantias, histórico do empresário e a necessidade de capital com o projeto.",
-    "saber": ["A taxa é definida pela instituição após a análise de crédito.",
+    "saber": ["Taxas médias de referência: de 7% a 10% ao ano, em moeda estrangeira, apenas como exemplo. A taxa de cada operação é definida pelo fundo (instituição credora) após a análise de crédito e não inclui variação cambial, proteção cambial (hedge), impostos e custos da operação.",
               "As condições de custo vêm por escrito antes de qualquer compromisso.",
               "A operação é em moeda estrangeira. O efeito do câmbio é avaliado com a empresa em cada caso.",
               "É uma operação de alguns meses, apoiada em documentos. Não é solução imediata de caixa, e a aprovação depende da instituição.",
@@ -71,7 +73,7 @@ h2 span{{color:#B58A1F;font:400 8pt 'IBM Plex Mono';margin-right:2mm}}
 <div class="marca">CONFIDENCIAL</div>
 <div class="faixa">{e(selo)}</div>
 <div class="miolo">
-<div class="topo"><img src="file://{PAD}/logo-save-fundo-claro.png" alt="Save Co."><span class="rot">Resumo reservado · {e(hoje)}</span></div>
+<div class="topo"><img src="file://{PAD}/logo-save-fundo-claro.png" alt="Save Co."></div>
 <h1>{e(T['titulo'])}</h1><p class="sub">{e(T['sub'])}</p>
 <div class="duas">
  <div><div class="bloco"><h2><span>01</span>O que é</h2><p>{e(T['oque'])}</p></div>
@@ -88,7 +90,7 @@ h2 span{{color:#B58A1F;font:400 8pt 'IBM Plex Mono';margin-right:2mm}}
 </div>
 <div class="rodape">
 <div class="aviso"><b>Confidencial.</b> Documento de uso exclusivo e confidencial de {e(empresa)}. Pedimos que não seja reproduzido nem compartilhado com terceiros. As obrigações de sigilo entre as partes são as do acordo de confidencialidade (NDA). {e(T['aviso'])}</div>
-<div class="cop"><span>Cópia nº {e(copia)} · preparada para {e(empresa)}</span><span>Save Co. · Área Partners</span></div>
+<div class="cop"><span>Cópia nº {e(copia)} · preparada para {e(empresa)} · {e(hoje)}</span><span>Save Co. · Área Partners</span></div>
 <div class="faixa">{e(selo)}</div>
 </div></body></html>"""
 
