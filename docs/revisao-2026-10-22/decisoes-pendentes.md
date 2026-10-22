@@ -1,6 +1,6 @@
 # Decisões pendentes · Folha única
 
-22/10/2026. Esta folha junta as decisões que estavam espalhadas por 10 conversas. Responda na coluna "Sua decisão" (sim, não ou outra opção) e mande a folha de volta. Os agentes aplicam cada resposta no material de origem.
+22/10/2026. Esta folha junta as decisões que estavam espalhadas por 10 conversas. Para responder, use a planilha com campos de seleção `Decisoes-Pendentes-2026-10-22.xlsx` (mesma pasta), que separa cada decisão numa linha (32 ao todo). Os agentes aplicam cada resposta no material de origem.
 
 ## 1. Travam a operação agora
 | # | Decisão | Por que trava | Recomendação das áreas | Prazo | Detalhe em | Sua decisão |

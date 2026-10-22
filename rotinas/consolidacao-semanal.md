@@ -21,7 +21,13 @@ Rotina semanal de consolidação da Área Partners (sexta, 16h). O objetivo é q
    - estado, local dos arquivos e próximo passo de cada tema mexido na semana;
    - seção nova para tema novo;
    - seção de tema parado há mais de 14 dias marcada como "parado desde <data>".
-7. **Decisões:** atualize `docs/revisao-2026-10-22/decisoes-pendentes.md`, tirando as resolvidas e acrescentando as novas, cada uma com a conversa de origem e o prazo. Gere o Word com o `gerar_manual_docx.js` em `04 · Gestão, Metas e Estratégia/Central de Agentes/` (destino por `lib/caminhos.py luis central`).
+7. **Decisões:** a fonte é `docs/revisao-2026-10-22/decisoes.json`, e a folha com campos de seleção está em `04 · Gestão/Central de Agentes/Decisoes-Pendentes-<data>.xlsx`.
+   - Rode `python3 ~/agentes-partners/infra/folha_decisoes.py ler <última folha>`.
+   - Para cada resposta "Aprovar" ou "Aprovar com ajuste", acione a área da coluna "Quem aplica" para aplicar no material de origem, com revisão do gerente. Registre a decisão em `conselho/decisoes.md` quando for do Conselho e tire o item do JSON.
+   - "Reprovar" vai para o histórico do JSON, com o motivo. "Decidir depois" continua na folha.
+   - Acrescente as decisões novas da semana, cada uma com a conversa de origem e o prazo.
+   - Gere a folha de novo com `folha_decisoes.py gerar`. As respostas ainda não aplicadas são mantidas.
+
 8. **Resumo ao Luis:** e-mail pelo caminho da Central (Graph ligado; se não estiver, grave em `04 · Gestão/Central de Agentes/Caixa de saída`). O resumo traz:
    - branches a juntar, com o comando de merge;
    - arquivos resgatados;
