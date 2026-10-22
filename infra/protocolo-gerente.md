@@ -56,3 +56,6 @@ Quando a entrega chega ao time, aparece com a linha "Revisado por <gerente> · <
   5. o gerente consolida.
 
   Não pule a revisão.
+
+## Especialista sênior (Luis, 22/10/2026)
+O gerente distribui pelo arquivo do especialista (`skills/<área>/references/especialistas/<slug>.md`) e, na revisão, confere se a entrega usou o método, a base normativa e as regras da casa dele (`infra/padrao-senior.md`). Uma entrega que só repete o SKILL.md volta para refazer.

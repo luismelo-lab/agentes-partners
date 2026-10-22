@@ -24,7 +24,10 @@ Formato nos arquivos: `fazer`, `precisa`, `falta` e `rascunho` (alertas do plano
 | Recorrência, perdidos e zerados | `recuperador` + `depto-tributario` |
 | Ganho de RT, cliente da carteira, "o que mais ele pode contratar" (bloco "o que você também precisa") | `depto-solucoes` (mapa_conta.py) |
 | Pergunta ou oportunidade de produto em validação (crédito internacional, fundo, funding, captação, home equity, maquila, paraguai, internacionalização) | `depto-internacional` (+ `depto-juridico`/`depto-tributario` quando exigir parecer; trava do G2) |
-| Gestão de Contas, antecipação, FIDC, estruturação patrimonial, tax internacional (produtos prontos, 19/10) | `depto-solucoes` (mapa da conta e esteira) |
+| Gestão de Contas, antecipação e FIDC (Save Invest, prontos, D92) | `depto-save-invest` (dono humano: Junior) |
+| Estruturação patrimonial (pronto) | `depto-juridico` |
+| Tax internacional e comércio exterior (pronto) | `depto-internacional` (Paulo e João Mattos) |
+| "O que mais o cliente pode contratar" (esteira e mapa da conta) | `depto-solucoes` |
 | Rascunho para parceiro ou cliente | passa por `depto-qualidade` (auditoria) antes de sair |
 
 ## O que não se faz mais

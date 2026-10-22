@@ -9,16 +9,16 @@
 | P1 | Recuperação tributária (T01 a T17) | Pronto | Time técnico | `depto-tributario`, `recuperador` | Jurídico, Qualidade | Alíquota zero só via PER, nunca DCOMP; risco da tese A sempre registrado |
 | P2 | Recorrência (novas competências) | Pronto | Time técnico | `depto-tributario` | Jurídico | Decadência de 5 anos |
 | P3 | Crédito presumido de PF e Funrural (T18, T19) | Pronto | Time técnico | `depto-tributario` (Agro) | Jurídico | Funrural: preço e consulta e-CAC/PGFN pendentes do Luis |
-| P4 | Gestão de Contas (cobrança, escrow, e-CAC) | Pronto (Save Invest) | Júnior (Save Invest) | `depto-solucoes`, `depto-internacional` (Analista do Ecossistema) | Jurídico, Qualidade | Quem contrata e quem presta: em aberto |
+| P4 | Gestão de Contas (cobrança, escrow, e-CAC) | Pronto (Save Invest) | Júnior (Save Invest) | `depto-save-invest` (D92) | Jurídico, Qualidade | Quem contrata e quem presta: em aberto |
 | P5 | Gestão de Passivo | Pronto | Time jurídico | `depto-juridico`, `depto-tributario` | Qualidade | Passivo antes do crédito novo |
 | P6 | Passivo bancário, alongamento, carência | Sem ficha | A definir | `depto-internacional` | Jurídico | Sem dono nem preço |
 | P7 | Produtos jurídicos | Pronto | Time jurídico | `depto-juridico` | Qualidade | Marketing jurídico e OAB |
 | P8 | Planejamento tributário e reforma (P01) | Pronto | Time técnico | `depto-tributario` (Reforma) | Jurídico | CBS plena em 2027; IBS em transição |
-| P9 | Antecipação de recebíveis | Pronto (Save Invest) | Save Invest | `depto-internacional` | Jurídico | A Save indica; antecipar é de instituição autorizada |
+| P9 | Antecipação de recebíveis | Pronto (Save Invest) | Junior (Save Invest) | `depto-save-invest` (D92) | Jurídico | A Save indica; antecipar é de instituição autorizada |
 | P10 | Estruturação patrimonial e empresarial | Pronto | Time jurídico | `depto-juridico` | Tributário | Dizer "estruturação patrimonial", não "holding" |
 | P11 | Certificado digital e ART | Sem ficha | A definir | `depto-solucoes` | Jurídico | Sem preço e dono |
 | P12 | Crédito Internacional | Validação, trava G2 | João Mattos | `depto-internacional` | Jurídico, Regulatório & Câmbio | Sem taxa, prazo ou fee antes do G2 |
-| P13 | FIDC, FIDIC, multicedente e multissacado | Pronto (Save Invest) | Save Invest | `depto-internacional` | Jurídico (CVM) | Save não distribui cotas; piso de faturamento a validar |
+| P13 | FIDC, FIDIC, multicedente e multissacado | Pronto (Save Invest) | Junior (Save Invest) | `depto-save-invest` (D92) | Jurídico (CVM) | Save não distribui cotas; piso de faturamento a validar |
 | P14 | Home equity | Validação | João Mattos | `depto-internacional` | Jurídico | Só descoberta |
 | P15 | Maquila e Paraguai | Validação | João Mattos | `depto-internacional` (Maquila & Internacionalização) | Tributário, Jurídico, Regulatório | D59 bloqueia frigorífico; só descoberta |
 | P16 | Captação de capital (equity, investidores, sócio estratégico) | Validação | João Mattos | `depto-internacional` | Jurídico (CVM) | Valor mobiliário: Jurídico antes de qualquer conversa |
