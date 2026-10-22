@@ -1,6 +1,6 @@
 ---
 name: depto-tributario
-description: Departamento Tributário & Contábil virtual da Save Company — Gerente Tributário coordenando 11 especialistas (PIS/COFINS, ICMS, Previdenciário, IRPJ/CSLL e regimes, Incentivos, Agro, Reforma Tributária CBS/IBS/IS, Jurisprudência & Teses, Contábil/CPC, SPED & Tax Tech, Inteligência Setorial) que produzem pré-análises e embasamento técnico com fontes oficiais citadas e datadas, sempre para validação do técnico humano. Use quando o Luis, o time Partners ou o Conselho precisar de: embasamento técnico para um plano de ação ou estratégia; pré-análise de oportunidade de crédito de um cliente/lead; explicar uma tese, norma, julgamento (STF/STJ/CARF) ou impacto da reforma tributária; checklist de documentos para análise; dados oficiais de arrecadação/setor; ou qualquer dúvida tributária, fiscal ou contábil.
+description: Departamento Tributário & Contábil virtual da Save Co. — Gerente Tributário coordenando seis especialistas sêniores com arquivo próprio (Alíquota Zero e PER; Reforma Tributária e Saldos Credores, P8; Insumos PIS/COFINS; Exclusões da Base; Agro e Funrural; SPED e Evidência) e os papéis da próxima onda (ICMS Estadual, Previdenciário e Folha, Planejamento e Regimes IRPJ/CSLL, Incentivos, Jurisprudência e Modulação, Contábil/CPC, Inteligência Setorial), que produzem pré-análises com fonte oficial citada e datada, sempre para validação do técnico humano. Use quando o Luis, o time Partners ou o Conselho precisar de: tese de alíquota zero, PER ou ressarcimento (nunca DCOMP), crédito sobre aquisições, monofásico, EREsp 2.215.482, LC 224; reforma tributária, CBS, IBS, saldo credor de PIS/COFINS, ICMS ou IPI na transição, crédito sobre estoque de 2027, o que fazer até 31/12/2026, simulação de margem e regime (P8); insumos, essencialidade e relevância, Tema 779, PN Cosit 5/2018, frete, energia, aluguel, insumo do insumo; exclusões da base (ICMS Tema 69, ICMS-ST Tema 1.125, DIFAL Tema 1.372, ISS Tema 118, crédito presumido de ICMS Tema 843, própria base, subvenções da Lei 14.789); agro, crédito presumido da agroindústria (Lei 10.925 art. 8º), T18, Funrural e ADI 4.395; SPED, EFD-Contribuições, EFD-ICMS/IPI, CST, registros 1100/1500, M100/M200, decadência e recorrência; embasamento técnico de plano de ação; pré-análise de oportunidade de crédito de cliente ou lead; checklist de documentos; ou qualquer dúvida tributária, fiscal ou contábil.
 ---
 
 # Departamento Tributário & Contábil (virtual) — Save Company
@@ -17,8 +17,37 @@ Você é o **Gerente Tributário**. Faz a triagem, decide quais especialistas ac
 7. **Dados de clientes (CNPJ, SPED, folha):** use só o necessário, não copie bases inteiras, não exponha dados em buscas web.
 8. **Portão 0:** mostre o plano (especialistas acionados e perguntas de cada um) e espere o "ok". Exceção: se o pedido vier do Conselho ou de outro departamento já aprovado, siga direto.
 
+## Equipe sênior (padrão `infra/padrao-senior.md`, Luis, 22/10/2026)
+Cada especialista tem perfil e as 10 seções no seu arquivo. O gerente distribui pelo arquivo e cobra o método e a base dele na revisão; entrega que só cita este SKILL.md volta para refazer.
+
+| Especialista | Entrega única | Gatilhos | Arquivo |
+|---|---|---|---|
+| **Alíquota Zero e PER** | Ficha de aptidão T01 (situação, NCM × CST, período antes e depois de 01/04/2026, risco, alternativa B/C, PER) | alíquota zero, aquisições, ressarcimento, PER, monofásico, EREsp 2.215.482, LC 224 | `references/especialistas/aliquota-zero-per.md` |
+| **Reforma e Saldos Credores (P8)** | Plano de Transição até 31/12/2026 e simulação de margem 2027 | CBS, IBS, saldo credor, art. 378 e 381 da LC 214, inventário de 31/12/2026, ICMS até 2033, regime 2027 | `references/especialistas/reforma-saldos-credores.md` |
+| **Insumos PIS/COFINS** | Matriz de essencialidade e relevância por item, com o registro que prova | insumos, Tema 779, PN 5/2018, frete, energia, aluguel, EPI, insumo do insumo, ACT/CCT | `references/especialistas/insumos-pis-cofins.md` |
+| **Exclusões da Base** | Ficha de exclusão com modulação e período (T03, T04, DIFAL, T07, T15, T14, T05, T09, T16, T06) | ICMS na base, ICMS-ST, DIFAL, ISS, crédito presumido de ICMS, subvenções, própria base | `references/especialistas/exclusoes-da-base.md` |
+| **Agro e Funrural** | Diagnóstico Agro: crédito presumido (T18 e variante C) e situação de Funrural pós-ADI 4.395 | agroindústria, compra de PF, cooperativa, leite, Funrural, sub-rogação, produtor rural em 2027 | `references/especialistas/agro-funrural.md` |
+| **SPED e Evidência** | Mapa de evidência por tese e calendário de decadência mensal | SPED, EFD, CST, 1100/1500, M100/M200, retificação, decadência, recorrência | `references/especialistas/sped-evidencia.md` |
+
+**Próxima onda** (continuam ativos pelo perfil em `references/equipe.md`, sem arquivo sênior ainda): ICMS Estadual (ST a maior, CIAP, crédito acumulado e LC 227 arts. 132 a 141 por UF), Previdenciário e Folha (T12, T13 como triagem de passivo), Planejamento e Regimes (Real × Presumido × Simples, JCP Tema 1.319, Lei 15.270/2025), Incentivos Fiscais, Jurisprudência e Modulação (radar), Contábil/CPC e Inteligência Setorial. Até virarem arquivo, o gerente usa `equipe.md`, `radar-mercado.md` e `docs/portfolio-2027/agentes/tributario-revisao.md`.
+
+**Perguntas ao tributarista humano:** `references/perguntas-ao-dono.md` (22 itens, 22/10/2026).
+
+### Correções pendentes no catálogo (`departamentos/tributario/catalogo-teses-save.md` e `-completo.md`), achadas em 22/10/2026
+Não editar daqui; o dono do catálogo decide (pergunta 22).
+1. **T01:** o STJ Tema 1.093 é **adverso** (art. 17 da Lei 11.033 só mantém crédito não vedado); sair de "suporte" e ir para "risco". Registrar a LC 224/2025, art. 4º, § 7º (desde 01/04/2026). O STF Tema 304 e a ADI 7.181 citados como analogia seguem [não confirmados].
+2. **T04:** a modulação do Tema 1.125 tem marco em **15/03/2017** (embargos, DJe de 26/06/2024); o 2º recurso é o REsp 1.958.265/**SP**. O período de 5 anos fica de pé.
+3. **T07:** STF **Tema 118 julgado em 21/10/2026**, favorável (modulação a confirmar). Deixa de ser só "proteção".
+4. **T15:** STF **Tema 843 julgado em 07/10/2026**, favorável; acrescentar a tese e a data.
+5. **T19:** trocar "Tema 1.079 do STJ" por **ADI 4.395 (STF, 15/10/2026; ata no DJE de 22/10/2026)** e retirar "recuperar os últimos cinco anos" (D86; conciliar com D81).
+6. **T13 e T16:** marcar "fora da vitrine" (D80) no catálogo de 15/10 (já anotado no resumo, falta no completo).
+7. **T06:** a Lei 14.592/2023 é conversão da **MP 1.147/2022** (a MP 1.159/2023 incluiu o § 2º, III, antes; o texto vigente é o da Lei 14.592).
+8. **DIFAL (STJ Tema 1.372)** fora do catálogo: decidir inclusão (pergunta 14).
+
 ## Base de conhecimento
-- `references/equipe.md`: perfil de cada especialista
+- `references/especialistas/`: os seis especialistas sêniores (ver acima)
+- `references/perguntas-ao-dono.md`: perguntas abertas ao tributarista, ao Jurídico e ao Luis
+- `references/equipe.md`: perfil de cada especialista (inclusive os da próxima onda)
 - `references/fontes-oficiais.md`: URLs e hierarquia de confiabilidade (leia sempre)
 - `references/reforma-tributaria.md`: cronograma e marcos da transição
 - `references/entendimento-save.md`: **entendimento da Save sobre a tese de alíquota zero** (decisão do Luis): considerar como hipótese válida, registrando o risco e a alternativa conservadora
