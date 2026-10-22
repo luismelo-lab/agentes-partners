@@ -235,7 +235,7 @@ Padrão do `regras-e-proibidos.md`. As frases de Crédito Internacional e Maquil
 7. **Programa de formalização:** pode ser conduzido pela Save sem o risco de participação no ilícito (CP art. 29)? Deve ser encomendado ao escritório?
 8. **Escrow:** em qual instituição financeira, em nome de quem, e o que a Save pode dizer sem prometer proteção?
 9. **Antecipação:** o produto exige **duplicata escritural**? A partir de quando, para qual porte, segundo a norma vigente do CMN/BCB?
-10. **Prazos:** edital 6/2026 encerrado; **novo edital** da PGFN? Modelo de preço de passivo sem divisão de honorários.
+10. **Prazos (corrigido em 22/10/2026 pelo depto-juridico):** o edital 6/2026 não está encerrado: o Edital PGDAU 10/2026 (DOU de 02/10/2026) prorrogou a adesão até 29/01/2027, às 19h. Detalhe em `skills/depto-juridico/references/especialistas/gestao-passivo-tributario.md`. Modelo de preço de passivo sem divisão de honorários.
 11. **LC 236/2026:** texto oficial do inciso do art. 151; dispensa do acréscimo de 30%; vigência.
 12. **Art. 163 da Lei 11.101:** ler o texto vigente, numeração dos §§ 7º e 8º, e efeito sobre créditos tributários e sobre ACC e ACE.
 13. **FIDC:** percentuais de subordinação por categoria no Anexo II; efeito do art. 42 sobre a Save (consultora) e sobre cedentes vinculados.
