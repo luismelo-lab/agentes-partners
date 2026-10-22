@@ -1,5 +1,8 @@
 # Características dos produtos extraídas das reuniões de 24/09 e 21/10
 
+> **ERRATAS (22/10, revisão dos agentes):** este arquivo foi escrito antes da revisão de Tributário, Jurídico e Internacional. As correções estão na seção 2.1 de [consolidado-agentes.md](consolidado-agentes.md) e valem sobre o texto abaixo. Itens afetados: E1 a E16.
+
+
 > Só o que descreve produto ou serviço: o que é, para quem, requisitos, condições ditas, processo, entregáveis e limites. Sem análise do cliente. Tudo é **dito em reunião, a validar** com o dono (João Mattos, Jurídico, Tributário) antes de entrar em ficha ou material. Fonte: R1 = reunião de 24/09; R2 = reunião de 21/10.
 
 ## 1. Captação de recursos no exterior (funding / crédito internacional) · R1

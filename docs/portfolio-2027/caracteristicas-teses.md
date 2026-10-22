@@ -1,5 +1,8 @@
 # Características das teses e serviços de base (T01 a T19, P01, P02)
 
+> **ERRATAS (22/10, revisão dos agentes):** este arquivo foi escrito antes da revisão de Tributário, Jurídico e Internacional. As correções estão na seção 2.1 de [consolidado-agentes.md](consolidado-agentes.md) e valem sobre o texto abaixo. Itens afetados: E1 a E16.
+
+
 > Mesmo recorte de `caracteristicas-produtos.md`: só atributos de produto, extraídos do catálogo completo de 15/10 (`departamentos/tributario/catalogo-teses-save-completo.md`, que continua sendo a fonte do texto). Coluna "Via" e "Dados para o diagnóstico" foram lidas do campo Atuação; o que não consta do catálogo está marcado "(inferido)". Ticket é interno.
 
 ## 1. Atributos comuns a todas as teses de recuperação

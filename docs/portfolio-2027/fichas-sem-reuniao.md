@@ -1,5 +1,8 @@
 # Fichas de produtos sem base de reunião · rascunho para avaliação do Luis
 
+> **ERRATAS (22/10, revisão dos agentes):** este arquivo foi escrito antes da revisão de Tributário, Jurídico e Internacional. As correções estão na seção 2.1 de [consolidado-agentes.md](consolidado-agentes.md) e valem sobre o texto abaixo. Itens afetados: E1 a E16.
+
+
 > **22/10/2026 · sem aprovação de nenhuma área.** Construído a partir de (1) o perfil e as referências dos agentes (`depto-solucoes`, `depto-internacional`, `depto-juridico`, `depto-tributario`), (2) o handoff e o ecossistema v1.0 e (3) pesquisa na web de 22/10/2026. Fora de escopo, por decisão do Luis: **certificado digital e ART**, **home equity** e o **programa de formalização**.
 >
 > **Como ler as marcas:** `[WEB]` fato de fonte pública, a conferir no texto oficial; `[AGENTES]` vem das bases internas; `[HIPÓTESE]` proposta minha, sem dono; `[VALIDAR JURÍDICO]` e `[VALIDAR TRIBUTÁRIO]` não saem desta pasta sem o humano. Nada aqui é oferta, taxa, prazo ou promessa. Valores, percentuais e nomes de instituição não vão a cliente.
