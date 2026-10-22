@@ -169,4 +169,4 @@ Só no one-page confidencial do cliente (`scripts/one_page_cliente.py`) é permi
 - citar "taxas médias de referência de 7% a 10% ao ano, em moeda estrangeira, apenas como exemplo", sempre com a frase de que a taxa é definida pela instituição credora (o fundo) após a análise, sem câmbio, hedge, impostos e custos;
 - citar a UBS como a instituição suíça.
 
-Condições para enviar: confirmação escrita do João Mattos (`perguntas-ao-dono.md`), NDA assinado e aviso validado por advogado. Em qualquer outro material, valem as regras acima.
+**Confirmado em 22/10/2026 (D77 e D88):** o João confirmou a faixa de 7% a 10% como exemplo, e a UBS foi aprovada em ligação por vídeo. O one-page pode ser usado. A UBS também pode aparecer na proposta Canex. Em qualquer outro material, valem as regras acima.

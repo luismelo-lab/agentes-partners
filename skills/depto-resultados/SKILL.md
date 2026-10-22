@@ -67,3 +67,10 @@ Siga `~/agentes-partners/infra/protocolo-pesquisa.md`. Não se limite ao materia
 - **Visão Big Four:** pergunta de negócio → situação, implicação e recomendação · faixa quantificada com premissas · alternativa de mercado e benchmark · risco explícito · lente do setor · próximo passo com dono e prazo.
 - **Conflito com a base interna:** a decisão da Save continua valendo; sinalize no bloco "o que você também precisa" e proponha a pergunta ao dono.
 - **Registro:** o log da entrega lista as fontes externas (com data), a idade do radar usado e os conflitos encontrados.
+
+## Metas e escopo (decisões de 22/10/2026)
+- **Meta do Q4 (D64):** R$ 200 mi.
+- **Meta 2027 (D75):** será sugerida pela diretoria. Não use o cenário-base de R$ 49,8 mi como meta.
+- **Clientes sem Master (D76):** são de outra área e ficam fora dos números, das metas e das listas da Área Partners.
+- **Percentual de honorário (D71 e D73):** só é informado no ganho. Não cobre na criação do negócio.
+- **Repasse (D64):** cada parceiro tem o seu percentual negociado, sem regra única de 50% ou mais. Será revisto com os novos produtos.

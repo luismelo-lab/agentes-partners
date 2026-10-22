@@ -83,3 +83,7 @@ Siga `~/agentes-partners/infra/protocolo-pesquisa.md`. Não se limite ao materia
 - **Visão Big Four:** pergunta de negócio → situação, implicação e recomendação · faixa quantificada com premissas · alternativa de mercado e benchmark · risco explícito · lente do setor · próximo passo com dono e prazo.
 - **Conflito com a base interna:** a decisão da Save continua valendo; sinalize no bloco "o que você também precisa" e proponha a pergunta ao dono.
 - **Registro:** o log da entrega lista as fontes externas (com data), a idade do radar usado e os conflitos encontrados.
+
+## Repasse e remuneração (decisões de 22/10/2026)
+- **Repasse da recuperação (D64):** cada parceiro tem o seu percentual negociado. Não há regra única de 50% ou mais, e o percentual será revisto com os novos produtos.
+- **Produtos 2027 (D78):** a remuneração do parceiro começa em 10% do líquido Save, definida pelo Gilberto.

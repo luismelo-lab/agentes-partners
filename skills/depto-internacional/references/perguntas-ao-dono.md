@@ -69,3 +69,11 @@ Os itens abaixo contradizem a base interna. Eles vão ao João antes de qualquer
 ## Decisões do Luis no one-page do cliente (22/10/2026), para o João confirmar por escrito antes do envio
 - **Taxa:** citar 7% a 10% ao ano como média de referência, em moeda estrangeira, definida pelo fundo após a análise, sem câmbio, hedge, impostos e custos. Isso substitui, só neste material, a frase padrão da regra B1.
 - **UBS como a instituição suíça:** confirmar o nome e a autorização para citá-lo em material de cliente (uso de marca de terceiro).
+
+## Respondidas em 22/10/2026 (folha de decisões do Luis)
+| Data | Item | Resposta | Fonte |
+|---|---|---|---|
+| 22/10 | Taxa de 7% a 10% como exemplo no one-page | Confirmada pelo João | D88 |
+| 22/10 | UBS como instituição suíça | Aprovada em ligação por vídeo com o João | D77 |
+| 22/10 | Hedge na proposta Canex | Pode-se informar que acrescenta cerca de 1% sobre o valor solicitado (João) | D77 |
+| 22/10 | Remuneração do parceiro nos produtos 2027 | 10% do líquido Save no início, definido pelo Gilberto | D78 |

@@ -10,7 +10,7 @@ Cada cópia sai nominal e numerada, com marca d'água CONFIDENCIAL, para desesti
 Uso:  python3 one_page_cliente.py --empresa "Nome da empresa" [--copia 001] [--responsavel "nome, cargo, canal corporativo"] [--saida <pasta>]
 Revisado por Produtos Internacionais, Jurídico e Qualidade/Marketing em 22/10/2026.
 Decisão do Luis (22/10/2026): citar a taxa média de 7% a 10% ao ano como exemplo (definida pelo fundo) e a UBS como instituição suíça.
-Confirmar com o João Mattos por escrito (perguntas-ao-dono.md) antes de enviar. Distribuição só depois do G2 ou por decisão do Luis.
+Confirmado pelo João em 22/10/2026 (D77, D88): pode ser usado. Liberado pelo Luis em 22/10/2026 (D88).
 Gera <saida>/Credito-Internacional-One-Page-<empresa>-<copia>.pdf e .png (prévia).
 """
 import argparse, html, os, re, sys

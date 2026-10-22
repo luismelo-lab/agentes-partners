@@ -32,3 +32,8 @@ A organização segue os 12 passos de `docs/ecossistema/racional-e-fechamento-ec
 3. **A reforma cria urgência na onda 1.** O PIS/COFINS acaba em 2027. A recuperação e a análise de saldos credores entram antes da transição.
 4. **No máximo 2 produtos novos por vez por cliente,** para não sobrecarregar o cliente nem a área que entrega.
 5. **Produto em validação ou definição (hoje: Crédito Internacional, Maquila, captação de capital e home equity, conduzidos pelo João Mattos)** entra na esteira como "descoberta", com a data do portão, nunca como proposta.
+
+## Decisões de 22/10/2026 (folha do Luis)
+- **Escopo 2027 ao parceiro (D83):** entram os produtos prontos e também os que estão em validação. Estes aparecem como descoberta, sem condição.
+- **Antecipação sobre venda gerencial e conta escrow (D82):** continuam no portfólio, mas são tema da Save Invest (Junior) e só tratados presencialmente, por serem sensíveis. Os agentes não os escrevem em material nem em mensagem.
+- **Remuneração do parceiro nos produtos 2027 (D78):** começa em 10% do líquido Save.

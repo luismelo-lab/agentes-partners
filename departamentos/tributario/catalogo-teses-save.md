@@ -29,3 +29,7 @@ Vias: **ADM** (PER/DCOMP, revisão de débitos, retificações) · **JUD** (deci
 | Planejamento Estratégico | Consultivo | Metas, indicadores, workshops | Empresas em expansão ou profissionalização | Reunião inicial gratuita; orçamento após diagnóstico |
 
 Observação do resumo geral: a recuperação pode ser por compensação (mesma natureza, PIS, COFINS, IRPJ, CSLL, previdenciárias), restituição (pagamento indevido, em espécie) ou ressarcimento (não cumulativo com operações desoneradas).
+
+## Decisões de 22/10/2026 (folha do Luis)
+- **Fora da vitrine (D80):** "Sistema S (teto de 20 salários)" (STJ Temas 1.079 e 1.390) e "PIS/COFINS fora da base do IRPJ/CSLL (Presumido)" (STJ Tema 1.312). O Sistema S vira triagem de passivo. Não oferecer como recuperação.
+- **Funrural:** a citação "Tema 1.079 STJ" está errada (o tema é do Sistema S). A base é a **ADI 4.395 (STF, 15/10/2026)**: inconstitucional só até 31/12/2017, modulação em aberto, acórdão não publicado (`docs/teses/funrural-adi-4395-estrategia.md`). O Luis aprovou lançar "Revisão do Funrural anterior a 2018" em Gestão de Passivo (D86) e manteve a tese T19 (D81). **A conciliar:** se a T19 continua como recuperação ao lado do produto de passivo.

@@ -143,6 +143,8 @@ Cada etapa só começa com a anterior aprovada.
 - **Entra:** desativar o registro ou tirar a atribuição de papéis bloqueia o acesso na hora, sem apagar nada.
 - **Rotinas:** a variável `CENTRAL_FONTE=artifact` faz voltar ao `ArtifactData`.
 
+> **22/10/2026 (D89):** aprovados o Azure Static Web Apps (Standard) e o Table Storage.
+
 ## 10. Decisões para começar
 1. **Hospedagem:** aprovar Azure Static Web Apps (Standard) e Azure Functions no locatário da Save. A alternativa é App Service, que custa mais e não traz ganho para este uso.
 2. **Armazenamento:** Azure Table Storage (simples e barato) ou Lista do SharePoint (o time vê também pelo SharePoint).
