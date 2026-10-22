@@ -8,24 +8,24 @@
 
 ### Proteína animal
 - Frigoríficos estão bloqueados no piloto da Maquila (D59): não oferecer.
-- Crédito Internacional, FIDC, Gestão de Contas, antecipação e estruturação patrimonial só em descoberta até o G2 (15/12/2026): sem taxa, prazo, fee ou nome de instituição ao cliente.
+- Gestão de Contas, antecipação e FIDC (Save Invest) e estruturação patrimonial (jurídico) são produtos prontos (Luis, 19/10/2026). Crédito Internacional e Maquila (João Mattos) ficam só em descoberta até o G2 (15/12/2026): sem taxa, prazo, fee ou nome de instituição ao cliente.
 - Margem do frigorífico médio, ciclo de caixa exato e endividamento setorial: não localizados. A referência de margem líquida de 1% a 3% é prática de mercado, sem fonte primária.
 - Pendências do radar: ato anual dos percentuais de crédito presumido do produtor rural e texto consolidado do Anexo I com a LC 227/2026.
 
 ### Café e grãos
 - Crédito internacional: só descoberta até o portão G2. Contrato futuro e CPR como garantia estão em aberto (item 13). Sem condição ao cliente.
-- Antecipação, FIDC, Gestão de Contas e estruturação patrimonial seguem em definição. Quem antecipa precisa de autorização confirmada pelo Jurídico (VALIDAR JURÍDICO).
+- Gestão de Contas, antecipação, FIDC e estruturação patrimonial estão prontos (19/10). A confirmar com o Jurídico e a Save Invest: quem contrata e quem presta, habilitação e taxa da antecipação (VALIDAR JURÍDICO).
 - Compromissos do Luis (13/10): mapear exportadores de café com ativos acima de R$ 60 mi e marcar o 1º cliente do café com um caso real.
 - Maquila não se aplica ao setor. Percentuais de remuneração de parceiros seguem a definir após validação.
 
 ### Varejo alimentar
-- Antecipação, FIDC, Gestão de Contas, Crédito Internacional e estruturação patrimonial estão só em descoberta até o G2 (15/12/2026); sem taxa, prazo ou fee ao cliente.
+- Crédito Internacional está só em descoberta até o G2 (15/12/2026), sem taxa, prazo ou fee ao cliente. Gestão de Contas, antecipação, FIDC e estruturação patrimonial estão prontos (19/10).
 - Multicedente/multissacado: aprofundamento em reunião futura; sem dono, parceiro, preço ou portão. Referência interna de ICP do FIDC: faturamento a partir de ~R$ 10 mi por mês.
 - Crédito Internacional: ICP interno de porte, garantia real e necessidade a partir de US$ 5 mi; estrutura abaixo disso é pergunta em aberto.
 - Maquila: sem aderência no setor, não oferecer. Alíquota zero na revenda: fora para supermercado (restrição do catálogo). Insumos no varejo: controvertido, não usar como tese principal.
 
 ### Combustíveis e GLP
-- Gestão de Contas, antecipação, FIDC, estruturação patrimonial e crédito internacional seguem em validação ou definição: só descoberta, sem taxa, prazo ou fee, até a decisão do dono e o portão G2.
+- Crédito internacional segue em validação: só descoberta, sem taxa, prazo ou fee até o G2. Gestão de Contas, antecipação, FIDC e estruturação patrimonial estão prontos (19/10).
 - FIDC só faz sentido para rede grande ou distribuidora acima de R$ 10 mi por mês; crédito internacional fora do perfil do setor; Maquila sem aderência (não oferecer).
 - Dados não localizados: margem líquida e endividamento setorial. Vigência do decreto de publicação de margens do diesel (anunciado em 14/04/2026) não confirmada. Aging dos clientes: pedir.
 - Próximo edital de transação da PGFN após o Edital 6/2026: não localizado. Acompanhar no radar antes de propor transação.
@@ -39,12 +39,12 @@
 ### Transporte rodoviário de carga
 - Margem setorial, endividamento do setor e composição por porte e regime da base: não localizados. Aging dos embarcadores deve ser pedido ao cliente.
 - Gestão de Contas e antecipação: em aberto quem contrata, habilitação de quem presta, taxa e escopo. Nada de condição ao cliente antes da decisão do dono do produto.
-- FIDC: MVP sem dono, parceiro, preço ou portão registrados. Só transportadora com mais de R$ 10 mi/mês. Crédito internacional fora do perfil do setor; Maquila sem aderência.
+- FIDC: pronto na Save Invest (19/10). Só transportadora com mais de R$ 10 mi/mês. Crédito internacional fora do perfil do setor; Maquila sem aderência.
 - Pendências do radar: ato anual dos percentuais do crédito presumido do TAC (até setembro), texto consolidado dos anexos com a LC 227/2026 e vigência do decreto de margens do diesel.
 
 ### Panificação e indústria de alimentos
 - Crédito internacional: só descoberta até o G2 (15/12/2026). Sem taxa, prazo ou fee. Faixas de porte do funding seguem pendentes (v2.3 x reunião de 13/10).
-- Gestão de Contas, antecipação e FIDC: empresa contratante, taxa e remuneração do parceiro em aberto; FIDC sem dono, parceiro, preço ou portão.
+- Gestão de Contas, antecipação e FIDC: prontos na Save Invest (19/10). Seguem em aberto a empresa contratante, a taxa e a remuneração do parceiro (D11).
 - Captação de equity: linha a formalizar; taxas e prazos citados na reunião de 24/09 não constam do v2.3 e não vão ao cliente. Pendente estrutura abaixo de US$ 5 mi.
 - Maquila: baixa aderência (perecível, pouco intensivo em mão de obra) e fora do piloto; D59 e estudo pago só após 30/06/2027. Margem e endividamento do setor: não localizados.
 

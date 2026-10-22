@@ -15,6 +15,7 @@ Entrada ──► 1. Agente de triagem ──► 2. Áreas responsáveis ──�
 | **Originação** | Indicação de empresa pelo parceiro, pelo BDR ou nas análises (WhatsApp, e-mail ou painel) | `whatsapp-caixa-time` ou `central-agentes-email`, conforme a origem |
 
 ## 1. Triagem
+Antes de tudo, passe o pedido pelo porteiro (`infra/porteiro.md`, `infra/ja_existe.py`). Se for repetido, continuação ou travado, a resposta parte do que já existe.
 O agente lê a mensagem e as evidências (áudio transcrito, print, documento, CNPJ). Em 1 frase, ele diz o que a pessoa quer, quem é o dono do pedido e qual área responde.
 
 ## 2. Áreas responsáveis
@@ -30,7 +31,8 @@ O agente aciona o agente da área com o caso, sem Portão 0 (o pedido vem de out
 | ICP, Receita, prospecção | `depto-intel-comercial` |
 | Recorrência, reanálise de casos | `recuperador` / `revisor-diagnostico` |
 | O que mais o cliente pode contratar, cross-sell, esteira, mapa de valor, carteira do Master | `depto-solucoes` |
-| Crédito internacional, fundo, funding, FIDC, antecipação, gestão de contas, home equity, maquila, Paraguai, internacionalização | `depto-internacional` (sem taxa, prazo ou fee antes do G2) |
+| Crédito internacional, fundo, funding, captação de capital, home equity, maquila, Paraguai, internacionalização | `depto-internacional` (sem taxa, prazo ou fee antes do G2) |
+| Gestão de Contas, cobrança, antecipação de recebíveis, FIDC, estruturação patrimonial, tax internacional (produtos prontos, 19/10) | `depto-solucoes` (esteira e encaixe) + Save Invest ou `depto-juridico`, que entregam |
 
 **Originação** sempre passa por quatro checagens antes de devolver:
 - Receita (situação, regime, CNAE e UF);

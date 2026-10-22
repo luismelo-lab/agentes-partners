@@ -1,6 +1,6 @@
 ---
 name: apresentacao-diagnostico
-description: Transforma um diagnóstico tributário pronto (PDF "Proposta de serviços de revisão tributária") na apresentação padrão ao cliente, depois de o time tributário avaliar cada tese (item de linha) e alterar o que não se sustenta. Gera PDF e PowerPoint no Design System Save, com o slide "Oxigenar, estruturar e escalar" (modelo Canex, com os produtos financeiros do ecossistema) e o case do segmento buscado na biblioteca de cases. Use quando o Luis ou a Geovana falarem em apresentação do diagnóstico, "deck do diagnóstico", "apresentar o diagnóstico da empresa X", revisão das teses do diagnóstico antes de ir ao cliente, case por segmento, ou "oxigenar, estruturar e escalar".
+description: Transforma um diagnóstico tributário pronto (PDF "Proposta de serviços de revisão tributária") na apresentação padrão ao cliente, depois de o time tributário avaliar cada tese (item de linha) e alterar o que não se sustenta. Gera PDF e PowerPoint no Design System Save, com o slide "Destravar caixa, proteger e controlar, crescer" (D1, 21/10; antes "Oxigenar, estruturar e escalar") (modelo Canex, com os produtos financeiros do ecossistema) e o case do segmento buscado na biblioteca de cases. Use quando o Luis ou a Geovana falarem em apresentação do diagnóstico, "deck do diagnóstico", "apresentar o diagnóstico da empresa X", revisão das teses do diagnóstico antes de ir ao cliente, case por segmento, ou "oxigenar, estruturar e escalar" (nome antigo da esteira), "destravar caixa, proteger e controlar, crescer".
 ---
 
 # Apresentação de diagnóstico (padrão Save)
@@ -14,7 +14,7 @@ Leia `~/agentes-partners/departamentos/tributario/apresentacao-diagnostico/FLUXO
 5. **Case do segmento:** vem de `biblioteca-cases/cases.json` (só aprovado; `--rascunho` inclui o não aprovado, marcado). Quando o Luis enviar cases, cadastrar seguindo o `README.md` da pasta (anonimizado, com data-base e fonte).
 6. **Entrega:** PDF e PowerPoint na pasta do cliente em `06 · Marketing e Apresentações` do OneDrive, mais `REVISAO-time-tributario.md` (uso interno: antes × depois de cada linha). Resposta final com o link de cada arquivo.
 
-Regras de texto: sem valor de mercado, offshores ou preço; "estruturação patrimonial" em vez de "holding"; sem "garantia"; rodapé de pré-análise e êxito; estatística de mercado não é dado Save; terceira etapa chama-se Escalar. Requer `pptxgenjs` em `~/.partners-node/node_modules` (ou NODE_PATH) e Playwright.
+Regras de texto: sem valor de mercado, offshores ou preço; "estruturação patrimonial" em vez de "holding"; sem "garantia"; rodapé de pré-análise e êxito; estatística de mercado não é dado Save; os movimentos chamam-se Destravar caixa, Proteger e controlar e Crescer (D1, 21/10). Requer `pptxgenjs` em `~/.partners-node/node_modules` (ou NODE_PATH) e Playwright.
 
 ## Revisão do Gerente (obrigatória, regra do Luis de 15/10/2026)
 Siga `~/agentes-partners/infra/protocolo-gerente.md`.

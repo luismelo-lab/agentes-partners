@@ -97,3 +97,6 @@ Siga `~/agentes-partners/infra/protocolo-pesquisa.md`. Não se limite ao materia
 - **Visão Big Four:** pergunta de negócio → situação, implicação e recomendação · faixa quantificada com premissas · alternativa de mercado e benchmark · risco explícito · lente do setor · próximo passo com dono e prazo.
 - **Conflito com a base interna:** a decisão da Save continua valendo; sinalize no bloco "o que você também precisa" e proponha a pergunta ao dono.
 - **Registro:** o log da entrega lista as fontes externas (com data), a idade do radar usado e os conflitos encontrados.
+
+## Prospecção de novos clientes para um Master (desde 21/10/2026)
+`scripts/prospeccao_ds/` (README com os passos): universo pela Receita, só Lucro Real, geografia (bairro → região → cidade → vizinhas), similaridade com os ganhos do Master, sócios e telefones da empresa, e planilha de ligações em lotes. Dono do universo e do score: `depto-intel-comercial`. Dono da cadência e das ligações: esta célula.

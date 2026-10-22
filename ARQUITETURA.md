@@ -187,3 +187,8 @@ agentes-partners/
     parceiros/        (roster, contatos, particularidades)
     padroes-resposta/ (exemplos de boas respostas)
 ```
+
+## Atualização 22/10/2026: áreas novas e regras de operação
+- `depto-solucoes` (Contas e Soluções): dono do cross-sell, do mapa da conta e da esteira Destravar caixa → Proteger e controlar → Crescer. Também roteia os produtos prontos da Save Invest (Gestão de Contas, antecipação, FIDC) e a estruturação patrimonial.
+- `depto-internacional` (Produtos Internacionais): Crédito Internacional, Maquila, captação de capital e home equity, em validação com o João Mattos (trava do G2).
+- Operação: `CLAUDE.md` (padrão único), `infra/porteiro.md` (validar repetição antes de executar), `infra/protocolo-gerente.md`, `infra/padrao-entrega.md`, `infra/fluxo-unico.md` e `infra/protocolo-pesquisa.md`.

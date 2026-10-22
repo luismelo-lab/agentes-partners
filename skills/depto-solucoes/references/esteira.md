@@ -1,6 +1,6 @@
 # Esteira do cliente: 3 ondas
 
-A organização segue a narrativa validada em 13/10/2026: **Destravar caixa → Proteger e controlar → Crescer**. A regra é **gerar caixa primeiro**. O caixa paga a onda seguinte e abre os dados (DRE, balanço e débitos) de que a próxima onda precisa.
+A organização segue os 12 passos de `docs/ecossistema/racional-e-fechamento-ecossistema-save.md` (fonte única, D1 de 21/10/2026): **Destravar caixa → Proteger e controlar → Crescer**. A regra é **gerar caixa primeiro**. O caixa paga a onda seguinte e abre os dados (DRE, balanço e débitos) de que a próxima onda precisa.
 
 ## Onda 1 · Destravar caixa (0 a 6 meses): caixa rápido, risco baixo
 | Produto | Status | Quem entrega | Depende de | Abre caminho para |
@@ -9,21 +9,21 @@ A organização segue a narrativa validada em 13/10/2026: **Destravar caixa → 
 | Recorrência (novas competências) | pronto | `recuperador` | último fechamento e 12 ou mais competências novas | — |
 | Crédito presumido de compras de PF e Funrural (agroindústria) | pronto | `depto-tributario` | compras de produtor PF | Planejamento agro |
 | Gestão de Contas (cobrança com IA, paga no êxito) | pronto | Save Invest | venda a prazo B2B | Acesso a DRE e balanço, antecipação e funding |
+| Antecipação de recebíveis (instituição autorizada) | pronto | Save Invest | carteira B2B registrada | FIDC |
+| Gestão de Passivo (transação, parcelamento, compensação com o próprio crédito) | pronto | `depto-juridico` + `depto-tributario` | débito apontado no parecer ou na consulta | Certidão negativa, que é pré-requisito de crédito |
 
 ## Onda 2 · Proteger e controlar (3 a 12 meses): passivo, carga e governança
 | Produto | Status | Quem entrega | Depende de | Abre caminho para |
 |---|---|---|---|---|
-| Gestão de Passivo (transação, parcelamento, compensação com o próprio crédito) | pronto | `depto-juridico` + `depto-tributario` | débito apontado no parecer ou na consulta | Certidão negativa, que é pré-requisito de crédito |
 | Produtos Jurídicos (defesa e acompanhamento) | pronto | `depto-juridico` | débito suspenso, intimação ou ação | — |
 | Planejamento tributário e reforma (CBS/IBS) | pronto | `depto-tributario` | Real ou Presumido, faturamento ≥ R$ 4,8 mi | Estruturação patrimonial |
-| Antecipação de recebíveis (instituição autorizada) | pronto | Save Invest | carteira B2B registrada | FIDC |
 | Estruturação patrimonial | pronto | `depto-juridico` | porte e patrimônio | Garantias para o funding |
 
 ## Onda 3 · Crescer (6 a 24 meses): funding e novos mercados
 | Produto | Status | Quem entrega | Depende de | Observação |
 |---|---|---|---|---|
 | Crédito Internacional (funding) | em validação (trava do G2) | `depto-internacional` | faturamento ≥ R$ 50 mi, garantia ~2x, 2 anos de demonstrações, passivo organizado | Só descoberta até o G2 |
-| FIDC | pronto | Save Invest | faturamento ≥ ~R$ 10 mi por mês com recebíveis | MVP |
+| FIDC | pronto | Save Invest | faturamento ≥ ~R$ 10 mi por mês com recebíveis | pronto desde 19/10 (antes era MVP) |
 | Maquila no Paraguai | em estruturação | `depto-internacional` | indústria intensiva em mão de obra, no Lucro Real | Frigoríficos bloqueados (D59) |
 
 ## Regras de sequência

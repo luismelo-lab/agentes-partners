@@ -66,7 +66,7 @@ Placar no mérito do art. 25: 5 votos pela constitucionalidade (Gilmar Mendes, M
 - **23 pareceres citam Funrural, 19 deles com ação judicial ou suspensão de exigibilidade.** São processos de 2010 a 2020, alguns perdidos depois de 2017 e outros com trânsito parcialmente favorável. Esses casos entram primeiro na triagem.
 - **Base pública (Receita), empresas ativas fora do Simples:** cerca de 9,8 mil adquirentes nos segmentos de carnes, laticínios, frigoríficos e leite, nos estados da base.
 
-## 5. Estratégia comercial: Oxigenar → Estruturar
+## 5. Estratégia comercial: Destravar caixa → Proteger e controlar
 **Posicionamento:** "Funrural antigo: verificar se sua empresa tem débito, processo ou depósito que a decisão do STF de outubro de 2026 alcança". É revisão de passivo e de processos, **não** promessa de restituição.
 
 ### Onda 1 · Carteira atual (semanas 1 a 3)

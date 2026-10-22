@@ -26,7 +26,7 @@
  ],
  "jornada": [
   {
-   "onda": "Oxigenar",
+   "onda": "Destravar caixa",
    "janela": "0 a 6 meses",
    "objetivo": "Recuperar o crédito que já existe e organizar a cobrança das redes, para gerar caixa antes das demais decisões.",
    "solucoes": [
@@ -54,7 +54,7 @@
    "entrega": "Tributário, com revisão do diagnóstico; Contas e Soluções para a cobrança"
   },
   {
-   "onda": "Estruturar",
+   "onda": "Proteger e controlar",
    "janela": "3 a 12 meses",
    "objetivo": "Montar o mapa do mix por NCM para 2027 e dar ao caixa uma base mais estável.",
    "solucoes": [
@@ -82,7 +82,7 @@
    "entrega": "Tributário; Jurídico; Produtos Financeiros com instituição autorizada"
   },
   {
-   "onda": "Expandir",
+   "onda": "Crescer",
    "janela": "12 a 24 meses",
    "objetivo": "Financiar a ampliação de capacidade com a alternativa que o caixa e a estrutura comportarem.",
    "solucoes": [
@@ -108,7 +108,8 @@
     }
    ],
    "entrega": "Produtos Financeiros; Internacional; Jurídico para a estruturação"
-  }
+  },
+  "Atualização de 19/10/2026 (Luis): Gestão de Contas, antecipação e FIDC (Save Invest) e estruturação patrimonial (jurídico) são produtos prontos; crédito internacional e Maquila (João Mattos) seguem só em descoberta até o G2 (15/12/2026), sem taxa, prazo ou fee. A confirmar com o Jurídico e a Save Invest: empresa que contrata e presta, habilitação, taxa da antecipação e remuneração do parceiro."
  ],
  "aderencia": [
   {

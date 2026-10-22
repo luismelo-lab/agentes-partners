@@ -225,9 +225,9 @@
    ]
   },
   "PI4": {
-   "rotulo": "Encaixe no ecossistema financeiro (caixa, dívida, carteira)",
-   "celula": "Produtos Internacionais",
-   "skill": "depto-internacional",
+   "rotulo": "Encaixe no ecossistema (caixa, dívida, carteira, FIDC, antecipação)",
+   "celula": "Contas e Soluções",
+   "skill": "depto-solucoes",
    "entrega": "Sinais financeiros lidos, produto que entra primeiro (Gestão de Contas, antecipação, alongamento, FIDC, funding ou home equity) e o que pedir",
    "precisa": [
     "CNPJ ou link do negócio",

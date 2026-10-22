@@ -163,3 +163,10 @@
 10. **MQ:** percentual a definir (MQ-Q4). Contas fora do roster: conta da casa no piloto, com preferência de 10 dias úteis ao parceiro de origem (D53, pendente).
 11. **Originador com participação (ex.: trading no kit de 07/10):** participação definida em contrato próprio e limitada ao crédito. Se valesse para serviço jurídico, seria captação remunerada, vedada.
 12. **Conta de receita:** sempre líquida da fatia do parceiro, em 3 colunas (contratado · conservador · realizado), rotulada como potencial (D16/D17).
+
+## Exceção registrada (22/10/2026, decisão do Luis)
+Só no one-page confidencial do cliente (`scripts/one_page_cliente.py`) é permitido:
+- citar "taxas médias de referência de 7% a 10% ao ano, em moeda estrangeira, apenas como exemplo", sempre com a frase de que a taxa é definida pela instituição credora (o fundo) após a análise, sem câmbio, hedge, impostos e custos;
+- citar a UBS como a instituição suíça.
+
+Condições para enviar: confirmação escrita do João Mattos (`perguntas-ao-dono.md`), NDA assinado e aviso validado por advogado. Em qualquer outro material, valem as regras acima.

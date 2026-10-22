@@ -1,5 +1,8 @@
 # Fluxo: diagnóstico pronto → apresentação ao cliente
 
+> **Nomenclatura (D1, 21/10/2026):** os movimentos se chamam **Destravar caixa → Proteger e controlar → Crescer** (`docs/ecossistema/racional-e-fechamento-ecossistema-save.md`). "Oxigenar, Estruturar, Expandir/Escalar" é o nome antigo.
+
+
 Padrão definido pelo Luis em 14/10/2026. Base visual e de conteúdo: a apresentação institucional da Save (`06 · Marketing e Apresentações/APRESENTAÇÃO BRASSOL.pdf` e `00 · Entrada/01. Save Co. (1).pptx`). Aqui a base vira **apresentação do diagnóstico**, no Design System Save v0.5 (capa e fechamento em preto, miolo claro, como é cliente), pelo motor do Marketing.
 
 ## Etapas
@@ -29,7 +32,7 @@ Os blocos em negrito mudam em todo diagnóstico; os demais são a base fixa. Sli
 - Rodapé fixo: pré-análise sujeita a validação técnica e jurídica; êxito sem desembolso inicial; resultados passados não garantem futuros.
 - Estatística de mercado nunca aparece como dado da Save.
 
-## Oxigenar, estruturar e escalar
+## Destravar caixa, proteger e controlar, crescer
 Modelo do slide e perguntas do diagnóstico que ativam cada item: `MODELO-OXIGENAR-ESTRUTURAR-ESCALAR.md`. A terceira etapa se chama **Escalar** (no Canex era "Expandir").
 
 ## Biblioteca de cases
@@ -37,7 +40,7 @@ Modelo do slide e perguntas do diagnóstico que ativam cada item: `MODELO-OXIGEN
 
 ## Pendências
 - Definição de "reconectado" e data-base dos números de segmento (João ou Depto Dados).
-- Quem presta cada serviço do slide "Oxigenar, estruturar e escalar" (Save ou parceiro) e o enquadramento na OAB (Jurídico humano).
+- Quem presta cada serviço do slide "Destravar caixa, proteger e controlar, crescer" (Save ou parceiro) e o enquadramento na OAB (Jurídico humano).
 - Fontes oficiais: o Planalto e o portal da Receita não abriram durante a revisão de 14/10; dispositivos de lei marcados "conferir".
 - Descrição de Save ID e AssinePro na base de conhecimento.
 
