@@ -22,6 +22,7 @@ A pergunta que a área responde: *"Fizemos a recuperação tributária deste fri
 - `references/esteira.md`: as 3 ondas, a ordem, as dependências e quem entrega cada produto.
 - `references/demonstracao-valor.md`: mapa de valor da conta, business case, KPIs por produto e roteiro de QBR.
 - `references/playbooks-setoriais.md`: retrato de cada setor, mudanças regulatórias, dores, aderência e esteira por setor, KPIs. É a visão Big Four de Industry Practice.
+- `scripts/mapa_base_parceiro.py`: encaixe de produto na base de clientes de um parceiro (docs/ecossistema/conexao-base-parceiros.md). `scripts/gerar_esteira_cliente.py`: a esteira completa para o cliente, em Word, com os 12 passos.
 - `scripts/mapa_conta.py`: o motor de aderência (tabela `PRODUTOS`, uma regra por produto). Somente leitura e local.
 - Catálogo de teses: `~/agentes-partners/departamentos/tributario/catalogo-teses-save.md`. Produtos novos: `~/.claude/skills/depto-internacional/references/produtos.md`.
 - Saída: `~/agentes-partners/departamentos/solucoes/` (`carteira-<data>.json` e `.xlsx`, `entregas/`).

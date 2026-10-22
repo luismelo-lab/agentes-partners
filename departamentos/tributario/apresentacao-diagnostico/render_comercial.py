@@ -74,7 +74,8 @@ def fundo(nome, op=0.28, blur=2):
 
 
 def foto_css(nome, pos="center"):
-    return f"background-image:url({uri(ASS / (nome + '.jpg'))});background-position:{pos}"
+    extra = Path(PASTA_DECK[0]) / "fotos" / (nome + ".jpg")   # fotos do cliente têm prioridade sobre as institucionais (Santa Clara, 21/10/2026)
+    return f"background-image:url({uri(extra if extra.exists() else ASS / (nome + '.jpg'))});background-position:{pos}"
 
 
 def faixa(s, topo):
@@ -150,7 +151,8 @@ def timeline(s, n, tot):
 
 def roadmap(s, n, tot):
     """Três etapas em pilares ascendentes, ligados por uma curva dourada (arte da Save: preto, ouro, linhas finas)."""
-    et = s["etapas"]; GANHO = {"Oxigenar": "Mais caixa e menos dívida", "Estruturar": "Previsibilidade e controle", "Escalar": "Crescimento sustentável"}
+    et = s["etapas"]; GANHO = {"Destravar caixa": "Mais caixa e menos dívida", "Proteger e controlar": "Previsibilidade e controle", "Crescer": "Crescimento sustentável",
+             "Oxigenar": "Mais caixa e menos dívida", "Estruturar": "Previsibilidade e controle", "Escalar": "Crescimento sustentável"}  # nomes antigos aceitos (decks já gerados)
     W, GAP = 540, 70; tops = [530, 450, 370]; bottom = 975; xs = [80 + i * (W + GAP) for i in range(3)]
     marca = uri(PADRAO / M["logos"]["simbolo_contorno_ouro"])
     pts = [(xs[i] + W / 2, tops[i] - 62) for i in range(3)]

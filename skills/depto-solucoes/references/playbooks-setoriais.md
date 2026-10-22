@@ -107,7 +107,7 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 |---|---|---|---|---|
 | 1 Destravar caixa | RT alíquota zero (PER) → crédito presumido de PF → CPP → Gestão de Contas (atacado) | Parecer, SPED, folha | 0–6 meses | `depto-tributario`, `revisor-diagnostico`, ecossistema |
 | 2 Proteger e controlar | Passivo (com o crédito abatendo débito) → defesa adm. → planejamento para 2027 → antecipação | Débitos mapeados; CND | 3–12 meses | `depto-juridico`, `depto-tributario`, instituição autorizada |
-| 3 Crescer | CI (frigorífico grande, com terra e planta) → FIDC | CND, 2 anos de demonstrações, garantias | 6–24 meses | `depto-internacional` (após o G2) |
+| 3 Crescer | CI (frigorífico grande, com terra e planta) → FIDC | CND, 2 anos de demonstrações, garantias | 6–24 meses | `depto-internacional` (CI só após o G2) + Save Invest (FIDC, pronto) |
 
 ### Demonstração de valor
 - **KPIs:** caixa liberado (R$); carga efetiva de PIS/COFINS (crédito ÷ tributo pago); dias de ciclo de caixa (pagamento do boi × recebimento); DSO; custo da dívida (% a.a.) contra 22,55% do giro.
@@ -187,7 +187,7 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 |---|---|---|---|---|
 | 1 Destravar caixa | Conta gráfica e insumos (exportador) ou alíquota zero (grãos) → Funrural → antecipação via instituição autorizada | SPED, exportações, DCTFWeb | 0–6 meses | `depto-tributario`, ecossistema |
 | 2 Proteger e controlar | Defesa de glosas → passivo → planejamento (2027, regime agro) → estruturação patrimonial | Débitos e despachos mapeados | 3–12 meses | `depto-juridico`, `depto-tributario` |
-| 3 Crescer | CI (giro de safra ou troca de dívida) → FIDC | CND, garantias reais livres, 2 anos de demonstrações | 6–24 meses | `depto-internacional` (após o G2) |
+| 3 Crescer | CI (giro de safra ou troca de dívida) → FIDC | CND, garantias reais livres, 2 anos de demonstrações | 6–24 meses | `depto-internacional` (CI só após o G2) + Save Invest (FIDC, pronto) |
 
 ### Demonstração de valor
 - **KPIs:** saldo credor convertido em caixa (R$); custo do giro de safra (% a.a. e deságio); prazo médio de estoque; DSO; carga efetiva.

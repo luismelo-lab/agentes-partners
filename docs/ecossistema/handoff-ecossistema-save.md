@@ -1,5 +1,8 @@
 # Passagem de contexto: Ecossistema Save (Destravar caixa, Proteger e controlar, Crescer)
 
+> **Registro histórico da conversa de 20/10.** **Nomenclatura (D1, 21/10/2026):** os movimentos se chamam **Destravar caixa → Proteger e controlar → Crescer** (`docs/ecossistema/racional-e-fechamento-ecossistema-save.md`). "Oxigenar, Estruturar, Expandir/Escalar" é o nome antigo.
+
+
 > **Para o Claude que ler este arquivo:** esta é a continuação de uma sessão de consultoria estratégica com Luís Fernando de Melo, Gerente de Parcerias e Canais da Save. Responda em português. Luís **não quer concordância automática**: quer ser desafiado e "afiar o machado" rumo a ideias escaláveis. Continue de onde a conversa parou (última pergunta no fim deste arquivo).
 
 ---

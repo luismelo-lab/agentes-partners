@@ -214,11 +214,11 @@ def r_rt(s):
 PRODUTOS = [
     ("RT", "Recuperação Tributária", 1, "pronto", "depto-tributario + recuperador + revisor-diagnostico", r_rt),
     ("GC", "Gestão de Contas (cobrança com IA)", 1, "pronto", "Save Invest", r_gestao_contas),
-    ("PAS", "Gestão de Passivo (transação e parcelamento)", 2, "pronto", "depto-juridico + depto-tributario", r_passivo),
+    ("PAS", "Gestão de Passivo (transação e parcelamento)", 1, "pronto", "depto-juridico + depto-tributario", r_passivo),
     ("JUR", "Produtos Jurídicos (defesa e acompanhamento)", 2, "pronto", "depto-juridico", r_juridico),
     ("PLAN", "Planejamento tributário e reforma (CBS/IBS)", 2, "pronto", "depto-tributario", r_planejamento),
     ("EP", "Estruturação patrimonial", 2, "pronto", "depto-juridico", r_patrimonial),
-    ("ANT", "Antecipação de recebíveis (instituição autorizada)", 2, "pronto", "Save Invest", r_antecipacao),
+    ("ANT", "Antecipação de recebíveis (instituição autorizada)", 1, "pronto", "Save Invest", r_antecipacao),
     ("FIDC", "FIDC", 3, "pronto", "Save Invest", r_fidc),
     ("CI", "Crédito Internacional (funding)", 3, "em validação", "João Mattos (depto-internacional)", r_ci),
     ("MQ", "Maquila no Paraguai", 3, "em estruturação", "João Mattos e Paulo (depto-internacional)", r_maquila),

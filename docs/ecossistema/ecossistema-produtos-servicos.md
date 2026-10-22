@@ -33,7 +33,7 @@ Meta do João: até 2027 ter produtos validados para a Save se posicionar de fat
         (parecer fiscal · DRE · balanço · SCR/Bacen · e-CAC · SPED)
                                 │
    ┌────────────────────────────┼────────────────────────────┐
-   │ ONDA 1 · OXIGENAR          │ ONDA 2 · ESTRUTURAR        │ ONDA 3 · EXPANDIR
+   │ ONDA 1 · DESTRAVAR CAIXA          │ ONDA 2 · PROTEGER E CONTROLAR        │ ONDA 3 · CRESCER
    │ (0–6 meses)                │ (3–12 meses)               │ (6–24 meses)
    │                            │                            │
    │ Recuperação tributária     │ Gestão de Passivo          │ Crédito Internacional (funding)
@@ -59,7 +59,7 @@ Regras de sequência (vigentes em `skills/depto-solucoes/references/esteira.md`)
 
 Legenda de status (ver a atualização de 19/10 no topo): **Maduro** (vende hoje) · **Em definição** (desenho feito, falta decisão do dono) · **MVP / em validação** (só descoberta) · **Em estruturação** (sem cliente).
 
-### ONDA 1 · OXIGENAR
+### ONDA 1 · DESTRAVAR CAIXA
 
 #### P1. Recuperação tributária (teses do catálogo)
 - **O que é:** levantamento e recuperação de créditos de PIS/COFINS e correlatos, nos últimos 5 anos, por tese e por perfil (CNAE × regime). Detalhe das teses na seção 4.
@@ -87,7 +87,7 @@ Legenda de status (ver a atualização de 19/10 no topo): **Maduro** (vende hoje
 - **Status:** **pronto para venda, oferta da Save Invest** (Luis, 19/10). Cobrança em produção desde outubro, com carteira interna rodando e 1º cliente externo previsto. Fora do Padrão de Produto Novo.
 - **Em aberto:** empresa que contrata, taxa da antecipação, regra de remuneração do parceiro, escopo exato, habilitação de quem presta.
 
-### ONDA 2 · ESTRUTURAR
+### ONDA 2 · PROTEGER E CONTROLAR
 
 #### P5. Gestão de Passivo
 - Transação, parcelamento, compensação com o próprio crédito. **Gatilho:** débito apontado no parecer ou na consulta. **Resultado:** certidão negativa (pré-requisito de crédito). Entrega: `depto-juridico` + `depto-tributario`. **Maduro.**
@@ -105,15 +105,15 @@ Legenda de status (ver a atualização de 19/10 no topo): **Maduro** (vende hoje
 - Regime mais eficiente, créditos antigos antes da extinção, simulação 2027–2033. **Gatilho:** Real ou Presumido, faturamento ≥ R$ 4,8 mi. **Maduro.**
 
 #### P9. Antecipação de recebíveis
-- Ver P4. Vendida **só como parte da Gestão de Contas**, via instituição autorizada. **Em definição.**
+- Ver P4. Vendida **só como parte da Gestão de Contas**, via instituição autorizada. **Pronto (Save Invest, Luis, 19/10/2026).**
 
 #### P10. Estruturação patrimonial
-- Estrutura de proteção patrimonial, camadas patrimoniais, eventualmente offshore. **Não usar "holding" como nome genérico.** Serve também de garantia para o funding. **Em definição.** Entrega: `depto-juridico`.
+- Estrutura de proteção patrimonial, camadas patrimoniais, eventualmente offshore. **Não usar "holding" como nome genérico.** Serve também de garantia para o funding. **Pronto (Luis, 19/10/2026).** Entrega: `depto-juridico`.
 
 #### P11. Certificado digital e ART
 - Serviços de ancoragem e fidelização: o certificado digital já foi o melhor produto identificado em apresentação no RS; ART/recuperação tributária é o destino natural de quem fecha um produto financeiro. **Status:** a detalhar (ficha própria ausente).
 
-### ONDA 3 · EXPANDIR
+### ONDA 3 · CRESCER
 
 #### P12. Crédito Internacional / funding (CI)
 - **O que é:** crédito em moeda forte (dólar ou franco suíço), estruturado caso a caso, com garantia real e projeto de uso. **Nunca chamar de "fundo internacional"** (risco CVM). A Save é **estruturadora, nunca credora**.
