@@ -14,13 +14,13 @@
 | Handoff do ecossistema | `docs/ecossistema/handoff-ecossistema-save.md` | Visão 360, mapa de conexão, jornada no tempo, pendências |
 | Ecossistema v1.0 (19/10) | `docs/ecossistema/ecossistema-produtos-servicos.md` | P1 a P17, sinais, regras e travas |
 | Teses de base (T01 a T19, P01, P02) | `departamentos/tributario/catalogo-teses-save-completo.md` (fonte) e `teses-indice.md` (índice) | Texto técnico fiel ao time; fecha a lacuna nº 1 da seção 9 do ecossistema |
-| Reunião de 24/09 (indústria de presunto cru) | transcrição no iCloud do Luis (não vai ao git); resumo em `insights-transcricoes.md` | Dor do cliente, captação, modelo dos fundos |
-| Reunião de 21/10 (Paraguai e expansão industrial) | transcrição em `00 · Entrada` do OneDrive (não vai ao git); resumo em `insights-transcricoes.md` | Maquila, custo de produção, ciclo, objeções |
+| Reunião de 24/09 (indústria de presunto cru) | transcrição no iCloud do Luis (não vai ao git); resumo em `caracteristicas-produtos.md` | Dor do cliente, captação, modelo dos fundos |
+| Reunião de 21/10 (Paraguai e expansão industrial) | transcrição em `00 · Entrada` do OneDrive (não vai ao git); resumo em `caracteristicas-produtos.md` | Maquila, custo de produção, ciclo, objeções |
 | Esteira, sinais, playbooks | `skills/depto-solucoes/references/` | Regras de sequência e setores |
 | Produtos financeiros e portões | `skills/depto-internacional/references/` | Elegibilidade, G0 a G4, proibidos, perguntas ao João |
 
 ## 3. Arquivos desta pasta
-- `insights-transcricoes.md`: o que as duas reuniões ensinam ao portfólio, com o que não pode virar promessa.
+- `caracteristicas-produtos.md`: só as características de produto das duas reuniões (o que é, requisitos, condições ditas, processo, entregáveis, limites), por produto.
 - `teses-indice.md`: índice das 21 fichas de base.
 - `matriz-agentes.md`: produto × dono × agente × revisores × trava.
 - `jornada-2027.md`: esqueleto da jornada e das conexões, com as lacunas a fechar.
