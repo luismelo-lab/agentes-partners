@@ -21,7 +21,7 @@ Marca: "Estimativa preliminar sujeita a validação técnica". Sem promessa de v
 | Recorrência | Caixa novo por competência | Média por trimestre do diagnóstico × trimestres disponíveis (regra do recuperador) |
 | Gestão de Passivo | Débito resolvido (R$) · desconto obtido · certidão | Débito apontado no parecer e resultado da transação |
 | Planejamento e reforma | Redução de carga (p.p.) · efeito em 2027–2033 | Simulação do `depto-tributario` |
-| Gestão de Contas | DSO (dias) · inadimplência recuperada | Carteira e vencidos do cliente (pedir) |
+| Gestão de Contas | DSO (dias) · inadimplência recuperada | Carteira e vencidos do cliente (pedir); simulação é do `depto-save-invest` (D92) |
 | Antecipação e FIDC | Custo do capital de giro vs. banco | Taxa média de desconto do BCB vs. a proposta (sem número antes da validação) |
 | Crédito Internacional | Custo da dívida e prazo vs. a dívida atual | Só depois do G2 |
 

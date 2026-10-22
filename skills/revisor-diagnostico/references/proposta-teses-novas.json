@@ -1,0 +1,31 @@
+{
+ "_leia": "PROPOSTA (22/10/2026), não lida pelo revisor.py. Teses que hoje só aparecem como 'o que os parecidos tiveram' e que a revisão manual passa a tratar como lacuna. Para entrar em teses.json e no script, precisa do ok do Tributário e do Luis (perguntas-ao-dono.md, itens 2 e 3). Base e risco: especialistas/lacunas-por-perfil.md. PRÉ-ANÁLISE: sujeita a validação técnica.",
+ "teses": {
+  "EX_DIFAL": {"nome": "Exclusão do ICMS-DIFAL da base do PIS/COFINS",
+   "base_legal": "STJ Tema 1.372 (REsp 2.174.178/SC), julgado em 20/08/2026, acórdão de 28/08/2026, efeitos desde 15/03/2017 ressalvadas as ações em curso; Lei 10.522/2002, art. 19",
+   "risco": "favorável vinculante, sem trânsito; RFB ainda não se curvou",
+   "gatilho": "Real ou Presumido com venda a consumidor final não contribuinte em outra UF (varejo com e-commerce, indústria com venda direta)",
+   "veto_junto": "DIFAL a contribuinte antes da LC 190/2022 (Tema 1.369); DIFAL de 2022 sem ação até 29/11/2023 (STF Tema 1.266)",
+   "tipo": "indébito", "documentos": "EFD ICMS/IPI E300/E310", "aderencia_padrao": "média"},
+  "EX_ISS": {"nome": "Exclusão do ISS da base do PIS/COFINS (T07)",
+   "base_legal": "STF Tema 118 (RE 592.616), placar 5 x 5, fora da pauta desde 25/02/2026",
+   "risco": "controvertida: só tese de proteção, nunca somar ao valor",
+   "gatilho": "serviço no Presumido ou Real com faturamento a partir de R$ 150 mil/mês",
+   "tipo": "indébito", "documentos": "EFD-Contribuições A100/A170", "aderencia_padrao": "baixa"},
+  "IPI_NREC": {"nome": "IPI não recuperável na base do crédito de PIS/COFINS (até 19/12/2022)",
+   "base_legal": "STJ Tema 1.373 (julgado em 11/03/2026): veto a partir de 20/12/2022 (IN RFB 2.121/2022)",
+   "risco": "médio antes de 12/2022; prazo de 5 anos vence mês a mês",
+   "gatilho": "atacado ou varejo no Real que compra de industrial",
+   "tipo": "saldo credor", "documentos": "EFD-Contribuições C170 de entrada", "aderencia_padrao": "média", "urgencia": "+1"},
+  "EX_ST_CFOP": {"nome": "Regra nova para EX_ST: abrir pela CFOP de entrada 1.403/2.403, não só pela linha da matriz",
+   "base_legal": "STJ Tema 1.125; veto ao crédito sobre ST pago (Tema 1.231)",
+   "tipo": "regra", "documentos": "EFD ICMS/IPI C170 de entrada"},
+  "JCP_RETRO": {"nome": "Dedução de JCP de exercícios anteriores (achado de triagem, IRPJ/CSLL)",
+   "base_legal": "STJ Tema 1.319, julgado em 12/11/2025, trânsito em 06/03/2026",
+   "risco": "baixo", "tipo": "achado", "documentos": "ECD J100 e ECF (e-Lalur)", "aderencia_padrao": "encaminhar ao Tributário"},
+  "ESTOQUE_381": {"nome": "Crédito presumido sobre estoque na transição (achado de 2027, P8)",
+   "base_legal": "LC 214/2025, art. 381 (prazo de apuração a conferir no oficial)",
+   "tipo": "achado", "documentos": "EFD ICMS/IPI H010 de 31/12/2026", "aderencia_padrao": "encaminhar ao P8"}
+ },
+ "prioridade": {"_proposta": "+1 para tese com prazo vencendo mês a mês (IPI_NREC); teto 'baixa' para tese de proteção (EX_ISS)"}
+}

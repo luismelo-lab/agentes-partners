@@ -14,7 +14,7 @@ Padrão definido pelo Luis em 14/10/2026. Base visual e de conteúdo: a apresent
 | 3 | **Time tributário** (`depto-tributario`, em paralelo) | Avalia **cada linha de tese** para o perfil do cliente: PIS/COFINS e ICMS; Previdenciário, passivo e processos; segmento e reforma. Veredito por linha: MANTER · AJUSTAR · RETER ATÉ VALIDAR · RETIRAR, com base legal, risco e documento que decide | `departamentos/tributario/entregas/AAAA-MM-DD-<cliente>-*.md` |
 | 4 | Jurídico | Confere promessas, números, avisos e o uso de cases (parecer-padrão em `juridico/entregas/2026-10-14-padrao-apresentacao-diagnostico-compliance.md`) | Ajustes de texto |
 | 5 | Gabinete | Preenche `diagnostico.json` só com o que passou na etapa 3: tese retirada sai; tese retida mostra "a validar", sem valor; **nunca soma o total do 1º relatório** se houver sobreposição | `diagnostico.json` revisado |
-| 6 | Gabinete | **Apresentação comercial (padrão):** escrever `deck.json` (modelo: `brasol/deck.json`) e rodar `python3 render_comercial.py <pasta>` → PDF e PowerPoint no layout da apresentação institucional (fotos recortadas dela, slides institucionais inseridos como estão, tese por tese e slide Oxigenar/Estruturar/Escalar com os produtos da Save). Cada slide é uma imagem de 3840×2160 (texto nítido); o roteiro de fala, os avisos e as validações pendentes vão nas notas. As fotos e os slides institucionais vêm do PowerPoint da Save na resolução do arquivo (`extrair_assets_pptx.py`, 1920×1080 por slide, usados em 1:1). `gerar_apresentacao.py` (motor do Marketing, layout claro, editável) fica como versão técnica | `<Cliente>-Apresentacao-Comercial.pdf/.pptx` |
+| 6 | Gabinete | **Apresentação comercial (padrão):** escrever `deck.json` (modelo: `brasol/deck.json`) e rodar `python3 render_comercial.py <pasta>` → PDF e PowerPoint no layout da apresentação institucional (fotos recortadas dela, slides institucionais inseridos como estão, tese por tese e slide Destravar caixa / Proteger e controlar / Crescer com os produtos da Save). Cada slide é uma imagem de 3840×2160 (texto nítido); o roteiro de fala, os avisos e as validações pendentes vão nas notas. As fotos e os slides institucionais vêm do PowerPoint da Save na resolução do arquivo (`extrair_assets_pptx.py`, 1920×1080 por slide, usados em 1:1). `gerar_apresentacao.py` (motor do Marketing, layout claro, editável) fica como versão técnica | `<Cliente>-Apresentacao-Comercial.pdf/.pptx` |
 | 7 | Luis / Geovana | Aprova. Nada vai ao cliente nem ao parceiro sem a aprovação | Envio pelo Luis |
 
 ## Esqueleto da apresentação comercial (20 slides, Brassol)
@@ -33,7 +33,7 @@ Os blocos em negrito mudam em todo diagnóstico; os demais são a base fixa. Sli
 - Estatística de mercado nunca aparece como dado da Save.
 
 ## Destravar caixa, proteger e controlar, crescer
-Modelo do slide e perguntas do diagnóstico que ativam cada item: `MODELO-OXIGENAR-ESTRUTURAR-ESCALAR.md`. A terceira etapa se chama **Escalar** (no Canex era "Expandir").
+Modelo do slide e perguntas do diagnóstico que ativam cada item: `MODELO-OXIGENAR-ESTRUTURAR-ESCALAR.md`. A terceira etapa se chama **Crescer** (D1, 21/10/2026; antes "Escalar", e no Canex "Expandir"). O nome do arquivo do modelo ficou o antigo. Especialistas da peça: `skills/apresentacao-diagnostico/references/especialistas/`.
 
 ## Biblioteca de cases
 `biblioteca-cases/` (README com campos e checklist). Hoje tem os seis totais por segmento da apresentação institucional, como **rascunho** (`aprovado=false`). Quando o Luis subir os cases individuais, eles passam à frente do agregado.

@@ -1,0 +1,20 @@
+# Revisor de Diagnóstico · Perguntas ao dono
+
+Aberta em 22/10/2026 (onda sênior, D93). Só o humano responde. Quando a resposta chegar, ela vai para o especialista certo com a data e a fonte, e a linha fica "respondida". ★ = trava o uso da lacuna fora da célula.
+
+| # | ★ | Pergunta | Por que importa | Dono | Data | Status |
+|---|---|---|---|---|---|---|
+| 1 | ★ | D81 (T19 segue como tese) e D86 (Funrural antes de 2018 vira Gestão de Passivo) conflitam. Qual vale para o Revisor? | Hoje o Funrural vai só para "o que você também precisa"; se D81 prevalecer, volta a ser lacuna | Luis | 22/10/2026 | aberta |
+| 2 | ★ | DIFAL (Tema 1.372), ICMS-ST fora da matriz, ISS (só proteção), IPI não recuperável (Tema 1.373) e JCP retroativo (Tema 1.319) podem entrar como lacuna no `teses.json` e no `revisor.py`? (proposta em `proposta-teses-novas.json`) | Sem isso, a lacuna só aparece na revisão manual | Tributário, depois Luis | 22/10/2026 | aberta |
+| 3 | ★ | A Save oferece hoje a tese do DIFAL? Por via administrativa (após manifestação da PGFN) ou judicial? Qual o honorário de catálogo? | O DIFAL não está no índice T01–T19; sem ficha no catálogo, a lacuna não vira proposta | Tributário | 22/10/2026 | aberta |
+| 4 | | A Save oferece restituição de ICMS-ST pago a maior (ST_REST) e CIAP (ICMS_CIAP), que são estaduais? | `teses.json` marca "confirmar se a Save oferece"; sem resposta, essas lacunas não deveriam aparecer | Tributário | 22/10/2026 | aberta |
+| 5 | | A limitação "nenhuma lacuna é confirmada" ainda vale? A rodada de 19/10/2026 leu 120 pareceres e marcou 288 lacunas confirmadas | Define se a seção de limitações do SKILL.md deve sair; e quanto o escopo `files` já foi liberado | Luis (TI) | 22/10/2026 | aberta |
+| 6 | | A Geovana vai registrar as decisões na aba Lacunas? Na rodada de 19/10/2026 foram copiadas 0 decisões e `decisoes.json` não existe | Sem decisões, o aprendizado (rebaixamento por 3 "Não se aplica") não funciona e os indicadores do piloto (D2) ficam vazios | Geovana | 22/10/2026 | aberta |
+| 7 | | Qual o canal e a frequência de entrega à Geovana (e-mail, cópia ao Luis, semanal ou diária)? | Pendente desde 29/09/2026; o Recuperador já tem a D27 | Luis | 22/10/2026 | aberta |
+| 8 | | Inconsistência: `tributario-revisao.md` (22/10/2026) diz "T15 com o Tema 843 (favorável, vinculante)", mas o radar de 16/10/2026 diz que o Tema 843 saiu da pauta do STF em 25/02/2026 sem julgamento. Qual vale? | Se o Tema 843 está pendente, T15 é tese de risco, não de caixa | Tributário | 22/10/2026 | aberta |
+| 9 | | Inconsistência: a matriz do Recuperador (29/09/2026) tem supermercado em "alta" para alíquota zero, e o catálogo exclui supermercado da T01 (C4). A matriz vai ser corrigida (erratas E1 a E5)? | O Revisor herda a matriz; hoje a revisão manual corrige caso a caso | Tributário | 22/10/2026 | aberta |
+| 10 | | Os itens "confirmar" do `teses.json` (CST, PREV, ICMS_CIAP, escopo do art. 8º da Lei 10.925) já foram conferidos no texto oficial? | São citados de memória técnica; não podem ir para fora da célula | Tributário | 22/10/2026 | aberta |
+| 11 | | O prazo do crédito presumido sobre estoque (LC 214/2025, art. 381) é mesmo 30/06/2027? Quem na Save faz esse serviço? | Achado de 2027 que o Revisor passa ao P8; sem dono, não há para quem encaminhar | Tributário | 22/10/2026 | aberta |
+| 12 | | A leitura de SPED pelo agente (hoje vedada pela D3) será liberada na fase 2? Para quais arquivos? | Sem SPED, toda lacuna é hipótese; com SPED, o "documento que decide" vira confirmação | Luis | 22/10/2026 | aberta |
+| 13 | | Os sinais financeiros pedidos na reunião de 13/10/2026 (despesa financeira, contas a receber, dívida de curto prazo) devem entrar na planilha do Revisor ou só no mapa da conta do `depto-solucoes`? | Evita duplicar trabalho entre áreas | Luis | 22/10/2026 | aberta |
+| 14 | | A Receita notificou empresas por divergência DCTF × EFD-Contribuições com prazo até 30/10/2026 (fonte de terceiros). Algum cliente da carteira foi notificado? | Retificar a EFD sem conciliar a DCTF agrava o risco do cliente | Tributário | 22/10/2026 | aberta |

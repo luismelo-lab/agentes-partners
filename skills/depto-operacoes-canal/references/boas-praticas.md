@@ -28,3 +28,16 @@ Síntese de práticas comuns em programas de parceiros B2B (registro de oportuni
 - Serviço com **êxito incerto e demorado** (PER/ressarcimento, glosa): o gatilho precisa ser o **recebimento do honorário**, não a assinatura.
 - Se for sociedade de advogados: **remuneração por indicação comercial** (art. 34 da Lei 8.906/94) — ver riscos-chave do Jurídico.
 - Retenções sobre a NF do parceiro dependem do tipo de serviço e do regime do parceiro → Tributário valida.
+
+## 5. Atualização de 22/10/2026 (fontes datadas)
+Esta seção substitui a ressalva "sem pesquisa web" da versão de 29/09/2026 nos pontos abaixo. O detalhe está nos especialistas.
+- **Validade do registro:** 90 dias é o padrão em programas publicados (Veeam: 15 a 90 dias; IGEL: 90, ou 120 para Gold e Platinum; CTOUCH: 90 mais 90; Tanaza, Binalyze e Seeburger: 90), consultados em 22/10/2026. Esse padrão coincide com o ciclo da Save: 80,8% dos ganhos em até 90 dias (`conflito-canal-2026-10-19.json`). Ver `especialistas/registro-conflito-canal.md`.
+- **Desenho de incentivo:** a Forrester (data snapshot RES180190, 2023; blog CIPM, 2025) mostra a troca de níveis fixos por programas personalizados por parceiro e oportunidade. Ver `especialistas/politica-programa-niveis.md`.
+- **Peso do canal:** a Canalys projeta que mais de 70% de um mercado de tecnologia de mais de US$ 5 trilhões em 2025 passa por parceiros (citação secundária, consultada em 22/10/2026).
+- **Proteção percebida:** em estudo da 2112 Group de 2012 (via Channel Futures), parceiros deram nota 6 de 10 ao deal registration. A proteção sem transparência no pagamento não basta.
+- **Norma brasileira que muda as "boas práticas" importadas:**
+  - Lei 4.886/1965, arts. 27, "j", 31, 32 e 43: indenização, zona, prazo de pagamento e del credere;
+  - CC, arts. 727 e 728: cauda e divisão entre mediadores;
+  - Res. CMN 4.935/2021: correspondente.
+
+  Conferidas no texto oficial em 22/10/2026.
