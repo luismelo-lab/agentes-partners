@@ -44,3 +44,6 @@ Já há oportunidades em andamento nos produtos em validação. Por isso, o espe
 
 ## 4. Auditoria
 `python3 infra/auditar_senioridade.py` dá a nota de cada área (0 a 100) pelas 10 seções e aponta o que falta. Área abaixo de 70 entra na fila de aprofundamento. A consolidação de sexta mostra a evolução.
+
+## 5. Dono do padrão
+O `arquiteto-agentes` é o dono deste padrão e do auditor. O modelo único de arquivo de especialista está em `skills/arquiteto-agentes/references/modelo-especialista.md`.
