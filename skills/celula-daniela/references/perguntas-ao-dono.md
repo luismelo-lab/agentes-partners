@@ -1,0 +1,21 @@
+# Perguntas ao dono · Central Masters (célula da Daniela)
+
+O que só o humano responde. Aberta em 22/10/2026 (padrão sênior, D93). Quando a resposta vier, registre a data, quem respondeu e o arquivo do especialista que muda.
+
+| # | Data | Pergunta | Por que importa | Dono | Especialista afetado | Estado |
+|---|---|---|---|---|---|---|
+| CD1 | 22/10/2026 | Quais prazos de 1ª resposta e de solução, por tipo de demanda, a Daniela e cada área aceitam cumprir (SLA e OLA)? | A tabela de `sla.md` é proposta de 29/09/2026; sem validação, a cobrança às áreas não tem base | Daniela + gestores das áreas | Triagem e SLA | aberta (Semana 0 não fechada) |
+| CD2 | 22/10/2026 | Quando a área atrasa, a escala é responsável → gestor da área → Luis, com 1, 3 e 5 dias úteis? | Define quando a cobrança sobe sem desgastar a Daniela | Luis + Daniela | Triagem e SLA | aberta |
+| CD3 | 22/10/2026 | Quais são as metas ou objetivos de 2027 por Master, depois da meta sugerida pela diretoria (D75)? | Sem meta, o plano de conta usa só objetivos de atividade | Luis (diretoria) | Gestor de Contas-Chave | aberta |
+| CD4 | 22/10/2026 | Quem conduz o QBR de cada Master: a Daniela sozinha, ou com o Luis nos Masters Estratégicos? Com que frequência? | Define agenda e dono do plano conjunto | Luis | Gestor de Contas-Chave | aberta |
+| CD5 | 22/10/2026 | O bloco L1 a L10 do Programa de Parceiros (item 8 da folha de 22/10, "decidir depois") será decidido quando? | Níveis e benefícios entram no plano de conta e no QBR | Luis | Gestor de Contas-Chave (com `depto-partner-success`) | aberta |
+| CD6 | 22/10/2026 | Funrural anterior a 2018: Gestão de Passivo (D86) ou tese T19 (D81)? | Hoje o pedido do Master vai às duas áreas com a nota "a conciliar" | Luis | Apoio Jurídico ao Canal | aberta |
+| CD7 | 22/10/2026 | Como o Master é remunerado quando indica Gestão de Passivo ou estruturação patrimonial (produtos jurídicos), à luz da Lei 8.906/1994, art. 34, III e IV? | Sem parecer, a célula não pode falar de remuneração nesses produtos | Luis + advogado(a) | Apoio Jurídico ao Canal | aberta |
+| CD8 | 22/10/2026 | Quem executa a adesão à transação, a revisão de CAPAG e o NJP: advogado próprio ou escritório parceiro? (mesma pergunta A7 do `depto-juridico`) | Define o encaminhamento P5 e o prazo que se pode informar ao parceiro | Luis + advogado(a) | Apoio Jurídico ao Canal | aberta |
+| CD9 | 22/10/2026 | Qual é o prazo de validade do registro de oportunidade (dias sem atividade que derrubam a proteção do Master)? | Sem regra escrita, todo conflito de canal vai ao Luis | Luis + `depto-operacoes-canal` | Higiene de CRM e Registro | aberta |
+| CD10 | 22/10/2026 | O campo de parceiro do negócio vira lista fechada (9 Masters + indicadores) no HubSpot? Quando? | O texto livre gera aliases e conflito falso | time de CRM (D18) | Higiene de CRM e Registro | aberta |
+| CD11 | 22/10/2026 | Qual tom e quais limites a Daniela quer nas respostas (o que ela nunca quer delegar)? | Base do banco `padroes-resposta.md`, hoje vazio | Daniela | Retorno ao Parceiro | aberta (Semana 0) |
+| CD12 | 22/10/2026 | O degrau 2 da D28 (resposta automática de dado objetivo) será proposto para quais tipos primeiro? | Depende de 20 casos em 2 semanas com 95% de acerto | Luis | Retorno ao Parceiro | aberta |
+| CD13 | 22/10/2026 | A Lei 4.886/1965, art. 32, § 7º, continua em vigor (PL 5.761/2019 propunha revogá-lo)? Os Masters habituais têm risco de requalificação como representantes? | Limita qualquer proposta de mudança de repasse no plano de conta | advogado(a) | Gestor de Contas-Chave | aberta [não confirmado] |
+| CD14 | 22/10/2026 | O art. 31 da Lei 4.886/1965 e os arts. 722 a 725 do Código Civil se aplicam ao registro de oportunidade dos Masters? | Define se o registro de quem originou tem efeito jurídico de comissão | advogado(a) | Higiene de CRM e Registro | aberta [VALIDAR JURÍDICO] |
+| CD15 | 22/10/2026 | A Daniela confirma que a Central Masters atende só clientes com Master (D76) e que pedidos de clientes sem Master vão para qual área? | Evita trabalho fora do escopo e conflito com a outra área | Luis | todos | aberta |

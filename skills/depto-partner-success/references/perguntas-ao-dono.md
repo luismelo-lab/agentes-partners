@@ -1,0 +1,22 @@
+# Perguntas ao dono · Partner Success
+
+O que só uma pessoa responde. O agente não presume: enquanto não houver resposta, o ponto fica marcado nos arquivos dos especialistas. Quando a resposta chegar, registre a data e quem respondeu, e atualize o especialista indicado.
+
+| # | Data | Pergunta | Por que importa | Dono | Especialista afetado | Resposta |
+|---|---|---|---|---|---|---|
+| 1 | 22/10/2026 | Decide o bloco L1 a L4, L6 a L8 e L10 do programa de parceiros (item 8 da folha de 22/10, "Decidir depois")? E qual é o texto da L5? | O Word do programa não pode ser regerado; níveis do Crédito Internacional e do Programa Partners 2027 ficam como proposta | Luis | gestor-niveis-jornada | |
+| 2 | 22/10/2026 | L6: regra anti-oscilação pela opção 1 (leitura de 12 × 24 meses) ou pela opção 2 do Conselho (2 trimestres de observação)? | Muda a regra de manutenção de nível e o amortecedor multiproduto | Luis | gestor-niveis-jornada | |
+| 3 | 22/10/2026 | Com a meta 2027 vindo da diretoria (D75), os patamares em R$ do Programa Partners 2027 (R$ 1,5 mi / R$ 8 mi) devem ser recalibrados quando? | Foram calibrados no cenário-base reprovado | Luis + diretoria | gestor-niveis-jornada | |
+| 4 | 22/10/2026 | O repasse dos Masters é contratual ou negociável caso a caso, e há parecer sobre a natureza dele (representação comercial)? | Condição para qualquer opção B ou C (Lei 4.886/1965, art. 32, § 7º) | Luis + Jurídico | gestor-niveis-jornada, analista-saude-churn | |
+| 5 | 22/10/2026 | O nível será comunicado aos Masters no 1º ciclo ou usado só internamente? | Define a carta de nível e o encontro anual | Luis | gestor-niveis-jornada, gestor-comunidade-eventos | |
+| 6 | 22/10/2026 | Quem é o dono humano da Academia (proposta: Daniela curadora, Geovana curadora técnica, Luis patrocinador)? | Sem dono, nenhum módulo é publicado | Luis | designer-academia | |
+| 7 | 22/10/2026 | T19 (Funrural) segue como tese (D81) ou vai para Gestão de Passivo (D86)? Ou as duas convivem? | O módulo de Funrural está congelado até a conciliação | Luis | designer-academia | |
+| 8 | 22/10/2026 | Quem do Tributário e do Jurídico valida os módulos N1 (T01, qualificação, objeções, o que não prometer) e em que prazo? | O N1 de 29/09/2026 está todo com `[VALIDAR TÉCNICO]`/`[VALIDAR JURÍDICO]` | Luis (designar) | designer-academia | |
+| 9 | 22/10/2026 | O Junior (Save Invest, D92) valida o conteúdo dos módulos de Gestão de Contas, antecipação e FIDC, e o que o parceiro pode dizer sobre antecipação sobre venda gerencial e escrow (D82)? | Produtos prontos sem módulo; tema sensível tratado só presencialmente | Junior | designer-academia | |
+| 10 | 22/10/2026 | Os nomes fora do roster com ganhos em 12 meses e hoje dormentes são parceiros externos ou pessoas internas? | Muda a lista de reativação e a trilha Indicador | Luis | analista-saude-churn, coach-onboarding-enablement | |
+| 11 | 22/10/2026 | O Depto Dados cria a propriedade `data_entrada_parceiro` (e `master_padrinho`, `nivel_parceiro`, certificações, `motivo_dormencia`) no HubSpot? Quando? | Sem data de entrada não há tempo de ativação confiável | Luis (pedido ao time de CRM) | coach-onboarding-enablement, analista-saude-churn | |
+| 12 | 22/10/2026 | A co-venda obrigatória nas 2 primeiras indicações de cada indicador novo cabe na agenda da Jenifer e da Geovana? Com qual limite por mês? | Regra central do onboarding; depende de capacidade | Luis | coach-onboarding-enablement | |
+| 13 | 22/10/2026 | Existe orçamento para o encontro anual de parceiros de 2027, ou ele é virtual na v1? | Formato e data do encontro | Luis | gestor-comunidade-eventos | |
+| 14 | 22/10/2026 | Mandato do Conselho de Parceiros: quais temas ele opina e quem decide cada sugestão, em que prazo? | Conselho sem devolutiva perde os participantes | Luis | gestor-comunidade-eventos | |
+| 15 | 22/10/2026 | O Jurídico valida o texto-padrão de identificação de publicidade para parceiro remunerado que divulga conteúdo da Save (guia do CONAR de 12/05/2026)? | Kit de evento e co-branding | Jurídico | gestor-comunidade-eventos | |
+| 16 | 22/10/2026 | Certificação entra como critério de nível já no 1º ciclo (jan/2027) ou só no 2º (jul/2027)? | Decisão 3 do `programa-niveis-v1.md` | Luis | gestor-niveis-jornada, designer-academia | |

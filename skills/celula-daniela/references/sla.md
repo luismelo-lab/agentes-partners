@@ -1,6 +1,6 @@
 # Tabela de SLA por tipo de demanda — PROPOSTA A VALIDAR
 
-> **Status:** proposta do agente (29/09/2026), **não combinada** com as áreas. Validar na Semana 0 com a Daniela (roteiro, bloco 3) e depois com cada área de apoio antes de cobrar alguém por esses prazos. Fonte de máquina: `sla.json` (o `pendencias.py` calcula os prazos a partir dele; ao mudar aqui, mude lá).
+> **Status:** proposta do agente (29/09/2026), **não combinada** com as áreas (ainda aberta em 22/10/2026: pergunta CD1 em `perguntas-ao-dono.md`; método em `especialistas/triagem-sla.md`). Validar na Semana 0 com a Daniela (roteiro, bloco 3) e depois com cada área de apoio antes de cobrar alguém por esses prazos. Fonte de máquina: `sla.json` (o `pendencias.py` calcula os prazos a partir dele; ao mudar aqui, mude lá).
 
 **Como ler:** prazos em dias úteis a partir da abertura (0 = no mesmo dia). *1ª resposta* = o parceiro fica sabendo que o pedido foi recebido e encaminhado, com previsão. *Solução* = o parceiro recebe a resposta/entrega. Feriados não são descontados pelo script.
 
