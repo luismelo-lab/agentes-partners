@@ -22,6 +22,7 @@
 ## 3. Arquivos desta pasta
 - `caracteristicas-produtos.md`: só as características de produto das duas reuniões (o que é, requisitos, condições ditas, processo, entregáveis, limites), por produto.
 - `teses-indice.md`: índice das 21 fichas de base.
+- `fichas-sem-reuniao.md`: 23 fichas de produtos sem base de reunião (pesquisa web + perfil dos agentes), rascunho para avaliação, sem certificado, home equity e formalização.
 - `caracteristicas-teses.md`: atributos de produto das teses (via, regime, gatilho, ticket, dados exigidos, conexões).
 - `matriz-agentes.md`: produto × dono × agente × revisores × trava.
 - `jornada-2027.md`: esqueleto da jornada e das conexões, com as lacunas a fechar.
