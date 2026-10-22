@@ -1,4 +1,4 @@
-# Compensação de ofício — referência do especialista (levantamento de 29/09/2026 — validar com o Jurídico/Técnico)
+# Compensação de ofício — ficha rápida (levantamento de 29/09/2026; versão sênior em `especialistas/compensacao-de-oficio-e-recebimento.md`, com o art. 92 da IN 2.055 e o Decreto 2.138/1997 conferidos em 22/10/2026)
 
 ## O que é (em uma frase)
 Antes de pagar um ressarcimento ou restituição, a Receita verifica se o cliente tem débitos; se tiver, **usa o crédito para quitar esses débitos** ("compensação de ofício") e só paga o que sobrar. Não é DCOMP e não é iniciativa do cliente nem da Save.
@@ -13,7 +13,7 @@ Antes de pagar um ressarcimento ou restituição, a Receita verifica se o client
 | Concordância expressa ou tácita → compensação feita na ordem legal; saldo remanescente é pago | art. 92, §§ 5º e 6º | idem |
 | Para PJ, verifica débitos de **todos os estabelecimentos** | art. 92, § 7º | idem |
 | Base legal da compensação de ofício | Lei 9.430/1996, art. 73; Decreto-Lei 2.287/1986, art. 7º | https://www.planalto.gov.br/ccivil_03/leis/l9430.htm [VALIDAR redação vigente] |
-| Contagem de prazos no processo administrativo fiscal: exclui o dia do início, inclui o do vencimento; só começam e vencem em dia de expediente normal | Decreto 70.235/1972, art. 5º | http://www.planalto.gov.br/ccivil_03/decreto/d70235cons.htm [VALIDAR se aplica a esta comunicação] |
+| Contagem de prazos no processo administrativo fiscal: dias corridos, salvo disposição em contrário; exclui o dia do início, inclui o do vencimento; só começam e vencem em dia de expediente normal | Decreto 70.235/1972, art. 5º (redação da LC 227/2026, conferida no planalto em 22/10/2026) | http://www.planalto.gov.br/ccivil_03/decreto/d70235cons.htm [VALIDAR se aplica a esta comunicação: pergunta 7 de `perguntas-ao-dono.md`] |
 | Ciência por meio eletrônico (caixa postal/DTE): 15 dias após a entrega no domicílio eletrônico, ou na data da abertura, se antes | Decreto 70.235/1972, art. 23, § 2º, III | idem [VALIDAR] |
 
 **Atenção:** pela regra do art. 23, a **ciência** pode ocorrer só 15 dias depois de a mensagem chegar à caixa postal — e aí começam os 15 dias do art. 92, § 3º. Abrir a mensagem antecipa a ciência. Quem abre a caixa postal do cliente é a área real (procuração e-CAC); registre **data de disponibilização** e **data de abertura**.

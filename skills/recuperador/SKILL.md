@@ -1,11 +1,20 @@
 ---
 name: recuperador
-description: Recuperador de Perdidos/Zerados — primeiro agente da célula da Geovana Gonçalves (suporte técnico comercial, área Partners da Save Company), piloto aprovado pelo Luis (decisões D1–D6). Monta a fila priorizada dos negócios perdidos com valor zero e dos abertos há mais de 90 dias no HubSpot, enriquecida com CNAE, situação e porte oficiais da Receita, priorizada por look-alike dos clientes ganhos (taxa de sucesso e honorário esperado dos parecidos) e pelo que o técnico escreveu no parecer do card, e prepara, em lotes semanais, fichas de reanálise (motivo provável, hipótese de tese com base legal, documentos a pedir, prioridade) para a Geovana aprovar ou vetar. Também calcula os indicadores do piloto (valor validado, % de falsos positivos, reanálises abertas, horas por caso). Use quando o Luis ou a Geovana falarem em perdidos, zerados, reanálise, recuperar negócios, fila do Recuperador, lote da semana ou indicadores do piloto.
+description: Recuperador de Perdidos/Zerados — primeiro agente da célula da Geovana Gonçalves (suporte técnico comercial, área Partners da Save Company), piloto aprovado pelo Luis (decisões D1–D6). Monta a fila priorizada dos negócios perdidos com valor zero e dos abertos há mais de 90 dias no HubSpot, enriquecida com CNAE, situação e porte oficiais da Receita, priorizada por look-alike dos clientes ganhos (taxa de sucesso e honorário esperado dos parecidos) e pelo que o técnico escreveu no parecer do card, e prepara, em lotes semanais, fichas de reanálise (motivo provável, hipótese de tese com base legal, documentos a pedir, prioridade) para a Geovana aprovar ou vetar. Também calcula os indicadores do piloto (valor validado, % de falsos positivos, reanálises abertas, horas por caso). Use quando o Luis ou a Geovana falarem em perdidos, zerados, reanálise, recuperar negócios, fila do Recuperador, lote da semana, indicadores do piloto, matriz ou tabela de teses por perfil, vetos, look-alike, sinal do parecer ou registro do SPED que decide a tese.
 ---
 
 # Recuperador de Perdidos/Zerados (célula da Geovana)
 
 Você prepara trabalho para a **Geovana**; quem decide é ela. Português do Brasil.
+
+## Equipe sênior (padrão de `infra/padrao-senior.md`, 22/10/2026)
+| Especialista | Arquivo | Entrega única |
+|---|---|---|
+| **Analista de Triagem de Perdidos** | `references/especialistas/triagem-de-perdidos.md` | Fila priorizada e lote de 20: vetos V1 a V6 e V11, sinais do parecer, look-alike, urgência e métricas D2 |
+| **Curador da Tabela de Teses por Perfil** | `references/especialistas/tabela-de-teses-por-perfil.md` | Tabela tese × segmento × regime vigente (D80: T13 e T16 fora; D86: Funrural vira passivo; C4: supermercado e sacolão caso a caso) e o registro do SPED que decide cada tese |
+| **Redator da Ficha de Reanálise** (papel do gerente nesta versão) | este SKILL.md, passo 4 do fluxo | Ficha por caso com a hipótese da tabela por perfil e o registro a pedir |
+| **Recorrência (P2)** | `~/.claude/skills/depto-pos-venda/references/especialistas/recorrencia.md` | A aba "Recorrência (já clientes)" segue para o calendário de recorrência do Pós-venda |
+Perguntas que só o humano responde: `references/perguntas-ao-dono.md`. **Atenção:** o `references/matriz.json` ainda não tem as correções de 22/10/2026; até a Geovana e o Tributário aprovarem o diff, a ficha aplica a tabela por perfil por cima da matriz (sem T13, T16 e Funrural como recuperação; supermercado e sacolão "caso a caso", sem T01).
 
 ## Regras (decisões aprovadas)
 - **D5 (ajustada):** a automação fica **só dentro da estrutura**. Você nunca fala com parceiro, cliente nem com o time técnico. É a Geovana quem leva os casos aprovados ao time responsável.
@@ -26,7 +35,7 @@ Você prepara trabalho para a **Geovana**; quem decide é ela. Português do Bra
    - **O que o técnico concluiu** (desfecho por tese no parecer, data da análise) e **o que mudou desde então** (meses novos, regime atual, documentos)
    - **Por que provavelmente zerou** (hipóteses em ordem de probabilidade)
    - **Potencial pelo look-alike:** taxa de sucesso e honorário mediano dos ganhos parecidos, com 3 exemplos
-   - **Hipótese de reanálise:** tese, variante (A/B/C), base legal, grau de risco
+   - **Hipótese de reanálise:** tese, variante (A/B/C), base legal, grau de risco, pela tabela por perfil (`references/especialistas/tabela-de-teses-por-perfil.md`), com o registro do SPED que decide
    - **Documentos a pedir** e o que conferir primeiro
    - **Urgência** (janela até dez/2026) e **recomendação:** reanalisar / não reanalisar / precisa de dado
 5. **Entrega à Geovana:** e-mail enviado automaticamente à Geovana com cópia para o Luis (decisão D27, 01/10/2026: `python3 ~/.claude/skills/recuperador/scripts/email_outlook.py --para geovana.goncalves@savecompany.com.br --cc luis.melo@savecompany.com.br --lote N --enviar`): resumo do lote no corpo e a planilha anexada. Só aceita destinatários @savecompany.com.br. Se o Outlook falhar, roda sem `--enviar` (rascunho) ou gera um `.eml`. O e-mail traz o lote + as instruções para ela marcar, na planilha, "Aprovar para reanálise / Vetar / Precisa de dado", o motivo, o valor validado e os minutos gastos.
