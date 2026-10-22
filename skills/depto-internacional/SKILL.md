@@ -90,6 +90,7 @@ Scripts já prontos (somente leitura e local; nenhum CNPJ sai da máquina) em `~
 Rode-os antes de montar lista nova. Não recalcule à mão.
 
 ### E. Material (interno ou externo)
+- **One-page confidencial para o cliente:** `python3 scripts/one_page_cliente.py --empresa "<empresa>" --copia <nº> [--responsavel "nome, cargo, canal corporativo"] --saida <pasta>`. Gera PDF e PNG nominais e numerados, com faixa e marca d'água de confidencial. Foi revisado por Produtos Internacionais, Jurídico e Qualidade/Marketing em 22/10/2026. Antes do G2, só sai por decisão do Luis e depois do NDA, e o aviso precisa da validação do advogado.
 - **Interno:** livre, marcado `USO INTERNO`.
 - **Externo:** só depois do G2 e com o Guardião confirmando o portão. Quem produz é o `depto-marketing`, com auditoria do `depto-qualidade` e, se houver afirmação regulatória, validação do `depto-juridico`.
 - Antes do G2, o departamento entrega o conteúdo e a lista do que ainda não pode ir.
