@@ -12,7 +12,7 @@ padrão, local). No piloto, depende do ok do Jurídico e da TI. Sem contrato nem
 
 Faixas: confirmado_real | provavel_real | nao_real | sem_dado | indisponivel | invalido.
 """
-import json, os, sys, time, urllib.error, urllib.request
+import json, os, subprocess, sys, time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 
@@ -32,14 +32,15 @@ _uso = {}
 
 
 def _http(url):
-    """(status, json|None). Status 0 = falha de rede ou tempo esgotado."""
-    req = urllib.request.Request(url, headers={"User-Agent": "SaveCo-Central-Partners/1.0", "Accept": "application/json"})
+    """(status, json|None). Status 0 = falha de rede ou tempo esgotado. Usa o curl, como o receita_cnpj.py: o Python
+    da python.org no Mac não traz os certificados raiz e recusaria o HTTPS (a verificação não é desligada)."""
     try:
-        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-            return r.status, json.load(r)
-    except urllib.error.HTTPError as e:
-        return e.code, None
-    except (urllib.error.URLError, TimeoutError, ValueError, OSError):
+        r = subprocess.run(["curl", "-sS", "-m", str(TIMEOUT), "-A", "SaveCo-Central-Partners/1.0", "-H", "Accept: application/json",
+                            "-w", "\n%{http_code}", url], capture_output=True, text=True, timeout=TIMEOUT + 5)
+        corpo, _, codigo = r.stdout.rpartition("\n")
+        st = int(codigo or 0)
+        return (st, json.loads(corpo)) if st == 200 else (st, None)
+    except (subprocess.SubprocessError, ValueError, OSError):
         return 0, None
 
 
