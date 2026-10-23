@@ -13,6 +13,9 @@ Plano: `docs/sso-entra/diagnostico-e-plano.md`. Roteiro da TI: `docs/sso-entra/o
 1. Copie `api/local.settings.example.json` para `api/local.settings.json`. Copie também `web/config.example.js` para `web/config.js`. Preencha os dois com o Tenant ID e o Client ID. Esses arquivos ficam fora do repositório.
 2. Rode `python3 central/dev_server.py` e abra `http://localhost:4280/`.
 
+## Demo da consulta de Lucro Real (parceiros)
+`python3 central/consulta_demo.py` → `http://localhost:4281/consulta.html`. Sem login, só localhost. Usa a base da Receita e o `regime-cache.json` locais (`dados-publicos/receita/`); nada sai do Mac. Regras em `api/central_api/regime.py`: faixas confirmado / provável / não é Real / sem dado, ano-base e fonte em toda resposta, teto diário, trilha em `consultas-regime.jsonl`, lote de até 50. No piloto, `regime.py` entra em `rotas.py` atrás do token do Entra. Testes: `cd central/api && PYTHONPATH=../../lib python3 -m unittest tests.test_regime`.
+
 ## Testes
 `cd central/api && python3 -m unittest -v`
 

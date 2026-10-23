@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consulta de regime · Save Co.</title>
+  <link rel="stylesheet" href="save.css">
+  <link rel="stylesheet" href="central.css">
+  <link rel="stylesheet" href="consulta.css">
+</head>
+<body>
+  <main class="tela">
+    <header class="topo">
+      <img src="logo-save-fundo-claro.png" alt="Save Co." class="logo">
+      <span class="rotulo">Área Partners</span>
+    </header>
+
+    <p class="aviso-demo">Demonstração local, sem login. Dados da base da Receita e do cache de regime.</p>
+
+    <section class="cartao bloco">
+      <h2>Consulta de regime tributário</h2>
+      <p class="apoio">Veja se a empresa está no Lucro Real. Informe um CNPJ ou cole uma lista (até 50, um por linha).</p>
+      <form id="form" novalidate>
+        <label for="cnpjs">CNPJ</label>
+        <textarea id="cnpjs" rows="3" placeholder="00.000.000/0001-00" autocomplete="off" spellcheck="false"></textarea>
+        <div id="campo-fat">
+          <label for="fat">Faturamento anual, se você souber (opcional, R$)</label>
+          <input id="fat" inputmode="decimal" placeholder="Ex.: 95.000.000" autocomplete="off">
+        </div>
+        <button class="botao" type="submit" id="enviar">Consultar</button>
+      </form>
+      <p id="erro" class="erro-msg" role="alert" hidden></p>
+    </section>
+
+    <section id="saida" hidden>
+      <div class="cabeca-saida">
+        <h3 id="contagem"></h3>
+        <button class="botao-sec" type="button" id="baixar" hidden>Baixar CSV</button>
+      </div>
+      <div id="lista"></div>
+      <p id="uso" class="apoio"></p>
+    </section>
+
+    <footer class="rodape">
+      <p>O regime vem da ECF e reflete o ano-base indicado, não necessariamente o regime de hoje. Esta consulta é uma informação de apoio e não garante valor, prazo ou êxito de nenhum serviço. Confirme com a documentação do cliente antes de uma proposta.</p>
+    </footer>
+  </main>
+  <script src="consulta.js"></script>
+</body>
+</html>
