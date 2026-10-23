@@ -534,7 +534,8 @@ def planilha(p, nome, evs, aviso=False):
     out = os.path.join(os.environ.get("OPERACAO_REG") or os.path.join(AP, "departamentos/operacao"), nome); os.makedirs(out, exist_ok=True)
     f = os.path.join(out, f"{'Aviso-da-tarde' if aviso else 'Plano-do-dia'}-{nome}-{HOJE.isoformat()}.xlsx")
     wb = Workbook(); ws = wb.active; ws.title = "Pendências"
-    cab = ["Tipo", "Negócio / item", "Situação", "Área", "Valor no CRM", "Desde", "Novo", "HubSpot", "Bitrix", "Rascunho para o parceiro (auditado; quem envia é você)"]
+    cab = ["Tipo", "Negócio / item", "Situação", "Área", "Valor no CRM", "Desde", "Novo", "HubSpot", "Bitrix", "Rascunho para o parceiro (auditado; quem envia é você)",
+           "Usei / Ajustei / Não usei"]  # medição da D28 a partir do lançamento (docs/lancamento-2026)
     ws.append(cab)
     for c in ws[1]: c.font = Font(bold=True, color="FFFFFF"); c.fill = PatternFill("solid", fgColor="1F1F1F")
     for e in sorted(evs, key=lambda e: (list(NOME).index(e["tipo"]), _ord(e))):
@@ -544,11 +545,22 @@ def planilha(p, nome, evs, aviso=False):
         for col, k in ((8, "link"), (9, "bitrix")):
             if e.get(k): ws.cell(r, col).hyperlink = e[k]; ws.cell(r, col).font = Font(color="7A5F00", underline="single", bold=True)
         ws.cell(r, 5).number_format = '"R$" #,##0'
-    for col, w in zip("ABCDEFGHIJ", (30, 42, 70, 16, 14, 8, 6, 10, 10, 50)): ws.column_dimensions[col].width = w
+    for col, w in zip("ABCDEFGHIJK", (30, 42, 70, 16, 14, 8, 6, 10, 10, 50, 16)): ws.column_dimensions[col].width = w
+    from openpyxl.worksheet.datavalidation import DataValidation
+    dv = DataValidation(type="list", formula1='"Usei,Ajustei,Não usei"', allow_blank=True); ws.add_data_validation(dv); dv.add(f"K2:K{max(2, ws.max_row)}")
     for row in ws.iter_rows(min_row=2):
         for c in row: c.alignment = Alignment(vertical="top", wrap_text=c.column in (2, 3, 10))
     ws.freeze_panes = "C2"; ws.auto_filter.ref = ws.dimensions
-    wb.save(f); return f
+    wb.save(f)
+    # entrega diária na pasta da pessoa (lançamento ao time, Luis 23/10/2026): a planilha também vai para a Central dela no OneDrive
+    try:
+        import shutil, caminhos
+        if p in ("daniela", "jenifer", "geovana"):
+            destino = os.path.join(caminhos.pasta(p), "Plano do dia"); os.makedirs(destino, exist_ok=True)
+            shutil.copy2(f, os.path.join(destino, os.path.basename(f)))
+    except Exception as erro:
+        print(f"aviso: plano de {nome} não foi copiado para a pasta do OneDrive ({erro})")
+    return f
 
 
 def quadro_supervisor(L, at):
