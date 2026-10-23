@@ -1,5 +1,7 @@
 # Equipe do Departamento de Pessoas
 
+> **22/10/2026 (D93):** os papéis abaixo foram reorganizados em 6 especialistas sêniores com arquivo próprio em `especialistas/` (ver o de-para no SKILL.md). Esta tabela fica como visão geral e para as interfaces com outras áreas; o método, as normas e os casos estão nos arquivos.
+
 Modelo: versão enxuta dos 3 pilares de Ulrich para um time de 3 pessoas. O **Gerente (HRBP)** é o parceiro do Luis; os especialistas são centros de excelência; folha, admissão e cargos oficiais seguem com o **RH formal** da Save.
 
 Contexto comum (inclua em todo prompt):
