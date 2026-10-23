@@ -19,6 +19,11 @@
 !skills/**
 !rotinas/**
 !portal/index.html
+!portal/arquivo/index-v1.html
+!portal/opcoes/combinada.html
+!portal/opcoes/opcao-a.html
+!portal/opcoes/comum.js
+!portal/opcoes/*.py
 !portal/prototipo/modelo.html
 !portal/prototipo/dados_proto.py
 !portal/prototipo/recorrencia_excel.py

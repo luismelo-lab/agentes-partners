@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- PRÉVIA LOCAL. Na versão final (portal/index.html) saem esta linha de cabeçalho e o exemplo-dados.js:
+     sem window.EX a página lê dados.json, diretorio.json e o db do Artifact. -->
+<script src="exemplo-dados.js"></script>
+<title>Central Partners</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Central Partners v2 (versão combinada, 23/10/2026). Design System Save v0.5.
+   Casca de sistema: barra lateral fixa + barra superior com busca global (Ctrl+K), notificações e perfil;
+   tabelas com filtros e painel lateral de detalhe. Áreas em cartões de serviço com página própria.
+   Mesa do Luis com KPIs, filas em kanban e janelas de receita. Claro por padrão (time), alternância para escuro. */
+:root {
+  --fundo:#F6F7F9; --fundo-2:#F1F2F5; --cartao:#FFFFFF; --borda:#E6E8EC; --borda-3:#C9CCD3;
+  --texto:#0F1115; --texto-2:#4A4F58; --ouro:#F3CD60; --ouro-texto:#B58A1F; --ouro-suave:#FBF1D7;
+  --sucesso:#1E8E3E; --alerta:#B5790F; --erro:#C5221F; --sombra:rgba(15,17,21,.14); --veu:rgba(15,17,21,.32); --hover:#FAFAFB;
+  --sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  color-scheme:light }
+:root[data-theme="dark"] {
+  --fundo:#000000; --fundo-2:#111111; --cartao:#171717; --borda:#2A2A2A; --borda-3:#3A3A3A;
+  --texto:#F5F5F5; --texto-2:#A1A1A1; --ouro:#F3CD60; --ouro-texto:#F3CD60; --ouro-suave:rgba(243,205,96,.12);
+  --sucesso:#44C653; --alerta:#E8B34A; --erro:#D64545; --sombra:rgba(0,0,0,.6); --veu:rgba(0,0,0,.6); --hover:#1E1E1E; color-scheme:dark }
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--fundo);color:var(--texto);font:400 15px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+a{color:var(--texto);text-decoration:underline;text-decoration-color:var(--ouro-texto);text-underline-offset:3px;font-weight:500}
+:focus-visible{outline:3px solid var(--ouro-texto);outline-offset:2px} [tabindex="-1"]:focus{outline:none}
+.ic{width:20px;height:20px;flex:none}
+.logo-escuro{display:none} :root[data-theme="dark"] .logo-claro{display:none} :root[data-theme="dark"] .logo-escuro{display:block}
+/* barra lateral */
+.lado{position:fixed;inset:0 auto 0 0;width:236px;overflow:hidden;background:var(--cartao);border-right:1px solid var(--borda);display:flex;flex-direction:column;z-index:30;padding-left:env(safe-area-inset-left,0px)}
+.lado .marca{height:64px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:4px;padding:0 20px;border-bottom:1px solid var(--borda)}
+.lado .marca img{height:20px;width:auto} .lado .marca span{font:500 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--texto-2);white-space:nowrap}
+.menu{padding:10px;display:grid;gap:2px}
+.menu .grupo{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--texto-2);padding:14px 12px 6px}
+.menu a{display:flex;align-items:center;gap:12px;padding:0 12px;min-height:42px;border-radius:8px;text-decoration:none;color:var(--texto-2);font-weight:500;position:relative}
+.menu a:hover{background:var(--fundo-2);color:var(--texto)}
+.menu a[aria-current="page"]{background:var(--ouro-suave);color:var(--texto);font-weight:600}
+.menu a[aria-current="page"]::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:2px;background:var(--ouro)}
+.menu .cont{margin-left:auto;font:600 12px var(--mono);background:var(--texto);color:var(--cartao);border-radius:10px;padding:0 7px}
+.lado .perfil{margin-top:auto;border-top:1px solid var(--borda);padding:14px 16px;display:flex;gap:10px;align-items:center}
+.av{width:34px;height:34px;border-radius:50%;background:#0F1115;color:#F3CD60;border:1px solid var(--borda-3);display:grid;place-items:center;font:600 12.5px var(--mono);flex:none}
+.av.p{width:26px;height:26px;font-size:10.5px}
+.perfil label{flex:1;display:grid;gap:2px;font-size:12px;color:var(--texto-2);font-weight:500}
+.perfil select{min-height:36px;padding:4px 8px}
+/* barra superior */
+.corpo{margin-left:236px;min-height:100vh}
+.topo{position:sticky;top:0;z-index:20;height:64px;background:var(--cartao);border-bottom:1px solid var(--borda);display:flex;align-items:center;gap:10px;padding:0 max(24px,env(safe-area-inset-right,0px)) 0 24px}
+.icbtn.btn-menu{display:none}
+.busca-g{flex:1;max-width:560px;display:flex;align-items:center;gap:10px;height:42px;border:1px solid var(--borda-3);border-radius:10px;background:var(--fundo);padding:0 12px;color:var(--texto-2);cursor:text;text-align:left;min-width:0}
+.busca-g span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .busca-g .txt-c{display:none} .topo img.logo-m{display:none!important}
+.busca-g kbd{margin-left:auto;font:500 11.5px var(--mono);border:1px solid var(--borda-3);border-radius:5px;padding:1px 6px;background:var(--cartao);color:var(--texto-2)}
+.topo .dir{margin-left:auto;display:flex;align-items:center;gap:6px}
+.icbtn{width:42px;height:42px;border-radius:10px;border:1px solid transparent;background:none;display:grid;place-items:center;cursor:pointer;position:relative;color:var(--texto)}
+.icbtn:hover{background:var(--fundo-2)}
+.icbtn .pt{position:absolute;top:5px;right:4px;min-width:18px;height:18px;border-radius:9px;background:var(--erro);color:#FFFFFF;font:600 11px/18px var(--mono);text-align:center;padding:0 4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 16px;border-radius:8px;border:1px solid var(--ouro);background:var(--ouro);color:#0F1115;font:600 14px var(--sans);cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{filter:brightness(.96)} .btn .ic{width:18px;height:18px}
+.btn.sec{background:var(--cartao);border-color:var(--borda-3);color:var(--texto)} .btn.perigo{background:var(--cartao);border-color:var(--erro);color:var(--erro)}
+.btn.peq{min-height:34px;padding:0 12px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed;filter:none}
+.faixa-previa{background:var(--ouro-suave);border-bottom:1px solid var(--ouro);font-size:13.5px;padding:8px 24px;display:flex;gap:8px;flex-wrap:wrap}
+/* páginas */
+.pag{padding:28px 24px 64px;max-width:1280px;display:grid;gap:22px}
+.pag>*{min-width:0}
+.pag-cab{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;justify-content:space-between}
+.pag-cab>div{min-width:0}
+.pag-cab h1{margin:2px 0 0;font-size:26px;font-weight:600;letter-spacing:-.01em;line-height:1.2;text-wrap:balance}
+.pag-cab p{margin:6px 0 0;color:var(--texto-2);max-width:72ch}
+.rot{font:500 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--texto-2)}
+.migalha{font-size:13.5px;color:var(--texto-2);display:flex;gap:6px;align-items:center;flex-wrap:wrap} .migalha a{color:var(--texto-2)}
+.acoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;padding:14px 16px;display:grid;gap:2px;text-align:left;cursor:default}
+button.kpi{cursor:pointer} button.kpi:hover{border-color:var(--borda-3)}
+.kpi strong{font:600 28px/1.15 var(--mono);font-variant-numeric:tabular-nums} .kpi small{color:var(--texto-2);font-size:13px}
+.kpi.destaque{border-color:var(--ouro);box-shadow:inset 0 3px 0 var(--ouro)}
+.painel{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;overflow:hidden;min-width:0}
+.painel-cab{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--borda)}
+.painel-cab h2{margin:0;font-size:16px;font-weight:600}
+.painel-corpo{padding:16px;display:grid;gap:12px}
+.filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--borda-3);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:var(--cartao);padding:0 12px;min-height:36px;cursor:pointer;font-size:13.5px;border-right:1px solid var(--borda);display:inline-flex;gap:6px;align-items:center}
+.seg button:last-child{border-right:0} .seg button[aria-pressed="true"]{background:var(--texto);color:var(--cartao)}
+.seg .n{font:500 12px var(--mono);opacity:.8}
+select,input,textarea{font:15px/1.4 var(--sans);border:1px solid var(--borda-3);border-radius:8px;padding:9px 12px;min-height:42px;background:var(--cartao);color:var(--texto);width:100%;min-width:0}
+select.f{width:auto;min-height:36px;padding:0 10px;font-size:13.5px}
+textarea{min-height:96px;resize:vertical}
+label{display:grid;gap:6px;font-weight:500;font-size:14px} label small{color:var(--texto-2);font-weight:400}
+.campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.linhas{display:grid}
+.lh{display:grid;grid-template-columns:var(--cols);gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--borda);min-width:0}
+.lh>*{min-width:0} .lh:last-child{border-bottom:0}
+.lh.cab{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--texto-2);padding-block:9px;background:var(--fundo)}
+button.lh{width:100%;text-align:left;background:var(--cartao);border:0;border-bottom:1px solid var(--borda);cursor:pointer}
+button.lh:hover{background:var(--hover)}
+.tit{font-weight:600;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sub{color:var(--texto-2);font-size:13px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quebra{white-space:normal}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:6px;font:500 12px/1.6 var(--sans);padding:1px 9px;border-radius:4px;background:var(--fundo-2);border:1px solid var(--borda);white-space:nowrap;color:var(--texto)}
+.chip.p::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--texto-2);flex:none}
+.chip.fila::before{background:transparent;border:1.5px solid var(--texto-2);width:7px;height:7px}
+.chip.analise::before{background:var(--alerta)} .chip.aprovar{background:var(--ouro-suave);border-color:var(--ouro)} .chip.aprovar::before{background:var(--ouro-texto)}
+.chip.concluido::before{background:var(--sucesso)} .chip.urg{color:var(--erro);border-color:var(--erro);background:var(--cartao)}
+.duas{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:22px;align-items:start}
+.pilha{display:grid;gap:22px;min-width:0}
+.vazio{padding:18px 16px;color:var(--texto-2)}
+.nota{background:var(--fundo-2);border-radius:8px;padding:10px 12px;font-size:13.5px;color:var(--texto-2)}
+.aviso{background:var(--ouro-suave);border:1px solid var(--ouro);border-radius:8px;padding:10px 12px;font-size:13.5px;color:var(--texto)}
+/* kanban */
+.kanban{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.coluna{background:var(--fundo-2);border-radius:12px;padding:10px;display:grid;gap:8px;align-content:start;min-height:120px}
+.coluna h3{margin:0;padding:2px 4px 4px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.coluna h3 .mono{margin-left:auto;color:var(--texto-2)}
+.ticket{background:var(--cartao);border:1px solid var(--borda);border-radius:10px;padding:10px 12px;display:grid;gap:6px;text-align:left;cursor:pointer;width:100%}
+.ticket:hover{border-color:var(--borda-3)}
+.ticket .txt{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ticket .rodape{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--texto-2)}
+.ticket .rodape .mono{font-size:12px;margin-left:auto}
+.seg-col{display:none}
+/* áreas como serviços */
+.bloco{display:grid;gap:10px}
+.servicos{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.servico{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;padding:16px;display:grid;grid-template-rows:auto 1fr auto;gap:8px;text-align:left;cursor:pointer;min-height:168px}
+.servico:hover{border-color:var(--ouro);box-shadow:0 4px 12px var(--sombra)}
+.servico .topo-s{display:flex;align-items:center;gap:10px}
+.servico .sig{width:36px;height:36px;border-radius:8px;background:var(--ouro-suave);color:var(--texto);display:grid;place-items:center;font:600 13px var(--mono);flex:none;border:1px solid var(--ouro)}
+.servico strong{font-size:15.5px;font-weight:600;line-height:1.25}
+.servico p{margin:0;color:var(--texto-2);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.servico .base{display:flex;gap:2px 8px;flex-wrap:wrap;font-size:12.5px;color:var(--texto-2);border-top:1px solid var(--borda);padding-top:8px}
+.area-cab{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;padding:20px;display:grid;gap:12px;box-shadow:inset 0 4px 0 var(--ouro)}
+.area-cab h1{margin:0;font-size:28px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+.area-cab p{margin:0;max-width:78ch}
+.esps{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.esp{border:1px solid var(--borda);border-radius:10px;padding:12px;display:grid;gap:4px;background:var(--cartao)}
+.esp b{font-size:14px} .esp span{font-size:13px;color:var(--texto-2)}
+.ent{display:grid;gap:4px;padding:12px 16px;border-bottom:1px solid var(--borda)} .ent:last-child{border-bottom:0}
+.ent .meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--texto-2)}
+.dl{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px 12px;font-size:14px;margin:0} .dl dt{color:var(--texto-2)} .dl dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.janela{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;padding:12px 16px;border-bottom:1px solid var(--borda);align-items:start} .janela:last-child{border-bottom:0}
+.dias{font:600 13px var(--mono);border-radius:6px;padding:4px 8px;text-align:center;min-width:64px;background:var(--fundo-2);border:1px solid var(--borda)}
+.dias.perto{background:var(--ouro-suave);border-color:var(--ouro)}
+/* gaveta */
+.veu{position:fixed;inset:0;background:var(--veu);z-index:40}
+.gaveta{position:fixed;top:0;right:0;bottom:0;width:min(540px,100%);background:var(--cartao);z-index:41;box-shadow:-12px 0 32px var(--sombra);display:flex;flex-direction:column;padding-right:env(safe-area-inset-right,0px)}
+.gaveta>header{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 20px;border-bottom:1px solid var(--borda);min-height:64px}
+.gaveta>header h2{margin:0;font-size:17px;font-weight:600;flex:1;min-width:0}
+.gaveta>header .sub{margin-top:2px}
+.gaveta .conteudo{padding:18px 20px 28px;overflow:auto;display:grid;gap:16px;align-content:start;flex:1}
+.gaveta .rodape{border-top:1px solid var(--borda);padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:8px}
+.linha-tempo{list-style:none;margin:0;padding:0}
+.linha-tempo li{position:relative;padding:0 0 14px 22px;font-size:14px}
+.linha-tempo li::before{content:"";position:absolute;left:4px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--texto-2)}
+.linha-tempo li::after{content:"";position:absolute;left:7.5px;top:17px;bottom:0;width:1px;background:var(--borda-3)}
+.linha-tempo li:last-child::after{display:none} .linha-tempo li:last-child::before{background:var(--ouro);box-shadow:0 0 0 3px var(--ouro-suave)}
+.resp{border-left:3px solid var(--ouro);padding:2px 0 2px 14px;display:grid;gap:6px;font-size:14.5px} .resp p{margin:0} .resp ul{margin:0;padding-left:18px} .resp h4{margin:6px 0 0;font-size:14px}
+.lista-areas{display:grid;gap:2px;max-height:280px;overflow:auto;border:1px solid var(--borda);border-radius:8px;padding:4px}
+.lista-areas button{display:grid;text-align:left;border:0;background:none;border-radius:6px;padding:8px 10px;cursor:pointer;gap:1px}
+.lista-areas button:hover{background:var(--fundo-2)} .lista-areas button[aria-pressed="true"]{background:var(--ouro-suave);box-shadow:inset 3px 0 0 var(--ouro)}
+.lista-areas small{color:var(--texto-2);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lista-areas .g{font:500 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--texto-2);padding:8px 10px 2px}
+/* conversa */
+.chat{display:flex;flex-direction:column;gap:12px}
+.msg{max-width:92%;padding:10px 14px;border-radius:12px;font-size:14.5px;display:grid;gap:6px}
+.msg p{margin:0} .msg ul{margin:0;padding-left:18px}
+.msg.eu{align-self:flex-end;background:var(--texto);color:var(--cartao);border-bottom-right-radius:4px}
+.msg.ag{align-self:flex-start;background:var(--fundo-2);border:1px solid var(--borda);border-bottom-left-radius:4px}
+.msg.ag .quem{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--texto-2)}
+.msg.erro{border-color:var(--erro)}
+.sugestoes{display:flex;flex-wrap:wrap;gap:8px}
+.sugestoes button{border:1px solid var(--borda-3);background:var(--cartao);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;text-align:left}
+.compor{display:grid;gap:8px;border-top:1px solid var(--borda);padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px))}
+.compor textarea{min-height:64px}
+/* paleta e notificações */
+.paleta{position:fixed;top:12vh;left:50%;transform:translateX(-50%);width:min(640px,calc(100% - 32px));background:var(--cartao);border-radius:14px;z-index:51;box-shadow:0 24px 64px var(--sombra);overflow:hidden;border:1px solid var(--borda)}
+.paleta input{border:0;border-bottom:1px solid var(--borda);border-radius:0;min-height:56px;font-size:17px;padding:0 18px}
+.paleta .res{max-height:52vh;overflow:auto;padding:6px}
+.paleta .res button{width:100%;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;text-align:left;border:0;background:none;border-radius:8px;padding:9px 12px;cursor:pointer;align-items:center}
+.paleta .res button:hover{background:var(--fundo-2)} .paleta .res .sub{grid-column:2}
+.pop{position:fixed;top:60px;right:max(16px,env(safe-area-inset-right,0px));width:min(360px,calc(100% - 32px));background:var(--cartao);border:1px solid var(--borda);border-radius:12px;box-shadow:0 16px 40px var(--sombra);z-index:51;overflow:hidden}
+.toast{visibility:hidden;position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(160%);background:var(--texto);color:var(--cartao);padding:12px 16px;border-radius:10px;z-index:60;font-size:14px;max-width:calc(100% - 32px);transition:transform .2s}
+.toast.mostra{transform:translateX(-50%);visibility:visible}
+.so-leitor{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:1100px){ .kanban{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:900px){
+  .lado{transform:translateX(-100%);transition:transform .2s} body.menu-aberto .lado{transform:none;box-shadow:12px 0 32px var(--sombra)}
+  .corpo{margin-left:0} .icbtn.btn-menu{display:grid} .topo{padding:0 max(12px,env(safe-area-inset-right,0px)) 0 max(12px,env(safe-area-inset-left,0px));gap:4px}
+  .busca-g kbd,.busca-g .txt-l,.topo .novo-t{display:none} .busca-g .txt-c{display:inline} .topo img.logo-m{height:18px;width:auto;margin-right:4px} .topo img.logo-m.logo-claro{display:block!important} :root[data-theme="dark"] .topo img.logo-m.logo-claro{display:none!important} :root[data-theme="dark"] .topo img.logo-m.logo-escuro{display:block!important} .busca-g{max-width:none;padding:0 10px}
+  .pag{padding:20px max(16px,env(safe-area-inset-right,0px)) 56px max(16px,env(safe-area-inset-left,0px))} .duas{grid-template-columns:1fr}
+  .faixa-previa{padding:8px 16px}
+  .lh{grid-template-columns:minmax(0,1fr) auto !important;gap:4px 10px} .lh.cab{display:none} .lh .esconde-m{display:none}
+  .dl{grid-template-columns:1fr;gap:2px} .dl dt{font-size:12.5px;margin-top:6px}
+  .pag-cab h1{font-size:22px} .area-cab h1{font-size:23px}
+  .kanban{grid-template-columns:1fr} .kanban .coluna{display:none} .kanban .coluna.vis{display:grid} .seg-col{display:inline-flex}
+  .servicos{grid-template-columns:1fr} .servico{min-height:0}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px} .kpi{padding:12px} .kpi strong{font-size:24px}
+  .janela.alerta{grid-template-columns:1fr !important}
+  .topo .dir{gap:0} .icbtn{width:40px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head><body>
+<aside class="lado" aria-label="Menu principal">
+  <div class="marca"><img class="logo-claro" src="logo-save-fundo-claro.png" alt="Save Co." width="125" height="22"><img class="logo-escuro" src="logo-save-fundo-escuro.png" alt="Save Co." width="125" height="22"><span>Central Partners</span></div>
+  <nav class="menu" id="menu"></nav>
+  <div class="perfil"><div class="av" id="av">—</div><label for="sou">Perfil<select id="sou"><option value="">Quem é você?</option><option value="luis">Luis</option><option value="daniela">Daniela</option><option value="jenifer">Jenifer</option><option value="geovana">Geovana</option></select></label></div>
+</aside>
+<div class="corpo">
+  <header class="topo">
+    <button class="icbtn btn-menu" id="abrir-menu" aria-label="Abrir menu"></button><img class="logo-m logo-claro" src="logo-save-fundo-claro.png" alt="Save Co." width="103" height="18"><img class="logo-m logo-escuro" src="logo-save-fundo-escuro.png" alt="Save Co." width="103" height="18">
+    <button class="busca-g" id="abrir-busca" aria-label="Buscar (Ctrl+K)"><span id="ic-busca"></span><span class="txt-l">Buscar área, entrega, pasta, rotina ou pedido</span><span class="txt-c">Buscar</span><kbd>Ctrl K</kbd></button>
+    <div class="dir"><button class="icbtn" id="tema" aria-label="Alternar modo claro e escuro"></button><button class="icbtn" id="sino" aria-label="Notificações"></button><a class="btn novo-t" href="#novo">Novo pedido</a></div>
+  </header>
+  <div id="faixa"></div>
+  <main class="pag" id="pag"><div class="vazio">Carregando a Central…</div></main>
+</div>
+<div id="camada"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ===================== Camada de dados =====================
+   Tudo o que depende do Artifact está aqui: claude.use("db"), ("user") e ("sample").
+   Para migrar ao host com SSO (central/), troque este objeto por chamadas à API, com os mesmos nomes de coleção e campos.
+   Modo prévia: quando exemplo-dados.js está carregado (window.EX), usa dados de exemplo e só simula as gravações. */
+const Fonte = {
+  db: null, user: null, sample: null, previa: !!window.EX,
+  async json(n) { const r = await fetch(n, {cache: "no-store"}); if (!r.ok) throw new Error(n); return r.json() },
+  async carregar() {
+    if (this.previa) { const X = window.EX;
+      return {atualizado: X.atualizado, areas: X.areas, blocos: X.blocos, rotinas: X.rotinas, pastas: X.pastas, pessoas: X.pessoas, regras: X.regras_casa,
+        decisoes: X.decisoes, decisoesTotal: X.decisoes_total, demandas: X.demandas, demandasNum: X.demandas_num, alertas: X.alertas, manchete: X.manchete,
+        masters: X.masters, janelas: X.janelas, lote: X.lote, arquivos: X.arquivos,
+        pedidos: X.pedidos.map(p => ({...p, campos: {precisa: p.precisa, uso: p.uso, prazo: p.prazo}, para: {"celula-daniela": "daniela", "celula-jenifer": "jenifer", "recuperador": "geovana", "revisor-diagnostico": "geovana"}[p.area] || "luis"})),
+        chamados: X.chamados} }
+    const [D, R] = await Promise.all([this.json("dados.json"), this.json("diretorio.json")]);
+    const pw = D.pastas_web || {};
+    return {atualizado: D.atualizado, areas: R.areas, blocos: R.blocos, rotinas: R.rotinas, pastas: R.pastas, pessoas: R.pessoas, regras: R.regras_casa || [],
+      decisoes: D.conselho || [], decisoesTotal: null, demandas: D.demandas_lista || [], demandasNum: D.demandas || {}, alertas: D.gestao?.alertas || [], manchete: D.gestao?.manchete,
+      masters: D.gestao?.masters || [], janelas: D.janelas || [], lote: D.lote || [], arquivos: D.arquivos_dia || {}, pedidos: [], chamados: [], pastasWeb: pw, mastersLista: D.gestao?.masters || []};
+  },
+  async conectar() {
+    if (this.previa && /demo/.test(location.search)) { this.sample = demoSample(); return }
+    if (typeof claude === "undefined" || !claude?.use) return;
+    const [db, user, sample] = await Promise.all(["db", "user", "sample"].map(n => claude.use(n).catch(() => null)));
+    if (!this.previa) { this.db = db; this.user = user } this.sample = sample;
+  },
+  async quemSou() {
+    if (!this.user) return {id: null, chave: null};
+    let me = null; try { me = await this.user.me() } catch (e) {}
+    const n = sem(me?.name || ""); let chave = ["luis", "daniela", "jenifer", "geovana"].find(k => n.includes(k)) || null;
+    try { if (!chave && await this.user.isOwner()) chave = "luis" } catch (e) {}
+    return {id: me?.id || null, chave};
+  },
+  ouvir(col, ordem, lim, cb, erro) { let q = this.db.collection(col); if (ordem) q = q.orderBy(ordem, "desc"); return q.limit(lim).onSnapshot(s => cb(s.docs.map(d => ({id: d.id, ...d.data()}))), erro) },
+  pode() { return this.previa || !!this.db },
+  async criar(col, dados) { if (this.previa) return {id: "prev-" + Date.now()}; return this.db.collection(col).add(dados) },
+  async atualizar(c, dados) { if (this.previa) return; return this.db.doc(c).update(dados) },
+  async gravar(c, dados) { if (this.previa) return; return this.db.doc(c).set(dados) },
+};
+/* Resposta de demonstração do chat (só na prévia local com ?demo): mostra o desenho sem chamar o Claude. */
+function demoSample() {
+  return async (turns, o) => { const t = "**O que você pediu**\n- Para a conferência de repasses, a área precisa do Master, do mês e da lista dos ganhos que entram no cálculo.\n- O percentual vem do que foi negociado com cada Master (D64).\n\n**O que você também precisa**\n- Ganhos sem % de honorário no card ficam fora do cálculo até o dado chegar.\n\n**O que falta e quem fornece**\n- Mês de referência: você.\n\nIsto é pré-análise. Para virar entrega formal, clique em Transformar em pedido.";
+    let acc = ""; for (const p of t.match(/[\s\S]{1,24}/g)) { if (o?.signal?.aborted) throw {code: "cancelled", text: acc}; acc += p; o?.onText?.({text: acc, delta: p}); await new Promise(r => setTimeout(r, 15)) } return {text: acc, truncated: false} };
+}
+
+/* ===================== Utilitários ===================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const url = u => /^https:\/\//i.test(String(u || "")) ? esc(u) : "";
+const sem = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const agora = () => new Date().toISOString();
+const data = iso => { if (!iso) return ""; const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}:\d{2}))?/); return m ? `${m[3]}/${m[2]}${m[4] ? " " + m[4] : ""}` : esc(iso) };
+const mi = v => !v ? "—" : v >= 1e6 ? "R$ " + (v / 1e6).toFixed(1).replace(".", ",") + " mi" : "R$ " + Math.round(v / 1e3).toLocaleString("pt-BR") + " mil";
+const md = t => { let h = "", l = false; for (const x of String(t || "").split("\n")) { const s = esc(x.trim()).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+  if (s.startsWith("- ")) { if (!l) { h += "<ul>"; l = true } h += `<li>${s.slice(2)}</li>`; continue } if (l) { h += "</ul>"; l = false }
+  if (s) h += s.startsWith("### ") ? `<h4>${s.slice(4)}</h4>` : `<p>${s}</p>` } return h + (l ? "</ul>" : "") };
+const lsGet = k => { try { return localStorage.getItem(k) } catch (e) { return null } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v) } catch (e) {} };
+const P = {mesa: "M3 10.5 12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z", pedidos: "M4 4h16v16H4zM8 9h8M8 13h8M8 17h5", areas: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
+  onde: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4", rotinas: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 3", decisoes: "M5 12l4 4 10-10",
+  sino: "M6 16V11a6 6 0 1 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0", mais: "M12 5v14M5 12h14", fechar: "M6 6l12 12M18 6 6 18", menu: "M4 7h16M4 12h16M4 17h16",
+  chat: "M4 5h16v11H9l-5 4z", sol: "M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
+  lua: "M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z", pasta: "M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z", parar: "M7 7h10v10H7z"};
+const icone = (n, c = "ic") => `<svg class="${c}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${P[n]}"/></svg>`;
+
+const PESSOAS = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "Geovana"};
+const FASES = [["fila", "Na fila"], ["analise", "Em análise"], ["aprovar", "Pronto para aprovar"], ["concluido", "Concluído"]];
+const FASE = {novo: "fila", nova_analise: "fila", em_analise: "analise", aguardando_aprovacao: "aprovar", aprovado: "concluido", concluido: "concluido", nao_aprovado: "concluido"};
+const PARA_AREA = {"celula-daniela": "daniela", "celula-jenifer": "jenifer", "recuperador": "geovana", "revisor-diagnostico": "geovana"};
+const ST_CH = {proposto: "Aguarda aprovação", aprovado: "Aprovado · abrindo no GLPI", aberto: "Aberto no GLPI", aprovado_manual: "Aprovado · abrir manualmente", recusado: "Recusado"};
+const S = {M: null, eu: null, meuId: null, identificado: false, acoes: {}, recup: {}, conselho: {}, apont: [],
+  f: {fase: "", area: "", pessoa: ""}, kPessoa: "", kCol: "aprovar", novo: {sel: null, busca: ""}, chats: {}, chatOff: "", msg: ""};
+const fase = p => FASE[p.status] || "fila";
+const rotFase = p => p.status === "nova_analise" ? "Na fila · ajuste pedido" : p.status === "nao_aprovado" ? "Concluído · não aprovado" : FASES.find(f => f[0] === fase(p))[1];
+const chip = p => `<span class="chip p ${fase(p)}">${esc(rotFase(p))}</span>`;
+const area = sk => S.M.areas.find(a => a.skill === sk);
+const nomeArea = sk => sk ? (area(sk)?.nome || sk) : "Central de Agentes";
+const sigla = n => n.replace(/[&(),·]/g, " ").split(/\s+/).filter(w => w.length > 2 || /^[A-Z]{2,}$/.test(w)).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+const linkPastas = ls => (ls || []).filter(l => url(l.url)).map(l => `<a href="${url(l.url)}" target="_blank" rel="noopener">Abrir pasta ${esc(l.rotulo)}</a>`).join(" ");
+const foraOD = o => /^(Mac:|na conversa|repositório|pasta confidencial|~\/)/i.test(o || "");
+const toast = t => { const el = $("#toast"); el.textContent = t + (Fonte.previa ? " (prévia: nada foi gravado)" : ""); el.className = "toast mostra"; clearTimeout(el._t); el._t = setTimeout(() => el.className = "toast", 3400) };
+const rota = () => { const h = decodeURIComponent((location.hash || "").slice(1)); const [r, ...p] = h.split("/"); return {r: r || "mesa", p} };
+
+/* ===================== Mesa ===================== */
+function mesaDe(p) {
+  const M = S.M, dem = M.demandas.filter(d => d.pessoa === p && !S.acoes[d.id]);
+  return {prontos: M.pedidos.filter(x => x.solicitante === p && x.status === "aguardando_aprovacao"),
+    responder: dem.filter(d => d.status === "responder"), acompanhar: dem.filter(d => d.status !== "responder"),
+    chamados: M.chamados.filter(c => c.pessoa === p && c.status === "proposto"),
+    lote: p === "geovana" ? M.lote.filter(r => !S.recup[r.deal]) : [],
+    andamento: M.pedidos.filter(x => x.solicitante === p && ["fila", "analise"].includes(fase(x))),
+    paraArea: M.pedidos.filter(x => x.para === p && x.solicitante !== p && fase(x) !== "concluido"),
+    decisoes: p === "luis" ? decisoesPend() : [], arquivos: M.arquivos[p] || [], pasta: M.pessoas.find(x => x.chave === p) || {}};
+}
+const decisoesPend = () => S.M.decisoes.filter(d => !S.conselho[d.id]);
+const totalDecisoes = () => S.M.decisoesTotal ?? decisoesPend().length;
+function itensAcao(p) {
+  const m = mesaDe(p);
+  return [...m.decisoes.map(d => ({tipo: "Decisão do Conselho", t: d.id + " · " + d.texto, sub: "Alçada do Luis", go: "decisao/" + d.id, c: `<span class="chip p aprovar">Pendente</span>`})),
+    ...m.prontos.map(x => ({tipo: "Aprovar resposta", t: x.entrega || x.campos?.precisa, sub: nomeArea(x.area), quando: (x.historico || []).at(-1)?.quando, go: "pedido/" + x.id, c: `<span class="chip p aprovar">Pronto para aprovar</span>`})),
+    ...m.chamados.map(c => ({tipo: "Aprovar chamado", t: c.titulo, sub: c.grupo, go: "chamado/" + c.id, c: `<span class="chip p aprovar">Aguarda você</span>`})),
+    ...m.responder.map(d => ({tipo: "Responder demanda", t: d.titulo, sub: d.master, quando: d.aberta_em, go: "demanda/" + d.id, c: d.urgente ? `<span class="chip urg">Urgente</span>` : `<span class="chip p analise">Responder</span>`})),
+    ...m.lote.map(l => ({tipo: "Decidir lote", t: l.negocio + " · " + (l.segmento || ""), sub: l.parceiro, go: "lote/" + l.deal, c: `<span class="chip p aprovar">Decidir</span>`}))];
+}
+const pendentes = p => !p ? 0 : itensAcao(p).length - (p === "luis" ? decisoesPend().length - totalDecisoes() : 0);
+const cab = (rot, t, sub, acoes = "") => `<div class="pag-cab"><div><span class="rot">${rot}</span><h1>${t}</h1>${sub ? `<p>${sub}</p>` : ""}</div><div class="acoes">${acoes}</div></div>`;
+const kpi = (r, v, s, go, dest) => `<${go ? `button class="kpi ${dest ? "destaque" : ""}" data-go="${go}"` : `div class="kpi ${dest ? "destaque" : ""}"`}><span class="rot">${r}</span><strong>${v}</strong><small>${s}</small></${go ? "button" : "div"}>`;
+function tabelaAcao(itens, max = 10) {
+  return `<section class="painel"><div class="painel-cab"><h2>Para agir agora</h2><span class="sub">${itens.length} ${itens.length === 1 ? "item" : "itens"}</span></div>
+    <div class="linhas" style="--cols:160px minmax(0,1fr) 170px"><div class="lh cab"><span>Tipo</span><span>Item</span><span>Situação</span></div>
+    ${itens.slice(0, max).map(i => `<button class="lh" data-go="${i.go}"><span class="sub esconde-m">${esc(i.tipo)}</span><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.sub || "")}${i.quando ? " · " + data(i.quando) : ""}</span></span><span>${i.c}</span></button>`).join("") || `<div class="vazio">Nada pendente com você.</div>`}
+    ${itens.length > max ? `<button class="lh" data-go="decisoes"><span class="sub">Ver as outras ${itens.length - max}</span></button>` : ""}</div></section>`;
+}
+function painelPedidos(t, xs, vazio) {
+  return `<section class="painel"><div class="painel-cab"><h2>${t}</h2><a href="#pedidos">Ver todos</a></div><div class="linhas" style="--cols:minmax(0,1fr) auto">
+    ${xs.map(p => `<button class="lh" data-go="pedido/${esc(p.id)}"><span><span class="tit">${esc(nomeArea(p.area))}</span><span class="sub">${esc(p.campos?.precisa)}</span></span>${chip(p)}</button>`).join("") || `<div class="vazio">${vazio}</div>`}</div></section>`;
+}
+function painelArquivos(m) {
+  const pw = (S.M.pastasWeb || {})[S.eu] || {}, pu = m.pasta.url || pw.url;
+  return `<section class="painel"><div class="painel-cab"><h2>Arquivos do dia</h2>${url(pu) ? `<a href="${url(pu)}" target="_blank" rel="noopener">Abrir minha pasta</a>` : ""}</div>
+    <div class="linhas" style="--cols:minmax(0,1fr) auto">${m.arquivos.map(a => `<div class="lh"><span><span class="tit">${url(a.url) ? `<a href="${url(a.url)}" target="_blank" rel="noopener">${esc(a.nome)}</a>` : esc(a.nome)}</span><span class="sub">${esc(a.pasta || "pasta principal")}</span></span><span class="mono">${esc(a.hora)}</span></div>`).join("") || `<div class="vazio">Nenhum arquivo novo nas últimas 24 horas.</div>`}</div></section>`;
+}
+function telaMesa() {
+  const p = S.eu;
+  if (!p) return cab("Minha mesa", "Quem está usando?", "Escolha o seu nome. A mesa mostra só o que é seu agora.") + `<div class="acoes">${Object.entries(PESSOAS).map(([k, v]) => `<button class="btn sec" data-sou="${k}">${v}</button>`).join("")}</div>`;
+  return p === "luis" ? mesaLuis() : mesaTime(p);
+}
+function mesaTime(p) {
+  const m = mesaDe(p), itens = itensAcao(p);
+  return cab(`Minha mesa · ${PESSOAS[p]}`, itens.length ? `${itens.length} ${itens.length === 1 ? "item pede" : "itens pedem"} a sua ação` : "Nada pendente com você agora",
+      "Você aprova o que é da sua entrega. Só regra, preço, meta, remuneração, produto em validação e material em escala sobem ao Luis.", `<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`)
+  + `<div class="kpis">${kpi("Para responder", m.responder.length, "demandas dos Masters", m.responder[0] ? "demanda/" + m.responder[0].id : "", false)}${kpi("Para aprovar", m.prontos.length + m.chamados.length + m.lote.length, p === "geovana" ? "respostas, chamados e lote" : "respostas e chamados", "", true)}${kpi("Em andamento", m.andamento.length, "pedidos que você fez", "pedidos")}${kpi("Para a sua área", m.paraArea.length, "pedidos de outras pessoas", "pedidos")}</div>
+  <div class="duas">${tabelaAcao(itens)}<div class="pilha">${painelPedidos("Meus pedidos em andamento", m.andamento, "Nenhum pedido seu em andamento.")}${painelArquivos(m)}</div></div>
+  ${m.acompanhar.length ? `<section class="painel"><div class="painel-cab"><h2>Demandas que você acompanha (${m.acompanhar.length})</h2></div><div class="linhas" style="--cols:minmax(0,1fr) auto">${m.acompanhar.map(d => `<button class="lh" data-go="demanda/${esc(d.id)}"><span><span class="tit">${esc(d.titulo)}</span><span class="sub">${esc(d.master || "")} · ${data(d.aberta_em)}</span></span><span class="chip p fila">Acompanhar</span></button>`).join("")}</div></section>` : ""}
+  ${painelApont(p)}`;
+}
+function painelApont(p) {
+  const hoje = new Date().toISOString().slice(0, 10), meus = S.apont.filter(x => x.pessoa === p && (x.data || "").startsWith(hoje));
+  return `<details class="painel"><summary class="painel-cab" style="cursor:pointer"><h2>Registrar uma tarefa (Semana 0)</h2><span class="sub">${meus.length} hoje · ${meus.reduce((s, x) => s + (x.minutos || 0), 0)} min</span></summary>
+    <form id="f-apont" class="painel-corpo"><div class="campos"><label>O que fez<input id="a-desc" required maxlength="160" placeholder="Ex.: encaminhei o pedido de contrato"></label>
+      <label>Tipo<select id="a-tipo">${["Atendimento ao parceiro", "Encaminhamento a área", "Cobrança de área", "Atualização de CRM", "Reunião", "Prospecção", "Análise técnica", "Relatório", "Outro"].map(t => `<option>${t}</option>`).join("")}</select></label>
+      <label>Minutos<input id="a-min" type="number" min="1" max="600" value="15"></label></div>
+      <label style="display:flex;gap:10px;align-items:center;font-weight:400"><input id="a-ponte" type="checkbox" style="width:22px;min-height:22px"> Foi só ponte (receber, repassar, cobrar ou devolver)</label>
+      <div class="acoes"><button class="btn sec" type="submit" ${Fonte.pode() ? "" : "disabled"}>Registrar</button></div></form></details>`;
+}
+function mesaLuis() {
+  const M = S.M, ps = M.pedidos, dn = M.demandasNum, itens = itensAcao("luis");
+  const base = ps.filter(p => !S.kPessoa || p.solicitante === S.kPessoa);
+  const hoje = new Date(M.janelas.length && Fonte.previa ? "2026-10-23T12:00" : Date.now());
+  const dias = d => d ? Math.ceil((new Date(d + "T23:59") - hoje) / 864e5) : null;
+  const js = M.janelas.slice().sort((a, b) => (a.prazo || "9999").localeCompare(b.prazo || "9999"));
+  return cab("Minha mesa · Luis", `Decisões da sua alçada: ${totalDecisoes()}`, "Aqui ficam regra, preço, meta, remuneração, produto em validação e material em escala. Chamados, lotes e listas são decididos por quem é dona da entrega.", `<a class="btn sec" href="#decisoes">Ver decisões</a><a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`)
+  + `<div class="kpis">${kpi("Decisões suas", totalDecisoes(), "regra, preço, meta, produto", "decisoes", true)}
+      ${kpi("Para responder", ["daniela", "jenifer", "geovana"].reduce((s, k) => s + (dn[k]?.responder || 0), 0), ["daniela", "jenifer", "geovana"].map(k => `${PESSOAS[k]} ${dn[k]?.responder || 0}`).join(" · "))}
+      ${kpi("Pedidos abertos", ps.filter(p => ["fila", "analise"].includes(fase(p))).length, "na fila ou em análise", "pedidos")}
+      ${kpi("Prontos p/ aprovar", ps.filter(p => fase(p) === "aprovar").length, "com quem pediu", "pedidos")}
+      ${kpi("Chamados", M.chamados.filter(c => c.status === "proposto").length, "com a dona para aprovar")}
+      ${kpi("Lote Recuperador", `${M.lote.filter(r => S.recup[r.deal]).length}/${M.lote.length}`, "decididos pela Geovana")}</div>
+  <section class="painel"><div class="painel-cab"><h2>Filas de pedidos</h2>
+      <div class="filtros"><div class="seg" role="group" aria-label="Pessoa"><button data-kp="" aria-pressed="${!S.kPessoa}">Todos <span class="n">${ps.length}</span></button>${Object.entries(PESSOAS).map(([k, v]) => `<button data-kp="${k}" aria-pressed="${S.kPessoa === k}">${v} <span class="n">${ps.filter(p => p.solicitante === k).length}</span></button>`).join("")}</div>
+      <select class="f seg-col" id="k-col" aria-label="Coluna">${FASES.map(([k, n]) => `<option value="${k}" ${S.kCol === k ? "selected" : ""}>${n} (${base.filter(p => fase(p) === k).length})</option>`).join("")}</select></div></div>
+    <div class="painel-corpo"><div class="kanban">${FASES.map(([k, n]) => { const xs = base.filter(p => fase(p) === k);
+      return `<div class="coluna ${S.kCol === k ? "vis" : ""}"><h3><span class="chip p ${k}" style="border:0;background:none;padding:0">${n}</span><span class="mono">${xs.length}</span></h3>
+        ${xs.map(p => `<button class="ticket" data-go="pedido/${esc(p.id)}"><span class="sub">${esc(p.pid || p.id)} · ${esc(nomeArea(p.area))}</span><span class="txt">${esc(p.campos?.precisa)}</span>
+          <span class="rodape"><span class="av p" aria-hidden="true">${esc((PESSOAS[p.solicitante] || "?").slice(0, 2).toUpperCase())}</span>${esc(PESSOAS[p.solicitante] || "")}<span class="mono">${data(p.criado_em)}</span></span></button>`).join("") || `<p class="sub" style="padding:4px">Vazio</p>`}</div>` }).join("")}</div></div></section>
+  <div class="duas">${tabelaAcao(itens, 6)}
+    <section class="painel"><div class="painel-cab"><h2>Janelas de receita</h2><span class="sub">por prazo</span></div>
+      ${js.map(j => { const d = dias(j.prazo); return `<div class="janela"><span class="dias ${d !== null && d <= 14 ? "perto" : ""}">${d === null ? "sem data" : d < 0 ? "encerrada" : d + " dias"}</span><span><span class="tit quebra" style="font-size:14px">${esc(j.janela)}</span><span class="sub quebra">${esc(j.prazo_texto)} · ${esc(j.produto)}</span></span></div>` }).join("") || `<div class="vazio">Sem janelas cadastradas.</div>`}</section></div>
+  <div class="duas"><section class="painel"><div class="painel-cab"><h2>Alertas das áreas</h2></div>${M.alertas.map(a => `<div class="janela alerta" style="grid-template-columns:150px minmax(0,1fr)"><span><span class="chip">${esc(a.area)}</span></span><span class="quebra" style="font-size:14px">${esc(a.texto)}</span></div>`).join("")}</section>
+    <details class="painel"><summary class="painel-cab" style="cursor:pointer"><h2>Saúde dos Masters</h2><span class="sub">${M.masters.length} Masters</span></summary>
+      <div class="linhas" style="--cols:minmax(0,1fr) 70px 70px 80px"><div class="lh cab"><span>Master</span><span>Saúde</span><span>Parados</span><span>Ganhos 90d</span></div>
+      ${M.masters.slice().sort((a, b) => a.saude - b.saude).map(m => `<div class="lh" style="grid-template-columns:minmax(0,1fr) 70px 70px 80px !important"><span>${esc(m.parceiro)}</span><span class="mono">${esc(m.saude)}${m.saude < 60 ? " ↓" : ""}</span><span class="mono">${esc(m.parados)}</span><span class="mono">${esc(m.ganhos_90d)}</span></div>`).join("")}</div></details></div>
+  ${painelArquivos(mesaDe("luis"))}`;
+}
+
+/* ===================== Pedidos ===================== */
+function telaPedidos() {
+  const F = S.f, ps = S.M.pedidos;
+  const base = ps.filter(p => (!F.area || (F.area === "-" ? !p.area : p.area === F.area)) && (!F.pessoa || p.solicitante === F.pessoa)), vis = base.filter(p => !F.fase || fase(p) === F.fase);
+  return cab("Pedidos", "Todos os pedidos", "Quem pede escolhe a área. O pedido vai direto para ela, e quem pediu aprova a resposta.", `<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`)
+  + `<section class="painel"><div class="painel-cab"><div class="seg" role="group" aria-label="Situação"><button data-fase="" aria-pressed="${!F.fase}">Todos <span class="n">${base.length}</span></button>${FASES.map(([k, n]) => `<button data-fase="${k}" aria-pressed="${F.fase === k}">${n} <span class="n">${base.filter(p => fase(p) === k).length}</span></button>`).join("")}</div>
+    <div class="filtros"><select class="f" id="f-area" aria-label="Área"><option value="">Todas as áreas</option><option value="-" ${F.area === "-" ? "selected" : ""}>Central (sem área)</option>${S.M.areas.map(a => `<option value="${esc(a.skill)}" ${F.area === a.skill ? "selected" : ""}>${esc(a.nome)}</option>`).join("")}</select>
+    <select class="f" id="f-pessoa" aria-label="Pessoa"><option value="">Todas as pessoas</option>${Object.entries(PESSOAS).map(([k, v]) => `<option value="${k}" ${F.pessoa === k ? "selected" : ""}>${v}</option>`).join("")}</select></div></div>
+    <div class="linhas" style="--cols:84px minmax(0,1fr) 190px 90px 100px 190px"><div class="lh cab"><span>Nº</span><span>Pedido</span><span>Área</span><span>Quem</span><span>Aberto</span><span>Situação</span></div>
+    ${vis.map(p => `<button class="lh" data-go="pedido/${esc(p.id)}"><span class="mono esconde-m">${esc(p.pid || p.id)}</span><span><span class="tit">${esc(p.entrega || p.campos?.precisa)}</span><span class="sub">${esc(p.campos?.precisa)}</span></span><span class="sub esconde-m">${esc(nomeArea(p.area))}${p.direto ? "" : " · triagem"}</span><span class="esconde-m">${esc(PESSOAS[p.solicitante] || "")}</span><span class="mono esconde-m">${data(p.criado_em)}</span><span>${chip(p)}</span></button>`).join("")
+      || `<div class="vazio">${Fonte.pode() ? "Nenhum pedido com esses filtros." : "Os pedidos aparecem quando a Central é aberta pelo link do Claude."}</div>`}</div></section>`;
+}
+
+/* ===================== Áreas ===================== */
+function telaAreas() {
+  return cab("Áreas", `${S.M.areas.length} áreas de agentes`, "Escolha a área para ver o que ela faz, quem é o dono, os especialistas e onde ficam as entregas. Em cada uma você faz o pedido ou conversa com os agentes.", `<button class="btn sec" id="ir-busca">${icone("onde")}Buscar</button>`)
+  + S.M.blocos.map(b => `<section class="bloco"><span class="rot">${esc(b)}</span><div class="servicos">${S.M.areas.filter(a => a.bloco === b).map(a => `<button class="servico" data-go="area/${esc(a.skill)}">
+      <span class="topo-s"><span class="sig" aria-hidden="true">${esc(sigla(a.nome))}</span><strong>${esc(a.nome)}</strong></span><p>${esc(a.missao)}</p>
+      <span class="base"><span>${a.entregas.length} entregas · ${a.especialistas.length} especialistas</span><span style="width:100%">Dono: ${esc(a.dono.split(" (")[0])}</span></span></button>`).join("")}</div></section>`).join("");
+}
+function telaArea(sk) {
+  const a = area(sk); if (!a) return telaAreas();
+  return `<nav class="migalha" aria-label="Caminho"><a href="#areas">Áreas</a><span>/</span><span>${esc(a.bloco)}</span></nav>
+  <section class="area-cab"><span class="rot">${esc(a.bloco)}</span><h1>${esc(a.nome)}</h1><p>${esc(a.missao)}</p>
+    <div class="filtros"><span class="chip">Dono: ${esc(a.dono)}</span><span class="chip">${a.especialistas.length} especialistas</span><span class="chip">${a.entregas.length} entregas</span></div>
+    <div class="acoes"><a class="btn" href="#area/${esc(a.skill)}/pedido">${icone("mais")}Fazer pedido</a><a class="btn sec" href="#area/${esc(a.skill)}/conversa">${icone("chat")}Fale com esta área</a></div></section>
+  <div class="duas"><div class="pilha">
+    <section class="painel"><div class="painel-cab"><h2>Entregas</h2><span class="sub">o que a área costuma entregar</span></div>
+      ${a.entregas.map(e => `<div class="ent"><span class="tit quebra">${esc(e.entrega)}</span>${e.conteudo ? `<span class="sub quebra">${esc(e.conteudo)}</span>` : ""}
+        <span class="meta">${e.quando ? `<span>Quando: ${esc(e.quando)}</span>` : ""}${e.quem_recebe ? `<span>Recebe: ${esc(e.quem_recebe)}</span>` : ""}${e.formato ? `<span>Formato: ${esc(e.formato)}</span>` : ""}</span>
+        ${e.arquivo && e.arquivo !== "—" ? `<span class="meta">Arquivo: <span class="mono">${esc(e.arquivo)}</span></span>` : ""}
+        <span class="meta">Onde: ${esc(e.onde)} ${linkPastas(e.links)}</span>
+        <span><button class="btn peq sec" data-pedir="${esc(a.skill)}" data-entrega="${esc(e.entrega)}">Pedir esta entrega</button></span></div>`).join("")}</section>
+    <section class="painel"><div class="painel-cab"><h2>Especialistas</h2><span class="sub">o que cada um entrega</span></div><div class="painel-corpo"><div class="esps">${a.especialistas.map(e => `<div class="esp"><b>${esc(e.nome)}</b><span>${esc(e.entrega)}</span></div>`).join("")}</div></div></section>
+  </div><div class="pilha">
+    <section class="painel"><div class="painel-cab"><h2>Onde fica</h2></div><div class="painel-corpo"><p style="margin:0;font-size:14px">${esc(a.onde)}</p>${a.links.length ? `<div class="acoes">${linkPastas(a.links)}</div>` : `<p class="sub quebra">Entrega na conversa ou no pedido; arquivo fora do OneDrive quando houver.</p>`}</div></section>
+    ${a.quem_usa ? `<section class="painel"><div class="painel-cab"><h2>Quem usa</h2></div><div class="painel-corpo"><p style="margin:0;font-size:14px">${esc(a.quem_usa)}</p></div></section>` : ""}
+    ${a.nao_faz?.length ? `<section class="painel"><div class="painel-cab"><h2>O que a área não faz</h2></div><div class="painel-corpo"><ul style="margin:0;padding-left:18px;font-size:14px;display:grid;gap:4px">${a.nao_faz.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div></section>` : ""}
+  </div></div>`;
+}
+
+/* ===================== Onde está ===================== */
+let IDX = null;
+function indice() {
+  if (IDX) return IDX; const R = [], M = S.M;
+  for (const a of M.areas) { R.push({tipo: "Área", titulo: a.nome, sub: a.bloco + " · dono: " + a.dono, det: a.missao, onde: a.onde, links: a.links, area: a.skill});
+    for (const e of a.entregas) R.push({tipo: "Entrega", titulo: e.entrega, sub: a.nome + (e.quando ? " · " + e.quando : ""), det: e.conteudo, onde: e.onde, quem: e.quem_recebe, links: e.links, area: a.skill});
+    for (const e of a.especialistas) R.push({tipo: "Especialista", titulo: e.nome, sub: a.nome, det: e.entrega, onde: "", links: [], area: a.skill}) }
+  for (const r of M.rotinas) R.push({tipo: "Rotina", titulo: r.nome, sub: r.quando, det: r.entrega, onde: r.onde, links: r.links});
+  for (const p of M.pastas) R.push({tipo: "Pasta", titulo: p.rotulo, sub: p.caminho, det: p.uso, onde: p.caminho, links: url(p.url) ? [{rotulo: p.rotulo, url: p.url}] : []});
+  for (const p of M.pessoas) R.push({tipo: "Pessoa", titulo: p.nome, sub: p.pasta, det: p.papel, onde: p.pasta, links: url(p.url) ? [{rotulo: "de " + p.nome, url: p.url}] : []});
+  for (const r of R) { r.t = sem(r.titulo); r.all = sem([r.tipo, r.titulo, r.sub, r.det, r.onde, r.quem].join(" ")) }
+  return IDX = R;
+}
+const PESO = {Entrega: 3, Pasta: 2, Rotina: 2, "Área": 2, Pessoa: 1, Especialista: 0};
+const buscar = (q, n = 30) => { const ts = sem(q).trim().split(/\s+/).filter(Boolean); if (!ts.length) return [];
+  return indice().filter(r => ts.every(t => r.all.includes(t))).map(r => ({r, s: (ts.every(t => r.t.includes(t)) ? 10 : 0) + PESO[r.tipo]})).sort((a, b) => b.s - a.s).slice(0, n).map(x => x.r) };
+function resOnde(q) {
+  const rs = buscar(q);
+  return `<div class="painel-cab"><h2>${q.trim() ? `${rs.length}${rs.length === 30 ? "+" : ""} resultado(s) para “${esc(q)}”` : "Digite o que você procura"}</h2></div>
+  <div class="linhas" style="--cols:110px minmax(0,1.2fr) minmax(0,1fr)">${rs.map(r => `<div class="lh"><span class="esconde-m"><span class="chip">${esc(r.tipo)}</span></span>
+    <span><span class="tit quebra">${esc(r.titulo)}</span><span class="sub quebra">${esc(r.sub || "")}</span>${r.det ? `<span class="sub quebra">${esc(r.det)}</span>` : ""}</span>
+    <span><span class="sub quebra">Onde: ${esc(r.onde || "—")}${foraOD(r.onde) && !r.links?.length ? " (fora do OneDrive)" : ""}</span><span class="acoes" style="margin-top:4px">${linkPastas(r.links)}${r.area ? `<a href="#area/${esc(r.area)}">Ver a área</a>` : ""}</span></span></div>`).join("") || (q.trim() ? `<div class="vazio">Nada encontrado. Tente outra palavra ou <a href="#novo">peça à Central</a>.</div>` : "")}</div>`;
+}
+function telaOnde(q) {
+  const ex = ["Conferência de repasses", "lote do Recuperador", "ata do Conselho", "plano do dia"];
+  return cab("Onde está", "Onde fica cada coisa", `${S.M.areas.length} áreas, ${S.M.areas.reduce((s, a) => s + a.especialistas.length, 0)} especialistas e ${S.M.areas.reduce((s, a) => s + a.entregas.length, 0)} entregas. Busque por entrega, pasta, rotina, pessoa ou especialista.`)
+  + `<label style="max-width:760px"><span class="so-leitor">Buscar</span><input id="q-onde" type="search" value="${esc(q)}" placeholder="O que você procura? Ex.: conferência de repasses" autocomplete="off" style="min-height:48px;font-size:16px"></label>
+  <div class="filtros"><span class="sub">Exemplos:</span>${ex.map(x => `<button class="btn peq sec" data-q="${esc(x)}">${esc(x)}</button>`).join("")}</div>
+  <section class="painel" id="res-onde">${resOnde(q)}</section>
+  <div class="duas"><section class="painel"><div class="painel-cab"><h2>Pastas no OneDrive</h2></div><div class="linhas" style="--cols:minmax(0,1fr) auto">
+    ${S.M.pastas.map(p => `<div class="lh"><span><span class="tit">${esc(p.rotulo)}</span><span class="sub">${esc(p.caminho)}</span></span><span>${url(p.url) ? `<a href="${url(p.url)}" target="_blank" rel="noopener">Abrir</a>` : `<span class="sub">ainda não criada</span>`}</span></div>`).join("")}</div></section>
+  <section class="painel"><div class="painel-cab"><h2>Pessoas</h2></div><div class="linhas" style="--cols:minmax(0,1fr) auto">
+    ${S.M.pessoas.map(p => `<div class="lh"><span><span class="tit">${esc(p.nome)}</span><span class="sub quebra">${esc(p.papel)}</span></span><span>${url(p.url) ? `<a href="${url(p.url)}" target="_blank" rel="noopener">Pasta</a>` : ""}</span></div>`).join("")}</div></section></div>`;
+}
+function telaRotinas() {
+  return cab("Rotinas", "Quando os agentes trabalham", "O que roda sozinho, quando roda e onde entrega.")
+  + `<section class="painel"><div class="linhas" style="--cols:minmax(0,1fr) 240px minmax(0,1.1fr)"><div class="lh cab"><span>Rotina</span><span>Quando</span><span>Onde entrega</span></div>
+  ${S.M.rotinas.map(r => `<div class="lh"><span><span class="tit">${esc(r.nome)}</span><span class="sub quebra">${esc(r.entrega)}</span><span class="sub quebra so-m-b">${esc(r.quando)}</span></span><span class="mono esconde-m">${esc(r.quando)}</span><span class="sub quebra esconde-m">${esc(r.onde)} ${linkPastas(r.links)}</span></div>`).join("")}</div></section>`;
+}
+function telaDecisoes() {
+  const ds = decisoesPend(), dono = S.eu === "luis";
+  return cab("Decisões", `Decisões do Conselho · ${totalDecisoes()} pendentes`, dono ? "Aprove, rejeite ou ajuste. O agente registra no livro de decisões na próxima rodada." : "Só o Luis decide. As aprovações operacionais ficam com quem é dona da entrega.")
+  + (Fonte.previa && S.M.decisoesTotal > ds.length ? `<div class="nota">Prévia: mostrando ${ds.length} de ${S.M.decisoesTotal} decisões, sem as que citam cliente.</div>` : "")
+  + `<section class="painel"><div class="linhas" style="--cols:70px minmax(0,1fr) 100px 120px"><div class="lh cab"><span>Nº</span><span>Decisão</span><span>Data</span><span>Situação</span></div>${ds.map(d => `<button class="lh" data-go="decisao/${esc(d.id)}"><span class="mono">${esc(d.id)}</span><span class="tit quebra">${esc(d.texto)}</span><span class="mono esconde-m">${esc(d.data)}</span><span><span class="chip p aprovar">Pendente</span></span></button>`).join("") || `<div class="vazio">Nenhuma decisão pendente.</div>`}</div></section>`;
+}
+
+/* ===================== Gaveta ===================== */
+function gaveta(titulo, sub, corpo, rodape = "", extra = "") {
+  $("#camada").innerHTML = `<div class="veu" data-fechar></div><section class="gaveta" role="dialog" aria-modal="true" aria-labelledby="g-tit"><header><div style="flex:1;min-width:0"><h2 id="g-tit" tabindex="-1">${titulo}</h2>${sub ? `<span class="sub">${sub}</span>` : ""}</div><button class="icbtn" data-fechar aria-label="Fechar">${icone("fechar")}</button></header><div class="conteudo" id="g-conteudo">${corpo}</div>${extra}${rodape ? `<div class="rodape">${rodape}</div>` : ""}</section>`;
+  $("#g-tit").focus({preventScroll: true});
+}
+function gPedido(id) {
+  const p = S.M.pedidos.find(x => x.id === id); if (!p) return; const R = p.resposta, meu = p.solicitante === S.eu && p.status === "aguardando_aprovacao";
+  gaveta(`${esc(p.entrega || "Pedido")}`, `<span class="mono">${esc(p.pid || p.id)}</span> · ${esc(nomeArea(p.area))}`,
+    `<div class="filtros">${chip(p)}<span class="chip">${p.direto ? "Direto à área" : "Pela Central"}</span></div>
+    <p style="margin:0;font-size:16px">${esc(p.campos?.precisa)}</p>
+    <dl class="dl"><dt>Pedido por</dt><dd>${esc(PESSOAS[p.solicitante] || p.solicitante)} em ${data(p.criado_em)}</dd>${p.campos?.uso ? `<dt>Para que</dt><dd>${esc(p.campos.uso)}</dd>` : ""}${p.campos?.prazo ? `<dt>Prazo</dt><dd>${data(p.campos.prazo)}</dd>` : ""}<dt>Quem aprova</dt><dd>${esc(PESSOAS[p.solicitante] || "")} (quem pediu)</dd>${p.campos?.contexto ? `<dt>Contexto</dt><dd class="quebra">${esc(p.campos.contexto).slice(0, 600)}</dd>` : ""}</dl>
+    ${(p.reencaminhado || []).map(r => `<div class="nota">Reencaminhado de ${esc(nomeArea(r.de))} para ${esc(nomeArea(r.para))}: ${esc(r.motivo)} (${data(r.quando)}).</div>`).join("")}
+    ${R ? `<div class="resp"><span class="rot">Resposta v${esc(R.versao)} · ${esc(nomeArea(p.area))}</span><p><b>${esc(R.resumo)}</b></p>${(R.secoes || []).map(s => `<h4>${esc(s.titulo)}</h4>${md(s.texto)}`).join("")}${R.tambem ? `<h4>O que você também precisa</h4>${md(R.tambem)}` : ""}${R.falta ? `<h4>O que falta e quem fornece</h4>${md(R.falta)}` : ""}${(R.conferir || []).length ? `<h4>Antes de usar, confira</h4>${md(R.conferir.map(c => "- " + c).join("\n"))}` : ""}${(R.arquivos || []).length ? `<p class="sub quebra">Arquivos: ${R.arquivos.map(esc).join(", ")}</p>` : ""}</div>` : ""}
+    <div><span class="rot">Linha do tempo</span><ol class="linha-tempo" style="margin-top:10px">${(p.historico || []).map(h => `<li><b>${esc(h.evento)}</b> · ${esc(PESSOAS[h.por] || h.por)} <span class="mono" style="color:var(--texto-2)">${data(h.quando)}</span>${h.nota ? `<br><span class="sub quebra">${esc(h.nota)}</span>` : ""}</li>`).join("")}</ol></div>
+    ${meu ? `<label for="com">Comentário <small>(obrigatório para pedir ajuste ou não aprovar)</small><textarea id="com" maxlength="1500"></textarea></label>` : ""}`,
+    meu ? `<button class="btn" data-dec="aprovado" data-id="${esc(p.id)}">Aprovar</button><button class="btn sec" data-dec="nova_analise" data-id="${esc(p.id)}">Pedir ajuste</button><button class="btn perigo" data-dec="nao_aprovado" data-id="${esc(p.id)}">Não aprovado</button>` : "");
+}
+function listaAreasNovo() {
+  const q = sem(S.novo.busca);
+  return `<button type="button" data-sel="" aria-pressed="${S.novo.sel === ""}"><b>Não sei qual área</b><small>A Central decide quem responde</small></button>` + S.M.blocos.map(b => {
+    const xs = S.M.areas.filter(x => x.bloco === b && (!q || sem(x.nome + " " + x.missao + " " + x.entregas.map(e => e.entrega).join(" ")).includes(q)));
+    return xs.length ? `<span class="g">${esc(b)}</span>` + xs.map(x => `<button type="button" data-sel="${esc(x.skill)}" aria-pressed="${S.novo.sel === x.skill}"><b>${esc(x.nome)}</b><small>${esc(x.missao)}</small></button>`).join("") : "" }).join("");
+}
+function gNovo(fixa) {
+  const sel = fixa !== undefined ? fixa : S.novo.sel, a = sel ? area(sel) : null, ent = S.novo.entrega || "";
+  const ok = Fonte.pode() && S.eu;
+  gaveta(a ? `Fazer pedido · ${esc(a.nome)}` : "Novo pedido", a ? "Direto para a área, sem triagem" : "Escolha a área ou deixe a Central decidir",
+    `${fixa === undefined ? `<label for="q-area">Para qual área?</label><input id="q-area" type="search" placeholder="Buscar área ou entrega" value="${esc(S.novo.busca)}" autocomplete="off"><div class="lista-areas" id="lista-areas">${listaAreasNovo()}</div>` : ""}
+    ${sel !== null ? `<div class="nota"><b>${esc(a ? a.nome : "Central de Agentes")}</b> · ${esc(a ? a.missao : "Faz a triagem e aciona as áreas certas. Use quando o pedido cruza várias áreas.")}${a ? `<br>Dono: ${esc(a.dono)}` : ""}</div>
+      ${a ? `<label for="p-entrega">O que você quer receber <small>(opcional)</small></label><select id="p-entrega"><option value="">Não sei, a área decide</option>${a.entregas.map(e => `<option ${e.entrega === ent ? "selected" : ""}>${esc(e.entrega)}</option>`).join("")}</select>` : ""}
+      <label for="p-precisa">O que você precisa <small>Descreva a entrega que resolve o seu problema.</small></label><textarea id="p-precisa" maxlength="1500">${esc(S.novo.texto || "")}</textarea>
+      <div class="campos"><label>Para que vai usar<select id="p-uso">${["Reunião", "Resposta ao parceiro", "Decisão interna", "Prospecção", "Levantamento", "Outro"].map(x => `<option>${x}</option>`).join("")}</select></label><label>Prazo <small>(opcional)</small><input id="p-prazo" type="date"></label></div>
+      <details><summary style="cursor:pointer;font-weight:500">Mais detalhes (opcional)</summary><div style="display:grid;gap:12px;margin-top:10px"><label>Master ou parceiro<input id="p-master" maxlength="120"></label><label>Cliente, CNPJ ou link do HubSpot<input id="p-cliente" maxlength="300"></label>
+        <label>Informações que ajudam<textarea id="p-contexto" maxlength="1500" placeholder="Não escreva dados bancários, CPF ou senhas.">${esc(S.novo.contexto || "")}</textarea></label></div></details>
+      <div class="nota">${a ? "Vai direto para a área. O gerente da área responde em 3 blocos e você aprova. Se o pedido não for da área, ela reencaminha e registra o motivo." : "A Central lê o pedido e aciona as áreas certas."}</div>` : ""}`,
+    `<button class="btn" id="enviar-pedido" data-area="${esc(sel ?? "")}" ${sel === null || !ok ? "disabled" : ""}>Enviar pedido</button><button class="btn sec" data-fechar>Cancelar</button>${!S.eu ? `<span class="sub">Escolha o seu perfil para enviar.</span>` : !Fonte.pode() ? `<span class="sub">Modo leitura: abra pelo link do Claude.</span>` : ""}`);
+}
+
+/* ===================== Fale com esta área (sample) ===================== */
+const ERROS_CHAT = {rate_limited: "Muitas perguntas seguidas. Espere um pouco e tente de novo.", session_expired: "Entre de novo na sua conta do Claude e tente de novo.",
+  refused: "Os agentes não responderam a esta pergunta. Reformule.", empty_completion: "Sem resposta. Reformule a pergunta.", prompt_too_large: "A conversa ficou longa demais. Comece uma nova.",
+  upstream_error: "Falha temporária. Tente de novo em instantes."};
+const SEM_CHAT = ["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"];
+function instrucoes(a) {
+  return `Você é o gerente da área "${a.nome}" da Área Partners da Save Co. Responda como os especialistas sêniores desta área responderiam a ${PESSOAS[S.eu] || "uma pessoa do time"}, do time interno.
+
+CONTEXTO DA ÁREA
+${a.contexto_chat || a.missao}
+
+REGRAS DA CASA (obrigatórias)
+${(S.M.regras || []).map(r => "- " + r).join("\n")}
+
+COMO RESPONDER
+- Português do Brasil, frases curtas, no máximo 180 palavras.
+- Sempre em 3 blocos, com estes títulos em negrito: **O que você pediu**, **O que você também precisa**, **O que falta e quem fornece**. Use "- " para listas.
+- Não invente número, norma, prazo ou dado. Se faltar informação, diga o que falta e quem fornece.
+- Se o assunto não for desta área, diga qual área da Área Partners atende e sugira fazer o pedido para ela.
+- Se a pergunta trouxer nome de cliente ou dado pessoal (CPF, conta, senha), não repita e avise que foi ignorado.
+- Termine sempre com: "Isto é pré-análise. Para virar entrega formal, clique em Transformar em pedido."`;
+}
+function chatDe(sk) { return S.chats[sk] || (S.chats[sk] = {turnos: [], ctl: null, rodando: false, aviso: ""}) }
+function htmlChat(a) {
+  const c = chatDe(a.skill);
+  if (!Fonte.sample || S.chatOff) return `<div class="aviso"><b>A conversa com os agentes não está disponível aqui.</b> ${esc(S.chatOff || "Ela funciona quando a Central é aberta pelo link do Claude e o uso do Claude está liberado para a página.")} Faça um pedido à área: a resposta chega em Pedidos.</div>
+    <div class="acoes"><a class="btn" href="#area/${esc(a.skill)}/pedido">${icone("mais")}Fazer pedido</a></div>`;
+  const sug = [`O que a área precisa para ${sem(a.entregas[0]?.entrega || "uma análise").replace(/\s*\(.*\)$/, "")}?`, `Isto é com vocês ou com outra área?`, `Qual entrega da área serve para uma reunião com o parceiro?`];
+  return `<div class="chat" id="chat-msgs">${c.turnos.length ? c.turnos.map((t, i) => t.role === "user" ? `<div class="msg eu">${esc(t.content)}</div>` : `<div class="msg ag ${t.erro ? "erro" : ""}"><span class="quem">Agentes · ${esc(a.nome)}${t.parcial ? " · interrompida" : ""}</span><div id="${i === c.turnos.length - 1 ? "ultima" : ""}">${t.content ? md(t.content) : "<p>Pensando…</p>"}</div></div>`).join("")
+    : `<div class="nota">Pergunte como faria a um colega da área. Ex.: o que ela precisa para começar, se o assunto é dela, qual entrega serve para o seu caso.</div><div class="sugestoes">${sug.map(s => `<button data-sug="${esc(s)}">${esc(s)}</button>`).join("")}</div>`}</div>
+    ${c.aviso ? `<p class="sub quebra" style="color:var(--erro)" role="alert">${esc(c.aviso)}</p>` : ""}`;
+}
+function gConversa(sk) {
+  const a = area(sk); if (!a) return; const c = chatDe(sk), ativo = Fonte.sample && !S.chatOff;
+  gaveta(`Fale com ${esc(a.nome)}`, "Agentes da área · pré-análise",
+    `<div class="nota" role="note">Respostas automáticas dos agentes; nada é enviado a parceiros ou clientes. A conversa não fica gravada.</div><div id="chat-area">${htmlChat(a)}</div>`, "",
+    ativo ? `<form class="compor" id="f-chat" data-area="${esc(sk)}"><label for="chat-in" class="so-leitor">Sua pergunta</label><textarea id="chat-in" maxlength="2000" placeholder="Escreva a sua pergunta. Não use nome de cliente nem dados pessoais."></textarea>
+      <div class="acoes"><button class="btn" type="submit" id="chat-env" ${c.rodando ? "disabled" : ""}>Enviar</button><button class="btn sec" type="button" id="chat-parar" ${c.rodando ? "" : "disabled"}>${icone("parar")}Parar</button>
+      <button class="btn sec" type="button" id="chat-pedido" ${c.turnos.some(t => t.role === "assistant" && t.content && !t.erro) && !c.rodando ? "" : "disabled"} style="margin-left:auto">Transformar em pedido</button></div></form>` : "");
+}
+function redesenharChat(sk) { const a = area(sk), el = $("#chat-area"); if (!el || !a) return; el.innerHTML = htmlChat(a); const c = chatDe(sk);
+  const env = $("#chat-env"), pa = $("#chat-parar"), pe = $("#chat-pedido"); if (env) env.disabled = c.rodando; if (pa) pa.disabled = !c.rodando;
+  if (pe) pe.disabled = c.rodando || !c.turnos.some(t => t.role === "assistant" && t.content && !t.erro); const box = $("#g-conteudo"); if (box) box.scrollTop = box.scrollHeight }
+async function perguntar(sk, texto) {
+  const a = area(sk), c = chatDe(sk); texto = texto.trim(); if (!texto || c.rodando || !Fonte.sample) return;
+  c.aviso = ""; c.turnos.push({role: "user", content: texto}); const resp = {role: "assistant", content: ""}; c.turnos.push(resp);
+  c.rodando = true; c.ctl = new AbortController(); redesenharChat(sk);
+  const hist = c.turnos.slice(0, -1).filter(t => t.content && !t.erro).slice(-8).map(t => ({role: t.role, content: t.content}));
+  while (hist.length && hist[0].role !== "user") hist.shift();
+  try {
+    const {text, truncated} = await Fonte.sample([{role: "user", content: instrucoes(a)}, ...hist], {cache: false, modelTier: "default", signal: c.ctl.signal,
+      onText: ({text}) => { resp.content = text; const u = $("#ultima"); if (u) { u.innerHTML = md(text); const box = $("#g-conteudo"); if (box) box.scrollTop = box.scrollHeight } }});
+    resp.content = text; if (truncated) c.aviso = "A resposta foi cortada. Pergunte uma coisa de cada vez.";
+  } catch (e) {
+    const code = e?.code || "upstream_error";
+    if (code === "cancelled") { resp.content = e.text || ""; resp.parcial = true; if (!resp.content) c.turnos.pop() }
+    else if (SEM_CHAT.includes(code)) { S.chatOff = "O uso do Claude não está liberado para esta página nesta conta."; c.turnos.pop() }
+    else { resp.content = code === "refused" ? "" : (e.text || ""); if (!resp.content) c.turnos.pop(); c.aviso = ERROS_CHAT[code] || ERROS_CHAT.upstream_error }
+  } finally { c.rodando = false; c.ctl = null; if (S.chatOff) gConversa(sk); else redesenharChat(sk) }
+}
+function chatParaPedido(sk) {
+  const c = chatDe(sk), us = c.turnos.filter(t => t.role === "user");
+  const resumo = c.turnos.filter(t => t.content && !t.erro).map(t => (t.role === "user" ? "Pergunta: " : "Agentes: ") + t.content.replace(/\s+/g, " ").slice(0, 400)).join("\n");
+  S.novo = {sel: sk, busca: "", entrega: "", texto: us.at(-1)?.content || "", contexto: ("Conversa com os agentes da área (resumo):\n" + resumo).slice(0, 1500)};
+  location.hash = "area/" + sk + "/pedido";
+}
+
+/* ===================== Gravações ===================== */
+async function enviarPedido(sel) {
+  if (!Fonte.pode() || !S.eu) return;
+  const precisa = ($("#p-precisa")?.value || "").trim(); if (!precisa) { $("#p-precisa").focus(); $("#p-precisa").setAttribute("aria-invalid", "true"); return toast("Escreva o que você precisa") }
+  const a = sel ? area(sel) : null, v = id => ($(id)?.value || "").trim(), entrega = v("#p-entrega");
+  const doc = {criado_em: agora(), solicitante: S.eu, solicitante_id: S.meuId, codigo: "", status: "novo", area: a ? a.skill : "", area_nome: a ? a.nome : "", direto: !!a, entrega, canal: "portal-v2",
+    para: a ? (PARA_AREA[a.skill] || "luis") : "luis", campos: {master: v("#p-master"), cliente: v("#p-cliente"), precisa, uso: v("#p-uso"), formato: entrega || "Resumo na tela", prazo: v("#p-prazo"), contexto: v("#p-contexto")},
+    historico: [{quando: agora(), evento: a ? "Pedido direto à área" : "Pedido à Central", por: S.eu, nota: a ? a.skill : ""}]};
+  $("#enviar-pedido").disabled = true;
+  try { const r = await Fonte.criar("pedidos", doc); if (Fonte.previa) S.M.pedidos.unshift({id: "P-NOVO", ...doc});
+    S.novo = {sel: null, busca: ""}; toast(`Pedido enviado para ${a ? a.nome : "a Central"}`); location.hash = "pedidos" }
+  catch (x) { $("#enviar-pedido").disabled = false; toast(x?.code === "invalid_argument" ? "Sem permissão para enviar. Peça ao Luis acesso de Colaborador." : "Não consegui enviar agora. Tente de novo.") }
+}
+async function decidirPedido(id, dec) {
+  const p = S.M.pedidos.find(x => x.id === id), nota = ($("#com")?.value || "").trim(); if (!p || p.solicitante !== S.eu) return;
+  if (dec !== "aprovado" && !nota) { $("#com").focus(); return toast("Escreva o motivo ou o que mudar") }
+  const dados = {status: dec, decisao: {tipo: dec, nota, quando: agora(), por: S.eu, por_id: S.meuId}, historico: [...(p.historico || []), {quando: agora(), evento: dec, por: S.eu, nota}].slice(-30)};
+  try { await Fonte.atualizar("pedidos/" + id, dados); if (Fonte.previa) Object.assign(p, dados); toast({aprovado: "Resposta aprovada", nova_analise: "Ajuste pedido à área", nao_aprovado: "Marcado como não aprovado"}[dec]); location.hash = "pedidos" }
+  catch (x) { toast("Não consegui registrar a decisão") }
+}
+async function acao(tipo, id, valor) {
+  const v = s => ($(s)?.value || "").trim();
+  try {
+    if (tipo === "demanda") { await Fonte.gravar("acoes_demandas/" + id, {status: valor, por: S.eu, quando: agora()}); S.acoes[id] = {status: valor}; toast({respondido: "Marcada como respondida", encaminhado: "Marcada como encaminhada", nao_e_demanda: "Marcada como não é demanda"}[valor]) }
+    if (tipo === "lote") { if (S.eu !== "geovana") return; await Fonte.gravar("recuperador/" + id, {decisao: valor, motivo: v("#r-m"), por: S.eu, quando: agora()}); S.recup[id] = {decisao: valor}; toast(valor) }
+    if (tipo === "decisao") { if (S.eu !== "luis") return; await Fonte.gravar("conselho/" + id, {decisao: valor, nota: v("#n-dec"), quando: agora()}); S.conselho[id] = {decisao: valor}; toast("Decisão registrada: " + valor) }
+    if (tipo === "chamado") { const c = S.M.chamados.find(x => x.id === id); if (!c || c.pessoa !== S.eu) return;
+      const dados = valor === "aprovado" ? {status: "aprovado", titulo_editado: v("#ct"), descricao_editada: v("#cd"), aprovado_por: S.eu, aprovado_em: agora()} : {status: "recusado", motivo: v("#cm"), recusado_por: S.eu, recusado_em: agora()};
+      if (valor === "recusado" && !dados.motivo) { $("#cm").focus(); return toast("Diga por que não abrir") }
+      await Fonte.atualizar("chamados/" + id, dados); if (Fonte.previa) Object.assign(c, dados); toast(valor === "aprovado" ? "Chamado aprovado" : "Chamado não aberto") }
+    location.hash = tipo === "decisao" && S.eu === "luis" ? "decisoes" : "mesa";
+  } catch (x) { toast("Não consegui registrar") }
+}
+
+/* ===================== Render e rotas ===================== */
+const MENU = [["mesa", "Minha mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["areas", "Áreas", "areas"], ["onde", "Onde está", "onde"], ["rotinas", "Rotinas", "rotinas"], ["decisoes", "Decisões", "decisoes"]];
+function moldura(r) {
+  const n = pendentes(S.eu), dono = {pedido: "pedidos", novo: "pedidos", area: "areas", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r] || r;
+  $("#menu").innerHTML = `<span class="grupo">Trabalho</span>` + MENU.map(([k, t, ic], i) => (i === 3 ? `<span class="grupo">Consulta</span>` : "") + `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}${t}${k === "mesa" && n ? `<span class="cont">${n}</span>` : ""}${k === "decisoes" && S.eu === "luis" && totalDecisoes() ? `<span class="cont">${totalDecisoes()}</span>` : ""}</a>`).join("");
+  $("#sino").innerHTML = icone("sino") + (n ? `<span class="pt">${n}</span>` : ""); $("#sino").setAttribute("aria-label", `Notificações: ${n}`);
+  $("#av").textContent = S.eu ? PESSOAS[S.eu].slice(0, 2).toUpperCase() : "—"; $("#sou").value = S.eu || ""; $("#sou").disabled = S.identificado;
+  $("#tema").innerHTML = icone(document.documentElement.dataset.theme === "dark" ? "sol" : "lua");
+  $("#faixa").innerHTML = Fonte.previa ? `<div class="faixa-previa" role="note"><b>Prévia para validação.</b><span>Áreas, entregas, rotinas, pastas, alertas e janelas são reais. Pedidos, demandas, chamados e lote são exemplos, sem cliente. Nada é gravado.</span></div>`
+    : !Fonte.db ? `<div class="faixa-previa" role="note"><b>Modo leitura.</b><span>Pedir, aprovar e registrar funcionam quando a Central é aberta pelo link do Claude, com a sua conta da Save.</span></div>` : "";
+}
+function abrir() {
+  if (!S.M) return; const {r, p} = rota(); moldura(r); document.body.classList.remove("menu-aberto");
+  const fundo = {mesa: telaMesa, pedidos: telaPedidos, pedido: telaPedidos, novo: telaPedidos, areas: telaAreas, area: () => telaArea(p[0]), onde: () => telaOnde(p.join("/")), rotinas: telaRotinas, decisoes: telaDecisoes,
+    demanda: telaMesa, chamado: telaMesa, lote: telaMesa, decisao: S.eu === "luis" ? telaMesa : telaDecisoes}[r] || telaMesa;
+  const manter = document.activeElement?.id === "q-onde";
+  $("#pag").innerHTML = fundo(); $("#camada").innerHTML = "";
+  if (r === "pedido") gPedido(p[0]);
+  if (r === "novo") gNovo();
+  if (r === "area" && p[1] === "pedido") { if (S.novo.sel !== p[0]) S.novo = {sel: p[0], busca: "", entrega: S.novo.entrega || ""}; gNovo(p[0]) }
+  if (r === "area" && p[1] === "conversa") gConversa(p[0]);
+  if (r === "demanda") { const d = S.M.demandas.find(x => x.id === p[0]); if (d) gaveta(esc(d.titulo), `<span class="mono">${esc(d.id)}</span> · ${esc(d.master || "")}`, `<div class="filtros">${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}<span class="chip">${esc(d.origem || "WhatsApp")}</span></div><p style="margin:0">${esc(d.o_que_pede)}</p><dl class="dl"><dt>Aberta</dt><dd>${data(d.aberta_em)}</dd>${d.rota ? `<dt>Encaminhar</dt><dd>${esc(d.rota)}</dd>` : ""}${d.proximo_passo ? `<dt>Próximo passo</dt><dd>${esc(d.proximo_passo)}</dd>` : ""}</dl>${url(d.link) ? `<a href="${url(d.link)}" target="_blank" rel="noopener">${esc(d.negocio || "Abrir no HubSpot")}</a>` : ""}`,
+      d.pessoa === S.eu ? `<button class="btn" data-acao="demanda" data-id="${esc(d.id)}" data-v="respondido">Respondi</button><button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="encaminhado">Encaminhei à área</button><button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="nao_e_demanda">Não é demanda</button>` : "") }
+  if (r === "chamado") { const c = S.M.chamados.find(x => x.id === p[0]); if (c) { const pode = c.pessoa === S.eu && c.status === "proposto"; gaveta(esc(c.titulo_editado || c.titulo), esc(c.grupo || "Chamado"), `<div class="filtros"><span class="chip p ${c.status === "proposto" ? "aprovar" : "concluido"}">${esc(ST_CH[c.status] || c.status)}</span>${c.urgencia >= 4 ? `<span class="chip urg">Urgência ${esc(c.urgencia)}</span>` : ""}</div>
+      ${pode ? `<label for="ct">Título</label><input id="ct" value="${esc(c.titulo_editado || c.titulo)}" maxlength="200"><label for="cd">Descrição</label><textarea id="cd" rows="7">${esc(c.descricao_editada || c.descricao)}</textarea><label for="cm">Motivo, se não for abrir <small>(ensina os agentes)</small></label><input id="cm" maxlength="300"><div class="nota">O chamado só vai ao GLPI depois que você aprova.</div>` : `<div class="resp">${md(c.descricao_editada || c.descricao)}</div>`}`,
+      pode ? `<button class="btn" data-acao="chamado" data-id="${esc(c.id)}" data-v="aprovado">Aprovar e abrir no GLPI</button><button class="btn perigo" data-acao="chamado" data-id="${esc(c.id)}" data-v="recusado">Não abrir</button>` : "") } }
+  if (r === "lote") { const l = S.M.lote.find(x => x.deal === p[0]); if (l) gaveta(esc(l.negocio), esc(l.parceiro), `<div class="filtros"><span class="chip">${esc(l.tipo)}</span><span class="chip">${esc(l.segmento)} · ${esc(l.uf)}</span></div><p style="margin:0">Potencial estimado ${mi(l.esperado)}, a validar caso a caso.</p>${l.hipotese ? `<div class="resp"><p>${esc(l.hipotese)}</p>${l.parecer ? `<p>Parecer: ${esc(l.parecer)}</p>` : ""}${l.documentos ? `<p>Pedir: ${esc(l.documentos)}</p>` : ""}</div>` : ""}${url(l.link) ? `<a href="${url(l.link)}" target="_blank" rel="noopener">Abrir no HubSpot</a>` : ""}${S.eu === "geovana" ? `<label for="r-m">Motivo ou observação</label><input id="r-m" maxlength="300">` : `<div class="nota">Quem decide o lote é a Geovana.</div>`}`,
+      S.eu === "geovana" ? `<button class="btn" data-acao="lote" data-id="${esc(l.deal)}" data-v="Aprovar para reanálise">Aprovar para reanálise</button><button class="btn perigo" data-acao="lote" data-id="${esc(l.deal)}" data-v="Vetar">Vetar</button><button class="btn sec" data-acao="lote" data-id="${esc(l.deal)}" data-v="Precisa de dado">Precisa de dado</button>` : "") }
+  if (r === "decisao") { const d = S.M.decisoes.find(x => x.id === p[0]); if (d) gaveta(esc(d.id), esc(d.data || "") + (d.ata ? " · " + esc(d.ata) : ""), `<p style="margin:0;font-size:16px">${esc(d.texto)}</p>${d.obs ? `<p class="sub quebra">${esc(d.obs)}</p>` : ""}${S.eu === "luis" ? `<label for="n-dec">Observação <small>(opcional)</small></label><input id="n-dec" maxlength="400">` : `<div class="nota">Só o Luis decide as decisões do Conselho.</div>`}`,
+      S.eu === "luis" ? `<button class="btn" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada com ajuste">Aprovar com ajuste</button><button class="btn perigo" data-acao="decisao" data-id="${esc(d.id)}" data-v="rejeitada">Rejeitar</button>` : "") }
+  if (manter) { const q = $("#q-onde"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length) } }
+}
+function fechar() {
+  const {r, p} = rota(); const volta = {pedido: "pedidos", novo: "pedidos", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r];
+  if (r === "area" && p[1]) { const c = chatDe(p[0]); c.ctl?.abort(); location.hash = "area/" + p[0]; return }
+  if (volta) location.hash = volta; else $("#camada").innerHTML = "";
+}
+function paleta() {
+  $("#camada").innerHTML = `<div class="veu" data-fechar-p></div><div class="paleta" role="dialog" aria-modal="true" aria-label="Busca global"><input id="q-p" placeholder="Buscar área, entrega, pasta, rotina ou pedido" autocomplete="off" aria-label="Buscar"><div class="res" id="res-p"></div></div>`;
+  const q = $("#q-p"); q.focus();
+  const rodar = () => { const v = q.value.trim(), sv = sem(v); const ps = v ? S.M.pedidos.filter(p => sem((p.pid || p.id) + " " + p.campos?.precisa + " " + (p.entrega || "")).includes(sv)).slice(0, 4) : [];
+    $("#res-p").innerHTML = (!v ? `<div class="vazio">Ex.: conferência de repasses, lote do Recuperador, ata do Conselho, P-0031.</div>` : "")
+      + ps.map(p => `<button data-go="pedido/${esc(p.id)}"><span class="chip">Pedido</span><b>${esc(p.pid || p.id)} · ${esc(p.entrega || p.campos?.precisa)}</b><span class="sub">${esc(nomeArea(p.area))} · ${esc(rotFase(p))}</span></button>`).join("")
+      + buscar(v, 10).map(r => `<button data-go="${r.area ? "area/" + esc(r.area) : "onde/" + esc(encodeURIComponent(r.titulo))}"><span class="chip">${esc(r.tipo)}</span><b>${esc(r.titulo)}</b><span class="sub">${esc(r.sub || "")}${r.onde ? " · " + esc(r.onde) : ""}</span></button>`).join("")
+      + (v ? `<button data-go="onde/${esc(encodeURIComponent(v))}"><span class="chip">Todos</span><b>Ver todos os resultados em Onde está</b></button>` : "") };
+  q.addEventListener("input", rodar); rodar();
+}
+function notificacoes() {
+  const it = itensAcao(S.eu).slice(0, 6);
+  $("#camada").innerHTML = `<div class="veu" data-fechar-p style="background:transparent"></div><div class="pop" role="dialog" aria-label="Notificações"><div class="painel-cab"><h2>Para você</h2><span class="sub">${pendentes(S.eu)} itens</span></div>
+    <div class="linhas" style="--cols:minmax(0,1fr)">${it.map(i => `<button class="lh" data-go="${i.go}"><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.tipo)}</span></span></button>`).join("") || `<div class="vazio">${S.eu ? "Nada pendente." : "Escolha o seu perfil."}</div>`}</div></div>`;
+}
+
+/* ===================== Eventos ===================== */
+document.addEventListener("click", e => {
+  const go = e.target.closest("[data-go]"); if (go) { location.hash = go.dataset.go; return }
+  if (e.target.closest("[data-fechar]")) return fechar();
+  if (e.target.closest("[data-fechar-p]")) { $("#camada").innerHTML = ""; return }
+  const so = e.target.closest("[data-sou]"); if (so) { S.eu = so.dataset.sou; lsSet("sou", S.eu); abrir(); return }
+  const fa = e.target.closest("[data-fase]"); if (fa) { S.f.fase = fa.dataset.fase; abrir(); return }
+  const kp = e.target.closest("[data-kp]"); if (kp) { S.kPessoa = kp.dataset.kp; abrir(); return }
+  const sl = e.target.closest("[data-sel]"); if (sl) { S.novo.sel = sl.dataset.sel; S.novo.entrega = ""; gNovo(); return }
+  const pe = e.target.closest("[data-pedir]"); if (pe) { S.novo = {sel: pe.dataset.pedir, busca: "", entrega: pe.dataset.entrega || ""}; location.hash = "area/" + pe.dataset.pedir + "/pedido"; return }
+  const q = e.target.closest("[data-q]"); if (q) { location.hash = "onde/" + encodeURIComponent(q.dataset.q); return }
+  const sg = e.target.closest("[data-sug]"); if (sg) { const f = $("#f-chat"); if (f) perguntar(f.dataset.area, sg.dataset.sug); return }
+  const dc = e.target.closest("[data-dec]"); if (dc) { decidirPedido(dc.dataset.id, dc.dataset.dec); return }
+  const ac = e.target.closest("[data-acao]"); if (ac) { acao(ac.dataset.acao, ac.dataset.id, ac.dataset.v); return }
+  if (e.target.closest("#enviar-pedido")) return enviarPedido(e.target.closest("#enviar-pedido").dataset.area);
+  if (e.target.closest("#chat-parar")) { const f = $("#f-chat"); chatDe(f.dataset.area).ctl?.abort(); return }
+  if (e.target.closest("#chat-pedido")) return chatParaPedido($("#f-chat").dataset.area);
+  if (e.target.closest("#abrir-busca") || e.target.closest("#ir-busca")) return paleta();
+  if (e.target.closest("#abrir-menu")) { document.body.classList.toggle("menu-aberto"); return }
+  if (e.target.closest("#sino")) return notificacoes();
+  if (e.target.closest("#tema")) { const d = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = d; lsSet("tema", d); moldura(rota().r); return }
+});
+document.addEventListener("submit", e => {
+  if (e.target.id === "f-chat") { e.preventDefault(); const t = $("#chat-in"); const v = t.value; t.value = ""; perguntar(e.target.dataset.area, v) }
+  if (e.target.id === "f-apont") { e.preventDefault(); if (!$("#a-desc").value.trim()) return $("#a-desc").focus();
+    Fonte.criar("apontamentos", {pessoa: S.eu, data: agora(), descricao: $("#a-desc").value.trim(), tipo: $("#a-tipo").value, minutos: Number($("#a-min").value) || 0, ponte: $("#a-ponte").checked}).then(() => { toast("Tarefa registrada"); $("#a-desc").value = "" }, () => toast("Não consegui registrar a tarefa")) }
+});
+document.addEventListener("keydown", e => {
+  if (e.target.id === "chat-in" && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("#f-chat").requestSubmit() }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); paleta() }
+  if (e.key === "Escape" && $("#camada").innerHTML) { if ($("#camada .paleta, #camada .pop")) $("#camada").innerHTML = ""; else fechar() }
+});
+document.addEventListener("input", e => {
+  if (e.target.id === "q-onde") { $("#res-onde").innerHTML = resOnde(e.target.value) }
+  if (e.target.id === "q-area") { S.novo.busca = e.target.value; $("#lista-areas").innerHTML = listaAreasNovo() }
+});
+document.addEventListener("change", e => {
+  if (e.target.id === "sou") { S.eu = e.target.value || null; lsSet("sou", S.eu || ""); abrir() }
+  if (e.target.id === "f-area") { S.f.area = e.target.value; abrir() } if (e.target.id === "f-pessoa") { S.f.pessoa = e.target.value; abrir() }
+  if (e.target.id === "k-col") { S.kCol = e.target.value; abrir() }
+  if (e.target.id === "p-entrega") S.novo.entrega = e.target.value;
+});
+window.addEventListener("hashchange", abrir);
+
+async function iniciar() {
+  const t = lsGet("tema"); if (t === "dark" || t === "light") document.documentElement.dataset.theme = t; else document.documentElement.dataset.theme = "light";
+  $("#abrir-menu").innerHTML = icone("menu"); $("#ic-busca").innerHTML = icone("onde");
+  try { S.M = await Fonte.carregar() } catch (e) { $("#pag").innerHTML = `<div class="vazio">Não consegui carregar os dados da Central. Recarregue a página em alguns segundos.</div>`; return }
+  S.eu = lsGet("sou") || (Fonte.previa ? "daniela" : null);
+  abrir();
+  await Fonte.conectar();
+  const eu = await Fonte.quemSou(); S.meuId = eu.id; if (eu.chave) { S.eu = eu.chave; S.identificado = true }
+  if (Fonte.db) {
+    const erro = () => toast("Não consegui carregar os registros agora");
+    const refaz = () => { if (!$("#camada .gaveta textarea:focus, #camada .gaveta input:focus, #camada .paleta")) abrir(); else moldura(rota().r) };
+    Fonte.ouvir("pedidos", "criado_em", 300, xs => { S.M.pedidos = xs; refaz() }, erro);
+    Fonte.ouvir("acoes_demandas", null, 500, xs => { S.acoes = Object.fromEntries(xs.map(d => [d.id, d])); refaz() }, erro);
+    Fonte.ouvir("recuperador", null, 500, xs => { S.recup = Object.fromEntries(xs.map(d => [d.id, d])); refaz() }, erro);
+    Fonte.ouvir("conselho", null, 200, xs => { S.conselho = Object.fromEntries(xs.map(d => [d.id, d])); refaz() }, erro);
+    Fonte.ouvir("apontamentos", "data", 300, xs => { S.apont = xs; refaz() }, erro);
+    Fonte.ouvir("chamados", "proposto_em", 300, xs => { S.M.chamados = xs; refaz() }, erro);
+  }
+  abrir();
+}
+iniciar();
+</script>
+</body></html>

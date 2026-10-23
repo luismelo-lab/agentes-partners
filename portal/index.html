@@ -1,0 +1,621 @@
+<title>Central Partners</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Central Partners v2 (23/10/2026) · Design System Save v0.5, modo claro (uso interno do time).
+   Layout: cabeçalho branco com o logo e faixa de ouro; 4 seções em abas (Minha mesa, Pedir a uma área, Onde está, Acompanhar);
+   em cada seção, primeiro o que pede ação, depois o detalhe. O ouro aparece só em faixas, seleção e botão principal. */
+:root {
+  --fundo: #F6F7F9; --fundo-2: #F1F2F5; --cartao: #FFFFFF;
+  --borda: #E6E8EC; --borda-3: #C9CCD3;
+  --texto: #0F1115; --texto-2: #4A4F58;
+  --ouro: #F3CD60; --ouro-texto: #B58A1F; --ouro-suave: #FBF1D7;
+  --sucesso: #1E8E3E; --alerta: #B5790F; --erro: #C5221F;
+  --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r-sm: 8px; --r-md: 12px;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box }
+body { margin: 0; background: var(--fundo); color: var(--texto); font: 400 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.faixa-ouro { height: 4px; background: var(--ouro) }
+.topo { background: var(--cartao); border-bottom: 1px solid var(--borda) }
+.marca { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-block: 16px 8px }
+.marca .id { display: flex; align-items: center; gap: 14px; min-width: 0 }
+.marca img { height: 26px; width: auto; display: block }
+.marca h1 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.01em; padding-left: 14px; border-left: 1px solid var(--borda-3); line-height: 1.2 }
+.quem { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; color: var(--texto-2) }
+.quem select { width: auto; min-height: 40px }
+.quem .hora { font: 12px var(--mono); color: var(--texto-2) }
+nav.abas { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none }
+nav.abas button { flex: 0 0 auto; background: none; border: 0; border-bottom: 3px solid transparent; color: var(--texto-2); font: 500 15px var(--sans); padding: 12px 14px 11px; min-height: 48px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px }
+nav.abas button[aria-selected="true"] { color: var(--texto); font-weight: 600; border-bottom-color: var(--ouro) }
+nav.abas .curto { display: none }
+.badge { display: inline-block; min-width: 22px; padding: 1px 6px; border-radius: 11px; background: var(--texto); color: #FFFFFF; font: 600 12px/1.5 var(--mono); text-align: center }
+main { padding-block: 24px 48px; display: grid; gap: 28px }
+main > *, .duas > *, .lista > * { min-width: 0 }
+h2 { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; margin: 0; text-wrap: balance }
+h3 { font-size: 18px; font-weight: 600; margin: 0; line-height: 1.3; text-wrap: balance }
+h4 { font-size: 15px; font-weight: 600; margin: 0 }
+p { margin: 0 }
+.rotulo { font: 500 11px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--texto-2) }
+.cab { display: grid; gap: 6px }
+.lead { color: var(--texto-2); max-width: 68ch }
+.peq { font-size: 14px; color: var(--texto-2) }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums }
+a { color: var(--texto); text-decoration: underline; text-decoration-color: var(--ouro-texto); text-underline-offset: 3px; font-weight: 500 }
+a:hover { text-decoration-thickness: 2px }
+:focus-visible { outline: 3px solid var(--ouro-texto); outline-offset: 2px }
+.secao { display: grid; gap: 14px }
+.duas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px; align-items: start }
+.lista { display: grid; gap: 10px }
+.cartao { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 16px; display: grid; gap: 8px }
+.cartao header { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+.cartao header strong { font-weight: 600 }
+.vazio { background: var(--cartao); border: 1px dashed var(--borda-3); border-radius: var(--r-md); padding: 16px; color: var(--texto-2) }
+.aviso { background: var(--ouro-suave); border: 1px solid var(--ouro); border-radius: var(--r-sm); padding: 12px 14px; font-size: 14.5px }
+.erro-msg { color: var(--erro); font-weight: 500 }
+.ok-msg { color: var(--sucesso); font-weight: 500 }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 500 12px/1.6 var(--sans); padding: 1px 9px; border-radius: 4px; background: var(--fundo-2); color: var(--texto); border: 1px solid var(--borda) }
+.chip.ponto::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--texto-2) }
+.chip.fila::before { background: transparent; border: 1.5px solid var(--texto-2); width: 7px; height: 7px }
+.chip.analise::before { background: var(--alerta) }
+.chip.aprovar { background: var(--ouro-suave); border-color: var(--ouro) } .chip.aprovar::before { background: var(--ouro-texto) }
+.chip.concluido::before { background: var(--sucesso) }
+.chip.urgente { color: var(--erro); border-color: var(--erro); background: var(--cartao) }
+.numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 12px }
+.num { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md); padding: 14px 16px; display: grid; gap: 2px }
+.num strong { font: 600 28px/1.15 var(--mono); font-variant-numeric: tabular-nums }
+.num small { color: var(--texto-2); font-size: 13.5px }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: var(--r-sm); border: 1px solid var(--ouro); font: 600 14.5px/1.2 var(--sans); cursor: pointer; background: var(--ouro); color: var(--texto); text-decoration: none }
+.btn:hover { filter: brightness(.96) }
+.btn.sec { background: var(--cartao); border-color: var(--borda-3) }
+.btn.perigo { background: var(--cartao); border-color: var(--erro); color: var(--erro) }
+.btn.link { background: none; border-color: transparent; text-decoration: underline; text-decoration-color: var(--ouro-texto); text-underline-offset: 3px; padding: 0 6px }
+.btn:disabled { opacity: .5; cursor: not-allowed; filter: none }
+.acoes { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+label { display: grid; gap: 6px; font-size: 14.5px; font-weight: 500 }
+label small { color: var(--texto-2); font-weight: 400 }
+input, select, textarea { font: 15px/1.4 var(--sans); padding: 10px 12px; min-height: 44px; border: 1px solid var(--borda-3); border-radius: var(--r-sm); background: var(--cartao); color: var(--texto); width: 100%; min-width: 0 }
+textarea { resize: vertical; min-height: 96px }
+.campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px }
+details > summary { cursor: pointer; font-weight: 500; min-height: 32px; display: flex; align-items: center; gap: 8px }
+details > summary::marker { color: var(--texto-2) }
+.resposta { border-left: 3px solid var(--ouro); padding: 2px 0 2px 14px; display: grid; gap: 6px; font-size: 15px }
+.resposta ul { margin: 0; padding-left: 20px }
+.resposta h3 { font-size: 15.5px; margin-top: 4px }
+.pasta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; background: var(--fundo-2); border-radius: var(--r-sm); padding: 10px 12px; font-size: 14px }
+.pasta code { font: 13px var(--mono); color: var(--texto-2); overflow-wrap: anywhere; min-width: 0 }
+.tabela { overflow-x: auto; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md) }
+table { width: 100%; border-collapse: collapse; font-size: 14.5px }
+th { text-align: left; font: 500 11px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--texto-2); padding: 10px 12px; border-bottom: 1px solid var(--borda-3); white-space: nowrap }
+td { padding: 10px 12px; border-bottom: 1px solid var(--borda); vertical-align: top }
+td.n, th.n { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap }
+tr:last-child td { border-bottom: 0 }
+.filtros { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+.filtros button { font: 500 14px var(--sans); border: 1px solid var(--borda-3); background: var(--cartao); color: var(--texto); border-radius: 999px; padding: 0 14px; min-height: 40px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px }
+.filtros button[aria-pressed="true"] { background: var(--texto); color: #FFFFFF; border-color: var(--texto) }
+.filtros .mono { font-size: 12.5px }
+/* Pedir: escolha da área */
+.busca { position: relative }
+.busca input { padding-left: 40px; font-size: 16px; min-height: 48px }
+.busca svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; stroke: var(--texto-2); fill: none; stroke-width: 2 }
+.bloco-areas { display: grid; gap: 8px }
+.grade-areas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 8px }
+.area-op { text-align: left; background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-sm); padding: 10px 12px; cursor: pointer; display: grid; gap: 2px; font: inherit; color: inherit; min-height: 44px }
+.area-op strong { font-size: 15px; font-weight: 600 }
+.area-op span { font-size: 13.5px; color: var(--texto-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.area-op:hover { border-color: var(--borda-3) }
+.area-op[aria-pressed="true"] { border: 2px solid var(--ouro); background: var(--ouro-suave); padding: 9px 11px }
+.area-op.nao-sei { border-style: dashed }
+.form-pedido { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px) }
+.entregas-chips { display: flex; flex-wrap: wrap; gap: 6px }
+/* Onde está */
+.resultado { display: grid; gap: 6px }
+.resultado .meta { font-size: 14px; color: var(--texto-2) }
+.onde-linha { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; font-size: 14.5px }
+.onde-linha .rot { color: var(--texto-2) }
+.area-det { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-md) }
+.area-det > summary { padding: 14px 16px; min-height: 56px; flex-wrap: wrap }
+.area-det > summary strong { font-size: 16px; font-weight: 600 }
+.area-det[open] > summary { border-bottom: 1px solid var(--borda) }
+.area-corpo { padding: 14px 16px 16px; display: grid; gap: 14px }
+.ent { display: grid; gap: 4px; padding-block: 10px; border-top: 1px solid var(--borda) }
+.ent:first-of-type { border-top: 0; padding-top: 0 }
+.esp { display: grid; gap: 2px; padding-left: 12px; border-left: 2px solid var(--borda) }
+.rodape { color: var(--texto-2); font-size: 13px; border-top: 1px solid var(--borda); padding-top: 14px }
+.so-leitor { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
+@media (max-width: 640px) {
+  nav.abas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 }
+  nav.abas button { padding: 10px 2px; justify-content: center; font-size: 13.5px; flex-direction: column; gap: 2px }
+  nav.abas .longo { display: none } nav.abas .curto { display: inline }
+  .marca h1 { font-size: 17px; padding-left: 10px } .marca img { height: 22px }
+  h2 { font-size: 21px }
+  .form-pedido { position: static }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important } }
+</style>
+
+<div class="faixa-ouro" aria-hidden="true"></div>
+<header class="topo">
+  <div class="wrap">
+    <div class="marca">
+      <div class="id"><img src="logo-save-fundo-claro.png" alt="Save Co." width="148" height="26"><h1>Central Partners</h1></div>
+      <div class="quem"><label for="sou" class="so-leitor">Quem está usando</label><span id="quem-txt">Você é</span>
+        <select id="sou"><option value="">escolha</option><option value="luis">Luis</option><option value="daniela">Daniela</option><option value="jenifer">Jenifer</option><option value="geovana">Geovana</option></select>
+        <span class="hora" id="quando">carregando…</span></div>
+    </div>
+    <nav class="abas" role="tablist" aria-label="Seções" id="abas"></nav>
+  </div>
+</header>
+<div class="wrap"><main id="conteudo" aria-live="polite"><div class="vazio">Carregando a Central…</div></main></div>
+
+<script>
+/* ===================== Camada de dados =====================
+   Tudo o que depende do Artifact fica aqui (claude.use("db") e claude.use("user")).
+   Para migrar ao host com SSO (central/, Azure Static Web Apps + Entra ID), troque só este objeto
+   por chamadas à API (/api/painel), mantendo os mesmos nomes de coleção e de campo. */
+const Fonte = {
+  db: null, user: null,
+  async json(nome) { const r = await fetch(nome, {cache: "no-store"}); if (!r.ok) throw new Error(nome); return r.json() },
+  async conectar() {
+    if (typeof claude === "undefined" || !claude?.use) return;
+    const [db, user] = await Promise.all([claude.use("db").catch(() => null), claude.use("user").catch(() => null)]);
+    this.db = db; this.user = user;
+  },
+  async quemSou() {
+    if (!this.user) return {id: null, chave: null};
+    let me = null; try { me = await this.user.me() } catch (e) {}
+    const n = sem(me?.name || "");
+    let chave = ["luis", "daniela", "jenifer", "geovana"].find(k => n.includes(k)) || null;
+    try { if (!chave && await this.user.isOwner()) chave = "luis" } catch (e) {}
+    return {id: me?.id || null, chave};
+  },
+  ouvir(col, ordem, limite, cb, erro) {
+    let q = this.db.collection(col); if (ordem) q = q.orderBy(ordem, "desc");
+    return q.limit(limite).onSnapshot(s => cb(s.docs.map(d => ({id: d.id, ...d.data()}))), erro);
+  },
+  criar(col, dados) { return this.db.collection(col).add(dados) },
+  atualizar(caminho, dados) { return this.db.doc(caminho).update(dados) },
+  gravar(caminho, dados) { return this.db.doc(caminho).set(dados) },
+};
+
+/* ===================== Utilitários ===================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const url = u => /^https:\/\//i.test(String(u || "")) ? esc(u) : "";
+const sem = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const agora = () => new Date().toISOString();
+const dataBR = iso => { try { return iso ? new Date(iso).toLocaleString("pt-BR", {day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"}) : "" } catch (e) { return "" } };
+const mi = v => !v ? "—" : v >= 1e6 ? "R$ " + (v / 1e6).toFixed(1).replace(".", ",") + " mi" : "R$ " + Math.round(v / 1e3).toLocaleString("pt-BR") + " mil";
+const md = t => { let h = "", lista = false;
+  for (const l of String(t || "").split("\n")) {
+    const s = esc(l.trim()).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    if (s.startsWith("- ")) { if (!lista) { h += "<ul>"; lista = true } h += `<li>${s.slice(2)}</li>`; continue }
+    if (lista) { h += "</ul>"; lista = false }
+    if (s) h += s.startsWith("### ") ? `<h3>${s.slice(4)}</h3>` : `<p>${s}</p>`;
+  } return h + (lista ? "</ul>" : "") };
+const lsGet = k => { try { return localStorage.getItem(k) } catch (e) { return null } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v) } catch (e) {} };
+
+const EQUIPE = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "Geovana"};
+const PARA_AREA = {"celula-daniela": "daniela", "celula-jenifer": "jenifer", "recuperador": "geovana", "revisor-diagnostico": "geovana"};
+const FASE = {novo: "fila", nova_analise: "fila", em_analise: "analise", aguardando_aprovacao: "aprovar", aprovado: "concluido", concluido: "concluido", nao_aprovado: "concluido"};
+const FASES = [["fila", "Na fila"], ["analise", "Em análise"], ["aprovar", "Pronto para aprovar"], ["concluido", "Concluído"]];
+const ST_CH = {proposto: "Aguarda a sua aprovação", aprovado: "Aprovado · abrindo no GLPI", aberto: "Aberto no GLPI", aprovado_manual: "Aprovado · abrir manualmente", recusado: "Recusado"};
+const ABAS = [["inicio", "Minha mesa", "Mesa"], ["pedir", "Pedir a uma área", "Pedir"], ["onde", "Onde está", "Onde está"], ["acompanhar", "Acompanhar", "Acompanhar"]];
+
+const S = {D: null, DIR: null, eu: null, meuId: null, identificado: false, aba: "inicio",
+  pedidos: [], acoes: {}, recup: {}, conselho: {}, apont: [], chamados: [],
+  area: null, entrega: "", buscaArea: "", busca: "", ondeAba: "areas", abrirArea: null,
+  f: {area: "", pessoa: "", fase: ""}, verTodasDec: false, msg: {}};
+
+const areaDe = sk => (S.DIR?.areas || []).find(a => a.skill === sk);
+const nomeArea = sk => sk ? (areaDe(sk)?.nome || sk) : "Central (sem área)";
+const online = () => !!Fonte.db;
+const faseDe = p => FASE[p.status] || "fila";
+const chipFase = p => { const f = faseDe(p); const r = FASES.find(x => x[0] === f)[1]; return `<span class="chip ponto ${f}">${esc(p.status === "nao_aprovado" ? "Concluído · não aprovado" : p.status === "nova_analise" ? "Na fila · nova análise" : r)}</span>` };
+const linksHtml = ls => (ls || []).filter(l => url(l.url)).map(l => `<a href="${url(l.url)}" target="_blank" rel="noopener">Abrir pasta ${esc(l.rotulo)}</a>`).join(" ");
+const msg = k => S.msg[k] ? `<span class="${S.msg[k].ok ? "ok-msg" : "erro-msg"}" role="status">${esc(S.msg[k].t)}</span>` : "";
+const avisoLeitura = () => online() ? "" : `<div class="aviso" role="note"><b>Modo leitura.</b> Pedir, aprovar e registrar funcionam quando a Central é aberta pelo link do Claude, com a sua conta da Save. Aqui você consulta tudo, mas os botões ficam desligados.</div>`;
+
+/* ===================== Abas ===================== */
+function pendencias(p) {
+  if (!p || !S.D) return 0;
+  if (p === "luis") return (S.D.conselho || []).filter(d => !S.conselho[d.id]).length + S.pedidos.filter(x => x.solicitante === p && x.status === "aguardando_aprovacao").length + S.chamados.filter(c => c.pessoa === p && c.status === "proposto").length;
+  return (S.D.demandas_lista || []).filter(d => d.pessoa === p && d.status === "responder" && !S.acoes[d.id]).length
+    + S.chamados.filter(c => c.pessoa === p && c.status === "proposto").length
+    + S.pedidos.filter(x => x.solicitante === p && x.status === "aguardando_aprovacao").length
+    + (p === "geovana" ? (S.D.lote || []).filter(r => !S.recup[r.deal]).length : 0);
+}
+function nav() {
+  const n = pendencias(S.eu);
+  $("#abas").innerHTML = ABAS.map(([k, longo, curto]) => `<button role="tab" id="tab-${k}" aria-controls="conteudo" data-aba="${k}" aria-selected="${S.aba === k}"><span class="longo">${longo}</span><span class="curto">${curto}</span>${k === "inicio" && n ? `<span class="badge" aria-label="${n} itens para agir">${n}</span>` : ""}</button>`).join("");
+}
+
+/* ===================== Minha mesa ===================== */
+function cardDemanda(d) {
+  const a = S.acoes[d.id], meu = S.eu === d.pessoa;
+  return `<article class="cartao"><header><strong>${esc(d.titulo)}</strong>${d.master ? `<span class="chip">${esc(d.master)}</span>` : ""}${d.urgente ? `<span class="chip urgente">Urgente</span>` : ""}
+    ${a ? `<span class="chip ponto concluido">${esc({respondido: "Respondi", encaminhado: "Encaminhei", nao_e_demanda: "Não é demanda"}[a.status] || a.status)}</span>` : ""}</header>
+    ${d.o_que_pede ? `<p>${esc(d.o_que_pede)}</p>` : ""}
+    ${d.rota ? `<p class="peq">Encaminhar para: ${esc(d.rota)}</p>` : ""}
+    ${d.proximo_passo ? `<p class="peq">Próximo passo: ${esc(d.proximo_passo)}${d.prazo ? " · prazo " + esc(d.prazo) : ""}</p>` : ""}
+    ${url(d.link) ? `<p class="peq"><a href="${url(d.link)}" target="_blank" rel="noopener">${esc(d.negocio || "Abrir no HubSpot")}</a></p>` : ""}
+    <p class="peq mono">${esc(d.id)} · ${esc(d.origem || "")} · aberta em ${dataBR(d.aberta_em)}</p>
+    ${meu && !a ? `<div class="acoes"><button class="btn sec" data-acao="respondido" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Respondi</button>
+      <button class="btn sec" data-acao="encaminhado" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Encaminhei à área</button>
+      <button class="btn link" data-acao="nao_e_demanda" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Não é demanda</button></div>` : ""}
+  </article>`;
+}
+function cardChamado(c) {
+  const pode = S.eu === c.pessoa && c.status === "proposto";
+  return `<article class="cartao"><header><strong>${esc(c.grupo || "Chamado")}</strong><span class="chip ponto ${c.status === "proposto" ? "aprovar" : c.status === "recusado" ? "" : "concluido"}">${esc(ST_CH[c.status] || c.status)}</span>
+      ${c.urgencia >= 4 ? `<span class="chip urgente">Urgência ${esc(c.urgencia)}</span>` : ""}${c.master ? `<span class="chip">${esc(c.master)}</span>` : ""}</header>
+    <p class="peq mono">${esc(c.id)}${c.conversa ? " · " + esc(c.conversa) : ""}</p>
+    ${pode ? `<label for="ct-${esc(c.id)}">Título</label><input id="ct-${esc(c.id)}" value="${esc(c.titulo_editado || c.titulo)}" maxlength="200">
+      <label for="cd-${esc(c.id)}">Descrição</label><textarea id="cd-${esc(c.id)}" rows="7">${esc(c.descricao_editada || c.descricao)}</textarea>
+      <label for="cm-${esc(c.id)}">Motivo, se não for abrir <small>(ensina os agentes)</small></label><input id="cm-${esc(c.id)}" maxlength="300">
+      <div class="acoes"><button class="btn" data-ch="aprovado" data-id="${esc(c.id)}" ${online() ? "" : "disabled"}>Aprovar e abrir no GLPI</button><button class="btn perigo" data-ch="recusado" data-id="${esc(c.id)}" ${online() ? "" : "disabled"}>Não abrir</button>${msg("ch-" + c.id)}</div>`
+    : `<p><b>${esc(c.titulo_editado || c.titulo)}</b></p><details><summary>Ver descrição</summary><div class="resposta">${md(c.descricao_editada || c.descricao)}</div></details>
+      ${url(c.url) ? `<p class="peq"><a href="${url(c.url)}" target="_blank" rel="noopener">Chamado #${esc(c.glpi_id)} no GLPI</a></p>` : ""}`}
+    ${url(c.link) ? `<p class="peq"><a href="${url(c.link)}" target="_blank" rel="noopener">Negócio no HubSpot</a></p>` : ""}
+  </article>`;
+}
+function cardLote(r) {
+  const d = S.recup[r.deal], dona = S.eu === "geovana";
+  return `<article class="cartao"><header><strong><a href="${url(r.link)}" target="_blank" rel="noopener">${esc(r.negocio)}</a></strong><span class="chip">${esc(r.parceiro)}</span><span class="chip">${esc(r.tipo)}</span>
+      ${d ? `<span class="chip ponto concluido">${esc(d.decisao)}</span>` : ""}</header>
+    <p class="peq">${esc(r.segmento)} · ${esc(r.uf)} · parecidos ${esc(String(r.taxa || "").split(" ")[0])} · esperado ${mi(r.esperado)}</p>
+    <details><summary>Hipótese, parecer e documentos</summary><div class="resposta"><p>${esc(r.hipotese)}</p><p>Parecer: ${esc(r.parecer)}</p><p>Pedir: ${esc(r.documentos)}</p></div></details>
+    ${dona && !d ? `<div class="campos"><label>Motivo ou observação<input id="r-m-${esc(r.deal)}" maxlength="300"></label><label>Valor validado (R$)<input id="r-v-${esc(r.deal)}" inputmode="decimal"></label><label>Minutos gastos<input id="r-t-${esc(r.deal)}" type="number" min="0"></label></div>
+      <div class="acoes"><button class="btn" data-recup="Aprovar para reanálise" data-id="${esc(r.deal)}" ${online() ? "" : "disabled"}>Aprovar para reanálise</button><button class="btn perigo" data-recup="Vetar" data-id="${esc(r.deal)}" ${online() ? "" : "disabled"}>Vetar</button><button class="btn sec" data-recup="Precisa de dado" data-id="${esc(r.deal)}" ${online() ? "" : "disabled"}>Precisa de dado</button></div>`
+    : d?.motivo ? `<p class="peq">Motivo: ${esc(d.motivo)}</p>` : ""}
+  </article>`;
+}
+function cardPedido(p, completo) {
+  const meu = p.solicitante === S.eu, R = p.resposta, re = p.reencaminhado || [];
+  const titulo = p.entrega || (p.campos?.precisa || "").slice(0, 80) || "Pedido";
+  return `<article class="cartao"><header>${chipFase(p)}<span class="chip">${esc(nomeArea(p.area))}</span>${p.direto ? `<span class="chip">Direto</span>` : ""}<strong>${esc(p.pid || "")}${p.pid ? " · " : ""}${esc(titulo)}</strong></header>
+    <p>${esc(p.campos?.precisa)}</p>
+    <p class="peq">Pedido por ${esc(EQUIPE[p.solicitante] || p.solicitante || "—")} em ${dataBR(p.criado_em)}${p.campos?.master ? " · " + esc(p.campos.master) : ""}${p.campos?.prazo ? " · prazo " + esc(p.campos.prazo) : ""}</p>
+    ${re.map(x => `<p class="peq">Reencaminhado de ${esc(nomeArea(x.de))} para ${esc(nomeArea(x.para))}${x.motivo ? ": " + esc(x.motivo) : ""} (${dataBR(x.quando)})</p>`).join("")}
+    ${R ? `<details ${meu && p.status === "aguardando_aprovacao" || completo ? "open" : ""}><summary>Resposta v${esc(R.versao)}${R.area ? " · " + esc(nomeArea(R.area)) : ""}</summary><div class="resposta"><p><b>${esc(R.resumo)}</b></p>
+      ${(R.secoes || []).map(s => `<h3>${esc(s.titulo)}</h3>${md(s.texto)}`).join("")}
+      ${R.tambem ? `<h3>O que você também precisa</h3>${md(R.tambem)}` : ""}${R.falta ? `<h3>O que falta e quem fornece</h3>${md(R.falta)}` : ""}
+      ${(R.conferir || []).length ? `<h3>Antes de usar, confira</h3>${md(R.conferir.map(c => "- " + c).join("\n"))}` : ""}
+      ${(R.arquivos || []).length ? `<p class="peq">Arquivos no OneDrive: ${R.arquivos.map(esc).join(", ")}</p>` : ""}</div></details>` : ""}
+    ${meu && p.status === "aguardando_aprovacao" ? `<label for="c-${esc(p.id)}">Comentário <small>(obrigatório em Pedir ajuste e Não aprovado)</small></label><textarea id="c-${esc(p.id)}" maxlength="1500" rows="3"></textarea>
+      <div class="acoes"><button class="btn" data-dec="aprovado" data-id="${esc(p.id)}" ${online() ? "" : "disabled"}>Aprovar</button><button class="btn sec" data-dec="nova_analise" data-id="${esc(p.id)}" ${online() ? "" : "disabled"}>Pedir ajuste</button><button class="btn perigo" data-dec="nao_aprovado" data-id="${esc(p.id)}" ${online() ? "" : "disabled"}>Não aprovado</button>${msg("p-" + p.id)}</div>` : ""}
+  </article>`;
+}
+function linhaPedido(p) {
+  return `<li class="peq">${chipFase(p)} <b>${esc(nomeArea(p.area))}</b> · ${esc((p.campos?.precisa || "").slice(0, 90))} <span class="mono">${dataBR(p.criado_em)}</span></li>`;
+}
+function arquivosDia(p) {
+  const pw = (S.D.pastas_web || {})[p] || {}, fs = (S.D.arquivos_dia || {})[p] || [];
+  return `<section class="secao"><div class="cab"><h3>Arquivos do dia na sua pasta</h3><p class="peq">${esc((S.D.pastas || {})[p] || "")}</p></div>
+    ${fs.length ? `<div class="tabela"><table><thead><tr><th>Arquivo</th><th>Subpasta</th><th class="n">Hora</th></tr></thead><tbody>${fs.map(f => `<tr><td><a href="${url(f.url)}" target="_blank" rel="noopener">${esc(f.nome)}</a></td><td>${esc(f.pasta || "—")}</td><td class="n">${esc(f.hora)}</td></tr>`).join("")}</tbody></table></div>`
+      : `<div class="vazio">Nenhum arquivo novo nas últimas 24 horas.</div>`}
+    <div class="acoes">${url(pw.url) ? `<a class="btn sec" href="${url(pw.url)}" target="_blank" rel="noopener">Abrir minha pasta</a>` : ""}${url(pw.plano_url) && pw.plano_url !== pw.url ? `<a class="btn sec" href="${url(pw.plano_url)}" target="_blank" rel="noopener">Plano do dia</a>` : ""}</div>
+    <p class="peq">O OneDrive abre a pasta; o arquivo aparece na lista.</p></section>`;
+}
+function apontamento(p) {
+  const hoje = new Date().toISOString().slice(0, 10), meus = S.apont.filter(x => x.pessoa === p && (x.data || "").startsWith(hoje));
+  return `<details class="cartao"><summary>Registrar uma tarefa (Semana 0) · ${meus.length} hoje, ${meus.reduce((s, x) => s + (x.minutos || 0), 0)} min</summary>
+    <form id="f-apont" class="secao"><div class="campos">
+      <label>O que fez<input id="a-desc" required maxlength="160" placeholder="Ex.: encaminhei o pedido de contrato"></label>
+      <label>Tipo<select id="a-tipo">${["Atendimento ao parceiro", "Encaminhamento a área", "Cobrança de área", "Atualização de CRM", "Reunião", "Prospecção", "Análise técnica", "Relatório", "Outro"].map(t => `<option>${t}</option>`).join("")}</select></label>
+      <label>Master<select id="a-master"><option value="">—</option>${(S.D.gestao?.masters || []).map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
+      <label>Minutos<input id="a-min" type="number" min="1" max="600" value="15"></label></div>
+      <label style="display:flex;gap:10px;align-items:center;font-weight:400"><input id="a-ponte" type="checkbox" style="width:22px;min-height:22px"> Foi só ponte (receber, repassar, cobrar ou devolver)</label>
+      <div class="acoes"><button class="btn sec" type="submit" ${online() ? "" : "disabled"}>Registrar</button>${msg("apont")}</div></form></details>`;
+}
+function escolherPessoa() {
+  return `<section class="secao"><div class="cab"><span class="rotulo">Minha mesa</span><h2>Quem está usando?</h2><p class="lead">Escolha o seu nome no alto da página. A mesa mostra só o que é seu agora.</p></div>
+    <div class="acoes">${Object.entries(EQUIPE).map(([k, v]) => `<button class="btn sec" data-sou="${k}">${v}</button>`).join("")}</div></section>`;
+}
+function mesa() {
+  const p = S.eu; if (!p) return escolherPessoa();
+  if (p === "luis") return mesaLuis();
+  const dem = (S.D.demandas_lista || []).filter(d => d.pessoa === p && !S.acoes[d.id]);
+  const resp = dem.filter(d => d.status === "responder"), acomp = dem.filter(d => d.status !== "responder");
+  const ch = S.chamados.filter(c => c.pessoa === p && c.status === "proposto");
+  const prontos = S.pedidos.filter(x => x.solicitante === p && x.status === "aguardando_aprovacao");
+  const andamento = S.pedidos.filter(x => x.solicitante === p && ["fila", "analise"].includes(faseDe(x)));
+  const paraArea = S.pedidos.filter(x => x.para === p && x.solicitante !== p && faseDe(x) !== "concluido");
+  const L = p === "geovana" ? (S.D.lote || []) : [], lotePend = L.filter(r => !S.recup[r.deal]);
+  const total = resp.length + ch.length + prontos.length + lotePend.length;
+  return `<section class="secao"><div class="cab"><span class="rotulo">Minha mesa · ${esc(EQUIPE[p])}</span>
+      <h2>${total ? `${total} ${total === 1 ? "item pede" : "itens pedem"} a sua ação` : "Nada pendente com você agora"}</h2>
+      <p class="lead">Você aprova o que é da sua entrega. Só regra, preço, meta, remuneração, produto em validação e material em escala sobem ao Luis.</p></div>
+    ${avisoLeitura()}</section>
+    ${prontos.length ? `<section class="secao"><h3>Respostas prontas para você aprovar (${prontos.length})</h3><div class="lista">${prontos.map(x => cardPedido(x)).join("")}</div></section>` : ""}
+    ${ch.length ? `<section class="secao"><div class="cab"><h3>Chamados para aprovar (${ch.length})</h3><p class="peq">Os agentes propõem. O chamado só vai ao GLPI depois que você aprova. Ajuste o texto se precisar.</p></div><div class="lista">${ch.map(cardChamado).join("")}</div></section>` : ""}
+    ${L.length ? `<section class="secao"><div class="cab"><h3>Lote do Recuperador: ${L.length - lotePend.length} de ${L.length} decididos</h3><p class="peq">Você decide o lote. A decisão volta para a fila e ensina o Recuperador. Potencial estimado do lote: ${mi(S.D.recuperador?.esperado_lote1)}, a validar caso a caso.</p></div>
+      <div class="lista">${lotePend.map(cardLote).join("")}</div>${L.length > lotePend.length ? `<details><summary>Já decididos (${L.length - lotePend.length})</summary><div class="lista">${L.filter(r => S.recup[r.deal]).map(cardLote).join("")}</div></details>` : ""}</section>` : ""}
+    <section class="secao"><h3>Demandas para responder (${resp.length})</h3>${resp.length ? `<div class="lista">${resp.map(cardDemanda).join("")}</div>` : `<div class="vazio">Nenhuma demanda esperando resposta sua.</div>`}
+      ${acomp.length ? `<details><summary>Acompanhando (${acomp.length})</summary><div class="lista">${acomp.map(cardDemanda).join("")}</div></details>` : ""}</section>
+    <div class="duas">
+      <section class="secao"><h3>Seus pedidos em andamento (${andamento.length})</h3>${andamento.length ? `<ul class="lista" style="padding:0;list-style:none">${andamento.map(linhaPedido).join("")}</ul>` : `<div class="vazio">Nenhum pedido seu na fila. <button class="btn link" data-aba="pedir">Pedir a uma área</button></div>`}</section>
+      <section class="secao"><h3>Pedidos para a sua área (${paraArea.length})</h3>${paraArea.length ? `<ul class="lista" style="padding:0;list-style:none">${paraArea.map(linhaPedido).join("")}</ul>` : `<div class="vazio">Nenhum pedido aberto para a sua área.</div>`}</section>
+    </div>
+    ${arquivosDia(p)}${apontamento(p)}`;
+}
+function mesaLuis() {
+  const G = S.D.gestao || {}, dm = S.D.demandas || {}, ds = (S.D.conselho || []).filter(d => !S.conselho[d.id]);
+  const vis = S.verTodasDec ? ds : ds.slice(0, 6);
+  const prontos = S.pedidos.filter(x => x.solicitante === "luis" && x.status === "aguardando_aprovacao"), ch = S.chamados.filter(c => c.pessoa === "luis" && c.status === "proposto");
+  const L = S.D.lote || [], fila = S.pedidos.filter(x => ["fila", "analise"].includes(faseDe(x))).length;
+  return `<section class="secao"><div class="cab"><span class="rotulo">Minha mesa · Luis</span><h2>Decisões da sua alçada: ${ds.length}</h2>
+      <p class="lead">Aqui ficam só regra, preço, meta, remuneração, produto em validação e material em escala. Chamados, lotes e listas são decididos por quem é dona da entrega.</p></div>${avisoLeitura()}
+    <div class="lista">${vis.map(d => `<article class="cartao"><header><strong class="mono">${esc(d.id)}</strong><span class="chip ponto aprovar">Pendente</span><span class="peq">${esc(d.data)} · ${esc(d.ata)}</span></header>
+      <p>${esc(d.texto)}</p>${d.obs ? `<p class="peq">${esc(d.obs)}</p>` : ""}
+      <label for="n-${esc(d.id)}">Observação <small>(opcional)</small></label><input id="n-${esc(d.id)}" maxlength="400">
+      <div class="acoes"><button class="btn" data-cons="aprovada" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Aprovar</button><button class="btn sec" data-cons="aprovada com ajuste" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Aprovar com ajuste</button><button class="btn perigo" data-cons="rejeitada" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Rejeitar</button>${msg("cons-" + d.id)}</div></article>`).join("") || `<div class="vazio">Nenhuma decisão esperando você.</div>`}</div>
+    ${ds.length > vis.length ? `<div><button class="btn sec" data-todas="1">Mostrar todas as ${ds.length}</button></div>` : ""}</section>
+    ${prontos.length ? `<section class="secao"><h3>Respostas prontas para você aprovar (${prontos.length})</h3><div class="lista">${prontos.map(x => cardPedido(x)).join("")}</div></section>` : ""}
+    ${ch.length ? `<section class="secao"><h3>Chamados seus para aprovar (${ch.length})</h3><div class="lista">${ch.map(cardChamado).join("")}</div></section>` : ""}
+    <section class="secao"><div class="cab"><h3>Números da área</h3>${G.manchete ? `<p class="lead">${esc(G.manchete)}</p>` : ""}</div>
+      <div class="numeros">
+        ${["daniela", "jenifer", "geovana"].map(k => `<div class="num"><span class="rotulo">${EQUIPE[k]}</span><strong>${esc(dm[k]?.responder ?? 0)}</strong><small>para responder · ${esc(dm[k]?.abertas ?? 0)} abertas</small></div>`).join("")}
+        <div class="num"><span class="rotulo">Pedidos</span><strong>${fila}</strong><small>na fila ou em análise · ${S.pedidos.filter(x => x.status === "aguardando_aprovacao").length} prontos</small></div>
+        <div class="num"><span class="rotulo">Chamados</span><strong>${S.chamados.filter(c => c.status === "proposto").length}</strong><small>com a dona para aprovar · ${S.chamados.filter(c => c.status === "aberto").length} abertos</small></div>
+        <div class="num"><span class="rotulo">Lote Recuperador</span><strong>${L.filter(r => S.recup[r.deal]).length}/${L.length}</strong><small>decididos pela Geovana</small></div>
+      </div></section>
+    <div class="duas">
+      <section class="secao"><h3>Alertas das áreas</h3><div class="lista">${(G.alertas || []).map(a => `<article class="cartao"><header><span class="chip">${esc(a.area)}</span></header><p>${esc(a.texto)}</p></article>`).join("") || `<div class="vazio">Sem alertas.</div>`}</div></section>
+      <section class="secao"><h3>Saúde dos Masters</h3><div class="tabela"><table><thead><tr><th>Master</th><th class="n">Saúde</th><th class="n">Abertos</th><th class="n">Parados</th><th class="n">Ganhos 90d</th></tr></thead><tbody>
+        ${(G.masters || []).slice().sort((a, b) => a.saude - b.saude).map(m => `<tr><td>${esc(m.parceiro)}</td><td class="n">${esc(m.saude)}${m.saude < 60 ? " · baixa" : ""}</td><td class="n">${esc(m.abertos)} · ${mi(m.abertos_rs)}</td><td class="n">${esc(m.parados)}</td><td class="n">${esc(m.ganhos_90d)}</td></tr>`).join("")}
+      </tbody></table></div></section>
+    </div>
+    ${arquivosDia("luis")}`;
+}
+
+/* ===================== Pedir a uma área ===================== */
+function listaAreas() {
+  const q = sem(S.buscaArea).trim(), A = S.DIR.areas;
+  const casa = a => !q || q.split(/\s+/).every(t => sem([a.nome, a.missao, a.dono, ...(a.entregas || []).map(e => e.entrega)].join(" ")).includes(t));
+  const blocos = S.DIR.blocos.map(b => [b, A.filter(a => a.bloco === b && casa(a))]).filter(([, xs]) => xs.length);
+  return `<button type="button" class="area-op nao-sei" data-area="" aria-pressed="${S.area === ""}"><strong>Não sei qual área</strong><span>A Central lê o pedido e decide quem responde.</span></button>
+    ${blocos.map(([b, xs]) => `<div class="bloco-areas"><span class="rotulo">${esc(b)}</span><div class="grade-areas">${xs.map(a => `<button type="button" class="area-op" data-area="${esc(a.skill)}" aria-pressed="${S.area === a.skill}"><strong>${esc(a.nome)}</strong><span>${esc(a.missao)}</span></button>`).join("")}</div></div>`).join("")
+      || `<div class="vazio">Nenhuma área com “${esc(S.buscaArea)}”. Use “Não sei qual área”.</div>`}`;
+}
+function formPedido() {
+  if (S.area === null) return `<div class="vazio">Escolha uma área para ver o que ela entrega e escrever o pedido.</div>`;
+  const a = areaDe(S.area), ok = online() && S.eu;
+  const ents = a?.entregas || [], ent = ents.find(e => e.entrega === S.entrega);
+  return `<form id="f-pedido" class="cartao form-pedido" novalidate>
+    <div class="cab"><span class="rotulo">${a ? "Direto para a área" : "Para a Central"}</span><h3>${esc(a ? a.nome : "Não sei qual área")}</h3>
+      <p class="peq">${esc(a ? a.missao : "A Central de Agentes faz a triagem e aciona as áreas certas. Use quando o pedido cruza várias áreas.")}</p>
+      ${a ? `<p class="peq">Dono: ${esc(a.dono)} · <button type="button" class="btn link" data-ver-area="${esc(a.skill)}">Ver tudo o que a área entrega</button></p>` : ""}</div>
+    ${a && ents.length ? `<label for="p-entrega">O que você quer receber <small>(opcional)</small></label><select id="p-entrega"><option value="">Não sei, a área decide</option>${ents.map(e => `<option value="${esc(e.entrega)}" ${e.entrega === S.entrega ? "selected" : ""}>${esc(e.entrega)}</option>`).join("")}</select>
+      ${ent ? `<p class="peq">${esc(ent.conteudo)}${ent.formato ? " Formato: " + esc(ent.formato) + "." : ""}</p>` : ""}` : ""}
+    <label for="p-precisa">O que você precisa <small>Descreva a entrega que resolve o seu problema.</small></label><textarea id="p-precisa" required maxlength="1500" rows="4"></textarea>
+    <div class="campos"><label>Para que vai usar<select id="p-uso">${["Reunião", "Resposta ao parceiro", "Decisão interna", "Prospecção", "Levantamento", "Outro"].map(x => `<option>${x}</option>`).join("")}</select></label>
+      <label>Prazo <small>(opcional)</small><input id="p-prazo" type="date"></label></div>
+    <details><summary>Mais detalhes (opcional)</summary><div class="secao" style="margin-top:10px">
+      <div class="campos"><label>Master ou parceiro<select id="p-master"><option value="">—</option><option>Todos</option>${(S.D.gestao?.masters || []).map(m => `<option>${esc(m.parceiro)}</option>`).join("")}</select></label>
+        <label>Cliente, CNPJ ou link do HubSpot<input id="p-cliente" maxlength="300"></label></div>
+      <label>Informações que ajudam<textarea id="p-contexto" maxlength="1500" rows="3" placeholder="Não escreva dados bancários, CPF ou senhas."></textarea></label></div></details>
+    <p class="peq">${a ? "O pedido vai direto para a área, sem triagem. O gerente da área responde aqui em 3 blocos e você aprova. Se o pedido não for da área, ela reencaminha e registra o motivo." : "A Central responde aqui em 3 blocos e você aprova."}</p>
+    <div class="acoes"><button class="btn" type="submit" ${ok ? "" : "disabled"}>${a ? "Enviar para " + esc(a.nome) : "Enviar para a Central"}</button>${msg("pedido")}</div>
+    ${!S.eu ? `<p class="peq">Escolha o seu nome no alto da página para enviar.</p>` : ""}
+  </form>`;
+}
+function pedir() {
+  return `<section class="secao"><div class="cab"><span class="rotulo">Pedir a uma área</span><h2>Escolha a área e escreva o pedido</h2>
+    <p class="lead">O pedido vai direto para a área que você escolher. Se não souber qual é, a Central decide.</p></div>${avisoLeitura()}</section>
+    <div class="duas"><section class="secao"><div class="busca"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><label for="busca-area" class="so-leitor">Buscar área ou entrega</label><input id="busca-area" type="search" placeholder="Buscar área ou entrega (ex.: repasse, contrato, lista)" value="${esc(S.buscaArea)}" autocomplete="off"></div>
+      <div id="lista-areas" class="secao">${listaAreas()}</div></section>
+      <section id="painel-pedido">${formPedido()}</section></div>`;
+}
+
+/* ===================== Onde está ===================== */
+let INDICE = null;
+function indice() {
+  if (INDICE) return INDICE; const X = [];
+  for (const a of S.DIR.areas) {
+    X.push({tipo: "Área", titulo: a.nome, sub: a.bloco + " · dono: " + a.dono, det: a.missao, onde: a.onde, links: a.links, area: a.skill});
+    for (const e of a.especialistas) X.push({tipo: "Especialista", titulo: e.nome, sub: a.nome, det: e.entrega, onde: "", links: [], area: a.skill});
+    for (const e of a.entregas) X.push({tipo: "Entrega", titulo: e.entrega, sub: a.nome + (e.quando ? " · " + e.quando : ""), det: e.conteudo, onde: e.onde, quem: e.quem_recebe, arquivo: e.arquivo, links: e.links, area: a.skill});
+  }
+  for (const r of S.DIR.rotinas) X.push({tipo: "Rotina", titulo: r.nome, sub: r.quando, det: r.entrega, onde: r.onde, links: r.links});
+  for (const p of S.DIR.pessoas) X.push({tipo: "Pessoa", titulo: p.nome, sub: p.pasta, det: p.papel, onde: p.pasta, links: url(p.url) ? [{rotulo: "de " + p.nome, url: p.url}] : []});
+  for (const p of S.DIR.pastas) X.push({tipo: "Pasta", titulo: p.rotulo, sub: p.caminho, det: p.uso, onde: p.caminho, links: url(p.url) ? [{rotulo: p.rotulo, url: p.url}] : []});
+  for (const x of X) { x.t = sem(x.titulo); x.all = sem([x.tipo, x.titulo, x.sub, x.det, x.onde, x.quem, x.arquivo].join(" ")) }
+  return INDICE = X;
+}
+const ONDE_MAC = o => /^(Mac:|na conversa|repositório|pasta confidencial|~\/)/i.test(o || "");
+function linhaOnde(onde, links) {
+  if (!onde && !(links || []).length) return "";
+  return `<p class="onde-linha"><span class="rot">Onde:</span> <span>${esc(onde)}</span>${ONDE_MAC(onde) && !(links || []).length ? `<span class="peq">(fora do OneDrive: peça o arquivo pelo pedido à área)</span>` : ""} ${linksHtml(links)}</p>`;
+}
+function resultados() {
+  const q = sem(S.busca).trim(); if (!q) return "";
+  const ts = q.split(/\s+/).filter(Boolean);
+  const peso = {Entrega: 3, Pasta: 2, Rotina: 2, Área: 2, Pessoa: 1, Especialista: 0};
+  const rs = indice().filter(x => ts.every(t => x.all.includes(t))).map(x => ({x, s: (ts.every(t => x.t.includes(t)) ? 10 : 0) + peso[x.tipo]})).sort((a, b) => b.s - a.s).slice(0, 30);
+  if (!rs.length) return `<div class="vazio">Nada encontrado para “${esc(S.busca)}”. Tente outra palavra ou <button class="btn link" data-aba="pedir">peça à Central</button>.</div>`;
+  return `<p class="peq" role="status">${rs.length}${rs.length === 30 ? "+" : ""} resultado(s)</p><div class="lista">${rs.map(({x}) => `<article class="cartao resultado"><header><span class="chip">${esc(x.tipo)}</span><strong>${esc(x.titulo)}</strong></header>
+    ${x.sub ? `<p class="meta">${esc(x.sub)}</p>` : ""}${x.det ? `<p class="peq">${esc(x.det)}</p>` : ""}
+    ${x.quem ? `<p class="peq">Quem recebe: ${esc(x.quem)}</p>` : ""}${x.arquivo && x.arquivo !== "—" ? `<p class="peq">Arquivo: <span class="mono">${esc(x.arquivo)}</span></p>` : ""}
+    ${linhaOnde(x.onde, x.links)}
+    ${x.area ? `<div class="acoes"><button class="btn sec" data-ver-area="${esc(x.area)}">Ver a área</button><button class="btn link" data-pedir-area="${esc(x.area)}" ${x.tipo === "Entrega" ? `data-entrega="${esc(x.titulo)}"` : ""}>Pedir a esta área</button></div>` : ""}</article>`).join("")}</div>`;
+}
+function areaDetalhe(a) {
+  return `<details class="area-det" id="area-${esc(a.skill)}" ${S.abrirArea === a.skill ? "open" : ""}><summary><strong>${esc(a.nome)}</strong><span class="chip">${esc(a.especialistas.length)} especialistas · ${esc(a.entregas.length)} entregas</span><span class="peq">Dono: ${esc(a.dono)}</span></summary>
+    <div class="area-corpo"><p>${esc(a.missao)}</p>${linhaOnde(a.onde, a.links)}
+      ${a.quem_usa ? `<p class="peq">Quem usa: ${esc(a.quem_usa)}</p>` : ""}
+      ${(a.nao_faz || []).length ? `<p class="peq">Não faz: ${a.nao_faz.map(esc).join(" ")}</p>` : ""}
+      <div class="acoes"><button class="btn" data-pedir-area="${esc(a.skill)}">Pedir a esta área</button></div>
+      <div class="secao"><h4>Entregas</h4><div>${a.entregas.map(e => `<div class="ent"><strong>${esc(e.entrega)}</strong><p class="peq">${esc(e.conteudo)}</p>
+        <p class="peq">${[e.quando && "Quando: " + e.quando, e.quem_recebe && "Recebe: " + e.quem_recebe, e.formato && "Formato: " + e.formato].filter(Boolean).map(esc).join(" · ")}</p>
+        ${e.arquivo && e.arquivo !== "—" ? `<p class="peq">Arquivo: <span class="mono">${esc(e.arquivo)}</span></p>` : ""}${linhaOnde(e.onde, e.links)}</div>`).join("")}</div></div>
+      <details><summary>Especialistas (${a.especialistas.length}) e o que cada um entrega</summary><div class="lista" style="margin-top:8px">${a.especialistas.map(e => `<div class="esp"><strong>${esc(e.nome)}</strong><span class="peq">${esc(e.entrega)}</span></div>`).join("")}</div></details>
+    </div></details>`;
+}
+function ondeConteudo() {
+  if (S.busca.trim()) return resultados();
+  const D = S.DIR;
+  if (S.ondeAba === "areas") return D.blocos.map(b => `<div class="secao"><span class="rotulo">${esc(b)}</span><div class="lista">${D.areas.filter(a => a.bloco === b).map(areaDetalhe).join("")}</div></div>`).join("");
+  if (S.ondeAba === "pessoas") return `<div class="lista">${D.pessoas.map(p => `<article class="cartao"><header><strong>${esc(p.nome)}</strong></header><p>${esc(p.papel)}</p>
+    ${p.pasta ? `<div class="pasta"><code>${esc(p.pasta)}</code>${url(p.url) ? `<a href="${url(p.url)}" target="_blank" rel="noopener">Abrir pasta</a>` : ""}${url(p.plano_url) && p.plano_url !== p.url ? `<a href="${url(p.plano_url)}" target="_blank" rel="noopener">Plano do dia</a>` : ""}</div>` : ""}
+    ${p.areas.length ? `<div class="acoes">${p.areas.map(s => `<button class="btn link" data-ver-area="${esc(s)}">${esc(nomeArea(s))}</button>`).join("")}</div>` : ""}</article>`).join("")}</div>`;
+  if (S.ondeAba === "rotinas") return `<div class="lista">${D.rotinas.map(r => `<article class="cartao"><header><strong>${esc(r.nome)}</strong></header><p class="peq mono">${esc(r.quando)}</p><p>${esc(r.entrega)}</p>${linhaOnde(r.onde, r.links)}</article>`).join("")}</div>`;
+  return `<div class="lista">${D.pastas.map(p => `<article class="cartao"><header><strong>${esc(p.rotulo)}</strong></header><p class="peq">${esc(p.uso)}</p><div class="pasta"><code>${esc(p.caminho)}</code>${url(p.url) ? `<a href="${url(p.url)}" target="_blank" rel="noopener">Abrir pasta</a>` : `<span class="peq">pasta ainda não criada</span>`}</div></article>`).join("")}</div>`;
+}
+function onde() {
+  const ex = ["Conferência de repasses", "lote do Recuperador", "ata do Conselho", "plano do dia"];
+  return `<section class="secao"><div class="cab"><span class="rotulo">Onde está</span><h2>Onde fica cada coisa</h2>
+      <p class="lead">${S.DIR.areas.length} áreas, ${S.DIR.areas.reduce((s, a) => s + a.especialistas.length, 0)} especialistas e ${S.DIR.areas.reduce((s, a) => s + a.entregas.length, 0)} entregas. Busque pelo nome do que você procura.</p></div>
+    <div class="busca"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><label for="busca" class="so-leitor">Buscar</label><input id="busca" type="search" placeholder="O que você procura?" value="${esc(S.busca)}" autocomplete="off"></div>
+    <div class="filtros" aria-label="Exemplos de busca"><span class="peq">Exemplos:</span>${ex.map(x => `<button type="button" data-exemplo="${esc(x)}">${esc(x)}</button>`).join("")}</div>
+    <div class="filtros" role="group" aria-label="Ver por" id="onde-abas" ${S.busca.trim() ? "hidden" : ""}>${[["areas", "Por área"], ["pessoas", "Por pessoa"], ["rotinas", "Por rotina"], ["pastas", "Pastas"]].map(([k, n]) => `<button type="button" data-onde="${k}" aria-pressed="${S.ondeAba === k}">${n}</button>`).join("")}</div>
+    <div id="onde-res" class="secao">${ondeConteudo()}</div></section>`;
+}
+
+/* ===================== Acompanhar ===================== */
+function acompanhar() {
+  const F = S.f;
+  const base = S.pedidos.filter(p => (!F.area || (F.area === "-" ? !p.area : p.area === F.area)) && (!F.pessoa || p.solicitante === F.pessoa));
+  const vis = base.filter(p => !F.fase || faseDe(p) === F.fase);
+  const areasUsadas = [...new Set(S.pedidos.map(p => p.area).filter(Boolean))];
+  return `<section class="secao"><div class="cab"><span class="rotulo">Acompanhar</span><h2>Todos os pedidos</h2><p class="lead">Na fila, em análise, pronto para aprovar ou concluído. Quem pediu é quem aprova.</p></div>${avisoLeitura()}
+    <div class="campos"><label>Área<select id="f-area"><option value="">Todas</option><option value="-" ${F.area === "-" ? "selected" : ""}>Central (sem área)</option>${S.DIR.areas.map(a => `<option value="${esc(a.skill)}" ${F.area === a.skill ? "selected" : ""}>${esc(a.nome)}${areasUsadas.includes(a.skill) ? "" : " (sem pedidos)"}</option>`).join("")}</select></label>
+      <label>Pessoa<select id="f-pessoa"><option value="">Todas</option>${Object.entries(EQUIPE).map(([k, v]) => `<option value="${k}" ${F.pessoa === k ? "selected" : ""}>${v}</option>`).join("")}</select></label></div>
+    <div class="filtros" role="group" aria-label="Situação"><button type="button" data-fase="" aria-pressed="${!F.fase}">Todos <span class="mono">${base.length}</span></button>${FASES.map(([k, n]) => `<button type="button" data-fase="${k}" aria-pressed="${F.fase === k}">${n} <span class="mono">${base.filter(p => faseDe(p) === k).length}</span></button>`).join("")}</div>
+    <div class="lista">${vis.length ? vis.map(p => cardPedido(p)).join("") : `<div class="vazio">${online() ? "Nenhum pedido com esses filtros." : "Os pedidos aparecem quando a Central é aberta pelo link do Claude."}</div>`}</div></section>`;
+}
+
+/* ===================== Render ===================== */
+const VISTAS = {inicio: mesa, pedir, onde, acompanhar};
+function render() {
+  nav(); if (!S.D || !S.DIR) return;
+  const sel = $("#sou"); if (sel) { sel.value = S.eu || ""; sel.disabled = S.identificado }
+  $("#quem-txt").textContent = S.identificado ? "Você:" : "Você é";
+  const vals = {}, ativo = document.activeElement, foco = ativo?.id, pos = ativo && "selectionStart" in ativo ? [ativo.selectionStart, ativo.selectionEnd] : null;
+  const abertos = new Set([...document.querySelectorAll("#conteudo details[open]")].map((d, i) => d.id || "d" + i));
+  document.querySelectorAll("#conteudo input[id], #conteudo select[id], #conteudo textarea[id]").forEach(el => { vals[el.id] = el.type === "checkbox" ? el.checked : el.value });
+  $("#conteudo").innerHTML = VISTAS[S.aba]() + `<p class="rodape">Pré-análises dos agentes da Área Partners para o time validar. Nada aqui é enviado a parceiros ou clientes. Dados de ${esc(S.D.atualizado)}; diretório de ${esc(S.DIR.atualizado)}.</p>`;
+  const limpar = S.limpar; S.limpar = null;
+  for (const [id, v] of Object.entries(vals)) { if (limpar && id.startsWith(limpar)) continue; const el = document.getElementById(id); if (!el || id === "p-entrega") continue; if (el.type === "checkbox") el.checked = v; else if (v !== "" || el.tagName !== "SELECT") el.value = v }
+  [...document.querySelectorAll("#conteudo details")].forEach((d, i) => { if (abertos.has(d.id || "d" + i)) d.open = true });
+  if (foco) { const el = document.getElementById(foco); if (el) { el.focus({preventScroll: true}); if (pos && el.setSelectionRange) try { el.setSelectionRange(pos[0], pos[1]) } catch (e) {} } }
+}
+function irPara(aba, rolar) {
+  S.aba = aba; S.msg = {}; lsSet("aba", aba);
+  try { history.replaceState(null, "", "#" + aba) } catch (e) {}
+  render(); if (rolar !== false) window.scrollTo({top: 0});
+  document.getElementById("tab-" + aba)?.focus({preventScroll: true});
+}
+
+/* ===================== Gravações ===================== */
+const aviso = (k, t, ok) => { S.msg[k] = {t, ok}; render() };
+async function salvarPedido(e) {
+  e.preventDefault(); if (!online() || !S.eu) return;
+  const precisa = $("#p-precisa").value.trim();
+  if (!precisa) { $("#p-precisa").focus(); return aviso("pedido", "Escreva o que você precisa.") }
+  const a = areaDe(S.area), b = e.target.querySelector("button[type=submit]"); b.disabled = true;
+  const entrega = $("#p-entrega")?.value || "";
+  try {
+    await Fonte.criar("pedidos", {criado_em: agora(), solicitante: S.eu, solicitante_id: S.meuId, codigo: "", status: "novo",
+      area: a ? a.skill : "", area_nome: a ? a.nome : "", direto: !!a, entrega, canal: "portal-v2",
+      para: a ? (PARA_AREA[a.skill] || "luis") : "luis",
+      campos: {master: $("#p-master")?.value || "", cliente: ($("#p-cliente")?.value || "").trim(), precisa, uso: $("#p-uso").value, formato: entrega || "Resumo na tela", prazo: $("#p-prazo").value, contexto: ($("#p-contexto")?.value || "").trim()},
+      historico: [{quando: agora(), evento: "novo", por: S.eu, nota: a ? "direto para " + a.skill : "para a Central"}]});
+    S.limpar = "p-"; aviso("pedido", `Pedido enviado para ${a ? a.nome : "a Central"}. A resposta aparece em Acompanhar e na sua mesa.`, true);
+  } catch (x) { b.disabled = false; aviso("pedido", x?.code === "invalid_argument" ? "Sem permissão para enviar. Peça ao Luis acesso de Colaborador." : "Não consegui enviar agora. Tente de novo em instantes.") }
+}
+async function decidirPedido(id, dec) {
+  const p = S.pedidos.find(x => x.id === id), campo = $("#c-" + id), nota = (campo?.value || "").trim();
+  if (p?.solicitante !== S.eu) return;
+  if (dec !== "aprovado" && !nota) { campo.focus(); return aviso("p-" + id, "Escreva o motivo ou o que mudar.") }
+  try { await Fonte.atualizar("pedidos/" + id, {status: dec, decisao: {tipo: dec, nota, quando: agora(), por: S.eu, por_id: S.meuId}, historico: [...(p.historico || []), {quando: agora(), evento: dec, por: S.eu, nota}].slice(-30)}) }
+  catch (x) { aviso("p-" + id, "Não consegui registrar a decisão.") }
+}
+async function acaoDemanda(id, st) { try { await Fonte.gravar("acoes_demandas/" + id, {status: st, por: S.eu, quando: agora()}) } catch (x) { aviso("geral", "Não consegui registrar.") } }
+async function decidirRecup(id, dec) {
+  if (S.eu !== "geovana") return; const v = s => ($(s)?.value || "").trim();
+  try { await Fonte.gravar("recuperador/" + id, {decisao: dec, motivo: v("#r-m-" + id), valor_validado: v("#r-v-" + id), minutos: Number(v("#r-t-" + id)) || null, por: S.eu, quando: agora()}) }
+  catch (x) { aviso("geral", "Não consegui registrar a decisão do lote.") }
+}
+async function decidirConselho(id, dec) {
+  if (S.eu !== "luis") return;
+  try { await Fonte.gravar("conselho/" + id, {decisao: dec, nota: ($("#n-" + id)?.value || "").trim(), quando: agora()}) } catch (x) { aviso("cons-" + id, "Só o Luis registra decisões do Conselho.") }
+}
+async function decidirChamado(id, dec) {
+  const c = S.chamados.find(x => x.id === id); if (!c || c.pessoa !== S.eu) return;
+  const v = s => ($(s)?.value || "").trim();
+  const dados = dec === "aprovado" ? {status: "aprovado", titulo_editado: v("#ct-" + id), descricao_editada: v("#cd-" + id), aprovado_por: S.eu, aprovado_em: agora()}
+                                   : {status: "recusado", motivo: v("#cm-" + id), recusado_por: S.eu, recusado_em: agora()};
+  if (dec === "recusado" && !dados.motivo) { $("#cm-" + id).focus(); return aviso("ch-" + id, "Diga por que não abrir.") }
+  try { await Fonte.atualizar("chamados/" + id, dados) } catch (x) { aviso("ch-" + id, "Não consegui registrar a decisão do chamado.") }
+}
+async function salvarApont(e) {
+  e.preventDefault(); if (!online()) return;
+  if (!$("#a-desc").value.trim()) { $("#a-desc").focus(); return }
+  try { await Fonte.criar("apontamentos", {pessoa: S.eu, data: agora(), descricao: $("#a-desc").value.trim(), tipo: $("#a-tipo").value, master: $("#a-master").value, minutos: Number($("#a-min").value) || 0, ponte: $("#a-ponte").checked}); S.limpar = "a-"; aviso("apont", "Tarefa registrada.", true) }
+  catch (x) { aviso("apont", "Não consegui registrar a tarefa.") }
+}
+
+/* ===================== Eventos ===================== */
+function definirPessoa(k) { S.eu = k || null; lsSet("sou", k || ""); render() }
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-aba]"); if (t) return irPara(t.dataset.aba);
+  const s = e.target.closest("[data-sou]"); if (s) return definirPessoa(s.dataset.sou);
+  const ar = e.target.closest("[data-area]"); if (ar) { S.area = ar.dataset.area; S.entrega = ""; S.msg = {}; render(); if (matchMedia("(max-width: 640px)").matches) $("#painel-pedido")?.scrollIntoView({block: "start"}); return }
+  const pa = e.target.closest("[data-pedir-area]"); if (pa) { S.area = pa.dataset.pedirArea; S.entrega = pa.dataset.entrega || ""; S.buscaArea = ""; irPara("pedir"); if (matchMedia("(max-width: 640px)").matches) $("#painel-pedido")?.scrollIntoView({block: "start"}); return }
+  const va = e.target.closest("[data-ver-area]"); if (va) { S.abrirArea = va.dataset.verArea; S.busca = ""; S.ondeAba = "areas"; irPara("onde", false); const el = document.getElementById("area-" + S.abrirArea); if (el) { el.open = true; el.scrollIntoView({block: "start"}); el.querySelector("summary")?.focus({preventScroll: true}) } return }
+  const ex = e.target.closest("[data-exemplo]"); if (ex) { S.busca = ex.dataset.exemplo; $("#busca").value = S.busca; atualizarBusca(); return }
+  const oa = e.target.closest("[data-onde]"); if (oa) { S.ondeAba = oa.dataset.onde; render(); return }
+  const fa = e.target.closest("[data-fase]"); if (fa) { S.f.fase = fa.dataset.fase; render(); return }
+  if (e.target.closest("[data-todas]")) { S.verTodasDec = true; render(); return }
+  const b = e.target.closest("button[data-id]"); if (!b || !online()) return; b.disabled = true;
+  if (b.dataset.dec) decidirPedido(b.dataset.id, b.dataset.dec);
+  else if (b.dataset.acao) acaoDemanda(b.dataset.id, b.dataset.acao);
+  else if (b.dataset.recup) decidirRecup(b.dataset.id, b.dataset.recup);
+  else if (b.dataset.cons) decidirConselho(b.dataset.id, b.dataset.cons);
+  else if (b.dataset.ch) decidirChamado(b.dataset.id, b.dataset.ch);
+});
+function atualizarBusca() { const r = $("#onde-res"); if (r) r.innerHTML = ondeConteudo(); const ab = $("#onde-abas"); if (ab) ab.hidden = !!S.busca.trim() }
+document.addEventListener("input", e => {
+  if (e.target.id === "busca") { S.busca = e.target.value; atualizarBusca() }
+  if (e.target.id === "busca-area") { S.buscaArea = e.target.value; $("#lista-areas").innerHTML = listaAreas() }
+});
+document.addEventListener("submit", e => { if (e.target.id === "f-pedido") salvarPedido(e); if (e.target.id === "f-apont") salvarApont(e) });
+document.addEventListener("change", e => {
+  if (e.target.id === "sou") definirPessoa(e.target.value);
+  if (e.target.id === "p-entrega") { S.entrega = e.target.value; render() }
+  if (e.target.id === "f-area") { S.f.area = e.target.value; render() }
+  if (e.target.id === "f-pessoa") { S.f.pessoa = e.target.value; render() }
+});
+document.addEventListener("keydown", e => {
+  const t = e.target.closest?.("nav.abas [role=tab]"); if (!t || !["ArrowRight", "ArrowLeft"].includes(e.key)) return;
+  const i = ABAS.findIndex(([k]) => k === t.dataset.aba), n = ABAS[(i + (e.key === "ArrowRight" ? 1 : ABAS.length - 1)) % ABAS.length][0]; irPara(n);
+});
+
+/* ===================== Início ===================== */
+async function iniciar() {
+  try { [S.D, S.DIR] = await Promise.all([Fonte.json("dados.json"), Fonte.json("diretorio.json")]) }
+  catch (e) { $("#conteudo").innerHTML = `<div class="vazio">Não consegui carregar os dados da Central. Recarregue a página em alguns segundos.</div>`; return }
+  $("#quando").textContent = "dados de " + S.D.atualizado;
+  S.eu = lsGet("sou") || null;
+  const h = (location.hash || "").slice(1); S.aba = ABAS.some(([k]) => k === h) ? h : (ABAS.some(([k]) => k === lsGet("aba")) ? lsGet("aba") : "inicio");
+  render();
+  await Fonte.conectar();
+  const eu = await Fonte.quemSou(); S.meuId = eu.id; if (eu.chave) { S.eu = eu.chave; S.identificado = true }
+  if (online()) {
+    const erro = () => aviso("geral", "Não consegui carregar os registros agora.");
+    Fonte.ouvir("pedidos", "criado_em", 300, xs => { S.pedidos = xs; render() }, erro);
+    Fonte.ouvir("acoes_demandas", null, 500, xs => { S.acoes = Object.fromEntries(xs.map(d => [d.id, d])); render() }, erro);
+    Fonte.ouvir("recuperador", null, 500, xs => { S.recup = Object.fromEntries(xs.map(d => [d.id, d])); render() }, erro);
+    Fonte.ouvir("conselho", null, 200, xs => { S.conselho = Object.fromEntries(xs.map(d => [d.id, d])); render() }, erro);
+    Fonte.ouvir("apontamentos", "data", 300, xs => { S.apont = xs; render() }, erro);
+    Fonte.ouvir("chamados", "proposto_em", 300, xs => { S.chamados = xs; render() }, erro);
+  }
+  render();
+}
+iniciar();
+</script>

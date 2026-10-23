@@ -398,8 +398,9 @@ def cmd_importar_portal(a):
     R["seq"] += 1; pid = f"P-{R['seq']:04d}"; c = dict(d.get("campos") or {}); c["codigo"] = d.get("codigo"); c["tipo"] = d.get("codigo")
     pessoa = d.get("solicitante") or "luis"
     R["pedidos"][pid] = {"id": pid, "portal_id": a.portal_id, "origem": "painel", "pessoa": pessoa, "email": next((e for e, k in REMETENTES.items() if k == pessoa), CAIXA),
-                         "assunto": " · ".join(x for x in [d.get("codigo"), (c.get("precisa") or "")[:60]] if x), "recebido": d.get("criado_em"),
-                         "codigo": d.get("codigo"), "campos": c, "status": "em_analise", "versao": 0, "anexos": [], "historico": [{"quando": d.get("criado_em"), "evento": "pedido (painel)"}]}
+                         "assunto": " · ".join(x for x in [d.get("codigo") or d.get("area"), (c.get("precisa") or "")[:60]] if x), "recebido": d.get("criado_em"),
+                         "codigo": d.get("codigo"), "campos": c, "status": "em_analise",
+                         "area": d.get("area") or "", "direto": bool(d.get("direto") and d.get("area")), "entrega": d.get("entrega") or "", "versao": 0, "anexos": [], "historico": [{"quando": d.get("criado_em"), "evento": "pedido direto à área " + d["area"] + " (painel)" if d.get("direto") and d.get("area") else "pedido (painel)"}]}
     salvar(R); print(pid)
 
 

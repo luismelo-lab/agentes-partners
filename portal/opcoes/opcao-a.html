@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Central Partners · Opção A</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Opção A · Sistema corporativo. Barra lateral fixa + barra superior com busca global (Ctrl+K);
+   conteúdo em tabelas com filtros; detalhe num painel lateral. Design System Save v0.5, modo claro. */
+:root { --fundo:#F6F7F9; --fundo-2:#F1F2F5; --cartao:#FFFFFF; --borda:#E6E8EC; --borda-3:#C9CCD3; --texto:#0F1115; --texto-2:#4A4F58;
+  --ouro:#F3CD60; --ouro-texto:#B58A1F; --ouro-suave:#FBF1D7; --sucesso:#1E8E3E; --alerta:#B5790F; --erro:#C5221F;
+  --sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace; color-scheme:light }
+*,*::before,*::after{box-sizing:border-box} html,body{height:100%}
+body{margin:0;background:var(--fundo);color:var(--texto);font:400 15px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit} a{color:var(--texto);text-decoration:underline;text-decoration-color:var(--ouro-texto);text-underline-offset:3px;font-weight:500}
+:focus-visible{outline:3px solid var(--ouro-texto);outline-offset:2px}
+.ic{width:20px;height:20px;flex:none}
+/* barra lateral */
+.lado{position:fixed;inset:0 auto 0 0;width:236px;background:var(--cartao);border-right:1px solid var(--borda);display:flex;flex-direction:column;z-index:30}
+.lado .logo{height:64px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid var(--borda)}
+.lado .logo img{height:22px} .lado .logo span{font:600 13px var(--sans);color:var(--texto-2);border-left:1px solid var(--borda-3);padding-left:10px}
+.menu{padding:12px 10px;display:grid;gap:2px}
+.menu .grupo{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--texto-2);padding:14px 12px 6px}
+.menu a{display:flex;align-items:center;gap:12px;padding:0 12px;min-height:42px;border-radius:8px;text-decoration:none;color:var(--texto-2);font-weight:500;position:relative}
+.menu a:hover{background:var(--fundo-2);color:var(--texto)}
+.menu a[aria-current="page"]{background:var(--ouro-suave);color:var(--texto);font-weight:600}
+.menu a[aria-current="page"]::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:2px;background:var(--ouro)}
+.menu .cont{margin-left:auto;font:600 12px var(--mono);background:var(--texto);color:#fff;border-radius:10px;padding:0 7px}
+.lado .perfil{margin-top:auto;border-top:1px solid var(--borda);padding:14px 16px;display:flex;gap:10px;align-items:center}
+.av{width:34px;height:34px;border-radius:50%;background:var(--texto);color:var(--ouro);display:grid;place-items:center;font:600 13px var(--mono);flex:none}
+.perfil select{border:1px solid var(--borda-3);border-radius:8px;padding:6px 8px;background:var(--cartao);min-height:36px;width:100%}
+/* topo */
+.corpo{margin-left:236px;min-height:100%}
+.topo{position:sticky;top:0;z-index:20;height:64px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--borda);display:flex;align-items:center;gap:12px;padding:0 max(24px,env(safe-area-inset-right,0px)) 0 24px}
+.btn-menu{display:none}
+.busca-g{flex:1;max-width:560px;display:flex;align-items:center;gap:10px;height:42px;border:1px solid var(--borda-3);border-radius:10px;background:var(--fundo);padding:0 12px;color:var(--texto-2);cursor:text;text-align:left}
+.busca-g kbd{margin-left:auto;font:500 11.5px var(--mono);border:1px solid var(--borda-3);border-radius:5px;padding:1px 6px;background:var(--cartao)}
+.topo .dir{margin-left:auto;display:flex;align-items:center;gap:8px}
+.icbtn{width:42px;height:42px;border-radius:10px;border:1px solid transparent;background:none;display:grid;place-items:center;cursor:pointer;position:relative}
+.icbtn:hover{background:var(--fundo-2)}
+.icbtn .pt{position:absolute;top:6px;right:6px;min-width:18px;height:18px;border-radius:9px;background:var(--erro);color:#fff;font:600 11px/18px var(--mono);text-align:center;padding:0 4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 16px;border-radius:8px;border:1px solid var(--ouro);background:var(--ouro);color:var(--texto);font:600 14px var(--sans);cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.sec{background:var(--cartao);border-color:var(--borda-3)} .btn.perigo{background:var(--cartao);border-color:var(--erro);color:var(--erro)}
+.btn .ic{width:18px;height:18px}
+/* conteúdo */
+.pag{padding:28px 24px 64px;max-width:1240px;display:grid;gap:22px}
+.pag-cab{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;justify-content:space-between}
+.pag-cab h1{margin:0;font-size:26px;font-weight:600;letter-spacing:-.01em}
+.pag-cab p{margin:4px 0 0;color:var(--texto-2)}
+.rot{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--texto-2)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.kpi{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;padding:14px 16px;display:grid;gap:2px}
+.kpi strong{font:600 28px/1.1 var(--mono)} .kpi small{color:var(--texto-2);font-size:13px}
+.kpi.destaque{border-color:var(--ouro);box-shadow:inset 0 3px 0 var(--ouro)}
+.painel{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;overflow:hidden}
+.painel-cab{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--borda)}
+.painel-cab h2{margin:0;font-size:16px;font-weight:600}
+.filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--borda-3);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:var(--cartao);padding:0 12px;min-height:36px;cursor:pointer;font-size:13.5px;border-right:1px solid var(--borda)}
+.seg button:last-child{border-right:0} .seg button[aria-pressed="true"]{background:var(--texto);color:#fff}
+select.f{border:1px solid var(--borda-3);border-radius:8px;min-height:36px;padding:0 10px;background:var(--cartao);font-size:13.5px}
+.linhas{display:grid}
+.lh{display:grid;grid-template-columns:var(--cols);gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--borda);min-width:0}
+.lh>*{min-width:0} .lh:last-child{border-bottom:0}
+.lh.cab{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--texto-2);padding-block:9px;background:var(--fundo)}
+button.lh{width:100%;text-align:left;background:var(--cartao);border:0;border-bottom:1px solid var(--borda);cursor:pointer}
+button.lh:hover{background:#FAFAFB}
+.tit{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .sub{color:var(--texto-2);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:6px;font:500 12px/1.6 var(--sans);padding:1px 9px;border-radius:4px;background:var(--fundo-2);border:1px solid var(--borda);white-space:nowrap}
+.chip.p::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--texto-2)}
+.chip.fila::before{background:transparent;border:1.5px solid var(--texto-2);width:7px;height:7px}
+.chip.analise::before{background:var(--alerta)} .chip.aprovar{background:var(--ouro-suave);border-color:var(--ouro)} .chip.aprovar::before{background:var(--ouro-texto)}
+.chip.concluido::before{background:var(--sucesso)} .chip.urg{color:var(--erro);border-color:var(--erro);background:var(--cartao)}
+.duas{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px;align-items:start}
+.vazio{padding:18px 16px;color:var(--texto-2)}
+/* painel lateral (detalhe) */
+.veu{position:fixed;inset:0;background:rgba(15,17,21,.32);z-index:40}
+.gaveta{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--cartao);z-index:41;box-shadow:-12px 0 32px rgba(15,17,21,.14);display:flex;flex-direction:column}
+.gaveta header{display:flex;align-items:center;gap:10px;padding:14px 16px 14px 20px;border-bottom:1px solid var(--borda);min-height:64px}
+.gaveta header h2{margin:0;font-size:17px;font-weight:600;flex:1;min-width:0}
+.gaveta .conteudo{padding:18px 20px 32px;overflow:auto;display:grid;gap:16px;align-content:start}
+.gaveta .rodape{border-top:1px solid var(--borda);padding:12px 20px;display:flex;flex-wrap:wrap;gap:8px}
+.campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.dl{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;font-size:14px;margin:0} .dl dt{color:var(--texto-2)} .dl dd{margin:0;min-width:0}
+.linha-tempo{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.linha-tempo li{position:relative;padding:0 0 14px 22px;font-size:14px}
+.linha-tempo li::before{content:"";position:absolute;left:4px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--texto-2)}
+.linha-tempo li::after{content:"";position:absolute;left:7.5px;top:17px;bottom:0;width:1px;background:var(--borda-3)}
+.linha-tempo li:last-child::after{display:none} .linha-tempo li:last-child::before{background:var(--ouro);box-shadow:0 0 0 3px var(--ouro-suave)}
+.resp{border-left:3px solid var(--ouro);padding:2px 0 2px 14px;display:grid;gap:6px;font-size:14.5px} .resp p{margin:0} .resp ul{margin:0;padding-left:18px}
+.resp h4{margin:6px 0 0;font-size:14px}
+label{display:grid;gap:6px;font-weight:500;font-size:14px} label small{color:var(--texto-2);font-weight:400}
+input,select,textarea{font:15px/1.4 var(--sans);border:1px solid var(--borda-3);border-radius:8px;padding:9px 12px;min-height:42px;background:var(--cartao);width:100%;min-width:0}
+textarea{min-height:96px;resize:vertical}
+.lista-areas{display:grid;gap:4px;max-height:260px;overflow:auto;border:1px solid var(--borda);border-radius:8px;padding:4px}
+.lista-areas button{display:grid;text-align:left;border:0;background:none;border-radius:6px;padding:8px 10px;cursor:pointer;gap:1px}
+.lista-areas button:hover{background:var(--fundo-2)} .lista-areas button[aria-pressed="true"]{background:var(--ouro-suave);box-shadow:inset 3px 0 0 var(--ouro)}
+.lista-areas small{color:var(--texto-2);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lista-areas .g{font:500 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--texto-2);padding:8px 10px 2px}
+.pastas{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:14px;align-items:center}
+.nota{background:var(--fundo-2);border-radius:8px;padding:10px 12px;font-size:13.5px;color:var(--texto-2)}
+/* paleta de comandos */
+.paleta{position:fixed;top:12vh;left:50%;transform:translateX(-50%);width:min(640px,calc(100% - 32px));background:var(--cartao);border-radius:14px;z-index:51;box-shadow:0 24px 64px rgba(15,17,21,.28);overflow:hidden}
+.paleta input{border:0;border-bottom:1px solid var(--borda);border-radius:0;min-height:56px;font-size:17px;padding:0 18px}
+.paleta .res{max-height:52vh;overflow:auto;padding:6px}
+.paleta .res button{width:100%;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;text-align:left;border:0;background:none;border-radius:8px;padding:9px 12px;cursor:pointer}
+.paleta .res button:hover,.paleta .res button.ativo{background:var(--fundo-2)}
+.paleta .res .sub{grid-column:2}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140%);background:var(--texto);color:#fff;padding:12px 16px;border-radius:10px;z-index:60;font-size:14px;max-width:calc(100% - 32px);transition:transform .2s}
+.toast.mostra{transform:translateX(-50%)}
+.amostra{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--ouro-suave);border:1px solid var(--ouro);border-radius:4px;padding:2px 8px}
+@media (max-width:900px){
+  .lado{transform:translateX(-100%);transition:transform .2s;box-shadow:12px 0 32px rgba(15,17,21,.14)} body.menu-aberto .lado{transform:none}
+  .corpo{margin-left:0} .btn-menu{display:grid} .topo{padding:0 12px;gap:6px} .busca-g kbd,.busca-g .txt-l{display:none} .busca-g{max-width:none}
+  .topo .novo-t{display:none}
+  .pag{padding:20px 16px 56px} .duas{grid-template-columns:1fr}
+  .lh{grid-template-columns:1fr auto !important;gap:4px 10px} .lh.cab{display:none} .lh .esconde-m{display:none}
+  .dl{grid-template-columns:1fr} .dl dt{font-size:12.5px;margin-top:4px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head>
+<body>
+<aside class="lado" aria-label="Menu principal">
+  <div class="logo"><img src="logo-save-fundo-claro.png" alt="Save Co."><span>Central Partners</span></div>
+  <nav class="menu" id="menu"></nav>
+  <div class="perfil"><div class="av" id="av">DA</div><label style="flex:1;gap:2px;font-size:12px;color:var(--texto-2)">Perfil<select id="sou"><option value="daniela">Daniela</option><option value="luis">Luis</option><option value="jenifer">Jenifer</option><option value="geovana">Geovana</option></select></label></div>
+</aside>
+<div class="corpo">
+  <header class="topo">
+    <button class="icbtn btn-menu" id="abrir-menu" aria-label="Abrir menu"></button>
+    <button class="busca-g" id="abrir-busca" aria-label="Buscar (Ctrl+K)"><span id="ic-busca"></span><span class="txt-l">Buscar área, entrega, pasta, rotina ou pedido</span><span class="txt-c">Buscar</span><kbd>Ctrl K</kbd></button>
+    <div class="dir"><span class="amostra">Prévia</span><button class="icbtn" id="sino" aria-label="Notificações"></button><a class="btn novo-t" href="#novo">Novo pedido</a></div>
+  </header>
+  <main class="pag" id="pag"></main>
+</div>
+<div id="camada"></div>
+<script src="exemplo-dados.js"></script>
+<script src="comum.js"></script>
+<script>
+const {X, esc, url, data, mi, md, PESSOAS, FASES, fase, rotFase, area, nomeArea, st, mesa, pendentes, buscar, foraOneDrive, linkPastas, icone, toast, rota} = C;
+const $ = s => document.querySelector(s);
+const F = {fase: "", area: "", pessoa: "", buscaArea: "", sel: null};
+const MENU = [["mesa", "Minha mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["areas", "Áreas", "areas"], ["onde", "Onde está", "onde"], ["rotinas", "Rotinas", "rotinas"], ["decisoes", "Decisões", "decisoes"]];
+const chip = p => `<span class="chip p ${fase(p)}">${esc(rotFase(p))}</span>`;
+$("#abrir-menu").innerHTML = icone("menu"); $("#ic-busca").innerHTML = icone("onde"); $("#sino").innerHTML = icone("sino") + `<span class="pt" id="pt"></span>`;
+
+function menu(r) {
+  const n = pendentes();
+  $("#menu").innerHTML = `<span class="grupo">Trabalho</span>` + MENU.map(([k, t, ic], i) => (i === 3 ? `<span class="grupo">Consulta</span>` : "") +
+    `<a href="#${k}" ${r === k || (k === "pedidos" && ["pedido", "novo"].includes(r)) || (k === "areas" && r === "area") ? 'aria-current="page"' : ""}>${icone(ic)}${t}${k === "mesa" && n ? `<span class="cont">${n}</span>` : ""}</a>`).join("");
+  $("#pt").textContent = n; $("#av").textContent = PESSOAS[st.eu].slice(0, 2).toUpperCase();
+}
+const cab = (rot, t, sub, acoes = "") => `<div class="pag-cab"><div><span class="rot">${rot}</span><h1>${t}</h1>${sub ? `<p>${sub}</p>` : ""}</div><div class="filtros">${acoes}</div></div>`;
+
+/* ---------- telas ---------- */
+function telaMesa() {
+  const m = mesa(), eu = PESSOAS[st.eu];
+  const itens = [...m.prontos.map(p => ({tipo: "Aprovar resposta", t: p.entrega || p.precisa, sub: nomeArea(p.area), quando: p.historico.at(-1).quando, go: "pedido/" + p.id, c: `<span class="chip p aprovar">Pronto para aprovar</span>`})),
+    ...m.chamados.map(c => ({tipo: "Aprovar chamado", t: c.titulo, sub: c.grupo, quando: "", go: "chamado/" + c.id, c: `<span class="chip p aprovar">Aguarda você</span>`})),
+    ...m.responder.map(d => ({tipo: "Responder demanda", t: d.titulo, sub: d.master, quando: d.aberta_em, go: "demanda/" + d.id, c: d.urgente ? `<span class="chip urg">Urgente</span>` : `<span class="chip p analise">Responder</span>`})),
+    ...m.lote.map(l => ({tipo: "Decidir lote", t: l.negocio + " · " + l.segmento, sub: l.parceiro, quando: "", go: "lote/" + l.deal, c: `<span class="chip p aprovar">Decidir</span>`})),
+    ...m.decisoes.map(d => ({tipo: "Decisão do Conselho", t: d.id + " · " + d.texto, sub: "Alçada do Luis", quando: "", go: "decisao/" + d.id, c: `<span class="chip p aprovar">Pendente</span>`}))];
+  const dn = X.demandas_num;
+  return cab(`Minha mesa · ${eu}`, itens.length ? `${itens.length} itens pedem a sua ação` : "Nada pendente com você", st.eu === "luis" ? "Só regra, preço, meta, remuneração, produto em validação e material em escala chegam a você." : "Você aprova o que é da sua entrega. O Luis só vê regra, preço, meta e produto.", `<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`)
+  + `<div class="kpis">${st.eu === "luis" ? [["Daniela", dn.daniela?.responder ?? 0, "para responder"], ["Pedidos na fila", X.pedidos.filter(p => ["fila", "analise"].includes(fase(p))).length, "em todas as áreas"], ["Prontos para aprovar", X.pedidos.filter(p => fase(p) === "aprovar").length, "com quem pediu"], ["Decisões suas", X.decisoes_total, "regra, preço, meta, produto"]]
+      : [["Para responder", m.responder.length, "demandas dos Masters"], ["Para aprovar", m.prontos.length + m.chamados.length, "respostas e chamados"], ["Em andamento", m.andamento.length, "pedidos que você fez"], ["Arquivos hoje", m.arquivos.length, "na sua pasta"]]).map(([r, v, s], i) => `<div class="kpi ${i === 1 ? "destaque" : ""}"><span class="rot">${r}</span><strong>${v}</strong><small>${s}</small></div>`).join("")}</div>
+  <div class="duas"><section class="painel"><div class="painel-cab"><h2>Para agir agora</h2><span class="sub">${itens.length} itens</span></div>
+    <div class="linhas" style="--cols:150px minmax(0,1fr) 150px"><div class="lh cab"><span>Tipo</span><span>Item</span><span>Situação</span></div>
+    ${itens.slice(0, 9).map(i => `<button class="lh" data-go="${i.go}"><span class="sub esconde-m">${esc(i.tipo)}</span><span><span class="tit" style="display:block">${esc(i.t)}</span><span class="sub" style="display:block">${esc(i.sub || "")}${i.quando ? " · " + data(i.quando) : ""}</span></span><span>${i.c}</span></button>`).join("") || `<div class="vazio">Nada pendente.</div>`}</div></section>
+    <div style="display:grid;gap:22px"><section class="painel"><div class="painel-cab"><h2>Meus pedidos em andamento</h2><a href="#pedidos">Ver todos</a></div>
+      <div class="linhas" style="--cols:minmax(0,1fr) auto">${m.andamento.map(p => `<button class="lh" data-go="pedido/${p.id}"><span><span class="tit" style="display:block">${esc(nomeArea(p.area))}</span><span class="sub" style="display:block">${esc(p.precisa)}</span></span>${chip(p)}</button>`).join("") || `<div class="vazio">Nenhum pedido em andamento.</div>`}</div></section>
+    <section class="painel"><div class="painel-cab"><h2>Arquivos do dia</h2>${url(m.pasta.url) ? `<a href="${url(m.pasta.url)}" target="_blank" rel="noopener">Abrir minha pasta</a>` : ""}</div>
+      <div class="linhas" style="--cols:minmax(0,1fr) auto">${m.arquivos.map(a => `<div class="lh"><span><span class="tit" style="display:block">${esc(a.nome)}</span><span class="sub" style="display:block">${esc(a.pasta || "pasta principal")}</span></span><span class="mono">${esc(a.hora)}</span></div>`).join("")}</div></section></div></div>`;
+}
+function telaPedidos() {
+  const base = X.pedidos.filter(p => (!F.area || p.area === F.area) && (!F.pessoa || p.solicitante === F.pessoa)), vis = base.filter(p => !F.fase || fase(p) === F.fase);
+  return cab("Pedidos", "Todos os pedidos", "Quem pede escolhe a área; quem pediu aprova.", `<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`)
+  + `<section class="painel"><div class="painel-cab"><div class="seg" role="group" aria-label="Situação"><button data-fase="" aria-pressed="${!F.fase}">Todos ${base.length}</button>${FASES.map(([k, n]) => `<button data-fase="${k}" aria-pressed="${F.fase === k}">${n} ${base.filter(p => fase(p) === k).length}</button>`).join("")}</div>
+    <div class="filtros"><select class="f" id="f-area" aria-label="Área"><option value="">Todas as áreas</option>${X.areas.map(a => `<option value="${a.skill}" ${F.area === a.skill ? "selected" : ""}>${esc(a.nome)}</option>`).join("")}</select>
+    <select class="f" id="f-pessoa" aria-label="Pessoa"><option value="">Todas as pessoas</option>${Object.entries(PESSOAS).map(([k, v]) => `<option value="${k}" ${F.pessoa === k ? "selected" : ""}>${v}</option>`).join("")}</select></div></div>
+    <div class="linhas" style="--cols:84px minmax(0,1fr) 190px 100px 110px 170px"><div class="lh cab"><span>Nº</span><span>Pedido</span><span>Área</span><span>Quem</span><span>Aberto</span><span>Situação</span></div>
+    ${vis.map(p => `<button class="lh" data-go="pedido/${p.id}"><span class="mono esconde-m">${p.id}</span><span><span class="tit" style="display:block">${esc(p.entrega || p.precisa)}</span><span class="sub" style="display:block">${esc(p.precisa)}</span></span><span class="sub esconde-m">${esc(nomeArea(p.area))}${p.direto ? "" : " · triagem"}</span><span class="esconde-m">${PESSOAS[p.solicitante]}</span><span class="mono esconde-m">${data(p.criado_em)}</span><span>${chip(p)}</span></button>`).join("") || `<div class="vazio">Nenhum pedido com esses filtros.</div>`}</div></section>`;
+}
+function telaAreas() {
+  return cab("Áreas", "25 áreas de agentes", "Clique numa área para ver o que ela faz, quem é o dono e onde ficam as entregas.", `<a class="btn sec" href="#onde">Buscar</a>`)
+  + X.blocos.map(b => `<section class="painel"><div class="painel-cab"><h2>${esc(b)}</h2></div><div class="linhas" style="--cols:minmax(0,1.1fr) minmax(0,1.6fr) 200px 120px">
+    <div class="lh cab"><span>Área</span><span>O que faz</span><span>Dono</span><span>Entregas</span></div>
+    ${X.areas.filter(a => a.bloco === b).map(a => `<button class="lh" data-go="area/${a.skill}"><span class="tit">${esc(a.nome)}</span><span class="sub esconde-m">${esc(a.missao)}</span><span class="sub esconde-m">${esc(a.dono)}</span><span class="mono">${a.entregas.length} · ${a.especialistas.length} esp.</span></button>`).join("")}</div></section>`).join("");
+}
+function resultadoLinha(r) {
+  return `<button class="lh" data-go="${r.area ? "area/" + r.area : "onde"}"><span class="chip esconde-m">${esc(r.tipo)}</span><span><span class="tit" style="display:block">${esc(r.titulo)}</span><span class="sub" style="display:block">${esc(r.sub || "")}</span></span><span class="sub esconde-m">${esc(r.onde || "—")}</span></button>`;
+}
+function telaOnde(q) {
+  const rs = q ? buscar(q) : [], ex = ["Conferência de repasses", "lote do Recuperador", "ata do Conselho", "plano do dia"];
+  return cab("Onde está", "Onde fica cada coisa", "Busque por entrega, pasta, rotina, pessoa ou especialista.")
+  + `<label style="max-width:720px"><span class="rot">Buscar</span><input id="q-onde" type="search" value="${esc(q)}" placeholder="Ex.: conferência de repasses" autocomplete="off"></label>
+  <div class="filtros"><span class="sub">Exemplos:</span>${ex.map(x => `<button class="btn sec" style="min-height:34px" data-q="${esc(x)}">${esc(x)}</button>`).join("")}</div>
+  <section class="painel" id="res-onde">${resOnde(q, rs)}</section>
+  <section class="painel"><div class="painel-cab"><h2>Pastas no OneDrive</h2></div><div class="linhas" style="--cols:220px minmax(0,1fr) 140px">
+    ${X.pastas.map(p => `<div class="lh"><span class="tit">${esc(p.rotulo)}</span><span class="sub esconde-m">${esc(p.caminho)}</span><span>${url(p.url) ? `<a href="${url(p.url)}" target="_blank" rel="noopener">Abrir pasta</a>` : `<span class="sub">ainda não criada</span>`}</span></div>`).join("")}</div></section>`;
+}
+const resOnde = (q, rs) => `<div class="painel-cab"><h2>${q ? `${rs.length} resultado(s) para “${esc(q)}”` : "Digite para buscar"}</h2></div><div class="linhas" style="--cols:110px minmax(0,1fr) minmax(0,1fr)">${rs.map(resultadoLinha).join("") || (q ? `<div class="vazio">Nada encontrado.</div>` : "")}</div>`;
+function telaRotinas() {
+  return cab("Rotinas", "Quando os agentes trabalham", "O que roda sozinho, quando roda e onde entrega.")
+  + `<section class="painel"><div class="linhas" style="--cols:minmax(0,1fr) 230px minmax(0,1.2fr)"><div class="lh cab"><span>Rotina</span><span>Quando</span><span>Onde entrega</span></div>
+  ${X.rotinas.map(r => `<div class="lh"><span><span class="tit" style="display:block">${esc(r.nome)}</span><span class="sub" style="display:block;white-space:normal">${esc(r.entrega)}</span></span><span class="mono esconde-m">${esc(r.quando)}</span><span class="sub esconde-m" style="white-space:normal">${esc(r.onde)} ${linkPastas(r.links)}</span></div>`).join("")}</div></section>`;
+}
+function telaDecisoes() {
+  return cab("Decisões", `Decisões do Conselho · ${X.decisoes_total} pendentes`, "Só o Luis decide. As aprovações operacionais ficam com quem é dona da entrega.")
+  + `<section class="painel"><div class="linhas" style="--cols:70px minmax(0,1fr) 90px 130px">${X.decisoes.map(d => `<button class="lh" data-go="decisao/${d.id}"><span class="mono">${d.id}</span><span class="tit" style="white-space:normal">${esc(d.texto)}</span><span class="mono esconde-m">${esc(d.data)}</span><span><span class="chip p aprovar">Pendente</span></span></button>`).join("")}</div></section>`;
+}
+
+/* ---------- painel lateral ---------- */
+function gaveta(titulo, corpo, rodape = "") {
+  $("#camada").innerHTML = `<div class="veu" data-fechar></div><section class="gaveta" role="dialog" aria-modal="true" aria-labelledby="g-tit"><header><h2 id="g-tit">${titulo}</h2><button class="icbtn" data-fechar aria-label="Fechar">${icone("fechar")}</button></header><div class="conteudo">${corpo}</div>${rodape ? `<div class="rodape">${rodape}</div>` : ""}</section>`;
+  $("#camada .gaveta header button").focus();
+}
+function gPedido(id) {
+  const p = X.pedidos.find(x => x.id === id); if (!p) return; const R = p.resposta, meu = p.solicitante === st.eu && p.status === "aguardando_aprovacao";
+  gaveta(`<span class="mono" style="color:var(--texto-2)">${p.id}</span> · ${esc(p.entrega || "Pedido")}`,
+    `<div class="filtros">${chip(p)}<span class="chip">${esc(nomeArea(p.area))}</span>${p.direto ? `<span class="chip">Direto à área</span>` : `<span class="chip">Pela Central</span>`}</div>
+    <p style="margin:0;font-size:16px">${esc(p.precisa)}</p>
+    <dl class="dl"><dt>Pedido por</dt><dd>${PESSOAS[p.solicitante]} em ${data(p.criado_em)}</dd><dt>Para que</dt><dd>${esc(p.uso)}</dd>${p.prazo ? `<dt>Prazo</dt><dd>${data(p.prazo)}</dd>` : ""}<dt>Aprova</dt><dd>${PESSOAS[p.solicitante]} (quem pediu)</dd></dl>
+    ${(p.reencaminhado || []).map(r => `<div class="nota">Reencaminhado de ${esc(nomeArea(r.de))} para ${esc(nomeArea(r.para))}: ${esc(r.motivo)}.</div>`).join("")}
+    ${R ? `<div class="resp"><span class="rot">Resposta v${R.versao} · ${esc(nomeArea(p.area))}</span><p><b>${esc(R.resumo)}</b></p>${R.secoes.map(s => `<h4>${esc(s.titulo)}</h4>${md(s.texto)}`).join("")}<h4>O que você também precisa</h4><p>${esc(R.tambem)}</p><h4>O que falta e quem fornece</h4><p>${esc(R.falta)}</p></div>` : ""}
+    <div><span class="rot">Linha do tempo</span><ol class="linha-tempo" style="margin-top:10px">${p.historico.map(h => `<li><b>${esc(h.evento)}</b> · ${esc(PESSOAS[h.por] || h.por)} <span class="mono" style="color:var(--texto-2)">${data(h.quando)}</span>${h.nota ? `<br><span class="sub">${esc(h.nota)}</span>` : ""}</li>`).join("")}</ol></div>
+    ${meu ? `<label>Comentário <small>(obrigatório para pedir ajuste ou não aprovar)</small><textarea id="com"></textarea></label>` : ""}`,
+    meu ? `<button class="btn" data-sim="Resposta aprovada">Aprovar</button><button class="btn sec" data-sim="Ajuste pedido à área">Pedir ajuste</button><button class="btn perigo" data-sim="Marcado como não aprovado">Não aprovado</button>` : "");
+}
+function gArea(sk) {
+  const a = area(sk); if (!a) return;
+  gaveta(esc(a.nome), `<div class="filtros"><span class="chip">${esc(a.bloco)}</span><span class="chip">Dono: ${esc(a.dono)}</span></div><p style="margin:0">${esc(a.missao)}</p>
+    <dl class="dl"><dt>Onde entrega</dt><dd>${esc(a.onde)}<div class="pastas">${linkPastas(a.links)}</div></dd>${a.nao_faz.length ? `<dt>Não faz</dt><dd>${a.nao_faz.map(esc).join(" ")}</dd>` : ""}</dl>
+    <div><span class="rot">Entregas (${a.entregas.length})</span><div class="linhas" style="--cols:minmax(0,1fr);margin-top:6px;border:1px solid var(--borda);border-radius:10px">${a.entregas.map(e => `<div class="lh" style="display:grid;gap:2px"><span class="tit" style="white-space:normal">${esc(e.entrega)}</span><span class="sub" style="white-space:normal">${esc(e.quando || "")}${e.quem_recebe ? " · " + esc(e.quem_recebe) : ""}</span><span class="sub" style="white-space:normal">Onde: ${esc(e.onde)} ${linkPastas(e.links)}</span></div>`).join("")}</div></div>
+    <div><span class="rot">Especialistas (${a.especialistas.length})</span><div style="display:grid;gap:8px;margin-top:8px">${a.especialistas.map(e => `<div style="border-left:2px solid var(--borda-3);padding-left:10px"><b style="font-size:14px">${esc(e.nome)}</b><div class="sub" style="white-space:normal">${esc(e.entrega)}</div></div>`).join("")}</div></div>`,
+    `<a class="btn" href="#novo/${a.skill}">Pedir a esta área</a>`);
+}
+function gNovo(sk) {
+  F.sel = sk || F.sel || null;
+  const a = area(F.sel);
+  const lista = () => { const q = C.sem(F.buscaArea); return `<button data-area="" aria-pressed="${F.sel === ""}"><b>Não sei qual área</b><small>A Central decide quem responde</small></button>` + X.blocos.map(b => { const xs = X.areas.filter(x => x.bloco === b && (!q || C.sem(x.nome + " " + x.missao + " " + x.entregas.map(e => e.entrega).join(" ")).includes(q))); return xs.length ? `<span class="g">${esc(b)}</span>` + xs.map(x => `<button data-area="${x.skill}" aria-pressed="${F.sel === x.skill}"><b>${esc(x.nome)}</b><small>${esc(x.missao)}</small></button>`).join("") : "" }).join("") };
+  gaveta("Novo pedido", `<label>1. Para qual área?<input id="q-area" type="search" placeholder="Buscar área ou entrega" value="${esc(F.buscaArea)}" autocomplete="off"></label><div class="lista-areas" id="lista-areas">${lista()}</div>
+    ${F.sel !== null ? `<div class="nota"><b>${esc(a ? a.nome : "Central de Agentes")}</b> · ${esc(a ? a.missao : "Faz a triagem e aciona as áreas.")}${a ? `<br>Dono: ${esc(a.dono)}` : ""}</div>
+    ${a ? `<label>2. O que você quer receber <small>(opcional)</small><select><option>Não sei, a área decide</option>${a.entregas.map(e => `<option>${esc(e.entrega)}</option>`).join("")}</select></label>` : ""}
+    <label>${a ? 3 : 2}. O que você precisa<textarea placeholder="Descreva a entrega que resolve o seu problema."></textarea></label>
+    <div class="campos"><label>Para que vai usar<select><option>Reunião</option><option>Resposta ao parceiro</option><option>Decisão interna</option><option>Prospecção</option></select></label><label>Prazo<input type="date"></label></div>
+    <div class="nota">${a ? "Vai direto para a área, sem triagem. O gerente responde em 3 blocos e você aprova. Se não for da área, ela reencaminha e registra." : "A Central lê e aciona as áreas certas."}</div>` : ""}`,
+    `<button class="btn" data-sim="Pedido enviado ${a ? "para " + a.nome : "à Central"}" ${F.sel === null ? "disabled" : ""}>Enviar pedido</button><button class="btn sec" data-fechar>Cancelar</button>`);
+  F._lista = lista;
+}
+function gSimples(t, corpo, rod) { gaveta(t, corpo, rod) }
+
+/* ---------- roteamento ---------- */
+function abrir() {
+  const {r, p} = rota(); menu(r); $("#camada").innerHTML = "";
+  const tela = {"": telaMesa, mesa: telaMesa, pedidos: telaPedidos, pedido: telaPedidos, novo: telaPedidos, areas: telaAreas, area: telaAreas, onde: () => telaOnde(p), rotinas: telaRotinas, decisoes: telaDecisoes,
+    chamado: telaMesa, demanda: telaMesa, lote: telaMesa, decisao: st.eu === "luis" ? telaMesa : telaDecisoes}[r] || telaMesa;
+  $("#pag").innerHTML = tela();
+  if (r === "pedido") gPedido(p); if (r === "area") gArea(p); if (r === "novo") gNovo(p || null);
+  if (r === "chamado") { const c = X.chamados.find(x => x.id === p); gSimples(esc(c.titulo), `<div class="filtros"><span class="chip p aprovar">Aguarda você</span><span class="chip">${esc(c.grupo)}</span></div><label>Título<input value="${esc(c.titulo)}"></label><label>Descrição<textarea rows="6">${esc(c.descricao)}</textarea></label><div class="nota">O chamado só vai ao GLPI depois que você aprova.</div>`, `<button class="btn" data-sim="Chamado aprovado">Aprovar e abrir no GLPI</button><button class="btn perigo" data-sim="Chamado não aberto">Não abrir</button>`) }
+  if (r === "demanda") { const d = X.demandas.find(x => x.id === p); gSimples(esc(d.titulo), `<div class="filtros">${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}<span class="chip">${esc(d.master)}</span></div><p style="margin:0">${esc(d.o_que_pede)}</p><dl class="dl"><dt>Aberta</dt><dd>${data(d.aberta_em)}</dd><dt>Nº</dt><dd class="mono">${d.id}</dd></dl>`, `<button class="btn" data-sim="Marcada como respondida">Respondi</button><button class="btn sec" data-sim="Marcada como encaminhada">Encaminhei à área</button><button class="btn sec" data-sim="Marcada como não é demanda">Não é demanda</button>`) }
+  if (r === "lote") { const l = X.lote.find(x => x.deal === p); gSimples(esc(l.negocio), `<div class="filtros"><span class="chip">${esc(l.parceiro)}</span><span class="chip">${esc(l.tipo)}</span></div><p style="margin:0">${esc(l.segmento)} · ${esc(l.uf)} · potencial estimado ${mi(l.esperado)}, a validar</p><label>Motivo ou observação<input></label>`, `<button class="btn" data-sim="Aprovado para reanálise">Aprovar para reanálise</button><button class="btn perigo" data-sim="Vetado">Vetar</button><button class="btn sec" data-sim="Marcado: precisa de dado">Precisa de dado</button>`) }
+  if (r === "decisao") { const d = X.decisoes.find(x => x.id === p); gSimples(d.id, `<p style="margin:0">${esc(d.texto)}</p><label>Observação<input></label>`, st.eu === "luis" ? `<button class="btn" data-sim="Decisão aprovada">Aprovar</button><button class="btn sec" data-sim="Aprovada com ajuste">Aprovar com ajuste</button><button class="btn perigo" data-sim="Decisão rejeitada">Rejeitar</button>` : `<span class="sub">Só o Luis decide.</span>`) }
+  document.body.classList.remove("menu-aberto");
+}
+function fechar() { const {r} = rota(); const volta = {pedido: "pedidos", novo: "pedidos", area: "areas", chamado: "mesa", demanda: "mesa", lote: "mesa", decisao: st.eu === "luis" ? "mesa" : "decisoes"}[r]; if (volta) location.hash = volta; else $("#camada").innerHTML = "" }
+
+/* paleta Ctrl+K */
+function paleta() {
+  $("#camada").innerHTML = `<div class="veu" data-fechar-p></div><div class="paleta" role="dialog" aria-modal="true" aria-label="Busca global"><input id="q-p" placeholder="Buscar área, entrega, pasta, rotina, pedido…" autocomplete="off"><div class="res" id="res-p"></div></div>`;
+  const q = $("#q-p"); q.focus();
+  const rodar = () => { const v = q.value.trim(); const ps = X.pedidos.filter(p => v && C.sem(p.id + " " + p.precisa + " " + (p.entrega || "")).includes(C.sem(v))).slice(0, 4);
+    const rs = buscar(v, 10);
+    $("#res-p").innerHTML = (!v ? `<div class="vazio">Ex.: “conferência de repasses”, “lote do Recuperador”, “P-0031”.</div>` : "") + ps.map(p => `<button data-go="pedido/${p.id}"><span class="chip">Pedido</span><b>${p.id} · ${esc(p.entrega || p.precisa)}</b><span class="sub">${esc(nomeArea(p.area))} · ${esc(rotFase(p))}</span></button>`).join("")
+      + rs.map(r => `<button data-go="${r.area ? "area/" + r.area : "onde/" + encodeURIComponent(r.titulo)}"><span class="chip">${esc(r.tipo)}</span><b>${esc(r.titulo)}</b><span class="sub">${esc(r.sub || "")}${r.onde ? " · " + esc(r.onde) : ""}</span></button>`).join("") };
+  q.addEventListener("input", rodar); rodar();
+}
+
+document.addEventListener("click", e => {
+  const go = e.target.closest("[data-go]"); if (go) { location.hash = go.dataset.go; return }
+  if (e.target.closest("[data-fechar]")) return fechar();
+  if (e.target.closest("[data-fechar-p]")) { $("#camada").innerHTML = ""; return }
+  const s = e.target.closest("[data-sim]"); if (s) { toast(s.dataset.sim); return }
+  const fa = e.target.closest("[data-fase]"); if (fa) { F.fase = fa.dataset.fase; abrir(); return }
+  const ar = e.target.closest("[data-area]"); if (ar) { F.sel = ar.dataset.area; gNovo(F.sel); return }
+  const q = e.target.closest("[data-q]"); if (q) { location.hash = "onde/" + encodeURIComponent(q.dataset.q); return }
+  if (e.target.closest("#abrir-busca")) return paleta();
+  if (e.target.closest("#abrir-menu")) { document.body.classList.toggle("menu-aberto"); return }
+  if (e.target.closest("#sino")) { toast(`${pendentes()} itens na sua mesa`); return }
+});
+document.addEventListener("input", e => {
+  if (e.target.id === "q-onde") { const v = e.target.value; $("#res-onde").innerHTML = resOnde(v, buscar(v)) }
+  if (e.target.id === "q-area") { F.buscaArea = e.target.value; $("#lista-areas").innerHTML = F._lista() }
+});
+document.addEventListener("change", e => {
+  if (e.target.id === "sou") { st.eu = e.target.value; abrir() }
+  if (e.target.id === "f-area") { F.area = e.target.value; abrir() } if (e.target.id === "f-pessoa") { F.pessoa = e.target.value; abrir() }
+});
+document.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); paleta() } if (e.key === "Escape" && $("#camada").innerHTML) { $("#camada .paleta") ? $("#camada").innerHTML = "" : fechar() } });
+window.addEventListener("hashchange", abrir);
+abrir();
+</script>
+</body></html>
