@@ -14,7 +14,7 @@ Plano: `docs/sso-entra/diagnostico-e-plano.md`. Roteiro da TI: `docs/sso-entra/o
 2. Rode `python3 central/dev_server.py` e abra `http://localhost:4280/`.
 
 ## Demo da consulta de Lucro Real (parceiros)
-`python3 central/consulta_demo.py` → `http://localhost:4281/consulta.html`. Sem login, só localhost. Usa a base da Receita e o `regime-cache.json` locais (`dados-publicos/receita/`); nada sai do Mac. Regras em `api/central_api/regime.py`: faixas confirmado / provável / não é Real / sem dado, ano-base e fonte em toda resposta, teto diário, trilha em `consultas-regime.jsonl`, lote de até 50. No piloto, `regime.py` entra em `rotas.py` atrás do token do Entra. Testes: `cd central/api && PYTHONPATH=../../lib python3 -m unittest tests.test_regime`.
+`python3 central/consulta_demo.py` → `http://localhost:4281/consulta.html`. Sem login, só localhost. **Sem base local:** consulta o Minha Receita e, se falhar, a BrasilAPI (mesma fonte, a segunda é reserva). O CNPJ digitado sai para essas APIs: `CENTRAL_API_EXTERNA=0` desliga; no piloto depende do ok do Jurídico e da TI. Regras em `api/central_api/regime.py`: faixas confirmado / provável / não é Real / sem dado / indisponível, ano-base e fonte em toda resposta, cache em memória de 24 h, lote de até 20 (4 em paralelo), teto diário, trilha em `dados-publicos/receita/consultas-regime.jsonl`. Testes (sem rede): `cd central/api && PYTHONPATH=../../lib python3 -m unittest tests.test_regime`.
 
 ## Testes
 `cd central/api && python3 -m unittest -v`

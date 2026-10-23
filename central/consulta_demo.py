@@ -3,7 +3,7 @@
 
     python3 central/consulta_demo.py        → http://localhost:4281/consulta.html
 
-Usa a base da Receita e o cache de regime locais (nada sai do Mac). No piloto, as mesmas funções de
+Consulta o Minha Receita e, se ele falhar, a BrasilAPI (APIs gratuitas; o CNPJ digitado sai para elas; CENTRAL_API_EXTERNA=0 desliga). Sem base local. No piloto, as mesmas funções de
 central_api/regime.py entram em rotas.py atrás do token do Entra (papel e teto de consultas por parceiro).
 Só escuta em localhost.
 """
@@ -36,7 +36,7 @@ def lote(corpo):
     if not ok:
         return 429, {"erro": "Limite diário de %d consultas atingido (%d usadas)." % (limite, usadas)}
     fat = numero(corpo.get("faturamento")) if len(cnpjs) == 1 else None
-    res = [regime.consultar(c, fat) for c in cnpjs]
+    res = regime.consultar_lote(cnpjs, fat)
     regime.auditar(USUARIO, res)
     return 200, {"resultados": res, "usadas": usadas, "limite": limite}
 
