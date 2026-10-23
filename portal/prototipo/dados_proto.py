@@ -64,6 +64,7 @@ for c in PO.get("conselho", []):
 
 # triagem do WhatsApp (o que o parceiro pede, Master, rota e rascunho dos agentes), ligada à demanda pela chave
 sys.path.insert(0, os.path.join(AP, "lib")); import protecao
+from cnpj import normalizar_cnpj  # noqa: E402  CNPJ alfanumérico (IN RFB 2.229/2024)
 EMP = re.compile(r"\b[A-ZÀ-Ý0-9&.\-]+(?:\s+[A-ZÀ-Ý0-9&.\-]+)*\s+(?:LTDA|S/?A|EIRELI|ME|EPP)\b\.?")
 anon = lambda t: protecao.limpo(t) if t else ""
 TRI = {}
@@ -311,7 +312,7 @@ docs_neg.sort(key=lambda d: (-len(d["decide"]), -(d["dias"] or 0)))
 H8 = lambda r: hashlib.sha256(("save:" + r).encode()).hexdigest()[:16]
 busca = []
 for n in HB:
-    c = re.sub(r"\D", "", str((n.get("extras") or {}).get("cnpj") or "")); r8 = c.zfill(14)[:8] if c else None
+    c = normalizar_cnpj((n.get("extras") or {}).get("cnpj")); r8 = c.zfill(14)[:8] if c else None
     busca.append([str(n["id"])[-5:], n.get("parceiro") or "", n.get("etapa") or "", n["status"], round(n.get("valor") or 0), (n.get("extras") or {}).get("uf") or "", (n.get("segmento") or "")[:40], (n.get("criado") or "")[:10], H8(r8) if r8 else "", (n.get("nome") or "")[:70]])
 # histórico: demandas resolvidas e tempo até resolver
 hist = []
@@ -350,7 +351,7 @@ biblioteca = {"respostas": [
 
 # ================= recorrência (regras V5, L11, L13 e parecer "já aproveitado" — Tributário 29/09; Revisor "grupo já é cliente")
 def raiz(n):
-    c = re.sub(r"\D", "", str((n.get("extras") or {}).get("cnpj") or "")); return c.zfill(14)[:8] if c else None
+    c = normalizar_cnpj((n.get("extras") or {}).get("cnpj")); return c.zfill(14)[:8] if c else None
 meses = lambda a, b: (b.year - a.year) * 12 + (b.month - a.month)
 grupos = collections.defaultdict(list)
 for n in HB:

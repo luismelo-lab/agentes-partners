@@ -6,6 +6,7 @@
 | Peça | Onde |
 |---|---|
 | Rotinas da nuvem, **desligadas** | `.github/workflows/`: dados do dia, segunda, leitura do WhatsApp, rodada sem IA, leitura da Central, Receita mensal, rotinas com IA |
+| Esteira do parceiro (consulta de Lucro Real), **desligada** | `.github/workflows/esteira-parceiro.yml` (a cada 15 min, só chama o Claude se houver fila; liga com `AGENTES_NUVEM` e `AGENTES_IA`): aprofunda o dossiê-base e publica pelo auditor de promessas. Roteiro em `rotinas/esteira-parceiro.md`; fluxo em `central/README.md` |
 | Preparação do ambiente | `.github/actions/preparar/`: monta as pastas iguais às do Mac, instala OCR em português e baixa o estado |
 | E-mail e SharePoint pelo Microsoft Graph | `lib/graph.py`: o envio de e-mail, a Central e o OneDrive passam a usá-lo quando `AGENTES_EMAIL=graph` e `AGENTES_ARQUIVOS=sharepoint` |
 | Memória entre rodadas | `lib/estado.py`: registro de demandas, Central, triagens e métricas ficam numa pasta restrita do SharePoint, nunca no GitHub |
@@ -27,6 +28,7 @@
 **3. Configurar o repositório** (Settings → Secrets and variables → Actions)
 - **Segredos:** `HUBSPOT_TOKEN`, `GRAPH_TENANT_ID`, `GRAPH_CLIENT_ID`, `GRAPH_CLIENT_SECRET` e, para as rotinas com IA, `ANTHROPIC_API_KEY` ou `CLAUDE_CODE_OAUTH_TOKEN`.
 - **Variáveis:** `AGENTES_CAIXA`, `GRAPH_SITE_ID`, `GRAPH_PASTA` (= `Área Partners · Agentes`).
+- **Esteira do parceiro:** segredo `CENTRAL_SAL` (o mesmo valor no site, na rotina Dados do dia e aqui; sem ele o índice de negócios ativos não confere) e variável `CENTRAL_APROVACAO` (`obrigatoria`, padrão de teste com um aprovador, ou `autonoma`).
 
 **4. Testar sem ligar os horários**
 - No Mac, com as credenciais no ambiente: `python3 lib/graph.py testar` (login, caixa e site).
@@ -40,6 +42,8 @@
 **6. Partes com IA**, quando houver crédito ou token de uso automático do Claude:
 1. `AGENTES_IA=ligado` no GitHub.
 2. No app do Claude, pausar as rotinas equivalentes: WhatsApp com IA, Central, relatório semanal e Recuperador.
+
+- **Índice de negócios ativos (site de consulta):** a rotina Dados do dia (`partners manha` e `tarde`) agora roda `partners indice-ativos` depois do download do HubSpot. Precisa do segredo `CENTRAL_SAL` (o mesmo da Central e da esteira). O índice segue para o SharePoint pelo `lib/estado.py`.
 
 ## O que continua no Mac por enquanto
 - **Portal Central Partners:** só uma sessão do Claude publica o portal. Alternativa: página no SharePoint.

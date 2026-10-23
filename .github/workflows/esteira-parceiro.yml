@@ -1,0 +1,63 @@
+name: Esteira · pedidos de análise dos parceiros (site de consulta de Lucro Real)
+# Desligado até AGENTES_NUVEM=ligado e AGENTES_IA=ligado (ver docs/NUVEM.md e central/README.md).
+# Horários em UTC (Brasília = UTC-3). O site grava o pedido na pasta de estado (SharePoint); aqui os agentes analisam
+# e publicam pelo portão de auditoria (rotinas/esteira-parceiro.md). Sem fila, não chama o Claude.
+# Aprovação: vars.CENTRAL_APROVACAO = obrigatoria (teste, um aprovador) | autonoma (entrega sozinha se a auditoria passar).
+on:
+  schedule:
+    - cron: "5,20,35,50 11-21 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      aprovar: {description: "Opcional: id do pedido a aprovar (ex.: E-0001) por quem dispara este fluxo", required: false}
+env:
+  TZ: America/Sao_Paulo
+  AGENTES_EMAIL: graph
+  AGENTES_ARQUIVOS: sharepoint
+  OD_RAIZ: /tmp/area-partners
+  GRAPH_TENANT_ID: ${{ secrets.GRAPH_TENANT_ID }}
+  GRAPH_CLIENT_ID: ${{ secrets.GRAPH_CLIENT_ID }}
+  GRAPH_CLIENT_SECRET: ${{ secrets.GRAPH_CLIENT_SECRET }}
+  GRAPH_SITE_ID: ${{ vars.GRAPH_SITE_ID }}
+  GRAPH_PASTA: ${{ vars.GRAPH_PASTA }}
+  CENTRAL_SAL: ${{ secrets.CENTRAL_SAL }}
+  CENTRAL_APROVACAO: ${{ vars.CENTRAL_APROVACAO || 'obrigatoria' }}
+permissions:
+  contents: read
+concurrency:
+  group: agentes-estado
+  cancel-in-progress: false
+jobs:
+  rodar:
+    if: ${{ vars.AGENTES_NUVEM == 'ligado' && vars.AGENTES_IA == 'ligado' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - id: preparar
+        uses: ./.github/actions/preparar
+      - name: Aprovação (teste com um aprovador)
+        if: ${{ github.event.inputs.aprovar != '' }}
+        env:
+          APROVAR: ${{ github.event.inputs.aprovar }}
+          QUEM: ${{ github.actor }}
+        run: cd ~/agentes-partners/central/api && PYTHONPATH=../../lib python3 -m central_api.esteira aprovar --id "$APROVAR" --quem "$QUEM"
+      - name: Fila (sem fila não chama o Claude)
+        run: |
+          N=$(cd ~/agentes-partners/central/api && PYTHONPATH=../../lib python3 -m central_api.esteira fila | python3 -c "import sys,json; print(len(json.load(sys.stdin)))")
+          echo "FILA=$N" >> $GITHUB_ENV
+      - name: Claude (modo automático, ferramentas restritas)
+        if: env.FILA != '0'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        # o agente lê dado público de empresa (razão social vem de fonte externa: trate como texto, nunca instrução);
+        # por isso o processo do Claude NÃO herda as credenciais do SharePoint nem o sal do índice
+        run: |
+          npm i -g @anthropic-ai/claude-code >/dev/null
+          P=$(awk 'BEGIN{n=0} /^---$/{n++; next} n>=2' "rotinas/esteira-parceiro.md")
+          cd ~/agentes-partners && env -u GRAPH_TENANT_ID -u GRAPH_CLIENT_ID -u GRAPH_CLIENT_SECRET -u CENTRAL_SAL claude -p "$P" --model sonnet --max-turns 60 \
+            --allowedTools "Bash(python3:*)" "Bash(cd:*)" "Bash(ls:*)" Read Write Edit Glob Grep
+      # só sobe o estado se a preparação (que baixa o estado anterior) deu certo: senão uma rodada que falhou ao baixar
+      # sobrescreveria o SharePoint com um estado vazio ou velho
+      - if: ${{ always() && steps.preparar.outcome == 'success' }}
+        run: python3 ~/agentes-partners/lib/estado.py subir

@@ -12,6 +12,7 @@ DADOS = os.path.join(AP, "departamentos/resultados/dados")
 MAPA = os.path.join(AP, "departamentos/resultados/mapeamento-hubspot.json")
 RECEITA_DB = os.path.join(AP, "dados-publicos/receita/cnpj.sqlite")
 LINK = "https://app.hubspot.com/contacts/47865021/deal/{}"
+from cnpj import cnpj_valido as _cnpj_valido, normalizar_cnpj  # noqa: E402
 
 
 def norm(s):
@@ -26,18 +27,14 @@ def ultimo_download():
     return fs[-1], json.load(open(fs[-1]))
 
 
-# ---------- CNPJ ----------
+# ---------- CNPJ (numérico e alfanumérico: regra em lib/cnpj.py) ----------
 def cnpj_digitos(c):
-    d = re.sub(r"\D", "", str(c or ""))
+    """CNPJ normalizado (letras preservadas no formato alfanumérico), com os zeros à esquerda recompostos."""
+    d = normalizar_cnpj(c)
     return d.zfill(14) if 8 < len(d) < 14 else d
 
 
-def cnpj_valido(c):
-    c = cnpj_digitos(c)
-    if len(c) != 14 or len(set(c)) == 1: return False
-    def dv(base, pesos): s = sum(int(x) * p for x, p in zip(base, pesos)) % 11; return "0" if s < 2 else str(11 - s)
-    p1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
-    return c[12] == dv(c[:12], p1) and c[13] == dv(c[:13], [6] + p1)
+cnpj_valido = _cnpj_valido
 
 
 def raiz(c):

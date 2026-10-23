@@ -26,7 +26,7 @@ from collections import Counter, defaultdict
 from datetime import date, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fila import perfil, parecido, raiz, linha_matriz, dt  # noqa: E402  (reuso: mesmo perfil e look-alike do Recuperador)
+from fila import normalizar_cnpj, perfil, parecido, raiz, linha_matriz, dt  # noqa: E402  (reuso: mesmo perfil e look-alike do Recuperador)
 
 H = os.path.expanduser
 SRC = H("~/agentes-partners/departamentos/resultados/dados")
@@ -260,7 +260,7 @@ def main():
     revis, lacunas, fora = [], [], []
     vistos = {}
     for d in sorted(alvo, key=lambda x: x["criado"] or ""):
-        p = perfil(d, E); e = E.get(d["id"], {}); cnpj = re.sub(r"\D", "", str(e.get("cnpj") or d["extras"].get("cnpj") or "")).zfill(14)
+        p = perfil(d, E); e = E.get(d["id"], {}); cnpj = normalizar_cnpj(e.get("cnpj") or d["extras"].get("cnpj")).zfill(14)
         rz = cnpj[:8]
         base = {"negócio": d["nome"], "parceiro": d["parceiro"], "pipeline": d["pipeline"], "etapa": d.get("etapa"), "criado": d["criado"],
                 "regime": p["regime"] or "não informado", "cnae_oficial": f"{p['cnae']} {p['cnae_desc'] or ''}".strip(), "uf": p["uf"], "link": LINK.format(d["id"])}

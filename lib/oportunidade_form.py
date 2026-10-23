@@ -19,6 +19,7 @@ import glob, json, os, re, subprocess, sys, time
 AP = os.path.expanduser("~/agentes-partners"); SK = os.path.expanduser("~/.claude/skills")
 sys.path.insert(0, os.path.join(AP, "lib")); sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(SK, "depto-resultados/scripts"))
+from cnpj import normalizar_cnpj  # noqa: E402
 PORTAL, FORM = "47865021", "71224d09-587d-42f2-bab1-5186c2c6d8e0"
 URL = f"https://api.hsforms.com/submissions/v3/integration/submit/{PORTAL}/{FORM}"
 REG = os.path.join(AP, "registro", "oportunidades-enviadas.json")
@@ -85,7 +86,7 @@ def montar(did, teses_grupo=None):
     x = n.get("extras") or {}; cfg = json.load(open(CFG)) if os.path.exists(CFG) else {}
     d, erro = _negocio(did); falta = [erro] if erro else []
     _, p = PR.ultimo_parecer([str(did)])
-    cnpj = re.sub(r"\D", "", str(d.get("cpf_cnpj") or x.get("cnpj") or "")); cnpj = cnpj.zfill(14) if 11 < len(cnpj) <= 14 else (cnpj or None)
+    cnpj = normalizar_cnpj(d.get("cpf_cnpj") or x.get("cnpj")); cnpj = cnpj.zfill(14) if 11 < len(cnpj) <= 14 else (cnpj or None)
     rf = PR.receita(cnpj)
     end, bairro, cidade, cep = _endereco(d.get("endereco"))
     cep = cep or _cep_receita(cnpj)

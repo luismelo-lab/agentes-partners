@@ -16,6 +16,7 @@ env:
   AGENTES_CAIXA: ${{ vars.AGENTES_CAIXA }}
   GRAPH_SITE_ID: ${{ vars.GRAPH_SITE_ID }}
   GRAPH_PASTA: ${{ vars.GRAPH_PASTA }}
+  CENTRAL_SAL: ${{ secrets.CENTRAL_SAL }}  # sal do índice de negócios ativos (mesmo valor da Central e da esteira)
 concurrency:
   group: agentes-estado
   cancel-in-progress: false

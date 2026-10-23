@@ -25,7 +25,6 @@ DB = os.path.join(AP, "dados-publicos/receita/cnpj.sqlite")
 RESUMOS = os.path.join(AP, "celulas/geovana/pareceres/resumos.json")
 URL = re.compile(r"https?://\S+")
 ANEXO = re.compile(r"https://f005\.backblazeb2\.com/file/eazybe-attachments/\S+")
-CNPJ = re.compile(r"(?<!\d)(\d{2}\.?\d{3}\.?\d{3}\s?/?\s?\d{4}\s?-?\s?\d{2})(?!\d)")
 DEAL = re.compile(r"hubspot\.com/\S*?(?:deal/|record/0-3/)(\d{6,})")
 PESSOAL = re.compile(r"(?<![a-z])(cnh|rg|cpf|ctps|irpf)(?![a-z])|identidade|passaporte|holerite|contracheque|t[ií]tulo[_ -]?(de[_ -]?)?eleitor|carteira[_ -]?(de[_ -]?)?trabalho"
                      r"|comprovante[_ -]?(de[_ -]?)?(resid|endere)|resid[eê]ncia|certid[aã]o[_ -]?(de[_ -]?)?(nasc|casam|obito)|extrato[_ -]?(banc|de[_ -]?conta)|dados[_ -]?banc", re.I)  # validado pelo Jurídico 02/10
@@ -34,15 +33,11 @@ IMG, DOC, AUD = ("jpeg", "jpg", "png", "webp", "heic"), ("pdf", "docx", "xlsx", 
 
 sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
 import partners_dados as PD  # noqa: E402  fonte única: CNPJ e Receita
-dv_ok = PD.cnpj_valido
+from cnpj import cnpjs_no_texto, normalizar_cnpj  # noqa: E402  CNPJ numérico e alfanumérico
 
 
 def cnpjs(texto):
-    out = []
-    for m in CNPJ.findall(texto or ""):
-        c = re.sub(r"\D", "", m)
-        if dv_ok(c) and c not in out: out.append(c)
-    return out
+    return cnpjs_no_texto(texto)
 
 
 receita = PD.receita
@@ -140,7 +135,7 @@ def main():
     _, D = fonte_hubspot(); N = {d["id"]: d for d in D["negocios"]}
     por_raiz = {}
     for d in D["negocios"]:
-        c = re.sub(r"\D", "", (d.get("extras") or {}).get("cnpj") or "")
+        c = normalizar_cnpj((d.get("extras") or {}).get("cnpj"))
         if len(c) >= 8: por_raiz.setdefault(c.zfill(14)[:8], []).append(d)
     R = json.load(open(RESUMOS)) if os.path.exists(RESUMOS) else {}
     from comum import cfg_time, e_do_time

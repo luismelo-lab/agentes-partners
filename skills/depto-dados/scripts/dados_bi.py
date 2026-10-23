@@ -9,6 +9,8 @@ Uso: python3 dados_bi.py [--baixar] [--parados 30]
 import argparse, glob, json, os, re, statistics, subprocess, sys
 from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from cnpj import normalizar_cnpj  # noqa: E402
 
 BASE = os.path.expanduser("~/agentes-partners/departamentos")
 SRC = os.path.join(BASE, "resultados/dados")
@@ -84,7 +86,7 @@ def main():
     # duplicidade: mesmo CNPJ com 2+ negócios abertos ao mesmo tempo (vários ganhos do mesmo CNPJ podem ser teses diferentes)
     porc = defaultdict(list)
     for d in N:
-        c = re.sub(r"\D", "", d["extras"].get("cnpj") or "")
+        c = normalizar_cnpj(d["extras"].get("cnpj"))
         if c and d["status"] == "aberto": porc[c].append(d)
     dup = [dict(row(d, "CNPJ com 2+ negócios abertos"), cnpj=c) for c, L in porc.items() if len(L) > 1 for d in L]
     R["duplicidade_abertos"] = {"cnpjs": sum(1 for L in porc.values() if len(L) > 1), "negocios": len(dup)}

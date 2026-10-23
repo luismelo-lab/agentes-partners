@@ -1,0 +1,3 @@
+# Exemplos públicos de CNPJ alfanumérico da Receita/Serpro (lib/test_cnpj.py)
+12ABC34501DE35
+00000000E08G12

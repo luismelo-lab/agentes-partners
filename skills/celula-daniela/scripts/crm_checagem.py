@@ -21,7 +21,8 @@ import argparse, importlib.util, os, subprocess, sys
 from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import CELULA, LINK, cnpj_digitos, fonte_hubspot, norm, receita, resolver_master, slug
+from comum import CELULA, LINK, cnpj_digitos, digitos, fonte_hubspot, norm, receita, resolver_master, slug
+from cnpj import cnpj_valido as _cnpj_valido  # noqa: E402  (lib no caminho pelo comum)
 
 RECEITA_PY = os.path.expanduser("~/.claude/skills/depto-intel-comercial/scripts/receita_cnpj.py")
 # campos do HubSpot (nomes internos, ver mapeamento-hubspot.json) sem fonte oficial: de onde vem o dado certo
@@ -41,13 +42,7 @@ INFORMAVEIS = {"faturamento": "faturamento", "regime": "qual_e_o_regime_tributar
 
 def cnpj_valido(c):
     c = cnpj_digitos(c)
-    if len(c) != 14 or len(set(c)) == 1:
-        return False
-    def dv(base, pesos):
-        s = sum(int(x) * p for x, p in zip(base, pesos)) % 11
-        return "0" if s < 2 else str(11 - s)
-    p1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]; p2 = [6] + p1
-    return c[12] == dv(c[:12], p1) and c[13] == dv(c[:12] + c[12], p2)
+    return len(c) == 14 and _cnpj_valido(c)
 
 
 def receita_local(cnpj):
@@ -88,7 +83,7 @@ def propostas(d, r, fonte_rf, informado, origem):
             L.append(("estado", e.get("uf") or "vazio", r["uf_oficial"], fonte_rf, "Atualizar"))
         if r.get("municipio_oficial") and norm(e.get("cidade")) != norm(r["municipio_oficial"]):
             L.append(("cidade", e.get("cidade") or "vazio", r["municipio_oficial"].title(), fonte_rf, "Atualizar"))
-        if r.get("cnae_oficial") and cnpj_digitos(d.get("cnae") or "") != r["cnae_oficial"]:
+        if r.get("cnae_oficial") and digitos(d.get("cnae") or "") != r["cnae_oficial"]:
             L.append(("cnae", d.get("cnae") or "vazio", r["cnae_oficial"], fonte_rf, "Atualizar"))
         if r.get("cnae_desc_oficial") and norm(d.get("segmento")) != norm(r["cnae_desc_oficial"]):
             L.append(("descricao_do_cnae", d.get("segmento") or "vazio", r["cnae_desc_oficial"], fonte_rf, "Atualizar" if not d.get("segmento") else "Conferir (texto diferente)"))

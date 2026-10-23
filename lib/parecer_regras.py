@@ -11,6 +11,7 @@ Fontes locais (nada sai do Mac): celulas/geovana/pareceres (resumos.json e texto
 Uso em Python:  import parecer_regras as PR;  PR.empresa(deal_ids, cnpj) → dict com as colunas acima.
 """
 import glob, json, os, re, sqlite3
+from cnpj import normalizar_cnpj
 from datetime import date
 
 AP = os.path.expanduser("~/agentes-partners")
@@ -115,7 +116,7 @@ def movimentacao(deal_id, ultimo_ganho=None):
 def receita(cnpj):
     """Situação e data de abertura na base local da Receita (Dados Abertos, mês de referência na tabela meta)."""
     global _DB
-    d = re.sub(r"\D", "", str(cnpj or "")).zfill(14)
+    d = normalizar_cnpj(cnpj).zfill(14)
     if not cnpj: return {"situacao": "sem CNPJ no HubSpot", "abertura": None}
     if _DB is None: _DB = sqlite3.connect(os.path.join(AP, "dados-publicos/receita/cnpj.sqlite"))
     r = _DB.execute("select situacao, inicio, data_situacao from estab where cnpj=?", (d,)).fetchone()

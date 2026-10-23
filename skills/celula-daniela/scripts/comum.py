@@ -16,6 +16,8 @@ CELULA = os.path.join(AP, "celulas/daniela")
 PENDENCIAS = os.path.join(CELULA, "Controle-Pendencias-Masters.xlsx")
 SKILL = os.path.join(HOME, ".claude/skills/celula-daniela")
 LINK = "https://app.hubspot.com/contacts/47865021/deal/{}"
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from cnpj import normalizar_cnpj  # noqa: E402
 
 
 def norm(s):
@@ -46,7 +48,12 @@ def pct(v, casas=1):
 
 
 def cnpj_digitos(c):
-    return re.sub(r"\D", "", c or "")
+    """CNPJ sem pontuação; letras do CNPJ alfanumérico preservadas (IN RFB 2.229/2024)."""
+    return normalizar_cnpj(c)
+
+
+def digitos(s):
+    return re.sub(r"\D", "", s or "")
 
 
 def fonte_hubspot(caminho=None):
@@ -87,7 +94,7 @@ def resolver_master(texto):
 def e_cafe(d, regras):
     pal = [norm(p) for p in regras.get("cafe_palavras", [])]
     txt = norm((d.get("nome") or "") + " " + (d.get("segmento") or ""))
-    cn = cnpj_digitos(d.get("cnae") or "")
+    cn = digitos(d.get("cnae") or "")
     return any(p in txt for p in pal) or (cn and cn in set(regras.get("cafe_cnae", [])))
 
 

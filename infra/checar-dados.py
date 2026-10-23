@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Barreira de LGPD do repositório: falha se algum arquivo a ser versionado tiver dado sensível.
-Procura CNPJ válido, CPF válido, token do HubSpot, chave privada, telefone e e-mail fora da Save.
+Procura CNPJ válido (numérico ou alfanumérico), CPF válido, token do HubSpot, chave privada, telefone e e-mail fora da Save.
 Uso: python3 infra/checar-dados.py [arquivos...]  (sem argumentos: tudo o que o git versionaria)
 Exceções conhecidas: infra/checar-dados-permitidos.txt (um valor por linha).
 """
@@ -8,6 +8,7 @@ import os, re, subprocess, sys
 R = os.path.expanduser("~/agentes-partners")
 sys.path.insert(0, os.path.join(R, "lib"))
 from partners_dados import cnpj_valido  # noqa: E402
+from cnpj import CNPJ_TEXTO_ALFA, normalizar_cnpj  # noqa: E402
 
 def cpf_ok(c):
     if len(c) != 11 or len(set(c)) == 1: return False
@@ -34,6 +35,9 @@ for a in arqs:
         for m in re.findall(r"(?<!\d)\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}(?!\d)", l):
             d = re.sub(r"\D", "", m)
             if cnpj_valido(d) and d not in perm: achados.append((a, n, "CNPJ", d[:4] + "…"))
+        for m in CNPJ_TEXTO_ALFA.findall(l):  # CNPJ alfanumérico (IN RFB 2.229/2024): só com letra maiúscula e DV válido
+            d = normalizar_cnpj(m)
+            if re.search(r"[A-Z]", m) and cnpj_valido(d) and d not in perm: achados.append((a, n, "CNPJ", d[:4] + "…"))
         for m in re.findall(r"(?<!\d)\d{3}\.\d{3}\.\d{3}-\d{2}(?!\d)", l):
             d = re.sub(r"\D", "", m)
             if cpf_ok(d) and d not in perm: achados.append((a, n, "CPF", d[:3] + "…"))

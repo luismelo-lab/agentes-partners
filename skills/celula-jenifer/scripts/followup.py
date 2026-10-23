@@ -19,6 +19,8 @@ Uso:
 import argparse, glob, json, os, re, sys
 from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from cnpj import normalizar_cnpj  # noqa: E402
 
 H = os.path.expanduser("~")
 CEL = os.path.join(H, "agentes-partners/celulas/jenifer")
@@ -46,7 +48,7 @@ NOMES = [c for c, _, _ in COLS]
 
 
 def raiz(c):
-    d = re.sub(r"\D", "", str(c or "")); return d.zfill(14)[:8] if d else ""
+    d = normalizar_cnpj(c); return d.zfill(14)[:8] if d else ""
 
 
 def dt(v):
@@ -148,7 +150,7 @@ def proposta_hubspot(r):
                  "Descartado": "Desqualificado"}.get(et)
     if not etapa_bdr: return None
     return ["RASCUNHO · aguardando aprovação da Jenifer", "Criar/atualizar negócio", r["Empresa"], "Save Partners - BDR/SDR", etapa_bdr,
-            r["Master"], re.sub(r"\D", "", str(r["CNPJ"])), r["UF"], r["Município"], (r.get("Regime") or "[confirmar regime]").split(" (")[0].title(), r["Segmento"],
+            r["Master"], normalizar_cnpj(r["CNPJ"]), r["UF"], r["Município"], (r.get("Regime") or "[confirmar regime]").split(" (")[0].title(), r["Segmento"],
             "[ID da Jenifer no HubSpot: CONFIRMAR]", (r["Motivo descarte"] or "") if et == "Descartado" else (r["Próximo passo acordado"] or ""),
             r["Conflito (reconferido)"]]
 

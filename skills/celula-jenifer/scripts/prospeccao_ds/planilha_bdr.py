@@ -2,6 +2,7 @@
 import collections, os, pickle, re, sys, urllib.parse
 from datetime import date
 import openpyxl
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); from cnpj import cnpj_valido, normalizar_cnpj  # noqa: E402
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.formatting.rule import FormulaRule
 from openpyxl.worksheet.datavalidation import DataValidation
@@ -65,7 +66,7 @@ for f in ("Listas/Lista-D-S-2026-09-29.xlsx", "Controle-Followup-Jenifer.xlsx"):
     try:
         for w in openpyxl.load_workbook(JEN + f, read_only=True, data_only=True).worksheets:
             for r in w.iter_rows(values_only=True):
-                ANTIGAS |= {re.sub(r"\D", "", str(c))[:8] for c in r if c and len(re.sub(r"\D", "", str(c))) == 14}
+                ANTIGAS |= {normalizar_cnpj(c)[:8] for c in r if c and len(normalizar_cnpj(c)) == 14 and (normalizar_cnpj(c).isdigit() or cnpj_valido(c))}
     except Exception: pass
 for p in pros:
     s = p["similaridade"]; p["tier"] = "A" if s >= 90 else "B" if s >= 85 else "C"

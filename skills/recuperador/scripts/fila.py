@@ -11,9 +11,11 @@ dão o potencial (mediana do crédito e do honorário líquido) e a taxa de suce
 Regras fixas: fora café (fora da meta desde abr/2026), Simples e CNPJ baixado/inapto; Presumido sem tese de crédito
 nas aquisições; variante A nunca como hipótese principal (D14). Tudo é pré-análise: a Geovana decide.
 """
-import argparse, glob, json, math, os, re, statistics
+import argparse, glob, json, math, os, re, statistics, sys
 from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from cnpj import normalizar_cnpj  # noqa: E402  CNPJ alfanumérico (IN RFB 2.229/2024)
 
 H = os.path.expanduser
 SRC = H("~/agentes-partners/departamentos/resultados/dados")
@@ -40,7 +42,7 @@ def linha_matriz(cnae, regime):
 
 
 def raiz(d, E):
-    c = re.sub(r"\D", "", str(E.get(d["id"], {}).get("cnpj") or d["extras"].get("cnpj") or ""))
+    c = normalizar_cnpj(E.get(d["id"], {}).get("cnpj") or d["extras"].get("cnpj"))
     return c.zfill(14)[:8] if c else None  # sem CNPJ não tem grupo (antes todos viravam "00000000" e colidiam: falsa duplicidade)
 
 
@@ -184,7 +186,7 @@ def main():
     # uma linha por CNPJ e tipo (a empresa pode ter mais de um negócio no HubSpot)
     vistos, unicos = {}, []
     for r in sorted(fila, key=lambda r: -(r["honorário esperado (look-alike)"] or 0)):
-        cn = re.sub(r"\D", "", str(E.get(r["link"].rsplit("/", 1)[1], {}).get("cnpj") or "")) or r["negócio"]
+        cn = normalizar_cnpj(E.get(r["link"].rsplit("/", 1)[1], {}).get("cnpj")) or r["negócio"]
         k = (cn, r["tipo"])
         if k in vistos: vistos[k]["negócios no HubSpot"] += 1; continue
         r["negócios no HubSpot"] = 1; vistos[k] = r; unicos.append(r)
