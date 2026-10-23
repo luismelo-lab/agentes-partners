@@ -21,7 +21,7 @@ FONTE = os.path.join(REPO, "docs/revisao-2026-10-22/decisoes.json")
 OPCOES = ["Aprovar", "Aprovar com ajuste", "Reprovar", "Decidir depois"]
 F = "IBM Plex Sans"; OURO = "F3CD60"; OURO_T = "B58A1F"; OURO_S = "FBF1D7"; TX = "0F1115"; TX2 = "4A4F58"; BORDA = "E6E8EC"
 COLS = [("Nº", 6), ("Bloco", 15), ("Tema", 18), ("Decisão proposta", 58), ("Por que importa", 34), ("Prazo", 13),
-        ("Sua decisão", 20), ("Ajuste ou comentário", 40), ("Detalhe em", 30), ("Quem aplica", 24)]
+        ("Sua decisão", 20), ("Ajuste ou comentário", 40), ("Detalhe em", 30), ("Quem aplica", 24), ("Se não responder", 26)]
 
 
 def respostas_anteriores(f):
@@ -43,9 +43,10 @@ def gerar(saida):
     fino = Side(style="thin", color=BORDA)
     for i, d in enumerate(D, 3):
         dec, com = ant.get(d["id"], (None, None))
-        vals = [d["id"], d["bloco"], d["tema"], d["decisao"], d["porque"], d["prazo"], dec, com, d["onde"], d["dono_aplicacao"]]
+        vals = [d["id"], d["bloco"], d["tema"], d["decisao"], d["porque"], d["prazo"], dec, com, d["onde"], d["dono_aplicacao"],
+                f"Vale a recomendação em {d['prazo']}" if d.get("padrao") else "Continua pendente"]  # infra/alcadas.md
         for j, v in enumerate(vals, 1):
-            c = ws.cell(i, j, v); c.font = Font(name=F, size=10, color=TX2 if j in (9, 10) else TX, bold=(j == 7))
+            c = ws.cell(i, j, v); c.font = Font(name=F, size=10, color=TX2 if j in (9, 10, 11) else TX, bold=(j == 7))
             c.alignment = Alignment(wrap_text=True, vertical="top"); c.border = Border(bottom=fino)
         ws.cell(i, 7).fill = PatternFill("solid", fgColor="FFFFFF"); ws.cell(i, 7).border = Border(left=Side(style="thin", color=OURO), right=Side(style="thin", color=OURO), bottom=fino)
         ws.row_dimensions[i].height = 60
@@ -53,9 +54,9 @@ def gerar(saida):
     dv = DataValidation(type="list", formula1='"' + ",".join(OPCOES) + '"', allow_blank=True, showDropDown=False)
     dv.promptTitle = "Sua decisão"; dv.prompt = "Escolha: " + " · ".join(OPCOES); ws.add_data_validation(dv); dv.add(f"G3:G{fim}")
     for txt, cor in (("Aprovar", "DCEFE0"), ("Aprovar com ajuste", "FBF1D7"), ("Reprovar", "FBE3E2"), ("Decidir depois", "F1F2F5")):
-        ws.conditional_formatting.add(f"A3:J{fim}", FormulaRule(formula=[f'$G3="{txt}"'], fill=PatternFill("solid", fgColor=cor)))
+        ws.conditional_formatting.add(f"A3:K{fim}", FormulaRule(formula=[f'$G3="{txt}"'], fill=PatternFill("solid", fgColor=cor)))
     ws.conditional_formatting.add(f"B3:B{fim}", FormulaRule(formula=['$B3="Trava a operação"'], font=Font(name=F, bold=True, color=OURO_T)))
-    ws.freeze_panes = "D3"; ws.auto_filter.ref = f"A2:J{fim}"
+    ws.freeze_panes = "D3"; ws.auto_filter.ref = f"A2:K{fim}"
     r = wb.create_sheet("Resumo"); r.sheet_view.showGridLines = False; r.column_dimensions["A"].width = 30; r.column_dimensions["B"].width = 12
     linhas = [("Resumo das respostas", None), ("Total de decisões", f"=COUNTA(Decisões!A3:A{fim})")] + \
              [(o, f'=COUNTIF(Decisões!G3:G{fim},"{o}")') for o in OPCOES] + [("Sem resposta", f'=COUNTBLANK(Decisões!G3:G{fim})'),
@@ -67,7 +68,8 @@ def gerar(saida):
         "1. Na aba Decisões, escolha na coluna 'Sua decisão': Aprovar, Aprovar com ajuste, Reprovar ou Decidir depois.",
         "2. Em 'Aprovar com ajuste' e 'Reprovar', escreva o motivo ou o ajuste em 'Ajuste ou comentário'. Para os itens que pedem um dado (ex.: telefone da Canex), escreva o dado no comentário.",
         "3. Salve o arquivo. Os agentes leem as respostas (infra/folha_decisoes.py ler) e aplicam cada uma no material de origem, pela área da coluna 'Quem aplica'.",
-        "4. A consolidação de sexta, 16h, gera a folha de novo: mantém as suas respostas, tira o que foi aplicado e acrescenta as decisões novas."], 1):
+        "4. A consolidação de sexta, 16h, gera a folha de novo: mantém as suas respostas, tira o que foi aplicado e acrescenta as decisões novas.",
+        "5. Coluna 'Se não responder': item reversível e dentro das regras vale a recomendação no prazo (infra/alcadas.md). Você pode reverter depois marcando Reprovar."], 1):
         c = u.cell(i, 1, t); c.font = Font(name=F, bold=(i == 1), size=13 if i == 1 else 11, color=TX); c.alignment = Alignment(wrap_text=True)
     wb.save(saida); print("ok", saida, len(D), "decisões")
 

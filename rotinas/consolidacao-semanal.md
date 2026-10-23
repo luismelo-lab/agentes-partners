@@ -10,6 +10,7 @@ Rotina semanal de consolidação da Área Partners (sexta, 16h). O objetivo é q
    - junte as que não conflitam na branch desta rotina, com commit;
    - liste as que conflitam, com os arquivos em conflito.
 2. **Trabalho sem commit:** em cada worktree de `.claude/worktrees/`, rode `git status --short` e procure arquivos novos fora do git (pdf, docx, pptx, xlsx, md) modificados nos últimos 7 dias. Não apague nada. Copie o que for entrega para a pasta de dados da área (`departamentos/<área>/<tema>/`) e liste o que precisa de commit pela conversa de origem.
+2b. **Limpeza de worktrees (Luis, 23/10/2026):** remova com `git worktree remove` (sem `--force`) e `git branch -d` os worktrees de `.claude/worktrees/` cuja branch já está no `main`, sem arquivo solto (`git status --porcelain` vazio) e sem nada modificado há 3 dias ou mais. Nunca remova o worktree desta rotina nem o de uma conversa ativa. Rode `git worktree prune` e informe quantos saíram e o espaço liberado.
 3. **Cópias vivas:** compare `skills/` com `~/.claude/skills/` e `rotinas/` com `~/.claude/scheduled-tasks/*/SKILL.md`, ignorando `node_modules`, `ocr` e `__pycache__`. Liste o que diverge, sem sobrescrever.
 4. **Coerência:** procure nos arquivos alterados na semana:
    - nome antigo da esteira (Oxigenar, Estruturar, Expandir ou Escalar fora de atas);
@@ -25,6 +26,8 @@ Rotina semanal de consolidação da Área Partners (sexta, 16h). O objetivo é q
    - Rode `python3 ~/agentes-partners/infra/folha_decisoes.py ler <última folha>`.
    - Para cada resposta "Aprovar" ou "Aprovar com ajuste", acione a área da coluna "Quem aplica" para aplicar no material de origem, com revisão do gerente. Registre a decisão em `conselho/decisoes.md` quando for do Conselho e tire o item do JSON.
    - "Reprovar" vai para o histórico do JSON, com o motivo. "Decidir depois" continua na folha.
+   - Item com `padrao: true`, sem resposta e com prazo vencido: aplique a recomendação, registre em `conselho/decisoes.md` como "aplicado por padrão (infra/alcadas.md)" e liste no resumo para o Luis poder reverter. Nunca aplique por padrão preço, meta, remuneração, tese na vitrine, frase permitida, produto em validação, contrato ou envio externo.
+   - Decisão nova da semana entra na folha só se a matriz de alçada (`infra/alcadas.md`) disser que é do Luis.
    - Acrescente as decisões novas da semana, cada uma com a conversa de origem e o prazo.
    - Gere a folha de novo com `folha_decisoes.py gerar`. As respostas ainda não aplicadas são mantidas.
 

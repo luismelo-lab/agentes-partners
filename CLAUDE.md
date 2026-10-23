@@ -13,6 +13,7 @@ Vale para toda conversa, fork, worktree e rotina neste repositório. O objetivo 
 - **Entrega em 3 blocos:** `infra/padrao-entrega.md` (o que você pediu, o que você também precisa, o que falta e quem fornece).
 - **Especialistas sêniores:** `infra/padrao-senior.md`. Cada especialista tem uma entrega única e um arquivo próprio com 10 seções (domínio, normas com artigo e data, regras da casa, método, perguntas, armadilhas, casos). Nenhum agente raso (Luis, 22/10/2026). A nota sai de `infra/auditar_senioridade.py`.
 - **Pesquisa nível Big Four:** `infra/protocolo-pesquisa.md`. Usa base interna, dados por script, radar da área e pesquisa na hora, com data. A decisão interna só muda com o dono.
+- **Alçada:** `infra/alcadas.md` diz quem decide o quê. Só sobe ao Luis regra, preço, meta, remuneração, produto em validação e material em escala; o que é reversível e dentro das regras vale a recomendação no prazo.
 - **Material para fora:** passa por todas as áreas envolvidas e pelo auditor de promessas (`depto-qualidade/scripts/auditar_texto.py`). O Luis vê um exemplo antes da execução em massa.
 
 ## 3. Regras da casa
