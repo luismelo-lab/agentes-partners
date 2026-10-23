@@ -17,6 +17,13 @@ Rotina semanal de consolidação da Área Partners (sexta, 16h). O objetivo é q
    - produto pronto tratado como "em definição" ou com a trava do G2 (Gestão de Contas, antecipação, FIDC, estruturação patrimonial, tax internacional);
    - frases proibidas do Crédito Internacional fora da exceção registrada em `skills/depto-internacional/references/regras-e-proibidos.md`;
    - rotas que não citam `depto-solucoes` ou `depto-internacional`.
+4b. **Senioridade e acerto (Luis, 23/10/2026):**
+   - Rode `python3 ~/agentes-partners/infra/avaliar_casos.py --validar`.
+   - A rodada da semana cobre 9 áreas: as 3 do piloto (tributário, Save Invest, Daniela) e mais 6 em rodízio, para que todas sejam avaliadas a cada 3 semanas (a avaliação vale 21 dias).
+   - Para cada área, rode `--preparar --area <área>` e acione um subagente que lê só `skills/<área>/`, nunca `casos-teste.md`. Ele grava as respostas em `registro/avaliacoes/<área>/CT-nn.md`.
+   - Rode `--pontuar` e depois `python3 ~/agentes-partners/infra/auditar_senioridade.py --json`.
+   - No resumo ao Luis, mostre estrutura × acerto, os casos críticos e as aprovações vazias da semana (§5.1 do protocolo do gerente).
+   - Caso que a área erra 2 semanas seguidas volta ao gerente como correção no especialista.
 5. **Repetições:** leia `registro/pedidos-luis.jsonl` da semana. Junte pedidos parecidos, aponte os temas pedidos mais de uma vez e diga o que estava repetido.
 6. **Guia de sessões:** atualize `~/agentes-partners/gabinete/SESSOES.md`:
    - estado, local dos arquivos e próximo passo de cada tema mexido na semana;

@@ -46,6 +46,21 @@ O gerente lê a demanda e escolhe **os especialistas certos**: só os necessári
 ```
 Quando a entrega chega ao time, aparece com a linha "Revisado por <gerente> · <n> rodada(s) · consultou <áreas>".
 
+### 5.1 Aprovação precisa de conteúdo (regra do Luis de 23/10/2026)
+Das 188 análises registradas até 23/10/2026, todas foram aprovadas na 1ª rodada sem ajuste: a revisão não estava sendo aplicada. A partir de agora:
+- **Toda revisão aprovada registra um ajuste concreto ou o motivo de não haver ajuste.**
+  - Com ajuste, `ajustes` diz o que mudou e onde. Exemplo: "trocou 'compensar' por 'pedir ressarcimento (PER)' no bloco 1; acrescentou a LC 224, art. 4º, § 7º".
+  - Sem ajuste, `sem_ajuste_motivo` diz o que o gerente conferiu e por que passou. Exemplo: "conferi as normas citadas (Lei 11.457, art. 24; D14) no arquivo do especialista e o texto no auditor de promessas, com 0 achados; o encaminhamento ao Jurídico está certo".
+- **Aprovação "vazia" é defeito.** Isso vale para `ajustes` vazio, "ok", "nenhum", "aprovado" ou "sem ajustes", sem o motivo, e para o motivo genérico ("está bom", "segue o padrão"). O `depto-qualidade` conta esse defeito como "revisão não aplicada" na taxonomia de defeitos das entregas. Ele entra na amostragem da semana e volta ao gerente da área.
+- **O motivo cita o que foi conferido.** Pelo menos um destes itens: a norma ou a decisão conferida, o número batido com a fonte, o auditor de promessas rodado, o encaminhamento checado ou o caso de teste parecido (`references/casos-teste.md`).
+- **Sinal de alerta:** área com mais de 80% de aprovações na 1ª rodada sem ajuste por 2 semanas seguidas. O `depto-qualidade` amostra 3 entregas dela, e o `arquiteto-agentes` compara com o acerto nos casos de teste (`infra/avaliar_casos.py`).
+
+```json
+"revisao": {"gerente": "Gerente Tributário", "especialistas": ["Alíquota Zero e PER"], "rodadas": 1, "areas_consultadas": [],
+            "aprovado": true, "ajustes": "",
+            "sem_ajuste_motivo": "conferi D14 e a Lei 11.457, art. 24, no especialista; auditor de promessas com 0 achados; não precisa de outra área"}
+```
+
 ## Como executar nas rotinas
 - **Com a ferramenta Agent:** um subagente por área no papel de gerente. Ele cria subagentes para os especialistas, revisa, devolve e consolida. A passagem para outra área é outro subagente-gerente.
 - **Sem a ferramenta Agent:** a mesma sequência, em papéis explícitos e numa ordem fixa:

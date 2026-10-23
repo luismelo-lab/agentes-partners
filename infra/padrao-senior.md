@@ -48,5 +48,7 @@ Quando o dono não tem o dado, o especialista segue com o que existe. Marca o po
 ## 4. Auditoria
 `python3 infra/auditar_senioridade.py` dá a nota de cada área (0 a 100) pelas 10 seções e aponta o que falta. Área abaixo de 70 entra na fila de aprofundamento. A consolidação de sexta mostra a evolução.
 
+**v2 (Luis, 23/10/2026):** a nota passa a ter duas partes. A **estrutura** soma os especialistas (85%) e os casos de teste da área (`references/casos-teste.md`, 15%; padrão em `infra/casos-teste.md`). O **acerto** é a pontuação das respostas da área aos próprios casos (`infra/avaliar_casos.py`). Nota final = 60% estrutura + 40% acerto. Sem avaliação, a nota fica limitada a 85.
+
 ## 5. Dono do padrão
 O `arquiteto-agentes` é o dono deste padrão e do auditor. O modelo único de arquivo de especialista está em `skills/arquiteto-agentes/references/modelo-especialista.md`.
