@@ -9,12 +9,12 @@ regera sempre que uma área muda.
   python3 infra/manual_oficial.py                 grava docs/manual-oficial-agentes.md
   python3 infra/manual_oficial.py --docx          também gera o Word no padrão Save em 04 · Gestão/Central de Agentes
 """
-import glob, os, re, subprocess, sys
+import glob, json, os, re, subprocess, sys
 from datetime import date
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "lib"))
-VERSAO = "2.0"
+VERSAO = "2.1"
 SAIDA_MD = os.path.join(REPO, "docs/manual-oficial-agentes.md")
 
 # área: (nome, bloco, missão, dono humano, onde entrega)
@@ -48,9 +48,9 @@ AREAS = {
 ORDEM_BLOCOS = ["Orquestração", "Produtos", "Venda e esteira", "Canal", "Gestão", "Suporte"]
 
 ROTINAS = [
-    ("Operação das áreas", "Dias úteis, 7h40", "Cada área analisa os alertas do dia em 3 blocos; às segundas, carteira de cross-sell", "Plano do dia em `04 · Gestão/Central de Agentes`"),
+    ("Operação das áreas", "Dias úteis, 7h40 (só alertas novos ou que mudaram)", "Cada área analisa os alertas em 3 blocos; plano do dia por pessoa, com a coluna Usei/Ajustei/Não usei; às segundas, carteira de cross-sell", "Plano do Luis em `04 · Gestão/Central de Agentes`; plano de cada pessoa em `<Central da pessoa>/Plano do dia`"),
     ("WhatsApp · triagem", "Dias úteis, 8h e 14h (11h e 17h sem IA)", "Lê os grupos dos Masters e as caixas do time, interpreta e devolve analisado", "Pastas das Centrais em `Área Partners · Agentes`"),
-    ("Central de Agentes", "Dias úteis, de hora em hora (8h às 18h)", "Processa pedidos do painel e do e-mail [AGENTES] e aplica as decisões do painel", "E-mail ou `Caixa de saída`"),
+    ("Central de Agentes", "Dias úteis, a cada 2 horas (8h às 18h), com saída rápida se não houver nada novo", "Processa pedidos do painel e do e-mail [AGENTES] e aplica as decisões do painel", "E-mail ou `Caixa de saída`"),
     ("Relatório semanal de resultados", "Segunda, 6h30", "Deck e one-pager de resultados", "`04 · Gestão/Resultado semanal`"),
     ("Conselho · reunião semanal", "Segunda, 7h30", "Ata com recomendação, o que não fazer e decisões para aprovar", "`04 · Gestão/Conselho`"),
     ("Recuperador · lote semanal", "Segunda, 9h", "Fila, folha curta do lote e fichas para a Geovana", "`Central Técnica · Geovana`"),
@@ -60,6 +60,7 @@ ROTINAS = [
 
 
 def especialistas(area):
+    """(nome, resumo de uma linha, entrega completa em linhas de Markdown) de cada especialista."""
     out = []
     for f in sorted(glob.glob(os.path.join(REPO, "skills", area, "references/especialistas/*.md"))):
         txt = open(f, encoding="utf-8").read()
@@ -68,17 +69,26 @@ def especialistas(area):
         nome = re.sub(r"^(Especialista|Conselheiro|Conselheira)\s*[·:—-]\s*", "", nome)
         nome = re.sub(r"\s*\(.*?\)\s*$", "", nome).replace("Especialista em ", "").replace("Especialista de ", "")
         sec = re.search(r"^## 1\.[^\n]*\n(.+?)(?=^## )", txt, re.S | re.M)
-        ent = ""
+        linhas = []
         if sec:
             for linha in sec.group(1).strip().splitlines():
-                linha = linha.strip()
-                if linha and not linha.startswith(("|", ">")):
-                    ent = linha; break
-        ent = re.sub(r"[*`]", "", ent).lstrip("- ").strip()
+                t = linha.rstrip()
+                if not t.strip() or t.lstrip().startswith(("|", ">", "```")): continue
+                t = t.replace("`", "")
+                if t.lstrip().startswith(("- ", "* ")) or re.match(r"\s*\d+[.)] ", t):
+                    t = "- " + re.sub(r"^\s*(?:[-*]|\d+[.)])\s+", "", t)
+                linhas.append(t)
+                if len(linhas) >= 14: break
+        ent = re.sub(r"[*`]", "", linhas[0] if linhas else "").lstrip("- ").strip()
         ent = re.split(r" Formato\b", ent)[0].rstrip(" :")
         if len(ent) > 230: ent = ent[:227].rsplit(" ", 1)[0] + "…"
-        out.append((nome, ent.replace("|", "/")))
+        out.append((nome, ent.replace("|", "/"), linhas))
     return out
+
+
+def entregas():
+    f = os.path.join(REPO, "docs/manual-oficial/entregas.json")
+    return json.load(open(f, encoding="utf-8")) if os.path.exists(f) else {}
 
 
 def perguntas(area):
@@ -88,7 +98,7 @@ def perguntas(area):
 
 FIXO_INICIO = f"""# Manual Oficial dos Agentes · Área Partners
 
-> Versão {VERSAO}, {date.today():%d/%m/%Y}. Substitui o Manual dos Agentes v1.0 (13/10/2026). Uso interno. O conteúdo das áreas é lido das próprias skills (`infra/manual_oficial.py`), então este manual se regera quando uma área muda.
+> Versão {VERSAO}, {date.today():%d/%m/%Y}. Substitui a v2.0 de 23/10/2026 e o Manual dos Agentes v1.0 (13/10/2026). A v2.1 detalha o que cada área e cada especialista entrega. Uso interno. O conteúdo das áreas é lido das próprias skills (`infra/manual_oficial.py`), então este manual se regera quando uma área muda.
 
 ## 1. Para que serve este manual
 Este é o documento oficial da operação de agentes de IA da Área Partners da Save Co. Ele diz:
@@ -176,7 +186,7 @@ Links do OneDrive saem de `lib/caminhos.py`: só o link de pasta abre, então to
 ## 9. Responsabilidades das pessoas
 | Pessoa | Responde por |
 |---|---|
-| **Luis** | Decide e aprova; faz o merge e o push; responde a folha de decisões; aprova chamados no painel uma vez por dia |
+| **Luis** | Decide o que a matriz de alçada reserva a ele (`infra/alcadas.md`); aprova; faz o merge e o push; responde a folha de decisões; aprova chamados no painel uma vez por dia |
 | **Daniela** | Masters: demandas, retorno ao parceiro, ganhos a completar no HubSpot, plano de conta |
 | **Jenifer** | Prospecção e listas para os Masters |
 | **Geovana** | Decisões do Recuperador e do Revisor; diagnóstico |
@@ -224,19 +234,33 @@ def gerar():
     linhas, total = [], 0
     linhas.append("## 6. As áreas: missão, responsáveis, especialistas e onde entregam")
     linhas.append("Cada área tem um gerente, que distribui e revisa, e especialistas sêniores com uma entrega única. As perguntas que só as pessoas respondem ficam em `references/perguntas-ao-dono.md` de cada área.")
-    n = 0
+    n = 0; E = entregas()
     for bloco in ORDEM_BLOCOS:
         linhas.append(f"\n### Bloco: {bloco}")
         for area, (nome, b, missao, dono, onde) in AREAS.items():
             if b != bloco: continue
-            n += 1; esp = especialistas(area); total += len(esp)
-            linhas.append(f"\n**6.{n} {nome}** (`{area}`)\n")
+            n += 1; esp = especialistas(area); total += len(esp); e = E.get(area, {})
+            linhas.append(f"\n### 6.{n} {nome}\n")
             linhas.append(f"- **Missão:** {missao}")
             linhas.append(f"- **Dono humano:** {dono}")
+            if e.get("quem_usa"): linhas.append(f"- **Quem usa e quando:** {e['quem_usa']}")
             linhas.append(f"- **Onde entrega:** {onde}")
-            linhas.append(f"- **Especialistas ({len(esp)}):**\n")
-            linhas.append("| Especialista | Entrega única |\n|---|---|")
-            for nm, ent in esp: linhas.append(f"| {nm} | {ent} |")
+            if e.get("como_acionar"):
+                linhas.append("- **Como acionar:** " + "; ".join(x.rstrip(".") for x in e["como_acionar"]) + ".")
+            if e.get("entregas"):
+                linhas.append("\n**O que a área entrega**\n")
+                linhas.append("| Entrega | O que vem | Formato e arquivo | Quando | Quem recebe e onde |\n|---|---|---|---|---|")
+                for x in e["entregas"]:
+                    cel = lambda k: str(x.get(k) or "—").replace("|", "/").replace("\n", " ")
+                    arq = cel("formato") + ("" if cel("arquivo") in ("—", "") else " · " + cel("arquivo"))
+                    linhas.append(f"| {cel('entrega')} | {cel('conteudo')} | {arq} | {cel('quando')} | {cel('quem_recebe')} · {cel('onde')} |")
+            linhas.append(f"\n**Especialistas e o que cada um entrega ({len(esp)})**\n")
+            for nm, _, full in esp:
+                linhas.append(f"**{nm}.** " + (full[0].lstrip("- ") if full else ""))
+                linhas.extend(full[1:])
+                linhas.append("")
+            if e.get("nao_faz"):
+                linhas.append("**O que a área não faz:** " + "; ".join(x.rstrip(".") for x in e["nao_faz"]) + ".")
     linhas.append("\n## 7. Rotinas automáticas")
     linhas.append("| Rotina | Quando | O que entrega | Onde |\n|---|---|---|---|")
     for r in ROTINAS: linhas.append("| " + " | ".join(r) + " |")

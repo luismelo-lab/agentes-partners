@@ -1,0 +1,646 @@
+{
+ "_nota": "Entregas reais das 25 áreas de agentes da Área Partners, estado de 23/10/2026. Fontes: Manual dos Agentes v1.0 (docs/manual-dos-agentes.md), skills/<área>/SKILL.md e references/especialistas/*.md (Entrega única), scripts em skills/*/scripts, lib/ e infra/, rotinas/*.md, lib/caminhos.py e skills/central-agentes/references/catalogo.json. Situação vigente: o e-mail dos agentes segue pausado (arquivo .email-pausado desde 13/10/2026) até a TI liberar o Graph; pela D91 (22/10/2026), a pasta de cada pessoa no OneDrive é a caixa oficial e o que sairia por e-mail vira página em '04 · Gestão, Metas e Estratégia/Central de Agentes/Caixa de saída (e-mail pausado)'. 'Mac: departamentos/...' indica arquivo que fica só no computador do Luis (fora do git e do OneDrive). Tudo é rascunho: nada é enviado, assinado ou gravado no HubSpot ou no GLPI sem uma pessoa.",
+ "gabinete": {
+  "quem_usa": "Luis, quando traz uma necessidade sem área clara, um pedido de apoio, uma construção ou uma validação. O time chega ao Gabinete pela Central (código GE1) ou quando a Central sobe o pedido (3 ou mais áreas, mudança de regra, crédito acima de R$ 1 mi com decisão, produto em validação com condição pedida ou cliente sem Master).",
+  "como_acionar": [
+   "Escrever ao Claude com as próprias palavras: \"preciso de apoio em…\", \"valida isso\", \"quem precisa ver isso?\", \"isso já foi feito?\", \"leva para as áreas\".",
+   "Dizer o que muda a rota: dinheiro envolvido, pessoas afetadas, parceiros, se é reversível e se vai para a liderança. Faltando algo, o Gabinete faz no máximo 2 perguntas.",
+   "Responder \"ok\" à Ficha de Rota (ou pedir ajuste); só então as áreas trabalham. A consulta rápida (nível 1) vem direto.",
+   "Pelo time: pedido à Central com o código GE1 (Pedido às áreas), informando o tema e o que precisa."
+  ],
+  "entregas": [
+   {"entrega": "Checagem do porteiro", "conteudo": "Antes de produzir, classifica o pedido como repetido, continuação, relacionado, travado ou novo (infra/ja_existe.py) e devolve ao Luis o que já existe quando for repetido ou continuação de outra conversa.", "formato": "texto na conversa", "arquivo": "registro/pedidos-luis.jsonl (linha do pedido)", "quando": "a cada pedido novo do Luis", "quem_recebe": "Luis", "onde": "na conversa"},
+   {"entrega": "Ficha de Rota (Portão 0)", "conteudo": "Pedido, classificação do porteiro, movimento da esteira, nível (1 consulta, 2 área, 3 comitê de 2 a 4 áreas, 4 Conselho) com o motivo, áreas em ordem e o que cada uma entrega, quem fica de fora, gatilho para subir de nível e prazo estimado.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido, antes de acionar as áreas", "quem_recebe": "Luis", "onde": "na conversa"},
+   {"entrega": "Resposta de consulta rápida (nível 1)", "conteudo": "Resposta curta de um especialista, com o nome de quem respondeu, sem passar pela Ficha de Rota.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "na conversa"},
+   {"entrega": "Parecer consolidado", "conteudo": "Um documento único com a entrega principal pronta para usar, o que cada área validou ou apontou (ok, ajustar, bloqueia), conflitos entre áreas e a resolução sugerida, pendências que exigem humano (RH formal, advogado, técnico) e decisões para o Luis aprovar.", "formato": "texto na conversa + .md", "arquivo": "gabinete/pedidos/AAAA-MM-DD-<tema>.md (temas de pessoas em gabinete/pessoas/, confidencial)", "quando": "sob pedido (ou código GE1)", "quem_recebe": "Luis", "onde": "na conversa; cópia em gabinete/pedidos/ no repositório"},
+   {"entrega": "Registro do Gabinete", "conteudo": "Uma linha por caso com data, tema, nível, áreas acionadas e situação.", "formato": "md", "arquivo": "gabinete/registro.md", "quando": "a cada parecer", "quem_recebe": "Luis", "onde": "repositório (gabinete/)"},
+   {"entrega": "Guia das conversas por tema", "conteudo": "Estado, local dos arquivos, próximo passo e decisões pendentes de cada tema; tema parado há mais de 14 dias é marcado como parado.", "formato": "md", "arquivo": "gabinete/SESSOES.md", "quando": "sexta 16h (rotina consolidacao-semanal) e ao fim de cada conversa", "quem_recebe": "Luis", "onde": "repositório (gabinete/)"},
+   {"entrega": "Folha de decisões pendentes", "conteudo": "Uma linha por decisão com tema, decisão proposta, por que importa, prazo e campo de seleção (Aprovar, Aprovar com ajuste, Reprovar, Decidir depois); as respostas já dadas são mantidas a cada nova geração.", "formato": "xlsx", "arquivo": "Decisoes-Pendentes-<data>.xlsx", "quando": "sexta 16h (rotina consolidacao-semanal)", "quem_recebe": "Luis", "onde": "04 · Gestão, Metas e Estratégia/Central de Agentes"},
+   {"entrega": "Resumo da consolidação semanal", "conteudo": "Branches a juntar com o comando de merge, arquivos resgatados dos worktrees, divergências com a cópia viva, inconsistências de regra, temas pedidos mais de uma vez e as 5 decisões mais urgentes.", "formato": "e-mail (hoje página na Caixa de saída)", "arquivo": "—", "quando": "sexta 16h (rotina consolidacao-semanal)", "quem_recebe": "Luis", "onde": "04 · Gestão, Metas e Estratégia/Central de Agentes/Caixa de saída (e-mail pausado)"},
+   {"entrega": "Plano do dia do Luis (supervisor)", "conteudo": "Alertas do dia com a análise das áreas em 3 blocos, avisos de falha de rotina, quem está travando e a ação de destrave, com planilha anexa e links do HubSpot e do Bitrix.", "formato": "e-mail com xlsx anexo (hoje página na Caixa de saída)", "arquivo": "Plano-do-dia-Luis-<data>.xlsx", "quando": "dias úteis, depois da rotina operacao-areas (7h40; reserva às 9h)", "quem_recebe": "Luis", "onde": "04 · Gestão, Metas e Estratégia/Central de Agentes/Caixa de saída (e-mail pausado); planilha em Mac: departamentos/operacao/"}
+  ],
+  "nao_faz": [
+   "Não faz o trabalho técnico: decide quem trabalha, quanto e em que ordem.",
+   "Não executa nada: tudo é rascunho para o Luis aprovar.",
+   "Não envia mensagem a parceiro, cliente ou time e não altera o HubSpot.",
+   "Não decide sobre pessoas (Luis e RH formal decidem) nem rotula personalidade.",
+   "Não faz merge no main: o Luis faz o merge e o push."
+  ]
+ },
+ "central-agentes": {
+  "quem_usa": "Daniela, Jenifer, Geovana e Luis, sempre que precisam de trabalho dos agentes. Qualquer outro remetente é ignorado. Qualquer pessoa pode pedir qualquer código do catálogo.",
+  "como_acionar": [
+   "Painel Central Partners, aba Pedidos: escrever o pedido (o código é opcional; sem código, a Central deduz pelo texto e diz qual escolheu).",
+   "Preencher o que mais vale: o que você precisa, para que vai usar e o formato da resposta; cliente por CNPJ ou link do HubSpot; prazo.",
+   "E-mail com [AGENTES] no assunto para o Luis: pausado até a TI liberar o Graph; use o painel.",
+   "Responder à entrega com Aprovado, Não aprovado (com o motivo) ou Nova análise (com o que mudar ou o dado que faltou)."
+  ],
+  "entregas": [
+   {"entrega": "Resposta ao pedido em 3 blocos", "conteudo": "Resumo em 2 frases, o que foi pedido com o resultado primeiro, o que você também precisa, o que falta e quem fornece, o que os agentes já conferiram (HubSpot, parecer, Receita, Bitrix) e o que só uma pessoa pode conferir; passa pelo validar_saidas.py antes de sair.", "formato": "painel (e e-mail quando o Graph voltar)", "arquivo": "central-agentes/pedidos/<P-NNNN>/resposta.json", "quando": "dias úteis, a cada 2 horas das 8h às 18h (rotina central-agentes-email), com saída rápida quando não há pedido novo", "quem_recebe": "quem pediu (Daniela, Jenifer, Geovana ou Luis)", "onde": "painel Central Partners, aba Pedidos"},
+   {"entrega": "Anexos do pedido", "conteudo": "Planilha, Word ou texto gerado pela área que respondeu, conforme o formato pedido.", "formato": "xlsx/docx/md", "arquivo": "pasta P-NNNN", "quando": "junto com a resposta", "quem_recebe": "quem pediu", "onde": "pasta Pedidos da Central de cada pessoa (Área Partners · Agentes/Central Masters · Daniela, Central BDR · Jenifer, Central Técnica · Geovana; a do Luis em 04 · Gestão, Metas e Estratégia/Central de Agentes)"},
+   {"entrega": "Versão aprovada", "conteudo": "Ao clicar Aprovado, os anexos finais são guardados e o que funcionou entra em aprendizados.md.", "formato": "xlsx/docx/md", "arquivo": "—", "quando": "quando a pessoa aprova", "quem_recebe": "quem pediu", "onde": "subpasta Pedidos aprovados da Central da pessoa"},
+   {"entrega": "Nova versão (Nova análise)", "conteudo": "Refaz com o dado novo e diz o que mudou em relação à versão anterior.", "formato": "painel", "arquivo": "resposta.json (campo mudou)", "quando": "na rodada seguinte à Nova análise", "quem_recebe": "quem pediu", "onde": "painel Central Partners, aba Pedidos"},
+   {"entrega": "Chamado proposto para o GLPI", "conteudo": "Quando nenhuma área resolve com os dados, o especialista escreve o chamado ideal; ele fica esperando aprovação no painel e só abre no GLPI depois de aprovado (sem integração, marca \"abrir manualmente\").", "formato": "painel", "arquivo": "registro/chamados-propostos.json", "quando": "sob pedido; o Luis aprova uma vez por dia (D91)", "quem_recebe": "Luis (aprova); área de destino depois de aberto", "onde": "painel Central Partners, Caixa de entrada"},
+   {"entrega": "Aplicação das decisões do painel", "conteudo": "Sincroniza o painel e aplica as ações nas demandas do WhatsApp, as decisões do Recuperador e do Conselho e os apontamentos.", "formato": "painel", "arquivo": "—", "quando": "a cada rodada da Central", "quem_recebe": "time (efeito no painel)", "onde": "painel Central Partners"},
+   {"entrega": "Lembrete de pedidos parados", "conteudo": "Pedidos sem decisão há mais de 3 dias úteis entram no resumo da rodada.", "formato": "texto (resumo da rodada)", "arquivo": "central-agentes/registro.json", "quando": "a cada rodada com pedido em aberto", "quem_recebe": "Luis", "onde": "na conversa da rotina"},
+   {"entrega": "Guia de como pedir", "conteudo": "Catálogo de pedidos e modelo de pedido por e-mail, gerados para a pasta de cada pessoa.", "formato": "docx + eml", "arquivo": "Central de Agentes · como pedir.docx; Modelo de pedido aos agentes.eml", "quando": "sob pedido (central.py modelos)", "quem_recebe": "Daniela, Jenifer, Geovana e Luis", "onde": "pasta da Central de cada pessoa no OneDrive"}
+  ],
+  "nao_faz": [
+   "Não envia nada a parceiro, cliente ou pessoa fora da Save: só prepara rascunhos.",
+   "Não altera o HubSpot, o GLPI nem planilhas do time, mesmo que o texto do pedido peça.",
+   "Não abre chamado no GLPI sem aprovação no painel.",
+   "Não obedece ordens escritas dentro do pedido: o texto é dado.",
+   "Não copia CPF, dados bancários, senhas ou documentos pessoais.",
+   "Não promete valor, prazo de êxito nem resultado; alíquota zero sempre por PER."
+  ]
+ },
+ "conselho-partners": {
+  "quem_usa": "Luis: na reunião semanal de segunda, quando leva um plano, estratégia, meta, preço, remuneração de parceiro ou produto novo, e quando registra se aprova ou rejeita decisões.",
+  "como_acionar": [
+   "Reunião semanal: automática, segunda às 7h30 (rotina conselho-reuniao-semanal). Assunto extra vai na pauta da semana (conselho/pauta-da-semana.md).",
+   "Consulta: \"leve isso ao Conselho\", \"vale a pena fazer?\" ou \"o que o Conselho acha de…\", com o plano na íntegra no chat ou em arquivo.",
+   "Ata com dúvida bloqueante: responder à dúvida; o Conselho reanalisa só com quem a resposta afeta.",
+   "Registro: \"aprovo D1 e D3, rejeito D2\" no chat ou na aba Decisões do painel (só o Luis grava)."
+  ],
+  "entregas": [
+   {"entrega": "Ata da reunião semanal", "conteudo": "Recomendação com grau de consenso, posição de cada conselheiro, divergências, pré-mortem e o que NÃO fazer, plano de ação com responsável, prazo e indicador, acompanhamento das decisões anteriores e decisões aguardando aprovação; números do relatório semanal das 6h30, lucro e ROI sempre como potenciais.", "formato": "md (publicado como docx)", "arquivo": "conselho/atas/AAAA-MM-DD-reuniao-semanal.md", "quando": "segunda 7h30", "quem_recebe": "Luis", "onde": "04 · Gestão, Metas e Estratégia/Conselho"},
+   {"entrega": "Ata de consulta", "conteudo": "Mesma estrutura da ata semanal, aplicada ao plano ou decisão trazida pelo Luis; sem dado suficiente, diz o que coletar em vez de encher a ata.", "formato": "md (publicado como docx)", "arquivo": "conselho/atas/AAAA-MM-DD-<tema>.md", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "04 · Gestão, Metas e Estratégia/Conselho"},
+   {"entrega": "Resumo no chat", "conteudo": "Até 5 linhas de resumo executivo, as decisões para aprovação, as dúvidas bloqueantes e o caminho da ata.", "formato": "texto na conversa", "arquivo": "—", "quando": "ao fim de cada reunião ou consulta", "quem_recebe": "Luis", "onde": "na conversa"},
+   {"entrega": "Pareceres dos conselheiros", "conteudo": "Seis pareceres independentes: estratégia (o que fazer, adiar e não fazer), comercial (Master × ação × efeito), finanças (valor esperado de decidir agora × adiar), operações (gargalo, custo da espera, correção), pessoas (fato e sugestão por pessoa) e risco (probabilidade, impacto, mitigação, quem valida).", "formato": "texto dentro da ata", "arquivo": "—", "quando": "em cada reunião ou consulta", "quem_recebe": "Luis", "onde": "dentro da ata"},
+   {"entrega": "Registro de decisões", "conteudo": "Toda decisão nova entra como pendente com ID (D-número), impacto de aprovar e de não aprovar; ao responder, grava data, decisão, status e observação do Luis.", "formato": "md", "arquivo": "conselho/decisoes.md", "quando": "a cada ata e a cada resposta do Luis", "quem_recebe": "Luis", "onde": "repositório (conselho/) e 04 · Gestão, Metas e Estratégia/Conselho"}
+  ],
+  "nao_faz": [
+   "Só aconselha: não executa nenhuma ação.",
+   "Não envia mensagens, não cria tarefas e não fala com ninguém.",
+   "Não altera o HubSpot, o GLPI nem planilhas do time.",
+   "Não inventa dados: o que não existe fica registrado como lacuna.",
+   "Não avalia pessoas formalmente nem rotula personalidade."
+  ]
+ },
+ "arquiteto-agentes": {
+  "quem_usa": "Luis, para criar, avaliar, fundir ou desligar agentes, manter o padrão sênior e medir o ROI de IA. O time participa quando é preciso preencher o mapa de tarefas ou supervisionar um piloto.",
+  "como_acionar": [
+   "Dizer \"vamos continuar o projeto de agentes\" ou \"próximo passo dos agentes\": o Arquiteto lê o ESTADO.md e retoma de onde parou.",
+   "Responder às 1 a 3 perguntas por mensagem; ele prefere trazer um rascunho para corrigir.",
+   "Pedir a auditoria de um especialista ou de uma área (padrão sênior, nota, casos de teste).",
+   "Material que depende do time (mapa de tarefas, mensagem de instrução) vem pronto; quem envia é o Luis."
+  ],
+  "entregas": [
+   {"entrega": "Auditoria semanal do padrão sênior", "conteudo": "Nota do auditor por área, leitura qualitativa de 1 especialista por área pela rubrica, conferência de 5 afirmações por arquivo amostrado, lacunas que travam receita e as 3 correções da semana.", "formato": "md (seção Senioridade da consolidação)", "arquivo": "saída de infra/auditar_senioridade.py --json", "quando": "sexta", "quem_recebe": "Luis", "onde": "resumo da consolidação semanal"},
+   {"entrega": "Modelo e fila do padrão sênior", "conteudo": "Modelo de especialista com perfil e 10 seções, fila de aprofundamento, mapa de [não confirmado] e de perguntas ao dono por área e proposta de evolução do padrão (só muda com aprovação do Luis).", "formato": "md", "arquivo": "infra/padrao-senior.md; references/modelo-especialista.md", "quando": "sob pedido e na auditoria de sexta", "quem_recebe": "Luis", "onde": "repositório (infra/ e skills/arquiteto-agentes/)"},
+   {"entrega": "Casos de teste por área", "conteudo": "Casos de teste de cada área para avaliar se o agente responde dentro do padrão, com o avaliador em infra/avaliar_casos.py.", "formato": "md", "arquivo": "skills/<área>/references/casos-teste.md; infra/casos-teste.md", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "repositório"},
+   {"entrega": "Entregável de cada fase do método", "conteudo": "Mapa de tarefas (uma aba por pessoa), ranking de tarefas com nota, ficha do agente, base de conhecimento, resultados do piloto e one-pager para a liderança, com o ESTADO.md atualizado.", "formato": "xlsx/md", "arquivo": "ESTADO.md e arquivos da fase", "quando": "sob pedido, fase a fase (0 a 9)", "quem_recebe": "Luis", "onde": "na conversa e em ~/agentes-partners/"},
+   {"entrega": "Avaliação do piloto", "conteudo": "Piloto de 2 a 3 semanas com cada saída registrada como aprovada, editada ou rejeitada; critério de avanço de pelo menos 80% aprovadas sem edição.", "formato": "md", "arquivo": "resultados-piloto.md", "quando": "durante e ao fim do piloto", "quem_recebe": "Luis", "onde": "~/agentes-partners/"},
+   {"entrega": "ROI de IA por agente", "conteudo": "Custo completo do agente contra o tempo economizado e o resultado, para decidir manter, fundir ou desligar.", "formato": "md", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "na conversa"}
+  ],
+  "nao_faz": [
+   "Não envia mensagens a parceiros nem ao time: só o Luis envia.",
+   "Não dá autonomia a um agente por confiança: ela só sobe com evidência do piloto.",
+   "Não pula fases: sem diagnóstico e base de conhecimento, o agente não é construído.",
+   "Não altera dados em massa no HubSpot nem copia bases inteiras de clientes sem necessidade.",
+   "Não muda o padrão sênior ou o script de nota sem aprovação do Luis."
+  ]
+ },
+ "depto-tributario": {
+  "quem_usa": "Geovana no dia a dia de análise e parecer; Jenifer e Daniela para entender a tese antes de falar com parceiro ou cliente; Luis para embasar planos e decisões. Também é acionado pela operação diária e pelo lote do Recuperador.",
+  "como_acionar": [
+   "Escrever ao Claude: \"Tributário, faça a pré-análise da empresa deste CNPJ\" ou a dúvida técnica.",
+   "Pelo painel: GT1 (pré-análise de empresa), GT4 (parecer em linguagem de parceiro), GT5 (preparar reunião técnica), GT6 (dúvida com fonte).",
+   "Responder \"ok\" ao plano de trabalho; faltando dados, ele devolve um checklist de documentos.",
+   "Enviar o resultado ao técnico que valida; só depois da validação vira versão para o parceiro."
+  ],
+  "entregas": [
+   {"entrega": "Matriz de oportunidades (GT1)", "conteudo": "Tese, base legal com data e vigência, grau de risco, indícios, documentos para confirmar, período recuperável de 5 anos, faixa estimada só com dados e prioridade, com o aviso de pré-análise sujeita a validação técnica.", "formato": "md / texto na conversa", "arquivo": "departamentos/tributario/entregas/AAAA-MM-DD-<tema>.md", "quando": "sob pedido (código GT1)", "quem_recebe": "Geovana (ou quem pediu) e o técnico validador", "onde": "na conversa ou no pedido; arquivo no Mac: departamentos/tributario/entregas/"},
+   {"entrega": "Parecer em linguagem de parceiro (GT4)", "conteudo": "Versão comercial do parecer já validado pelo técnico, sem valores nem promessa.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido (código GT4), depois da validação técnica", "quem_recebe": "quem pediu (Daniela, Jenifer)", "onde": "na conversa ou no pedido"},
+   {"entrega": "Preparação de reunião técnica (GT5)", "conteudo": "Resumo do caso, 3 mensagens-chave e objeções prováveis com resposta e fonte.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido (código GT5)", "quem_recebe": "quem pediu", "onde": "na conversa ou no pedido"},
+   {"entrega": "Resposta a dúvida pontual (GT6)", "conteudo": "Resposta curta com fonte oficial, vigência e grau de risco.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido (código GT6)", "quem_recebe": "quem pediu", "onde": "na conversa ou no pedido"},
+   {"entrega": "Embasamento de plano ou estratégia", "conteudo": "O que os dados oficiais dizem, implicações a favor e contra o plano, riscos técnicos, números com fonte e o que precisa de validação humana.", "formato": "md", "arquivo": "departamentos/tributario/entregas/AAAA-MM-DD-<tema>.md", "quando": "sob pedido (Luis ou Conselho)", "quem_recebe": "Luis", "onde": "na conversa"},
+   {"entrega": "Fichas dos especialistas por cliente", "conteudo": "Conforme a tese: ficha de aptidão de alíquota zero (T01), ficha de exclusão da base, matriz de essencialidade de insumos, diagnóstico agro e Funrural, plano de transição de saldos credores até 31/12/2026 e mapa de evidência no SPED com o calendário de decadência.", "formato": "md / planilha + memorando", "arquivo": "departamentos/tributario/entregas/", "quando": "sob pedido", "quem_recebe": "Geovana e o time técnico", "onde": "Mac: departamentos/tributario/entregas/"},
+   {"entrega": "Análise dos alertas técnicos do dia", "conteudo": "No diagnóstico parado, o que trava e o documento que destrava; no negócio que entrou em apresentação, se cabe gerar a apresentação e com qual case, usando a ficha do Revisor.", "formato": "texto no plano do dia", "arquivo": "registro/analises-<data>.json", "quando": "dias úteis 7h40 (rotina operacao-areas)", "quem_recebe": "Geovana", "onde": "plano do dia da pessoa"},
+   {"entrega": "Validação do lote do Recuperador", "conteudo": "Confere a hipótese de tese e o documento que decide nos 10 casos de maior honorário esperado do lote.", "formato": "json", "arquivo": "celulas/geovana/recuperador/resumo-lote-<N>.json", "quando": "segunda 9h (rotina recuperador-lote-semanal)", "quem_recebe": "Geovana", "onde": "resumo do lote do Recuperador"},
+   {"entrega": "Radar tributário", "conteudo": "O que mudou em normas e julgados desde a última data-base, com impacto para a Save, ação do agente, fonte e data; o que muda tese vira proposta ao Conselho.", "formato": "md", "arquivo": "skills/depto-tributario/references/radar-mercado.md", "quando": "sexta 7h (rotina radar-mercado)", "quem_recebe": "Luis", "onde": "branch radar/<data> e resumo em 04 · Gestão, Metas e Estratégia/Central de Agentes"}
+  ],
+  "nao_faz": [
+   "Não promete valor nem êxito: estimativa só em faixa, como estimativa preliminar sujeita a validação técnica.",
+   "Não manda nada a parceiro ou cliente sem validação de técnico humano.",
+   "Não analisa planejamento tributário agressivo: vai direto a um humano.",
+   "Não sugere DCOMP na alíquota zero: sempre PER.",
+   "Não inventa fonte (escreve \"não localizado\") nem altera o HubSpot."
+  ]
+ },
+ "depto-juridico": {
+  "quem_usa": "Luis, Daniela, Jenifer e Geovana, sempre que houver dúvida jurídica. A Daniela usa muito em contratos e conversas com Masters. Validação por advogado humano (Gestão de Passivo e Estruturação Patrimonial até 07/11, D94).",
+  "como_acionar": [
+   "Escrever ao Claude: \"Jurídico, analise esta notificação da Receita e me diga o prazo\" e colar o texto, de preferência sem nome e CNPJ do cliente.",
+   "Pelo painel: código DM7 (consulta jurídica).",
+   "Com prazo correndo, avisar no pedido e informar a data de recebimento: o cálculo do prazo vem antes de tudo.",
+   "Responder \"ok\" ao plano e enviar a pré-análise ao advogado responsável."
+  ],
+  "entregas": [
+   {"entrega": "Ficha de prazo e defesa", "conteudo": "Ato, forma e data de ciência, regra de contagem, prazo fatal, prazo interno 5 dias antes, alertas D-10, D-5 e D-2 e segunda contagem cega; depois, estrutura da manifestação ou recurso, documentos a juntar e risco.", "formato": "md", "arquivo": "departamentos/juridico/entregas/AAAA-MM-DD-prazo-<processo>.md + linha em departamentos/juridico/prazos.md", "quando": "sob pedido, prazo entregue primeiro", "quem_recebe": "quem pediu e o advogado", "onde": "na conversa; arquivo no Mac: departamentos/juridico/"},
+   {"entrega": "Pré-análise jurídica (DM7)", "conteudo": "Risco baixo, médio ou alto com justificativa, fontes com dispositivo e data, e a lista do que o advogado precisa validar, com o aviso \"PRÉ-ANÁLISE JURÍDICA — não substitui parecer\".", "formato": "md / texto na conversa", "arquivo": "departamentos/juridico/entregas/AAAA-MM-DD-<tema>.md", "quando": "sob pedido (código DM7)", "quem_recebe": "quem pediu e o advogado", "onde": "na conversa ou no pedido"},
+   {"entrega": "Diagnóstico de passivo tributário", "conteudo": "Mapa de cada débito (esfera, situação, valor, prazo), rota por débito (defender, garantir, transacionar, parcelar, pagar), caminho da certidão e prazos fatais de editais, sem prometer desconto.", "formato": "md", "arquivo": "departamentos/juridico/entregas/AAAA-MM-DD-passivo-<cliente-anonimizado>.md", "quando": "sob pedido", "quem_recebe": "quem pediu e o advogado", "onde": "Mac: departamentos/juridico/entregas/"},
+   {"entrega": "Candidatos à transação de pequeno valor da RFB", "conteudo": "Lista de hipóteses (porte ME/EPP ou MEI e sinal de débito ou processo) cruzando HubSpot, fila do Recuperador, pareceres e Receita, para a Daniela confirmar com o Master antes do prazo do edital (30/10/2026).", "formato": "xlsx", "arquivo": "Transacao-Pequeno-Valor-candidatos-<data>.xlsx", "quando": "sob pedido (edital RFB 10/2026, prazo 30/10/2026)", "quem_recebe": "Daniela", "onde": "Área Partners · Agentes/Central Masters · Daniela"},
+   {"entrega": "Estruturação patrimonial e sucessória", "conteudo": "Mapa patrimonial e familiar, teste de licitude com veredito, comparativo de cenários (inventário, doação com usufruto, integralização e doação de quotas) com ITCMD, ITBI e IR, sem promessa de economia, e as peças que o advogado faz.", "formato": "md", "arquivo": "departamentos/juridico/entregas/AAAA-MM-DD-estruturacao-<familia-anonimizada>.md", "quando": "sob pedido", "quem_recebe": "Luis e o advogado", "onde": "Mac: departamentos/juridico/entregas/"},
+   {"entrega": "Parecer de perímetro regulatório", "conteudo": "Papel permitido da Save, do parceiro e da instituição em cada etapa, enquadramento (CVM, BCB, OAB, PLD, LGPD) com dispositivo, linha vermelha com frase proibida e substituta, peças contratuais e quando é obrigatório parecer externo.", "formato": "md (uma página)", "arquivo": "departamentos/juridico/entregas/", "quando": "sob pedido (produto, peça ou parceria)", "quem_recebe": "Luis", "onde": "na conversa"},
+   {"entrega": "Revisão de contrato e briefing jurídico de reunião", "conteudo": "Contrato comparado ao padrão Save com desvios, cláusulas de dados e remuneração; ou briefing com pontos de atenção, respostas a objeções com base legal e o que não prometer.", "formato": "texto na conversa", "arquivo": "departamentos/juridico/entregas/AAAA-MM-DD-<tema>.md", "quando": "sob pedido", "quem_recebe": "quem pediu", "onde": "na conversa"},
+   {"entrega": "Análise dos alertas jurídicos do dia", "conteudo": "Prazo fatal e prazo interno com cálculo duplo; sem data de ciência, pede a data.", "formato": "texto no plano do dia", "arquivo": "registro/analises-<data>.json", "quando": "dias úteis 7h40 (rotina operacao-areas)", "quem_recebe": "dona do alerta", "onde": "plano do dia da pessoa"},
+   {"entrega": "Radar jurídico", "conteudo": "Mudanças em normas, julgados e regulação (inclui Contratos e Qualidade) com fonte e data e perguntas novas ao dono.", "formato": "md", "arquivo": "skills/depto-juridico/references/radar-mercado.md", "quando": "sexta 7h (rotina radar-mercado)", "quem_recebe": "Luis", "onde": "branch radar/<data> e resumo em 04 · Gestão, Metas e Estratégia/Central de Agentes"}
+  ],
+  "nao_faz": [
+   "Não dá parecer final: só advogado com OAB aprova.",
+   "Não envia nada a cliente, parceiro ou Fisco e não protocola.",
+   "Não promete resultado nem tendência de êxito sem justificativa.",
+   "Não inventa fonte: sem fonte oficial, escreve \"não localizado\".",
+   "Não expõe CPF ou CNPJ em buscas na internet."
+  ]
+ },
+ "depto-save-invest": {
+  "quem_usa": "Junior (dono da Save Invest: Gestão de Contas, antecipação e FIDC, D92) e Luis como ponto focal; Daniela (Masters), Jenifer (listas) e Geovana (documentos) quando o caso de um cliente toca caixa, cobrança ou recebíveis.",
+  "como_acionar": [
+   "Pelo painel: código PI4 (encaixe no ecossistema: caixa, dívida, carteira, FIDC, antecipação), com CNPJ ou link do negócio e DRE, balanço ou SCR se tiver.",
+   "Escrever ao Claude: cobrança, inadimplência, régua, antecipar duplicata, limite sobre a carteira, capital de giro, FIDC, multicedente.",
+   "Pedir a preparação de reunião com cliente, parceiro ou com o Junior.",
+   "Pedir a varredura da base para achar candidatos."
+  ],
+  "entregas": [
+   {"entrega": "Qualificação de oportunidade (PI4)", "conteudo": "Sinais financeiros lidos, produto que entra primeiro (Gestão de Contas, antecipação ou FIDC), seguir, preparar ou não seguir com o motivo, próximo passo e quem conduz, em 3 blocos.", "formato": "md / texto na conversa", "arquivo": "departamentos/save-invest/entregas/AAAA-MM-DD-<produto>-<tema>.md", "quando": "sob pedido (código PI4)", "quem_recebe": "quem pediu e Junior", "onde": "na conversa ou no pedido; arquivo no Mac"},
+   {"entrega": "Diagnóstico de carteira e régua de Gestão de Contas", "conteudo": "Aging em 5 faixas, % vencido, DSO, concentração nos 10 maiores sacados, encaixe, régua proposta por dia e canal e valor em faixa com premissas.", "formato": "md", "arquivo": "departamentos/save-invest/entregas/", "quando": "sob pedido", "quem_recebe": "Luis e Junior", "onde": "Mac: departamentos/save-invest/entregas/"},
+   {"entrega": "Parecer de elegibilidade e custo da antecipação", "conteudo": "Se a carteira é antecipável, limite de referência a pedir, garantia a levar ao comitê e custo comparado ao que o cliente paga hoje, sem prometer limite nem taxa.", "formato": "md (1 página)", "arquivo": "departamentos/save-invest/entregas/", "quando": "sob pedido", "quem_recebe": "Junior", "onde": "Mac: departamentos/save-invest/entregas/"},
+   {"entrega": "Tese de viabilidade de FIDC", "conteudo": "Se o FIDC é o veículo certo, qual modelo, business case em faixa, desenho preliminar e riscos; uso interno, sem rentabilidade de cota.", "formato": "md (2 a 3 páginas)", "arquivo": "departamentos/save-invest/entregas/", "quando": "sob pedido", "quem_recebe": "Junior", "onde": "Mac: departamentos/save-invest/entregas/"},
+   {"entrega": "Resposta a dúvida de produto", "conteudo": "3 a 5 linhas com o status do faq-validado.md, a frase segura para o parceiro e, se \"a confirmar\", a pergunta registrada ao Junior.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "quem pediu", "onde": "na conversa"},
+   {"entrega": "Preparação de reunião", "conteudo": "Com cliente ou parceiro: pauta de descoberta, objeções, o que não dizer e documentos a pedir. Com o Junior: perguntas prioritárias, o que cada resposta destrava e ata pronta para preencher.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "quem pediu", "onde": "na conversa"},
+   {"entrega": "Varredura da base", "conteudo": "Lista interna de candidatos (CNAEs B2B, porte, sinais de parecer, leads perdidos) com motivo e faixa, sem cliente sem Master.", "formato": "xlsx (padrão Save, uso interno)", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Luis e Junior", "onde": "Mac: departamentos/save-invest/entregas/"},
+   {"entrega": "Mapa regulatório e texto revisado", "conteudo": "Atividade × papel × norma × risco × ação para a operação; e o veredito liberado, liberado com ajuste ou bloqueado para qualquer rascunho da área.", "formato": "md", "arquivo": "—", "quando": "sob pedido e em todo material da área", "quem_recebe": "Junior e o advogado", "onde": "na conversa"}
+  ],
+  "nao_faz": [
+   "Não promete limite, taxa, rentabilidade nem aprovação: quem decide é o Junior e o comitê.",
+   "Não descreve venda gerencial nem conta escrow: só presencialmente, com o Junior (D82).",
+   "Não trata crédito internacional, funding, captação, home equity nem Maquila: encaminha ao depto-internacional.",
+   "Não aborda lead de Master sem o Master nem cliente sem Master (D76).",
+   "Não produz peça externa: o conteúdo vai ao Marketing e passa pela Qualidade."
+  ]
+ },
+ "depto-internacional": {
+  "quem_usa": "João Mattos (dono de Crédito Internacional, Maquila, captação, home equity e turnkey) e Paulo (tax internacional e comércio exterior, com o João); Luis como ponto focal; Daniela, Jenifer e Geovana quando chega um caso com dólar, funding, Paraguai, investidor ou exportação.",
+  "como_acionar": [
+   "Pelo painel: PI1 (qualificar para crédito internacional), PI2 (descoberta para Maquila), PI3 (dúvida de produto), PI5 (preparar reunião com cliente ou com o João).",
+   "Escrever ao Claude com o caso: \"esse cliente serve para o crédito internacional?\", \"o cliente tem empresa no Paraguai\", \"precisa de preço de transferência?\".",
+   "Informar CNPJ ou link do negócio, necessidade (valor e finalidade) e garantias, se souber.",
+   "One-page de Crédito Internacional: só por decisão do Luis e depois do NDA."
+  ],
+  "entregas": [
+   {"entrega": "Qualificação para Crédito Internacional (PI1)", "conteudo": "Eliminatórios K1 a K10 com a prova, pontuação de 0 a 100, faixa seguir, preparar ou não seguir, lacunas, documentos a pedir e frase de saída; sem taxa, prazo ou fee.", "formato": "md / texto na conversa", "arquivo": "departamentos/produtos/entregas/AAAA-MM-DD-<produto>-<tema>.md", "quando": "sob pedido (código PI1)", "quem_recebe": "quem pediu e João Mattos", "onde": "na conversa ou no pedido; arquivo no Mac"},
+   {"entrega": "Descoberta para Maquila (PI2)", "conteudo": "Perfil para o Paraguai (corte e anti-perfil), roteiro de descoberta e o que não dizer, sem preço nem número.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido (código PI2)", "quem_recebe": "quem pediu", "onde": "na conversa ou no pedido"},
+   {"entrega": "Resposta a dúvida de produto (PI3)", "conteudo": "Resposta com fonte e data do faq-validado.md, a frase segura para o parceiro e, se \"a confirmar\", a pergunta registrada ao dono do produto.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido (código PI3)", "quem_recebe": "quem pediu", "onde": "na conversa ou no pedido"},
+   {"entrega": "Preparação de reunião (PI5)", "conteudo": "Pauta, perguntas priorizadas, o que não dizer, documentos e ata pronta para preencher; com o João, as perguntas pendentes e o que cada resposta destrava.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido (código PI5)", "quem_recebe": "quem pediu", "onde": "na conversa ou no pedido"},
+   {"entrega": "One-page confidencial de Crédito Internacional", "conteudo": "Página nominal e numerada, com marca d'água de confidencial, a Save como estruturadora e a taxa de 7% a 10% ao ano apenas como exemplo definido pelo fundo (D88).", "formato": "pdf + png", "arquivo": "Credito-Internacional-One-Page-<empresa>-<copia>.pdf", "quando": "sob pedido, por decisão do Luis e depois do NDA", "quem_recebe": "Luis (entrega ao cliente)", "onde": "pasta informada em --saida (03 · Produtos e Projetos/Crédito Internacional)"},
+   {"entrega": "Diagnóstico de tax internacional e comércio exterior", "conteudo": "Mapa da operação cross-border, matriz de tributos por fluxo e método de preço de transferência, obrigações e prazos (CBE, ECF, DU-E, drawback), riscos com nota e plano de 90 dias.", "formato": "md", "arquivo": "departamentos/produtos/entregas/", "quando": "sob pedido", "quem_recebe": "Paulo ou João, com revisão do Tributário e do Jurídico", "onde": "Mac: departamentos/produtos/entregas/"},
+   {"entrega": "Dossiês de produto em validação", "conteudo": "Dossiê para a instituição (capacidade de pagamento em 3 cenários, mapa de garantias, checklist de 12 itens), estudo \"gol ou não gol\" do Paraguai, diagnóstico de passivo bancário, dossiê de prontidão para investidor ou plano de entrada em mercado externo, conforme o produto.", "formato": "md", "arquivo": "departamentos/produtos/entregas/", "quando": "sob pedido (oportunidade em andamento)", "quem_recebe": "João Mattos ou Paulo", "onde": "Mac: departamentos/produtos/entregas/; projetos em 03 · Produtos e Projetos"},
+   {"entrega": "Quadro de portões do produto", "conteudo": "Portão atual, o que ele libera e não libera, documentos do kit, perguntas críticas com dono e prazo e a frase-limite do que pode ser dito hoje.", "formato": "md", "arquivo": "references/perguntas-ao-dono.md e faq-validado.md", "quando": "sob pedido e a cada resposta do dono", "quem_recebe": "Luis e João Mattos", "onde": "repositório (skills/depto-internacional/references/)"},
+   {"entrega": "Varredura de candidatos", "conteudo": "Lista interna com o motivo de cada empresa e a faixa, sem abordagem antes do G2.", "formato": "xlsx (padrão Save, uso interno)", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "Mac: departamentos/produtos/"},
+   {"entrega": "Radar de crédito, câmbio, financeiro e Maquila", "conteudo": "O que mudou em captação externa, câmbio, IOF, FIDC e Paraguai, com fonte e data.", "formato": "md", "arquivo": "references/radar-mercado-credito.md; references/radar-mercado-financeiro-maquila.md", "quando": "sexta 7h (rotina radar-mercado)", "quem_recebe": "Luis", "onde": "branch radar/<data> e resumo em 04 · Gestão, Metas e Estratégia/Central de Agentes"}
+  ],
+  "nao_faz": [
+   "Não diz taxa, prazo, carência, custo ou fee de produto em validação antes do G2 (exceção da one-page, D88).",
+   "Não usa \"fundo internacional\" como nome do produto nem apresenta a Save como credora.",
+   "Não aborda empresa antes do G2 nem produz material externo sem o Guardião confirmar o portão.",
+   "Não trata caixa, cobrança, antecipação ou FIDC: encaminha à Save Invest (D92).",
+   "Não substitui o parecer do advogado ou do técnico tributário."
+  ]
+ },
+ "depto-solucoes": {
+  "quem_usa": "Luis e Daniela, para saber o que mais cada cliente pode contratar e preparar o QBR com o Master. Roda também sozinha na operação diária (ganho novo) e às segundas (carteira).",
+  "como_acionar": [
+   "Pelo painel: SC1 (mapa da conta), SC2 (carteira do Master: onde crescer), SC3 (oferta integrada para um setor).",
+   "Escrever ao Claude: \"o que mais esse cliente pode contratar?\", \"cross-sell\", \"mapa da conta\", \"dossiê\", \"QBR com o Master\".",
+   "Informar CNPJ ou link do negócio (SC1), nome do Master (SC2) ou setor (SC3).",
+   "Mapa de valor só vai ao Master depois do ok do Luis."
+  ],
+  "entregas": [
+   {"entrega": "Mapa da conta (SC1)", "conteudo": "Esteira em 3 ondas (Destravar caixa, Proteger e controlar, Crescer) com produto, motivo e evidência, quem entrega e próximo passo, mais o rascunho de mensagem ao Master; sem promessa de valor.", "formato": "md / texto na conversa", "arquivo": "departamentos/solucoes/entregas/AAAA-MM-DD-<conta>.md", "quando": "sob pedido (código SC1) e em até 7 dias depois de cada ganho de recuperação", "quem_recebe": "quem pediu (Daniela ou Luis)", "onde": "na conversa ou no pedido; arquivo no Mac"},
+   {"entrega": "Mapa de Valor da Conta", "conteudo": "One-pager com o valor da conta em três colunas (contratado, conservador, realizado), premissas com fonte e o business case interno que o sustenta.", "formato": "docx (padrão Save)", "arquivo": "ao lado do .md em departamentos/solucoes/entregas/", "quando": "junto com o mapa da conta", "quem_recebe": "Luis (aprova antes do Master)", "onde": "Mac: departamentos/solucoes/entregas/"},
+   {"entrega": "Carteira por Master (SC2)", "conteudo": "Um cliente por linha com a aderência por onda e o índice, os 10 clientes prioritários, a pauta do QBR e o rascunho do convite ao Master.", "formato": "xlsx", "arquivo": "carteira-<data>.xlsx (+ .json)", "quando": "segunda (rotina operacao-areas) e sob pedido (código SC2)", "quem_recebe": "Luis e Daniela", "onde": "Mac: departamentos/solucoes/"},
+   {"entrega": "Achados semanais de Contas e Soluções", "conteudo": "Por Master, os 5 clientes com mais aderência e menos pendência, com a onda e o motivo, para o Conselho e o relatório semanal.", "formato": "json", "arquivo": "registro/achados-areas-<data>.json", "quando": "segunda (rotina operacao-areas)", "quem_recebe": "Luis e Conselho", "onde": "repositório local (registro/)"},
+   {"entrega": "Dossiê da conta (padrão Big Four)", "conteudo": "Estudo de até 10 seções com sumário executivo, gráficos no padrão Save, revisão de todas as áreas e pendências do Luis.", "formato": "docx", "arquivo": "dossie e mapa-valor em Word", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "01 · Comercial e Parceiros/Relatórios das áreas/Contas e Soluções"},
+   {"entrega": "Oferta integrada para um setor (SC3)", "conteudo": "Pacote por onda, público na base (número de clientes), valor em faixa, área que entrega e o que precisa existir antes.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido (código SC3)", "quem_recebe": "Luis", "onde": "na conversa"},
+   {"entrega": "Ficha de encaminhamento de cross-sell", "conteudo": "Uma ficha por gatilho para o dono do produto, mais o quadro semanal de gatilhos abertos, encaminhados, aceitos e recusados.", "formato": "md", "arquivo": "—", "quando": "a cada gatilho (ganho, parecer novo, recorrência, mudança regulatória)", "quem_recebe": "dono do produto e dona da conta", "onde": "na conversa e no plano do dia"},
+   {"entrega": "Mapa da base de um parceiro", "conteudo": "Quais empresas da carteira de um parceiro cabem em quais produtos, a porta de entrada e os dados a pedir (protótipo de 19/10/2026).", "formato": "json", "arquivo": "<parceiro>-<data>.json", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "Mac: departamentos/solucoes/base-parceiros/"},
+   {"entrega": "Esteira do Cliente", "conteudo": "Documento com 12 passos em 3 movimentos, sem nome de produto, com os dados setoriais.", "formato": "docx (padrão Save)", "arquivo": "caminho informado na geração", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "na conversa"}
+  ],
+  "nao_faz": [
+   "Não promete valor ao cliente nem envia o mapa ao Master sem o ok do Luis.",
+   "Não decide elegibilidade, limite ou viabilidade de Gestão de Contas, antecipação e FIDC: encaminha à Save Invest (D92).",
+   "Não prospecta clientes novos: isso é da Inteligência Comercial e da Central BDR.",
+   "Não conduz a conversa com o Master: a Central Masters conduz.",
+   "Não põe taxa, prazo ou fee de produto em validação."
+  ]
+ },
+ "apresentacao-diagnostico": {
+  "quem_usa": "Luis e Geovana, quando um diagnóstico revisado vai virar apresentação ao cliente. A operação diária sugere gerar a apresentação quando um negócio entra em Apresentação de Diagnóstico.",
+  "como_acionar": [
+   "Escrever ao Claude: \"deck do diagnóstico\", \"apresentar o diagnóstico\", com o diagnóstico do cliente (PDF da pasta 00 · Entrada).",
+   "Aguardar o veredito do time tributário por tese (MANTER, AJUSTAR, RETER ATÉ VALIDAR, RETIRAR) antes do roteiro.",
+   "Enviar cases do segmento ao Luis para cadastro na biblioteca, anonimizados.",
+   "Aprovar com o técnico antes de qualquer envio ao cliente."
+  ],
+  "entregas": [
+   {"entrega": "Deck do diagnóstico", "conteudo": "Apresentação comercial com imagens: informativo separado da proposta, R$ por tese do diagnóstico como potencial a validar, slide dos 3 movimentos (Destravar caixa, Proteger e controlar, Crescer), rodapé de pré-análise e roteiro nas notas.", "formato": "pdf + pptx", "arquivo": "<nome>.pdf e <nome>.pptx na pasta do cliente", "quando": "sob pedido", "quem_recebe": "Luis e Geovana", "onde": "06 · Marketing e Apresentações (pasta do cliente)"},
+   {"entrega": "Revisão do time tributário", "conteudo": "Antes × depois de cada linha do diagnóstico, com o veredito por tese.", "formato": "md (uso interno)", "arquivo": "REVISAO-time-tributario.md", "quando": "junto com o deck", "quem_recebe": "Luis e Geovana", "onde": "pasta do cliente"},
+   {"entrega": "Roteiro do deck", "conteudo": "Resposta em uma frase, SCQA, ghost deck com títulos-conclusão, notas de fala por slide, leitura por persona e o que ficou fora.", "formato": "md", "arquivo": "roteiro.md", "quando": "antes do deck.json", "quem_recebe": "Luis", "onde": "Mac: departamentos/tributario/apresentacao-diagnostico/<cliente>/"},
+   {"entrega": "Mapa de objeções do caso", "conteudo": "5 a 8 objeções prováveis por persona com resposta, base técnica com data, o que não dizer e quando passar ao técnico.", "formato": "md", "arquivo": "objecoes.md", "quando": "junto com o roteiro", "quem_recebe": "Luis e o Master", "onde": "Mac: pasta do cliente"},
+   {"entrega": "Ficha de case do segmento", "conteudo": "Case aprovado para o slide \"Quem já fez\" com a frase de rodapé, ou \"sem case: o slide sai\" e o que falta para aprovar um.", "formato": "json + nota", "arquivo": "biblioteca-cases/cases.json", "quando": "a cada deck", "quem_recebe": "Luis", "onde": "Mac: departamentos/tributario/apresentacao-diagnostico/biblioteca-cases/"},
+   {"entrega": "Parecer de promessas da peça", "conteudo": "Resultado do auditor, tabela slide × texto atual × problema × texto novo, conferência do rodapé e dos 9 avisos e veredito APROVADO, APROVADO COM AJUSTES ou DEVOLVER.", "formato": "md", "arquivo": "revisao-promessas.md", "quando": "antes de ir ao Luis", "quem_recebe": "Luis", "onde": "Mac: pasta do cliente"}
+  ],
+  "nao_faz": [
+   "Não muda o veredito técnico de uma tese: é do time tributário.",
+   "Não envia nada ao cliente sem aprovação do Luis e do técnico.",
+   "Não usa valor de mercado, offshore, preço, \"garantia\" ou \"holding\" (usa \"estruturação patrimonial\").",
+   "Não soma linhas que se sobrepõem nem põe valor sem base.",
+   "Não usa case não aprovado nem cita cliente pelo nome."
+  ]
+ },
+ "revisor-diagnostico": {
+  "quem_usa": "Geovana, ao revisar diagnósticos antes de irem ao cliente. O Luis recebe a planilha enquanto o canal de entrega à Geovana não é definido.",
+  "como_acionar": [
+   "Automático: rodada completa toda segunda às 6h (partners segunda) e nos negócios que entram em Apresentação de Diagnóstico, com aviso no plano do dia.",
+   "Para um negócio específico: código GT2 no painel ou pedido ao Claude, com o link do negócio.",
+   "Abrir a planilha, aba Lacunas, e marcar Incluir tese, Não se aplica ou Precisa de dado, com motivo, minutos e data em que levou ao técnico."
+  ],
+  "entregas": [
+   {"entrega": "Planilha de revisão de diagnóstico", "conteudo": "Negócios em Apresentação de Diagnóstico com perfil oficial e alertas de cadastro, teses esperadas, teses já cobertas, lacunas por prioridade (confirmada, provável, a conferir), parecidos que tiveram a tese, cobertura típica e a lista do que ficou fora da revisão.", "formato": "xlsx", "arquivo": "Revisor-Diagnostico-<data>.xlsx", "quando": "segunda 6h e no dia em que um negócio entra em apresentação", "quem_recebe": "Geovana", "onde": "Área Partners · Agentes/Central Técnica · Geovana"},
+   {"entrega": "Fichas dos negócios com mais lacunas", "conteudo": "Até 30 fichas por rodada com perfil oficial, tese esperada, status, base legal, risco, look-alike em contagem (nunca R$), o único documento que decide e a alternativa conservadora.", "formato": "md (publicado como docx)", "arquivo": "celulas/geovana/revisor/fichas/AAAA-MM-DD.md", "quando": "segunda 6h", "quem_recebe": "Geovana", "onde": "Área Partners · Agentes/Central Técnica · Geovana (Fichas do Revisor)"},
+   {"entrega": "Revisão de um negócio (GT2)", "conteudo": "Teses esperadas e não analisadas, com base legal e o documento que decide.", "formato": "texto + ficha", "arquivo": "—", "quando": "sob pedido (código GT2)", "quem_recebe": "quem pediu", "onde": "na conversa ou no pedido"},
+   {"entrega": "Leitura padronizada do parecer", "conteudo": "Para cada tese do catálogo: apurada com valor, analisada sem valor, citada ou ausente, período, via, motivo de não aplicação, débitos e processos ajuizados.", "formato": "colunas da aba Revisão", "arquivo": "Revisor-Diagnostico-<data>.xlsx", "quando": "a cada rodada", "quem_recebe": "Geovana", "onde": "Área Partners · Agentes/Central Técnica · Geovana"},
+   {"entrega": "Evidência no SPED por lacuna", "conteudo": "Tese, registro que decide, o que procurar nele, o que confirma e o que derruba, e o período mínimo a pedir ao cliente.", "formato": "texto na ficha", "arquivo": "—", "quando": "a cada ficha", "quem_recebe": "Geovana e o técnico", "onde": "dentro da ficha"},
+   {"entrega": "Indicadores e proposta de regras", "conteudo": "Lacunas apresentadas, % incluídas, % \"não se aplica\", teses levadas ao técnico e minutos por negócio; regras novas da matriz tese × perfil propostas ao Tributário a partir das decisões da Geovana.", "formato": "json / md", "arquivo": "celulas/geovana/revisor/decisoes.json; aprendizados.md", "quando": "a cada rodada com decisões", "quem_recebe": "depto-resultados e Tributário", "onde": "Mac: celulas/geovana/revisor/"}
+  ],
+  "nao_faz": [
+   "Não fala com parceiro, cliente nem técnico: quem leva a lacuna é a Geovana.",
+   "Não promete valor: mostra quantos parecidos tiveram a tese, não reais.",
+   "Não decide a tese: é pré-análise sujeita à validação técnica.",
+   "Não sugere tese que a Save não adota (crédito sobre monofásico ou sobre ICMS-ST pago).",
+   "Não revisa Simples, passivo, café ou CNPJ baixado (ficam em \"Fora da revisão\")."
+  ]
+ },
+ "recuperador": {
+  "quem_usa": "Geovana, toda semana, ao receber o lote; o Luis recebe cópia do resumo. Caso avulso pelo código GT3.",
+  "como_acionar": [
+   "Automático: segunda às 6h o terminal atualiza HubSpot, pareceres e fila; às 9h sai o lote da semana (rotina recuperador-lote-semanal).",
+   "Caso avulso: código GT3 no painel ou pedido ao Claude, com o link do negócio.",
+   "Decidir na folha curta do lote ou no painel: Aprovar para reanálise, Vetar ou Precisa de dado, com motivo, valor validado e minutos.",
+   "Sem nenhuma decisão do lote anterior, o lote não avança: o mesmo é reenviado com aviso."
+  ],
+  "entregas": [
+   {"entrega": "Fila priorizada do Recuperador", "conteudo": "Negócios perdidos com valor zero e abertos há mais de 90 dias, com motivo de entrada, vetos, sinal do parecer e potencial pelo look-alike, nas abas Fila, Recorrência (já clientes), Gestão de Passivo e Fora da fila.", "formato": "xlsx", "arquivo": "Fila-Recuperador-<data>.xlsx", "quando": "segunda 6h", "quem_recebe": "Geovana", "onde": "Área Partners · Agentes/Central Técnica · Geovana"},
+   {"entrega": "Folha curta de decisão do lote", "conteudo": "Só os casos do lote e as colunas para decidir: prioridade, negócio, parceiro, honorário esperado, saldo credor urgente, sinal do parecer, hipótese, documentos a pedir e os campos de decisão; lida de volta na rodada seguinte.", "formato": "xlsx", "arquivo": "Fila-Recuperador-Lote<N>-decidir-<data>.xlsx", "quando": "segunda 9h", "quem_recebe": "Geovana", "onde": "Área Partners · Agentes/Central Técnica · Geovana"},
+   {"entrega": "Fichas de reanálise do lote", "conteudo": "20 casos (padrão) com o que o técnico concluiu e o que mudou, por que provavelmente zerou, potencial pelos parecidos, hipótese de tese com base legal, risco e registro do SPED que decide, documentos a pedir, urgência e recomendação.", "formato": "md (publicado como docx)", "arquivo": "celulas/geovana/recuperador/fichas/AAAA-MM-DD-lote-N.md", "quando": "segunda 9h", "quem_recebe": "Geovana", "onde": "Área Partners · Agentes/Central Técnica · Geovana (Fichas do Recuperador)"},
+   {"entrega": "Resumo do lote", "conteudo": "Até 5 destaques com o documento que decide, perfil de aderência alta, o que a Geovana também precisa (risco, prazo, recorrência, saldo credor até 31/12) e o que falta, com a planilha anexa.", "formato": "e-mail (hoje página na Caixa de saída)", "arquivo": "celulas/geovana/recuperador/resumo-lote-<N>.json", "quando": "segunda 9h", "quem_recebe": "Geovana, com cópia ao Luis", "onde": "04 · Gestão, Metas e Estratégia/Central de Agentes/Caixa de saída (e-mail pausado)"},
+   {"entrega": "Ficha de caso avulso (GT3)", "conteudo": "Por que zerou, look-alike, hipótese de reanálise e documentos.", "formato": "texto + ficha", "arquivo": "—", "quando": "sob pedido (código GT3)", "quem_recebe": "quem pediu", "onde": "na conversa ou no pedido"},
+   {"entrega": "Indicadores do piloto (D2)", "conteudo": "Fichas geradas, aprovadas, vetadas, % de falsos positivos, valor validado, reanálises encaminhadas e minutos por caso contra a Semana 0.", "formato": "dados para o relatório", "arquivo": "—", "quando": "segunda, com decisões registradas", "quem_recebe": "depto-resultados e Luis", "onde": "relatório semanal de resultados"},
+   {"entrega": "Tabela de teses por perfil", "conteudo": "Tabela vigente com o registro do SPED que decide cada tese; cada veto com motivo vira regra nova.", "formato": "md", "arquivo": "references/especialistas/tabela-de-teses-por-perfil.md; celulas/geovana/recuperador/aprendizados.md", "quando": "a cada lote com vetos", "quem_recebe": "Geovana e Tributário", "onde": "repositório e Mac"}
+  ],
+  "nao_faz": [
+   "Não fala com parceiro, cliente nem com o time técnico: quem leva é a Geovana.",
+   "Não altera o HubSpot.",
+   "Não promete valor: vale o valor que a Geovana validar.",
+   "Não sugere empresa baixada ou inapta, do Simples, de café, de gestão de passivo ou que já é cliente do grupo (esta vai para Recorrência).",
+   "Não usa SPED nem folha nesta fase; alíquota zero só como hipótese, por PER."
+  ]
+ },
+ "depto-pos-venda": {
+  "quem_usa": "Área de Pós-venda e Daniela (quando um parceiro pergunta \"como está o crédito do cliente X?\"), e o Luis. O ciclo mensal está proposto, sem agendamento até o Luis aprovar. Números de recebido dependem da planilha do Financeiro (o HubSpot não tem o valor recebido).",
+  "como_acionar": [
+   "Chegou comunicação de compensação de ofício: \"calcule o prazo\" na hora (o prazo vem primeiro).",
+   "Pergunta do parceiro: \"o parceiro perguntou como está o crédito do cliente X\".",
+   "Avisos do mês: \"prepare os avisos de pagamento do mês\" (depende da planilha de recebidos).",
+   "PER com intimação, despacho ou acima de 360 dias: pedir a ficha de acompanhamento."
+  ],
+  "entregas": [
+   {"entrega": "Tabela de prazos da compensação de ofício", "conteudo": "Débito indicado, valor, ciência com cálculo duplo, fim dos 15 dias, prazo interno, decisão do cliente e efeito no honorário, com o rascunho de consulta ao cliente e os pontos para o Jurídico.", "formato": "md / xlsx", "arquivo": "departamentos/pos-venda/entregas/AAAA-MM-DD-<tema>.md", "quando": "sob pedido, no dia em que a comunicação chega", "quem_recebe": "Daniela e Jurídico", "onde": "na conversa; arquivo no Mac: departamentos/pos-venda/entregas/"},
+   {"entrega": "Rascunho de resposta ao parceiro", "conteudo": "Status do crédito em linguagem clara, sem promessa; sem dado da área, rascunho de pedido à área em vez de resposta inventada.", "formato": "rascunho WhatsApp / e-mail", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Daniela", "onde": "na conversa"},
+   {"entrega": "Ficha do PER e tabela de prazos do mês", "conteudo": "Uma linha por PER com valor pedido, protocolo, dia 360, início da Selic, situação, próximo prazo legal com cálculo duplo, débitos que bloqueiam e dono da próxima ação, mais resumo de uma página.", "formato": "xlsx + md", "arquivo": "departamentos/pos-venda/entregas/AAAA-MM-DD-prazos-per.xlsx", "quando": "sob pedido (mensal proposto, sem agendamento)", "quem_recebe": "Daniela e Luis", "onde": "Mac: departamentos/pos-venda/entregas/"},
+   {"entrega": "Calendário de recorrência", "conteudo": "Uma linha por cliente ganho e tese com competências novas, competência mais antiga dentro dos 5 anos, próximo PER possível e gatilho de esteira, mais a lista de 10 a 20 clientes do mês para levar aos Masters.", "formato": "xlsx", "arquivo": "departamentos/pos-venda/entregas/AAAA-MM-recorrencia.xlsx", "quando": "sob pedido (mensal proposto, sem agendamento)", "quem_recebe": "Daniela", "onde": "Mac: departamentos/pos-venda/entregas/"},
+   {"entrega": "Extrato do crédito e aviso de honorário", "conteudo": "Por PER: pedido, deferido, compensado de ofício, pago, Selic, saldo, honorário faturado e recebido, com fonte e data de cada coluna; e os avisos de pagamento do mês.", "formato": "xlsx + rascunhos", "arquivo": "departamentos/pos-venda/entregas/", "quando": "sob pedido, só com a planilha de recebidos do Financeiro", "quem_recebe": "Daniela e área de Pós-venda", "onde": "Mac: departamentos/pos-venda/entregas/"},
+   {"entrega": "Controle de guias", "conteudo": "Conciliação das guias (DARF) a compensar ou quitar: guia, vencimento, origem do crédito, situação e pendências.", "formato": "xlsx", "arquivo": "—", "quando": "sob pedido, quando houver dados da área", "quem_recebe": "área de Pós-venda", "onde": "Mac: departamentos/pos-venda/entregas/"},
+   {"entrega": "Análise dos alertas de pós-venda do dia", "conteudo": "O que falta para a execução começar (card, documento, técnico) e quem cobra.", "formato": "texto no plano do dia", "arquivo": "registro/analises-<data>.json", "quando": "dias úteis 7h40 (rotina operacao-areas)", "quem_recebe": "dona do alerta", "onde": "plano do dia da pessoa"}
+  ],
+  "nao_faz": [
+   "Não promete prazo de ressarcimento, valor ou resultado.",
+   "Não sugere DCOMP na alíquota zero: sempre PER.",
+   "Não inventa valor recebido, saldo ou guia: sem fonte, não há número.",
+   "Não envia mensagem a parceiro ou cliente: tudo é rascunho.",
+   "Não põe dado fiscal de cliente em grupo de WhatsApp nem em busca na internet."
+  ]
+ },
+ "celula-daniela": {
+  "quem_usa": "Daniela, no dia a dia com os 9 Masters: pedido de parceiro, pendência a cobrar, reunião marcada, dado novo para o CRM, plano de conta. O Luis também pode pedir.",
+  "como_acionar": [
+   "Escrever ao Claude e colar a conversa do WhatsApp, o chamado do GLPI ou as anotações da reunião; ou nada, porque a caixa do WhatsApp é lida sozinha.",
+   "Pelo painel: DM1 (briefing de conta), DM2 (status de negócio), DM3 (resposta ao parceiro), DM4 (pedido para área de apoio), DM5 (atualização de CRM), DM6 (reunião ou ata), DM7 (consulta jurídica).",
+   "Responder \"ok\" ao plano; toda entrega termina com \"Para aprovar\".",
+   "Na aba da sua pessoa no painel, marcar cada demanda como Respondi, Encaminhei ou Não é demanda."
+  ],
+  "entregas": [
+   {"entrega": "Resumo do WhatsApp", "conteudo": "Cada pedido de parceiro interpretado (o que pede, rota, próximo passo, prazo, urgência), o que os agentes já levantaram (status do negócio, cadastro oficial, conflito, leitura de prints e documentos) e um rascunho de resposta curto já auditado; pedido de grupo de Master é sempre da Daniela.", "formato": "painel + e-mail (hoje página na Caixa de saída)", "arquivo": "celulas/daniela/whatsapp/demandas-*.json", "quando": "dias úteis 8h e 14h com IA; 11h e 17h sem IA, só pedido novo", "quem_recebe": "Daniela (e Jenifer e Geovana no próprio número); Luis recebe o panorama", "onde": "painel Central Partners, aba da pessoa; 04 · Gestão, Metas e Estratégia/Central de Agentes/Caixa de saída (e-mail pausado)"},
+   {"entrega": "Controle de pendências dos Masters", "conteudo": "Uma linha por demanda (PM-AAAA-NNNN) com tipo, Master, canal, prazo do SLA, dias em aberto e situação, resumo por Master e cobrança agrupada por área (rascunho).", "formato": "xlsx (editável pela Daniela)", "arquivo": "Controle-Pendencias-Masters.xlsx", "quando": "atualizado toda manhã e a cada ficha aprovada", "quem_recebe": "Daniela", "onde": "Área Partners · Agentes/Central Masters · Daniela"},
+   {"entrega": "Ficha de triagem da demanda", "conteudo": "Tipo de demanda com confiança, o que o parceiro pede, dados mínimos (tem ou falta), rota sugerida e prazos; quando a rota é GLPI, título e descrição no formulário da área.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido e a cada demanda nova", "quem_recebe": "Daniela", "onde": "na conversa"},
+   {"entrega": "Briefing de conta Master (DM1)", "conteudo": "Pipeline aberto por etapa, ganhos e perdidos recentes, parados acima de 30 e 90 dias, campos vazios no CRM, principais clientes e saúde; com um negócio, o raio-x do negócio e do grupo.", "formato": "md (publicado como docx)", "arquivo": "celulas/daniela/briefings/AAAA-MM-DD-briefing-<master>.md", "quando": "sob pedido (código DM1)", "quem_recebe": "Daniela", "onde": "Área Partners · Agentes/Central Masters · Daniela (Briefings)"},
+   {"entrega": "Rascunho de resposta ao parceiro (DM3)", "conteudo": "Mensagem por momento (recebido, pedir dados, status, entrega, atraso) no canal certo, sem promessa de valor ou prazo de êxito, com a checagem do auditor de promessas.", "formato": "rascunho WhatsApp / e-mail", "arquivo": "—", "quando": "sob pedido (código DM3)", "quem_recebe": "Daniela", "onde": "na conversa ou no pedido"},
+   {"entrega": "Proposta de atualização de CRM (DM5)", "conteudo": "Campo, valor atual, valor sugerido, fonte com data (Receita ou HubSpot) e ação, mais o parecer de registro: livre para registrar, registrar com ressalva ou conflito para o Luis decidir.", "formato": "md (tabela)", "arquivo": "celulas/daniela/crm/AAAA-MM-DD-proposta-crm-*.md", "quando": "sob pedido (código DM5)", "quem_recebe": "Daniela (aplica à mão no HubSpot)", "onde": "Mac: celulas/daniela/crm/"},
+   {"entrega": "Status, pedido à área e reunião (DM2, DM4, DM6)", "conteudo": "Situação de cada negócio com próximo passo e quem está com a bola; pedido formatado para Contratos, Pós-venda, Jurídico, Marketing ou Técnico com o que falta; briefing antes da reunião ou ata com próximos passos.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido (códigos DM2, DM4, DM6)", "quem_recebe": "Daniela", "onde": "na conversa ou no pedido"},
+   {"entrega": "Plano de conta trimestral e QBR", "conteudo": "Por Master: retrato em 5 linhas, mapa de stakeholders, até 3 objetivos medidos no HubSpot, oportunidades, riscos, compromissos dos dois lados e pauta do QBR.", "formato": "md", "arquivo": "celulas/daniela/briefings/AAAA-TT-plano-<master>.md", "quando": "sob pedido (trimestral)", "quem_recebe": "Daniela (Luis aprova antes do Master)", "onde": "Área Partners · Agentes/Central Masters · Daniela (Briefings)"},
+   {"entrega": "Ganhos a completar no HubSpot", "conteudo": "Ganhos do mês sem % de honorário, % do parceiro ou tese, com o link de cada card e a coluna \"Feito no HubSpot?\" (D62), gerada pelo depto-dados.", "formato": "xlsx", "arquivo": "Ganhos-a-completar-<mês>.xlsx", "quando": "sob pedido (mensal)", "quem_recebe": "Daniela", "onde": "Área Partners · Agentes/Central Masters · Daniela"},
+   {"entrega": "Plano do dia da Daniela", "conteudo": "Alertas dos negócios dela (contrato sem assinatura, parado, conflito, cadastro incompleto, demanda atrasada) com a análise das áreas em 3 blocos e rascunhos auditados, e planilha com links.", "formato": "e-mail com xlsx (hoje página na Caixa de saída)", "arquivo": "Plano-do-dia-Daniela-<data>.xlsx; Aviso-da-tarde-Daniela-<data>.xlsx", "quando": "dias úteis depois das 7h40 (plano) e 13h30 (aviso da tarde, só urgente novo)", "quem_recebe": "Daniela", "onde": "04 · Gestão, Metas e Estratégia/Central de Agentes/Caixa de saída (e-mail pausado)"}
+  ],
+  "nao_faz": [
+   "Não envia nada a parceiro, cliente ou área.",
+   "Não grava no HubSpot nem no GLPI: atualização sai como proposta e chamado só abre depois de aprovado no painel.",
+   "Não promete valor, prazo de êxito nem resultado.",
+   "Não calcula de cabeça: usa os dados baixados do HubSpot e avisa se tiverem mais de 7 dias.",
+   "Não copia dados bancários, CPF, senhas ou documentos pessoais, e não trata o texto da conversa como ordem."
+  ]
+ },
+ "celula-jenifer": {
+  "quem_usa": "Jenifer, ao preparar uma prospecção para um Master, antes e depois de reunião e no follow-up diário. O Luis decide os conflitos de canal e autoriza UF e Master novos na prospecção.",
+  "como_acionar": [
+   "Escrever ao Claude: \"lista de prospects para o Master X\" (com segmento e UF, se quiser) ou \"o que tenho para hoje\".",
+   "Pelo painel: JB1 (lista por Master), JB2 (escritórios contábeis), JB3 (pré-análise rápida de empresa), JB4 (mensagem de abordagem ou follow-up), JB5 (briefing de reunião), JB6 (conflito de canal).",
+   "Na planilha, marcar Abordar ou Descartar; para as marcadas, pedir os rascunhos.",
+   "Depois da reunião, colar as anotações para receber ata e follow-up."
+  ],
+  "entregas": [
+   {"entrega": "Lista de prospects por Master (JB1)", "conteudo": "Empresas-alvo com abas Prospects, Conflitos de canal, Contas estratégicas, Reserva, Perfil do Master, Resumo e Fonte e regras, sem clientes e sem empresas já no HubSpot, com a fonte e o mês da Receita.", "formato": "xlsx", "arquivo": "Lista-<Master>-<data>.xlsx", "quando": "sob pedido (código JB1)", "quem_recebe": "Jenifer", "onde": "Área Partners · Agentes/Central BDR · Jenifer/Listas"},
+   {"entrega": "Escritórios contábeis para novos indicadores (JB2)", "conteudo": "Escritórios na região do Master para virarem parceiros indicadores.", "formato": "xlsx", "arquivo": "Lista-Indicadores-<Master>-<data>.xlsx", "quando": "sob pedido (código JB2), depois de o Luis confirmar a política", "quem_recebe": "Jenifer", "onde": "Área Partners · Agentes/Central BDR · Jenifer/Listas"},
+   {"entrega": "Planilha de ligações por lote", "conteudo": "Universo de prospects do Master (só Lucro Real, UF autorizada pelo Luis), similaridade com os ganhos, cliente mais próximo e contatos da empresa no cadastro público; cada lote é um arquivo novo.", "formato": "xlsx", "arquivo": "nome do lote definido na geração (planilha_bdr.py)", "quando": "sob pedido, por lote, com prévia aprovada pelo Luis", "quem_recebe": "Jenifer", "onde": "Área Partners · Agentes/Central BDR · Jenifer/Listas"},
+   {"entrega": "Controle de follow-up", "conteudo": "Abas Controle, Agenda do dia (vencidos primeiro), Propostas HubSpot, Painel da semana, Cadência e Como usar; preserva o que a Jenifer preencheu.", "formato": "xlsx (editável pela Jenifer)", "arquivo": "Controle-Followup-Jenifer.xlsx", "quando": "sob pedido (\"o que tenho para hoje\") e ao importar uma lista", "quem_recebe": "Jenifer", "onde": "Área Partners · Agentes/Central BDR · Jenifer"},
+   {"entrega": "Rascunhos de abordagem e cadência (JB4)", "conteudo": "Sequência de toques por persona (sócio, CFO, contador) com datas em dias úteis e o rascunho de cada toque (M0 a M8).", "formato": "rascunho WhatsApp / e-mail", "arquivo": "—", "quando": "sob pedido (código JB4)", "quem_recebe": "Jenifer", "onde": "na conversa ou no pedido"},
+   {"entrega": "Pré-análise rápida de empresa (JB3)", "conteudo": "Perfil oficial, teses prováveis sem valores, conflito de canal e próximo passo.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido (código JB3)", "quem_recebe": "Jenifer", "onde": "na conversa ou no pedido"},
+   {"entrega": "Briefing de reunião (JB5)", "conteudo": "Uma página na véspera: retrato da empresa, histórico com a Save e conflito, teses prováveis sem valores, participantes, objetivo, perguntas, objeções com resposta, o que não falar e próximo passo, mais o roteiro de 30 minutos.", "formato": "md", "arquivo": "celulas/jenifer/entregas/briefing-<raiz-do-CNPJ>-AAAA-MM-DD.md", "quando": "sob pedido (código JB5)", "quem_recebe": "Jenifer", "onde": "Mac: celulas/jenifer/entregas/ (nunca no OneDrive com nome de sócio)"},
+   {"entrega": "Ata e qualificação pós-reunião", "conteudo": "Ata, ficha de qualificação com evidência e decisão (SQL, Nutrição ou Descartado), proposta de etapa no HubSpot e rascunho de follow-up para enviar em até 24 horas.", "formato": "texto + linha no controle", "arquivo": "Controle-Followup-Jenifer.xlsx (Propostas HubSpot)", "quando": "sob pedido, depois da reunião", "quem_recebe": "Jenifer", "onde": "na conversa e no controle"},
+   {"entrega": "Plano do dia e resumo do WhatsApp da Jenifer", "conteudo": "Itens dos negócios dela e pedidos de indicação e prospecção que chegaram no número dela, com análise das áreas e rascunho.", "formato": "painel + e-mail (hoje página na Caixa de saída)", "arquivo": "Plano-do-dia-Jenifer-<data>.xlsx", "quando": "dias úteis (plano depois das 7h40; WhatsApp 8h e 14h, 11h e 17h sem IA)", "quem_recebe": "Jenifer", "onde": "painel Central Partners, aba da pessoa; 04 · Gestão, Metas e Estratégia/Central de Agentes/Caixa de saída (e-mail pausado)"}
+  ],
+  "nao_faz": [
+   "Não envia mensagem a ninguém e não grava no HubSpot: tudo é rascunho ou proposta.",
+   "Não busca celular pessoal de sócio fora do cadastro público da empresa.",
+   "Não promete valor, percentual, prazo nem êxito: a pré-análise é indicativa e sem valores.",
+   "Não decide conflito de canal: sinaliza ao Luis.",
+   "Não monta lista de empresas de café nem busca na internet dados de quem já é cliente."
+  ]
+ },
+ "depto-intel-comercial": {
+  "quem_usa": "Luis, para decidir foco, território e política de recrutamento; Jenifer, para listas de contas-alvo e pontuação de leads. Roda toda segunda e sob pedido.",
+  "como_acionar": [
+   "Escrever ao Claude: \"atualize o ICP e o mapa de território dos parceiros\".",
+   "Lista: \"monte lista de empresas-alvo para o Master X, no segmento Y, no estado Z\".",
+   "Para saber se a empresa já tem dono: código JB6 (checagem de conflito de canal).",
+   "Base da Receita: atualização mensal, com autorização do Luis para o download."
+  ],
+  "entregas": [
+   {"entrega": "Planilha de ICP", "conteudo": "Conversão, ticket e honorário esperado por segmento, regime e UF, com a aba Território (onde cada Master já ganha).", "formato": "xlsx + json", "arquivo": "ICP-<data>.xlsx", "quando": "segunda 6h (partners segunda) e sob pedido", "quem_recebe": "Luis e Jenifer", "onde": "Mac: departamentos/intel-comercial/"},
+   {"entrega": "Resumo do ICP em 5 linhas", "conteudo": "Quem priorizar e por quê, mapa de território resumido, lead scoring v1 para o Luis validar e as ressalvas (poucos casos = indício).", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "na conversa"},
+   {"entrega": "Lista de empresas-alvo da Receita", "conteudo": "Empresas que cabem no ICP, excluindo clientes e empresas já no HubSpot, com contas estratégicas, fonte e mês de referência.", "formato": "xlsx", "arquivo": "Prospects-Receita-<data>.xlsx", "quando": "sob pedido", "quem_recebe": "Jenifer", "onde": "Mac: departamentos/intel-comercial/ (listas por Master vão à Central BDR)"},
+   {"entrega": "Ficha de ICP por produto", "conteudo": "Por produto do portfólio: porte, regime, setores, UF e Master com histórico, sinais de compra, eliminatórios, produto de entrada e marca de evidência (medido, documentado, hipótese).", "formato": "md", "arquivo": "docs/portfolio-2027/agentes/intel-comercial-icp.md (seção 1)", "quando": "revisão trimestral ou quando um produto muda de estado", "quem_recebe": "Luis", "onde": "repositório"},
+   {"entrega": "Dimensionamento de mercado", "conteudo": "TAM, SAM e SOM por produto, UF e segmento, cada número com fonte, data e faixa.", "formato": "md (1 a 2 páginas)", "arquivo": "departamentos/intel-comercial/entregas/mercado-<produto>-AAAA-MM-DD.md", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "Mac: departamentos/intel-comercial/entregas/"},
+   {"entrega": "Battlecard de concorrência", "conteudo": "Concorrentes por tipo e produto, como chegam ao cliente, onde ganham e perdem da Save e as 3 respostas do BDR e do Master.", "formato": "md", "arquivo": "departamentos/intel-comercial/entregas/concorrencia-AAAA-MM-DD.md", "quando": "sob pedido", "quem_recebe": "Luis e Jenifer", "onde": "Mac: departamentos/intel-comercial/entregas/"},
+   {"entrega": "Mapa de território e recrutamento", "conteudo": "Master × segmento × UF com penetração e status (coberto, sub-coberto, descoberto), regras de distribuição de lead e praças para recrutar escritórios contábeis, com nota de 1 página para o Luis decidir.", "formato": "xlsx + md", "arquivo": "aba Território do ICP-<data>.xlsx", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "Mac: departamentos/intel-comercial/"},
+   {"entrega": "Modelo de lead scoring", "conteudo": "Dimensões e pesos, faixas A/B/C com a ação de cada uma, validação e ficha de look-alike, proposto ao Luis no config da Jenifer.", "formato": "md / json", "arquivo": "celulas/jenifer/config-jenifer.json (proposta)", "quando": "sob pedido; só vale depois que o Luis valida", "quem_recebe": "Luis", "onde": "na conversa"}
+  ],
+  "nao_faz": [
+   "Não envia mensagem a empresa nem a parceiro.",
+   "Não grava nada no HubSpot.",
+   "Não baixa dados de sócios nem contatos fora do cadastro público e do arquivo protegido (prospects-contatos.json).",
+   "Não define a pontuação sozinho: só vale depois que o Luis valida.",
+   "Não consulta regime em serviço externo com CNPJ de cliente: só de prospects."
+  ]
+ },
+ "depto-operacoes-canal": {
+  "quem_usa": "Luis decide conflitos e política; Daniela e o Financeiro usam as conferências; Jenifer usa a checagem antes de abordar uma empresa.",
+  "como_acionar": [
+   "Empresa tem dono? Código JB6 no painel, com CNPJ ou nome.",
+   "\"Faça a conferência de repasses do mês\".",
+   "\"Liste os conflitos de canal de prioridade alta\".",
+   "Mudança de política ou regra de registro: pedir nova versão; aprovação do Luis, Jurídico e Financeiro."
+  ],
+  "entregas": [
+   {"entrega": "Conferência de repasses", "conteudo": "Cada ganho classificado em Bloqueado, Revisar ou OK, repasse contratado por parceiro, os 3 problemas de maior impacto em R$ e o que cada dono corrige (CRM, Contratos, Luis, Financeiro).", "formato": "xlsx + json", "arquivo": "Conferencia-Repasses-<data>.xlsx", "quando": "planilha toda segunda 6h (partners segunda); leitura de 1 página mensal ou sob pedido", "quem_recebe": "Luis, Daniela e Financeiro", "onde": "01 · Comercial e Parceiros/Relatórios das áreas"},
+   {"entrega": "Relatório de conflito de canal", "conteudo": "Casos por severidade (Alta: dois parceiros e ao menos um ganho; Master × Master primeiro), fatos de cada caso, o que a regra proposta diria, a pergunta objetiva ao Luis e a lista de cadastro incompleto para o CRM.", "formato": "xlsx + pauta", "arquivo": "Conflito-Canal-<data>.xlsx", "quando": "segunda 6h (partners segunda) e sob pedido", "quem_recebe": "Luis", "onde": "01 · Comercial e Parceiros/Relatórios das áreas"},
+   {"entrega": "Checagem de conflito de canal (JB6)", "conteudo": "Resposta curta: a empresa já é cliente, tem negócio aberto ou é de outro Master.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido (código JB6)", "quem_recebe": "Jenifer (ou quem pediu)", "onde": "na conversa ou no pedido"},
+   {"entrega": "Elegibilidade e retenções do pagamento", "conteudo": "Por parceiro do lote: apto a receber, código de serviço na NF, retenções aplicáveis com base legal, líquido estimado e o que o Tributário valida.", "formato": "tabela", "arquivo": "—", "quando": "sob pedido, por lote de pagamento", "quem_recebe": "Luis e Financeiro", "onde": "na conversa"},
+   {"entrega": "Rascunho de extrato do parceiro", "conteudo": "Recebido dos clientes, remuneração bruta, estornos e retenções, valor a pagar, detalhe por cliente e prazo de contestação, mais o registro de contestações.", "formato": "rascunho", "arquivo": "—", "quando": "só com política aprovada e dado de recebimento", "quem_recebe": "Daniela (envia)", "onde": "na conversa"},
+   {"entrega": "Política do programa de parceiros", "conteudo": "Famílias de remuneração (percentual por Master, D64; produtos 2027 a 10% do líquido Save, D78 e D97), níveis, regras de registro e conflito, calendário de pagamento e checklist do termo, com histórico de versões.", "formato": "md", "arquivo": "departamentos/operacoes-canal/Politica-Programa-Parceiros-vN-<data>.md", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "Mac: departamentos/operacoes-canal/; Programa de Parceiros em 01 · Comercial e Parceiros"},
+   {"entrega": "Análise dos alertas de canal do dia", "conteudo": "Parecer do conflito com a regra proposta e quem tem precedência; no repasse bloqueado, quais campos faltam e em quantos ganhos.", "formato": "texto no plano do dia", "arquivo": "registro/analises-<data>.json", "quando": "dias úteis 7h40 (rotina operacao-areas)", "quem_recebe": "dona do alerta e Luis", "onde": "plano do dia da pessoa"}
+  ],
+  "nao_faz": [
+   "Não paga, não aprova pagamento e não envia extrato.",
+   "Não comunica parceiro nem altera o HubSpot.",
+   "Não decide de quem é o cliente: mostra os fatos e a regra proposta.",
+   "Não chama de \"a pagar\" o que não foi recebido: sem dado de recebimento, o valor é só contratado.",
+   "Não guarda dados bancários de parceiros."
+  ]
+ },
+ "depto-contratos": {
+  "quem_usa": "Daniela, que recebe as demandas dos 9 Masters, e o Luis. A área real de Contratos e o Jurídico humano decidem.",
+  "como_acionar": [
+   "Escrever ao Claude: \"confira os dados do contrato da empresa X\", \"prepare o pedido de contrato\" ou \"liste contratos enviados e não assinados\".",
+   "Informar o CNPJ ou o link do negócio no HubSpot; CNPJ novo pede o comprovante de situação cadastral e o quadro de sócios.",
+   "Revisar e encaminhar à área de Contratos: o agente nunca envia.",
+   "Distrato: pedir o dossiê; o Jurídico valida."
+  ],
+  "entregas": [
+   {"entrega": "Controle de contratos", "conteudo": "Contratos enviados e parados há mais de 15 dias, assinados e não fechados, sem modificação há mais de 10 dias e ganhos sem dado essencial, com rascunho de cobrança para os mais urgentes; a data de fechamento substitui a de assinatura, que o HubSpot não tem.", "formato": "xlsx + json", "arquivo": "Controle-Contratos-<data>.xlsx", "quando": "planilha toda segunda 6h (partners segunda); leitura com rascunhos sob pedido", "quem_recebe": "Daniela e Luis", "onde": "01 · Comercial e Parceiros/Relatórios das áreas"},
+   {"entrega": "Checklist de conferência", "conteudo": "CNPJ, razão social, situação cadastral e parceiro marcados como certo, atenção ou erro, com o link do negócio e a correção sugerida.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Daniela", "onde": "na conversa"},
+   {"entrega": "Pedido à área de Contratos", "conteudo": "Pedido formatado de contrato novo ou aditivo, com a ficha de dados e os pontos para o Jurídico.", "formato": "md", "arquivo": "departamentos/contratos/entregas/AAAA-MM-DD-<tema>.md", "quando": "sob pedido", "quem_recebe": "Daniela (aprova e encaminha)", "onde": "Mac: departamentos/contratos/entregas/"},
+   {"entrega": "Ficha de cláusulas do contrato de serviços tributários", "conteudo": "Cláusulas do modelo vigente que se aplicam, variáveis preenchidas (percentual, base, período, gatilho, procuração), desvios marcados para o Jurídico e checagem PER × DCOMP.", "formato": "tabela", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Daniela e Jurídico", "onde": "na conversa"},
+   {"entrega": "Termo com parceiro e mapa contratual de produto 2027", "conteudo": "Natureza da relação (indicação, representação, corretagem, correspondente), riscos e cláusulas mínimas com o anexo de remuneração; por produto 2027, peças necessárias, o que existe e o que falta, e a frase de uso externo permitida.", "formato": "md", "arquivo": "esqueletos em references/modelos/ preenchidos", "quando": "sob pedido", "quem_recebe": "Luis e Jurídico", "onde": "na conversa"},
+   {"entrega": "Parecer de formalização", "conteudo": "Nível de assinatura eletrônica por tipo de contrato, checagem de poderes de quem assina, configuração da plataforma e o que guardar.", "formato": "md (1 página)", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Daniela", "onde": "na conversa"},
+   {"entrega": "Dossiê de distrato ou cobrança", "conteudo": "Créditos em andamento com honorário potencial, cláusula aplicável, prazo calculado duas vezes, valor devido com memória de cálculo, minuta-esqueleto e rascunho ao parceiro.", "formato": "md", "arquivo": "departamentos/contratos/entregas/", "quando": "sob pedido", "quem_recebe": "Jurídico e área real", "onde": "Mac: departamentos/contratos/entregas/"},
+   {"entrega": "Análise dos alertas de contrato do dia", "conteudo": "Status, dias parado e o que destrava, com um rascunho de cobrança por negócio.", "formato": "texto no plano do dia", "arquivo": "registro/analises-<data>.json", "quando": "dias úteis 7h40 (rotina operacao-areas)", "quem_recebe": "Daniela", "onde": "plano do dia da pessoa"}
+  ],
+  "nao_faz": [
+   "Não envia, não assina e não altera contrato.",
+   "Não inventa cláusula: texto novo vai marcado para o Jurídico validar.",
+   "Não completa dado de cabeça: usa a Receita e o HubSpot.",
+   "Não consulta serviço externo com CNPJ de cliente sem autorização.",
+   "Não mostra data de assinatura exata: o HubSpot não tem o campo."
+  ]
+ },
+ "depto-partner-success": {
+  "quem_usa": "Daniela (Masters) e Luis como patrocinador; Jenifer na trilha dos indicadores novos. O dono do programa ainda será confirmado pelo Luis.",
+  "como_acionar": [
+   "\"Monte o plano 30/60/90 para o indicador novo X\" ou \"quais parceiros estão dormentes e como reativar?\".",
+   "\"Monte a trilha de capacitação da tese Y\" ou de um produto 2027.",
+   "\"Simule os níveis do programa com os dados reais\".",
+   "Revisar o rascunho com a Daniela ou a Jenifer antes de usar."
+  ],
+  "entregas": [
+   {"entrega": "Métricas de Partner Success", "conteudo": "Parceiros ativos, dormentes e em rampa, tempo até o primeiro negócio, concentração do canal e simulação de níveis, com a aba Conferência.", "formato": "xlsx + json", "arquivo": "Metricas-PS-<data>.xlsx", "quando": "segunda 6h (partners segunda) e sob pedido", "quem_recebe": "Luis e Daniela", "onde": "01 · Comercial e Parceiros/Relatórios das áreas"},
+   {"entrega": "Lista de saúde, ativação e churn", "conteudo": "Parceiro × classe (rampa, dormente, travado, risco de churn) × sinal × motivo × pergunta para a conversa × dono do toque.", "formato": "md (1 página)", "arquivo": "departamentos/partner-success/entregas/AAAA-MM-DD-saude-canal/", "quando": "sob pedido", "quem_recebe": "Daniela", "onde": "Mac: departamentos/partner-success/entregas/"},
+   {"entrega": "Plano 30/60/90 e plano de reativação", "conteudo": "Marcos mensuráveis no HubSpot, roteiro dos check-ins D+30, D+60 e D+90, regra de co-venda das duas primeiras indicações e kit de enablement por fase.", "formato": "md", "arquivo": "departamentos/partner-success/entregas/AAAA-MM-DD-onboarding-<parceiro>/", "quando": "sob pedido (parceiro novo ou esfriando)", "quem_recebe": "Daniela ou Jenifer", "onde": "Mac: departamentos/partner-success/entregas/"},
+   {"entrega": "Trilha da Academia de Parceiros", "conteudo": "Módulos por tese e por produto 2027 com objetivo, conteúdo validado, o que não dizer, quiz de 5 a 10 questões com gabarito, roleplay e regras de certificação.", "formato": "md", "arquivo": "departamentos/partner-success/entregas/AAAA-MM-DD-academia-<modulo>/", "quando": "sob pedido", "quem_recebe": "Luis e Daniela", "onde": "Mac: departamentos/partner-success/entregas/"},
+   {"entrega": "Proposta de níveis e jornada", "conteudo": "Critérios por nível (trilha Master e Indicador), simulação com dados reais, matriz de benefícios, carta de nível em rascunho e a lista nível de partida × leitura do trimestre × o que falta.", "formato": "md + aba do Metricas-PS", "arquivo": "documento de regras versionado", "quando": "sob pedido (revisão semestral)", "quem_recebe": "Luis (aprova)", "onde": "01 · Comercial e Parceiros/Programa de Parceiros"},
+   {"entrega": "Calendário de comunidade e eventos", "conteudo": "Conselho de Parceiros, webinars, encontros regionais e anual com objetivo, público, pauta, convite em rascunho, métrica e devolutiva.", "formato": "md", "arquivo": "departamentos/partner-success/entregas/AAAA-MM-DD-comunidade/", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "Mac: departamentos/partner-success/entregas/"},
+   {"entrega": "Plano de reativação nos alertas do dia", "conteudo": "Com o Marketing: motivo provável pelo histórico, oferta ou campanha e mensagem para o Master parado.", "formato": "texto no plano do dia", "arquivo": "registro/analises-<data>.json", "quando": "dias úteis 7h40 (rotina operacao-areas)", "quem_recebe": "Daniela", "onde": "plano do dia da pessoa"},
+   {"entrega": "Radar das áreas comerciais", "conteudo": "Mudanças de mercado para Partner Success, Operações de Canal, Intel Comercial, Marketing, Pós-venda, Pessoas e células, com fonte e data.", "formato": "md", "arquivo": "skills/depto-partner-success/references/radar-mercado.md", "quando": "sexta 7h (rotina radar-mercado)", "quem_recebe": "Luis", "onde": "branch radar/<data> e resumo em 04 · Gestão, Metas e Estratégia/Central de Agentes"}
+  ],
+  "nao_faz": [
+   "Não envia nada a parceiro: tudo é rascunho.",
+   "Não calcula a nota de saúde: ela vem de Dados & BI.",
+   "Não faz ranking de pessoas do time.",
+   "Não promete valor, prazo ou resultado.",
+   "Não calcula nem paga remuneração: é de Operações de Canal."
+  ]
+ },
+ "depto-resultados": {
+  "quem_usa": "Luis recebe o relatório toda segunda; o Conselho usa o one-pager na reunião das 7h30. Resultado do mês ou da semana sai também sob pedido.",
+  "como_acionar": [
+   "Nada a fazer na segunda: o terminal calcula às 6h e o Claude escreve às 6h30 (rotina relatorio-semanal-resultados).",
+   "Fora da rotina: \"gere o relatório de resultados da semana\" ou do mês, com o período.",
+   "Ler primeiro a manchete e as decisões pedidas no último slide.",
+   "Salto estranho nos números: pedir para comparar com a edição anterior."
+  ],
+  "entregas": [
+   {"entrega": "Deck de resultado semanal", "conteudo": "8 slides fixos: capa com manchete e 4 KPIs, confiabilidade dos dados, volume criado × fechado em 13 meses, crescimento, margem, lucro da área e ROI em 3 versões, funil e concentração, destaques, riscos e decisões; lucro e ROI sempre potenciais e antes de impostos.", "formato": "pptx", "arquivo": "Resultado-Semanal-<data>.pptx", "quando": "segunda 6h30", "quem_recebe": "Luis", "onde": "04 · Gestão, Metas e Estratégia/Resultado semanal"},
+   {"entrega": "One-pager de resultados", "conteudo": "Resumo de uma página com a manchete, os números principais, alertas e decisões; entra no dossiê do Conselho.", "formato": "md (publicado como docx)", "arquivo": "Resultado-Semanal-<data>.md", "quando": "segunda 6h30", "quem_recebe": "Luis e Conselho", "onde": "04 · Gestão, Metas e Estratégia/Resultado semanal"},
+   {"entrega": "Métricas da semana", "conteudo": "Números calculados do HubSpot (receita em 4 camadas, forecast, ROI, metas, alertas e pendências de dado) que alimentam o deck e o Conselho.", "formato": "json", "arquivo": "departamentos/resultados/dados/metricas-AAAA-MM-DD.json", "quando": "segunda 6h (partners segunda)", "quem_recebe": "Conselho e áreas", "onde": "Mac: departamentos/resultados/dados/"},
+   {"entrega": "Resumo no chat", "conteudo": "Manchete, os 3 números principais, alertas e decisões pedidas, com os caminhos dos arquivos.", "formato": "texto na conversa", "arquivo": "—", "quando": "a cada relatório", "quem_recebe": "Luis", "onde": "na conversa"},
+   {"entrega": "Relatórios mensais de controladoria", "conteudo": "Ponte de receita (contratado, conservador, reconhecido, recebido, com backlog e aging), forecast com cobertura e acurácia, DRE da área com margem por negócio e metas por produto, Master e mês.", "formato": "xlsx", "arquivo": "Ponte-Receita-AAAA-MM.xlsx; Forecast-AAAA-MM.xlsx; DRE-Area-AAAA-MM.xlsx; Metas-Produto-AAAA-MM.xlsx", "quando": "mensal no método dos especialistas; sem rotina agendada (sob pedido)", "quem_recebe": "Luis", "onde": "Mac: departamentos/resultados/relatorios/"},
+   {"entrega": "ROI e caixa", "conteudo": "ROI em 3 versões trimestral móvel, curva de caixa esperada da carteira ganha e business case de iniciativa nova com payback em 3 cenários.", "formato": "xlsx / md", "arquivo": "ROI-Caixa-AAAA-Tn.xlsx", "quando": "trimestral no método; business case sob pedido", "quem_recebe": "Luis", "onde": "Mac: departamentos/resultados/relatorios/"},
+   {"entrega": "Recomendação de preço e fee", "conteudo": "Por negócio fora da regra: preço pedido, preço da regra, margem estimada, quem aprova e risco; por produto, faixa interna e alçada de desconto.", "formato": "md (1 página)", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "na conversa"}
+  ],
+  "nao_faz": [
+   "Não envia o relatório a ninguém: é rascunho para o Luis.",
+   "Não altera o HubSpot.",
+   "Não trata lucro e ROI como dinheiro recebido: são potenciais, antes de impostos e só com custos da área Partners.",
+   "Não usa número que não esteja nos dados calculados.",
+   "Não conta clientes sem Master nos números e metas da área (D76)."
+  ]
+ },
+ "depto-dados": {
+  "quem_usa": "Luis, para limpar o HubSpot e ver quais parceiros estão esfriando; Daniela, Jenifer e Geovana para levantamentos; as outras áreas usam os dados daqui.",
+  "como_acionar": [
+   "Levantamento: código GE2 no painel, com o critério (filtro, etapa, parceiro, datas).",
+   "\"Rode o painel de qualidade dos dados do HubSpot\".",
+   "\"Mostre o placar de saúde dos parceiros Masters e quais estão esfriando\".",
+   "Saneamento de duplicados: pedir a lista proposta (D87); quem mescla é o time de CRM."
+  ],
+  "entregas": [
+   {"entrega": "Download diário do HubSpot", "conteudo": "Arquivo-fonte do dia, só leitura, com contagens por status e bloco de controle que os outros scripts conferem; no chat, a foto do dia (negócios, ganhos, alertas de extração).", "formato": "json", "arquivo": "departamentos/resultados/dados/hubspot-AAAA-MM-DD.json", "quando": "dias úteis 7h30 (partners manha) e segunda 6h", "quem_recebe": "todas as áreas", "onde": "Mac: departamentos/resultados/dados/"},
+   {"entrega": "Painel de qualidade do CRM e saúde dos parceiros", "conteudo": "Índice de qualidade dos ganhos, os 3 maiores problemas de dado com quantidade e R$, lista de correção com link e placar de saúde de 0 a 100 por parceiro com cor e motivo.", "formato": "xlsx + json", "arquivo": "Dados-BI-<data>.xlsx", "quando": "dias úteis 7h30 (partners manha)", "quem_recebe": "Luis", "onde": "01 · Comercial e Parceiros/Relatórios das áreas"},
+   {"entrega": "Levantamento do HubSpot (GE2)", "conteudo": "Negócios que atendem ao critério pedido, resumo por parceiro e por etapa e o link de cada card.", "formato": "xlsx", "arquivo": "—", "quando": "sob pedido (código GE2)", "quem_recebe": "quem pediu", "onde": "pasta Pedidos da Central de quem pediu"},
+   {"entrega": "Saneamento de ganhos duplicados", "conteudo": "Pares candidatos com ID, link, chave que casou, regra, confiança, card sobrevivente proposto e ação (mesclar, manter, investigar), mais campos faltando e as regras usadas.", "formato": "xlsx", "arquivo": "Saneamento-Ganhos-Duplicados-<data>.xlsx", "quando": "sob pedido (D87)", "quem_recebe": "Luis e time de CRM da Save", "onde": "01 · Comercial e Parceiros/Relatórios das áreas"},
+   {"entrega": "Ganhos a completar", "conteudo": "Ganhos do mês sem % de honorário, % do parceiro ou tese, com link para a Daniela completar (D62).", "formato": "xlsx", "arquivo": "Ganhos-a-completar-<mês>.xlsx", "quando": "sob pedido (mensal)", "quem_recebe": "Daniela", "onde": "Área Partners · Agentes/Central Masters · Daniela"},
+   {"entrega": "Estimativas estatísticas", "conteudo": "Look-alike dos ganhos (taxa de sucesso e honorário esperado dos parecidos), coortes de conversão e ciclo e testes de diferença, com intervalo de 95%, n e leitura em uma frase.", "formato": "tabela", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Luis e áreas que priorizam filas", "onde": "na conversa"},
+   {"entrega": "Dicionário de dados e métricas", "conteudo": "Campos do HubSpot com regra, dono e quando é obrigatório, e glossário de métricas com fórmula, fonte e versão.", "formato": "md", "arquivo": "proposta references/dicionario-dados.md", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "repositório"},
+   {"entrega": "Análise dos alertas de cadastro do dia", "conteudo": "A correção exata do cadastro com o dado oficial da Receita ao lado.", "formato": "texto no plano do dia", "arquivo": "registro/analises-<data>.json", "quando": "dias úteis 7h40 (rotina operacao-areas)", "quem_recebe": "dona do negócio", "onde": "plano do dia da pessoa"}
+  ],
+  "nao_faz": [
+   "Não altera nada no HubSpot: aponta, e quem corrige ou mescla é o time.",
+   "Não faz ranking de pessoas: o placar é de parceiros.",
+   "Não trata a nota de saúde como sentença: é sinal para conversar.",
+   "Não calcula número de cabeça: tudo vem do cálculo automático."
+  ]
+ },
+ "depto-qualidade": {
+  "quem_usa": "Luis e o time. Qualquer pessoa pede a auditoria de um texto antes de enviar; a Daniela recebe a reclamação do Master e dá a primeira resposta. O Luis é o dono e o ouvidor de segunda instância (a confirmar).",
+  "como_acionar": [
+   "\"Qualidade, audite este texto antes de eu enviar ao parceiro\": com um só texto, a entrega vem direto.",
+   "Reclamação: colar a conversa; nomes e telefones são trocados antes da análise.",
+   "Pesquisa, ouvidoria, relatório mensal, incidente, qualidade das entregas dos agentes ou melhoria contínua: dizer o modo e responder \"ok\" ao plano.",
+   "Reclamação grave ou com dado pessoal: o agente para e leva ao Luis no mesmo dia."
+  ],
+  "entregas": [
+   {"entrega": "Auditoria de promessas", "conteudo": "Cada trecho ALTO ou MÉDIO com a regra, o veredito (risco real, falso positivo, termo técnico aceito), a reescrita, a norma e quem aprova, mais uma cópia do texto com as marcações.", "formato": "md", "arquivo": "departamentos/qualidade/auditorias/AAAA-MM-DD-<tema>.md (+ pasta marcados)", "quando": "sob pedido e em todo material externo", "quem_recebe": "quem pediu", "onde": "na conversa; última auditoria de teste em 01 · Comercial e Parceiros/Relatórios das áreas"},
+   {"entrega": "Trava de qualidade dos rascunhos", "conteudo": "Rascunho ao parceiro reprovado pelo auditor é descartado do plano do dia; respostas da Central passam pelo validar_saidas.py antes de sair.", "formato": "automático", "arquivo": "registro/analises-rejeitadas.json", "quando": "dias úteis (operação das áreas e cada rodada da Central)", "quem_recebe": "gerente da área (devolução para corrigir)", "onde": "plano do dia e painel"},
+   {"entrega": "Ficha de reclamação ou incidente", "conteudo": "Tema, etapa, causa e severidade, linha do tempo, contenção, prazos, rascunho do acuse e da resposta, dono humano e ação preventiva.", "formato": "md", "arquivo": "departamentos/qualidade/reclamacoes/AAAA-MM-DD-<id>.md", "quando": "sob pedido, no dia da reclamação", "quem_recebe": "Daniela e Luis", "onde": "Mac: departamentos/qualidade/reclamacoes/ (pasta restrita)"},
+   {"entrega": "Pesquisa de satisfação", "conteudo": "Questionário por momento com base legal, remetente e canal; NPS, CSAT e CES calculados por script com margem de erro, drivers e lista de fechamento do ciclo; abaixo de 10 respostas, não publica número.", "formato": "md", "arquivo": "departamentos/qualidade/questionarios/AAAA-MM-<ciclo>-leitura.md", "quando": "sob pedido (disparo é humano)", "quem_recebe": "Luis", "onde": "Mac: departamentos/qualidade/questionarios/"},
+   {"entrega": "Boletim de qualidade das entregas dos agentes", "conteudo": "Amostra por área, defeitos por tipo, taxa de defeito e de retrabalho, acerto contra o que o humano enviou (D28) e ação corretiva por gerente.", "formato": "md", "arquivo": "departamentos/qualidade/auditorias/AAAA-MM-entregas-agentes.md", "quando": "mensal no método; sob pedido", "quem_recebe": "Luis e gerentes das áreas", "onde": "Mac: departamentos/qualidade/auditorias/"},
+   {"entrega": "Relatório mensal de ocorrências e melhoria", "conteudo": "Pareto de reclamações, % no prazo, reincidência, CSAT do tratamento, auditorias do mês, fichas CAPA e as 3 propostas de melhoria.", "formato": "md", "arquivo": "departamentos/qualidade/capa/AAAA-MM-DD-<id>.md", "quando": "mensal no método; sob pedido", "quem_recebe": "Luis", "onde": "Mac: departamentos/qualidade/"},
+   {"entrega": "Resposta de ouvidoria", "conteudo": "Revisão da primeira resposta, dos fatos e do prazo, com rascunho da resposta de segunda instância.", "formato": "rascunho", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "na conversa"}
+  ],
+  "nao_faz": [
+   "Não dispara pesquisa nem envia mensagem, e não grava no HubSpot ou no GLPI.",
+   "Não promete valor, êxito ou prazo, nem nas respostas a reclamações.",
+   "Não julga colaboradores: reclamação sobre alguém do time vai só ao Luis, com fatos.",
+   "Não entende intenção: o auditor acha palavras e padrões, sempre com leitura humana.",
+   "Não tem série histórica: o GLPI não está em produção e o primeiro ciclo de pesquisa é linha de base."
+  ]
+ },
+ "depto-marketing": {
+  "quem_usa": "Luis e todo o time Partners, para calendário de campanhas, posts, textos para WhatsApp, kit de venda para parceiros, webinar, campanha para contas-alvo e peça visual.",
+  "como_acionar": [
+   "\"Marketing, monte…\" dizendo objetivo, público (parceiros, clientes dos parceiros ou interno), canal, período e prazo.",
+   "Responder \"ok\" ao plano; faltando algo, até 3 perguntas.",
+   "Preencher ou apagar os pontos [A CONFIRMAR] antes de aprovar.",
+   "Padrão de marca: pasta 06 · Marketing e Apresentações/Marca."
+  ],
+  "entregas": [
+   {"entrega": "Painel de janelas de receita", "conteudo": "Uma linha por janela com prazo, dias que faltam, produto ou tese, público, base legal, área, responsável, base da Save por Master, campanha proposta e próximo passo, com os textos auditados.", "formato": "xlsx", "arquivo": "Janelas-de-Receita-<data>.xlsx", "quando": "sob pedido (ao atualizar o janelas.json)", "quem_recebe": "Luis", "onde": "04 · Gestão, Metas e Estratégia/Central de Agentes"},
+   {"entrega": "Plano trimestral de campanhas", "conteudo": "Uma linha por ação com data, campanha, público, canal, gancho fiscal com fonte, peça, dono, meta e status rascunho, mais a página da campanha âncora.", "formato": "xlsx + md", "arquivo": "departamentos/marketing/entregas/AAAA-MM-DD-<tema>/", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "Mac: departamentos/marketing/entregas/"},
+   {"entrega": "Kit de vendas do parceiro", "conteudo": "One-page ao cliente, pitch de 60 segundos, roteiro de diagnóstico, mapa de objeções, documentos do próximo passo, fluxo da operação, \"não diga / diga\", quiz de 10 questões e versões interna e externa.", "formato": "pasta com md/html/pdf", "arquivo": "departamentos/marketing/entregas/AAAA-MM-DD-kit-<produto>/", "quando": "sob pedido", "quem_recebe": "Luis e Daniela", "onde": "Mac: departamentos/marketing/entregas/"},
+   {"entrega": "Peça visual no Design System Save", "conteudo": "Feed, story ou one-page A4, ou pptx/docx pelos geradores oficiais, com PNG/PDF e o briefing visual; versão co-branded com espaço para o logo do parceiro.", "formato": "html/pptx/docx + png/pdf", "arquivo": "departamentos/marketing/entregas/", "quando": "sob pedido", "quem_recebe": "quem pediu", "onde": "Mac: departamentos/marketing/entregas/; marca em 06 · Marketing e Apresentações/Marca"},
+   {"entrega": "Texto por canal", "conteudo": "Texto para WhatsApp, e-mail, post, carrossel, roteiro de vídeo ou artigo, com a tabela afirmação × fonte × validado por e os pontos [A CONFIRMAR], já passado no auditor.", "formato": "md", "arquivo": "departamentos/marketing/entregas/", "quando": "sob pedido", "quem_recebe": "quem pediu", "onde": "na conversa"},
+   {"entrega": "Parecer de conformidade publicitária", "conteudo": "Veredito (aprovado, com ajustes, reprovado), tabela trecho × problema × norma × texto substituto, checagem de marca e o que exige humano; sem parecer, nenhuma peça sai do rascunho.", "formato": "md", "arquivo": "—", "quando": "em toda peça", "quem_recebe": "quem pediu", "onde": "na conversa"},
+   {"entrega": "Plano de conta-alvo (ABM)", "conteudo": "10 a 30 contas por território com sinal de compra, tese provável indicada pelo Tributário, Master dono e conflito checado, mais a sequência por persona em rascunho.", "formato": "xlsx + md", "arquivo": "departamentos/marketing/entregas/", "quando": "sob pedido", "quem_recebe": "Luis e o Master dono (via Daniela)", "onde": "Mac: departamentos/marketing/entregas/"},
+   {"entrega": "Jornal diário", "conteudo": "3 a 8 notícias da Save e do mercado tributário, com cabeçalho de rascunho a revisar antes de distribuir, e a pauta de autoridade da semana.", "formato": "md (html se pedido)", "arquivo": "departamentos/marketing/jornal/AAAA-MM-DD.md", "quando": "sob pedido (não há rotina agendada ativa)", "quem_recebe": "Luis", "onde": "Mac: departamentos/marketing/jornal/"}
+  ],
+  "nao_faz": [
+   "Não publica, não envia, não agenda post e não manda mensagem a ninguém.",
+   "Não inventa números, clientes, cases ou prêmios sobre a Save.",
+   "Não usa outro visual que não o Design System Save, salvo pedido explícito.",
+   "Não afirma tema tributário ou jurídico sem embasamento das áreas.",
+   "Não usa emoji, mascote ou tom de robô."
+  ]
+ },
+ "depto-pessoas": {
+  "quem_usa": "Luis, para metas, feedback, 1:1, PDI, remuneração variável, vagas e clima do time (Daniela, Geovana e Jenifer). Temas confidenciais: nada vai ao time sem decisão dele.",
+  "como_acionar": [
+   "\"Pessoas, prepare o roteiro de um feedback difícil com [função]\".",
+   "Dizer o modo: construir (rascunho novo), validar (você traz o material) ou preparar uma conversa.",
+   "Descrever só fatos observáveis: o que aconteceu, em que situação e qual o efeito.",
+   "Responder \"ok\" ao plano; pedidos vindos do Gabinete já chegam com a rota aprovada."
+  ],
+  "entregas": [
+   {"entrega": "Roteiro de conversa", "conteudo": "Objetivo em uma frase, abertura, fatos com data, perguntas, combinados com prazo, o que evitar dizer e plano B.", "formato": "md", "arquivo": "gabinete/pessoas/AAAA-MM-DD-<tema>.md", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "pasta confidencial gabinete/pessoas/ (no Mac)"},
+   {"entrega": "Metas e régua de avaliação", "conteudo": "Meta da área com fonte, contribuição de cada função, 3 a 5 indicadores por pessoa com fórmula, peso e periodicidade, régua de 4 níveis e roteiro de calibração.", "formato": "md + xlsx", "arquivo": "gabinete/pessoas/", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "pasta confidencial gabinete/pessoas/"},
+   {"entrega": "PDI e trilha técnica", "conteudo": "Trilha por função com módulos, exercício com caso anonimizado e quiz; PDI com 3 a 5 ações, prazo, apoio do Luis e indicador de comportamento.", "formato": "md", "arquivo": "gabinete/pessoas/", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "pasta confidencial gabinete/pessoas/"},
+   {"entrega": "Plano de remuneração variável", "conteudo": "Elegíveis por função, natureza de cada verba e risco, indicadores, curva, custo em 3 cenários, teste de isonomia e o que exige decisão do Luis, do RH e do Jurídico trabalhista.", "formato": "md + xlsx", "arquivo": "gabinete/pessoas/", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "pasta confidencial gabinete/pessoas/"},
+   {"entrega": "Pacote de vaga ou cargo", "conteudo": "Missão, resultados em 6 e 12 meses, responsabilidades, competências, requisitos, faixa salarial com fonte, anúncio, roteiro de entrevista, teste prático e plano 30-60-90.", "formato": "md", "arquivo": "gabinete/pessoas/", "quando": "sob pedido", "quem_recebe": "Luis (RH formal oficializa)", "onde": "pasta confidencial gabinete/pessoas/"},
+   {"entrega": "Validação de material do Luis", "conteudo": "Cada ponto marcado como ok, ajustar ou risco, com sugestão de texto.", "formato": "texto na conversa", "arquivo": "—", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "na conversa"},
+   {"entrega": "Checagem do Guardião CLT e LGPD", "conteudo": "Bloco anexo a toda entrega: fato observável, critério igual, natureza da verba, dado sensível, decisão humana e escalonamento; e o painel agregado de pessoas sem ranking.", "formato": "bloco na entrega", "arquivo": "—", "quando": "em toda entrega; painel mensal no método", "quem_recebe": "Luis", "onde": "dentro da entrega"}
+  ],
+  "nao_faz": [
+   "Não decide nota, promoção, bônus nem desligamento.",
+   "Não manda nada ao time: tudo passa pela decisão do Luis.",
+   "Não rotula personalidade nem usa dado sensível ou de vida pessoal.",
+   "Em desligamento, advertência, assédio, mudança de salário ou cargo, afastamento: só prepara a pauta para o RH formal e o Jurídico.",
+   "Não guarda material em pasta compartilhada."
+  ]
+ },
+ "depto-ti": {
+  "quem_usa": "Luis, principalmente, para levar pedidos ao TI da Save (ex.: liberação do Graph e do GLPI). Geovana e Daniela podem pedir ajustes de categoria e fila do GLPI.",
+  "como_acionar": [
+   "\"TI, redija o chamado para…\" dizendo o tipo: GLPI, integração, automação, segurança e acessos, governança de IA ou LGPD técnica.",
+   "Responder \"ok\" ao plano; a entrega termina com o que o TI decide e o que o Luis decide.",
+   "Para ver se tudo funciona: o Luis roda o teste de fumaça (partners teste) no Terminal; não envia nada.",
+   "Agente novo criado ou ativado: pedir o registro no inventário e a ficha de avaliação."
+  ],
+  "entregas": [
+   {"entrega": "Rascunho de chamado ao TI", "conteudo": "Escopo, motivo, volume afetado, menor privilégio e como revogar; quem abre é o Luis.", "formato": "md", "arquivo": "departamentos/ti/chamados-rascunho.md", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "01 · Comercial e Parceiros/Relatórios das áreas"},
+   {"entrega": "Especificação de integração", "conteudo": "Objetivo, fluxo com portão humano, sistemas e endpoints, credencial (tipo, escopo, dono, rotação, revogação), dados e classificação, limites de API, teste de aceite e plano de desligar.", "formato": "md (1 página)", "arquivo": "departamentos/ti/entregas/AAAA-MM-DD-<tema>.md", "quando": "sob pedido", "quem_recebe": "Luis e TI da Save", "onde": "Mac: departamentos/ti/entregas/ (integrações Microsoft e WhatsApp publicadas em Relatórios das áreas)"},
+   {"entrega": "GLPI pronto para agente", "conteudo": "Categorias, campos, filas, SLA e regras propostas, com o impacto nos agentes e na célula da Daniela e o teste de aceite.", "formato": "xlsx + md", "arquivo": "GLPI-pronto-para-agente.xlsx", "quando": "sob pedido", "quem_recebe": "Luis e TI da Save", "onde": "01 · Comercial e Parceiros/Relatórios das áreas"},
+   {"entrega": "Inventário e governança de IA", "conteudo": "Por agente: finalidade, dados e classe, sistemas, gatilho, autonomia, portão humano, dono, riscos e status, mais a ficha de avaliação antes do uso real.", "formato": "md", "arquivo": "departamentos/ti/inventario-agentes.md", "quando": "a cada agente, script ou rotina nova; revisão trimestral", "quem_recebe": "Luis", "onde": "Mac: departamentos/ti/"},
+   {"entrega": "Ficha de incidente", "conteudo": "Detecção, severidade, linha do tempo, dado afetado, impacto, contenção, causa-raiz, correção e regra nova; com dado pessoal, insumo para o Jurídico decidir a comunicação à ANPD.", "formato": "md", "arquivo": "departamentos/ti/entregas/ + seção G do inventário", "quando": "a cada incidente", "quem_recebe": "Luis", "onde": "Mac: departamentos/ti/"},
+   {"entrega": "Nota de segurança e acesso", "conteudo": "Exposição medida, classificação do dado, controles existentes e faltantes, risco, papéis propostos e o rascunho do chamado.", "formato": "md", "arquivo": "departamentos/ti/entregas/", "quando": "sob pedido", "quem_recebe": "Luis e TI da Save", "onde": "Mac: departamentos/ti/entregas/"},
+   {"entrega": "Mapa de rotinas, continuidade e custos", "conteudo": "Cada rotina com horário, dependências, dono, alerta de falha e como desligar, RTO e RPO, teste de restauração do backup e custo e uso de limite por serviço, como proposta.", "formato": "md", "arquivo": "departamentos/ti/entregas/", "quando": "sob pedido", "quem_recebe": "Luis", "onde": "Mac: departamentos/ti/entregas/"},
+   {"entrega": "Aviso de falha de rotina", "conteudo": "Nome da rotina, últimas linhas do log e o comando para ver tudo; as etapas que dependem dela são puladas para não usar dado velho.", "formato": "e-mail (hoje página na Caixa de saída) + notificação do macOS", "arquivo": "logs/ALERTAS-PENDENTES.txt", "quando": "na falha, uma vez por rotina por dia", "quem_recebe": "Luis", "onde": "04 · Gestão, Metas e Estratégia/Central de Agentes/Caixa de saída (e-mail pausado) e Mac (logs/)"}
+  ],
+  "nao_faz": [
+   "Não altera nenhum sistema (HubSpot, GLPI, Outlook, Microsoft 365, WhatsApp ou tarefas agendadas).",
+   "Não abre chamado nem envia e-mail sozinho.",
+   "Não lê nem pede senhas, tokens ou chaves.",
+   "Não cria automação ou rotina agendada: propõe, e o Luis decide.",
+   "Não altera agentes de outros departamentos."
+  ]
+ }
+}
