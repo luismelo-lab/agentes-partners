@@ -14,7 +14,7 @@ A pasta de estado (CENTRAL_ESTEIRA) viaja pelo SharePoint com lib/estado.py; nun
 
 Uso:  esteira.py fila | status --id E-0001 | publicar --id E-0001 --arquivo resultado.json | aprovar --id E-0001 --quem "Nome"
 """
-import argparse, fcntl, hashlib, json, os, re, shutil, subprocess, sys, tempfile, time
+import argparse, fcntl, hashlib, json, logging, os, re, shutil, subprocess, sys, tempfile, time
 from pathlib import Path
 
 sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
@@ -22,6 +22,8 @@ from cnpj import cnpj_valido, completar_cnpj  # noqa: E402
 from . import dossie as DS  # noqa: E402
 from . import dossie_base as DB  # noqa: E402
 from . import negocio_ativo as NA  # noqa: E402
+
+log = logging.getLogger("central_api.esteira")
 
 DIR = NA.DIR
 RAIZ_REPO = Path(__file__).resolve().parents[3]
@@ -153,9 +155,11 @@ def solicitar(cnpj, parceiro, consulta=None):
         raise Recusa("Parceiro não identificado.")
     ativo = NA.tem_negocio_ativo(c)
     if ativo is None:
-        raise Recusa("Não foi possível conferir a base agora. Tente de novo mais tarde.")
+        log.info("pedido recusado: motivo=indice_ausente")
+        raise Recusa(NA.MSG_NEUTRA)
     if ativo:
-        raise Recusa("Empresa com negócio ativo na base Save Company.")
+        log.info("pedido recusado: motivo=negocio_ativo")
+        raise Recusa(NA.MSG_NEUTRA)
     corte = _corte(REUSO_DIAS)
     consulta = consulta if isinstance(consulta, dict) else {}
     with _trava():

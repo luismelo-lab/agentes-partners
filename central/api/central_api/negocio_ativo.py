@@ -26,6 +26,7 @@ DIR = os.path.expanduser(os.environ.get("CENTRAL_ESTEIRA", "~/agentes-partners/c
 INDICE = os.path.join(DIR, "indice-negocios-ativos.json")
 STATUS_ATIVOS = {"aberto", "ganho"}
 STATUS_CONHECIDOS = STATUS_ATIVOS | {"perdido"}
+MSG_NEUTRA = "Não foi possível seguir com esta consulta. Fale com a Área Partners."  # única resposta para negócio ativo, índice ausente e tetos
 IDADE_MAX_DIAS = 3
 _cache = {"mtime": None, "chaves": None, "sal_id": None}
 

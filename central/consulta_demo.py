@@ -55,14 +55,15 @@ def lote(corpo):
     novas = [c for c in cnpjs if not guardadas.get(c)]
     ok, usadas, limite = regime.registrar_uso(USUARIO, len(novas))
     if not ok:
-        return 429, {"erro": "Limite diário de %d consultas atingido (%d usadas)." % (limite, usadas)}
+        regime.auditar(USUARIO, [regime.neutra(c, "teto_diario") for c in novas])
+        return 429, {"erro": regime.MSG_NEUTRA}
     vivas = iter(regime.consultar_lote(novas, fat))
     res = [guardadas.get(c) or next(vivas) for c in cnpjs]
     regime.auditar(USUARIO, [r for c, r in zip(cnpjs, res) if c in novas])  # inclui os acertos de negócio ativo
     for c, r in zip(cnpjs, res):
         if c in novas:  # guardada não é regravada: senão o prazo de 7 dias nunca vence
             esteira.registrar_consulta(USUARIO, r)
-    return 200, {"resultados": regime.limitar_ativos(USUARIO, res), "usadas": usadas, "limite": limite}
+    return 200, {"resultados": [regime.publico(r) for r in regime.limitar_ativos(USUARIO, res)], "usadas": usadas, "limite": limite}
 
 
 def pedir_esteira(corpo):
@@ -73,7 +74,8 @@ def pedir_esteira(corpo):
     if not r:
         ok, usadas, limite = regime.registrar_uso(USUARIO, 1)  # consulta nova às APIs conta no teto diário e na trilha, como no lote
         if not ok:
-            return 429, {"erro": "Limite diário de %d consultas atingido (%d usadas)." % (limite, usadas)}
+            regime.auditar(USUARIO, [regime.neutra(str(cnpj), "teto_diario")])
+            return 429, {"erro": regime.MSG_NEUTRA}
         r = regime.consultar(cnpj)
         regime.auditar(USUARIO, [r])
         esteira.registrar_consulta(USUARIO, r)

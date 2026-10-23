@@ -35,10 +35,10 @@ class Esteira(unittest.TestCase):
         E.DIR, NA.DIR, NA.INDICE, NA._carregar = self.antes; self.tmp.cleanup(); os.environ.pop("CENTRAL_APROVACAO", None)
 
     def test_recusa_cliente_invalido_e_sem_indice(self):
-        with self.assertRaisesRegex(E.Recusa, "negócio ativo"): E.solicitar(CLIENTE, "demo")
+        with self.assertRaisesRegex(E.Recusa, "Fale com a Área Partners"): E.solicitar(CLIENTE, "demo")
         with self.assertRaisesRegex(E.Recusa, "inválido"): E.solicitar("123", "demo")
         NA._carregar = lambda: None
-        with self.assertRaisesRegex(E.Recusa, "conferir a base"): E.solicitar(NOVO, "demo")
+        with self.assertRaisesRegex(E.Recusa, "Fale com a Área Partners"): E.solicitar(NOVO, "demo")
 
     def test_um_pedido_aberto_por_parceiro_e_empresa(self):
         a = E.solicitar(NOVO, "p1"); b = E.solicitar(NOVO, "p1"); c = E.solicitar(NOVO, "p2")

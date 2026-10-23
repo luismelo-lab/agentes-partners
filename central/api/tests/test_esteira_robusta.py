@@ -407,22 +407,24 @@ class Regime(Base):
         finally:
             R.LIMITE_DIA = antes
 
-    def test_teto_de_negocio_ativo_vira_mensagem_neutra(self):
+    def test_acertos_acima_do_teto_alertam_no_log_sem_mudar_a_resposta(self):
         antes = R.LIMITE_ATIVO; R.LIMITE_ATIVO = 2
         try:
             r = [R.consultar(CLIENTE) for _ in range(4)]
-            out = R.limitar_ativos("u", r)
-            self.assertEqual([x["faixa"] for x in out], ["negocio_ativo", "negocio_ativo", "indisponivel", "indisponivel"])
-            self.assertEqual(out[2]["titulo"], R.MSG_NEUTRA); self.assertNotIn("negócio", out[2]["titulo"].lower())
-            self.assertEqual(R.limitar_ativos("outro", r[:1])[0]["faixa"], "negocio_ativo")  # por usuário
-            self.assertEqual(R.limitar_ativos("u", [dict(r[0], faixa="confirmado_real")])[0]["faixa"], "confirmado_real")  # só conta o acerto de cliente
+            with self.assertLogs("central_api.regime", "WARNING"):
+                out = R.limitar_ativos("u", r)
+            self.assertEqual([x["_motivo"] for x in out], ["negocio_ativo", "negocio_ativo", "negocio_ativo_acima_do_teto", "negocio_ativo_acima_do_teto"])
+            self.assertEqual({x["titulo"] for x in out}, {R.MSG_NEUTRA})  # a mensagem é a mesma do primeiro ao último acerto
+            self.assertEqual(R.limitar_ativos("outro", [R.consultar(CLIENTE)])[0]["_motivo"], "negocio_ativo")  # por usuário
+            self.assertNotIn("_motivo", R.limitar_ativos("u", [R.publico(dict(r[0], faixa="confirmado_real"))])[0])  # só conta o acerto de cliente
         finally:
             R.LIMITE_ATIVO = antes
 
     def test_auditar_cria_a_pasta_e_registra_negocio_ativo(self):
         R.auditar("u", [R.consultar(CLIENTE), {"cnpj": NOVO, "faixa": "confirmado_real"}])
         arq = os.path.join(R.BASE, "consultas-regime.jsonl")
-        self.assertEqual([json.loads(l)["faixa"] for l in Path(arq).read_text().splitlines()], ["negocio_ativo", "confirmado_real"])
+        linhas = [json.loads(l) for l in Path(arq).read_text().splitlines()]
+        self.assertEqual([(x["faixa"], x.get("motivo")) for x in linhas], [("indisponivel", "negocio_ativo"), ("confirmado_real", None)])  # o motivo real fica na trilha
         self.assertEqual(os.stat(arq).st_mode & 0o777, 0o600)
 
 
@@ -498,7 +500,8 @@ class Demo(Base):
             self.assertEqual(self.post("/api/esteira", {"cnpj": c1})[0], 200); self.assertEqual(self.post("/api/esteira", {"cnpj": c2})[0], 200)
             self.assertEqual(self.post("/api/esteira", {"cnpj": c3})[0], 429)
             self.assertEqual(self.post("/api/esteira", {"cnpj": c1})[0], 200)  # guardada: não gasta teto
-            self.assertEqual(len(Path(R.BASE, "consultas-regime.jsonl").read_text().splitlines()), 2)
+            trilha = [json.loads(l) for l in Path(R.BASE, "consultas-regime.jsonl").read_text().splitlines()]
+            self.assertEqual(len(trilha), 3); self.assertEqual(trilha[-1].get("motivo"), "teto_diario")  # 2 consultas novas e o registro do teto
         finally:
             R.LIMITE_DIA = antes
 
@@ -506,15 +509,25 @@ class Demo(Base):
         R._http = lambda url: (404, None); self.assertEqual(self.post("/api/esteira", {"cnpj": NOVO})[0], 400)
         self.assertEqual(self.post("/api/esteira", {"cnpj": CLIENTE})[0], 400)
 
-    def test_acertos_de_cliente_passado_o_teto_viram_mensagem_neutra(self):
-        antes = R.LIMITE_ATIVO; R.LIMITE_ATIVO = 1
+    def test_cliente_recebe_sempre_a_mensagem_neutra_e_a_trilha_guarda_o_motivo(self):
+        a = self.post("/api/regime", {"cnpjs": [CLIENTE]})[1]["resultados"][0]; b = self.post("/api/regime", {"cnpjs": [CLIENTE]})[1]["resultados"][0]
+        self.assertEqual((a["faixa"], a["titulo"], b["titulo"]), ("indisponivel", R.MSG_NEUTRA, R.MSG_NEUTRA))
+        self.assertFalse([k for k in a if k.startswith("_")]); self.assertNotIn("motivo", a)  # nada interno na resposta
+        st, r = self.post("/api/esteira", {"cnpj": CLIENTE}); self.assertEqual((st, r["erro"]), (400, R.MSG_NEUTRA))
+        trilha = [json.loads(l) for l in Path(R.BASE, "consultas-regime.jsonl").read_text().splitlines()]
+        self.assertEqual([x.get("motivo") for x in trilha if x["faixa"] == "indisponivel"], ["negocio_ativo"] * 3)  # a trilha guarda o motivo real
+
+    def test_teto_diario_responde_a_mensagem_neutra_e_registra_o_motivo(self):
+        antes = R.LIMITE_DIA; R.LIMITE_DIA = 1
         try:
-            a = self.post("/api/regime", {"cnpjs": [CLIENTE]})[1]["resultados"][0]; b = self.post("/api/regime", {"cnpjs": [CLIENTE]})[1]["resultados"][0]
-            self.assertEqual((a["faixa"], b["faixa"], b["titulo"]), ("negocio_ativo", "indisponivel", R.MSG_NEUTRA))
-            st, r = self.post("/api/esteira", {"cnpj": CLIENTE}); self.assertEqual((st, r["erro"]), (400, R.MSG_NEUTRA))
-            self.assertEqual(sum('"negocio_ativo"' in l for l in Path(R.BASE, "consultas-regime.jsonl").read_text().splitlines()), 3)  # a trilha guarda o acerto real
+            mais = [cnpj("%08d" % (82000000 + i)) for i in range(2)]
+            self.assertEqual(self.post("/api/regime", {"cnpjs": mais[:1]})[0], 200)
+            st, r = self.post("/api/regime", {"cnpjs": mais[1:]}); self.assertEqual((st, r["erro"]), (429, R.MSG_NEUTRA))
+            st, r = self.post("/api/esteira", {"cnpj": mais[1]}); self.assertEqual((st, r["erro"]), (429, R.MSG_NEUTRA))
+            trilha = [json.loads(l) for l in Path(R.BASE, "consultas-regime.jsonl").read_text().splitlines()]
+            self.assertEqual([x.get("motivo") for x in trilha if x["faixa"] == "indisponivel"], ["teto_diario", "teto_diario"])
         finally:
-            R.LIMITE_ATIVO = antes
+            R.LIMITE_DIA = antes
 
     def test_faturamento_como_numero_e_texto(self):
         self.assertEqual(D.numero("90.000.000,50"), 90000000.5); self.assertEqual(D.numero(90000000.5), 90000000.5); self.assertEqual(D.numero(78000000), 78000000)

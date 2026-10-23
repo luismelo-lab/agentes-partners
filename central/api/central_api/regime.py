@@ -11,9 +11,10 @@ ATENÇÃO: cada consulta envia o CNPJ a um serviço de terceiros. Só liga com C
 padrão, local). No piloto, depende do ok do Jurídico e da TI. Sem contrato nem SLA nas duas fontes.
 
 Faixas: negocio_ativo | confirmado_real | provavel_real | nao_real | sem_dado | indisponivel | invalido.
-A 1ª checagem é a base Save Company (negocio_ativo.py): empresa com negócio ativo não segue para as APIs.
+A 1ª checagem é a base Save Company (negocio_ativo.py): empresa com negócio ativo não segue para as APIs. Negócio ativo,
+índice ausente e tetos devolvem a MESMA mensagem neutra (faixa indisponivel); o motivo real só vai para o log e a trilha.
 """
-import json, math, os, subprocess, sys, threading, time
+import json, logging, math, os, subprocess, sys, threading, time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 
@@ -21,11 +22,13 @@ sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
 from cnpj import cnpj_valido, completar_cnpj  # noqa: E402
 from . import negocio_ativo  # noqa: E402
 
+log = logging.getLogger("central_api.regime")
+
 BASE = os.path.expanduser(os.environ.get("CENTRAL_RECEITA", "~/agentes-partners/dados-publicos/receita"))  # só a trilha de auditoria
 LIMITE_LOTE = 20
 LIMITE_DIA = int(os.environ.get("CENTRAL_LIMITE_DIA", "200"))
 LIMITE_ATIVO = int(os.environ.get("CENTRAL_LIMITE_ATIVO", "10"))  # acertos "negócio ativo" por usuário por dia (anti-enumeração da base)
-MSG_NEUTRA = "Não foi possível seguir com esta consulta. Fale com a Área Partners."
+MSG_NEUTRA = negocio_ativo.MSG_NEUTRA
 MAX_BYTES = 2_000_000     # resposta maior que isto é descartada (as APIs devolvem poucos KB)
 MEMORIA_MAX = 2000
 TETO_PRESUMIDO = 78_000_000  # Lei 9.718/1998, art. 13 e art. 14, I
@@ -129,6 +132,18 @@ def _perfil(d):
             "matriz": str(d.get("identificador_matriz_filial")) == "1", "ecf": ecf}
 
 
+def neutra(cnpj, motivo):
+    """Resposta única para negócio ativo, índice ausente e tetos: o parceiro não distingue um do outro. O motivo real
+    fica em `_motivo` (só para o log e a trilha; `publico` o retira antes de qualquer resposta)."""
+    log.info("consulta neutra: motivo=%s", motivo)
+    return {"cnpj": cnpj, "faixa": "indisponivel", "titulo": MSG_NEUTRA, "detalhe": "", "fonte": None, "ano_base": None, "empresa": None, "_motivo": motivo}
+
+
+def publico(r):
+    """O resultado sem campos internos (chaves que começam com _)."""
+    return {k: v for k, v in r.items() if not str(k).startswith("_")}
+
+
 def consultar(entrada, faturamento=None):
     cnpj = completar_cnpj(str(entrada or ""))
     saida = {"cnpj": cnpj, "faixa": "invalido", "titulo": "CNPJ inválido", "fonte": None, "ano_base": None, "empresa": None}
@@ -137,12 +152,9 @@ def consultar(entrada, faturamento=None):
         return saida
     ativo = negocio_ativo.tem_negocio_ativo(cnpj)  # 1ª checagem: cliente Save nunca é enviado a serviço externo
     if ativo is None:
-        saida.update(faixa="indisponivel", titulo="Consulta indisponível agora", detalhe="Não foi possível conferir a base Save Company. Tente de novo mais tarde.")
-        return saida
+        return neutra(cnpj, "indice_ausente")
     if ativo:
-        saida.update(faixa="negocio_ativo", titulo="Empresa com negócio ativo na base Save Company", fonte="Base Save Company",
-                     detalhe="Esta empresa já tem um negócio em andamento ou concluído com a Save. Não é preciso consultar o regime. Em caso de dúvida, fale com a Área Partners.")
-        return saida
+        return neutra(cnpj, "negocio_ativo")
     if os.environ.get("CENTRAL_API_EXTERNA", "1") != "1":
         saida.update(faixa="indisponivel", titulo="Consulta externa desligada", detalhe="A consulta a APIs externas está desligada neste ambiente.")
         return saida
@@ -208,27 +220,27 @@ def registrar_uso(usuario, qtd):
 
 
 def limitar_ativos(usuario, resultados):
-    """Anti-enumeração: cada acerto 'negocio_ativo' do usuário no dia conta; passado CENTRAL_LIMITE_ATIVO, o acerto vira a
-    mensagem neutra (não revela que a empresa é da base). Até o teto, vale a mensagem explícita. Devolve nova lista."""
+    """Anti-enumeração: conta os acertos 'negocio_ativo' do usuário no dia. A resposta já é neutra desde o primeiro acerto;
+    passado CENTRAL_LIMITE_ATIVO o motivo interno vira 'negocio_ativo_acima_do_teto' e sai um alerta no log (possível
+    varredura da carteira). Devolve a mesma lista."""
     hoje = date.today().isoformat()
-    out = []
     with _lock:
         for k in [k for k in _ativos if k[1] != hoje]:
             del _ativos[k]
         for r in resultados:
-            if r.get("faixa") == "negocio_ativo":
+            if r.get("_motivo") == "negocio_ativo":
                 _ativos[(usuario, hoje)] = _ativos.get((usuario, hoje), 0) + 1
                 if _ativos[(usuario, hoje)] > LIMITE_ATIVO:
-                    r = {"cnpj": r["cnpj"], "faixa": "indisponivel", "titulo": MSG_NEUTRA, "detalhe": "", "fonte": None, "ano_base": None, "empresa": None}
-            out.append(r)
-    return out
+                    r["_motivo"] = "negocio_ativo_acima_do_teto"
+                    log.warning("acertos de negócio ativo acima do teto (%d/dia): possível varredura da carteira", LIMITE_ATIVO)
+    return resultados
 
 
 def auditar(usuario, resultados, arquivo=None):
     """Quem consultou, o quê e quando (inclui os acertos de negócio ativo). Fica em dados-publicos (fora do git), 600."""
     arq = arquivo or os.path.join(BASE, "consultas-regime.jsonl")
     os.makedirs(os.path.dirname(arq) or ".", exist_ok=True)
-    linhas = "".join(json.dumps({"quando": time.strftime("%Y-%m-%dT%H:%M:%S"), "usuario": usuario, "cnpj": r["cnpj"], "faixa": r["faixa"]}, ensure_ascii=False) + "\n" for r in resultados)
+    linhas = "".join(json.dumps({"quando": time.strftime("%Y-%m-%dT%H:%M:%S"), "usuario": usuario, "cnpj": r["cnpj"], "faixa": r["faixa"], **({"motivo": r["_motivo"]} if r.get("_motivo") else {})}, ensure_ascii=False) + "\n" for r in resultados)
     fd = os.open(arq, os.O_WRONLY | os.O_APPEND | os.O_CREAT, 0o600)
     with os.fdopen(fd, "a", encoding="utf-8") as f:
         f.write(linhas)  # uma escrita só: linhas de consultas simultâneas não se misturam

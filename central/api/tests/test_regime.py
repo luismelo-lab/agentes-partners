@@ -91,14 +91,22 @@ class Regime(unittest.TestCase):
         self.assertEqual(pf["razao"], "EMPRESA REAL"); self.assertEqual(pf["ecf"][-1], {"ano": ANO, "forma": "LUCRO REAL"})
         self.assertNotIn("FULANO", json.dumps(pf)); self.assertNotIn("EMAIL-DE-TESTE-NAO-COPIAR", json.dumps(pf)); self.assertNotIn("3100000000", json.dumps(pf))
 
-    def test_cliente_save_para_na_primeira_checagem_sem_chamar_api(self):
-        r = R.consultar(CLIENTE); self.assertEqual((r["faixa"], r["titulo"]), ("negocio_ativo", "Empresa com negócio ativo na base Save Company")); self.assertEqual(chamadas, [])
+    def test_cliente_save_recebe_a_mensagem_neutra_sem_chamar_api(self):
+        r = R.consultar(CLIENTE)
+        self.assertEqual((r["faixa"], r["titulo"], r["empresa"], r["detalhe"]), ("indisponivel", "Não foi possível seguir com esta consulta. Fale com a Área Partners.", None, ""))
+        self.assertEqual(r["_motivo"], "negocio_ativo"); self.assertEqual(chamadas, [])
 
     def test_filial_de_cliente_tambem_e_cliente(self):
-        self.assertEqual(R.consultar(cnpj("99999999", "0002"))["faixa"], "negocio_ativo")
+        self.assertEqual(R.consultar(cnpj("99999999", "0002"))["_motivo"], "negocio_ativo")
 
     def test_sem_indice_falha_fechada_sem_chamar_api(self):
-        NA._carregar = lambda: None; r = R.consultar(REAL); self.assertEqual(r["faixa"], "indisponivel"); self.assertEqual(chamadas, [])
+        NA._carregar = lambda: None; r = R.consultar(REAL)
+        self.assertEqual((r["faixa"], r["titulo"], r["_motivo"]), ("indisponivel", R.MSG_NEUTRA, "indice_ausente")); self.assertEqual(chamadas, [])
+
+    def test_cliente_e_indice_ausente_sao_indistinguiveis_para_o_parceiro(self):
+        a = R.publico(R.consultar(CLIENTE)); NA._carregar = lambda: None; b = R.publico(R.consultar(REAL))
+        a.pop("cnpj"); b.pop("cnpj"); self.assertEqual(a, b); self.assertFalse([k for k in R.consultar(CLIENTE) if k.startswith("_") and k in a])
+
 
     def test_invalido_nao_chama_api(self):
         self.assertEqual(R.consultar("12345")["faixa"], "invalido"); self.assertEqual(chamadas, [])
