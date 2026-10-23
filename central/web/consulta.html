@@ -19,15 +19,22 @@
 
     <section class="cartao bloco">
       <h2>Consulta de regime tributário</h2>
-      <p class="apoio">Veja se a empresa está no Lucro Real. Informe um CNPJ ou cole uma lista (até 20, um por linha).</p>
+      <p class="apoio">Veja se a empresa está no Lucro Real e receba o dossiê com a análise da Save.</p>
       <form id="form" novalidate>
-        <label for="cnpjs">CNPJ</label>
-        <textarea id="cnpjs" rows="3" placeholder="00.000.000/0001-00" autocomplete="off" spellcheck="false"></textarea>
-        <div id="campo-fat">
+        <div id="modo-um">
+          <label for="cnpj">CNPJ</label>
+          <input id="cnpj" class="campo-cnpj" inputmode="text" maxlength="18" size="18" placeholder="00.000.000/0001-00" autocomplete="off" spellcheck="false">
           <label for="fat">Faturamento anual, se você souber (opcional, R$)</label>
-          <input id="fat" inputmode="decimal" placeholder="Ex.: 95.000.000" autocomplete="off">
+          <input id="fat" class="campo-fat" inputmode="decimal" placeholder="95.000.000" autocomplete="off">
         </div>
-        <button class="botao" type="submit" id="enviar">Consultar</button>
+        <div id="modo-varios" hidden>
+          <label for="cnpjs">CNPJs, um por linha (até 20)</label>
+          <textarea id="cnpjs" class="campo-lista" rows="6" cols="22" spellcheck="false" autocomplete="off"></textarea>
+        </div>
+        <div class="acoes">
+          <button class="botao" type="submit" id="enviar">Consultar</button>
+          <button class="link" type="button" id="alternar">Consultar várias de uma vez</button>
+        </div>
       </form>
       <p id="erro" class="erro-msg" role="alert" hidden></p>
     </section>
@@ -39,6 +46,11 @@
       </div>
       <div id="lista"></div>
       <p id="uso" class="apoio"></p>
+    </section>
+
+    <section id="historico" class="bloco" hidden>
+      <h3>Últimas empresas</h3>
+      <div id="historico-lista"></div>
     </section>
 
     <footer class="rodape">

@@ -14,16 +14,20 @@ A pasta de estado (CENTRAL_ESTEIRA) viaja pelo SharePoint com lib/estado.py; nun
 
 Uso:  esteira.py fila | status --id E-0001 | publicar --id E-0001 --arquivo resultado.json | aprovar --id E-0001 --quem "Nome"
 """
-import argparse, fcntl, json, os, shutil, subprocess, sys, tempfile, time
+import argparse, fcntl, hashlib, json, os, shutil, subprocess, sys, tempfile, time
 from pathlib import Path
 
 sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
 from cnpj import cnpj_valido, normalizar_cnpj  # noqa: E402
 from . import dossie as DS  # noqa: E402
+from . import dossie_base as DB  # noqa: E402
 from . import negocio_ativo as NA  # noqa: E402
 
 DIR = NA.DIR
 RAIZ_REPO = Path(__file__).resolve().parents[3]
+REUSO_DIAS = 30           # pedido entregue há menos disso é reaproveitado (não refaz a mesma empresa)
+CONSULTA_VALE_DIAS = 7    # consulta guardada vale este tempo sem nova chamada às APIs
+HISTORICO_MAX = 30
 BLOCOS = ("fazer", "precisa", "falta")
 ABERTOS = ("recebida", "aguardando_aprovacao", "revisao_humana")
 ROTULO = {"recebida": "Em análise pelos agentes", "aguardando_aprovacao": "Em revisão final", "revisao_humana": "Em revisão final",
@@ -66,7 +70,13 @@ def _todos():
     return [p for p in (_ler(n[:-5]) for n in sorted(os.listdir(pasta)) if n.endswith(".json")) if p] if os.path.isdir(pasta) else []
 
 
+def _agora():
+    return time.strftime("%Y-%m-%dT%H:%M:%S")
+
+
 def solicitar(cnpj, parceiro, consulta=None):
+    """Cria o pedido e já entrega o dossiê-base (milissegundos). Os agentes aprofundam depois (enriquecer).
+    Reaproveita o pedido aberto, ou o entregue há menos de REUSO_DIAS, da mesma empresa e do mesmo parceiro."""
     c = normalizar_cnpj(cnpj)
     if not cnpj_valido(c):
         raise Recusa("CNPJ inválido.")
@@ -75,25 +85,79 @@ def solicitar(cnpj, parceiro, consulta=None):
         raise Recusa("Não foi possível conferir a base agora. Tente de novo mais tarde.")
     if ativo:
         raise Recusa("Empresa com negócio ativo na base Save Company.")
+    corte = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(time.time() - REUSO_DIAS * 86400))
     with _trava():
-        for p in _todos():  # um pedido aberto por parceiro e empresa
-            if p["cnpj"] == c and p["parceiro"] == parceiro and p["status"] in ABERTOS:
+        todos = _todos()
+        for p in todos:
+            if p["cnpj"] == c and p["parceiro"] == parceiro and (p["status"] in ABERTOS or (p["status"] == "entregue" and p["criado"] >= corte)):
                 return p
-        n = 1 + max([int(p["id"][2:]) for p in _todos()] or [0])
-        p = {"id": "E-%04d" % n, "cnpj": c, "parceiro": parceiro, "criado": time.strftime("%Y-%m-%dT%H:%M:%S"), "status": "recebida",
+        n = 1 + max([int(p["id"][2:]) for p in todos] or [0])
+        p = {"id": "E-%04d" % n, "cnpj": c, "parceiro": parceiro, "criado": _agora(), "status": "recebida", "nivel": None,
+             "enriquecer": "pendente" if os.environ.get("CENTRAL_ENRIQUECER", "1") == "1" else "nao",
              "consulta": {k: (consulta or {}).get(k) for k in ("faixa", "titulo", "ano_base", "fonte", "perfil")}, "resultado": None,
-             "historico": [{"quando": time.strftime("%Y-%m-%dT%H:%M:%S"), "evento": "recebida"}]}
+             "historico": [{"quando": _agora(), "evento": "recebida"}]}
         _gravar(p)
-        return p
+    perfil = p["consulta"].get("perfil")
+    if perfil:  # dossiê-base na hora; se falhar, o pedido segue "recebida" para os agentes
+        try:
+            return publicar(p["id"], DB.montar(perfil, p["consulta"].get("faixa")), origem="base")
+        except Recusa:
+            pass
+    return p
 
 
 def visao_parceiro(p):
     """O que o parceiro pode ver: andamento e, só depois de entregue, o resultado."""
-    v = {"id": p["id"], "status": p["status"], "andamento": ROTULO.get(p["status"], p["status"])}
+    v = {"id": p["id"], "status": p["status"], "andamento": ROTULO.get(p["status"], p["status"]), "nivel": p.get("nivel"),
+         "aprofundando": p.get("enriquecer") == "pendente" and p["status"] == "entregue"}
     if p["status"] == "entregue":
         v["resultado"] = p["resultado"]
-        v["arquivo"] = os.path.exists(_docx(p["id"]))
+        v["arquivo"] = True  # o Word é gerado na hora do download, se ainda não existir
     return v
+
+
+# ---------- histórico do parceiro (últimas empresas, sem chamar a API de novo) ----------
+def _arq_hist(parceiro):
+    return os.path.join(DIR, "historico", hashlib.sha256(parceiro.encode()).hexdigest()[:16] + ".json")
+
+
+def _hist_ler(parceiro):
+    try:
+        with open(_arq_hist(parceiro)) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return []
+
+
+def registrar_consulta(parceiro, resultado):
+    """Guarda a consulta feita (a mais recente de cada CNPJ, no máximo HISTORICO_MAX). CNPJ inválido ou indisponível não entra."""
+    if resultado.get("faixa") in ("invalido", "indisponivel") or not resultado.get("cnpj"):
+        return
+    with _trava():
+        h = [x for x in _hist_ler(parceiro) if x["cnpj"] != resultado["cnpj"]]
+        h.insert(0, {"cnpj": resultado["cnpj"], "quando": _agora(), "resultado": resultado})
+        os.makedirs(os.path.join(DIR, "historico"), exist_ok=True)
+        tmp = _arq_hist(parceiro) + ".tmp"
+        with open(tmp, "w") as f:
+            json.dump(h[:HISTORICO_MAX], f, ensure_ascii=False)
+        os.replace(tmp, _arq_hist(parceiro))
+
+
+def consulta_guardada(parceiro, cnpj, dias=CONSULTA_VALE_DIAS):
+    """Consulta já feita por este parceiro há menos de `dias` (evita nova chamada às APIs)."""
+    corte = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(time.time() - dias * 86400))
+    return next((x["resultado"] for x in _hist_ler(parceiro) if x["cnpj"] == normalizar_cnpj(cnpj) and x["quando"] >= corte), None)
+
+
+def historico(parceiro):
+    """Últimas empresas do parceiro, da mais recente para a mais antiga, com o andamento do dossiê de cada uma."""
+    pedidos = {p["cnpj"]: p for p in sorted(_todos(), key=lambda p: p["criado"]) if p["parceiro"] == parceiro}
+    out = []
+    for x in _hist_ler(parceiro):
+        r, p = x["resultado"], pedidos.get(x["cnpj"])
+        out.append({"cnpj": x["cnpj"], "quando": x["quando"], "razao": (r.get("empresa") or {}).get("razao"), "faixa": r.get("faixa"), "titulo": r.get("titulo"),
+                    "ano_base": r.get("ano_base"), "pedido": visao_parceiro(p) if p else None, "resultado": r})
+    return out
 
 
 def _docx(id_):
@@ -103,7 +167,16 @@ def _docx(id_):
 def arquivo_do_parceiro(id_, parceiro):
     """Caminho do Word, só para o dono do pedido e só depois de entregue."""
     p = _ler(id_)
-    return _docx(id_) if p and p["parceiro"] == parceiro and p["status"] == "entregue" and os.path.exists(_docx(id_)) else None
+    if not (p and p["parceiro"] == parceiro and p["status"] == "entregue"):
+        return None
+    if not os.path.exists(_docx(id_)):  # dossiê-base: o Word só é montado quando alguém pede
+        perfil = (p["consulta"] or {}).get("perfil") or {}
+        md = DS.para_markdown("Dossiê da empresa: %s" % (perfil.get("razao") or id_), "Briefing, como a Save pode ajudar, serviços aderentes e abordagem", p["resultado"]["dossie"])
+        try:
+            DS.gerar_docx(md, _docx(id_))
+        except (RuntimeError, OSError, subprocess.SubprocessError):
+            return None
+    return _docx(id_)
 
 
 def ler_do_parceiro(id_, parceiro):
@@ -135,7 +208,13 @@ def auditar(texto):
     return r.returncode == 0, achados
 
 
-def publicar(id_, resultado, anexo=None):
+def _decidir(p, ok):
+    if not ok:
+        return "revisao_humana"
+    return "entregue" if os.environ.get("CENTRAL_APROVACAO", "obrigatoria") == "autonoma" else "aguardando_aprovacao"
+
+
+def publicar(id_, resultado, anexo=None, origem="agentes"):
     faltam = [b for b in BLOCOS if not str(resultado.get(b, "")).strip()]
     if faltam:
         raise Recusa("Faltam blocos: " + ", ".join(faltam))
@@ -150,13 +229,32 @@ def publicar(id_, resultado, anexo=None):
         if anexo:
             shutil.copyfile(anexo, _docx(id_))
         p["auditoria"] = {"ok": ok, "alertas": len(achados)}
-        if not ok:
-            p["status"] = "revisao_humana"
-        elif os.environ.get("CENTRAL_APROVACAO", "obrigatoria") == "autonoma":
-            p["status"] = "entregue"
-        else:
-            p["status"] = "aguardando_aprovacao"
-        p["historico"].append({"quando": time.strftime("%Y-%m-%dT%H:%M:%S"), "evento": p["status"], "auditoria_ok": ok})
+        p["status"] = _decidir(p, ok)
+        p["nivel"] = "base" if origem == "base" else "agentes"
+        if origem != "base" and p.get("enriquecer") == "pendente":
+            p["enriquecer"] = "feito"
+        p["historico"].append({"quando": _agora(), "evento": p["status"], "origem": origem, "auditoria_ok": ok})
+        _gravar(p)
+        return p
+
+
+def enriquecer(id_, resultado, anexo=None):
+    """Troca o dossiê-base pelo dossiê aprofundado pelos agentes. Só substitui se a auditoria passar; com alerta, mantém
+    a versão atual e registra o alerta (nunca entrega texto com promessa)."""
+    faltam = [b for b in BLOCOS if not str(resultado.get(b, "")).strip()]
+    if faltam or not DS.valido(resultado.get("dossie")):
+        raise Recusa("Resultado incompleto: três blocos e dossiê com %d seções ou mais." % DS.SECOES_MINIMAS)
+    ok, achados = auditar(_texto(resultado))
+    with _trava():
+        p = _ler(id_)
+        if not p or p.get("enriquecer") != "pendente" or p["status"] not in ("entregue", "aguardando_aprovacao", "revisao_humana"):
+            raise Recusa("Nada a aprofundar neste pedido.")
+        p["enriquecer"] = "feito" if ok else "alerta"
+        if ok:
+            p["resultado"] = resultado; p["nivel"] = "agentes"; p["auditoria"] = {"ok": True, "alertas": len(achados)}
+            if anexo:
+                shutil.copyfile(anexo, _docx(id_))
+        p["historico"].append({"quando": _agora(), "evento": "aprofundado" if ok else "aprofundamento_barrado", "auditoria_ok": ok, "alertas": len(achados)})
         _gravar(p)
         return p
 
@@ -173,15 +271,17 @@ def aprovar(id_, quem):
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("cmd", choices=["fila", "status", "publicar", "aprovar"])
+    ap = argparse.ArgumentParser(); ap.add_argument("cmd", choices=["fila", "status", "publicar", "enriquecer", "aprovar"])
     ap.add_argument("--id"); ap.add_argument("--arquivo"); ap.add_argument("--quem"); ap.add_argument("--anexo", help="Word do dossiê (opcional)")
     ap.add_argument("--gerar-docx", action="store_true", help="gera o Word do dossiê a partir do resultado e anexa")
     a = ap.parse_args()
     if a.cmd == "fila":
-        print(json.dumps([{k: p[k] for k in ("id", "cnpj", "parceiro", "criado", "consulta")} for p in _todos() if p["status"] == "recebida"], ensure_ascii=False, indent=1))
+        # "recebida" (sem dossiê-base) e "enriquecer pendente" (dossiê-base já entregue; os agentes aprofundam)
+        print(json.dumps([{k: p.get(k) for k in ("id", "cnpj", "parceiro", "criado", "consulta", "status", "enriquecer", "resultado")} for p in _todos()
+                          if p["status"] == "recebida" or p.get("enriquecer") == "pendente"], ensure_ascii=False, indent=1))
     elif a.cmd == "status":
         print(json.dumps([{k: p[k] for k in ("id", "status", "parceiro", "criado")} for p in _todos() if not a.id or p["id"] == a.id], ensure_ascii=False, indent=1))
-    elif a.cmd == "publicar":
+    elif a.cmd in ("publicar", "enriquecer"):
         with open(a.arquivo) as f:
             res = json.load(f)
         anexo = a.anexo
@@ -190,8 +290,8 @@ def main():
             emp = (ped.get("consulta") or {}).get("perfil") or {}
             md = DS.para_markdown("Dossiê da empresa: %s" % (emp.get("razao") or a.id), "Briefing, como a Save pode ajudar, serviços aderentes e abordagem", res.get("dossie") or [])
             anexo = DS.gerar_docx(md, os.path.join(tempfile.mkdtemp(), a.id + ".docx"))
-        p = publicar(a.id, res, anexo)
-        print(p["id"], p["status"], p["auditoria"])
+        p = (publicar if a.cmd == "publicar" else enriquecer)(a.id, res, anexo)
+        print(p["id"], p["status"], p.get("enriquecer"), p.get("auditoria"))
     else:
         print(aprovar(a.id, a.quem or "")["status"])
 

@@ -1,7 +1,7 @@
 .tela { max-width: 720px; }
 .aviso-demo { background: var(--ouro-suave); border-left: 3px solid var(--ouro-texto); padding: var(--s-2) var(--s-3); font-size: var(--t-pequeno); margin: 0 0 var(--s-4); border-radius: var(--r-xs); }
 form label { display: block; font-size: var(--t-pequeno); font-weight: 600; margin: var(--s-3) 0 var(--s-1); }
-textarea, input { width: 100%; box-sizing: border-box; font: inherit; font-family: var(--mono); padding: var(--s-2) var(--s-3); border: 1px solid var(--borda); border-radius: var(--r-sm); background: var(--cartao); color: var(--texto); }
+textarea, input { box-sizing: border-box; font: inherit; font-family: var(--mono); padding: var(--s-2) var(--s-3); border: 1px solid var(--borda); border-radius: var(--r-sm); background: var(--cartao); color: var(--texto); }
 textarea:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--ouro-texto); outline-offset: 2px; }
 form .botao { margin-top: var(--s-4); }
 .erro-msg { color: var(--erro); font-size: var(--t-pequeno); margin: var(--s-3) 0 0; }
@@ -23,3 +23,16 @@ form .botao { margin-top: var(--s-4); }
 .secao { margin-top: var(--s-3); }
 .selo-pronto { display: inline-block; background: var(--ouro-suave); color: var(--ouro-texto); font-size: var(--t-legenda); font-weight: 600; padding: 2px var(--s-2); border-radius: var(--r-xs); margin-right: var(--s-3); }
 a.botao-sec { text-decoration: none; display: inline-block; }
+.campo-cnpj { width: 21ch; }
+.campo-fat { width: 21ch; }
+.campo-lista { width: 24ch; height: 9.5em; resize: none; }
+textarea, input { resize: none; }
+.acoes { display: flex; align-items: center; gap: var(--s-4); flex-wrap: wrap; margin-top: var(--s-4); }
+.acoes .botao { margin-top: 0; }
+.link { font: inherit; font-size: var(--t-pequeno); background: none; border: 0; color: var(--ouro-texto); text-decoration: underline; cursor: pointer; padding: 0; }
+.hist { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--r-sm); padding: var(--s-2) var(--s-3); margin-bottom: var(--s-2); }
+.hist .quem { min-width: 0; }
+.hist .quem .razao { font-weight: 600; font-size: var(--t-pequeno); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hist .quem .meta { font-size: var(--t-legenda); color: #565B66; }
+.faixa-aprofundando { background: var(--ouro-suave); border-left: 3px solid var(--ouro-texto); font-size: var(--t-pequeno); padding: var(--s-2) var(--s-3); margin: var(--s-2) 0; border-radius: var(--r-xs); }
+@media (max-width: 480px) { .campo-cnpj, .campo-fat, .campo-lista { width: 100%; } }

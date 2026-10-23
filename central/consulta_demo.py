@@ -18,6 +18,7 @@ CAB = json.load(open(os.path.join(WEB, "staticwebapp.config.json")))["globalHead
 CAB = {k: v for k, v in CAB.items() if k != "Strict-Transport-Security"}
 CAB["Content-Security-Policy"] = CAB["Content-Security-Policy"].replace("connect-src 'self' https://login.microsoftonline.com", "connect-src 'self'")
 USUARIO = "demo-local"
+os.environ.setdefault("CENTRAL_APROVACAO", "autonoma")  # demo: entrega na hora (o auditor continua barrando promessa); a nuvem começa em "obrigatoria"
 
 
 def numero(v):
@@ -33,17 +34,22 @@ def lote(corpo):
         return 400, {"erro": "Informe ao menos um CNPJ."}
     if len(cnpjs) > regime.LIMITE_LOTE:
         return 400, {"erro": "No máximo %d CNPJs por consulta." % regime.LIMITE_LOTE}
-    ok, usadas, limite = regime.registrar_uso(USUARIO, len(cnpjs))
+    fat = numero(corpo.get("faturamento")) if len(cnpjs) == 1 else None
+    guardadas = {} if fat else {c: esteira.consulta_guardada(USUARIO, c) for c in cnpjs}  # já consultada há pouco: sem nova chamada nem desconto no teto
+    novas = [c for c in cnpjs if not guardadas.get(c)]
+    ok, usadas, limite = regime.registrar_uso(USUARIO, len(novas))
     if not ok:
         return 429, {"erro": "Limite diário de %d consultas atingido (%d usadas)." % (limite, usadas)}
-    fat = numero(corpo.get("faturamento")) if len(cnpjs) == 1 else None
-    res = regime.consultar_lote(cnpjs, fat)
-    regime.auditar(USUARIO, res)
+    vivas = iter(regime.consultar_lote(novas, fat))
+    res = [guardadas.get(c) or next(vivas) for c in cnpjs]
+    regime.auditar(USUARIO, [r for c, r in zip(cnpjs, res) if c in novas])
+    for r in res:
+        esteira.registrar_consulta(USUARIO, r)
     return 200, {"resultados": res, "usadas": usadas, "limite": limite}
 
 
 def pedir_esteira(corpo):
-    r = regime.consultar(corpo.get("cnpj"))  # refaz a consulta no servidor (cache): não confia no que o navegador diz
+    r = esteira.consulta_guardada(USUARIO, corpo.get("cnpj")) or regime.consultar(corpo.get("cnpj"))  # a consulta vem do servidor, nunca do navegador
     if r["faixa"] in ("negocio_ativo", "invalido", "indisponivel"):
         return 400, {"erro": r["titulo"]}
     try:
@@ -69,6 +75,8 @@ class H(http.server.SimpleHTTPRequestHandler):
         rota, _, consulta = self.path.partition("?")
         if rota == "/api/esteira":
             return self._json(*andamento(consulta))
+        if rota == "/api/esteira/historico":
+            return self._json(200, {"empresas": esteira.historico(USUARIO)})
         if rota == "/api/esteira/arquivo":
             arq = esteira.arquivo_do_parceiro((parse_qs(consulta).get("id") or [""])[0], USUARIO)
             if not arq:
