@@ -14,11 +14,12 @@ A pasta de estado (CENTRAL_ESTEIRA) viaja pelo SharePoint com lib/estado.py; nun
 
 Uso:  esteira.py fila | status --id E-0001 | publicar --id E-0001 --arquivo resultado.json | aprovar --id E-0001 --quem "Nome"
 """
-import argparse, fcntl, json, os, subprocess, sys, tempfile, time
+import argparse, fcntl, json, os, shutil, subprocess, sys, tempfile, time
 from pathlib import Path
 
 sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
 from cnpj import cnpj_valido, normalizar_cnpj  # noqa: E402
+from . import dossie as DS  # noqa: E402
 from . import negocio_ativo as NA  # noqa: E402
 
 DIR = NA.DIR
@@ -80,7 +81,7 @@ def solicitar(cnpj, parceiro, consulta=None):
                 return p
         n = 1 + max([int(p["id"][2:]) for p in _todos()] or [0])
         p = {"id": "E-%04d" % n, "cnpj": c, "parceiro": parceiro, "criado": time.strftime("%Y-%m-%dT%H:%M:%S"), "status": "recebida",
-             "consulta": {k: (consulta or {}).get(k) for k in ("faixa", "titulo", "ano_base", "fonte")}, "resultado": None,
+             "consulta": {k: (consulta or {}).get(k) for k in ("faixa", "titulo", "ano_base", "fonte", "perfil")}, "resultado": None,
              "historico": [{"quando": time.strftime("%Y-%m-%dT%H:%M:%S"), "evento": "recebida"}]}
         _gravar(p)
         return p
@@ -91,7 +92,18 @@ def visao_parceiro(p):
     v = {"id": p["id"], "status": p["status"], "andamento": ROTULO.get(p["status"], p["status"])}
     if p["status"] == "entregue":
         v["resultado"] = p["resultado"]
+        v["arquivo"] = os.path.exists(_docx(p["id"]))
     return v
+
+
+def _docx(id_):
+    return os.path.join(DIR, "pedidos", id_ + ".docx")
+
+
+def arquivo_do_parceiro(id_, parceiro):
+    """Caminho do Word, só para o dono do pedido e só depois de entregue."""
+    p = _ler(id_)
+    return _docx(id_) if p and p["parceiro"] == parceiro and p["status"] == "entregue" and os.path.exists(_docx(id_)) else None
 
 
 def ler_do_parceiro(id_, parceiro):
@@ -100,7 +112,7 @@ def ler_do_parceiro(id_, parceiro):
 
 
 def _texto(r):
-    partes = [str(r.get(b, "")) for b in BLOCOS] + [str(x.get(k, "")) for x in r.get("esteira", []) for k in ("produto", "nota")]
+    partes = [DS.texto(r.get("dossie") or [])] + [str(r.get(b, "")) for b in BLOCOS] + [str(x.get(k, "")) for x in r.get("esteira", []) for k in ("produto", "nota")]
     return "\n".join(partes)
 
 
@@ -123,16 +135,20 @@ def auditar(texto):
     return r.returncode == 0, achados
 
 
-def publicar(id_, resultado):
+def publicar(id_, resultado, anexo=None):
     faltam = [b for b in BLOCOS if not str(resultado.get(b, "")).strip()]
     if faltam:
         raise Recusa("Faltam blocos: " + ", ".join(faltam))
+    if not DS.valido(resultado.get("dossie")):
+        raise Recusa("O dossiê precisa de %d seções ou mais, cada uma com título e conteúdo." % DS.SECOES_MINIMAS)
     ok, achados = auditar(_texto(resultado))
     with _trava():
         p = _ler(id_)
         if not p or p["status"] != "recebida":
             raise Recusa("Pedido inexistente ou já tratado.")
         p["resultado"] = resultado
+        if anexo:
+            shutil.copyfile(anexo, _docx(id_))
         p["auditoria"] = {"ok": ok, "alertas": len(achados)}
         if not ok:
             p["status"] = "revisao_humana"
@@ -158,7 +174,8 @@ def aprovar(id_, quem):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("cmd", choices=["fila", "status", "publicar", "aprovar"])
-    ap.add_argument("--id"); ap.add_argument("--arquivo"); ap.add_argument("--quem")
+    ap.add_argument("--id"); ap.add_argument("--arquivo"); ap.add_argument("--quem"); ap.add_argument("--anexo", help="Word do dossiê (opcional)")
+    ap.add_argument("--gerar-docx", action="store_true", help="gera o Word do dossiê a partir do resultado e anexa")
     a = ap.parse_args()
     if a.cmd == "fila":
         print(json.dumps([{k: p[k] for k in ("id", "cnpj", "parceiro", "criado", "consulta")} for p in _todos() if p["status"] == "recebida"], ensure_ascii=False, indent=1))
@@ -166,7 +183,14 @@ def main():
         print(json.dumps([{k: p[k] for k in ("id", "status", "parceiro", "criado")} for p in _todos() if not a.id or p["id"] == a.id], ensure_ascii=False, indent=1))
     elif a.cmd == "publicar":
         with open(a.arquivo) as f:
-            p = publicar(a.id, json.load(f))
+            res = json.load(f)
+        anexo = a.anexo
+        if a.gerar_docx:
+            ped = _ler(a.id) or {}
+            emp = (ped.get("consulta") or {}).get("perfil") or {}
+            md = DS.para_markdown("Dossiê da empresa: %s" % (emp.get("razao") or a.id), "Briefing, como a Save pode ajudar, serviços aderentes e abordagem", res.get("dossie") or [])
+            anexo = DS.gerar_docx(md, os.path.join(tempfile.mkdtemp(), a.id + ".docx"))
+        p = publicar(a.id, res, anexo)
         print(p["id"], p["status"], p["auditoria"])
     else:
         print(aprovar(a.id, a.quem or "")["status"])

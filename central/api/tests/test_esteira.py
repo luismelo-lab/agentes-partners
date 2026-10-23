@@ -3,6 +3,7 @@
     cd central/api && PYTHONPATH=../../lib python3 -m unittest -v tests.test_esteira
 """
 import json, os, tempfile, unittest
+from pathlib import Path
 
 from central_api import esteira as E
 from central_api import negocio_ativo as NA
@@ -19,6 +20,8 @@ os.environ["CENTRAL_SAL"] = "sal-de-teste"
 LIMPO = {"fazer": "A empresa não tem negócio na base. A pré-análise indica as teses a verificar com os documentos.",
          "precisa": "Veja a esteira em três ondas; a ordem depende da análise.", "falta": "ECF e EFD-Contribuições dos últimos 5 anos, pelo cliente.",
          "esteira": [{"onda": 1, "produto": "Recuperação tributária", "status": "pronto", "nota": "Depende de parecer e documentos."}]}
+SECAO = [{"titulo": "Seção %d" % i, "paragrafos": ["Texto de apoio da seção %d, sem valor nem prazo." % i]} for i in range(1, 7)]
+LIMPO["dossie"] = SECAO
 PROMESSA = dict(LIMPO, fazer="A Save garante recuperação de R$ 500 mil em 30 dias, sem risco.")
 
 
@@ -61,6 +64,22 @@ class Esteira(unittest.TestCase):
     def test_exige_os_tres_blocos(self):
         p = E.solicitar(NOVO, "p1")
         with self.assertRaisesRegex(E.Recusa, "falta"): E.publicar(p["id"], {"fazer": "x", "precisa": "y"})
+
+    def test_dossie_incompleto_nao_publica(self):
+        p = E.solicitar(NOVO, "p1")
+        with self.assertRaisesRegex(E.Recusa, "dossiê"): E.publicar(p["id"], dict(LIMPO, dossie=SECAO[:3]))
+        with self.assertRaisesRegex(E.Recusa, "dossiê"): E.publicar(p["id"], {k: v for k, v in LIMPO.items() if k != "dossie"})
+
+    def test_promessa_escondida_no_dossie_tambem_barra(self):
+        os.environ["CENTRAL_APROVACAO"] = "autonoma"; p = E.solicitar(NOVO, "p1")
+        r = E.publicar(p["id"], dict(LIMPO, dossie=SECAO[:5] + [{"titulo": "Valor", "paragrafos": ["A Save garante recuperação de R$ 500 mil em 30 dias, sem risco."]}]))
+        self.assertEqual(r["status"], "revisao_humana")
+
+    def test_word_so_para_o_dono_e_depois_de_entregue(self):
+        p = E.solicitar(NOVO, "p1"); anexo = os.path.join(self.tmp.name, "x.docx"); Path(anexo).write_bytes(b"PK")
+        E.publicar(p["id"], LIMPO, anexo)
+        self.assertIsNone(E.arquivo_do_parceiro(p["id"], "p1")); E.aprovar(p["id"], "A")
+        self.assertIsNotNone(E.arquivo_do_parceiro(p["id"], "p1")); self.assertIsNone(E.arquivo_do_parceiro(p["id"], "p2"))
 
     def test_nao_publica_duas_vezes(self):
         p = E.solicitar(NOVO, "p1"); E.publicar(p["id"], LIMPO)

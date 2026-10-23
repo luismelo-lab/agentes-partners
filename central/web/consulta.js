@@ -29,17 +29,25 @@ function cartao(r) {
 
 const BLOCOS = [["fazer", "O que você pediu"], ["precisa", "O que você também precisa"], ["falta", "O que falta e quem fornece"]];
 
+function secao(titulo, paragrafos, itens) {
+  const d = el("div", "secao");
+  d.append(el("div", "titulo", titulo));
+  (paragrafos || []).forEach((t) => d.append(el("p", "meta", t)));
+  if ((itens || []).length) { const ul = el("ul", "esteira"); itens.forEach((t) => ul.append(el("li", "", t))); d.append(ul); }
+  return d;
+}
+
 function mostrar(area, v) {
   area.replaceChildren();
   if (v.status !== "entregue") { area.append(el("p", "meta", v.andamento + ". Volte aqui: a página atualiza sozinha.")); return; }
   const r = v.resultado;
-  BLOCOS.forEach(([k, t]) => { area.append(el("div", "titulo", t)); area.append(el("p", "meta", r[k])); });
-  if ((r.esteira || []).length) {
-    area.append(el("div", "titulo", "Esteira"));
-    const ul = el("ul", "esteira");
-    r.esteira.forEach((x) => ul.append(el("li", "", "Onda " + x.onda + " · " + x.produto + " (" + x.status + ")" + (x.nota ? ": " + x.nota : ""))));
-    area.append(ul);
+  area.append(el("div", "selo-pronto", "Dossiê pronto"));
+  if (v.arquivo) {
+    const a = el("a", "botao-sec", "Baixar o dossiê em Word"); a.href = "/api/esteira/arquivo?id=" + encodeURIComponent(v.id); area.append(a);
   }
+  BLOCOS.forEach(([k, t]) => area.append(secao(t, [r[k]])));
+  (r.dossie || []).forEach((s) => area.append(secao(s.titulo, s.paragrafos, s.itens)));
+  if ((r.esteira || []).length) area.append(secao("Esteira", [], r.esteira.map((x) => "Onda " + x.onda + " · " + x.produto + " (" + x.status + ")" + (x.nota ? ": " + x.nota : ""))));
 }
 
 function acompanhar(area, id) {

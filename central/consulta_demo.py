@@ -69,6 +69,15 @@ class H(http.server.SimpleHTTPRequestHandler):
         rota, _, consulta = self.path.partition("?")
         if rota == "/api/esteira":
             return self._json(*andamento(consulta))
+        if rota == "/api/esteira/arquivo":
+            arq = esteira.arquivo_do_parceiro((parse_qs(consulta).get("id") or [""])[0], USUARIO)
+            if not arq:
+                return self._json(404, {"erro": "arquivo não encontrado"})
+            with open(arq, "rb") as f:
+                b = f.read()
+            self.send_response(200); self.send_header("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+            self.send_header("Content-Disposition", 'attachment; filename="dossie-%s.docx"' % os.path.basename(arq)[:-5])
+            self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return
         return super().do_GET()
 
     def do_POST(self):

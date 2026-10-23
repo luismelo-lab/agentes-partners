@@ -14,7 +14,7 @@ REMOTO = "Estado dos agentes"
 ITENS = ["registro/demandas.json", "central-agentes/registro.json", "central-agentes/fila-entrada.json", "central-agentes/aprendizados.md",
          "central-esteira/indice-negocios-ativos.json", "central-esteira/avisos-internos.md", "celulas/whatsapp-config.json", "celulas/geovana/pareceres/resumos.json", "departamentos/resultados/premissas-financeiras.xlsx",
          "departamentos/resultados/mapeamento-hubspot.json"]
-GLOBS_TODOS = ["central-esteira/pedidos/E-*.json"]  # histórico completo (cada pedido é o registro do parceiro)
+GLOBS_TODOS = ["central-esteira/pedidos/E-*.json", "central-esteira/pedidos/E-*.docx"]  # histórico completo (cada pedido é o registro do parceiro)
 GLOBS = ["celulas/whatsapp-triagem-*.json", "celulas/*/whatsapp/caixa-*.json", "celulas/*/whatsapp/demandas-*.json",
          "celulas/*/whatsapp/anexos-cache.json", "departamentos/resultados/dados/metricas-*.json", "departamentos/resultados/dados/texto-*.json"]
 INDICE = "indice.json"

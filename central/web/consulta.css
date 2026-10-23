@@ -20,3 +20,6 @@ form .botao { margin-top: var(--s-4); }
 .area-esteira { margin-top: var(--s-3); border-top: 1px solid var(--borda); padding-top: var(--s-3); }
 .res.negocio_ativo { border-left-color: var(--ouro-texto); }
 .esteira { margin: var(--s-1) 0 0; padding-left: var(--s-4); font-size: var(--t-pequeno); }
+.secao { margin-top: var(--s-3); }
+.selo-pronto { display: inline-block; background: var(--ouro-suave); color: var(--ouro-texto); font-size: var(--t-legenda); font-weight: 600; padding: 2px var(--s-2); border-radius: var(--r-xs); margin-right: var(--s-3); }
+a.botao-sec { text-decoration: none; display: inline-block; }

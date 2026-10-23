@@ -70,6 +70,17 @@ def _regime(dados):
     return {x["forma_de_tributacao"].strip().upper() for x in lista if (x.get("ano") or 0) == ano}, ano or None
 
 
+def _perfil(d):
+    """Retrato da empresa para os agentes, só dado cadastral da pessoa jurídica: sem sócios (QSA), telefone, e-mail nem endereço."""
+    sec = [{"codigo": x.get("codigo"), "descricao": x.get("descricao")} for x in (d.get("cnaes_secundarios") or [])[:12]]
+    ecf = sorted(({"ano": x.get("ano"), "forma": x.get("forma_de_tributacao")} for x in (d.get("regime_tributario") or [])), key=lambda x: x["ano"] or 0)
+    return {"razao": d.get("razao_social"), "fantasia": d.get("nome_fantasia") or None,
+            "cnae": {"codigo": d.get("cnae_fiscal"), "descricao": d.get("cnae_fiscal_descricao")}, "cnaes_secundarios": sec,
+            "capital_social": d.get("capital_social"), "inicio_atividade": d.get("data_inicio_atividade"), "municipio": d.get("municipio"),
+            "uf": d.get("uf"), "porte": (d.get("porte") or "").title() or None, "natureza_juridica": d.get("natureza_juridica"),
+            "matriz": str(d.get("identificador_matriz_filial")) == "1", "ecf": ecf}
+
+
 def consultar(entrada, faturamento=None):
     cnpj = normalizar_cnpj(str(entrada or ""))
     saida = {"cnpj": cnpj, "faixa": "invalido", "titulo": "CNPJ inválido", "fonte": None, "ano_base": None, "empresa": None}
@@ -98,6 +109,7 @@ def consultar(entrada, faturamento=None):
     saida["empresa"] = {"razao": dados.get("razao_social"), "porte": (dados.get("porte") or "").title() or None, "uf": dados.get("uf"),
                         "situacao": (dados.get("descricao_situacao_cadastral") or "").title() or None,
                         "matriz": str(dados.get("identificador_matriz_filial")) == "1"}
+    saida["perfil"] = _perfil(dados)
     formas, ano = _regime(dados)
     simples, mei = bool(dados.get("opcao_pelo_simples")), bool(dados.get("opcao_pelo_mei"))
     saida["simples"] = simples or mei
