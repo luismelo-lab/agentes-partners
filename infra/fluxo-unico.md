@@ -32,7 +32,10 @@ O agente aciona o agente da área com o caso, sem Portão 0 (o pedido vem de out
 | Recorrência, reanálise de casos | `recuperador` / `revisor-diagnostico` |
 | O que mais o cliente pode contratar, cross-sell, esteira, mapa de valor, carteira do Master | `depto-solucoes` |
 | Crédito internacional, fundo, funding, captação de capital, home equity, maquila, Paraguai, internacionalização | `depto-internacional` (sem taxa, prazo ou fee antes do G2) |
-| Gestão de Contas, cobrança, antecipação de recebíveis, FIDC, estruturação patrimonial, tax internacional (produtos prontos, 19/10) | `depto-solucoes` (esteira e encaixe) + Save Invest ou `depto-juridico`, que entregam |
+| Gestão de Contas, cobrança, antecipação de recebíveis, FIDC (Save Invest, prontos, D92) | `depto-save-invest` (dono humano: Junior) |
+| Estruturação patrimonial (pronto) | `depto-juridico` |
+| Tax internacional e comércio exterior (pronto) | `depto-internacional` |
+| "O que mais o cliente pode contratar" | `depto-solucoes` (esteira e mapa da conta) |
 
 **Originação** sempre passa por quatro checagens antes de devolver:
 - Receita (situação, regime, CNAE e UF);

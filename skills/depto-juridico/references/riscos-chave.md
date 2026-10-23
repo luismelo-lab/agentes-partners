@@ -6,6 +6,7 @@
 - **LC 236/2026:** veto (04/09/2026) ao §2º do art. 113-A do CTN, que vedaria a multa isolada na não homologação. Acompanhar a análise do veto. https://conjur.com.br/2026-set-15/a-lc-236-2026-e-a-vedacao-a-multa-isolada-na-nao-homologacao-de-compensacoes-tributarias/
 - **Limite para créditos judiciais > R$ 10 mi:** compensação mensal limitada (Lei 14.873/2024; Portaria MF 14/2024; mínimo de 1/60 avos). https://www2.camara.leg.br/legin/fed/lei/2024/lei-14873-28-maio-2024-795692-norma-pl.html
 - Vedações do art. 74, §3º, da Lei 9.430/96 (incluídas pela Lei 13.670/2018).
+- **Atualização de 22/10/2026 (texto oficial lido):** o §15 do art. 74 (multa sobre ressarcimento indeferido) está **revogado** pela Lei 13.137/2015; o §17 (DCOMP não homologada) segue no texto com "Vide ADI 4905". A LC 236/2026 limitou multas a 75%, 100% com dolo e 150% na reincidência (CTN art. 113-A §1º). Detalhe em `especialistas/prazos-contencioso-administrativo.md`.
 
 **Prática da Save (confirmada pelo Luis, 29/09/2026):** a tese de alíquota zero é feita via **PER (ressarcimento)**, nunca por DCOMP, o que afasta o risco de compensação não declarada (art. 74, §12, Lei 9.430/96).
 

@@ -33,3 +33,13 @@ Observação do resumo geral: a recuperação pode ser por compensação (mesma 
 ## Decisões de 22/10/2026 (folha do Luis)
 - **Fora da vitrine (D80):** "Sistema S (teto de 20 salários)" (STJ Temas 1.079 e 1.390) e "PIS/COFINS fora da base do IRPJ/CSLL (Presumido)" (STJ Tema 1.312). O Sistema S vira triagem de passivo. Não oferecer como recuperação.
 - **Funrural:** a citação "Tema 1.079 STJ" está errada (o tema é do Sistema S). A base é a **ADI 4.395 (STF, 15/10/2026)**: inconstitucional só até 31/12/2017, modulação em aberto, acórdão não publicado (`docs/teses/funrural-adi-4395-estrategia.md`). O Luis aprovou lançar "Revisão do Funrural anterior a 2018" em Gestão de Passivo (D86) e manteve a tese T19 (D81). **A conciliar:** se a T19 continua como recuperação ao lado do produto de passivo.
+
+## Correções do depto-tributario sênior (22/10/2026), conferidas no texto oficial
+- **T01:** o Tema 1.093 do STJ é **adverso**, não suporte. Registrar a LC 224/2025, art. 4º, § 7º. O Tema 304 e a ADI 7.181 ainda não foram conferidos.
+- **T04 (ICMS-ST):** a modulação do Tema 1.125 vale a partir de **15/03/2017**, nos embargos publicados no DJe de 26/06/2024. O recurso é o REsp 1.958.265/**SP**, não /RS. O período de 5 anos fica de pé.
+- **T06:** a Lei 14.592/2023 é a conversão da MP 1.147/2022.
+- **T07 (ISS fora da base):** o Plenário do STF julgou o **Tema 118** a favor do contribuinte em **21/10/2026**. A certidão não fala em modulação, e houve pedido de suspensão nacional em 22/10. **Decisão do Luis e do tributarista:** se a T07 volta à vitrine.
+- **T15 (crédito presumido de ICMS fora da base de PIS/COFINS):** o **Tema 843** foi julgado a favor em **07/10/2026**, com atas de 08 e 13/10. Hoje é a tese mais forte do catálogo. **A decidir:** a via de recuperação.
+- **T19 (Funrural):** a ata da ADI 4.395 saiu no DJE de 22/10/2026. Tirar a promessa de "recuperar os últimos 5 anos".
+- **DIFAL (Tema 1.372):** a decidir se entra no catálogo.
+- Detalhe em `skills/depto-tributario/references/especialistas/` e na seção "Correções pendentes no catálogo" do SKILL.md.

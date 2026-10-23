@@ -11,6 +11,7 @@ Vale para toda conversa, fork, worktree e rotina neste repositório. O objetivo 
 ## 2. Como os agentes trabalham (obrigatório)
 - **Gerente e especialistas:** `infra/protocolo-gerente.md`. O gerente distribui, revisa antes de devolver (até 2 rodadas) e aciona outra área quando precisa. Toda entrega leva o registro `revisao`.
 - **Entrega em 3 blocos:** `infra/padrao-entrega.md` (o que você pediu, o que você também precisa, o que falta e quem fornece).
+- **Especialistas sêniores:** `infra/padrao-senior.md`. Cada especialista tem uma entrega única e um arquivo próprio com 10 seções (domínio, normas com artigo e data, regras da casa, método, perguntas, armadilhas, casos). Nenhum agente raso (Luis, 22/10/2026). A nota sai de `infra/auditar_senioridade.py`.
 - **Pesquisa nível Big Four:** `infra/protocolo-pesquisa.md`. Usa base interna, dados por script, radar da área e pesquisa na hora, com data. A decisão interna só muda com o dono.
 - **Material para fora:** passa por todas as áreas envolvidas e pelo auditor de promessas (`depto-qualidade/scripts/auditar_texto.py`). O Luis vê um exemplo antes da execução em massa.
 

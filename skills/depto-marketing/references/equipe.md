@@ -1,5 +1,7 @@
 # Equipe do Departamento de Marketing — v2 (marketing de canal)
 
+> **22/10/2026 (D93):** os papéis abaixo ganharam arquivo sênior em `especialistas/`. De-para: Estrategista de Campanhas & Calendário → `estrategista-campanhas-calendario.md`; Geração de Demanda/ABM de Canal → `abm-canal.md`; Redator → `redator-b2b-tributario.md`; Designer → `designer-design-system-save.md`; Enablement → `enablement-parceiro.md`; Revisor de Marca & Compliance → `conformidade-publicitaria.md`; Autoridade Digital + Curador de Notícias → `autoridade-digital-curadoria.md`. Co-branding, Eventos & Webinars e Comunicação com Parceiros & PRM continuam como frentes descritas aqui. Este arquivo fica como visão geral; o método e as regras estão nos arquivos dos especialistas.
+
 Base: ciclo de vida do parceiro (Forrester: recrutar → integrar → capacitar → engajar → vender junto → marketing junto → incentivar) e as três frentes do marketing de canal: **para** o parceiro, **através** do parceiro (co-branding) e **com** o parceiro (campanhas conjuntas).
 
 Contexto comum (inclua em todo prompt):

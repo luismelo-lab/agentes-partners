@@ -1,12 +1,67 @@
 # Radar de mercado · Ecossistema financeiro e Maquila (MQ)
 
-- **Data-base:** 16/10/2026. **Próxima revisão:** 23/10/2026.
+- **Data-base:** 23/10/2026. **Próxima revisão:** 30/10/2026. (Revisão anterior: 16/10/2026, 7 dias.)
 - **Para quem:** agentes do depto-internacional (Analista do Ecossistema, Especialista Maquila, Regulatório & Câmbio, Revisor de Linguagem).
 - **Como ler cada item:** o que é ou o que mudou (data) · impacto para a Save · o que o agente faz ou diz · fonte (URL, data de publicação, data de consulta) · confiança.
 - **Confiança:** ALTA = fonte primária lida nesta rodada. MÉDIA = fonte secundária confiável, ou primária citada por terceiros. BAIXA = conhecimento de mercado sem fonte lida nesta rodada; não usar com cliente sem checar.
 - **Limite desta rodada:** a cota de buscas web acabou no meio da pesquisa. Itens marcados "não localizado" ou "BAIXA" ficam para a revisão de 23/10.
 - **Regra geral:** estatística de mercado não é dado da Save. Nada aqui é oferta, preço ou promessa. A Save não antecipa recebíveis, não distribui cotas e não concede crédito.
 - Todas as consultas foram feitas em 16/10/2026.
+
+## 0. Novidades de 23/10/2026 (desde 16/10/2026)
+
+> Datas de consulta: **23/10/2026**. Busca web limitada; onde só há fonte secundária, a confiança é MÉDIA.
+
+### 0.1 Res. CMN 5.343 (24/09/2026): FIDC não pode mais comprar crédito judicial ou arbitral sem caráter definitivo
+- **O que mudou:** a Resolução CMN 5.343, de **24/09/2026**, altera a Res. CMN 2.907/2001. Desde **13/10/2026**, FIDCs e FIC-FIDCs não podem fazer novos investimentos, diretos ou indiretos, em direitos de processos judiciais ou arbitrais enquanto o crédito não for líquido, certo e exigível em caráter definitivo (trânsito em julgado e fim do prazo de impugnação ou embargos). Alcança também estruturas que captem o mesmo risco. Fundos que já têm esses ativos: metodologia de avaliação verificável por terceiro independente e reavaliação por fato processual relevante a partir de **04/01/2027**. Críticas de gestoras de special situations; a Capital Aberto (out/2026) diz que a regra tende a concentrar esse crédito nos bancos.
+- **Impacto para a Save:** o FIDC que a Save apresenta ao cliente (carteira de recebíveis comerciais) **não é atingido**. O ponto de atenção é o cliente que tenha crédito judicial, precatório ou tese tributária reconhecida e queira ceder a FIDC: isso passa a ser muito mais restrito. Cria um ponto de contato com o Tributário (crédito de tese ainda sub judice não vira lastro de FIDC).
+- **Ação do agente:** na qualificação de FIDC, perguntar se parte do ativo que o cliente quer ceder é crédito judicial ou tributário em discussão; se for, não propor FIDC e sinalizar ao Tributário e ao Jurídico. Nunca dizer que a Save "monta" fundo. Não citar a 5.343 como oportunidade.
+- **Fonte:** Mattos Filho, https://www.mattosfilho.com.br/unico/cmn-fidcs-creditos-judiciais-arbitrais/ (set/2026; consulta 23/10/2026, via resumo de busca); Lefosse, https://lefosse.com/?p=35042 (set/2026); Migalhas, https://www.migalhas.com.br/depeso/465728/creditos-judiciais-e-precatorios-apos-a-resolucao-cmn-5-343; Capital Aberto, https://capitalaberto.com.br/economia-e-financas/2026/10/fid-cs-ficam-sem-resposta-do-governo-sobre-credito-judicial (out/2026). Texto oficial do CMN não aberto.
+- **Vigência:** vedação em vigor desde 13/10/2026; regras de avaliação a partir de 04/01/2027. **Confiança:** média (várias fontes concordam; texto oficial não lido).
+
+### 0.2 Câmbio e Selic para as simulações do Maquila (supera o PTAX de 16/10/2026 nos itens 2.4, 5.5 e 5.7)
+- **O que mudou:** PTAX venda **R$ 5,0383 em 22/10/2026** (16/10: 5,0826). Selic meta segue 13,75% (Copom em 03 e 04/11/2026; não há reunião em outubro).
+- **Impacto:** o real ficou cerca de 0,9% mais forte. Salário mínimo do Brasil: R$ 1.621 ÷ 5,0383 = cerca de **US$ 322** (era US$ 319). O mínimo do Paraguai (Gs 3.044.000, cerca de US$ 500 pela notícia de 18/06/2026) fica cerca de **55%** acima em dólar (era 57%). A comparação com os "68%" da base interna segue em conflito (conflito 1).
+- **Ação do agente:** nos estudos de Maquila, usar PTAX com data; manter simulação de ±15% no câmbio.
+- **Fonte:** BCB SGS série 1, https://api.bcb.gov.br/dados/serie/bcdata.sgs.1/dados/ultimos/8?formato=json (22/10/2026; consulta 23/10/2026). Demais premissas como em 5.5.
+- **Vigência:** dado diário. **Confiança:** alta (PTAX); média (US$ 500 do mínimo paraguaio, câmbio de junho).
+
+### 0.3 Duplicata escritural: cronograma do BCB confirmado em fonte de imprensa, com B3, CERC e Núclea autorizadas
+- **O que mudou:** reportagem de 30/06/2026 (DGABC) descreve o cronograma do BCB: produção assistida facultativa a partir de julho/2026, pleno funcionamento em dezembro/2026, obrigatoriedade escalonada com grandes sacadoras em **junho/2027**, médias seis meses depois (dez/2027) e pequenas em **junho/2028**. A mesma reportagem cita **B3, CERC e Núclea** como autorizadas para escrituração e registro. Blogs de plataforma que falam em obrigatoriedade já em 2026 para quem fatura mais de R$ 300 mi **não batem** com isso e não são fonte oficial. Nada novo encontrado para out/2026.
+- **Impacto:** reduz a divergência do item 2.1: prevalece 2027–2028. A Núclea passa a constar como registradora autorizada (item 2.2 dizia "não verificado").
+- **Ação do agente:** manter a frase do item 2.1; não citar a data de 2026 para a obrigatoriedade. Conferir a lista de registradoras no site do BCB antes de dizer a um cliente.
+- **Fonte:** DGABC, https://www.dgabc.com.br/noticia/4332379/cronograma-do-bc-para-duplicatas-escriturais-preve-implementacao-escalonada-ate-junho-de-2028 (30/06/2026; consulta 23/10/2026, via resumo de busca). Página oficial do BCB não aberta.
+- **Vigência:** cronograma de 2026 a 2028. **Confiança:** média.
+
+### 0.4 Maquila: sem norma nova; estatística de agosto/2026 ainda não localizada
+- **O que mudou:** nada novo localizado. Nenhuma resolução biministerial MIC+MEF/CNIME de out/2026 foi encontrada. O informe de agosto/2026 do SE-CNIME não foi localizado (o último continua o de julho: US$ 860 mi, +28%, Brasil 61%). Atenção: a página da Última Hora "exportaciones de maquila alcanzan USD 1.163 millones" mostra "23 oct 2026" no cabeçalho, mas trata de **jan a nov/2025** (publicada em 12/12/2025). **Não usar como dado de 2026.**
+- **Impacto:** nenhum. A base e o item 5.1 seguem válidos.
+- **Ação do agente:** reconsultar o MIC em 30/10 (informe de agosto e eventual resolução complementar do CNIME).
+- **Fonte:** https://www.ultimahora.com/exportaciones-de-maquila-alcanzan-usd-1-163-millones (12/12/2025; consulta 23/10/2026); MIC, Informe de julho/2026 (como em 5.2). 
+- **Vigência:** n/a. **Confiança:** alta para "não localizado até 23/10"; o MIC pode ter publicado e a busca não indexou.
+
+### 0.5 Sem novidade verificável nesta rodada (não alterar nada)
+- **CVM 175 e CVM 240:** nenhuma nova resolução da CVM sobre FIDC em out/2026 localizada. Segue o item 1.1. Observação: a CVM 240 (recuperação judicial) e a CMN 5.343 (crédito judicial) tratam de assuntos diferentes; não se contradizem.
+- **Números ANBIMA de FIDC:** nenhum boletim novo desde 14/10/2026. Recorte por tipo (agro, recebíveis comerciais) segue "não localizado".
+- **Serasa Experian (RJ):** o último dado mensal localizado é de abril/2026 (60 processos, 141 CNPJs; divulgado em 12/08/2026), contra 76 em março e 55 em fevereiro. O radar de 16/10 citava mensais até maio; **não foi possível confirmar o dado de maio nesta rodada**. Não usar o número de maio sem checar a página oficial. Fonte: https://www.serasaexperian.com.br/sala-de-imprensa/indicadores/pedidos-de-recuperacao-judicial-somaram-60-processos-em-abril-aponta-serasa-experian/ (consulta 23/10/2026).
+- **Home equity, cobrança por IA e PL 2338:** nada novo localizado. Seguem os itens 3.1 e 2.5.
+- **Bitributação Brasil–Paraguai:** nada novo; segue sem acordo em vigor.
+- **Big Four:** nenhuma publicação de out/2026 localizada sobre FIDC, capital de giro ou maquila. Benchmark mantido na seção 6.
+- **Lacunas que continuam:** custos por prestador de FIDC, estruturadores, tarifa ANDE geral, honorários Big Four.
+
+### Itens superados nesta rodada
+- **Item 2.4, "Dólar PTAX venda: R$ 5,0826 (16/10/2026)": superado em 23/10/2026** pelo 0.2 (R$ 5,0383 em 22/10).
+- **Item 5.5, comparação "cerca de 57% maior": superado em 23/10/2026** pelo 0.2 (cerca de 55% com PTAX de 22/10).
+- **Item 5.7, "Real a R$ 5,08/US$ (16/10/2026)": superado em 23/10/2026** pelo 0.2 (R$ 5,04).
+- **Item 2.2, "Outras (Núclea, CRDC): não verificado": parcialmente superado em 23/10/2026** pelo 0.3 (Núclea citada como autorizada; CRDC segue não verificado).
+
+### Conflitos com a base interna (rodada de 23/10/2026)
+- **Novo (N1):** a base trata o FIDC como destino de recebíveis comerciais, sem distinguir crédito judicial. Após a CMN 5.343, crédito judicial ou tributário não definitivo **não** pode ser cedido a FIDC. Atualizar `produtos.md` (FIDC) com essa exclusão. A decisão da Save não muda sozinha.
+- Os conflitos 1 a 10 abaixo seguem abertos (o 1 passa de 57% para 55%).
+
+### Perguntas novas ao dono (rodada de 23/10/2026)
+- **PN1 · FIDC e crédito judicial:** a Save quer registrar na ficha do FIDC que crédito judicial e tese tributária não definitiva ficam fora (CMN 5.343/2026, desde 13/10)? Algum cliente em andamento tinha essa intenção?
+- **PN2 · Registradoras:** a Federal Invest usa B3, CERC ou Núclea para a carteira registrada? (Reforça a pergunta 2 de 16/10.)
 
 ---
 

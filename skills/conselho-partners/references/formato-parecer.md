@@ -1,6 +1,6 @@
 # Formato do parecer individual (entregue a cada conselheiro)
 
-Responda em português do Brasil, em até 450 palavras, exatamente nesta estrutura:
+Use o método, os limites e as perguntas do seu arquivo em `references/especialistas/` e os números de `references/base-decisoes-e-numeros.md`. Responda em português do Brasil, em até 500 palavras, exatamente nesta estrutura:
 
 ```
 ## <Nome do conselheiro>
@@ -15,7 +15,9 @@ Responda em português do Brasil, em até 450 palavras, exatamente nesta estrutu
 
 **Desenvolvimento de pessoas (se aplicável à sua especialidade):** 1 sugestão concreta.
 
-**Riscos do caminho que você recomenda:** 1–2.
+**Riscos do caminho que você recomenda:** 1–2, e a causa mais provável de fracasso se for 30/06/2027 e a decisão tiver dado errado (pré-mortem).
+
+**Não fazer agora (pela sua especialidade):** o que deve ficar fora, com o critério da seção 7 do seu arquivo sênior.
 
 **Dúvidas para o Luis:** perguntas cuja resposta mudaria sua recomendação. Marque [BLOQUEANTE] se sem ela sua recomendação pode estar errada. Se não houver, escreva "nenhuma".
 

@@ -24,6 +24,13 @@ Consenso: <unânime | maioria (x de 6) | sem consenso>
 | Finanças | | |
 | Risco, Tributário & Jurídico | | |
 
+## Não fazer agora
+- <item> — <critério do Presidente que se aplica> — <o que faria voltar à pauta>
+
+## Pré-mortem (as 3 causas de fracasso mais citadas)
+| Causa | Como a decisão se protege (condição, indicador ou gatilho de reversão) |
+|---|---|
+
 ## Divergências e como foram resolvidas
 - <tema>: <quem x quem> → <resultado do debate, ou "mantida: o Luis decide">
 

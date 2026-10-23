@@ -1,5 +1,7 @@
 # Equipe do Departamento Jurídico
 
+> **Atualização de 22/10/2026 (padrão sênior, D93):** quatro papéis já têm arquivo sênior em `references/especialistas/`: Gestão de Passivo Tributário, Estruturação Patrimonial e Sucessória, Controle de Prazos e Contencioso Administrativo (une as linhas 2 e 3 abaixo) e Perímetro Regulatório. As demais linhas da tabela são os **especialistas da próxima onda**: o conteúdo abaixo continua valendo até cada um ganhar o seu arquivo.
+
 Modelo "hub & spoke" dos jurídicos corporativos modernos, com foco no que pesa para a Save: contencioso administrativo tributário, contratos, LGPD/compliance e controle de prazos.
 
 Contexto comum (inclua em todo prompt):

@@ -8,8 +8,8 @@ A organização segue os 12 passos de `docs/ecossistema/racional-e-fechamento-ec
 | Recuperação tributária: teses do catálogo que o parecer não levantou | pronto | `depto-tributario` + `revisor-diagnostico` | parecer lido, CNAE e regime | Passivo (o crédito abate o débito) e Planejamento |
 | Recorrência (novas competências) | pronto | `recuperador` | último fechamento e 12 ou mais competências novas | — |
 | Crédito presumido de compras de PF e Funrural (agroindústria) | pronto | `depto-tributario` | compras de produtor PF | Planejamento agro |
-| Gestão de Contas (cobrança com IA, paga no êxito) | pronto | Save Invest | venda a prazo B2B | Acesso a DRE e balanço, antecipação e funding |
-| Antecipação de recebíveis (instituição autorizada) | pronto | Save Invest | carteira B2B registrada | FIDC |
+| Gestão de Contas (cobrança com IA, paga no êxito) | pronto | `depto-save-invest` (Junior, D92) | venda a prazo B2B | Acesso a DRE e balanço, antecipação e funding |
+| Antecipação de recebíveis (instituição autorizada) | pronto | `depto-save-invest` (Junior, D92) | carteira B2B registrada | FIDC |
 | Gestão de Passivo (transação, parcelamento, compensação com o próprio crédito) | pronto | `depto-juridico` + `depto-tributario` | débito apontado no parecer ou na consulta | Certidão negativa, que é pré-requisito de crédito |
 
 ## Onda 2 · Proteger e controlar (3 a 12 meses): passivo, carga e governança
@@ -23,7 +23,7 @@ A organização segue os 12 passos de `docs/ecossistema/racional-e-fechamento-ec
 | Produto | Status | Quem entrega | Depende de | Observação |
 |---|---|---|---|---|
 | Crédito Internacional (funding) | em validação (trava do G2) | `depto-internacional` | faturamento ≥ R$ 50 mi, garantia ~2x, 2 anos de demonstrações, passivo organizado | Só descoberta até o G2 |
-| FIDC | pronto | Save Invest | faturamento ≥ ~R$ 10 mi por mês com recebíveis | pronto desde 19/10 (antes era MVP) |
+| FIDC | pronto | `depto-save-invest` (Junior, D92) | faturamento ≥ ~R$ 10 mi por mês com recebíveis | pronto desde 19/10 (antes era MVP) |
 | Maquila no Paraguai | em estruturação | `depto-internacional` | indústria intensiva em mão de obra, no Lucro Real | Frigoríficos bloqueados (D59) |
 
 ## Regras de sequência
@@ -37,3 +37,4 @@ A organização segue os 12 passos de `docs/ecossistema/racional-e-fechamento-ec
 - **Escopo 2027 ao parceiro (D83):** entram os produtos prontos e também os que estão em validação. Estes aparecem como descoberta, sem condição.
 - **Antecipação sobre venda gerencial e conta escrow (D82):** continuam no portfólio, mas são tema da Save Invest (Junior) e só tratados presencialmente, por serem sensíveis. Os agentes não os escrevem em material nem em mensagem.
 - **Remuneração do parceiro nos produtos 2027 (D78):** começa em 10% do líquido Save.
+- **Donos dos produtos financeiros (D92, 22/10/2026):** Gestão de Contas, antecipação e FIDC são do `depto-save-invest` (Junior). A esteira só aponta o gatilho e encaminha pelo Orquestrador de Cross-sell (`especialistas/orquestrador-cross-sell.md`); elegibilidade, limite e viabilidade são da Save Invest.

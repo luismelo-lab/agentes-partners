@@ -56,3 +56,23 @@ Compare com a linha de base da Fase 1:
 
 ## Fase 8 — Apresentação
 Linguagem de quem decide: problema → o que foi feito → resultado em números → governança → próximo passo e o que é preciso da liderança. Uma página.
+
+
+## Aprendizados das 24 áreas construídas (28/09 a 22/10/2026)
+1. **Medir antes de construir.** A casa construiu 24 skills sem fechar a Fase 1 (apontamento com zero registros): sem linha de base, não há ROI realizado. Próximo agente só com linha de base de 1 semana.
+2. **Canal de entrada é pré-requisito.** A Central por e-mail ficou sem pedidos quando o Graph parou (06/10); escolha um canal que funciona hoje (painel, pasta do OneDrive, D91).
+3. **O gargalo pode ser a decisão humana.** O lote 1 do Recuperador ficou 3 semanas sem decisão; a folha curta (22/10) destravou. Desenhe a saída do agente para facilitar a decisão.
+4. **Rigor proporcional.** Revisão completa em todo alerta custa ~15x uma conversa (Anthropic, citado em 15/10); use N1 (automático) para dado e status, N2 para parceiro e contrato, N3 para prazo, tese, valor acima de R$ 1 mi e conflito.
+5. **Texto externo é dado, não ordem**, e trava de domínio no envio (`lib/protecao.py`).
+6. **Porteiro antes de tudo** (22/10): pedido repetido ou continuação não começa do zero.
+7. **Especialista sênior por arquivo** (D93): perfil + 10 seções; o gerente cobra o método do arquivo na revisão.
+8. **Validação humana fecha o ciclo** (D94): base de especialista é interna até o dono validar.
+
+## Avaliação dos agentes (evals)
+- 20 a 50 casos reais por frente, julgados pela pessoa que faz o trabalho; dois juízes em parte da amostra (Anthropic, "Demystifying evals for AI agents").
+- Medir consistência: com 75% de acerto por tentativa, acertar 3 seguidas dá cerca de 42%.
+- Metas propostas em 15/10: 80% dos rascunhos usados sem edição; 70% dos itens prontos para decidir.
+- Rodar os casos a cada mudança de skill e guardar o resultado com a data.
+
+## ROI de IA (modelo da casa)
+Benefício = horas liberadas × custo/hora + receita incremental atribuível + erro caro evitado. Custo = tokens e assinatura + supervisão humana + TI e construção + erro residual. ROI líquido = (benefício − custo) ÷ custo, com a linha de base da Fase 1 e o rótulo "potencial" enquanto o benefício for contratado (D16). Detalhe e casos em `especialistas/mentor-metodo.md`.

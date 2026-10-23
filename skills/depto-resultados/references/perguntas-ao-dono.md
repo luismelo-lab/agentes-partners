@@ -1,0 +1,25 @@
+# Perguntas ao dono · depto-resultados
+
+> Só o humano responde. Aberto em 22/10/2026 (padrão sênior, D93). Dono principal: Luis; Financeiro e diretoria onde indicado. Quando uma resposta vier, registre a data e o D-número e atualize o especialista citado.
+
+| # | Pergunta | Para quem | Por que importa | Especialista | Aberta em |
+|---|---|---|---|---|---|
+| R1 | A meta do Q4 de R$ 200 mi (D64) está em crédito, em honorário bruto ou em honorário líquido potencial? | Luis | Em líquido, a meta supõe cerca de R$ 1,16 bi de crédito no trimestre; em crédito, cerca de R$ 35 mi de líquido. A cobertura e o desdobramento mudam por completo | `metas-medicao-produto`, `forecast-pipeline` | 22/10/2026 |
+| R2 | Qual é o regime tributário da Save (Presumido ou Real), a receita bruta anual e a alíquota de ISS do município de emissão? | Financeiro | Troca a faixa de 11,3% a 16,5% pelo número real; liga ou não a majoração da LC 224/2025 acima de R$ 5 mi | `margem-dre`, `roi-caixa` | 22/10/2026 |
+| R3 | Existe registro do honorário recebido por negócio, com o ID do HubSpot? Quem pode enviar mensalmente? | Financeiro | Sem ele, o ROI realizado (oficial pela D17) e o backlog não existem | `controladoria-receita`, `roi-caixa` | 22/10/2026 |
+| R4 | Qual evento dispara o reconhecimento por variante: homologação, compensação aceita, ressarcimento ou fatura? | Luis + Financeiro | Define a coluna "reconhecido" pelo CPC 47 e o mês em que a meta é cumprida | `controladoria-receita` | 22/10/2026 |
+| R5 | Quando o repasse ao parceiro é devido: no ganho, no faturamento ou no recebimento do cliente? | Luis + Financeiro | Se antes do caixa, a Save financia o parceiro e o ROI realizado piora; muda o líquido em cada camada | `controladoria-receita`, `margem-dre` | 22/10/2026 |
+| R6 | Quantas horas do Técnico um caso consome por tese e porte, e qual a capacidade semanal medida? | Luis + Técnico | Fecha o custo variável e a margem de contribuição; decide se a meta é teto | `margem-dre`, `metas-medicao-produto` | 22/10/2026 |
+| R7 | Qual o custo de capital que a Save usa para descontar recebimentos de longo prazo? | Financeiro | Substitui a Selic como piso no ROI conservador da variante A (3 a 6 anos) | `roi-caixa` | 22/10/2026 |
+| R8 | Há rateio de custos das áreas de apoio (Técnico, Jurídico, Pós-venda) para a Área Partners? | Financeiro | Sem ele, o ROI é "custo só da área" e o EBITDA da área não fecha | `roi-caixa`, `margem-dre` | 22/10/2026 |
+| R9 | A métrica "margem por colaborador" (`metricas.md`, nível 2) fica fora, como pede a D21 (sem R$ por pessoa)? | Luis | Conflito entre o dicionário e a decisão; até resposta, vale a D21 e a métrica não é publicada | `margem-dre` | 22/10/2026 |
+| R10 | Qual a taxa histórica de indeferimento ou glosa por tese? Quem do Pós-venda pode levantar? | Luis + Pós-venda | Substitui a faixa de 10% a 30% no conservador | `controladoria-receita`, `roi-caixa` | 22/10/2026 |
+| R11 | Qual é o escopo oficial do pipeline (D74: R$ 180,6 mi × R$ 123,6 mi)? | Luis + Dados | Sem a regra, cada fórum cita um número e a cobertura muda em cerca de R$ 57 mi | `forecast-pipeline` | 22/10/2026 |
+| R12 | Quando a diretoria vai sugerir a meta 2027 (D75), em que unidade, e ela inclui os produtos da Save Invest? | Luis → diretoria | Define o desdobramento por produto e Master e evita contar a receita da Save Invest duas vezes (D92) | `metas-medicao-produto` | 22/10/2026 |
+| R13 | A propriedade "Produto" (D37) e o "produto de entrada" serão criados em que data e por quem do CRM? | Luis + time de CRM | Sem os campos, não há funil por produto em 2027 | `metas-medicao-produto` | 22/10/2026 |
+| R14 | A meta da área vai ser usada para remunerar o time? | Luis + RH | Se sim, entra a Lei 10.101/2000 (metas pactuadas previamente) e o depto-pessoas | `metas-medicao-produto` | 22/10/2026 |
+| R15 | Na variante A, se o PER for indeferido, o honorário é zero? | Luis + Jurídico | Recomendação de `precos-fees.md` §6 item 12; define o contrato e o conservador | `precificacao-fee`, `controladoria-receita` | 22/10/2026 |
+| R16 | Com a D79 (escala reprovada), o desconto abaixo de 30% passa a exigir exceção registrada (D65) em todo caso? | Luis | Sem regra, o efetivo de 25% continua sendo decidido na negociação | `precificacao-fee` | 22/10/2026 |
+| R17 | O piso de margem de contribuição de 20% e o teto de desconto de 10% por cesta e 15% por cliente são aprovados? | Luis | Hoje são hipótese em `precos-fees.md`; sem aprovação, não podem bloquear proposta | `precificacao-fee` | 22/10/2026 |
+| R18 | Qual empresa fatura cada produto (Save, escritório jurídico, Save Invest) e qual o parecer sobre a natureza jurídica da Save (pedido para 31/10/2026)? | Jurídico | Define o que é receita da Save na DRE e a base do repasse | `margem-dre`, `precificacao-fee` | 22/10/2026 |
+| R19 | Os quatro campos de outras comissões do HubSpot (vendedor, gestor comercial, indicador, coordenador) estão em uso e somam ao repasse? | Luis + CRM | Podem reduzir a margem líquida sem aparecer no relatório | `margem-dre` | 22/10/2026 |

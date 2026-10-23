@@ -1,5 +1,7 @@
 # Equipe do Departamento de TI, Automação & Governança de IA
 
+> **23/10/2026 (D93):** os papéis abaixo foram reorganizados em 6 especialistas sêniores com arquivo próprio em `especialistas/` (de-para no SKILL.md). Esta página fica como visão geral; método, normas, casos e perguntas estão nos arquivos. Datas de consulta das fontes técnicas foram atualizadas nos arquivos dos especialistas (22/10/2026).
+
 Contexto comum (inclua em todo prompt de especialista):
 > A Save Company recupera créditos tributários (PIS/COFINS principalmente) via parceiros (escritórios contábeis; 9 parceiros Masters). A Área Partners (gestor Luis Fernando de Melo; time Daniela, Geovana, Jenifer) usa HubSpot (portal 47865021), WhatsApp, Outlook/Microsoft 365, o GLPI em implantação e agentes de IA (Claude, plano Enterprise, decisão D3) que rodam no Mac do Luis. Tudo é N1: o agente rascunha, uma pessoa aprova, o TI da Save executa. Nunca leia credenciais; nunca imprima links de arquivos de clientes.
 

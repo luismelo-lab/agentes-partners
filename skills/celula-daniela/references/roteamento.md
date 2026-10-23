@@ -12,7 +12,10 @@ Princípio do Gabinete: **só entra quem agrega**. Na dúvida, a Daniela decide.
 | LGPD (WhatsApp, dados de clientes, listas) | `depto-juridico` | LGPD & Privacidade | Jurídico real |
 | Apoio jurídico em reunião | `depto-juridico` | D · Apoio Jurídico Comercial | Daniela |
 | Dúvida de tese, norma, julgamento | `depto-tributario` | especialista da linha | Técnico tributário (1º nível: Geovana) |
-| Crédito internacional, fundo, funding, FIDC, antecipação, gestão de contas, home equity, maquila, Paraguai, internacionalização | `depto-internacional` | Qualificador, Maquila ou Ecossistema (modo A ou B) | Luis (ponto focal) e o João Mattos (dono do produto) |
+| Gestão de Contas, cobrança, antecipação de recebíveis, FIDC (Save Invest, D92 de 22/10/2026) | `depto-save-invest` | especialista do tema | Junior (dono da Save Invest) |
+| Crédito internacional, captação, home equity, maquila, Paraguai, internacionalização (em validação: só descoberta, D83) | `depto-internacional` | Qualificador ou Maquila | Luis (ponto focal) e o João Mattos (dono do produto) |
+| Dívida tributária, CND, parcelamento, CAPAG, transação, edital da PGFN, Funrural antigo (P5 Gestão de Passivo) | `depto-juridico` | Gestão de Passivo Tributário (via `especialistas/apoio-juridico-canal.md`) | Daniela e Jurídico real |
+| Holding, sucessão, doação de quotas, ITCMD, dividendos da Lei 15.270 (P10 estruturação patrimonial) | `depto-juridico` | Estruturação Patrimonial e Sucessória (via `especialistas/apoio-juridico-canal.md`) | Daniela e Jurídico real |
 | O que mais o cliente pode contratar, carteira do Master, QBR | `depto-solucoes` | Modo A (conta) ou B (carteira) | Daniela (conduz com o Master) |
 | Reanálise de perdido/zerado | `recuperador` | fila e ficha | Geovana |
 | Material novo, co-branding, kit | `depto-marketing` | Enablement de Vendas do Parceiro / Co-branding | Marketing real |
@@ -27,7 +30,7 @@ Como acionar: ferramenta Agent (`general-purpose`), mandando ler o SKILL.md do d
 |---|---|---|
 | Contratos | `CTR-ENVIO`, `CTR-DISTRATO` | distrato com litígio: + depto-juridico |
 | Pós-venda | `POS-EXTRATO`, `POS-GUIAS`, `POS-COMPENSACAO` | |
-| Partner Success | onboarding, capacitação de parceiro | até existir: Luis |
+| Partner Success | onboarding, capacitação, níveis, reativação de parceiro | virtual: `depto-partner-success` (já construído); o humano é o Luis |
 | Operações de Canal & Comissionamento (Financeiro) | `REP-COMISSAO` | repasse atrasado destrói confiança: prioridade |
 | TI / GLPI | `TI-ACESSO` | |
 | Qualidade & Ouvidoria | `QLD-RECLAMACAO` | até existir: Luis no mesmo dia |

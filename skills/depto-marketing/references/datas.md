@@ -1,5 +1,7 @@
 # Datas para o calendário
 
+> **22/10/2026:** o calendário fiscal datado (regra, fonte e data provável em 2027 de ECD, ECF, EFD-Contribuições, DCTFWeb, IRPF e transição PIS/COFINS → CBS) e as semanas de silêncio estão em `especialistas/estrategista-campanhas-calendario.md`, seção 2. Esta tabela segue para datas comemorativas e de relacionamento.
+
 > Prioridade: **A** = ligada ao público/negócio; **B** = boa para relacionamento; **C** = opcional.
 > Datas móveis: calcular para o ano pedido. Prazos fiscais mudam: **confirmar sempre** na fonte oficial (Receita Federal) ou com o Técnico Tributário antes de publicar.
 

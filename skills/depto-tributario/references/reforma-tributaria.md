@@ -1,5 +1,7 @@
 # Reforma tributária — marcos da transição
 
+> Resumo de 28/09/2026. O conteúdo completo e conferido em 22/10/2026 (arts. 378 a 383 da LC 214, Decreto 12.955 arts. 602 a 609, LC 227 arts. 132 a 139, método e perguntas) está em `especialistas/reforma-saldos-credores.md`.
+
 > Levantado em 2026-09-28 por pesquisa web (fontes abaixo). **Validar com o Técnico Tributário** e reconfirmar a cada nova regulamentação.
 
 | Ano | O que acontece |

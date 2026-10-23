@@ -1,5 +1,5 @@
 {
- "_nota": "Catálogo de pedidos por e-mail (v1, 30/09/2026). Cada código diz qual skill atende e o que a resposta deve trazer. A pessoa pode pedir qualquer código, não só os da própria célula.",
+ "_nota": "Catálogo de pedidos por e-mail (v1, 30/09/2026). Cada código diz qual skill atende e o que a resposta deve trazer. A pessoa pode pedir qualquer código, não só os da própria célula. Atualizado em 22/10/2026: PI4 passa para depto-save-invest (D92).",
  "tipos": {
   "DM1": {
    "rotulo": "Briefing de conta Master",
@@ -226,13 +226,14 @@
   },
   "PI4": {
    "rotulo": "Encaixe no ecossistema (caixa, dívida, carteira, FIDC, antecipação)",
-   "celula": "Contas e Soluções",
-   "skill": "depto-solucoes",
+   "celula": "Save Invest",
+   "skill": "depto-save-invest",
    "entrega": "Sinais financeiros lidos, produto que entra primeiro (Gestão de Contas, antecipação, alongamento, FIDC, funding ou home equity) e o que pedir",
    "precisa": [
     "CNPJ ou link do negócio",
     "DRE, balanço ou SCR, se tiver"
-   ]
+   ],
+   "nota": "Desde a D92 (22/10/2026), a Save Invest (Junior) responde por Gestão de Contas, antecipação e FIDC; depto-solucoes entra só no encaixe da esteira e no mapa da conta."
   },
   "PI5": {
    "rotulo": "Preparar reunião de produto (cliente ou João Mattos)",

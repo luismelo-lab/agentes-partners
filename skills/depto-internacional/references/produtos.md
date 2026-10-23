@@ -1,6 +1,7 @@
 # Produtos Internacionais e Financeiros · Ficha de cada produto
 
-> Base de conhecimento do departamento. Uso interno. Data-base: 16/10/2026.
+> Base de conhecimento do departamento. Uso interno. Data-base: 16/10/2026; seções 4 a 8 e a nota da seção 3 atualizadas em 22/10/2026 (D92, D93, transcrição de 21/10).
+> Cada produto tem especialista com as 10 seções do padrão sênior em `references/especialistas/` (ver `equipe.md`).
 > Fonte vigente do Crédito Internacional: `21-documento-interno.md` v2.3 (07/10/2026). Do Maquila: `06-documento-oficial-maquila.md` v0.9 (09/10/2026). Do ecossistema: reunião de 13/10/2026. Índice completo em `fontes.md`.
 > Regra de leitura: o que está marcado como **em aberto** não vai a parceiro nem a cliente. Nada aqui é oferta, taxa ou promessa.
 > Sem nomes de clientes em análise: use `<EMPRESA>`.
@@ -226,7 +227,9 @@ Nenhum valor definido. Ao cliente: "escopo e honorários definidos depois da con
 
 ---
 
-## 3. Ecossistema financeiro (reunião de 13/10/2026)
+## 3. Ecossistema financeiro (reunião de 13/10/2026) · **migrado para a Save Invest**
+
+> **D92 (22/10/2026):** Gestão de Contas, antecipação e FIDC ficam com o `depto-save-invest` (dono Junior). Esta seção fica como registro histórico e para o encaixe na esteira. Home equity (3.4) e passivo bancário seguem nesta área (seções 7 e 8 abaixo). Funding internacional (3.3) é o CI (seção 1).
 
 > **Atualização do Luis, 19/10/2026:** Gestão de Contas, antecipação e FIDC são **produtos prontos para venda**, ofertados pela **Save Invest**. Estruturação patrimonial e empresarial é produto pronto, conduzido pelo jurídico. Tax internacional e comércio exterior é produto pronto, conduzido pelo Paulo e pelo João Mattos. Crédito internacional, captação de capital, home equity e internacionalização de empresas são conduzidos pelo João Mattos. Onde esta seção diz "MVP", "em definição" ou "fora do Padrão de Produto Novo" para GC, antecipação e FIDC, vale esta atualização. As cautelas jurídicas (a Save não é credora, não antecipa e não distribui cotas) continuam; confirmar com o Jurídico qual empresa contrata e presta.
 
@@ -264,3 +267,48 @@ Despesa financeira alta; resultado baixo; contas a receber acima do faturamento 
 
 ### 3.6 Termos (13/10)
 Dizer "estruturação patrimonial", não "holding". Usar "Carry Trade" só no sentido correto. Estatística de mercado não é dado próprio.
+
+
+---
+
+## 4. P18 · Tax internacional e comércio exterior (PRONTO)
+Ficha completa em `references/tax-internacional.md`; especialista em `especialistas/tax-internacional-comex.md`.
+- **Estado:** pronto (Luis, 19/10/2026). Donos: Paulo e João Mattos. Revisão obrigatória do `depto-tributario` e do `depto-juridico`.
+- **O que é:** estrutura no exterior, CFC (Lei 12.973, arts. 76–92; Lei 14.754/2023 para PF), preço de transferência (Lei 14.596/2023), remessas (IRRF, CIDE, IOF), câmbio e registros (CBE, SCE-IED, SCE-Crédito), comércio exterior (drawback, Recof, Reintegra, origem Mercosul, tarifas).
+- **Regra-mãe:** sem sigilo de capitais; arm's length desde a primeira nota; a vantagem da maquila é custo, não alíquota.
+- **Em aberto:** cardápio, preço, quem assina, linha sobre CRS.
+
+## 5. P16 · Captação de capital (equity, investidores, sócio estratégico) e N1 · Preparação para investidor
+Especialista: `especialistas/captacao-capital-investidor.md`.
+- **Estado:** em validação; dono João Mattos; Paulo conduz investidores e family offices [R24/09; R21/10]. Sem G0. Descoberta para fora (D30, D83).
+- **O que é:** preparar a empresa e apresentar a investidores ou a sócio estratégico; comparar dívida (CI) × equity × híbrido (mútuo conversível, LC 182/2021, art. 5º) × crowdfunding (Res. CVM 88/2022: até R$ 15 mi, receita até R$ 40 mi).
+- **Falas do dono:** duas formas, equity e dívida em dólar [Paulo, R24/09]; prejuízo não inviabiliza se o plano convence [Paulo, R24/09]; investidores no Brasil, Europa e EUA, inclusive family offices [Paulo, R21/10, 00:46:07]; captação é vertical independente, sem venda casada [Paulo, R21/10, 00:26:17].
+- **Trava regulatória:** procurar muitos investidores é oferta pública (Res. CVM 160/2022, art. 3º); mediação sem registro é crime (Lei 6.385/1976, art. 27-E). Jurídico antes de qualquer conversa.
+- **Entregáveis:** dossiê de prontidão (nota 0–100), comparativo de rotas, lista curta de tipos de investidor, data room, acompanhamento até o fechamento (SCE-IED se estrangeiro).
+- **Em aberto:** quais investidores e tíquetes (existe fundo abaixo de US$ 5 mi? B17); remuneração da Save sem intermediação irregular; preço do N1.
+
+## 6. P17 · Internacionalização turnkey (abertura de mercado)
+Especialista: `especialistas/internacionalizacao-turnkey.md`.
+- **Estado:** em validação; dono João Mattos; condução do Paulo. Sem G0. Não lidera a primeira conversa (R02/10).
+- **O que é:** da obtenção de recursos à abertura de mercado: captação, estruturação, abertura de mercado, obrigações no Brasil, representantes comerciais [Paulo, R24/09]; 11 países citados (sem confirmação escrita da rede).
+- **Tese do Paulo [R21/10]:** o esforço para vender no Brasil é o mesmo para a América Latina [00:16:45]; menos dependência do mercado interno [00:17:24]; "o Brasil atende o Brasil, o Paraguai atende o mundo" [00:30:12].
+- **Correção de 22/10/2026:** a vantagem tarifária citada (Brasil 40%, Paraguai 10% nos EUA) [00:30:46] é de 2025; em 2026 vale a Seção 301 (25% desde 22/07/2026 e 12,5% desde 24/07/2026 para parte da pauta; 52,7% das exportações sem sobretaxa, MDIC).
+- **Ordem:** capacidade e caixa no Brasil primeiro.
+- **Em aberto:** rede de representantes, contratos, remuneração e preço.
+
+## 7. P14 · Home equity
+Especialista: `especialistas/home-equity-passivo-bancario.md`.
+- **Estado:** em validação; dono João Mattos; fora da rodada do portfólio de 22/10. Sem G0.
+- **O que é:** crédito com imóvel (da empresa, do sócio ou de terceiro) em alienação fiduciária (Lei 9.514/1997, art. 22, redação da Lei 14.711/2023), concedido por banco ou fintech autorizada; a Save diagnostica e indica, não empresta.
+- **Para quem:** quem não tem escala para FIDC ou funding [R13/10]; dívida cara e imóvel livre.
+- **Mercado (consulta 22/10/2026):** 1,1% a 1,8% a.m.; LTV de 50% a 60%; até 120 meses PJ; carteira de R$ 34,1 bi (ABECIP via imprensa). Sem série oficial do BCB para PJ.
+- **Risco:** consolidação do imóvel e saldo remanescente devido (Lei 9.514, art. 27, §5º-A).
+- **Em aberto:** parceiro bancário, remuneração da Save, enquadramento como correspondente (Res. CMN 4.935/2021).
+
+## 8. P6 · Passivo bancário, alongamento e carência
+Especialista: `especialistas/home-equity-passivo-bancario.md`.
+- **Estado:** em validação; **sem dono** (Save Invest ou João Mattos; pergunta ao Luis). Sem ficha nem G0.
+- **O que é:** mapa da dívida (SCR, curva ABC), caixa de 13 semanas, renegociação e alongamento com carência, troca de dívida cara (home equity ou CI), recuperação extrajudicial pelo advogado (Lei 11.101, art. 163: mais da metade por espécie; 1/3 para protocolar e 90 dias para completar).
+- **Exemplo da reunião (R13/10):** cerca de R$ 8 mi/mês de faturamento, cerca de 15 bancos, cerca de R$ 1 mi/mês de parcelas, prejuízo acumulado de cerca de R$ 9 mi. Pergunta-chave: "tem algum mês do ano em que o seu caixa aperta mais?".
+- **Referência de mercado:** capital de giro PJ a 22,89% a.a., rotativo a 40,41% a.a. (BCB, ago/2026); Selic de 13,75%.
+- **Em aberto:** dono, parceria com escritório de insolvência, preço.
