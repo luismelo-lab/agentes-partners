@@ -1,5 +1,7 @@
 # Manual dos Agentes · Área Partners
 
+> **Superado em 23/10/2026 pelo Manual Oficial dos Agentes v2.0** (`docs/manual-oficial-agentes.md`, gerado por `infra/manual_oficial.py`). Este arquivo fica como histórico.
+
 ## 1. Como usar este manual
 Este manual explica cada agente da Área Partners: o que ele faz, por que existe, como pedir, o que chega de volta e o que fazer em cada situação. Ele vale para Luis, Daniela, Jenifer e Geovana.
 
