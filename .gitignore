@@ -80,3 +80,4 @@ central/web/config.js
 central/api/local.settings.json
 central/api/.venv/
 **/__pycache__/
+portal/luis/

@@ -1,222 +1,375 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<!-- PRÉVIA LOCAL. Na versão final (portal/index.html) saem esta linha de cabeçalho e o exemplo-dados.js:
-     sem window.EX a página lê dados.json, diretorio.json e o db do Artifact. -->
+<!-- PRÉVIA LOCAL. Na versão final (portal/index.html, gerada por portal/opcoes/gerar_index.py) saem estas linhas de cabeçalho
+     e o exemplo-dados.js: sem window.EX a página lê dados.json, diretorio.json e o db do Artifact. -->
 <script src="exemplo-dados.js"></script>
 <title>Central Partners</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-/* Central Partners v2 (versão combinada, 23/10/2026). Design System Save v0.5.
-   Casca de sistema: barra lateral fixa + barra superior com busca global (Ctrl+K), notificações e perfil;
-   tabelas com filtros e painel lateral de detalhe. Áreas em cartões de serviço com página própria.
-   Mesa do Luis com KPIs, filas em kanban e janelas de receita. Claro por padrão (time), alternância para escuro. */
+/* Central Partners v3 (design aprovado em 23/10/2026: "cockpit escuro"). Design System Save v0.5.
+   Layout: barra lateral fixa (navegação + "Fale com uma área" + perfil), barra superior com caminho, busca ⌘K e "Novo pedido";
+   no celular, cabeçalho curto e menu inferior. Escuro é o padrão do painel; o botão de tema alterna para o claro.
+   O ouro é a única cor de destaque: botão principal, seleção, prazo perto e linha das sparklines. */
 :root {
-  --fundo:#F6F7F9; --fundo-2:#F1F2F5; --cartao:#FFFFFF; --borda:#E6E8EC; --borda-3:#C9CCD3;
-  --texto:#0F1115; --texto-2:#4A4F58; --ouro:#F3CD60; --ouro-texto:#B58A1F; --ouro-suave:#FBF1D7;
-  --sucesso:#1E8E3E; --alerta:#B5790F; --erro:#C5221F; --sombra:rgba(15,17,21,.14); --veu:rgba(15,17,21,.32); --hover:#FAFAFB;
+  --fundo:#000000; --sup:#0B0B0C; --sup-2:#141416; --poco:#060607; --hover:#101012;
+  --linha:#1C1C20; --linha-2:#26262B; --linha-3:#3A3A40; --linha-fina:#16161A;
+  --texto:#F2F2F3; --texto-2:#C9C9CF; --texto-3:#A3A3AB; --texto-4:#8A8A93; --apagado:#4A4A52; --ponto:#7C7C85;
+  --ouro:#F3CD60; --ouro-texto:#F3CD60; --ouro-linha:#F3CD60; --ouro-hover:#FFE08A; --ouro-suave:rgba(243,205,96,.12); --sobre-ouro:#000000;
+  --erro:#E5675F; --veu:rgba(0,0,0,.72); --sombra:rgba(0,0,0,.6);
   --sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
-  color-scheme:light }
-:root[data-theme="dark"] {
-  --fundo:#000000; --fundo-2:#111111; --cartao:#171717; --borda:#2A2A2A; --borda-3:#3A3A3A;
-  --texto:#F5F5F5; --texto-2:#A1A1A1; --ouro:#F3CD60; --ouro-texto:#F3CD60; --ouro-suave:rgba(243,205,96,.12);
-  --sucesso:#44C653; --alerta:#E8B34A; --erro:#D64545; --sombra:rgba(0,0,0,.6); --veu:rgba(0,0,0,.6); --hover:#1E1E1E; color-scheme:dark }
+  --lado:248px; color-scheme:dark }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --fundo:#F6F7F9; --sup:#FFFFFF; --sup-2:#F1F2F5; --poco:#F6F7F9; --hover:#F7F8FA;
+  --linha:#E6E8EC; --linha-2:#DEE0E5; --linha-3:#C9CCD3; --linha-fina:#EEF0F3;
+  --texto:#0F1115; --texto-2:#2E323A; --texto-3:#4A4F58; --texto-4:#5F646E; --apagado:#A9ADB5; --ponto:#838892;
+  --ouro:#F3CD60; --ouro-texto:#B58A1F; --ouro-linha:#B58A1F; --ouro-hover:#E8BC4C; --ouro-suave:#FBF1D7; --sobre-ouro:#0F1115;
+  --erro:#C5221F; --veu:rgba(15,17,21,.32); --sombra:rgba(15,17,21,.14); color-scheme:light } }
+:root[data-theme="light"] {
+  --fundo:#F6F7F9; --sup:#FFFFFF; --sup-2:#F1F2F5; --poco:#F6F7F9; --hover:#F7F8FA;
+  --linha:#E6E8EC; --linha-2:#DEE0E5; --linha-3:#C9CCD3; --linha-fina:#EEF0F3;
+  --texto:#0F1115; --texto-2:#2E323A; --texto-3:#4A4F58; --texto-4:#5F646E; --apagado:#A9ADB5; --ponto:#838892;
+  --ouro:#F3CD60; --ouro-texto:#B58A1F; --ouro-linha:#B58A1F; --ouro-hover:#E8BC4C; --ouro-suave:#FBF1D7; --sobre-ouro:#0F1115;
+  --erro:#C5221F; --veu:rgba(15,17,21,.32); --sombra:rgba(15,17,21,.14); color-scheme:light }
+.logo-claro{display:none}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .logo-claro{display:block} :root:not([data-theme="dark"]) .logo-escuro{display:none} }
+:root[data-theme="light"] .logo-claro{display:block} :root[data-theme="light"] .logo-escuro{display:none}
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--fundo);color:var(--texto);font:400 15px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--fundo);color:var(--texto);font:400 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:25;background:var(--fundo)}
 button{font:inherit;color:inherit}
-a{color:var(--texto);text-decoration:underline;text-decoration-color:var(--ouro-texto);text-underline-offset:3px;font-weight:500}
-:focus-visible{outline:3px solid var(--ouro-texto);outline-offset:2px} [tabindex="-1"]:focus{outline:none}
-.ic{width:20px;height:20px;flex:none}
-.logo-escuro{display:none} :root[data-theme="dark"] .logo-claro{display:none} :root[data-theme="dark"] .logo-escuro{display:block}
-/* barra lateral */
-.lado{position:fixed;inset:0 auto 0 0;width:236px;overflow:hidden;background:var(--cartao);border-right:1px solid var(--borda);display:flex;flex-direction:column;z-index:30;padding-left:env(safe-area-inset-left,0px)}
-.lado .marca{height:64px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:4px;padding:0 20px;border-bottom:1px solid var(--borda)}
-.lado .marca img{height:20px;width:auto} .lado .marca span{font:500 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--texto-2);white-space:nowrap}
-.menu{padding:10px;display:grid;gap:2px}
-.menu .grupo{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--texto-2);padding:14px 12px 6px}
-.menu a{display:flex;align-items:center;gap:12px;padding:0 12px;min-height:42px;border-radius:8px;text-decoration:none;color:var(--texto-2);font-weight:500;position:relative}
-.menu a:hover{background:var(--fundo-2);color:var(--texto)}
-.menu a[aria-current="page"]{background:var(--ouro-suave);color:var(--texto);font-weight:600}
-.menu a[aria-current="page"]::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:2px;background:var(--ouro)}
-.menu .cont{margin-left:auto;font:600 12px var(--mono);background:var(--texto);color:var(--cartao);border-radius:10px;padding:0 7px}
-.lado .perfil{margin-top:auto;border-top:1px solid var(--borda);padding:14px 16px;display:flex;gap:10px;align-items:center}
-.av{width:34px;height:34px;border-radius:50%;background:#0F1115;color:#F3CD60;border:1px solid var(--borda-3);display:grid;place-items:center;font:600 12.5px var(--mono);flex:none}
-.av.p{width:26px;height:26px;font-size:10.5px}
-.perfil label{flex:1;display:grid;gap:2px;font-size:12px;color:var(--texto-2);font-weight:500}
-.perfil select{min-height:36px;padding:4px 8px}
-/* barra superior */
-.corpo{margin-left:236px;min-height:100vh}
-.topo{position:sticky;top:0;z-index:20;height:64px;background:var(--cartao);border-bottom:1px solid var(--borda);display:flex;align-items:center;gap:10px;padding:0 max(24px,env(safe-area-inset-right,0px)) 0 24px}
-.icbtn.btn-menu{display:none}
-.busca-g{flex:1;max-width:560px;display:flex;align-items:center;gap:10px;height:42px;border:1px solid var(--borda-3);border-radius:10px;background:var(--fundo);padding:0 12px;color:var(--texto-2);cursor:text;text-align:left;min-width:0}
-.busca-g span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .busca-g .txt-c{display:none} .topo img.logo-m{display:none!important}
-.busca-g kbd{margin-left:auto;font:500 11.5px var(--mono);border:1px solid var(--borda-3);border-radius:5px;padding:1px 6px;background:var(--cartao);color:var(--texto-2)}
-.topo .dir{margin-left:auto;display:flex;align-items:center;gap:6px}
-.icbtn{width:42px;height:42px;border-radius:10px;border:1px solid transparent;background:none;display:grid;place-items:center;cursor:pointer;position:relative;color:var(--texto)}
-.icbtn:hover{background:var(--fundo-2)}
-.icbtn .pt{position:absolute;top:5px;right:4px;min-width:18px;height:18px;border-radius:9px;background:var(--erro);color:#FFFFFF;font:600 11px/18px var(--mono);text-align:center;padding:0 4px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 16px;border-radius:8px;border:1px solid var(--ouro);background:var(--ouro);color:#0F1115;font:600 14px var(--sans);cursor:pointer;text-decoration:none;white-space:nowrap}
-.btn:hover{filter:brightness(.96)} .btn .ic{width:18px;height:18px}
-.btn.sec{background:var(--cartao);border-color:var(--borda-3);color:var(--texto)} .btn.perigo{background:var(--cartao);border-color:var(--erro);color:var(--erro)}
-.btn.peq{min-height:34px;padding:0 12px;font-size:13px}
-.btn:disabled{opacity:.5;cursor:not-allowed;filter:none}
-.faixa-previa{background:var(--ouro-suave);border-bottom:1px solid var(--ouro);font-size:13.5px;padding:8px 24px;display:flex;gap:8px;flex-wrap:wrap}
-/* páginas */
-.pag{padding:28px 24px 64px;max-width:1280px;display:grid;gap:22px}
-.pag>*{min-width:0}
-.pag-cab{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;justify-content:space-between}
-.pag-cab>div{min-width:0}
-.pag-cab h1{margin:2px 0 0;font-size:26px;font-weight:600;letter-spacing:-.01em;line-height:1.2;text-wrap:balance}
-.pag-cab p{margin:6px 0 0;color:var(--texto-2);max-width:72ch}
-.rot{font:500 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--texto-2)}
-.migalha{font-size:13.5px;color:var(--texto-2);display:flex;gap:6px;align-items:center;flex-wrap:wrap} .migalha a{color:var(--texto-2)}
-.acoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
-.kpi{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;padding:14px 16px;display:grid;gap:2px;text-align:left;cursor:default}
-button.kpi{cursor:pointer} button.kpi:hover{border-color:var(--borda-3)}
-.kpi strong{font:600 28px/1.15 var(--mono);font-variant-numeric:tabular-nums} .kpi small{color:var(--texto-2);font-size:13px}
-.kpi.destaque{border-color:var(--ouro);box-shadow:inset 0 3px 0 var(--ouro)}
-.painel{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;overflow:hidden;min-width:0}
-.painel-cab{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--borda)}
-.painel-cab h2{margin:0;font-size:16px;font-weight:600}
-.painel-corpo{padding:16px;display:grid;gap:12px}
-.filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--borda-3);border-radius:8px;overflow:hidden}
-.seg button{border:0;background:var(--cartao);padding:0 12px;min-height:36px;cursor:pointer;font-size:13.5px;border-right:1px solid var(--borda);display:inline-flex;gap:6px;align-items:center}
-.seg button:last-child{border-right:0} .seg button[aria-pressed="true"]{background:var(--texto);color:var(--cartao)}
-.seg .n{font:500 12px var(--mono);opacity:.8}
-select,input,textarea{font:15px/1.4 var(--sans);border:1px solid var(--borda-3);border-radius:8px;padding:9px 12px;min-height:42px;background:var(--cartao);color:var(--texto);width:100%;min-width:0}
-select.f{width:auto;min-height:36px;padding:0 10px;font-size:13.5px}
+a{color:var(--ouro-texto);text-underline-offset:3px;font-weight:500} a:hover{color:var(--ouro-hover)}
+:focus-visible{outline:2px solid var(--ouro);outline-offset:2px} [tabindex="-1"]:focus{outline:none}
+h1,h2,h3{text-wrap:balance}
+.ic{width:18px;height:18px;flex:none}
+.so-leitor{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12.5px}
+.rot{font:500 11px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--texto-3)}
+.sub{color:var(--texto-4);font-size:12.5px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tit{font-weight:500;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quebra{white-space:normal;overflow-wrap:anywhere}
+
+/* ---------- barra lateral ---------- */
+.lado{position:fixed;inset:0 auto 0 0;width:var(--lado);background:var(--fundo);border-right:1px solid var(--linha);display:flex;flex-direction:column;gap:22px;
+  padding:calc(20px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));z-index:40;overflow-y:auto}
+.lado .marca{padding:0 8px;display:flex;align-items:center;min-height:24px} .lado .marca img{height:22px;width:auto}
+.grupo-m{display:flex;flex-direction:column;gap:2px}
+.grupo-m .rot{padding:0 10px 8px;letter-spacing:.12em;color:var(--texto-4)}
+.menu a,.fixadas a{display:flex;align-items:center;gap:10px;min-height:42px;padding:8px 10px;border-radius:9px;text-decoration:none;color:var(--texto-3);font-weight:400;font-size:14px}
+.menu a:hover,.fixadas a:hover{background:var(--sup-2);color:var(--texto)}
+.menu a[aria-current="page"]{background:var(--linha);color:var(--texto);font-weight:500}
+.menu a span.t,.fixadas a span.t{flex:1;min-width:0}
+.cont{font:600 11px var(--mono);min-width:22px;padding:1px 6px;border-radius:999px;background:var(--ouro);color:var(--sobre-ouro);text-align:center}
+.fixadas a{color:var(--texto-2)}
+.sig{width:24px;height:24px;border-radius:6px;background:var(--sup-2);border:1px solid var(--linha-2);color:var(--ouro-texto);font:600 11px var(--mono);display:flex;align-items:center;justify-content:center;flex:none}
+.sig.g{width:36px;height:36px;border-radius:9px;font-size:12px}
+.sig.forte{background:var(--ouro);border-color:var(--ouro);color:var(--sobre-ouro)}
+.perfil{margin-top:auto;display:grid;gap:10px;padding:12px 10px;border:1px solid var(--linha);border-radius:10px;background:var(--sup)}
+.perfil .quem{display:flex;align-items:center;gap:10px}
+.perfil .quem span{display:flex;flex-direction:column;line-height:1.3;min-width:0} .perfil .quem b{font-weight:600} .perfil .quem small{font-size:12px;color:var(--texto-3)}
+.av{width:32px;height:32px;border-radius:50%;background:var(--ouro);color:var(--sobre-ouro);font:700 12.5px var(--sans);display:flex;align-items:center;justify-content:center;flex:none}
+.av.vazio-av{background:var(--sup-2);color:var(--texto-3);border:1px solid var(--linha-3)}
+.av.p{width:24px;height:24px;font:600 10px var(--sans);background:var(--linha);color:var(--texto);border:1px solid var(--linha-3)}
+.av.m{width:30px;height:30px;font-size:12px;background:var(--linha);color:var(--texto);border:1px solid var(--linha-3)}
+.perfil label{display:grid;gap:4px;font-size:12px;color:var(--texto-3)}
+.perfil select{min-height:34px;padding:4px 8px;font-size:13px}
+.veu-menu{display:none}
+
+/* ---------- barra superior ---------- */
+.corpo{margin-left:var(--lado);min-height:100vh;min-width:0;display:flex;flex-direction:column}
+.topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:12px;background:var(--fundo);border-bottom:1px solid var(--linha);
+  padding-block:12px;padding-left:28px;padding-right:max(28px,env(safe-area-inset-right,0px))}
+.migalha{font-size:13px;color:var(--texto-3);display:flex;align-items:center;gap:8px;flex:1 1 200px;min-width:0}
+.migalha b{color:var(--texto);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .migalha i{font-style:normal;color:var(--apagado)}
+.topo img.logo-m{display:none!important}
+.busca-g{flex:0 1 380px;min-width:200px;display:flex;align-items:center;gap:10px;min-height:40px;padding:0 12px;border:1px solid var(--linha-2);border-radius:10px;background:var(--sup);color:var(--texto-4);font-size:14px;cursor:pointer;text-align:left}
+.busca-g:hover{border-color:var(--linha-3)} .busca-g .txt-l{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .busca-g .txt-c{display:none}
+kbd{font:500 11px var(--mono);padding:2px 6px;border:1px solid var(--linha-2);border-radius:5px;color:var(--texto-3);background:transparent}
+.tag-previa{font:500 11px var(--mono);letter-spacing:.06em;padding:4px 8px;border:1px dashed var(--apagado);border-radius:6px;color:var(--texto-3);white-space:nowrap}
+.dir{display:flex;align-items:center;gap:8px}
+.icbtn{position:relative;width:40px;height:40px;border:1px solid var(--linha-2);border-radius:10px;background:var(--sup);color:var(--texto-2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.icbtn:hover{border-color:var(--linha-3);color:var(--texto)}
+.icbtn .pt{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;background:var(--ouro);color:var(--sobre-ouro);font:600 10.5px/18px var(--mono);text-align:center;padding:0 4px}
+.av-m{display:none}
+.faixa{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;margin:0;padding-block:8px;padding-left:28px;padding-right:max(28px,env(safe-area-inset-right,0px));border-bottom:1px dashed var(--linha-2);font-size:12.5px;color:var(--texto-3)}
+.faixa b{color:var(--texto);font-weight:600}
+
+/* ---------- botões e campos ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border-radius:10px;border:1px solid var(--ouro);background:var(--ouro);color:var(--sobre-ouro);font:600 14px var(--sans);cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--ouro-hover);border-color:var(--ouro-hover);color:var(--sobre-ouro)} .btn .ic{width:16px;height:16px}
+.btn.sec{background:var(--sup-2);border-color:var(--linha-3);color:var(--texto);font-weight:500} .btn.sec:hover{border-color:var(--texto-4);color:var(--texto)}
+.btn.linha{background:transparent;border-color:var(--ouro);color:var(--ouro-texto);font-weight:500} .btn.linha:hover{background:var(--ouro-suave)}
+.btn.perigo{background:transparent;border-color:var(--erro);color:var(--erro);font-weight:500}
+.btn.peq{min-height:32px;padding:0 12px;font-size:12.5px;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.lnk{border:0;background:none;color:var(--ouro-texto);font-size:13px;cursor:pointer;min-height:32px;padding:0;text-decoration:none;font-weight:500}
+.lnk:hover{color:var(--ouro-hover)}
+select,input,textarea{font:14px/1.4 var(--sans);border:1px solid var(--linha-2);border-radius:10px;padding:9px 12px;min-height:40px;background:var(--poco);color:var(--texto);width:100%;min-width:0}
+input::placeholder,textarea::placeholder{color:var(--texto-4)}
+select.f{width:auto;min-height:34px;padding:0 10px;font-size:13px;background:var(--sup)}
 textarea{min-height:96px;resize:vertical}
-label{display:grid;gap:6px;font-weight:500;font-size:14px} label small{color:var(--texto-2);font-weight:400}
+label{display:grid;gap:6px;font-weight:500;font-size:13.5px} label small{color:var(--texto-4);font-weight:400}
 .campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.acoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;padding:4px;border:1px solid var(--linha);border-radius:10px;background:var(--sup)}
+.seg button{border:0;border-radius:7px;background:transparent;color:var(--texto-3);min-height:30px;padding:0 12px;font-size:13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.seg button[aria-pressed="true"]{background:var(--linha);color:var(--texto)} .seg .n,.pilulas .n{font:500 11.5px var(--mono);opacity:.8}
+.pilulas{display:flex;flex-wrap:wrap;gap:6px}
+.pilulas button{min-height:34px;padding:0 14px;border:1px solid var(--linha-2);border-radius:999px;background:transparent;color:var(--texto-2);font-size:13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.pilulas button[aria-pressed="true"]{background:var(--ouro);border-color:var(--ouro);color:var(--sobre-ouro);font-weight:600}
+.chip{display:inline-flex;align-items:center;gap:6px;font:500 11.5px/1.6 var(--mono);padding:1px 8px;border-radius:6px;border:1px solid var(--linha-2);color:var(--texto-2);white-space:nowrap;background:transparent}
+.chip.area{font-family:var(--sans);font-size:12px;background:var(--sup-2)}
+.chip.p::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--texto-4);flex:none}
+.chip.fila::before{background:transparent;border:1.5px solid var(--ponto)} .chip.analise::before{background:var(--texto-2)}
+.chip.aprovar,.chip.forte{background:var(--ouro);border-color:var(--ouro);color:var(--sobre-ouro);font-weight:600} .chip.aprovar::before{background:var(--sobre-ouro)}
+.chip.concluido{color:var(--texto-3)} .chip.concluido::before{background:var(--apagado)}
+.chip.urg{border-color:var(--ouro);color:var(--ouro-texto);font-weight:600} .chip.urg::before{content:"!";font-weight:700}
+.ponto{width:8px;height:8px;border-radius:50%;flex:none;background:var(--ponto)} .ponto.ouro{background:var(--ouro)}
+.nota{border:1px dashed var(--linha-2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--texto-3)}
+.nota b{color:var(--texto)}
+.aviso{border:1px solid var(--ouro);background:var(--ouro-suave);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--texto)}
+.vazio{padding:20px 18px;color:var(--texto-3)}
+
+/* ---------- páginas ---------- */
+.pag{flex:1;width:100%;max-width:1360px;display:flex;flex-direction:column;gap:24px;padding-block:28px 64px;padding-left:28px;padding-right:max(28px,env(safe-area-inset-right,0px))}
+.pag>*{min-width:0}
+.pag-cab{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.pag-cab>div{min-width:0}
+.pag-cab h1{margin:4px 0 0;font-size:26px;font-weight:600;letter-spacing:-.3px;line-height:1.2}
+.pag-cab h1.g{font-size:28px}
+.pag-cab p{margin:6px 0 0;color:var(--texto-3);max-width:68ch}
+.painel{border:1px solid var(--linha);border-radius:14px;background:var(--sup);overflow:hidden;min-width:0}
+.painel-cab{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--linha)}
+.painel-cab h2{margin:0;font-size:15px;font-weight:600}
+.painel-corpo{padding:16px 18px;display:grid;gap:12px}
+details.painel>summary{list-style:none} details.painel>summary::-webkit-details-marker{display:none}
+details.painel>summary h2::after{content:" +";color:var(--texto-4);font-weight:400} details.painel[open]>summary h2::after{content:" −"}
+details.painel:not([open])>summary{border-bottom:0}
+.grade-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:16px;align-items:start}
+.pilha{display:grid;gap:16px;min-width:0}
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.kpi{border:1px solid var(--linha);border-radius:14px;background:var(--sup);padding:18px;display:flex;flex-direction:column;gap:10px;text-align:left;min-width:0}
+button.kpi{cursor:pointer} .kpi:hover{border-color:var(--linha-3)}
+.kpi .k-topo{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;color:var(--texto-3)}
+.kpi .k-meio{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;min-height:34px}
+.kpi strong{font:500 34px/1 var(--mono);letter-spacing:-1px;font-variant-numeric:tabular-nums;color:var(--texto)}
+.kpi.destaque strong{color:var(--ouro-texto)}
+.kpi small{font-size:12.5px;color:var(--texto-4)}
+.spark{flex:none;overflow:visible}
+/* linhas de lista */
+.linha-a{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--linha-fina);min-width:0}
+.linha-a:last-child{border-bottom:0} .linha-a:hover{background:var(--hover)}
+.linha-a .meio{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .linhas{display:grid}
-.lh{display:grid;grid-template-columns:var(--cols);gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--borda);min-width:0}
+.lh{display:grid;grid-template-columns:var(--cols);gap:12px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--linha-fina);min-width:0;color:inherit;font:inherit}
 .lh>*{min-width:0} .lh:last-child{border-bottom:0}
-.lh.cab{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--texto-2);padding-block:9px;background:var(--fundo)}
-button.lh{width:100%;text-align:left;background:var(--cartao);border:0;border-bottom:1px solid var(--borda);cursor:pointer}
-button.lh:hover{background:var(--hover)}
-.tit{font-weight:600;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sub{color:var(--texto-2);font-size:13px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.quebra{white-space:normal}
-.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13px}
-.chip{display:inline-flex;align-items:center;gap:6px;font:500 12px/1.6 var(--sans);padding:1px 9px;border-radius:4px;background:var(--fundo-2);border:1px solid var(--borda);white-space:nowrap;color:var(--texto)}
-.chip.p::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--texto-2);flex:none}
-.chip.fila::before{background:transparent;border:1.5px solid var(--texto-2);width:7px;height:7px}
-.chip.analise::before{background:var(--alerta)} .chip.aprovar{background:var(--ouro-suave);border-color:var(--ouro)} .chip.aprovar::before{background:var(--ouro-texto)}
-.chip.concluido::before{background:var(--sucesso)} .chip.urg{color:var(--erro);border-color:var(--erro);background:var(--cartao)}
-.duas{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:22px;align-items:start}
-.pilha{display:grid;gap:22px;min-width:0}
-.vazio{padding:18px 16px;color:var(--texto-2)}
-.nota{background:var(--fundo-2);border-radius:8px;padding:10px 12px;font-size:13.5px;color:var(--texto-2)}
-.aviso{background:var(--ouro-suave);border:1px solid var(--ouro);border-radius:8px;padding:10px 12px;font-size:13.5px;color:var(--texto)}
+.lh.cab{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--texto-4);padding-block:10px;border-bottom:1px solid var(--linha)}
+button.lh{width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--linha-fina);cursor:pointer}
+button.lh:hover,div.lh:not(.cab):hover{background:var(--hover)}
+.dl{display:grid;grid-template-columns:120px minmax(0,1fr);gap:8px 12px;font-size:13.5px;margin:0} .dl dt{color:var(--texto-4)} .dl dd{margin:0;min-width:0;overflow-wrap:anywhere;color:var(--texto-2)}
+/* janelas */
+.janela{display:grid;grid-template-columns:78px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--linha-fina)} .janela:last-child{border-bottom:0}
+.dias{font:600 12px var(--mono);text-align:center;padding:6px 0;border-radius:8px;border:1px solid var(--linha-2);color:var(--texto-2)}
+.dias.perto{background:var(--ouro);border-color:var(--ouro);color:var(--sobre-ouro)}
+.janela .base{font:500 12px var(--mono);color:var(--texto-3);text-align:right;max-width:180px}
+/* tabela do time */
+.rolagem{overflow-x:auto}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:680px}
+table.t th{text-align:left;font:500 11px var(--mono);letter-spacing:.1em;color:var(--texto-4);padding:10px 12px;text-transform:uppercase}
+table.t th:first-child,table.t td:first-child{padding-left:18px} table.t th:last-child,table.t td:last-child{padding-right:18px}
+table.t td{padding:14px 12px;border-top:1px solid var(--linha-fina);color:var(--texto-2);vertical-align:middle}
+table.t tr:hover td{background:var(--hover)}
+table.t .num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--texto)}
+.pessoa{display:flex;align-items:center;gap:10px} .pessoa span{display:flex;flex-direction:column;line-height:1.3} .pessoa b{font-weight:500;color:var(--texto)} .pessoa small{font-size:12px;color:var(--texto-4)}
+.barra{display:flex;align-items:center;gap:10px} .barra i{flex:1;min-width:80px;height:6px;border-radius:3px;background:var(--linha);overflow:hidden;display:block}
+.barra i b{display:block;height:100%;border-radius:3px;background:var(--ouro)} .barra span{font:500 12px var(--mono);color:var(--texto-2);width:36px;text-align:right}
 /* kanban */
-.kanban{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.coluna{background:var(--fundo-2);border-radius:12px;padding:10px;display:grid;gap:8px;align-content:start;min-height:120px}
-.coluna h3{margin:0;padding:2px 4px 4px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
-.coluna h3 .mono{margin-left:auto;color:var(--texto-2)}
-.ticket{background:var(--cartao);border:1px solid var(--borda);border-radius:10px;padding:10px 12px;display:grid;gap:6px;text-align:left;cursor:pointer;width:100%}
-.ticket:hover{border-color:var(--borda-3)}
-.ticket .txt{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ticket .rodape{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--texto-2)}
-.ticket .rodape .mono{font-size:12px;margin-left:auto}
+.barra-f{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.kanban{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;align-items:start}
+.coluna{border:1px solid var(--linha);border-radius:14px;background:var(--poco);padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.coluna h3{margin:0;padding:4px 6px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.coluna h3 .t{flex:1} .coluna h3 .mono{color:var(--texto-4)}
+.ticket{border:1px solid var(--linha);border-radius:10px;background:var(--sup);padding:12px;display:flex;flex-direction:column;gap:8px;text-align:left;cursor:pointer;width:100%}
+.ticket:hover{border-color:var(--linha-3)}
+.ticket .t-topo{display:flex;justify-content:space-between;gap:8px;font:400 11px var(--mono);color:var(--texto-4)}
+.ticket .txt{font-weight:500;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ticket .t-base{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0} .ticket .t-base .chip{overflow:hidden;text-overflow:ellipsis;max-width:80%}
+.coluna .sem{font-size:12.5px;color:var(--texto-4);padding:4px 6px}
 .seg-col{display:none}
-/* áreas como serviços */
-.bloco{display:grid;gap:10px}
+/* áreas */
+.bloco{display:flex;flex-direction:column;gap:12px}
+.bloco>h2{margin:0;font:500 12px var(--mono);letter-spacing:.12em;color:var(--texto-3);text-transform:uppercase}
 .servicos{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-.servico{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;padding:16px;display:grid;grid-template-rows:auto 1fr auto;gap:8px;text-align:left;cursor:pointer;min-height:168px}
-.servico:hover{border-color:var(--ouro);box-shadow:0 4px 12px var(--sombra)}
-.servico .topo-s{display:flex;align-items:center;gap:10px}
-.servico .sig{width:36px;height:36px;border-radius:8px;background:var(--ouro-suave);color:var(--texto);display:grid;place-items:center;font:600 13px var(--mono);flex:none;border:1px solid var(--ouro)}
-.servico strong{font-size:15.5px;font-weight:600;line-height:1.25}
-.servico p{margin:0;color:var(--texto-2);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.servico .base{display:flex;gap:2px 8px;flex-wrap:wrap;font-size:12.5px;color:var(--texto-2);border-top:1px solid var(--borda);padding-top:8px}
-.area-cab{background:var(--cartao);border:1px solid var(--borda);border-radius:12px;padding:20px;display:grid;gap:12px;box-shadow:inset 0 4px 0 var(--ouro)}
-.area-cab h1{margin:0;font-size:28px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
-.area-cab p{margin:0;max-width:78ch}
-.esps{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
-.esp{border:1px solid var(--borda);border-radius:10px;padding:12px;display:grid;gap:4px;background:var(--cartao)}
-.esp b{font-size:14px} .esp span{font-size:13px;color:var(--texto-2)}
-.ent{display:grid;gap:4px;padding:12px 16px;border-bottom:1px solid var(--borda)} .ent:last-child{border-bottom:0}
-.ent .meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--texto-2)}
-.dl{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px 12px;font-size:14px;margin:0} .dl dt{color:var(--texto-2)} .dl dd{margin:0;min-width:0;overflow-wrap:anywhere}
-.janela{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;padding:12px 16px;border-bottom:1px solid var(--borda);align-items:start} .janela:last-child{border-bottom:0}
-.dias{font:600 13px var(--mono);border-radius:6px;padding:4px 8px;text-align:center;min-width:64px;background:var(--fundo-2);border:1px solid var(--borda)}
-.dias.perto{background:var(--ouro-suave);border-color:var(--ouro)}
-/* gaveta */
-.veu{position:fixed;inset:0;background:var(--veu);z-index:40}
-.gaveta{position:fixed;top:0;right:0;bottom:0;width:min(540px,100%);background:var(--cartao);z-index:41;box-shadow:-12px 0 32px var(--sombra);display:flex;flex-direction:column;padding-right:env(safe-area-inset-right,0px)}
-.gaveta>header{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 20px;border-bottom:1px solid var(--borda);min-height:64px}
-.gaveta>header h2{margin:0;font-size:17px;font-weight:600;flex:1;min-width:0}
-.gaveta>header .sub{margin-top:2px}
-.gaveta .conteudo{padding:18px 20px 28px;overflow:auto;display:grid;gap:16px;align-content:start;flex:1}
-.gaveta .rodape{border-top:1px solid var(--borda);padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:8px}
-.linha-tempo{list-style:none;margin:0;padding:0}
-.linha-tempo li{position:relative;padding:0 0 14px 22px;font-size:14px}
-.linha-tempo li::before{content:"";position:absolute;left:4px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--texto-2)}
-.linha-tempo li::after{content:"";position:absolute;left:7.5px;top:17px;bottom:0;width:1px;background:var(--borda-3)}
-.linha-tempo li:last-child::after{display:none} .linha-tempo li:last-child::before{background:var(--ouro);box-shadow:0 0 0 3px var(--ouro-suave)}
-.resp{border-left:3px solid var(--ouro);padding:2px 0 2px 14px;display:grid;gap:6px;font-size:14.5px} .resp p{margin:0} .resp ul{margin:0;padding-left:18px} .resp h4{margin:6px 0 0;font-size:14px}
-.lista-areas{display:grid;gap:2px;max-height:280px;overflow:auto;border:1px solid var(--borda);border-radius:8px;padding:4px}
-.lista-areas button{display:grid;text-align:left;border:0;background:none;border-radius:6px;padding:8px 10px;cursor:pointer;gap:1px}
-.lista-areas button:hover{background:var(--fundo-2)} .lista-areas button[aria-pressed="true"]{background:var(--ouro-suave);box-shadow:inset 3px 0 0 var(--ouro)}
-.lista-areas small{color:var(--texto-2);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lista-areas .g{font:500 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--texto-2);padding:8px 10px 2px}
-/* conversa */
-.chat{display:flex;flex-direction:column;gap:12px}
-.msg{max-width:92%;padding:10px 14px;border-radius:12px;font-size:14.5px;display:grid;gap:6px}
-.msg p{margin:0} .msg ul{margin:0;padding-left:18px}
-.msg.eu{align-self:flex-end;background:var(--texto);color:var(--cartao);border-bottom-right-radius:4px}
-.msg.ag{align-self:flex-start;background:var(--fundo-2);border:1px solid var(--borda);border-bottom-left-radius:4px}
-.msg.ag .quem{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--texto-2)}
+.servico{border:1px solid var(--linha);border-radius:14px;background:var(--sup);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.servico:hover{border-color:var(--linha-3)}
+.servico .s-topo{display:flex;align-items:center;gap:12px} .servico .s-topo span{display:flex;flex-direction:column;line-height:1.3;min-width:0}
+.servico .s-topo b{font-weight:600} .servico .s-topo small{font-size:12px;color:var(--texto-4)}
+.servico p{margin:0;color:var(--texto-2);font-size:13.5px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.servico .s-num{display:flex;gap:12px;font:400 12px var(--mono);color:var(--texto-4)}
+.servico .s-acoes{display:flex;gap:8px} .servico .s-acoes .btn{flex:1;min-height:36px;font-size:13px;padding:0 8px}
+/* página da área + conversa */
+.area-lay{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.area-princ{flex:999 1 520px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.voltar{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;color:var(--texto-3);font-size:13px;text-decoration:none;font-weight:400;min-height:32px}
+.voltar:hover{color:var(--texto)} .voltar .ic{width:14px;height:14px}
+.area-cab{border:1px solid var(--linha);border-radius:16px;background:var(--sup);padding:22px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.area-cab .a-topo{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.area-cab .sig.xg{width:52px;height:52px;border-radius:12px;font-size:16px}
+.area-cab .a-nome{flex:1;min-width:200px} .area-cab h1{margin:2px 0 0;font-size:26px;font-weight:600;line-height:1.2}
+.area-cab>p{margin:0;color:var(--texto-2);max-width:72ch}
+.abas{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--linha);margin:0 -2px}
+.abas button{min-height:40px;padding:0 14px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--texto-3);font-size:14px;cursor:pointer}
+.abas button[aria-selected="true"]{border-bottom-color:var(--ouro);color:var(--texto);font-weight:500}
+.ent-lh{--cols:minmax(0,1.7fr) minmax(0,1fr) 150px auto;padding-inline:0}
+.ent-lh .pedir{justify-self:end}
+.esps{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.esp{border:1px solid var(--linha);border-radius:10px;padding:12px;display:grid;gap:4px;background:var(--poco)} .esp b{font-size:14px;font-weight:500} .esp span{font-size:13px;color:var(--texto-3)}
+.conversa{flex:1 1 380px;min-width:0;max-width:100%;border:1px solid var(--linha-2);border-radius:16px;background:var(--sup);display:flex;flex-direction:column;min-height:640px;max-height:calc(100vh - 120px);position:sticky;top:calc(84px + env(safe-area-inset-top,0px))}
+.cv-cab{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--linha)}
+.cv-cab .cv-tit{flex:1;display:flex;flex-direction:column;line-height:1.3;min-width:0} .cv-cab b{font-weight:600} .cv-cab small{font-size:12px;color:var(--texto-3)}
+.cv-corpo{flex:1;padding:18px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.chat{display:flex;flex-direction:column;gap:14px}
+.msg{max-width:92%;padding:12px 14px;font-size:14px;display:grid;gap:8px;color:var(--texto)}
+.msg p{margin:0} .msg ul{margin:0;padding-left:18px;color:var(--texto-2)} .msg b{font-weight:600}
+.msg.eu{align-self:flex-end;max-width:86%;background:var(--linha);border:1px solid var(--linha-2);border-radius:14px 14px 4px 14px}
+.msg.ag{align-self:flex-start;background:var(--poco);border:1px solid var(--linha);border-radius:14px 14px 14px 4px}
+.msg.ag .quem{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ouro-texto)}
 .msg.erro{border-color:var(--erro)}
 .sugestoes{display:flex;flex-wrap:wrap;gap:8px}
-.sugestoes button{border:1px solid var(--borda-3);background:var(--cartao);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;text-align:left}
-.compor{display:grid;gap:8px;border-top:1px solid var(--borda);padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px))}
-.compor textarea{min-height:64px}
-/* paleta e notificações */
-.paleta{position:fixed;top:12vh;left:50%;transform:translateX(-50%);width:min(640px,calc(100% - 32px));background:var(--cartao);border-radius:14px;z-index:51;box-shadow:0 24px 64px var(--sombra);overflow:hidden;border:1px solid var(--borda)}
-.paleta input{border:0;border-bottom:1px solid var(--borda);border-radius:0;min-height:56px;font-size:17px;padding:0 18px}
+.sugestoes button{border:1px solid var(--linha-2);background:transparent;color:var(--texto-2);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;text-align:left}
+.sugestoes button:hover{border-color:var(--ouro);color:var(--texto)}
+.compor{display:grid;gap:10px;border-top:1px solid var(--linha);padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px))}
+.compor textarea{min-height:64px;resize:none;background:var(--fundo)}
+.compor .acoes{justify-content:space-between;gap:8px} .compor .btn{padding:0 12px;font-size:13px}
+.mais-j>summary{list-style:none;padding:12px 18px;cursor:pointer;display:block} .mais-j>summary::-webkit-details-marker{display:none} .mais-j[open]>summary{border-bottom:1px solid var(--linha-fina)}
+.resp{display:grid;gap:6px;font-size:14px;color:var(--texto-2)} .resp p{margin:0} .resp ul{margin:0;padding-left:18px} .resp h4{margin:6px 0 0;font-size:13.5px;color:var(--texto);font-weight:600}
+.ent{display:grid;gap:4px} .ent .meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--texto-4)}
+/* WhatsApp · Demandas */
+.busca-grande{display:flex;align-items:center;gap:12px;padding:0 16px;min-height:52px;border:1px solid var(--linha-2);border-radius:12px;background:var(--sup)}
+.busca-grande.xg{min-height:58px;border-color:var(--linha-3);border-radius:14px}
+.busca-grande .ic{color:var(--ouro-texto)}
+.busca-grande input{flex:1;border:0;background:transparent;padding:0;min-height:50px;font-size:15px;border-radius:0} .busca-grande.xg input{font-size:16px;min-height:56px}
+.busca-grande input:focus-visible{outline:0} .busca-grande:focus-within{border-color:var(--ouro)}
+.wa-lay{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+.wa-lista{flex:1 1 420px;min-width:0}
+.wa-linha{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:14px 16px;border:0;border-bottom:1px solid var(--linha-fina);border-left:3px solid transparent;background:transparent;width:100%;text-align:left;cursor:pointer;color:inherit}
+.wa-linha:hover{background:var(--hover)} .wa-linha.sel{border-left-color:var(--ouro);background:var(--hover)}
+.wa-linha .wl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.wa-linha .wl-topo{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px} .wa-linha .wl-topo b{font-weight:600} .wa-linha .wl-topo small{font-size:12px;color:var(--texto-4)}
+.wa-linha .wl-pede{color:var(--texto-2);line-height:1.45}
+.wa-linha .wl-dir{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.wa-det{flex:1 1 440px;min-width:0;border:1px solid var(--linha-2);border-radius:14px;background:var(--sup);padding:18px;display:flex;flex-direction:column;gap:14px}
+.wa-det .d-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.wa-det h2{margin:4px 0 0;font-size:18px;font-weight:600;line-height:1.3}
+.wa-det .fechar-m{display:none}
+.mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.mini div{border:1px solid var(--linha);border-radius:10px;padding:10px;min-width:0} .mini small{display:block;font-size:11px;color:var(--texto-4)} .mini b{font-weight:500;display:block;overflow-wrap:anywhere}
+.mini .ouro{color:var(--ouro-texto)}
+.rasc{padding:12px;border-radius:10px;background:var(--poco);border:1px solid var(--linha);color:var(--texto);white-space:pre-wrap;overflow-wrap:anywhere}
+.glpi{border-top:1px solid var(--linha);padding-top:14px;display:flex;flex-direction:column;gap:12px}
+.glpi h3{margin:0;font-size:15px;font-weight:600}
+.passos{display:flex;gap:6px;list-style:none;margin:0;padding:0}
+.passos li{flex:1;text-align:center;font-size:12px;padding:8px 6px;border-radius:8px;border:1px solid var(--linha-2);color:var(--texto-4)}
+.passos li.feito{background:var(--ouro);border-color:var(--ouro);color:var(--sobre-ouro);font-weight:600}
+.passos li.agora{border-color:var(--ouro);color:var(--texto)}
+/* Onde está */
+.res-l{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--linha-fina)} .res-l:last-child{border-bottom:0} .res-l:hover{background:var(--hover)}
+.res-l .ico{width:40px;height:40px;border-radius:10px;background:var(--sup-2);border:1px solid var(--linha-2);color:var(--ouro-texto);display:flex;align-items:center;justify-content:center}
+.res-l .meio{display:flex;flex-direction:column;gap:2px;min-width:0}
+.res-l .lks{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.lk-pasta{white-space:nowrap;font-size:13px;text-decoration:none;padding:7px 12px;border:1px solid var(--linha-3);border-radius:8px;color:var(--texto);font-weight:400}
+.lk-pasta:hover{border-color:var(--ouro);color:var(--texto)}
+/* gaveta, paleta, notificações */
+.veu{position:fixed;inset:0;background:var(--veu);z-index:50}
+.gaveta{position:fixed;top:0;right:0;bottom:0;width:min(540px,100%);background:var(--sup);border-left:1px solid var(--linha-2);z-index:51;box-shadow:-12px 0 32px var(--sombra);display:flex;flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px)}
+.gaveta>header{display:flex;align-items:center;gap:10px;padding:14px 14px 14px 20px;border-bottom:1px solid var(--linha);min-height:64px}
+.gaveta>header h2{margin:0;font-size:17px;font-weight:600}
+.gaveta .conteudo{padding:18px 20px 28px;overflow:auto;display:grid;gap:16px;align-content:start;flex:1}
+.gaveta .rodape{border-top:1px solid var(--linha);padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:8px}
+.linha-tempo{list-style:none;margin:0;padding:0}
+.linha-tempo li{position:relative;padding:0 0 14px 22px;font-size:13.5px;color:var(--texto-2)} .linha-tempo li b{color:var(--texto);font-weight:500}
+.linha-tempo li::before{content:"";position:absolute;left:4px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--texto-4)}
+.linha-tempo li::after{content:"";position:absolute;left:7.5px;top:17px;bottom:0;width:1px;background:var(--linha-3)}
+.linha-tempo li:last-child::after{display:none} .linha-tempo li:last-child::before{background:var(--ouro);box-shadow:0 0 0 3px var(--ouro-suave)}
+.lista-areas{display:grid;gap:2px;max-height:280px;overflow:auto;border:1px solid var(--linha-2);border-radius:10px;padding:4px;background:var(--poco)}
+.lista-areas button{display:grid;text-align:left;border:0;background:none;border-radius:8px;padding:8px 10px;cursor:pointer;gap:1px}
+.lista-areas button:hover{background:var(--sup-2)} .lista-areas button[aria-pressed="true"]{background:var(--ouro-suave);box-shadow:inset 3px 0 0 var(--ouro)}
+.lista-areas b{font-weight:500} .lista-areas small{color:var(--texto-4);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lista-areas .g{font:500 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--texto-4);padding:8px 10px 2px}
+.paleta{position:fixed;top:12vh;left:50%;transform:translateX(-50%);width:min(640px,calc(100% - 32px));background:var(--sup);border:1px solid var(--linha-3);border-radius:14px;z-index:51;box-shadow:0 24px 64px var(--sombra);overflow:hidden}
+.paleta input{border:0;border-bottom:1px solid var(--linha);border-radius:0;min-height:56px;font-size:16px;padding:0 18px;background:var(--sup)}
+.paleta input:focus-visible{outline:0}
 .paleta .res{max-height:52vh;overflow:auto;padding:6px}
 .paleta .res button{width:100%;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;text-align:left;border:0;background:none;border-radius:8px;padding:9px 12px;cursor:pointer;align-items:center}
-.paleta .res button:hover{background:var(--fundo-2)} .paleta .res .sub{grid-column:2}
-.pop{position:fixed;top:60px;right:max(16px,env(safe-area-inset-right,0px));width:min(360px,calc(100% - 32px));background:var(--cartao);border:1px solid var(--borda);border-radius:12px;box-shadow:0 16px 40px var(--sombra);z-index:51;overflow:hidden}
-.toast{visibility:hidden;position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(160%);background:var(--texto);color:var(--cartao);padding:12px 16px;border-radius:10px;z-index:60;font-size:14px;max-width:calc(100% - 32px);transition:transform .2s}
+.paleta .res button:hover{background:var(--sup-2)} .paleta .res b{font-weight:500} .paleta .res .sub{grid-column:2}
+.pop{position:fixed;top:calc(64px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));width:min(360px,calc(100% - 32px));background:var(--sup);border:1px solid var(--linha-3);border-radius:12px;box-shadow:0 16px 40px var(--sombra);z-index:51;overflow:hidden}
+.toast{visibility:hidden;position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(160%);background:var(--texto);color:var(--fundo);padding:12px 16px;border-radius:10px;z-index:60;font-size:14px;max-width:calc(100% - 32px);transition:transform .2s}
 .toast.mostra{transform:translateX(-50%);visibility:visible}
-.so-leitor{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-@media (max-width:1100px){ .kanban{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.nav-m{display:none}
+.so-m-b{display:none!important}
+
+/* ---------- telas médias ---------- */
+@media (max-width:1240px){ .tag-previa{display:none} .busca-g{min-width:160px} .migalha{flex-basis:120px} }
+@media (max-width:1099px){ .wa-det:not(.aberto){display:none} .wa-det.aberto{position:fixed;inset:0;z-index:45;border-radius:0;border:0;overflow-y:auto;
+    padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+  .wa-det .fechar-m{display:flex} }
+/* ---------- celular ---------- */
 @media (max-width:900px){
-  .lado{transform:translateX(-100%);transition:transform .2s} body.menu-aberto .lado{transform:none;box-shadow:12px 0 32px var(--sombra)}
-  .corpo{margin-left:0} .icbtn.btn-menu{display:grid} .topo{padding:0 max(12px,env(safe-area-inset-right,0px)) 0 max(12px,env(safe-area-inset-left,0px));gap:4px}
-  .busca-g kbd,.busca-g .txt-l,.topo .novo-t{display:none} .busca-g .txt-c{display:inline} .topo img.logo-m{height:18px;width:auto;margin-right:4px} .topo img.logo-m.logo-claro{display:block!important} :root[data-theme="dark"] .topo img.logo-m.logo-claro{display:none!important} :root[data-theme="dark"] .topo img.logo-m.logo-escuro{display:block!important} .busca-g{max-width:none;padding:0 10px}
-  .pag{padding:20px max(16px,env(safe-area-inset-right,0px)) 56px max(16px,env(safe-area-inset-left,0px))} .duas{grid-template-columns:1fr}
-  .faixa-previa{padding:8px 16px}
-  .lh{grid-template-columns:minmax(0,1fr) auto !important;gap:4px 10px} .lh.cab{display:none} .lh .esconde-m{display:none}
-  .dl{grid-template-columns:1fr;gap:2px} .dl dt{font-size:12.5px;margin-top:6px}
-  .pag-cab h1{font-size:22px} .area-cab h1{font-size:23px}
-  .kanban{grid-template-columns:1fr} .kanban .coluna{display:none} .kanban .coluna.vis{display:grid} .seg-col{display:inline-flex}
-  .servicos{grid-template-columns:1fr} .servico{min-height:0}
-  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px} .kpi{padding:12px} .kpi strong{font-size:24px}
-  .janela.alerta{grid-template-columns:1fr !important}
-  .topo .dir{gap:0} .icbtn{width:40px}
+  .lado{transform:translateX(-100%);transition:transform .2s;width:min(300px,86vw)} body.menu-aberto .lado{transform:none;box-shadow:12px 0 32px var(--sombra)}
+  body.menu-aberto .veu-menu{display:block;position:fixed;inset:0;background:var(--veu);z-index:39}
+  .corpo{margin-left:0}
+  .topo{flex-wrap:nowrap;gap:8px;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .migalha,.tag-previa,.topo .novo-t,.busca-g kbd,.busca-g .txt-l{display:none}
+  .topo img.logo-m{height:20px;width:auto;margin-right:auto} .topo img.logo-m.logo-escuro{display:block!important}
+  :root[data-theme="light"] .topo img.logo-m.logo-escuro{display:none!important} :root[data-theme="light"] .topo img.logo-m.logo-claro{display:block!important}
+  .busca-g{flex:none;min-width:0;width:44px;height:44px;padding:0;justify-content:center;border-radius:12px}
+  .icbtn{width:44px;height:44px;border-radius:12px} .av-m{display:flex;width:44px;height:44px;font-size:14px}
+  .faixa{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .pag{padding-block:16px calc(96px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));gap:16px}
+  .pag-cab h1,.pag-cab h1.g{font-size:24px} .area-cab h1{font-size:22px} .area-cab{padding:16px}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px} .kpi{padding:14px;gap:6px} .kpi strong{font-size:28px} .kpi .spark{display:none} .kpi .k-topo .chip{display:none}
+  .lh{grid-template-columns:minmax(0,1fr) auto!important;gap:4px 10px;padding-inline:16px} .lh.cab{display:none} .lh .esconde-m{display:none} .so-m-b{display:block!important}
+  .ent-lh{padding-inline:0} .linha-a{padding:12px 16px} .linha-a .chip.tipo{display:none}
+  .janela{grid-template-columns:68px minmax(0,1fr);padding:12px 16px} .janela .base{display:none}
+  .dl{grid-template-columns:1fr;gap:2px} .dl dt{font-size:12px;margin-top:6px}
+  .kanban{grid-template-columns:1fr} .kanban .coluna{display:none} .kanban .coluna.vis{display:flex} .seg-col{display:inline-flex}
+  .servicos{grid-template-columns:1fr}
+  .mini{grid-template-columns:repeat(2,minmax(0,1fr))} .mini div:last-child{grid-column:1/-1}
+  .res-l{grid-template-columns:36px minmax(0,1fr);padding:12px 16px} .res-l .ico{width:36px;height:36px} .res-l .lks{grid-column:2;align-items:flex-start;flex-direction:row;flex-wrap:wrap}
+  .conversa{position:fixed;inset:0;z-index:45;border-radius:0;border:0;min-height:0;max-height:none;padding-top:env(safe-area-inset-top,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+  .nav-m{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--fundo);border-top:1px solid var(--linha);
+    padding:6px max(8px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  .nav-m a,.nav-m button{min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-decoration:none;color:var(--texto-3);font:400 11px var(--sans);border:0;background:none;cursor:pointer;position:relative;padding:0}
+  .nav-m a[aria-current="page"]{color:var(--ouro-texto)} .nav-m .ic{width:20px;height:20px}
+  .nav-m .cont{position:absolute;top:2px;left:calc(50% + 4px);font-size:10px;min-width:18px;padding:0 4px}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head><body>
 <aside class="lado" aria-label="Menu principal">
-  <div class="marca"><img class="logo-claro" src="logo-save-fundo-claro.png" alt="Save Co." width="125" height="22"><img class="logo-escuro" src="logo-save-fundo-escuro.png" alt="Save Co." width="125" height="22"><span>Central Partners</span></div>
-  <nav class="menu" id="menu"></nav>
-  <div class="perfil"><div class="av" id="av">—</div><label for="sou">Perfil<select id="sou"><option value="">Quem é você?</option><option value="luis">Luis</option><option value="daniela">Daniela</option><option value="jenifer">Jenifer</option><option value="geovana">Geovana</option></select></label></div>
+  <div class="marca"><img class="logo-escuro" src="logo-save-fundo-escuro.png" alt="Save Co." width="125" height="22"><img class="logo-claro" src="logo-save-fundo-claro.png" alt="Save Co." width="125" height="22"></div>
+  <div class="grupo-m"><span class="rot">Central Partners</span><nav class="menu" id="menu" aria-label="Seções"></nav></div>
+  <div class="grupo-m"><span class="rot">Fale com uma área</span><div class="fixadas" id="fixadas"></div></div>
+  <div class="perfil"><div class="quem"><div class="av vazio-av" id="av">—</div><span><b id="perfil-nome">Visitante</b><small id="perfil-papel">Modo leitura</small></span></div>
+    <label for="sou">Perfil da prévia<select id="sou"><option value="">Quem é você?</option><option value="luis">Luis</option><option value="daniela">Daniela</option><option value="jenifer">Jenifer</option><option value="geovana">Geovana</option></select></label></div>
 </aside>
+<div class="veu-menu" id="veu-menu"></div>
 <div class="corpo">
   <header class="topo">
-    <button class="icbtn btn-menu" id="abrir-menu" aria-label="Abrir menu"></button><img class="logo-m logo-claro" src="logo-save-fundo-claro.png" alt="Save Co." width="103" height="18"><img class="logo-m logo-escuro" src="logo-save-fundo-escuro.png" alt="Save Co." width="103" height="18">
-    <button class="busca-g" id="abrir-busca" aria-label="Buscar (Ctrl+K)"><span id="ic-busca"></span><span class="txt-l">Buscar área, entrega, pasta, rotina ou pedido</span><span class="txt-c">Buscar</span><kbd>Ctrl K</kbd></button>
-    <div class="dir"><button class="icbtn" id="tema" aria-label="Alternar modo claro e escuro"></button><button class="icbtn" id="sino" aria-label="Notificações"></button><a class="btn novo-t" href="#novo">Novo pedido</a></div>
+    <img class="logo-m logo-escuro" src="logo-save-fundo-escuro.png" alt="Save Co." width="114" height="20"><img class="logo-m logo-claro" src="logo-save-fundo-claro.png" alt="Save Co." width="114" height="20">
+    <div class="migalha" id="migalha"><span>Central Partners</span><i aria-hidden="true">/</i><b id="crumb">Minha mesa</b></div>
+    <button class="busca-g" id="abrir-busca" aria-label="Buscar (Ctrl+K)"><span id="ic-busca"></span><span class="txt-l">Buscar área, entrega, pasta ou pedido</span><span class="txt-c">Buscar</span><kbd>⌘K</kbd></button>
+    <span class="tag-previa" id="tag-previa" hidden>PRÉVIA · DADOS DE EXEMPLO</span>
+    <div class="dir"><button class="icbtn" id="tema" aria-label="Alternar modo claro e escuro"></button><button class="icbtn" id="sino" aria-label="Notificações"></button><a class="btn novo-t" href="#novo" id="novo-t"></a><span class="av av-m vazio-av" id="av-m" aria-hidden="true">—</span></div>
   </header>
   <div id="faixa"></div>
   <main class="pag" id="pag"><div class="vazio">Carregando a Central…</div></main>
 </div>
+<nav class="nav-m" id="nav-m" aria-label="Navegação"></nav>
 <div id="camada"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
@@ -230,7 +383,7 @@ const Fonte = {
   async json(n) { const r = await fetch(n, {cache: "no-store"}); if (!r.ok) throw new Error(n); return r.json() },
   async carregar() {
     if (this.previa) { const X = window.EX;
-      return {atualizado: X.atualizado, areas: X.areas, blocos: X.blocos, rotinas: X.rotinas, pastas: X.pastas, pessoas: X.pessoas, regras: X.regras_casa,
+      return {atualizado: X.atualizado, hoje: X.hoje, areas: X.areas, blocos: X.blocos, rotinas: X.rotinas, pastas: X.pastas, pessoas: X.pessoas, regras: X.regras_casa,
         decisoes: X.decisoes, decisoesTotal: X.decisoes_total, demandas: X.demandas, demandasNum: X.demandas_num, alertas: X.alertas, manchete: X.manchete,
         masters: X.masters, janelas: X.janelas, lote: X.lote, arquivos: X.arquivos,
         pedidos: X.pedidos.map(p => ({...p, campos: {precisa: p.precisa, uso: p.uso, prazo: p.prazo}, para: {"celula-daniela": "daniela", "celula-jenifer": "jenifer", "recuperador": "geovana", "revisor-diagnostico": "geovana"}[p.area] || "luis"})),
@@ -275,7 +428,7 @@ function demoSample() {
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
 const url = u => /^https:\/\//i.test(String(u || "")) ? esc(u) : "";
-const sem = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const sem = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const agora = () => new Date().toISOString();
 const data = iso => { if (!iso) return ""; const s = String(iso);
   if (/T\d{2}:\d{2}.*(Z|[+-]\d{2}:?\d{2})$/.test(s)) { const d = new Date(s); if (!isNaN(d)) { const z = n => String(n).padStart(2, "0"); return `${z(d.getDate())}/${z(d.getMonth() + 1)} ${z(d.getHours())}:${z(d.getMinutes())}` } }
@@ -288,21 +441,25 @@ const md = t => { let h = "", l = false; for (const x of String(t || "").split("
   if (s) h += s.startsWith("### ") ? `<h4>${s.slice(4)}</h4>` : `<p>${s}</p>` } return h + (l ? "</ul>" : "") };
 const lsGet = k => { try { return localStorage.getItem(k) } catch (e) { return null } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v) } catch (e) {} };
-const P = {mesa: "M3 10.5 12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z", pedidos: "M4 4h16v16H4zM8 9h8M8 13h8M8 17h5", areas: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
-  onde: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4", rotinas: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 3", decisoes: "M5 12l4 4 10-10",
-  sino: "M6 16V11a6 6 0 1 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0", mais: "M12 5v14M5 12h14", fechar: "M6 6l12 12M18 6 6 18", menu: "M4 7h16M4 12h16M4 17h16",
-  chat: "M4 5h16v11H9l-5 4z", sol: "M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
-  lua: "M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z", pasta: "M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z", parar: "M7 7h10v10H7z"};
+const P = {mesa: "M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z", pedidos: "M4 4h16v16H4zM4 13h5l1.5 3h3L15 13h5", areas: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
+  onde: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4", rotinas: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2", decisoes: "M4 12l5 5L20 6",
+  sino: "M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20h4", mais: "M12 5v14M5 12h14", fechar: "M6 6l12 12M18 6 6 18", menu: "M4 7h16M4 12h16M4 17h16",
+  chat: "M4 5h16v11H8l-4 4z", whats: "M4 5h16v11H8l-4 4zM8 9h8M8 12h5", sol: "M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
+  lua: "M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z", pasta: "M3 6h6l2 2h10v11H3z", parar: "M7 7h10v10H7z", voltar: "M19 12H5M11 6l-6 6 6 6", enviar: "M5 12h14M13 6l6 6-6 6",
+  glpi: "M4 4h16v16H4zM8 9h8M8 13h8M8 17h5", doc: "M6 3h9l4 4v14H6zM14 3v5h5", pessoa: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0", esp: "M12 3l2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.5-.8z"};
 const icone = (n, c = "ic") => `<svg class="${c}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${P[n]}"/></svg>`;
 
 const PESSOAS = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "Geovana"};
+const PAPEL = {luis: "Gerente · Área Partners", daniela: "Central Masters", jenifer: "Central BDR", geovana: "Central Técnica"};
 const FASES = [["fila", "Na fila"], ["analise", "Em análise"], ["aprovar", "Pronto para aprovar"], ["concluido", "Concluído"]];
 const FASE = {novo: "fila", nova_analise: "fila", em_analise: "analise", aguardando_aprovacao: "aprovar", aprovado: "concluido", concluido: "concluido", nao_aprovado: "concluido"};
 const PARA_AREA = {"celula-daniela": "daniela", "celula-jenifer": "jenifer", "recuperador": "geovana", "revisor-diagnostico": "geovana"};
 const GLPI_SKILL = k => /^trib_/.test(k || "") ? "depto-tributario" : /^(jur_|contrato)/.test(k || "") ? "depto-juridico" : "";
 const ST_CH = {proposto: "Aguarda aprovação", aprovado: "Aprovado · abrindo no GLPI", aberto: "Aberto no GLPI", aprovado_manual: "Aprovado · abrir manualmente", recusado: "Recusado"};
+const FIXADAS = [["depto-tributario", "TR", "Tributário"], ["depto-save-invest", "SI", "Save Invest"], ["depto-juridico", "JU", "Jurídico"], ["depto-internacional", "IN", "Internacional"]];
 const S = {M: null, eu: null, meuId: null, identificado: false, acoes: {}, recup: {}, conselho: {}, apont: [],
-  f: {fase: "", area: "", pessoa: ""}, wa: {q: "", pessoa: "", status: ""}, kPessoa: "", kCol: "aprovar", novo: {sel: null, busca: ""}, chats: {}, chatOff: "", msg: ""};
+  f: {fase: "", area: "", pessoa: ""}, wa: {q: "", pessoa: "", status: ""}, kPessoa: "", kCol: "aprovar", vista: "quadro", aba: {}, waSel: null, rotaAnt: "",
+  novo: {sel: null, busca: "", entrega: "", texto: "", contexto: ""}, chats: {}, chatOff: "", msg: ""};
 const fase = p => FASE[p.status] || "fila";
 /* Aprovações valem só para a dona (alçadas): na versão online, a pessoa precisa estar identificada pela conta do Claude
    (o seletor de perfil é só para consulta). Na prévia, basta o perfil escolhido. */
@@ -314,10 +471,25 @@ const chip = p => `<span class="chip p ${fase(p)}">${esc(rotFase(p))}</span>`;
 const area = sk => S.M.areas.find(a => a.skill === sk);
 const nomeArea = sk => sk ? (area(sk)?.nome || sk) : "Central de Agentes";
 const sigla = n => n.replace(/[&(),·]/g, " ").split(/\s+/).filter(w => w.length > 2 || /^[A-Z]{2,}$/.test(w)).slice(0, 2).map(w => w[0]).join("").toUpperCase();
-const linkPastas = ls => (ls || []).filter(l => url(l.url)).map(l => `<a href="${url(l.url)}" target="_blank" rel="noopener">Abrir pasta ${esc(l.rotulo)}</a>`).join(" ");
+const linkPastas = (ls, cl = "") => (ls || []).filter(l => url(l.url)).map(l => `<a ${cl ? `class="${cl}"` : ""} href="${url(l.url)}" target="_blank" rel="noopener">Abrir pasta ${esc(l.rotulo)}</a>`).join(" ");
 const foraOD = o => /^(Mac:|na conversa|repositório|pasta confidencial|~\/)/i.test(o || "");
 const toast = t => { const el = $("#toast"); el.textContent = t + (Fonte.previa ? " (prévia: nada foi gravado)" : ""); el.className = "toast mostra"; clearTimeout(el._t); el._t = setTimeout(() => el.className = "toast", 3400) };
 const rota = () => { let h = (location.hash || "").slice(1); try { h = decodeURIComponent(h) } catch (e) {} const [r, ...p] = h.split("/"); return {r: r || "mesa", p} };
+const hoje = () => S.M?.hoje && Fonte.previa ? S.M.hoje : hojeLocal();
+const dataLonga = () => new Date(hoje() + "T12:00").toLocaleDateString("pt-BR", {weekday: "long", day: "numeric", month: "long"}).replace("-feira", "");
+const saudacao = () => { const h = new Date().getHours(); return h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite" };
+/* Sparkline: contagem real por dia (ou semana) a partir das datas dos registros; sem dado no período, não desenha nada. */
+function serie(datas, n = 14, passo = 1) {
+  const fim = new Date(hoje() + "T23:59:59"), xs = Array(n).fill(0);
+  for (const d of datas) { const t = new Date(d || ""); if (isNaN(t)) continue; const k = Math.floor((fim - t) / (864e5 * passo)); if (k >= 0 && k < n) xs[n - 1 - k]++ }
+  return xs;
+}
+function spark(xs, rotulo) {
+  if (!xs || !xs.some(Boolean)) return "";
+  const W = 96, H = 32, mx = Math.max(...xs), pt = xs.map((v, i) => [2 + i * (W - 4) / (xs.length - 1), H - 3 - v / mx * (H - 9)]);
+  const l = pt.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" "), u = pt[pt.length - 1];
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(rotulo)}"><title>${esc(rotulo)}</title><polygon points="2,${H - 3} ${l} ${W - 2},${H - 3}" style="fill:var(--ouro-suave)"/><polyline points="${l}" style="fill:none;stroke:var(--ouro-linha);stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round"/><circle cx="${u[0].toFixed(1)}" cy="${u[1].toFixed(1)}" r="2.6" style="fill:var(--ouro-linha)"/></svg>`;
+}
 
 /* ===================== Mesa ===================== */
 function mesaDe(p) {
@@ -334,163 +506,201 @@ const decisoesPend = () => S.M.decisoes.filter(d => !S.conselho[d.id]);
 const totalDecisoes = () => S.M.decisoesTotal ?? decisoesPend().length;
 function itensAcao(p) {
   const m = mesaDe(p);
-  return [...m.decisoes.map(d => ({tipo: "Decisão do Conselho", t: d.id + " · " + d.texto, sub: "Alçada do Luis", go: "decisao/" + d.id, c: `<span class="chip p aprovar">Pendente</span>`})),
-    ...m.prontos.map(x => ({tipo: "Aprovar resposta", t: x.entrega || x.campos?.precisa, sub: nomeArea(x.area), quando: (x.historico || []).at(-1)?.quando, go: "pedido/" + x.id, c: `<span class="chip p aprovar">Pronto para aprovar</span>`})),
-    ...m.chamados.map(c => ({tipo: "Aprovar chamado", t: c.titulo, sub: c.grupo, go: "chamado/" + c.id, c: `<span class="chip p aprovar">Aguarda você</span>`})),
-    ...m.responder.map(d => ({tipo: "Responder demanda", t: d.titulo, sub: d.master, quando: d.aberta_em, go: "demanda/" + d.id, c: d.urgente ? `<span class="chip urg">Urgente</span>` : `<span class="chip p analise">Responder</span>`})),
-    ...m.lote.map(l => ({tipo: "Decidir lote", t: l.negocio + " · " + (l.segmento || ""), sub: l.parceiro, go: "lote/" + l.deal, c: `<span class="chip p aprovar">Decidir</span>`}))];
+  return [...m.decisoes.map(d => ({tipo: "Decisão do Conselho", rot: d.id, t: d.texto, sub: "Alçada do Luis" + (d.data ? " · " + data(d.data) : ""), go: "decisao/" + d.id, forte: true, bt: "Decidir", c: `<span class="chip p aprovar">Pendente</span>`})),
+    ...m.prontos.map(x => ({tipo: "Aprovar resposta", rot: "Aprovar", t: x.entrega || x.campos?.precisa, sub: nomeArea(x.area), quando: (x.historico || []).at(-1)?.quando, go: "pedido/" + x.id, forte: true, bt: "Aprovar", c: `<span class="chip p aprovar">Pronto para aprovar</span>`})),
+    ...m.chamados.map(c => ({tipo: "Aprovar chamado", rot: "Chamado", t: c.titulo, sub: c.grupo, go: "chamado/" + c.id, forte: true, bt: "Aprovar", c: `<span class="chip p aprovar">Aguarda você</span>`})),
+    ...m.responder.map(d => ({tipo: "Responder demanda", rot: d.urgente ? "Urgente" : "Responder", t: d.titulo, sub: d.master, quando: d.aberta_em, go: "demanda/" + d.id, forte: d.urgente, bt: "Responder", c: d.urgente ? `<span class="chip urg">Urgente</span>` : `<span class="chip p analise">Responder</span>`})),
+    ...m.lote.map(l => ({tipo: "Decidir lote", rot: "Lote", t: l.negocio + " · " + (l.segmento || ""), sub: l.parceiro, go: "lote/" + l.deal, forte: false, bt: "Decidir", c: `<span class="chip p aprovar">Decidir</span>`}))];
 }
 const pendentes = p => !p ? 0 : itensAcao(p).length - (p === "luis" ? decisoesPend().length - totalDecisoes() : 0);
-const cab = (rot, t, sub, acoes = "") => `<div class="pag-cab"><div><span class="rot">${rot}</span><h1>${t}</h1>${sub ? `<p>${sub}</p>` : ""}</div><div class="acoes">${acoes}</div></div>`;
-const kpi = (r, v, s, go, dest) => `<${go ? `button class="kpi ${dest ? "destaque" : ""}" data-go="${go}"` : `div class="kpi ${dest ? "destaque" : ""}"`}><span class="rot">${r}</span><strong>${v}</strong><small>${s}</small></${go ? "button" : "div"}>`;
-function tabelaAcao(itens, max = 10) {
-  return `<section class="painel"><div class="painel-cab"><h2>Para agir agora</h2><span class="sub">${itens.length} ${itens.length === 1 ? "item" : "itens"}</span></div>
-    <div class="linhas" style="--cols:160px minmax(0,1fr) 170px"><div class="lh cab"><span>Tipo</span><span>Item</span><span>Situação</span></div>
-    ${itens.slice(0, max).map(i => `<button class="lh" data-go="${esc(i.go)}"><span class="sub esconde-m">${esc(i.tipo)}</span><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.sub || "")}${i.quando ? " · " + data(i.quando) : ""}</span></span><span>${i.c}</span></button>`).join("") || `<div class="vazio">Nada pendente com você.</div>`}
-    ${itens.length > max ? `<button class="lh" data-go="decisoes"><span class="sub">Ver as outras ${itens.length - max}</span></button>` : ""}</div></section>`;
+const cab = (rot, t, sub, acoes = "", g = false) => `<div class="pag-cab"><div>${rot ? `<span class="rot">${rot}</span>` : ""}<h1 class="${g ? "g" : ""}">${t}</h1>${sub ? `<p>${sub}</p>` : ""}</div>${acoes ? `<div class="acoes">${acoes}</div>` : ""}</div>`;
+/* Cartão de número: rótulo e selo no topo, número em mono com a sparkline à direita, legenda embaixo. */
+const kpi = ({r, v, s, go, dest, tag, tagForte, sp}) => `<${go ? `button class="kpi ${dest ? "destaque" : ""}" data-go="${esc(go)}"` : `div class="kpi ${dest ? "destaque" : ""}"`}>
+  <span class="k-topo"><span>${r}</span>${tag ? `<span class="chip ${tagForte ? "forte" : ""}">${esc(tag)}</span>` : ""}</span>
+  <span class="k-meio"><strong>${v}</strong>${sp || ""}</span><small>${s}</small></${go ? "button" : "div"}>`;
+/* Lista de ação no estilo "Para você decidir": ponto, título, contexto, tipo e botão. */
+function listaAcao(titulo, itens, max, ver) {
+  return `<section class="painel" aria-labelledby="t-acao"><div class="painel-cab"><h2 id="t-acao">${titulo}</h2>${ver || `<span class="sub">${itens.length} ${itens.length === 1 ? "item" : "itens"}</span>`}</div>
+    ${itens.slice(0, max).map(i => `<div class="linha-a"><span class="ponto ${i.forte ? "ouro" : ""}" aria-hidden="true"></span><span class="meio"><span class="tit quebra">${esc(i.t)}</span><span class="sub">${esc(i.tipo)}${i.sub ? " · " + esc(i.sub) : ""}${i.quando ? " · " + data(i.quando) : ""}</span></span>
+      <span class="chip tipo">${esc(i.rot)}</span><button class="btn sec peq" data-go="${esc(i.go)}">${esc(i.bt)}</button></div>`).join("") || `<div class="vazio">Nada pendente com você.</div>`}
+    ${itens.length > max ? `<div class="linha-a"><button class="lnk" data-go="${S.eu === "luis" ? "decisoes" : "pedidos"}">Ver as outras ${itens.length - max}</button></div>` : ""}</section>`;
 }
 function painelPedidos(t, xs, vazio) {
-  return `<section class="painel"><div class="painel-cab"><h2>${t}</h2><a href="#pedidos">Ver todos</a></div><div class="linhas" style="--cols:minmax(0,1fr) auto">
+  return `<section class="painel"><div class="painel-cab"><h2>${t}</h2><a class="lnk" href="#pedidos">Ver todos</a></div><div class="linhas" style="--cols:minmax(0,1fr) auto">
     ${xs.map(p => `<button class="lh" data-go="pedido/${esc(p.id)}"><span><span class="tit">${esc(nomeArea(p.area))}</span><span class="sub">${esc(p.campos?.precisa)}</span></span>${chip(p)}</button>`).join("") || `<div class="vazio">${vazio}</div>`}</div></section>`;
 }
 function painelArquivos(m) {
   const pw = (S.M.pastasWeb || {})[S.eu] || {}, pu = m.pasta.url || pw.url;
-  return `<section class="painel"><div class="painel-cab"><h2>Arquivos do dia</h2>${url(pu) ? `<a href="${url(pu)}" target="_blank" rel="noopener">Abrir minha pasta</a>` : ""}</div>
+  return `<section class="painel"><div class="painel-cab"><h2>Arquivos do dia</h2>${url(pu) ? `<a class="lnk" href="${url(pu)}" target="_blank" rel="noopener">Abrir minha pasta</a>` : ""}</div>
     <div class="linhas" style="--cols:minmax(0,1fr) auto">${m.arquivos.map(a => `<div class="lh"><span><span class="tit">${url(a.url) ? `<a href="${url(a.url)}" target="_blank" rel="noopener">${esc(a.nome)}</a>` : esc(a.nome)}</span><span class="sub">${esc(a.pasta || "pasta principal")}</span></span><span class="mono">${esc(a.hora)}</span></div>`).join("") || `<div class="vazio">Nenhum arquivo novo nas últimas 24 horas.</div>`}</div></section>`;
 }
 function telaMesa() {
   const p = S.eu;
-  if (!p && !Fonte.previa) return cab("Minha mesa", "Não reconheci a sua conta", "A Central está em modo leitura: você consulta áreas, entregas, rotinas e pastas. Para pedir e aprovar, abra a Central pelo link do Claude com a sua conta da Save; se ainda assim não funcionar, peça ao Luis para conferir o seu acesso.");
-  if (!p) return cab("Minha mesa", "Quem está usando?", "Escolha o seu nome. A mesa mostra só o que é seu agora.") + `<div class="acoes">${Object.entries(PESSOAS).map(([k, v]) => `<button class="btn sec" data-sou="${k}">${v}</button>`).join("")}</div>`;
+  if (!p && !Fonte.previa) return cab(dataLonga(), "Não reconheci a sua conta", "A Central está em modo leitura: você consulta áreas, entregas, rotinas e pastas. Para pedir e aprovar, abra a Central pelo link do Claude com a sua conta da Save; se ainda assim não funcionar, peça ao Luis para conferir o seu acesso.", `<a class="btn sec" href="#areas">${icone("areas")}Ver as áreas</a><a class="btn sec" href="#onde">${icone("onde")}Onde está</a>`, true)
+    + `<section class="bloco"><h2>Para consultar</h2><div class="servicos">${FIXADAS.map(([k]) => area(k)).filter(Boolean).map(a => `<article class="servico"><div class="s-topo"><span class="sig g" aria-hidden="true">${esc(sigla(a.nome))}</span><span><b>${esc(a.nome)}</b><small>Dono: ${esc(String(a.dono || "—").split(" (")[0])}</small></span></div><p>${esc(a.missao)}</p><div class="s-num"><span>${a.especialistas.length} especialistas</span><span>${a.entregas.length} entregas</span></div><div class="s-acoes"><button class="btn sec" data-go="area/${esc(a.skill)}">Abrir área</button></div></article>`).join("")}</div></section>`;
+  if (!p) return cab(dataLonga(), "Quem está usando?", "Escolha o seu nome. A mesa mostra só o que é seu agora.", "", true) + `<div class="acoes">${Object.entries(PESSOAS).map(([k, v]) => `<button class="btn sec" data-sou="${k}">${v}</button>`).join("")}</div>`;
   return p === "luis" ? mesaLuis() : mesaTime(p);
 }
 function mesaTime(p) {
-  const m = mesaDe(p), itens = itensAcao(p);
-  return cab(`Minha mesa · ${PESSOAS[p]}`, itens.length ? `${itens.length} ${itens.length === 1 ? "item pede" : "itens pedem"} a sua ação` : "Nada pendente com você agora",
-      "Você aprova o que é da sua entrega. Só regra, preço, meta, remuneração, produto em validação e material em escala sobem ao Luis.", `<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`)
-  + `<div class="kpis">${kpi("Para responder", m.responder.length, "demandas dos Masters", m.responder[0] ? "demanda/" + m.responder[0].id : "", false)}${kpi("Para aprovar", m.prontos.length + m.chamados.length + m.lote.length, p === "geovana" ? "respostas, chamados e lote" : "respostas e chamados", "", true)}${kpi("Em andamento", m.andamento.length, "pedidos que você fez", "pedidos")}${kpi("Para a sua área", m.paraArea.length, "pedidos de outras pessoas", "pedidos")}</div>
-  <div class="duas">${tabelaAcao(itens)}<div class="pilha">${painelPedidos("Meus pedidos em andamento", m.andamento, "Nenhum pedido seu em andamento.")}${painelArquivos(m)}</div></div>
-  ${m.acompanhar.length ? `<section class="painel"><div class="painel-cab"><h2>Demandas que você acompanha (${m.acompanhar.length})</h2></div><div class="linhas" style="--cols:minmax(0,1fr) auto">${m.acompanhar.map(d => `<button class="lh" data-go="demanda/${esc(d.id)}"><span><span class="tit">${esc(d.titulo)}</span><span class="sub">${esc(d.master || "")} · ${data(d.aberta_em)}</span></span><span class="chip p fila">Acompanhar</span></button>`).join("")}</div></section>` : ""}
+  const m = mesaDe(p), itens = itensAcao(p), M = S.M;
+  const minhas = M.demandas.filter(d => d.pessoa === p).map(d => d.aberta_em), meus = M.pedidos.filter(x => x.solicitante === p).map(x => x.criado_em);
+  return cab(dataLonga(), `${saudacao()}, ${PESSOAS[p]}`, itens.length ? `${itens.length} ${itens.length === 1 ? "item pede" : "itens pedem"} a sua ação. Você aprova o que é da sua entrega; só regra, preço, meta, remuneração, produto em validação e material em escala sobem ao Luis.` : "Nada pendente com você agora. Você aprova o que é da sua entrega; só regra, preço, meta, remuneração, produto em validação e material em escala sobem ao Luis.", `<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`, true)
+  + `<div class="kpis">${kpi({r: "Para responder", v: m.responder.length, s: "demandas dos Masters", go: m.responder[0] ? "demanda/" + m.responder[0].id : "whatsapp", tag: "14 dias", sp: spark(serie(minhas), "Demandas abertas por dia nos últimos 14 dias")})}
+    ${kpi({r: "Para aprovar", v: m.prontos.length + m.chamados.length + m.lote.length, s: p === "geovana" ? "respostas, chamados e lote" : "respostas e chamados", dest: true, tag: "você aprova", tagForte: true})}
+    ${kpi({r: "Em andamento", v: m.andamento.length, s: "pedidos que você fez", go: "pedidos", tag: "14 dias", sp: spark(serie(meus), "Pedidos feitos por dia nos últimos 14 dias")})}
+    ${kpi({r: "Para a sua área", v: m.paraArea.length, s: "pedidos de outras pessoas", go: "pedidos"})}</div>
+  <div class="grade-2">${listaAcao("Para agir agora", itens, 8)}<div class="pilha">${painelPedidos("Meus pedidos em andamento", m.andamento, "Nenhum pedido seu em andamento.")}${painelArquivos(m)}</div></div>
+  ${m.acompanhar.length ? `<section class="painel"><div class="painel-cab"><h2>Demandas que você acompanha</h2><span class="sub">${m.acompanhar.length}</span></div><div class="linhas" style="--cols:minmax(0,1fr) auto">${m.acompanhar.map(d => `<button class="lh" data-go="demanda/${esc(d.id)}"><span><span class="tit">${esc(d.titulo)}</span><span class="sub">${esc(d.master || "")} · ${data(d.aberta_em)}</span></span><span class="chip p fila">Acompanhar</span></button>`).join("")}</div></section>` : ""}
   ${painelApont(p)}`;
 }
 function painelApont(p) {
-  const hoje = hojeLocal(), meus = S.apont.filter(x => x.pessoa === p && diaLocal(x.data) === hoje);
+  const hj = hojeLocal(), meus = S.apont.filter(x => x.pessoa === p && diaLocal(x.data) === hj);
   return `<details class="painel"><summary class="painel-cab" style="cursor:pointer"><h2>Registrar uma tarefa (Semana 0)</h2><span class="sub">${meus.length} hoje · ${meus.reduce((s, x) => s + (x.minutos || 0), 0)} min</span></summary>
     <form id="f-apont" class="painel-corpo"><div class="campos"><label>O que fez<input id="a-desc" required maxlength="160" placeholder="Ex.: encaminhei o pedido de contrato"></label>
       <label>Tipo<select id="a-tipo">${["Atendimento ao parceiro", "Encaminhamento a área", "Cobrança de área", "Atualização de CRM", "Reunião", "Prospecção", "Análise técnica", "Relatório", "Outro"].map(t => `<option>${t}</option>`).join("")}</select></label>
       <label>Minutos<input id="a-min" type="number" min="1" max="600" value="15"></label></div>
-      <label style="display:flex;gap:10px;align-items:center;font-weight:400"><input id="a-ponte" type="checkbox" style="width:22px;min-height:22px"> Foi só ponte (receber, repassar, cobrar ou devolver)</label>
+      <label style="display:flex;gap:10px;align-items:center;font-weight:400"><input id="a-ponte" type="checkbox" style="width:20px;min-height:20px"> Foi só ponte (receber, repassar, cobrar ou devolver)</label>
       <div class="acoes"><button class="btn sec" type="submit" ${Fonte.pode() ? "" : "disabled"}>Registrar</button></div></form></details>`;
 }
 function mesaLuis() {
-  const M = S.M, ps = M.pedidos, dn = M.demandasNum, itens = itensAcao("luis");
-  const base = ps.filter(p => !S.kPessoa || p.solicitante === S.kPessoa);
-  const hoje = new Date(M.janelas.length && Fonte.previa ? "2026-10-23T12:00" : Date.now());
-  const dias = d => d ? Math.ceil((new Date(d + "T23:59") - hoje) / 864e5) : null;
+  const M = S.M, ps = M.pedidos, dn = M.demandasNum, itens = itensAcao("luis"), time = M.perfil === "time";
+  const hj = new Date(hoje() + "T12:00");
+  const dias = d => d ? Math.ceil((new Date(d + "T23:59") - hj) / 864e5) : null;
   const js = M.janelas.slice().sort((a, b) => (a.prazo || "9999").localeCompare(b.prazo || "9999"));
-  return cab("Minha mesa · Luis", `Decisões da sua alçada: ${totalDecisoes()}`, "Aqui ficam regra, preço, meta, remuneração, produto em validação e material em escala. Chamados, lotes e listas são decididos por quem é dona da entrega.", `<a class="btn sec" href="#decisoes">Ver decisões</a><a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`)
-  + `<div class="kpis">${kpi("Decisões suas", totalDecisoes(), "regra, preço, meta, produto", "decisoes", true)}
-      ${kpi("Para responder", ["daniela", "jenifer", "geovana"].reduce((s, k) => s + (dn[k]?.responder || 0), 0), ["daniela", "jenifer", "geovana"].map(k => `${PESSOAS[k]} ${dn[k]?.responder || 0}`).join(" · "))}
-      ${kpi("Pedidos abertos", ps.filter(p => ["fila", "analise"].includes(fase(p))).length, "na fila ou em análise", "pedidos")}
-      ${kpi("Prontos p/ aprovar", ps.filter(p => fase(p) === "aprovar").length, "com quem pediu", "pedidos")}
-      ${kpi("Chamados", M.chamados.filter(c => c.status === "proposto").length, "com a dona para aprovar")}
-      ${kpi("Lote Recuperador", `${M.lote.filter(r => S.recup[r.deal]).length}/${M.lote.length}`, "decididos pela Geovana")}</div>
-  <section class="painel"><div class="painel-cab"><h2>Filas de pedidos</h2>
-      <div class="filtros"><div class="seg" role="group" aria-label="Pessoa"><button data-kp="" aria-pressed="${!S.kPessoa}">Todos <span class="n">${ps.length}</span></button>${Object.entries(PESSOAS).map(([k, v]) => `<button data-kp="${k}" aria-pressed="${S.kPessoa === k}">${v} <span class="n">${ps.filter(p => p.solicitante === k).length}</span></button>`).join("")}</div>
-      <select class="f seg-col" id="k-col" aria-label="Coluna">${FASES.map(([k, n]) => `<option value="${k}" ${S.kCol === k ? "selected" : ""}>${n} (${base.filter(p => fase(p) === k).length})</option>`).join("")}</select></div></div>
-    <div class="painel-corpo"><div class="kanban">${FASES.map(([k, n]) => { const xs = base.filter(p => fase(p) === k);
-      return `<div class="coluna ${S.kCol === k ? "vis" : ""}"><h3><span class="chip p ${k}" style="border:0;background:none;padding:0">${n}</span><span class="mono">${xs.length}</span></h3>
-        ${xs.map(p => `<button class="ticket" data-go="pedido/${esc(p.id)}"><span class="sub">${esc(p.pid || p.id)} · ${esc(nomeArea(p.area))}</span><span class="txt">${esc(p.campos?.precisa)}</span>
-          <span class="rodape"><span class="av p" aria-hidden="true">${esc((PESSOAS[p.solicitante] || "?").slice(0, 2).toUpperCase())}</span>${esc(PESSOAS[p.solicitante] || "")}<span class="mono">${data(p.criado_em)}</span></span></button>`).join("") || `<p class="sub" style="padding:4px">Vazio</p>`}</div>` }).join("")}</div></div></section>
-  <div class="duas">${tabelaAcao(itens, 6)}
-    <section class="painel"><div class="painel-cab"><h2>Janelas de receita</h2><span class="sub">por prazo</span></div>
-      ${js.map(j => { const d = dias(j.prazo); return `<div class="janela"><span class="dias ${d !== null && d <= 14 ? "perto" : ""}">${d === null ? "sem data" : d < 0 ? "encerrada" : d + " dias"}</span><span><span class="tit quebra" style="font-size:14px">${esc(j.janela)}</span><span class="sub quebra">${esc(j.prazo_texto)} · ${esc(j.produto)}</span></span></div>` }).join("") || `<div class="vazio">Sem janelas cadastradas.</div>`}</section></div>
-  <div class="duas"><section class="painel"><div class="painel-cab"><h2>Alertas das áreas</h2></div>${M.alertas.map(a => `<div class="janela alerta" style="grid-template-columns:150px minmax(0,1fr)"><span><span class="chip">${esc(a.area)}</span></span><span class="quebra" style="font-size:14px">${esc(a.texto)}</span></div>`).join("") || `<div class="vazio">Sem alertas.</div>`}</section>
-    <details class="painel"><summary class="painel-cab" style="cursor:pointer"><h2>Saúde dos Masters</h2><span class="sub">${M.masters.length} Masters</span></summary>
-      <div class="linhas" style="--cols:minmax(0,1fr) 70px 70px 80px"><div class="lh cab"><span>Master</span><span>Saúde</span><span>Parados</span><span>Ganhos 90d</span></div>
-      ${M.masters.slice().sort((a, b) => a.saude - b.saude).map(m => `<div class="lh" style="grid-template-columns:minmax(0,1fr) 70px 70px 80px !important"><span>${esc(m.parceiro)}</span><span class="mono">${esc(m.saude)}${m.saude < 60 ? " ↓" : ""}</span><span class="mono">${esc(m.parados)}</span><span class="mono">${esc(m.ganhos_90d)}</span></div>`).join("")}</div></details></div>
-  ${painelArquivos(mesaDe("luis"))}`;
+  const prox = js.map(j => ({j, d: dias(j.prazo)})).find(x => x.d !== null && x.d >= 0);
+  const nf = ps.filter(p => fase(p) === "fila").length, na = ps.filter(p => fase(p) === "analise").length, nap = ps.filter(p => fase(p) === "aprovar").length;
+  const resp = ["daniela", "jenifer", "geovana"].reduce((s, k) => s + (dn[k]?.responder || 0), 0);
+  const desde = new Date(hj - 7 * 864e5);
+  const linhasTime = ["daniela", "jenifer", "geovana"].map(k => {
+    const ap = ps.filter(x => x.solicitante === k && x.status === "aguardando_aprovacao").length + M.chamados.filter(c => c.pessoa === k && c.status === "proposto").length + (k === "geovana" ? M.lote.filter(r => !S.recup[r.deal]).length : 0);
+    const uso = ps.filter(x => x.solicitante === k && new Date(x.criado_em) >= desde).length;
+    const foco = {daniela: "Demandas, chamados e plano de conta", jenifer: "Listas e cadência da prospecção", geovana: `Lote do Recuperador: ${M.lote.filter(r => S.recup[r.deal]).length} de ${M.lote.length}`}[k];
+    return {k, ap, uso, foco, resp: dn[k]?.responder || 0} });
+  const mx = Math.max(1, ...linhasTime.map(x => x.uso));
+  return cab(dataLonga(), `${saudacao()}, Luis`, time ? "Esta é a Central do time. As suas decisões ficam no seu painel próprio; aqui você acompanha os pedidos, as demandas e as janelas de receita." : "Aqui fica só o que é da sua alçada: regra, preço, meta, remuneração, produto em validação e material em escala. Chamados, lotes e listas são decididos por quem é dona da entrega.", `${time ? "" : `<a class="btn sec" href="#decisoes">Ver decisões</a>`}<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`, true)
+  + `<div class="kpis">${time ? kpi({r: "Decisões suas", v: "—", s: "ficam no seu painel próprio", tag: "alçada", tagForte: true}) : kpi({r: "Decisões suas", v: totalDecisoes(), s: "regra, preço, meta e produto em validação", go: "decisoes", dest: true, tag: "alçada", tagForte: true, sp: spark(serie(M.decisoes.map(d => d.data), 8, 7), "Decisões pendentes por semana de registro, últimas 8 semanas")})}
+      ${kpi({r: "Pedidos em andamento", v: nf + na + nap, s: `${nf} na fila · ${na} em análise · ${nap} para aprovar`, go: "pedidos", tag: "14 dias", sp: spark(serie(ps.map(p => p.criado_em)), "Pedidos abertos por dia nos últimos 14 dias")})}
+      ${kpi({r: "Janela mais próxima", v: prox ? prox.d + "d" : "—", s: prox ? esc(prox.j.janela) : "sem janela com data", tag: prox ? data(prox.j.prazo) : "", tagForte: prox && prox.d <= 14, dest: prox && prox.d <= 14})}
+      ${kpi({r: "Para responder", v: resp, s: ["daniela", "jenifer", "geovana"].map(k => `${PESSOAS[k]} ${dn[k]?.responder || 0}`).join(" · "), go: "whatsapp", tag: "14 dias", sp: spark(serie(M.demandas.map(d => d.aberta_em)), "Demandas abertas por dia nos últimos 14 dias")})}</div>
+  <div class="grade-2">${listaAcao("Para você decidir", itens, 6, time ? "" : `<button class="lnk" data-go="decisoes">Ver as ${totalDecisoes()}</button>`)}
+    <section class="painel" aria-labelledby="t-janelas"><div class="painel-cab"><h2 id="t-janelas">Janelas de receita</h2><span class="sub">por prazo</span></div>
+      ${js.map((j, i) => { const d = dias(j.prazo); return (i === 6 ? `<details class="mais-j"><summary class="lnk">Ver as outras ${js.length - 6} janelas</summary>` : "") + `<div class="janela"><span class="dias ${d !== null && d >= 0 && d <= 14 ? "perto" : ""}">${d === null ? "sem data" : d < 0 ? "encerrada" : d + (d === 1 ? " dia" : " dias")}</span><span style="min-width:0"><span class="tit quebra">${esc(j.janela)}</span><span class="sub quebra">${esc(j.prazo_texto || "")}</span></span><span class="base quebra">${esc(String(j.produto || "").replace(/\s*\(.*\)$/, ""))}</span></div>` }).join("") + (js.length > 6 ? "</details>" : "") || `<div class="vazio">Sem janelas cadastradas.</div>`}</section></div>
+  <section class="painel" aria-labelledby="t-time"><div class="painel-cab"><h2 id="t-time">Como está o time</h2><a class="lnk" href="#pedidos">Abrir fila de pedidos</a></div>
+    <div class="rolagem"><table class="t"><thead><tr><th scope="col">Pessoa</th><th scope="col">O que está com ela</th><th scope="col" style="text-align:right">Para responder</th><th scope="col" style="text-align:right">Para aprovar</th><th scope="col">Pedidos em 7 dias</th></tr></thead>
+    <tbody>${linhasTime.map(x => `<tr><td><span class="pessoa"><span class="av m">${esc(PESSOAS[x.k].slice(0, 2).toUpperCase())}</span><span><b>${PESSOAS[x.k]}</b><small>${PAPEL[x.k]}</small></span></span></td><td>${esc(x.foco)}</td><td class="num">${x.resp}</td><td class="num">${x.ap}</td>
+      <td><span class="barra"><i><b style="width:${Math.round(x.uso / mx * 100)}%"></b></i><span>${Fonte.pode() ? x.uso : "—"}</span></span></td></tr>`).join("")}</tbody></table></div></section>
+  <div class="grade-2"><section class="painel"><div class="painel-cab"><h2>Alertas das áreas</h2><span class="sub">${M.alertas.length}</span></div>${M.alertas.map(a => `<div class="linha-a"><span class="ponto" aria-hidden="true"></span><span class="meio"><span class="tit quebra">${esc(a.texto)}</span><span class="sub">${esc(a.area)}</span></span></div>`).join("") || `<div class="vazio">Sem alertas.</div>`}</section>
+    <div class="pilha"><details class="painel"><summary class="painel-cab" style="cursor:pointer"><h2>Saúde dos Masters</h2><span class="sub">${M.masters.length} Masters</span></summary>
+      <div class="linhas" style="--cols:minmax(0,1fr) 64px 64px 84px"><div class="lh cab"><span>Master</span><span>Saúde</span><span>Parados</span><span>Ganhos 90d</span></div>
+      ${M.masters.slice().sort((a, b) => a.saude - b.saude).map(m => `<div class="lh" style="grid-template-columns:minmax(0,1fr) 64px 64px 84px !important"><span>${esc(m.parceiro)}</span><span class="mono">${esc(m.saude)}${m.saude < 60 ? " ↓" : ""}</span><span class="mono">${esc(m.parados)}</span><span class="mono">${esc(m.ganhos_90d)}</span></div>`).join("")}</div></details>
+    ${painelArquivos(mesaDe("luis"))}</div></div>`;
 }
 
 /* ===================== Pedidos ===================== */
 function telaPedidos() {
   const F = S.f, ps = S.M.pedidos;
-  const base = ps.filter(p => (!F.area || (F.area === "-" ? !p.area : p.area === F.area)) && (!F.pessoa || p.solicitante === F.pessoa)), vis = base.filter(p => !F.fase || fase(p) === F.fase);
-  return cab("Pedidos", "Todos os pedidos", "Quem pede escolhe a área. O pedido vai direto para ela, e quem pediu aprova a resposta.", `<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`)
-  + `<section class="painel"><div class="painel-cab"><div class="seg" role="group" aria-label="Situação"><button data-fase="" aria-pressed="${!F.fase}">Todos <span class="n">${base.length}</span></button>${FASES.map(([k, n]) => `<button data-fase="${k}" aria-pressed="${F.fase === k}">${n} <span class="n">${base.filter(p => fase(p) === k).length}</span></button>`).join("")}</div>
+  const base = ps.filter(p => (!F.area || (F.area === "-" ? !p.area : p.area === F.area)) && (!S.kPessoa || p.solicitante === S.kPessoa)), vis = base.filter(p => !F.fase || fase(p) === F.fase);
+  const vazio = Fonte.pode() ? "Nenhum pedido com esses filtros." : "Os pedidos aparecem quando a Central é aberta pelo link do Claude.";
+  const cor = {fila: "", analise: "", aprovar: "ouro", concluido: ""};
+  return cab("", "Pedidos", "Tudo o que o time pediu às áreas, do pedido à aprovação. Quem pede escolhe a área, o pedido vai direto para ela, e quem pediu aprova a resposta.", `<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`)
+  + `<div class="barra-f"><div class="pilulas" role="group" aria-label="Filtrar por pessoa"><button data-kp="" aria-pressed="${!S.kPessoa}">Todos <span class="n">${ps.length}</span></button>${Object.entries(PESSOAS).map(([k, v]) => `<button data-kp="${k}" aria-pressed="${S.kPessoa === k}">${v} <span class="n">${ps.filter(p => p.solicitante === k).length}</span></button>`).join("")}</div>
     <div class="filtros"><select class="f" id="f-area" aria-label="Área"><option value="">Todas as áreas</option><option value="-" ${F.area === "-" ? "selected" : ""}>Central (sem área)</option>${S.M.areas.map(a => `<option value="${esc(a.skill)}" ${F.area === a.skill ? "selected" : ""}>${esc(a.nome)}</option>`).join("")}</select>
-    <select class="f" id="f-pessoa" aria-label="Pessoa"><option value="">Todas as pessoas</option>${Object.entries(PESSOAS).map(([k, v]) => `<option value="${k}" ${F.pessoa === k ? "selected" : ""}>${v}</option>`).join("")}</select></div></div>
+    <div class="seg" role="group" aria-label="Visualização"><button data-vista="quadro" aria-pressed="${S.vista === "quadro"}">Quadro</button><button data-vista="lista" aria-pressed="${S.vista === "lista"}">Lista</button></div></div></div>
+  ${!Fonte.pode() ? `<div class="nota">${vazio}</div>` : ""}
+  ${S.vista === "lista" ? `<section class="painel"><div class="painel-cab"><div class="seg" role="group" aria-label="Situação"><button data-fase="" aria-pressed="${!F.fase}">Todos <span class="n">${base.length}</span></button>${FASES.map(([k, n]) => `<button data-fase="${k}" aria-pressed="${F.fase === k}">${n} <span class="n">${base.filter(p => fase(p) === k).length}</span></button>`).join("")}</div></div>
     <div class="linhas" style="--cols:84px minmax(0,1fr) 190px 90px 100px 190px"><div class="lh cab"><span>Nº</span><span>Pedido</span><span>Área</span><span>Quem</span><span>Aberto</span><span>Situação</span></div>
-    ${vis.map(p => `<button class="lh" data-go="pedido/${esc(p.id)}"><span class="mono esconde-m">${esc(p.pid || p.id)}</span><span><span class="tit">${esc(p.entrega || p.campos?.precisa)}</span><span class="sub">${esc(p.campos?.precisa)}</span></span><span class="sub esconde-m">${esc(nomeArea(p.area))}${p.direto ? "" : " · triagem"}</span><span class="esconde-m">${esc(PESSOAS[p.solicitante] || "")}</span><span class="mono esconde-m">${data(p.criado_em)}</span><span>${chip(p)}</span></button>`).join("")
-      || `<div class="vazio">${Fonte.pode() ? "Nenhum pedido com esses filtros." : "Os pedidos aparecem quando a Central é aberta pelo link do Claude."}</div>`}</div></section>`;
+    ${vis.map(p => `<button class="lh" data-go="pedido/${esc(p.id)}"><span class="mono esconde-m">${esc(p.pid || p.id)}</span><span><span class="tit">${esc(p.entrega || p.campos?.precisa)}</span><span class="sub">${esc(p.campos?.precisa)}</span></span><span class="sub esconde-m">${esc(nomeArea(p.area))}${p.direto ? "" : " · triagem"}</span><span class="esconde-m">${esc(PESSOAS[p.solicitante] || "")}</span><span class="mono esconde-m">${data(p.criado_em)}</span><span>${chip(p)}</span></button>`).join("") || `<div class="vazio">${vazio}</div>`}</div></section>`
+  : `<select class="f seg-col" id="k-col" aria-label="Coluna">${FASES.map(([k, n]) => `<option value="${k}" ${S.kCol === k ? "selected" : ""}>${n} (${base.filter(p => fase(p) === k).length})</option>`).join("")}</select>
+    <div class="kanban">${FASES.map(([k, n]) => { const xs = base.filter(p => fase(p) === k);
+      return `<section class="coluna ${S.kCol === k ? "vis" : ""}" aria-label="${n}"><h3><span class="ponto ${cor[k]}" aria-hidden="true" style="${k === "analise" ? "background:var(--texto-2)" : k === "concluido" ? "background:var(--apagado)" : ""}"></span><span class="t">${n}</span><span class="mono">${xs.length}</span></h3>
+        ${xs.map(p => `<button class="ticket" data-go="pedido/${esc(p.id)}"><span class="t-topo"><span>${esc(p.pid || p.id)}</span><span>${data(p.criado_em)}</span></span><span class="txt">${esc(p.entrega || p.campos?.precisa)}</span>
+          <span class="t-base"><span class="chip area">${esc(nomeArea(p.area))}</span><span class="av p" title="${esc(PESSOAS[p.solicitante] || "")}">${esc((PESSOAS[p.solicitante] || "?").slice(0, 2).toUpperCase())}</span></span></button>`).join("") || `<p class="sem">Vazio</p>`}</section>` }).join("")}</div>`}`;
 }
 
 /* ===================== WhatsApp · Demandas =====================
    O que a rotina whatsapp-caixa-time leu nos grupos e conversas dos parceiros, com a avaliação dos agentes (dados.json → whatsapp_demandas).
    Tem nome de Master e de empresa: cada pessoa vê só as suas; o Luis vê todas. "Gerar chamado GLPI" grava em chamados/<id da demanda>
    com status "proposto" e origem "portal" (a dona aprova; a rotina da Central abre no GLPI por chamados_painel.py aplicar).
-   Sem o texto do especialista (regra de 14/10), a tela não escreve o chamado: grava um pedido à área para os agentes escreverem. */
+   Sem o texto do especialista (regra de 14/10), a tela não escreve o chamado: grava um pedido à área para os agentes escreverem.
+   Desenho: lista à esquerda e avaliação à direita; no celular, a avaliação abre por cima da lista. */
 const ST_WA = {responder: "Responder", acompanhar: "Acompanhar"};
 const waVis = () => !S.eu ? [] : S.M.whatsapp.filter(d => (S.eu === "luis" ? !S.wa.pessoa || d.pessoa === S.wa.pessoa : d.pessoa === S.eu) && !S.acoes[d.id]);
 function waBusca(xs) { const ts = sem(S.wa.q).trim().split(/\s+/).filter(Boolean); if (!ts.length) return xs;
   return xs.filter(d => { const a = sem([d.id, d.master, d.chat, d.grupo, d.o_que_pede, d.negocio, d.rota, d.tipo].join(" ")); return ts.every(t => a.includes(t)) }) }
 const chamadoDe = d => S.M.chamados.find(c => c.id === d.id) || (d.chamado ? {id: d.id, ...d.chamado} : null);
+const waFiltrada = () => waBusca(waVis().filter(d => !S.wa.status || d.status === S.wa.status));
 function listaWa() {
-  const xs = waBusca(waVis().filter(d => !S.wa.status || d.status === S.wa.status));
-  return `<div class="linhas" style="--cols:minmax(0,1.1fr) minmax(0,1.4fr) 150px 120px"><div class="lh cab"><span>Conversa</span><span>O que pede</span><span>Avaliação</span><span>Espera</span></div>
-    ${xs.map(d => `<button class="lh" data-go="wa/${esc(d.id)}"><span><span class="tit">${esc(d.master || d.chat)}</span><span class="sub">${esc(d.chat || "")}${S.eu === "luis" ? " · " + esc(PESSOAS[d.pessoa] || d.pessoa) : ""}</span></span>
-      <span class="esconde-m"><span class="tit quebra" style="font-weight:500">${esc(d.o_que_pede || "—")}</span></span>
-      <span><span class="chip p ${d.status === "responder" ? "analise" : "fila"}">${esc(d.tipo || ST_WA[d.status])}</span>${d.urgente ? ` <span class="chip urg">Urgente</span>` : ""}</span>
-      <span class="mono esconde-m">${d.aguardando_h != null ? esc(Math.round(d.aguardando_h)) + " h" : "—"}</span></button>`).join("")
-      || `<div class="vazio">${!S.eu ? "Entre com a sua conta do Claude para ver as suas demandas." : S.wa.q.trim() ? "Nenhuma demanda com essa busca." : "Nenhuma demanda aberta no WhatsApp."}</div>`}</div>
-    ${S.wa.q.trim() && S.eu ? `<div class="painel-corpo"><div class="acoes"><a class="btn sec" href="#wachamado">${icone("mais")}Gerar chamado GLPI a partir da busca</a><span class="sub">Os agentes escrevem o chamado no formato da área e ele volta para você aprovar.</span></div></div>` : ""}`;
+  const xs = waFiltrada();
+  return `${xs.map(d => `<button class="wa-linha ${d.id === S.waSel ? "sel" : ""}" data-go="wa/${esc(d.id)}" ${d.id === S.waSel ? 'aria-current="true"' : ""}><span class="wl">
+      <span class="wl-topo"><b>${esc(d.master || d.chat)}</b><small>${esc(d.chat || "")}${d.aberta_em ? " · " + data(d.aberta_em) : ""}${S.eu === "luis" ? " · " + esc(PESSOAS[d.pessoa] || d.pessoa) : ""}</small></span>
+      <span class="wl-pede">${esc(d.o_que_pede || "—")}</span>
+      <span class="filtros" style="gap:6px">${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}${d.area_sugerida ? `<span class="chip area">${esc(nomeArea(d.area_sugerida))}</span>` : ""}${d.tipo ? `<span class="sub" style="display:inline">${esc(d.tipo)}</span>` : ""}</span></span>
+      <span class="wl-dir"><span class="chip p ${d.status === "responder" ? "analise" : "fila"}">${esc(ST_WA[d.status] || d.status || "—")}</span><span class="mono" style="color:var(--texto-4)">${d.aguardando_h != null ? "espera " + esc(Math.round(d.aguardando_h)) + " h" : ""}</span></span></button>`).join("")
+    || `<div class="vazio">${!S.eu ? "Entre com a sua conta do Claude para ver as suas demandas." : S.wa.q.trim() ? "Nenhuma demanda com essa busca." : "Nenhuma demanda aberta no WhatsApp."}</div>`}
+    ${S.wa.q.trim() && S.eu ? `<div class="painel-corpo"><div class="acoes"><a class="btn sec" href="#wachamado">${icone("glpi")}Gerar chamado GLPI a partir da busca</a><span class="sub quebra">Os agentes escrevem o chamado no formato da área e ele volta para você aprovar.</span></div></div>` : ""}`;
 }
-function telaWhatsapp() {
-  const xs = waVis(), n = k => xs.filter(d => !k || d.status === k).length;
-  return cab("WhatsApp · Demandas", "O que os parceiros pediram", "Lidas nos grupos e conversas pela rotina das 8h e 14h, com a avaliação dos agentes. Responda com o rascunho conferido, peça à área ou gere o chamado do GLPI.")
-  + `<section class="painel"><div class="painel-cab"><div class="seg" role="group" aria-label="Situação"><button data-wa-st="" aria-pressed="${!S.wa.status}">Todas <span class="n">${n("")}</span></button>${Object.entries(ST_WA).map(([k, v]) => `<button data-wa-st="${k}" aria-pressed="${S.wa.status === k}">${v} <span class="n">${n(k)}</span></button>`).join("")}</div>
-    <div class="filtros">${S.eu === "luis" ? `<select class="f" id="wa-pessoa" aria-label="Pessoa"><option value="">Todas as pessoas</option>${["daniela", "jenifer", "geovana"].map(k => `<option value="${k}" ${S.wa.pessoa === k ? "selected" : ""}>${PESSOAS[k]}</option>`).join("")}</select>` : ""}</div></div>
-    <div class="painel-corpo" style="padding-bottom:0"><label><span class="so-leitor">Buscar demanda</span><input id="q-wa" type="search" value="${esc(S.wa.q)}" placeholder="Buscar por Master, empresa ou assunto" autocomplete="off"></label></div>
-    <div id="res-wa">${listaWa()}</div></section>`;
+function telaWhatsapp(sel, glpi) {
+  const xs = waVis(), n = k => xs.filter(d => !k || d.status === k).length, urg = xs.filter(d => d.urgente).length, aberto = sel !== undefined || glpi;
+  S.waSel = sel || (glpi ? null : waFiltrada()[0]?.id || null);
+  return cab("", "WhatsApp · Demandas", "O que os Masters pediram nos grupos e conversas, já lido e avaliado pelos agentes nas rodadas das 8h e das 14h: o que pedem, para qual área, a urgência e o rascunho de resposta. Responda com o rascunho conferido, peça à área ou gere o chamado do GLPI.",
+      `<span class="chip">${n("responder")} para responder</span>${urg ? `<span class="chip urg">${urg} ${urg === 1 ? "urgente" : "urgentes"}</span>` : ""}`)
+  + `<div class="barra-f"><div class="seg" role="group" aria-label="Situação"><button data-wa-st="" aria-pressed="${!S.wa.status}">Todas <span class="n">${n("")}</span></button>${Object.entries(ST_WA).map(([k, v]) => `<button data-wa-st="${k}" aria-pressed="${S.wa.status === k}">${v} <span class="n">${n(k)}</span></button>`).join("")}</div>
+    ${S.eu === "luis" ? `<select class="f" id="wa-pessoa" aria-label="Pessoa"><option value="">Todas as pessoas</option>${["daniela", "jenifer", "geovana"].map(k => `<option value="${k}" ${S.wa.pessoa === k ? "selected" : ""}>${PESSOAS[k]}</option>`).join("")}</select>` : ""}</div>
+  <div class="busca-grande">${icone("onde")}<label for="q-wa" class="so-leitor">Buscar demanda</label><input id="q-wa" type="search" value="${esc(S.wa.q)}" placeholder="Buscar por Master, empresa, assunto ou área" autocomplete="off"></div>
+  <div class="wa-lay"><section class="painel wa-lista" aria-label="Demandas"><div id="res-wa">${listaWa()}</div></section>
+    <section class="wa-det ${aberto ? "aberto" : ""}" id="wa-det" aria-label="Avaliação da demanda">${detalheWa(S.waSel, glpi)}</section></div>`;
 }
-function gWhats(id) {
-  const d = S.M.whatsapp.find(x => x.id === id); if (!d || !waVis().concat(S.M.whatsapp.filter(x => S.acoes[x.id] && x.pessoa === S.eu)).includes(d)) return;
-  const A = d.auditoria || {}, rv = d.revisao, ch = chamadoDe(d), dona = podeDecidir(d.pessoa), CS = d.chamado_sugerido;
-  gaveta(esc(d.master || d.chat), `<span class="mono">${esc(d.id)}</span> · ${esc(d.chat || "")}`,
-    `<div class="filtros"><span class="chip p ${d.status === "responder" ? "analise" : "fila"}">${esc(d.tipo || ST_WA[d.status])}</span>${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}${ch ? `<span class="chip p ${ch.status === "proposto" ? "aprovar" : "concluido"}">Chamado: ${esc(ST_CH[ch.status] || ch.status)}</span>` : ""}</div>
-    <p style="margin:0;font-size:16px">${esc(d.o_que_pede || "")}</p>
-    <dl class="dl"><dt>Master / grupo</dt><dd>${esc(d.master || "—")}${d.grupo ? " · " + esc(d.grupo) : ""}</dd><dt>Dona</dt><dd>${esc(PESSOAS[d.pessoa] || d.pessoa)}</dd>
-      <dt>Área sugerida</dt><dd>${esc(d.area_sugerida ? nomeArea(d.area_sugerida) : d.rota || "—")}</dd><dt>Prazo</dt><dd>${d.prazo ? data(d.prazo) : "—"}${d.aguardando_h != null ? ` · esperando há ${esc(Math.round(d.aguardando_h))} h` : ""}</dd>
-      <dt>Próximo passo</dt><dd class="quebra">${esc(d.proximo_passo || "—")}</dd>
+function passosGlpi(ch, dona) {
+  const st = ch?.status, f = [!!ch, ["aprovado", "aprovado_manual", "aberto"].includes(st), st === "aberto"], i = f.indexOf(false);
+  return `<ol class="passos" aria-label="Etapas do chamado">${["Proposto", `Aprovado por ${esc(PESSOAS[dona] || "a dona")}`, "Aberto no GLPI"].map((t, k) => `<li class="${f[k] ? "feito" : k === i && st !== "recusado" ? "agora" : ""}">${t}${f[k] ? `<span class="so-leitor"> (feito)</span>` : ""}</li>`).join("")}</ol>${st === "recusado" ? `<div class="nota">A dona decidiu não abrir este chamado${ch.motivo ? ": " + esc(ch.motivo) : "."}</div>` : ""}`;
+}
+function detalheWa(id, glpi) {
+  const d = id ? S.M.whatsapp.find(x => x.id === id) : null;
+  const fecharM = `<button class="icbtn fechar-m" data-fechar aria-label="Voltar à lista">${icone("fechar")}</button>`;
+  if (!d) return glpi ? `<div class="d-topo"><div><span class="rot">Chamado a partir da busca</span><h2>${esc(S.wa.q || "Busca")}</h2></div>${fecharM}</div>${blocoGlpi(null)}`
+    : `<div class="vazio" style="padding:8px 0">${S.eu ? "Escolha uma demanda na lista para ver a avaliação dos agentes." : "Entre com a sua conta do Claude para ver as suas demandas."}</div>`;
+  if (!waVis().concat(S.M.whatsapp.filter(x => S.acoes[x.id] && x.pessoa === S.eu)).includes(d)) return `<div class="vazio">Demanda fora do seu perfil.</div>`;
+  const A = d.auditoria || {}, rv = d.revisao, ch = chamadoDe(d), dona = podeDecidir(d.pessoa);
+  const urgTxt = d.urgente ? "Alta" + (d.prazo ? " · " + data(d.prazo) : "") : d.prazo ? "Prazo " + data(d.prazo) : "Normal";
+  return `<div class="d-topo"><div style="min-width:0"><span class="rot">Avaliação dos agentes · ${esc(d.master || d.chat)}</span><h2>${esc(d.tipo || ST_WA[d.status] || "Demanda")}</h2></div>
+      <span style="display:flex;gap:10px;align-items:center"><span class="sub" style="white-space:nowrap">Dona: <b style="color:var(--texto)">${esc(PESSOAS[d.pessoa] || d.pessoa)}</b></span>${fecharM}</span></div>
+    <div class="filtros"><span class="mono" style="color:var(--texto-4)">${esc(d.id)}</span><span class="chip p ${d.status === "responder" ? "analise" : "fila"}">${esc(ST_WA[d.status] || d.status || "")}</span>${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}${ch ? `<span class="chip p ${ch.status === "proposto" ? "aprovar" : "concluido"}">Chamado: ${esc(ST_CH[ch.status] || ch.status)}</span>` : ""}</div>
+    <p style="margin:0;font-size:15px;color:var(--texto)">${esc(d.o_que_pede || "")}</p>
+    <div class="mini"><div><small>Área</small><b>${esc(d.area_sugerida ? nomeArea(d.area_sugerida) : "—")}</b></div><div><small>Urgência</small><b>${esc(urgTxt)}</b></div><div><small>Rota sugerida</small><b class="ouro">${esc(d.rota || "—")}</b></div></div>
+    <dl class="dl"><dt>Master / grupo</dt><dd>${esc([...new Set([d.master, d.grupo, d.chat].filter(Boolean))].join(" · ") || "—")}</dd>
+      <dt>Próximo passo</dt><dd>${esc(d.proximo_passo || "—")}</dd>${d.aguardando_h != null ? `<dt>Esperando</dt><dd>há ${esc(Math.round(d.aguardando_h))} h</dd>` : ""}
       <dt>Confiança</dt><dd>${rv ? `${rv.aprovado ? "Conferida" : "Com ressalva"} pelo ${esc(rv.gerente || "gerente da área")}${rv.rodadas ? ` (${esc(rv.rodadas)} rodada${rv.rodadas > 1 ? "s" : ""})` : ""}` : "Sem revisão do gerente: confira antes de usar"}</dd>
       ${d.rodada ? `<dt>Lida em</dt><dd>${esc(d.rodada)}</dd>` : ""}${url(d.link) ? `<dt>HubSpot</dt><dd><a href="${url(d.link)}" target="_blank" rel="noopener">${esc(d.negocio || "Abrir negócio")}</a></dd>` : ""}</dl>
     ${d.entrega ? `<div class="resp"><h4>O que os agentes já levantaram</h4>${md(d.entrega)}</div>` : ""}
     ${d.precisa ? `<div class="resp"><h4>O que você também precisa</h4>${md(d.precisa)}</div>` : ""}
     ${d.falta && d.falta !== "nada" ? `<div class="resp"><h4>O que falta e quem fornece</h4>${md(d.falta)}</div>` : ""}
-    ${d.rascunho ? `<div><span class="rot">Rascunho de resposta ao parceiro</span><div class="nota quebra" style="margin-top:6px;color:var(--texto)">${esc(d.rascunho)}</div>
-      ${A.ok === true ? `<p class="sub">Passou no auditor de promessas.</p>` : A.ok === false ? `<div class="aviso" role="alert"><b>O auditor de promessas apontou:</b><ul style="margin:4px 0 0;padding-left:18px">${(A.achados || []).map(a => `<li>“${esc(a.termo)}” (${esc(a.regra)}): ${esc(a.sugestao)}</li>`).join("")}</ul>Ajuste antes de enviar.</div>` : `<p class="sub">Auditor de promessas indisponível nesta rodada: confira antes de enviar.</p>`}</div>`
-      : `<p class="sub">Sem rascunho: a resposta depende do que falta acima.</p>`}
-    ${S.eu === d.pessoa && !dona ? semIdent(d.pessoa) : ""}`,
-    `${d.rascunho ? `<button class="btn ${A.ok === false ? "sec" : ""}" data-copiar="${esc(d.id)}">Responder: copiar rascunho</button>` : ""}
-     ${dona ? `<button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="respondido">Respondi</button><button class="btn sec" data-wa-pedir="${esc(d.id)}">Pedir à área</button>
-       ${ch ? `<a class="btn sec" href="#chamado/${esc(ch.id)}">Ver chamado</a>` : `<a class="btn sec" href="#wachamado/${esc(d.id)}">Gerar chamado GLPI</a>`}` : ""}`);
+    ${d.rascunho ? `<div style="display:grid;gap:6px"><span class="sub">Rascunho de resposta ao Master</span><div class="rasc">${esc(d.rascunho)}</div>
+      ${A.ok === true ? `<span class="sub">Passou no auditor de promessas.</span>` : A.ok === false ? `<div class="aviso" role="alert"><b>O auditor de promessas apontou:</b><ul style="margin:4px 0 0;padding-left:18px">${(A.achados || []).map(a => `<li>“${esc(a.termo)}” (${esc(a.regra)}): ${esc(a.sugestao)}</li>`).join("")}</ul>Ajuste antes de enviar.</div>` : `<span class="sub quebra">Auditor de promessas indisponível nesta rodada: confira antes de enviar.</span>`}</div>`
+      : `<span class="sub">Sem rascunho: a resposta depende do que falta acima.</span>`}
+    ${S.eu === d.pessoa && !dona ? semIdent(d.pessoa) : ""}
+    <div class="acoes">${d.rascunho ? `<button class="btn sec" data-copiar="${esc(d.id)}">Copiar resposta</button>` : ""}
+      ${dona ? `<button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="respondido">Respondi</button><button class="btn sec" data-wa-pedir="${esc(d.id)}">Pedir à área</button>
+        ${ch ? `<a class="btn sec" href="#chamado/${esc(ch.id)}">Ver chamado</a>` : glpi ? "" : `<a class="btn" href="#wachamado/${esc(d.id)}">${icone("glpi")}Gerar chamado GLPI</a>`}` : ""}</div>
+    ${glpi || ch ? blocoGlpi(d) : ""}`;
 }
-function gChamadoWa(id) {
-  const d = id ? S.M.whatsapp.find(x => x.id === id) : null, CS = d?.chamado_sugerido, dona = d ? podeDecidir(d.pessoa) : Fonte.pode() && !!S.eu;
-  if (id && (!d || !waVis().includes(d))) return;
-  const pronto = CS && CS.pronto && !CS.nao_abrir;
-  gaveta(d ? "Gerar chamado GLPI" : "Chamado a partir da busca", d ? `<span class="mono">${esc(d.id)}</span> · ${esc(d.master || d.chat || "")}` : esc(S.wa.q),
-    pronto ? `<div class="nota">Chamado escrito pelo ${esc(CS.agente || "especialista da área")} no formato da área (chamado ideal). Revise; ele só vai ao GLPI depois que você aprova.</div>
-      <dl class="dl"><dt>Categoria</dt><dd>${esc(CS.grupo)} <span class="mono">(${esc(CS.area)})</span></dd>${CS.documentos ? `<dt>Anexos</dt><dd class="quebra">${esc(Array.isArray(CS.documentos) ? CS.documentos.join("; ") : CS.documentos)}</dd>` : ""}</dl>
+/* Bloco "Gerar chamado GLPI" (antes na gaveta): mesmos campos e botões (#wc-*, #salvar-chamado, #pedir-chamado). */
+function blocoGlpi(d) {
+  const CS = d?.chamado_sugerido, ch = d ? chamadoDe(d) : null, dona = d ? podeDecidir(d.pessoa) : Fonte.pode() && !!S.eu;
+  const pronto = CS && CS.pronto && !CS.nao_abrir, quem = d ? d.pessoa : S.eu;
+  const cabG = `<div class="d-topo"><h3>${ch ? "Chamado do GLPI" : pronto ? "Chamado ideal, escrito pelo especialista" : "Chamado do GLPI"}</h3>${d && !ch ? `<a class="icbtn" href="#wa/${esc(d.id)}" aria-label="Fechar chamado">${icone("fechar")}</a>` : ""}</div>${passosGlpi(ch, quem)}`;
+  if (ch) return `<div class="glpi">${cabG}<div class="acoes"><a class="btn ${ch.status === "proposto" && podeDecidir(ch.pessoa || d.pessoa) ? "" : "sec"}" href="#chamado/${esc(ch.id)}">${ch.status === "proposto" && podeDecidir(ch.pessoa || d.pessoa) ? "Revisar e aprovar" : "Ver chamado"}</a></div></div>`;
+  return `<div class="glpi">${cabG}
+    ${pronto ? `<div class="nota">Escrito pelo ${esc(CS.agente || "especialista da área")} no formato da área (chamado ideal). Revise; ele só vai ao GLPI depois que a dona aprova.</div>
+      <dl class="dl"><dt>Categoria</dt><dd>${esc(CS.grupo)} <span class="mono">(${esc(CS.area)})</span></dd>${CS.documentos ? `<dt>Anexos</dt><dd>${esc(Array.isArray(CS.documentos) ? CS.documentos.join("; ") : CS.documentos)}</dd>` : ""}</dl>
       <label for="wc-t">Título</label><input id="wc-t" maxlength="200" value="${esc(CS.titulo)}">
       <div class="campos"><label>Urgência<select id="wc-u">${[1, 2, 3, 4, 5].map(n => `<option ${Number(CS.urgencia) === n ? "selected" : ""}>${n}</option>`).join("")}</select></label><label>Prazo<input id="wc-p" type="date" value="${esc(/^\d{4}-\d{2}-\d{2}$/.test(CS.prazo || "") ? CS.prazo : "")}"></label></div>
       <label for="wc-d">Descrição <small>(blocos do chamado ideal)</small></label><textarea id="wc-d" rows="12">${esc(CS.descricao)}</textarea>`
     : `<div class="aviso">${CS?.nao_abrir ? `O especialista concluiu que <b>não é chamado</b>: ${esc(CS.nao_abrir)}` : `Ainda não há o texto do especialista para este chamado. Pela regra da casa (14/10), quem escreve o chamado é o especialista da área.`}</div>
-      <p style="margin:0">Peça aos agentes: eles escrevem no formato da área (o que entendemos, o que pedimos, anexos, prazo, riscos) e o chamado volta para ${d ? "a dona aprovar" : "você aprovar"} na mesa.</p>
-      <label for="wc-o">O que a área precisa resolver</label><textarea id="wc-o" maxlength="1500" rows="4">${esc(d ? d.o_que_pede || "" : S.wa.q)}</textarea>`,
-    !dona ? (d ? semIdent(d.pessoa) : `<span class="sub">Entre com a sua conta para gerar chamado.</span>`)
+      <p style="margin:0;color:var(--texto-2)">Peça aos agentes: eles escrevem no formato da área (o que entendemos, o que pedimos, anexos, prazo, riscos) e o chamado volta para ${d ? "a dona aprovar" : "você aprovar"} na mesa.</p>
+      <label for="wc-o">O que a área precisa resolver</label><textarea id="wc-o" maxlength="1500" rows="4">${esc(d ? d.o_que_pede || "" : S.wa.q)}</textarea>`}
+    <div class="acoes">${!dona ? (d ? semIdent(d.pessoa) || `<span class="sub">Só a dona da demanda gera o chamado.</span>` : `<span class="sub">Entre com a sua conta para gerar chamado.</span>`)
       : pronto ? `<button class="btn" id="salvar-chamado" data-id="${esc(d.id)}">Gravar chamado para aprovação</button><button class="btn sec" data-fechar>Cancelar</button>`
-      : `<button class="btn" id="pedir-chamado" data-id="${esc(d?.id || "")}">Pedir o texto do chamado aos agentes</button><button class="btn sec" data-fechar>Cancelar</button>`);
+      : `<button class="btn" id="pedir-chamado" data-id="${esc(d?.id || "")}">Pedir o texto do chamado aos agentes</button><button class="btn sec" data-fechar>Cancelar</button>`}</div></div>`;
 }
 async function salvarChamadoWa(id) {
   const d = S.M.whatsapp.find(x => x.id === id), CS = d?.chamado_sugerido; if (!d || !CS?.pronto || !podeDecidir(d.pessoa) || chamadoDe(d)) return;
@@ -523,30 +733,35 @@ function copiar(texto, ok) {
 
 /* ===================== Áreas ===================== */
 function telaAreas() {
-  return cab("Áreas", `${S.M.areas.length} áreas de agentes`, "Escolha a área para ver o que ela faz, quem é o dono, os especialistas e onde ficam as entregas. Em cada uma você faz o pedido ou conversa com os agentes.", `<button class="btn sec" id="ir-busca">${icone("onde")}Buscar</button>`)
-  + S.M.blocos.map(b => `<section class="bloco"><span class="rot">${esc(b)}</span><div class="servicos">${S.M.areas.filter(a => a.bloco === b).map(a => `<button class="servico" data-go="area/${esc(a.skill)}">
-      <span class="topo-s"><span class="sig" aria-hidden="true">${esc(sigla(a.nome))}</span><strong>${esc(a.nome)}</strong></span><p>${esc(a.missao)}</p>
-      <span class="base"><span>${a.entregas.length} entregas · ${a.especialistas.length} especialistas</span><span style="width:100%">Dono: ${esc(String(a.dono || "—").split(" (")[0])}</span></span></button>`).join("")}</div></section>`).join("");
+  const ne = S.M.areas.reduce((s, a) => s + a.especialistas.length, 0);
+  return cab("", "Áreas", `${S.M.areas.length} áreas e ${ne} especialistas. Abra a área para ver o que ela faz, o dono e onde ficam as entregas; peça direto a ela ou converse com os agentes.`, `<button class="btn sec" id="ir-busca">${icone("onde")}Buscar</button>`)
+  + S.M.blocos.map(b => { const xs = S.M.areas.filter(a => a.bloco === b); return xs.length ? `<section class="bloco"><h2>${esc(b)}</h2><div class="servicos">${xs.map(a => `<article class="servico">
+      <div class="s-topo"><span class="sig g" aria-hidden="true">${esc(sigla(a.nome))}</span><span><b>${esc(a.nome)}</b><small>Dono: ${esc(String(a.dono || "—").split(" (")[0])}</small></span></div>
+      <p>${esc(a.missao)}</p><div class="s-num"><span>${a.especialistas.length} especialistas</span><span>${a.entregas.length} entregas</span></div>
+      <div class="s-acoes"><button class="btn sec" data-go="area/${esc(a.skill)}">Abrir área</button><button class="btn linha" data-go="area/${esc(a.skill)}/conversa">Falar com a área</button></div></article>`).join("")}</div></section>` : "" }).join("");
 }
-function telaArea(sk) {
+function telaArea(sk, conversa) {
   const a = area(sk); if (!a) return telaAreas();
-  return `<nav class="migalha" aria-label="Caminho"><a href="#areas">Áreas</a><span>/</span><span>${esc(a.bloco)}</span></nav>
-  <section class="area-cab"><span class="rot">${esc(a.bloco)}</span><h1>${esc(a.nome)}</h1><p>${esc(a.missao)}</p>
-    <div class="filtros"><span class="chip">Dono: ${esc(a.dono)}</span><span class="chip">${a.especialistas.length} especialistas</span><span class="chip">${a.entregas.length} entregas</span></div>
-    <div class="acoes"><a class="btn" href="#area/${esc(a.skill)}/pedido">${icone("mais")}Fazer pedido</a><a class="btn sec" href="#area/${esc(a.skill)}/conversa">${icone("chat")}Fale com esta área</a></div></section>
-  <div class="duas"><div class="pilha">
-    <section class="painel"><div class="painel-cab"><h2>Entregas</h2><span class="sub">o que a área costuma entregar</span></div>
-      ${a.entregas.map(e => `<div class="ent"><span class="tit quebra">${esc(e.entrega)}</span>${e.conteudo ? `<span class="sub quebra">${esc(e.conteudo)}</span>` : ""}
-        <span class="meta">${e.quando ? `<span>Quando: ${esc(e.quando)}</span>` : ""}${e.quem_recebe ? `<span>Recebe: ${esc(e.quem_recebe)}</span>` : ""}${e.formato ? `<span>Formato: ${esc(e.formato)}</span>` : ""}</span>
-        ${e.arquivo && e.arquivo !== "—" ? `<span class="meta">Arquivo: <span class="mono">${esc(e.arquivo)}</span></span>` : ""}
-        <span class="meta">Onde: ${esc(e.onde)} ${linkPastas(e.links)}</span>
-        <span><button class="btn peq sec" data-pedir="${esc(a.skill)}" data-entrega="${esc(e.entrega)}">Pedir esta entrega</button></span></div>`).join("")}</section>
-    <section class="painel"><div class="painel-cab"><h2>Especialistas</h2><span class="sub">o que cada um entrega</span></div><div class="painel-corpo"><div class="esps">${a.especialistas.map(e => `<div class="esp"><b>${esc(e.nome)}</b><span>${esc(e.entrega)}</span></div>`).join("")}</div></div></section>
-  </div><div class="pilha">
-    <section class="painel"><div class="painel-cab"><h2>Onde fica</h2></div><div class="painel-corpo"><p style="margin:0;font-size:14px">${esc(a.onde)}</p>${a.links.length ? `<div class="acoes">${linkPastas(a.links)}</div>` : `<p class="sub quebra">Entrega na conversa ou no pedido; arquivo fora do OneDrive quando houver.</p>`}</div></section>
-    ${a.quem_usa ? `<section class="painel"><div class="painel-cab"><h2>Quem usa</h2></div><div class="painel-corpo"><p style="margin:0;font-size:14px">${esc(a.quem_usa)}</p></div></section>` : ""}
-    ${a.nao_faz?.length ? `<section class="painel"><div class="painel-cab"><h2>O que a área não faz</h2></div><div class="painel-corpo"><ul style="margin:0;padding-left:18px;font-size:14px;display:grid;gap:4px">${a.nao_faz.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div></section>` : ""}
-  </div></div>`;
+  const abas = [["entregas", `Entregas · ${a.entregas.length}`], ["especialistas", `Especialistas · ${a.especialistas.length}`], ["onde", "Onde fica"]].concat(a.nao_faz?.length || a.quem_usa ? [["regras", "Quem usa e limites"]] : []);
+  const aba = abas.some(x => x[0] === S.aba[sk]) ? S.aba[sk] : "entregas";
+  const corpo = {
+    entregas: () => `<div class="linhas"><div class="lh cab ent-lh"><span>Entrega</span><span>Quem recebe</span><span>Quando</span><span><span class="so-leitor">Ação</span></span></div>
+      ${a.entregas.map(e => `<div class="lh ent-lh"><span class="ent"><span class="tit quebra">${esc(e.entrega)}</span>${e.conteudo ? `<span class="sub quebra">${esc(e.conteudo)}</span>` : ""}
+        <span class="meta">${e.formato ? `<span>Formato: ${esc(e.formato)}</span>` : ""}${e.arquivo && e.arquivo !== "—" ? `<span>Arquivo: <span class="mono">${esc(e.arquivo)}</span></span>` : ""}<span>Onde: ${esc(e.onde)}</span>${e.quando ? `<span class="so-m-b">Quando: ${esc(e.quando)}</span>` : ""}</span>
+        ${linkPastas(e.links) ? `<span class="meta">${linkPastas(e.links)}</span>` : ""}</span>
+        <span class="sub quebra esconde-m">${esc(e.quem_recebe || "—")}</span><span class="sub quebra esconde-m">${esc(e.quando || "—")}</span>
+        <span class="pedir"><button class="btn sec peq" data-pedir="${esc(a.skill)}" data-entrega="${esc(e.entrega)}">Pedir</button></span></div>`).join("")}</div>`,
+    especialistas: () => `<div class="esps">${a.especialistas.map(e => `<div class="esp"><b>${esc(e.nome)}</b><span>${esc(e.entrega)}</span></div>`).join("")}</div>`,
+    onde: () => `<div style="display:grid;gap:10px"><p style="margin:0;color:var(--texto-2)">${esc(a.onde)}</p>${a.links.length ? `<div class="acoes">${linkPastas(a.links, "lk-pasta")}</div>` : `<span class="sub quebra">Entrega na conversa ou no pedido; arquivo fora do OneDrive quando houver.</span>`}</div>`,
+    regras: () => `<div style="display:grid;gap:14px">${a.quem_usa ? `<div class="resp"><h4>Quem usa</h4><p>${esc(a.quem_usa)}</p></div>` : ""}${a.nao_faz?.length ? `<div class="resp"><h4>O que a área não faz</h4><ul>${a.nao_faz.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}</div>`}[aba];
+  return `<div class="area-lay"><div class="area-princ"><a class="voltar" href="#areas">${icone("voltar")}Todas as áreas</a>
+    <section class="area-cab"><div class="a-topo"><span class="sig forte xg" aria-hidden="true">${esc(sigla(a.nome))}</span>
+      <div class="a-nome"><span class="rot">${esc(a.bloco)} · Dono: ${esc(String(a.dono || "—").split(" (")[0])}</span><h1>${esc(a.nome)}</h1></div>
+      <div class="acoes"><a class="btn sec" href="#area/${esc(a.skill)}/pedido">${icone("mais")}Fazer pedido</a><a class="btn" href="#area/${esc(a.skill)}/conversa">${icone("chat")}Fale com esta área</a></div></div>
+      <p>${esc(a.missao)}</p>
+      <div class="abas" role="tablist" aria-label="Seções da área">${abas.map(([k, t]) => `<button role="tab" id="aba-${k}" aria-controls="aba-corpo" aria-selected="${aba === k}" data-aba="${k}" data-sk="${esc(a.skill)}">${t}</button>`).join("")}</div>
+      <div id="aba-corpo" role="tabpanel" aria-labelledby="aba-${aba}">${corpo()}</div></section></div>
+    ${conversa ? painelConversa(sk) : ""}</div>`;
 }
 
 /* ===================== Onde está ===================== */
@@ -563,37 +778,39 @@ function indice() {
   return IDX = R;
 }
 const PESO = {Entrega: 3, Pasta: 2, Rotina: 2, "Área": 2, Pessoa: 1, Especialista: 0};
+const IC_TIPO = {Entrega: "doc", Pasta: "pasta", Rotina: "rotinas", "Área": "areas", Pessoa: "pessoa", Especialista: "esp"};
 const buscar = (q, n = 30) => { const ts = sem(q).trim().split(/\s+/).filter(Boolean); if (!ts.length) return [];
   return indice().filter(r => ts.every(t => r.all.includes(t))).map(r => ({r, s: (ts.every(t => r.t.includes(t)) ? 10 : 0) + PESO[r.tipo]})).sort((a, b) => b.s - a.s).slice(0, n).map(x => x.r) };
 function resOnde(q) {
   const rs = buscar(q);
   return `<div class="painel-cab"><h2>${q.trim() ? `${rs.length}${rs.length === 30 ? "+" : ""} resultado(s) para “${esc(q)}”` : "Digite o que você procura"}</h2></div>
-  <div class="linhas" style="--cols:110px minmax(0,1.2fr) minmax(0,1fr)">${rs.map(r => `<div class="lh"><span class="esconde-m"><span class="chip">${esc(r.tipo)}</span></span>
-    <span><span class="tit quebra">${esc(r.titulo)}</span><span class="sub quebra">${esc(r.sub || "")}</span>${r.det ? `<span class="sub quebra">${esc(r.det)}</span>` : ""}</span>
-    <span><span class="sub quebra">Onde: ${esc(r.onde || "—")}${foraOD(r.onde) && !r.links?.length ? " (fora do OneDrive)" : ""}</span><span class="acoes" style="margin-top:4px">${linkPastas(r.links)}${r.area ? `<a href="#area/${esc(r.area)}">Ver a área</a>` : ""}</span></span></div>`).join("") || (q.trim() ? `<div class="vazio">Nada encontrado. Tente outra palavra ou <a href="#novo">peça à Central</a>.</div>` : "")}</div>`;
+  ${rs.map(r => `<div class="res-l"><span class="ico" title="${esc(r.tipo)}">${icone(IC_TIPO[r.tipo] || "doc")}</span>
+    <span class="meio"><span class="tit quebra">${esc(r.titulo)}</span><span class="sub quebra">${esc(r.tipo)} · ${esc(r.sub || "")}</span>${r.det ? `<span class="sub quebra" style="color:var(--texto-3)">${esc(r.det)}</span>` : ""}
+      <span class="mono quebra" style="color:var(--texto-2)">Onde: ${esc(r.onde || "—")}${foraOD(r.onde) && !r.links?.length ? " (fora do OneDrive)" : ""}</span></span>
+    <span class="lks">${linkPastas(r.links, "lk-pasta")}${r.area ? `<a class="lnk" href="#area/${esc(r.area)}">Ver a área</a>` : ""}</span></div>`).join("") || (q.trim() ? `<div class="vazio">Nada encontrado. Tente o nome da área ou da entrega, ou <a href="#novo">peça à Central</a>.</div>` : "")}`;
 }
 function telaOnde(q) {
   const ex = ["Conferência de repasses", "lote do Recuperador", "ata do Conselho", "plano do dia"];
-  return cab("Onde está", "Onde fica cada coisa", `${S.M.areas.length} áreas, ${S.M.areas.reduce((s, a) => s + a.especialistas.length, 0)} especialistas e ${S.M.areas.reduce((s, a) => s + a.entregas.length, 0)} entregas. Busque por entrega, pasta, rotina, pessoa ou especialista.`)
-  + `<label style="max-width:760px"><span class="so-leitor">Buscar</span><input id="q-onde" type="search" value="${esc(q)}" placeholder="O que você procura? Ex.: conferência de repasses" autocomplete="off" style="min-height:48px;font-size:16px"></label>
-  <div class="filtros"><span class="sub">Exemplos:</span>${ex.map(x => `<button class="btn peq sec" data-q="${esc(x)}">${esc(x)}</button>`).join("")}</div>
-  <section class="painel" id="res-onde">${resOnde(q)}</section>
-  <div class="duas"><section class="painel"><div class="painel-cab"><h2>Pastas no OneDrive</h2></div><div class="linhas" style="--cols:minmax(0,1fr) auto">
-    ${S.M.pastas.map(p => `<div class="lh"><span><span class="tit">${esc(p.rotulo)}</span><span class="sub">${esc(p.caminho)}</span></span><span>${url(p.url) ? `<a href="${url(p.url)}" target="_blank" rel="noopener">Abrir</a>` : `<span class="sub">ainda não criada</span>`}</span></div>`).join("")}</div></section>
+  return `<div style="display:flex;flex-direction:column;gap:20px;max-width:960px;width:100%">` + cab("", "Onde está", `Encontre qualquer entrega, pasta, rotina ou pessoa e vá direto ao arquivo: ${S.M.areas.length} áreas, ${S.M.areas.reduce((s, a) => s + a.especialistas.length, 0)} especialistas e ${S.M.areas.reduce((s, a) => s + a.entregas.length, 0)} entregas.`)
+  + `<div class="busca-grande xg">${icone("onde")}<label for="q-onde" class="so-leitor">Buscar</label><input id="q-onde" type="search" value="${esc(q)}" placeholder="Ex.: repasses, lote, ata do Conselho, Daniela" autocomplete="off"></div>
+  <div class="filtros"><span class="sub" style="display:inline">Exemplos:</span>${ex.map(x => `<button class="btn peq sec" data-q="${esc(x)}">${esc(x)}</button>`).join("")}</div>
+  <section class="painel" id="res-onde">${resOnde(q)}</section></div>
+  <div class="grade-2"><section class="painel"><div class="painel-cab"><h2>Pastas no OneDrive</h2><span class="sub">${S.M.pastas.length}</span></div><div class="linhas" style="--cols:minmax(0,1fr) auto">
+    ${S.M.pastas.map(p => `<div class="lh"><span><span class="tit">${esc(p.rotulo)}</span><span class="sub">${esc(p.caminho)}</span></span><span>${url(p.url) ? `<a class="lk-pasta" href="${url(p.url)}" target="_blank" rel="noopener">Abrir</a>` : `<span class="sub">ainda não criada</span>`}</span></div>`).join("") || `<div class="vazio">Nenhuma pasta compartilhada nesta versão.</div>`}</div></section>
   <section class="painel"><div class="painel-cab"><h2>Pessoas</h2></div><div class="linhas" style="--cols:minmax(0,1fr) auto">
-    ${S.M.pessoas.map(p => `<div class="lh"><span><span class="tit">${esc(p.nome)}</span><span class="sub quebra">${esc(p.papel)}</span></span><span>${url(p.url) ? `<a href="${url(p.url)}" target="_blank" rel="noopener">Pasta</a>` : ""}</span></div>`).join("")}</div></section></div>`;
+    ${S.M.pessoas.map(p => `<div class="lh"><span><span class="tit">${esc(p.nome)}</span><span class="sub quebra">${esc(p.papel)}</span></span><span>${url(p.url) ? `<a class="lk-pasta" href="${url(p.url)}" target="_blank" rel="noopener">Pasta</a>` : ""}</span></div>`).join("")}</div></section></div>`;
 }
 function telaRotinas() {
-  return cab("Rotinas", "Quando os agentes trabalham", "O que roda sozinho, quando roda e onde entrega.")
+  return cab("", "Rotinas", "Quando os agentes trabalham: o que roda sozinho, quando roda e onde entrega.")
   + `<section class="painel"><div class="linhas" style="--cols:minmax(0,1fr) 240px minmax(0,1.1fr)"><div class="lh cab"><span>Rotina</span><span>Quando</span><span>Onde entrega</span></div>
-  ${S.M.rotinas.map(r => `<div class="lh"><span><span class="tit">${esc(r.nome)}</span><span class="sub quebra">${esc(r.entrega)}</span><span class="sub quebra so-m-b">${esc(r.quando)}</span></span><span class="mono esconde-m">${esc(r.quando)}</span><span class="sub quebra esconde-m">${esc(r.onde)} ${linkPastas(r.links)}</span></div>`).join("")}</div></section>`;
+  ${S.M.rotinas.map(r => `<div class="lh"><span><span class="tit">${esc(r.nome)}</span><span class="sub quebra">${esc(r.entrega)}</span><span class="sub quebra so-m-b">${esc(r.quando)}</span></span><span class="mono esconde-m" style="color:var(--texto-2)">${esc(r.quando)}</span><span class="sub quebra esconde-m">${esc(r.onde)} ${linkPastas(r.links)}</span></div>`).join("")}</div></section>`;
 }
 function telaDecisoes() {
   const ds = decisoesPend(), dono = S.eu === "luis";
-  return cab("Decisões", `Decisões do Conselho · ${totalDecisoes()} pendentes`, dono ? "Aprove, rejeite ou ajuste. O agente registra no livro de decisões na próxima rodada." : "Só o Luis decide. As aprovações operacionais ficam com quem é dona da entrega.")
+  return cab("", `Decisões do Conselho · ${totalDecisoes()} pendentes`, dono ? "Aprove, rejeite ou ajuste. O agente registra no livro de decisões na próxima rodada." : "Só o Luis decide. As aprovações operacionais ficam com quem é dona da entrega.")
   + (S.M.perfil === "time" ? `<div class="nota">Esta é a Central do time: as decisões do Conselho ficam no painel do Luis e na Folha Única de decisões.</div>` : "")
   + (Fonte.previa && S.M.decisoesTotal > ds.length ? `<div class="nota">Prévia: mostrando ${ds.length} de ${S.M.decisoesTotal} decisões, sem as que citam cliente.</div>` : "")
-  + `<section class="painel"><div class="linhas" style="--cols:70px minmax(0,1fr) 100px 120px"><div class="lh cab"><span>Nº</span><span>Decisão</span><span>Data</span><span>Situação</span></div>${ds.map(d => `<button class="lh" data-go="decisao/${esc(d.id)}"><span class="mono">${esc(d.id)}</span><span class="tit quebra">${esc(d.texto)}</span><span class="mono esconde-m">${esc(d.data)}</span><span><span class="chip p aprovar">Pendente</span></span></button>`).join("") || `<div class="vazio">Nenhuma decisão pendente.</div>`}</div></section>`;
+  + `<section class="painel"><div class="linhas" style="--cols:70px minmax(0,1fr) 100px 120px"><div class="lh cab"><span>Nº</span><span>Decisão</span><span>Data</span><span>Situação</span></div>${ds.map(d => `<button class="lh" data-go="decisao/${esc(d.id)}"><span class="mono">${esc(d.id)}</span><span class="tit quebra">${esc(d.texto)}</span><span class="mono esconde-m">${esc(data(d.data))}</span><span><span class="chip p aprovar">Pendente</span></span></button>`).join("") || `<div class="vazio">Nenhuma decisão pendente.</div>`}</div></section>`;
 }
 
 /* ===================== Gaveta ===================== */
@@ -605,11 +822,11 @@ function gPedido(id) {
   const p = S.M.pedidos.find(x => x.id === id); if (!p) return; const R = p.resposta, meu = p.status === "aguardando_aprovacao" && podeDecidir(p.solicitante);
   gaveta(`${esc(p.entrega || "Pedido")}`, `<span class="mono">${esc(p.pid || p.id)}</span> · ${esc(nomeArea(p.area))}`,
     `<div class="filtros">${chip(p)}<span class="chip">${p.direto ? "Direto à área" : "Pela Central"}</span></div>
-    <p style="margin:0;font-size:16px">${esc(p.campos?.precisa)}</p>
-    <dl class="dl"><dt>Pedido por</dt><dd>${esc(PESSOAS[p.solicitante] || p.solicitante)} em ${data(p.criado_em)}</dd>${p.campos?.uso ? `<dt>Para que</dt><dd>${esc(p.campos.uso)}</dd>` : ""}${p.campos?.prazo ? `<dt>Prazo</dt><dd>${data(p.campos.prazo)}</dd>` : ""}<dt>Quem aprova</dt><dd>${esc(PESSOAS[p.solicitante] || "")} (quem pediu)</dd>${p.campos?.contexto ? `<dt>Contexto</dt><dd class="quebra">${esc(String(p.campos.contexto).slice(0, 600))}</dd>` : ""}</dl>
+    <p style="margin:0;font-size:15px">${esc(p.campos?.precisa)}</p>
+    <dl class="dl"><dt>Pedido por</dt><dd>${esc(PESSOAS[p.solicitante] || p.solicitante)} em ${data(p.criado_em)}</dd>${p.campos?.uso ? `<dt>Para que</dt><dd>${esc(p.campos.uso)}</dd>` : ""}${p.campos?.prazo ? `<dt>Prazo</dt><dd>${data(p.campos.prazo)}</dd>` : ""}<dt>Quem aprova</dt><dd>${esc(PESSOAS[p.solicitante] || "")} (quem pediu)</dd>${p.campos?.contexto ? `<dt>Contexto</dt><dd>${esc(String(p.campos.contexto).slice(0, 600))}</dd>` : ""}</dl>
     ${(p.reencaminhado || []).map(r => `<div class="nota">Reencaminhado de ${esc(nomeArea(r.de))} para ${esc(nomeArea(r.para))}: ${esc(r.motivo)} (${data(r.quando)}).</div>`).join("")}
-    ${R ? `<div class="resp"><span class="rot">Resposta v${esc(R.versao)} · ${esc(nomeArea(p.area))}</span><p><b>${esc(R.resumo)}</b></p>${(R.secoes || []).map(s => `<h4>${esc(s.titulo)}</h4>${md(s.texto)}`).join("")}${R.tambem ? `<h4>O que você também precisa</h4>${md(R.tambem)}` : ""}${R.falta ? `<h4>O que falta e quem fornece</h4>${md(R.falta)}` : ""}${(R.conferir || []).length ? `<h4>Antes de usar, confira</h4>${md(R.conferir.map(c => "- " + c).join("\n"))}` : ""}${(R.arquivos || []).length ? `<p class="sub quebra">Arquivos: ${R.arquivos.map(esc).join(", ")}</p>` : ""}</div>` : ""}
-    <div><span class="rot">Linha do tempo</span><ol class="linha-tempo" style="margin-top:10px">${(p.historico || []).map(h => `<li><b>${esc(h.evento)}</b> · ${esc(PESSOAS[h.por] || h.por)} <span class="mono" style="color:var(--texto-2)">${data(h.quando)}</span>${h.nota ? `<br><span class="sub quebra">${esc(h.nota)}</span>` : ""}</li>`).join("")}</ol></div>
+    ${R ? `<div class="resp"><span class="rot" style="color:var(--ouro-texto)">Resposta v${esc(R.versao)} · ${esc(nomeArea(p.area))}</span><p><b>${esc(R.resumo)}</b></p>${(R.secoes || []).map(s => `<h4>${esc(s.titulo)}</h4>${md(s.texto)}`).join("")}${R.tambem ? `<h4>O que você também precisa</h4>${md(R.tambem)}` : ""}${R.falta ? `<h4>O que falta e quem fornece</h4>${md(R.falta)}` : ""}${(R.conferir || []).length ? `<h4>Antes de usar, confira</h4>${md(R.conferir.map(c => "- " + c).join("\n"))}` : ""}${(R.arquivos || []).length ? `<p class="sub quebra">Arquivos: ${R.arquivos.map(esc).join(", ")}</p>` : ""}</div>` : ""}
+    <div><span class="rot">Linha do tempo</span><ol class="linha-tempo" style="margin-top:10px">${(p.historico || []).map(h => `<li><b>${esc(h.evento)}</b> · ${esc(PESSOAS[h.por] || h.por)} <span class="mono" style="color:var(--texto-4)">${data(h.quando)}</span>${h.nota ? `<br><span class="sub quebra">${esc(h.nota)}</span>` : ""}</li>`).join("")}</ol></div>
     ${p.status === "aguardando_aprovacao" ? semIdent(p.solicitante) : ""}${meu ? `<label for="com">Comentário <small>(obrigatório para pedir ajuste ou não aprovar)</small><textarea id="com" maxlength="1500"></textarea></label>` : ""}`,
     meu ? `<button class="btn" data-dec="aprovado" data-id="${esc(p.id)}">Aprovar</button><button class="btn sec" data-dec="nova_analise" data-id="${esc(p.id)}">Pedir ajuste</button><button class="btn perigo" data-dec="nao_aprovado" data-id="${esc(p.id)}">Não aprovado</button>` : "");
 }
@@ -634,7 +851,8 @@ function gNovo(fixa) {
     `<button class="btn" id="enviar-pedido" data-area="${esc(sel ?? "")}" ${sel === null || !ok ? "disabled" : ""}>Enviar pedido</button><button class="btn sec" data-fechar>Cancelar</button>${!S.eu ? `<span class="sub">Escolha o seu perfil para enviar.</span>` : !Fonte.pode() ? `<span class="sub">Modo leitura: abra pelo link do Claude.</span>` : ""}`);
 }
 
-/* ===================== Fale com esta área (sample) ===================== */
+/* ===================== Fale com esta área (sample) =====================
+   A conversa agora fica ao lado da página da área (no celular, por cima dela). Mesmos ids: #chat-area, #f-chat, #chat-in, #chat-env, #chat-parar, #chat-pedido. */
 const ERROS_CHAT = {rate_limited: "Muitas perguntas seguidas. Espere um pouco e tente de novo.", session_expired: "Entre de novo na sua conta do Claude e tente de novo.",
   refused: "Os agentes não responderam a esta pergunta. Reformule.", empty_completion: "Sem resposta. Reformule a pergunta.", prompt_too_large: "A conversa ficou longa demais. Comece uma nova.",
   upstream_error: "Falha temporária. Tente de novo em instantes."};
@@ -660,23 +878,25 @@ function chatDe(sk) { return S.chats[sk] || (S.chats[sk] = {turnos: [], ctl: nul
 function htmlChat(a) {
   const c = chatDe(a.skill);
   if (!Fonte.sample || S.chatOff) return `<div class="aviso"><b>A conversa com os agentes não está disponível aqui.</b> ${esc(S.chatOff || "Ela funciona quando a Central é aberta pelo link do Claude e o uso do Claude está liberado para a página.")} Faça um pedido à área: a resposta chega em Pedidos.</div>
-    <div class="acoes"><a class="btn" href="#area/${esc(a.skill)}/pedido">${icone("mais")}Fazer pedido</a></div>`;
+    <div class="acoes" style="margin-top:12px"><a class="btn" href="#area/${esc(a.skill)}/pedido">${icone("mais")}Fazer pedido</a></div>`;
   const sug = [`O que a área precisa para ${sem(a.entregas[0]?.entrega || "uma análise").replace(/\s*\(.*\)$/, "")}?`, `Isto é com vocês ou com outra área?`, `Qual entrega da área serve para uma reunião com o parceiro?`];
   return `<div class="chat" id="chat-msgs">${c.turnos.length ? c.turnos.map((t, i) => t.role === "user" ? `<div class="msg eu">${esc(t.content)}</div>` : `<div class="msg ag ${t.erro ? "erro" : ""}"><span class="quem">Agentes · ${esc(a.nome)}${t.parcial ? " · interrompida" : ""}</span><div id="${i === c.turnos.length - 1 ? "ultima" : ""}">${t.content ? md(t.content) : "<p>Pensando…</p>"}</div></div>`).join("")
-    : `<div class="nota">Pergunte como faria a um colega da área. Ex.: o que ela precisa para começar, se o assunto é dela, qual entrega serve para o seu caso.</div><div class="sugestoes">${sug.map(s => `<button data-sug="${esc(s)}">${esc(s)}</button>`).join("")}</div>`}</div>
+    : `<p style="margin:0;color:var(--texto-2)">Pergunte como faria a um colega da área: o que ela precisa para começar, se o assunto é dela, qual entrega serve para o seu caso.</p><div class="sugestoes">${sug.map(s => `<button data-sug="${esc(s)}">${esc(s)}</button>`).join("")}</div>`}</div>
     ${c.aviso ? `<p class="sub quebra" style="color:var(--erro)" role="alert">${esc(c.aviso)}</p>` : ""}`;
 }
-function gConversa(sk) {
-  const a = area(sk); if (!a) return; const c = chatDe(sk), ativo = Fonte.sample && !S.chatOff;
-  gaveta(`Fale com ${esc(a.nome)}`, "Agentes da área · pré-análise",
-    `<div class="nota" role="note">Respostas automáticas dos agentes; nada é enviado a parceiros ou clientes. A conversa não fica gravada.</div><div id="chat-area">${htmlChat(a)}</div>`, "",
-    ativo ? `<form class="compor" id="f-chat" data-area="${esc(sk)}"><label for="chat-in" class="so-leitor">Sua pergunta</label><textarea id="chat-in" maxlength="2000" placeholder="Escreva a sua pergunta. Não use nome de cliente nem dados pessoais."></textarea>
-      <div class="acoes"><button class="btn" type="submit" id="chat-env" ${c.rodando ? "disabled" : ""}>Enviar</button><button class="btn sec" type="button" id="chat-parar" ${c.rodando ? "" : "disabled"}>${icone("parar")}Parar</button>
-      <button class="btn sec" type="button" id="chat-pedido" ${c.turnos.some(t => t.role === "assistant" && t.content && !t.erro) && !c.rodando ? "" : "disabled"} style="margin-left:auto">Transformar em pedido</button></div></form>` : "");
+function painelConversa(sk) {
+  const a = area(sk); if (!a) return ""; const c = chatDe(sk), ativo = Fonte.sample && !S.chatOff;
+  return `<aside class="conversa" id="conversa" aria-label="Conversa com ${esc(a.nome)}"><div class="cv-cab"><span class="sig forte g" aria-hidden="true">${esc(sigla(a.nome))}</span>
+      <span class="cv-tit"><b>Agentes · ${esc(a.nome)}</b><small>${a.especialistas.length} especialistas · respondem em pré-análise</small></span><button class="icbtn" data-fechar aria-label="Fechar conversa">${icone("fechar")}</button></div>
+    <div class="cv-corpo" id="chat-corpo"><div class="nota" role="note">Respostas automáticas dos agentes. Nada é enviado a parceiros ou clientes, e a conversa não fica gravada.</div><div id="chat-area">${htmlChat(a)}</div></div>
+    ${ativo ? `<form class="compor" id="f-chat" data-area="${esc(sk)}"><label for="chat-in" class="so-leitor">Sua pergunta para ${esc(a.nome)}</label><textarea id="chat-in" rows="2" maxlength="2000" placeholder="Pergunte à área. Não use nome de cliente nem dados pessoais."></textarea>
+      <div class="acoes"><button class="btn sec" type="button" id="chat-pedido" ${c.turnos.some(t => t.role === "assistant" && t.content && !t.erro) && !c.rodando ? "" : "disabled"}>Transformar em pedido</button>
+      <span class="acoes"><button class="btn sec" type="button" id="chat-parar" ${c.rodando ? "" : "disabled"}>${icone("parar")}Parar</button><button class="btn" type="submit" id="chat-env" ${c.rodando ? "disabled" : ""}>Enviar${icone("enviar")}</button></span></div></form>` : ""}</aside>`;
 }
+function gConversa(sk) { const el = $("#conversa"); if (el) el.outerHTML = painelConversa(sk) }
 function redesenharChat(sk) { const a = area(sk), el = $("#chat-area"); if (!el || !a) return; el.innerHTML = htmlChat(a); const c = chatDe(sk);
   const env = $("#chat-env"), pa = $("#chat-parar"), pe = $("#chat-pedido"); if (env) env.disabled = c.rodando; if (pa) pa.disabled = !c.rodando;
-  if (pe) pe.disabled = c.rodando || !c.turnos.some(t => t.role === "assistant" && t.content && !t.erro); const box = $("#g-conteudo"); if (box) box.scrollTop = box.scrollHeight }
+  if (pe) pe.disabled = c.rodando || !c.turnos.some(t => t.role === "assistant" && t.content && !t.erro); const box = $("#chat-corpo") || $("#g-conteudo"); if (box) box.scrollTop = box.scrollHeight }
 async function perguntar(sk, texto) {
   const a = area(sk), c = chatDe(sk); texto = texto.trim(); if (!texto || c.rodando || !Fonte.sample) return;
   c.aviso = ""; c.turnos.push({role: "user", content: texto}); const resp = {role: "assistant", content: ""}; c.turnos.push(resp);
@@ -685,7 +905,7 @@ async function perguntar(sk, texto) {
   while (hist.length && hist[0].role !== "user") hist.shift();
   try {
     const {text, truncated} = await Fonte.sample([{role: "user", content: instrucoes(a)}, ...hist], {cache: false, modelTier: "default", signal: c.ctl.signal,
-      onText: ({text}) => { resp.content = text; const u = $("#ultima"); if (u) { u.innerHTML = md(text); const box = $("#g-conteudo"); if (box) box.scrollTop = box.scrollHeight } }});
+      onText: ({text}) => { resp.content = text; const u = $("#ultima"); if (u) { u.innerHTML = md(text); const box = $("#chat-corpo") || $("#g-conteudo"); if (box) box.scrollTop = box.scrollHeight } }});
     resp.content = text; if (truncated) c.aviso = "A resposta foi cortada. Pergunte uma coisa de cada vez.";
   } catch (e) {
     const code = e?.code || "upstream_error";
@@ -736,43 +956,59 @@ async function acao(tipo, id, valor) {
 }
 
 /* ===================== Render e rotas ===================== */
-const MENU = [["mesa", "Minha mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "WhatsApp · Demandas", "chat"], ["areas", "Áreas", "areas"], ["onde", "Onde está", "onde"], ["rotinas", "Rotinas", "rotinas"], ["decisoes", "Decisões", "decisoes"]];
+const MENU = [["mesa", "Minha mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "WhatsApp · Demandas", "whats"], ["areas", "Áreas", "areas"], ["onde", "Onde está", "onde"], ["rotinas", "Rotinas", "rotinas"], ["decisoes", "Decisões", "decisoes"]];
+const MIGALHA = {mesa: "Minha mesa", pedidos: "Pedidos", whatsapp: "WhatsApp · Demandas", areas: "Áreas", onde: "Onde está", rotinas: "Rotinas", decisoes: "Decisões"};
 function moldura(r) {
   const n = pendentes(S.eu), dono = {pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: "whatsapp", area: "areas", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r] || r;
-  $("#menu").innerHTML = `<span class="grupo">Trabalho</span>` + MENU.map(([k, t, ic], i) => (i === 4 ? `<span class="grupo">Consulta</span>` : "") + `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}${t}${k === "mesa" && n ? `<span class="cont">${n}</span>` : ""}${k === "decisoes" && S.eu === "luis" && totalDecisoes() ? `<span class="cont">${totalDecisoes()}</span>` : ""}</a>`).join("");
+  const andamento = S.M.pedidos.filter(p => fase(p) !== "concluido").length, wa = waVis().filter(d => d.status === "responder").length, dec = S.eu === "luis" ? totalDecisoes() : 0;
+  const badge = {mesa: n, pedidos: andamento, whatsapp: wa, decisoes: dec};
+  $("#menu").innerHTML = MENU.map(([k, t, ic]) => `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}<span class="t">${t}</span>${badge[k] ? `<span class="cont">${badge[k]}</span>` : ""}</a>`).join("");
+  $("#fixadas").innerHTML = FIXADAS.filter(([k]) => area(k)).map(([k, sg, nm]) => `<a href="#area/${esc(k)}/conversa"><span class="sig" aria-hidden="true">${sg}</span><span class="t">${nm}</span></a>`).join("") + `<a href="#areas"><span class="sig" aria-hidden="true">+</span><span class="t">Todas as áreas</span></a>`;
+  $("#nav-m").innerHTML = [["mesa", "Mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "Demandas", "whats"], ["areas", "Áreas", "areas"]].map(([k, t, ic]) => `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}${t}${badge[k] ? `<span class="cont">${badge[k]}</span>` : ""}</a>`).join("")
+    + `<button type="button" id="abrir-menu" aria-label="Abrir menu completo">${icone("menu")}Mais</button>`;
+  const area_ = r === "area" ? area(rota().p[0]) : null;
+  $("#crumb").textContent = area_ ? "Áreas / " + area_.nome : MIGALHA[dono] || "Minha mesa";
   $("#sino").innerHTML = icone("sino") + (n ? `<span class="pt">${n}</span>` : ""); $("#sino").setAttribute("aria-label", `Notificações: ${n}`);
-  $("#av").textContent = S.eu ? PESSOAS[S.eu].slice(0, 2).toUpperCase() : "—"; $("#sou").value = S.eu || ""; $("#sou").disabled = S.identificado || !Fonte.previa; $("#sou").closest("label").hidden = !Fonte.previa;
-  $("#tema").innerHTML = icone(document.documentElement.dataset.theme === "dark" ? "sol" : "lua");
-  $("#faixa").innerHTML = Fonte.previa ? `<div class="faixa-previa" role="note"><b>Prévia para validação.</b><span>Áreas, entregas, rotinas, pastas, alertas e janelas são reais. Pedidos, demandas, chamados e lote são exemplos, sem cliente. Nada é gravado.</span></div>`
-    : !Fonte.pode() ? `<div class="faixa-previa" role="note"><b>Modo leitura.</b><span>Pedir, aprovar e registrar funcionam quando a Central é aberta pelo link do Claude, com a sua conta da Save.</span></div>` : "";
+  const sig = S.eu ? PESSOAS[S.eu].slice(0, 2).toUpperCase() : "—";
+  for (const id of ["#av", "#av-m"]) { $(id).textContent = sig; $(id).classList.toggle("vazio-av", !S.eu) }
+  $("#perfil-nome").textContent = S.eu ? PESSOAS[S.eu] : "Visitante";
+  $("#perfil-papel").textContent = S.eu ? PAPEL[S.eu] + (Fonte.previa ? " · prévia" : S.identificado ? "" : " · leitura") : "Modo leitura";
+  $("#sou").value = S.eu || ""; $("#sou").disabled = S.identificado || !Fonte.previa; $("#sou").closest("label").hidden = !Fonte.previa;
+  $("#tema").innerHTML = icone(document.documentElement.dataset.theme === "light" ? "lua" : "sol");
+  $("#tema").setAttribute("aria-label", document.documentElement.dataset.theme === "light" ? "Mudar para o modo escuro" : "Mudar para o modo claro");
+  $("#tag-previa").hidden = !Fonte.previa;
+  $("#faixa").innerHTML = Fonte.previa ? `<p class="faixa" role="note"><b>Prévia para validação.</b><span>Áreas, entregas, rotinas, pastas, alertas e janelas são reais. Pedidos, demandas, chamados e lote são exemplos, sem cliente. Nada é gravado.</span></p>`
+    : !Fonte.pode() ? `<p class="faixa" role="note"><b>Modo leitura.</b><span>Pedir, aprovar e registrar funcionam quando a Central é aberta pelo link do Claude, com a sua conta da Save.</span></p>` : "";
 }
 function abrir() {
   if (!S.M) return; const {r, p} = rota(); moldura(r); document.body.classList.remove("menu-aberto");
-  const fundo = {mesa: telaMesa, pedidos: telaPedidos, pedido: telaPedidos, novo: telaPedidos, areas: telaAreas, area: () => telaArea(p[0]), onde: () => telaOnde(p.join("/")), rotinas: telaRotinas, decisoes: telaDecisoes,
-    whatsapp: telaWhatsapp, wa: telaWhatsapp, wachamado: telaWhatsapp,
+  const fundo = {mesa: telaMesa, pedidos: telaPedidos, pedido: telaPedidos, novo: telaPedidos, areas: telaAreas, area: () => telaArea(p[0], p[1] === "conversa"), onde: () => telaOnde(p.join("/")), rotinas: telaRotinas, decisoes: telaDecisoes,
+    whatsapp: () => telaWhatsapp(), wa: () => telaWhatsapp(p[0]), wachamado: () => telaWhatsapp(p[0] || null, true),
     demanda: telaMesa, chamado: telaMesa, lote: telaMesa, decisao: S.eu === "luis" ? telaMesa : telaDecisoes}[r] || telaMesa;
-  const manter = document.activeElement?.id === "q-onde";
+  const foco = ["q-onde", "q-wa", "chat-in"].includes(document.activeElement?.id) ? document.activeElement.id : "";
+  const chatTxt = $("#chat-in")?.value || "";
+  const rotaAgora = location.hash, nova = rotaAgora !== S.rotaAnt; S.rotaAnt = rotaAgora;
   $("#pag").innerHTML = fundo(); $("#camada").innerHTML = "";
+  if (chatTxt && $("#chat-in")) $("#chat-in").value = chatTxt;
   if (r === "pedido") gPedido(p[0]);
   if (r === "novo") gNovo();
   if (r === "area" && p[1] === "pedido") { if (S.novo.sel !== p[0]) S.novo = {sel: p[0], busca: "", entrega: S.novo.entrega || ""}; gNovo(p[0]) }
-  if (r === "area" && p[1] === "conversa") gConversa(p[0]);
+  if (r === "area" && p[1] === "conversa" && nova) { const box = $("#chat-corpo"); if (box) box.scrollTop = box.scrollHeight; $("#chat-in")?.focus({preventScroll: true}) }
+  if ((r === "wa" || r === "wachamado") && nova && matchMedia("(max-width:1099px)").matches) $("#wa-det")?.scrollTo?.(0, 0);
   if (r === "demanda") { const d = S.M.demandas.find(x => x.id === p[0]); if (d) gaveta(esc(d.titulo), `<span class="mono">${esc(d.id)}</span> · ${esc(d.master || "")}`, `<div class="filtros">${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}<span class="chip">${esc(d.origem || "WhatsApp")}</span></div><p style="margin:0">${esc(d.o_que_pede)}</p><dl class="dl"><dt>Aberta</dt><dd>${data(d.aberta_em)}</dd>${d.rota ? `<dt>Encaminhar</dt><dd>${esc(d.rota)}</dd>` : ""}${d.proximo_passo ? `<dt>Próximo passo</dt><dd>${esc(d.proximo_passo)}</dd>` : ""}</dl>${url(d.link) ? `<a href="${url(d.link)}" target="_blank" rel="noopener">${esc(d.negocio || "Abrir no HubSpot")}</a>` : ""}`,
       d.pessoa === S.eu ? `<button class="btn" data-acao="demanda" data-id="${esc(d.id)}" data-v="respondido">Respondi</button><button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="encaminhado">Encaminhei à área</button><button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="nao_e_demanda">Não é demanda</button>` : "") }
-  if (r === "chamado") { const c = S.M.chamados.find(x => x.id === p[0]); if (c) { const pode = c.status === "proposto" && podeDecidir(c.pessoa); gaveta(esc(c.titulo_editado || c.titulo), esc(c.grupo || "Chamado"), `<div class="filtros"><span class="chip p ${c.status === "proposto" ? "aprovar" : "concluido"}">${esc(ST_CH[c.status] || c.status)}</span>${c.urgencia >= 4 ? `<span class="chip urg">Urgência ${esc(c.urgencia)}</span>` : ""}</div>
-      ${pode ? `<label for="ct">Título</label><input id="ct" value="${esc(c.titulo_editado || c.titulo)}" maxlength="200"><label for="cd">Descrição</label><textarea id="cd" rows="7">${esc(c.descricao_editada || c.descricao)}</textarea><label for="cm">Motivo, se não for abrir <small>(ensina os agentes)</small></label><input id="cm" maxlength="300"><div class="nota">O chamado só vai ao GLPI depois que você aprova.</div>` : `${c.status === "proposto" ? semIdent(c.pessoa) : ""}<div class="resp">${md(c.descricao_editada || c.descricao)}</div>`}`,
+  if (r === "chamado") { const c = S.M.chamados.find(x => x.id === p[0]); if (c) { const pode = c.status === "proposto" && podeDecidir(c.pessoa); gaveta(esc(c.titulo_editado || c.titulo), esc(c.grupo || "Chamado"), `${passosGlpi(c, c.pessoa)}<div class="filtros"><span class="chip p ${c.status === "proposto" ? "aprovar" : "concluido"}">${esc(ST_CH[c.status] || c.status)}</span>${c.urgencia >= 4 ? `<span class="chip urg">Urgência ${esc(c.urgencia)}</span>` : ""}</div>
+      ${pode ? `<label for="ct">Título</label><input id="ct" value="${esc(c.titulo_editado || c.titulo)}" maxlength="200"><label for="cd">Descrição</label><textarea id="cd" rows="7">${esc(c.descricao_editada || c.descricao)}</textarea><label for="cm">Motivo, se não for abrir <small>(ensina os agentes)</small></label><input id="cm" maxlength="300"><div class="nota">O chamado só vai ao GLPI depois que você aprova. Ele abre em nome de quem atendeu.</div>` : `${c.status === "proposto" ? semIdent(c.pessoa) : ""}<div class="resp">${md(c.descricao_editada || c.descricao)}</div>`}`,
       pode ? `<button class="btn" data-acao="chamado" data-id="${esc(c.id)}" data-v="aprovado">Aprovar e abrir no GLPI</button><button class="btn perigo" data-acao="chamado" data-id="${esc(c.id)}" data-v="recusado">Não abrir</button>`
         : ["aprovado_manual", "aprovado", "aberto"].includes(c.status) ? `${url(c.url) ? `<a class="btn sec" href="${url(c.url)}" target="_blank" rel="noopener">Chamado #${esc(c.glpi_id)} no GLPI</a>` : ""}<button class="btn sec" data-copiar-ch="${esc(c.id)}">Copiar texto do chamado</button>${c.nota_agente ? `<span class="sub quebra">${esc(c.nota_agente)}</span>` : ""}` : "") } }
-  if (r === "wa") gWhats(p[0]);
-  if (r === "wachamado") gChamadoWa(p[0] || "");
   if (r === "lote") { const l = S.M.lote.find(x => x.deal === p[0]); if (l) gaveta(esc(l.negocio), esc(l.parceiro), `<div class="filtros"><span class="chip">${esc(l.tipo)}</span><span class="chip">${esc(l.segmento)} · ${esc(l.uf)}</span></div><p style="margin:0">Potencial estimado ${mi(l.esperado)}, a validar caso a caso.</p>${l.hipotese ? `<div class="resp"><p>${esc(l.hipotese)}</p>${l.parecer ? `<p>Parecer: ${esc(l.parecer)}</p>` : ""}${l.documentos ? `<p>Pedir: ${esc(l.documentos)}</p>` : ""}</div>` : ""}${url(l.link) ? `<a href="${url(l.link)}" target="_blank" rel="noopener">Abrir no HubSpot</a>` : ""}${podeDecidir("geovana") ? `<label for="r-m">Motivo ou observação</label><input id="r-m" maxlength="300">` : semIdent("geovana") || `<div class="nota">Quem decide o lote é a Geovana.</div>`}`,
       podeDecidir("geovana") ? `<button class="btn" data-acao="lote" data-id="${esc(l.deal)}" data-v="Aprovar para reanálise">Aprovar para reanálise</button><button class="btn perigo" data-acao="lote" data-id="${esc(l.deal)}" data-v="Vetar">Vetar</button><button class="btn sec" data-acao="lote" data-id="${esc(l.deal)}" data-v="Precisa de dado">Precisa de dado</button>` : "") }
-  if (r === "decisao") { const d = S.M.decisoes.find(x => x.id === p[0]); if (d) gaveta(esc(d.id), esc(d.data || "") + (d.ata ? " · " + esc(d.ata) : ""), `<p style="margin:0;font-size:16px">${esc(d.texto)}</p>${d.obs ? `<p class="sub quebra">${esc(d.obs)}</p>` : ""}${podeDecidir("luis") ? `<label for="n-dec">Observação <small>(opcional)</small></label><input id="n-dec" maxlength="400">` : semIdent("luis") || `<div class="nota">Só o Luis decide as decisões do Conselho.</div>`}`,
+  if (r === "decisao") { const d = S.M.decisoes.find(x => x.id === p[0]); if (d) gaveta(esc(d.id), esc(data(d.data) || "") + (d.ata ? " · " + esc(d.ata) : ""), `<p style="margin:0;font-size:15px">${esc(d.texto)}</p>${d.obs ? `<p class="sub quebra">${esc(d.obs)}</p>` : ""}${podeDecidir("luis") ? `<label for="n-dec">Observação <small>(opcional)</small></label><input id="n-dec" maxlength="400">` : semIdent("luis") || `<div class="nota">Só o Luis decide as decisões do Conselho.</div>`}`,
       podeDecidir("luis") ? `<button class="btn" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada com ajuste">Aprovar com ajuste</button><button class="btn perigo" data-acao="decisao" data-id="${esc(d.id)}" data-v="rejeitada">Rejeitar</button>` : "") }
-  if (manter) { const q = $("#q-onde"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length) } }
+  if (foco) { const q = $("#" + foco); if (q && !$("#camada .gaveta")) { q.focus({preventScroll: true}); try { q.setSelectionRange(q.value.length, q.value.length) } catch (e) {} } }
 }
 function fechar() {
-  const {r, p} = rota(); const volta = {pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: "whatsapp", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r];
+  const {r, p} = rota(); const volta = {pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: p[0] ? "wa/" + p[0] : "whatsapp", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r];
   if (r === "area" && p[1]) { const c = chatDe(p[0]); c.ctl?.abort(); location.hash = "area/" + p[0]; return }
   if (volta) location.hash = volta; else $("#camada").innerHTML = "";
 }
@@ -789,7 +1025,7 @@ function paleta() {
 function notificacoes() {
   const it = itensAcao(S.eu).slice(0, 6);
   $("#camada").innerHTML = `<div class="veu" data-fechar-p style="background:transparent"></div><div class="pop" role="dialog" aria-label="Notificações"><div class="painel-cab"><h2>Para você</h2><span class="sub">${pendentes(S.eu)} itens</span></div>
-    <div class="linhas" style="--cols:minmax(0,1fr)">${it.map(i => `<button class="lh" data-go="${esc(i.go)}"><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.tipo)}</span></span></button>`).join("") || `<div class="vazio">${S.eu ? "Nada pendente." : "Escolha o seu perfil."}</div>`}</div></div>`;
+    <div class="linhas" style="--cols:minmax(0,1fr)">${it.map(i => `<button class="lh" data-go="${esc(i.go)}"><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.tipo)}</span></span></button>`).join("") || `<div class="vazio">${S.eu ? "Nada pendente." : "Entre com a sua conta para ver o que é seu."}</div>`}</div></div>`;
 }
 
 /* ===================== Eventos ===================== */
@@ -800,6 +1036,8 @@ document.addEventListener("click", e => {
   const so = e.target.closest("[data-sou]"); if (so) { if (S.identificado || !Fonte.previa) return; S.eu = perfil(so.dataset.sou); lsSet("sou", S.eu); abrir(); return }
   const fa = e.target.closest("[data-fase]"); if (fa) { S.f.fase = fa.dataset.fase; abrir(); return }
   const kp = e.target.closest("[data-kp]"); if (kp) { S.kPessoa = kp.dataset.kp; abrir(); return }
+  const vi = e.target.closest("[data-vista]"); if (vi) { S.vista = vi.dataset.vista; lsSet("vista", S.vista); abrir(); return }
+  const ab = e.target.closest("[data-aba]"); if (ab) { S.aba[ab.dataset.sk] = ab.dataset.aba; abrir(); $("#aba-" + ab.dataset.aba)?.focus(); return }
   const sl = e.target.closest("[data-sel]"); if (sl) { S.novo.sel = sl.dataset.sel; S.novo.entrega = ""; gNovo(); return }
   const pe = e.target.closest("[data-pedir]"); if (pe) { S.novo = {sel: pe.dataset.pedir, busca: "", entrega: pe.dataset.entrega || ""}; location.hash = "area/" + pe.dataset.pedir + "/pedido"; return }
   const q = e.target.closest("[data-q]"); if (q) { location.hash = "onde/" + encodeURIComponent(q.dataset.q); return }
@@ -819,8 +1057,9 @@ document.addEventListener("click", e => {
   if (e.target.closest("#chat-pedido")) return chatParaPedido($("#f-chat").dataset.area);
   if (e.target.closest("#abrir-busca") || e.target.closest("#ir-busca")) return paleta();
   if (e.target.closest("#abrir-menu")) { document.body.classList.toggle("menu-aberto"); return }
+  if (e.target.closest("#veu-menu")) { document.body.classList.remove("menu-aberto"); return }
   if (e.target.closest("#sino")) return notificacoes();
-  if (e.target.closest("#tema")) { const d = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = d; lsSet("tema", d); moldura(rota().r); return }
+  if (e.target.closest("#tema")) { const d = document.documentElement.dataset.theme === "light" ? "dark" : "light"; document.documentElement.dataset.theme = d; lsSet("tema", d); moldura(rota().r); return }
 });
 document.addEventListener("submit", e => {
   if (e.target.id === "f-chat") { e.preventDefault(); const t = $("#chat-in"); const v = t.value; t.value = ""; perguntar(e.target.dataset.area, v) }
@@ -830,7 +1069,10 @@ document.addEventListener("submit", e => {
 document.addEventListener("keydown", e => {
   if (e.target.id === "chat-in" && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("#f-chat").requestSubmit() }
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); paleta() }
-  if (e.key === "Escape" && $("#camada").innerHTML) { if ($("#camada .paleta, #camada .pop")) $("#camada").innerHTML = ""; else fechar() }
+  if (e.key === "Escape") {
+    if ($("#camada").innerHTML) { if ($("#camada .paleta, #camada .pop")) $("#camada").innerHTML = ""; else fechar() }
+    else if (document.body.classList.contains("menu-aberto")) document.body.classList.remove("menu-aberto");
+    else { const {r, p} = rota(); if ((r === "area" && p[1]) || r === "wa" || r === "wachamado") fechar() } }
 });
 document.addEventListener("input", e => {
   if (e.target.id === "q-onde") { $("#res-onde").innerHTML = resOnde(e.target.value) }
@@ -847,19 +1089,20 @@ document.addEventListener("change", e => {
   if (e.target.id === "p-entrega") S.novo.entrega = e.target.value;
 });
 window.addEventListener("hashchange", abrir);
-/* A pessoa está escrevendo? (foco num campo, texto digitado na gaveta ou no registro de tarefa, busca ou notificações abertas)
+/* A pessoa está escrevendo? (foco num campo, texto digitado na gaveta, na conversa, no chamado ou no registro de tarefa, busca ou notificações abertas)
    Nesse caso a atualização do db só refaz a moldura; a tela é refeita quando ela sai do campo. */
 function editando() {
   const a = document.activeElement;
   if (a && a.matches?.("input,textarea,select") && a.closest("#pag,#camada")) return true;
   if ($("#camada .paleta, #camada .pop")) return true;
-  return [...document.querySelectorAll("#camada textarea, #camada input:not([type=search]), #f-apont input[type=text], #a-desc")].some(el => el.value !== el.defaultValue);
+  return [...document.querySelectorAll("#camada textarea, #camada input:not([type=search]), #chat-in, #wa-det textarea, #wa-det input, #f-apont input[type=text], #a-desc")].some(el => el.value !== el.defaultValue);
 }
 document.addEventListener("focusout", () => setTimeout(() => { if (S.pendente && !editando()) { S.pendente = false; abrir() } }, 0));
 
 async function iniciar() {
-  const t = lsGet("tema"); if (t === "dark" || t === "light") document.documentElement.dataset.theme = t; else document.documentElement.dataset.theme = "light";
-  $("#abrir-menu").innerHTML = icone("menu"); $("#ic-busca").innerHTML = icone("onde");
+  const t = lsGet("tema"); document.documentElement.dataset.theme = t === "light" || t === "dark" ? t : "dark";  /* painel: escuro por padrão */
+  const v = lsGet("vista"); if (v === "lista" || v === "quadro") S.vista = v;
+  $("#ic-busca").innerHTML = icone("onde"); $("#novo-t").innerHTML = icone("mais") + "Novo pedido";
   try { S.M = await Fonte.carregar() } catch (e) { $("#pag").innerHTML = `<div class="vazio">Não consegui carregar os dados da Central. Recarregue a página em alguns segundos.</div>`; return }
   S.eu = Fonte.previa ? perfil(lsGet("sou")) || "daniela" : null;
   abrir();

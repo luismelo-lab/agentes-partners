@@ -229,13 +229,15 @@ class PortalDadosTime(unittest.TestCase):
              "pastas_web": {"luis": {"url": u("04")}, "geovana": {"url": u("g")}}, "pastas": {"luis": "04 · Gestão", "daniela": "Área"}}
         lk = lambda c: {"rotulo": c, "url": u(c), "caminho": c}
         D = {"pastas": [{"rotulo": "a", "caminho": "04 · Gestão / Conselho", "uso": "", "url": u("04")}, {"rotulo": "b", "caminho": "Área Partners · Agentes / Central BDR · Jenifer", "uso": "", "url": u("j")}],
-             "areas": [{"links": [lk("01 · Comercial / Relatórios"), lk("Área Partners · Agentes / X")], "entregas": [{"links": [lk("04 · Gestão / Resultado")]}]}],
+             "areas": [{"links": [lk("01 · Comercial / Relatórios"), lk("Área Partners · Agentes / X"), lk("03 · Produtos e Projetos / Maquila")],
+                        "entregas": [{"links": [lk("04 · Gestão / Resultado"), lk("06 · Marketing e Apresentações / Kits")]}]}],
              "rotinas": [{"links": [lk("04 · Gestão / Central")]}],
              "pessoas": [{"chave": "luis", "url": u("04"), "plano_url": u("04"), "pasta": "04 · Gestão / Central"}, {"chave": "daniela", "url": u("d"), "plano_url": u("d"), "pasta": "Área"}]}
         d2, D2 = M.para_time(d, D)
         s = json.dumps([d2, D2], ensure_ascii=False)
         self.assertNotIn("conselho", d2); self.assertNotIn("decisoes_pendentes", s); self.assertNotIn("04", "".join(x["url"] for x in D2["pastas"]))
         self.assertNotIn("my?id=04", s); self.assertNotIn("my?id=01", s)
+        self.assertNotIn("my?id=03", s); self.assertNotIn("my?id=06", s)  # D100: 03 e 06 saem da versão do time
         self.assertEqual([x["pessoa"] for x in d2["whatsapp_demandas"]], ["geovana"])
         self.assertEqual([x["pessoa"] for x in d2["demandas_lista"]], ["daniela"]); self.assertEqual(list(d2["arquivos_dia"]), ["jenifer"])
         self.assertEqual(D2["pessoas"][0]["url"], ""); self.assertEqual(D2["areas"][0]["links"][0]["rotulo"], "Área Partners · Agentes / X")

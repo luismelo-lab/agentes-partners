@@ -11,7 +11,7 @@ Nada de dados bancários, textos de pareceres ou conversas brutas do WhatsApp.
 Uso: python3 infra/portal_dados.py → <repositório>/portal/dados.json e diretorio.json (PORTAL_SAIDA muda a pasta)
 Perfil "time" (ajuste A2 da avaliação de publicação, 23/10/2026): PORTAL_PERFIL=time gera a versão do Artifact compartilhado
 com o time, em <repositório>/portal/time/ (ou PORTAL_SAIDA): sem as decisões do Conselho, sem os arquivos e os links das pastas
-do Luis (04 · Gestão e 01 · Relatórios das áreas; no lugar do link, "pasta do Luis: peça pela Central") e com as demandas só
+do Luis (04 · Gestão, 01 · Relatórios das áreas e, pela D100, 03 · Produtos e Projetos e 06 · Marketing e Apresentações; no lugar do link, "pasta do Luis: peça pela Central") e com as demandas só
 da Daniela, da Jenifer e da Geovana. O Artifact entrega o mesmo arquivo a todos: o filtro por pessoa dentro do time é feito na
 tela (cada uma vê a própria mesa); as demandas cruzadas entre as três ficam no arquivo (risco aceito na avaliação).
 """
@@ -24,7 +24,7 @@ PERFIL = os.environ.get("PORTAL_PERFIL") or "completo"
 if PERFIL not in ("completo", "time"): sys.exit("PORTAL_PERFIL deve ser 'completo' ou 'time'")
 SAIDA = os.environ.get("PORTAL_SAIDA") or os.path.join(REPO, "portal", "time" if PERFIL == "time" else "")
 TIME = ("daniela", "jenifer", "geovana")
-PASTAS_LUIS = ("04 · ", "01 · ")  # pastas do OneDrive do Luis que o time não abre
+PASTAS_LUIS = ("04 · ", "01 · ", "03 · ", "06 · ")  # pastas do OneDrive do Luis que o time não abre (03 e 06 saem pela D100, 23/10/2026)
 ult = lambda p: (sorted(glob.glob(os.path.join(AP, p))) or [None])[-1]
 ler = lambda p: json.load(open(p)) if p else {}
 
