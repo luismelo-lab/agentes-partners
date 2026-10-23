@@ -14,7 +14,8 @@ REMOTO = "Estado dos agentes"
 ITENS = ["registro/demandas.json", "central-agentes/registro.json", "central-agentes/fila-entrada.json", "central-agentes/aprendizados.md",
          "central-esteira/indice-negocios-ativos.json", "central-esteira/avisos-internos.md", "celulas/whatsapp-config.json", "celulas/geovana/pareceres/resumos.json", "departamentos/resultados/premissas-financeiras.xlsx",
          "departamentos/resultados/mapeamento-hubspot.json"]
-GLOBS_TODOS = ["central-esteira/pedidos/E-*.json", "central-esteira/pedidos/E-*.docx"]  # histórico completo (cada pedido é o registro do parceiro)
+GLOBS_TODOS = ["central-esteira/pedidos/E-*.json", "central-esteira/pedidos/E-*.docx",  # histórico completo (cada pedido é o registro do parceiro)
+               "central-esteira/historico/*.json"]  # últimas empresas de cada parceiro (só CNPJ e consulta pública)
 GLOBS = ["celulas/whatsapp-triagem-*.json", "celulas/*/whatsapp/caixa-*.json", "celulas/*/whatsapp/demandas-*.json",
          "celulas/*/whatsapp/anexos-cache.json", "departamentos/resultados/dados/metricas-*.json", "departamentos/resultados/dados/texto-*.json"]
 INDICE = "indice.json"
@@ -24,9 +25,18 @@ def baixar():
     tmp = os.path.join(AP, "logs", "estado-indice.json"); os.makedirs(os.path.dirname(tmp), exist_ok=True)
     if not graph.baixar(f"{REMOTO}/{INDICE}", tmp): print("estado vazio (primeira execução)"); return
     n = 0
-    for rel in json.load(open(tmp)):
+    with open(tmp, encoding="utf-8") as f:
+        indice = json.load(f)
+    for rel in indice if isinstance(indice, list) else []:
+        if not isinstance(rel, str) or os.path.isabs(rel) or ".." in rel.split("/"):
+            continue  # o índice vem do SharePoint: nunca grava fora da pasta do projeto
         if graph.baixar(f"{REMOTO}/{rel}", os.path.join(AP, rel)): n += 1
     print(n, "arquivo(s) de estado baixados")
+
+
+def _gravar_indice(idx, rels):
+    with open(idx, "w", encoding="utf-8") as f:
+        json.dump(rels, f)
 
 
 def subir():
@@ -37,7 +47,7 @@ def subir():
     for g in GLOBS_TODOS:
         rels += [os.path.relpath(f, AP) for f in sorted(glob.glob(os.path.join(AP, g)))]
     n = sum(graph.subir(os.path.join(AP, r), f"{REMOTO}/{r}") for r in rels)
-    idx = os.path.join(AP, "logs", "estado-indice.json"); json.dump(rels, open(idx, "w")); graph.subir(idx, f"{REMOTO}/{INDICE}")
+    idx = os.path.join(AP, "logs", "estado-indice.json"); _gravar_indice(idx, rels); graph.subir(idx, f"{REMOTO}/{INDICE}")
     print(n, "arquivo(s) de estado enviados")
 
 

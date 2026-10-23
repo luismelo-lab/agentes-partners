@@ -7,14 +7,17 @@ Consulta o Minha Receita e, se ele falhar, a BrasilAPI (APIs gratuitas; o CNPJ d
 central_api/regime.py entram em rotas.py atrás do token do Entra (papel e teto de consultas por parceiro).
 Só escuta em localhost.
 """
-import http.server, json, os, sys
+import http.server, json, math, os, sys
 from urllib.parse import parse_qs
 
 AQUI = os.path.dirname(os.path.abspath(__file__)); WEB = os.path.join(AQUI, "web")
 sys.path.insert(0, os.path.join(AQUI, "api"))
 from central_api import esteira, regime  # noqa: E402
 
-CAB = json.load(open(os.path.join(WEB, "staticwebapp.config.json")))["globalHeaders"]
+PORTA = 4281
+HOSTS = {"localhost:%d" % PORTA, "127.0.0.1:%d" % PORTA, "[::1]:%d" % PORTA}  # recusa Host de outro nome (DNS rebinding)
+with open(os.path.join(WEB, "staticwebapp.config.json"), encoding="utf-8") as _f:
+    CAB = json.load(_f)["globalHeaders"]
 CAB = {k: v for k, v in CAB.items() if k != "Strict-Transport-Security"}
 CAB["Content-Security-Policy"] = CAB["Content-Security-Policy"].replace("connect-src 'self' https://login.microsoftonline.com", "connect-src 'self'")
 USUARIO = "demo-local"
@@ -22,14 +25,27 @@ os.environ.setdefault("CENTRAL_APROVACAO", "autonoma")  # demo: entrega na hora 
 
 
 def numero(v):
+    """Faturamento digitado ('90.000.000,50') ou enviado como número. None se vazio, inválido, negativo ou não finito."""
+    if isinstance(v, bool) or v in (None, ""):
+        return None
     try:
-        return float(str(v).replace(".", "").replace(",", ".")) if v not in (None, "") else None
+        n = float(v) if isinstance(v, (int, float)) else float(str(v).strip().replace(".", "").replace(",", "."))
     except ValueError:
         return None
+    return n if math.isfinite(n) and n >= 0 else None
 
 
 def lote(corpo):
-    cnpjs = [str(c) for c in (corpo.get("cnpjs") or []) if str(c).strip()][:regime.LIMITE_LOTE + 1]
+    bruto = corpo.get("cnpjs")
+    if not isinstance(bruto, list):
+        return 400, {"erro": "Informe ao menos um CNPJ."}
+    cnpjs = []
+    for c in bruto:  # só texto; repetidos (inclusive com outra pontuação) contam e consultam uma vez
+        c = esteira._cnpj(c) if isinstance(c, str) else ""
+        if c and c not in cnpjs:
+            cnpjs.append(c)
+        if len(cnpjs) > regime.LIMITE_LOTE:
+            break
     if not cnpjs:
         return 400, {"erro": "Informe ao menos um CNPJ."}
     if len(cnpjs) > regime.LIMITE_LOTE:
@@ -42,15 +58,27 @@ def lote(corpo):
         return 429, {"erro": "Limite diário de %d consultas atingido (%d usadas)." % (limite, usadas)}
     vivas = iter(regime.consultar_lote(novas, fat))
     res = [guardadas.get(c) or next(vivas) for c in cnpjs]
-    regime.auditar(USUARIO, [r for c, r in zip(cnpjs, res) if c in novas])
-    for r in res:
-        esteira.registrar_consulta(USUARIO, r)
-    return 200, {"resultados": res, "usadas": usadas, "limite": limite}
+    regime.auditar(USUARIO, [r for c, r in zip(cnpjs, res) if c in novas])  # inclui os acertos de negócio ativo
+    for c, r in zip(cnpjs, res):
+        if c in novas:  # guardada não é regravada: senão o prazo de 7 dias nunca vence
+            esteira.registrar_consulta(USUARIO, r)
+    return 200, {"resultados": regime.limitar_ativos(USUARIO, res), "usadas": usadas, "limite": limite}
 
 
 def pedir_esteira(corpo):
-    r = esteira.consulta_guardada(USUARIO, corpo.get("cnpj")) or regime.consultar(corpo.get("cnpj"))  # a consulta vem do servidor, nunca do navegador
-    if r["faixa"] in ("negocio_ativo", "invalido", "indisponivel"):
+    cnpj = corpo.get("cnpj")
+    if not isinstance(cnpj, str):
+        return 400, {"erro": "Informe o CNPJ."}
+    r = esteira.consulta_guardada(USUARIO, cnpj)  # a consulta vem do servidor, nunca do navegador
+    if not r:
+        ok, usadas, limite = regime.registrar_uso(USUARIO, 1)  # consulta nova às APIs conta no teto diário e na trilha, como no lote
+        if not ok:
+            return 429, {"erro": "Limite diário de %d consultas atingido (%d usadas)." % (limite, usadas)}
+        r = regime.consultar(cnpj)
+        regime.auditar(USUARIO, [r])
+        esteira.registrar_consulta(USUARIO, r)
+    r = regime.limitar_ativos(USUARIO, [r])[0]
+    if r["faixa"] in ("negocio_ativo", "invalido", "indisponivel") or not r.get("empresa"):
         return 400, {"erro": r["titulo"]}
     try:
         p = esteira.solicitar(r["cnpj"], USUARIO, r)
@@ -71,33 +99,58 @@ class H(http.server.SimpleHTTPRequestHandler):
         for k, v in CAB.items(): self.send_header(k, v)
         super().end_headers()
 
+    def _host_ok(self):
+        if (self.headers.get("Host") or "").lower() in HOSTS:
+            return True
+        self._json(421, {"erro": "host não permitido"})
+        return False
+
     def do_GET(self):
+        if not self._host_ok():
+            return
         rota, _, consulta = self.path.partition("?")
-        if rota == "/api/esteira":
-            return self._json(*andamento(consulta))
-        if rota == "/api/esteira/historico":
-            return self._json(200, {"empresas": esteira.historico(USUARIO)})
-        if rota == "/api/esteira/arquivo":
-            arq = esteira.arquivo_do_parceiro((parse_qs(consulta).get("id") or [""])[0], USUARIO)
-            if not arq:
-                return self._json(404, {"erro": "arquivo não encontrado"})
-            with open(arq, "rb") as f:
-                b = f.read()
-            self.send_response(200); self.send_header("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-            self.send_header("Content-Disposition", 'attachment; filename="dossie-%s.docx"' % os.path.basename(arq)[:-5])
-            self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return
+        try:
+            if rota == "/api/esteira":
+                return self._json(*andamento(consulta))
+            if rota == "/api/esteira/historico":
+                return self._json(200, {"empresas": esteira.historico(USUARIO)})
+            if rota == "/api/esteira/arquivo":
+                pid = (parse_qs(consulta).get("id") or [""])[0]
+                arq = esteira.arquivo_do_parceiro(pid, USUARIO)
+                if not arq:
+                    return self._json(404, {"erro": "arquivo não encontrado"})
+                with open(arq, "rb") as f:
+                    b = f.read()
+                self.send_response(200); self.send_header("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                self.send_header("Content-Disposition", 'attachment; filename="dossie-%s.docx"' % pid)  # pid já validado (E-nnnn)
+                self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return
+        except Exception as e:  # noqa: BLE001  erro interno: resposta neutra, sem rastro nem dado de cliente
+            sys.stderr.write("erro interno em %s: %s\n" % (rota, type(e).__name__))
+            return self._json(500, {"erro": "erro interno"})
         return super().do_GET()
 
     def do_POST(self):
+        if not self._host_ok():
+            return
         rota = self.path.split("?")[0]
         if rota not in ("/api/regime", "/api/esteira"):
             return self._json(404, {"erro": "rota não encontrada"})
+        if (self.headers.get("Content-Type") or "").split(";")[0].strip().lower() != "application/json":
+            return self._json(415, {"erro": "use application/json"})  # exige preflight: página de outro site não consegue postar aqui
         try:
-            n = min(int(self.headers.get("Content-Length", 0)), 20000)
+            n = int(self.headers.get("Content-Length", 0))
+            if not 0 <= n <= 20000:
+                return self._json(413 if n > 20000 else 400, {"erro": "corpo inválido"})
             corpo = json.loads(self.rfile.read(n) or b"{}")
+            if not isinstance(corpo, dict):
+                raise ValueError
         except ValueError:
             return self._json(400, {"erro": "corpo inválido"})
-        self._json(*(pedir_esteira(corpo) if rota == "/api/esteira" else lote(corpo)))
+        try:
+            self._json(*(pedir_esteira(corpo) if rota == "/api/esteira" else lote(corpo)))
+        except Exception as e:  # noqa: BLE001
+            sys.stderr.write("erro interno em %s: %s\n" % (rota, type(e).__name__))
+            self._json(500, {"erro": "erro interno"})
 
     def _json(self, st, corpo):
         b = json.dumps(corpo, ensure_ascii=False).encode()
@@ -108,5 +161,5 @@ class H(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    print("Demo da consulta em http://localhost:4281/consulta.html  (Ctrl+C para parar)")
-    http.server.ThreadingHTTPServer(("localhost", 4281), H).serve_forever()
+    print("Demo da consulta em http://localhost:%d/consulta.html  (Ctrl+C para parar)" % PORTA)
+    http.server.ThreadingHTTPServer(("localhost", PORTA), H).serve_forever()

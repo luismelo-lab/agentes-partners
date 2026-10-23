@@ -83,7 +83,7 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 
 | Produto | Frigorífico | Atacado de carnes | Açougue | Por quê · sinal · restrição |
 |---|---|---|---|---|
-| RT: alíquota zero na revenda (PER) | Alta | Alta | Média | No perfil ideal do catálogo. Sinal: CNAE 1011/1013/4634, revenda de carne com CFOP de revenda. Açougue só no Real ou Presumido, após aptidão. Simples: não |
+| RT: alíquota zero na revenda (PER) | Alta | Alta | Média | No perfil ideal do catálogo. Sinal: CNAE 1011/1013/4634, revenda de carne com CFOP de revenda. Açougue só no Lucro Real, após aptidão. Simples: não |
 | RT: insumos | Alta | Média | Baixa | Embalagem, energia, frete, manutenção, EPI. Sinal: Lucro Real. Restrição: Real |
 | RT: exclusão ICMS / ICMS-ST | Média | Média | Média | Faturamento > R$ 300 mil/mês. Carne in natura tem pouco ICMS-ST; embutidos têm |
 | RT: crédito presumido de compras de PF | Alta | Baixa | Não | Agroindústria no Real que compra boi, suíno ou frango de PF. Sinal: compras de produtor PF no SPED. JUD (MS) e depois PER |
@@ -410,7 +410,7 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 |---|---|---|---|---|
 | 1 Destravar caixa | ICMS → insumos/IPI → CPP → Gestão de Contas | Regime Real ou Presumido, SPED, folha | 0–6 meses | `depto-tributario`, ecossistema |
 | 2 Proteger e controlar | Planejamento (regime 2027, Simples híbrido) → antecipação → passivo | Diagnóstico de regime | 3–12 meses | `depto-tributario`, instituição autorizada |
-| 3 Crescer | Maquila (descoberta, depois do G2) | Lucro Real, mão de obra intensiva, clientes no Sul/SP/CO | 12–24 meses | `depto-internacional` |
+| 3 Crescer | Maquila (descoberta) | Lucro Real, mão de obra intensiva, clientes no Sul/SP/CO | 12–24 meses | `depto-internacional` |
 
 ### Demonstração de valor
 - **KPIs:** caixa liberado (R$); custo da folha (% da receita) antes e depois da reoneração; DSO e inadimplência do lojista; carga efetiva por regime.

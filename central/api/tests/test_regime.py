@@ -86,10 +86,10 @@ class Regime(unittest.TestCase):
         R.consultar(REAL); R.consultar(REAL); self.assertEqual(len(chamadas), 1)
 
     def test_perfil_da_empresa_sem_dado_pessoal(self):
-        BASE[REAL]["qsa"] = [{"nome_socio": "FULANO"}]; BASE[REAL]["email"] = "a@b.com"; BASE[REAL]["ddd_telefone_1"] = "3100000000"
+        BASE[REAL]["qsa"] = [{"nome_socio": "FULANO"}]; BASE[REAL]["email"] = "EMAIL-DE-TESTE-NAO-COPIAR"; BASE[REAL]["ddd_telefone_1"] = "3100000000"
         pf = R.consultar(REAL)["perfil"]
         self.assertEqual(pf["razao"], "EMPRESA REAL"); self.assertEqual(pf["ecf"][-1], {"ano": ANO, "forma": "LUCRO REAL"})
-        self.assertNotIn("FULANO", json.dumps(pf)); self.assertNotIn("a@b.com", json.dumps(pf)); self.assertNotIn("3100000000", json.dumps(pf))
+        self.assertNotIn("FULANO", json.dumps(pf)); self.assertNotIn("EMAIL-DE-TESTE-NAO-COPIAR", json.dumps(pf)); self.assertNotIn("3100000000", json.dumps(pf))
 
     def test_cliente_save_para_na_primeira_checagem_sem_chamar_api(self):
         r = R.consultar(CLIENTE); self.assertEqual((r["faixa"], r["titulo"]), ("negocio_ativo", "Empresa com negócio ativo na base Save Company")); self.assertEqual(chamadas, [])

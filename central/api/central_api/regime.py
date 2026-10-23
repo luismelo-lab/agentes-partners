@@ -13,17 +13,21 @@ padrão, local). No piloto, depende do ok do Jurídico e da TI. Sem contrato nem
 Faixas: negocio_ativo | confirmado_real | provavel_real | nao_real | sem_dado | indisponivel | invalido.
 A 1ª checagem é a base Save Company (negocio_ativo.py): empresa com negócio ativo não segue para as APIs.
 """
-import json, os, subprocess, sys, time
+import json, math, os, subprocess, sys, threading, time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 
 sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
-from cnpj import cnpj_valido, normalizar_cnpj  # noqa: E402
+from cnpj import cnpj_valido, completar_cnpj  # noqa: E402
 from . import negocio_ativo  # noqa: E402
 
 BASE = os.path.expanduser(os.environ.get("CENTRAL_RECEITA", "~/agentes-partners/dados-publicos/receita"))  # só a trilha de auditoria
 LIMITE_LOTE = 20
 LIMITE_DIA = int(os.environ.get("CENTRAL_LIMITE_DIA", "200"))
+LIMITE_ATIVO = int(os.environ.get("CENTRAL_LIMITE_ATIVO", "10"))  # acertos "negócio ativo" por usuário por dia (anti-enumeração da base)
+MSG_NEUTRA = "Não foi possível seguir com esta consulta. Fale com a Área Partners."
+MAX_BYTES = 2_000_000     # resposta maior que isto é descartada (as APIs devolvem poucos KB)
+MEMORIA_MAX = 2000
 TETO_PRESUMIDO = 78_000_000  # Lei 9.718/1998, art. 13 e art. 14, I
 TTL = 24 * 3600
 TIMEOUT = 10
@@ -31,14 +35,18 @@ FONTES = [("Minha Receita", "https://minhareceita.org/%s"), ("BrasilAPI", "https
 
 _memoria = {}
 _uso = {}
+_ativos = {}
+_lock = threading.Lock()  # a demo atende em várias threads: cache e contadores mudam sob esta trava
 
 
 def _http(url):
     """(status, json|None). Status 0 = falha de rede ou tempo esgotado. Usa o curl, como o receita_cnpj.py: o Python
     da python.org no Mac não traz os certificados raiz e recusaria o HTTPS (a verificação não é desligada)."""
     try:
-        r = subprocess.run(["curl", "-sS", "-m", str(TIMEOUT), "-A", "SaveCo-Central-Partners/1.0", "-H", "Accept: application/json",
+        r = subprocess.run(["curl", "-sS", "-m", str(TIMEOUT), "--proto", "=https", "--max-filesize", str(MAX_BYTES), "-A", "SaveCo-Central-Partners/1.0", "-H", "Accept: application/json",
                             "-w", "\n%{http_code}", url], capture_output=True, text=True, timeout=TIMEOUT + 5)
+        if len(r.stdout) > MAX_BYTES + 16:
+            return 0, None
         corpo, _, codigo = r.stdout.rpartition("\n")
         st = int(codigo or 0)
         return (st, json.loads(corpo)) if st == 200 else (st, None)
@@ -48,17 +56,57 @@ def _http(url):
 
 def _buscar(cnpj):
     """(dados|None, nome da fonte, motivo). Motivo: 'nao_encontrado' (alguma fonte disse 404) ou 'indisponivel'."""
-    visto = _memoria.get(cnpj)
+    with _lock:
+        visto = _memoria.get(cnpj)
     if visto and time.time() - visto[0] < TTL:
         return visto[1], visto[2], None
     nao_achou = False
     for nome, modelo in FONTES:
         st, dados = _http(modelo % cnpj)
         if st == 200 and isinstance(dados, dict):
-            _memoria[cnpj] = (time.time(), dados, nome)
+            with _lock:
+                if len(_memoria) >= MEMORIA_MAX:  # teto de memória: sai a entrada mais antiga
+                    del _memoria[min(_memoria, key=lambda k: _memoria[k][0])]
+                _memoria[cnpj] = (time.time(), dados, nome)
             return dados, nome, None
         nao_achou = nao_achou or st == 404
     return None, None, "nao_encontrado" if nao_achou else "indisponivel"
+
+
+def _txt(v):
+    return v if isinstance(v, str) else (str(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else None)
+
+
+def _ano(v):
+    try:
+        a = int(v)
+    except (TypeError, ValueError):
+        return None
+    return a if 1990 <= a <= 2100 else None
+
+
+def _flag(v):
+    return v is True or (isinstance(v, str) and v.strip().lower() in ("true", "1", "sim"))
+
+
+def _sanear(d):
+    """Resposta da API com tipos garantidos (texto, número, lista): campo nulo ou de tipo estranho não derruba a consulta."""
+    reg = []
+    for x in d.get("regime_tributario") if isinstance(d.get("regime_tributario"), list) else []:
+        if isinstance(x, dict) and _ano(x.get("ano")) and _txt(x.get("forma_de_tributacao")) and _txt(x.get("forma_de_tributacao")).strip():
+            reg.append({"ano": _ano(x["ano"]), "forma_de_tributacao": _txt(x["forma_de_tributacao"]).strip()})
+    sec = [{"codigo": _txt(x.get("codigo")), "descricao": _txt(x.get("descricao"))} for x in (d.get("cnaes_secundarios") if isinstance(d.get("cnaes_secundarios"), list) else []) if isinstance(x, dict)]
+    cap = d.get("capital_social")
+    try:
+        cap = float(cap)
+        cap = cap if math.isfinite(cap) else None
+    except (TypeError, ValueError):
+        cap = None
+    out = {k: _txt(d.get(k)) for k in ("razao_social", "nome_fantasia", "cnae_fiscal", "cnae_fiscal_descricao", "data_inicio_atividade", "municipio", "uf",
+                                         "porte", "natureza_juridica", "descricao_situacao_cadastral")}
+    out.update(capital_social=cap, identificador_matriz_filial=_txt(d.get("identificador_matriz_filial")), cnaes_secundarios=sec, regime_tributario=reg,
+               opcao_pelo_simples=_flag(d.get("opcao_pelo_simples")), opcao_pelo_mei=_flag(d.get("opcao_pelo_mei")))
+    return out
 
 
 def _regime(dados):
@@ -82,7 +130,7 @@ def _perfil(d):
 
 
 def consultar(entrada, faturamento=None):
-    cnpj = normalizar_cnpj(str(entrada or ""))
+    cnpj = completar_cnpj(str(entrada or ""))
     saida = {"cnpj": cnpj, "faixa": "invalido", "titulo": "CNPJ inválido", "fonte": None, "ano_base": None, "empresa": None}
     if not cnpj_valido(cnpj):
         saida["detalhe"] = "Confira os 14 caracteres e os dois dígitos finais."
@@ -99,6 +147,8 @@ def consultar(entrada, faturamento=None):
         saida.update(faixa="indisponivel", titulo="Consulta externa desligada", detalhe="A consulta a APIs externas está desligada neste ambiente.")
         return saida
     dados, fonte, motivo = _buscar(cnpj)
+    if dados is not None:
+        dados = _sanear(dados)
     if dados is None:
         if motivo == "nao_encontrado":
             saida.update(faixa="sem_dado", titulo="CNPJ não localizado", fonte=" e ".join(n for n, _ in FONTES),
@@ -128,7 +178,7 @@ def consultar(entrada, faturamento=None):
     elif formas:
         saida.update(faixa="nao_real", titulo="Não é Lucro Real: " + ", ".join(sorted(f.title() for f in formas)), ano_base=ano, fonte=fonte_txt,
                      detalhe="Regime declarado na ECF do ano-base %s.%s" % (ano, antigo))
-    elif faturamento and faturamento > TETO_PRESUMIDO:
+    elif isinstance(faturamento, (int, float)) and math.isfinite(faturamento) and faturamento > TETO_PRESUMIDO:
         saida.update(faixa="provavel_real", titulo="Provável Lucro Real", fonte="Faturamento informado por você",
                      detalhe="Receita bruta acima de R$ 78 milhões obriga ao Lucro Real (Lei 9.718/1998, art. 14, I), salvo exceções. Falta a confirmação pela ECF.")
     else:
@@ -144,19 +194,42 @@ def consultar_lote(entradas, faturamento=None):
 
 
 def registrar_uso(usuario, qtd):
-    """Teto diário por usuário (contagem em memória na demo). Devolve (permitido, usadas, limite)."""
-    chave = (usuario, date.today().isoformat())
-    usado = _uso.get(chave, 0)
-    if usado + qtd > LIMITE_DIA:
-        return False, usado, LIMITE_DIA
-    _uso[chave] = usado + qtd
-    return True, usado + qtd, LIMITE_DIA
+    """Teto diário por usuário (contagem em memória na demo, sob trava). Devolve (permitido, usadas, limite)."""
+    hoje = date.today().isoformat()
+    with _lock:
+        for k in [k for k in _uso if k[1] != hoje]:  # dias passados saem da memória
+            del _uso[k]
+        chave = (usuario, hoje)
+        usado = _uso.get(chave, 0)
+        if usado + qtd > LIMITE_DIA:
+            return False, usado, LIMITE_DIA
+        _uso[chave] = usado + qtd
+        return True, usado + qtd, LIMITE_DIA
+
+
+def limitar_ativos(usuario, resultados):
+    """Anti-enumeração: cada acerto 'negocio_ativo' do usuário no dia conta; passado CENTRAL_LIMITE_ATIVO, o acerto vira a
+    mensagem neutra (não revela que a empresa é da base). Até o teto, vale a mensagem explícita. Devolve nova lista."""
+    hoje = date.today().isoformat()
+    out = []
+    with _lock:
+        for k in [k for k in _ativos if k[1] != hoje]:
+            del _ativos[k]
+        for r in resultados:
+            if r.get("faixa") == "negocio_ativo":
+                _ativos[(usuario, hoje)] = _ativos.get((usuario, hoje), 0) + 1
+                if _ativos[(usuario, hoje)] > LIMITE_ATIVO:
+                    r = {"cnpj": r["cnpj"], "faixa": "indisponivel", "titulo": MSG_NEUTRA, "detalhe": "", "fonte": None, "ano_base": None, "empresa": None}
+            out.append(r)
+    return out
 
 
 def auditar(usuario, resultados, arquivo=None):
-    """Quem consultou, o quê e quando. Fica em dados-publicos (fora do git)."""
+    """Quem consultou, o quê e quando (inclui os acertos de negócio ativo). Fica em dados-publicos (fora do git), 600."""
     arq = arquivo or os.path.join(BASE, "consultas-regime.jsonl")
-    with open(arq, "a") as f:
-        for r in resultados:
-            f.write(json.dumps({"quando": time.strftime("%Y-%m-%dT%H:%M:%S"), "usuario": usuario, "cnpj": r["cnpj"], "faixa": r["faixa"]}, ensure_ascii=False) + "\n")
+    os.makedirs(os.path.dirname(arq) or ".", exist_ok=True)
+    linhas = "".join(json.dumps({"quando": time.strftime("%Y-%m-%dT%H:%M:%S"), "usuario": usuario, "cnpj": r["cnpj"], "faixa": r["faixa"]}, ensure_ascii=False) + "\n" for r in resultados)
+    fd = os.open(arq, os.O_WRONLY | os.O_APPEND | os.O_CREAT, 0o600)
+    with os.fdopen(fd, "a", encoding="utf-8") as f:
+        f.write(linhas)  # uma escrita só: linhas de consultas simultâneas não se misturam
     os.chmod(arq, 0o600)

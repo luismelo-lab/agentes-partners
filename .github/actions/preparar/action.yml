@@ -15,6 +15,13 @@ runs:
       run: |
         sudo apt-get -qq update && sudo apt-get -qq install -y zsh tesseract-ocr tesseract-ocr-por poppler-utils imagemagick >/dev/null
         pip install -q -r "$GITHUB_WORKSPACE/requirements.txt"
+    - name: Node 20 e biblioteca docx (Word no padrão Save, usado por --gerar-docx e pelo download do dossiê)
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20"
+    - name: Biblioteca docx em ~/.partners-node
+      shell: bash
+      run: npm i --silent --prefix "$HOME/.partners-node" docx
     - name: Base pública da Receita (cache mensal; dado público, sem LGPD)
       uses: actions/cache/restore@v4
       with:
