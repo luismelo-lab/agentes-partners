@@ -1,5 +1,6 @@
 """Base da análise D&S: perfil dos clientes da planilha e universo de prospects (Receita local + HubSpot), sem chamada externa."""
-import openpyxl, sqlite3, json, glob, re, collections, os, unicodedata, pickle
+import openpyxl, sqlite3, json, glob, re, collections, os, unicodedata, pickle, sys
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); from cnpj import normalizar_cnpj  # CNPJ alfanumérico (IN RFB 2.229/2024)
 AP=os.path.expanduser("~/agentes-partners")
 S = os.environ.get("PROSPECCAO_DS", os.path.expanduser("~/agentes-partners/departamentos/intel-comercial/prospeccao-ds"))  # dados (fora do repositório)
 def norm(s): return re.sub(r"[^A-Z ]","",unicodedata.normalize("NFKD",str(s or "")).encode("ascii","ignore").decode().upper().replace("-"," ")).strip()
@@ -19,7 +20,7 @@ lin=list(openpyxl.load_workbook(F,read_only=True,data_only=True).active.iter_row
 n=json.load(open(sorted(glob.glob(AP+"/departamentos/resultados/dados/hubspot-*.json"))[-1]))["negocios"]
 HS=collections.defaultdict(list)
 for d in n:
-    c=re.sub(r"\D","",str((d.get("extras") or {}).get("cnpj") or ""))
+    c=normalizar_cnpj((d.get("extras") or {}).get("cnpj"))
     if c: HS[c.zfill(14)[:8]].append(d)
 try: RES=json.load(open(AP+"/celulas/geovana/pareceres/resumos.json"))
 except Exception: RES={}
@@ -61,7 +62,7 @@ def hubspot(raiz):
 
 cli=[]
 for r in lin:
-    c=re.sub(r"\D","",str(r[0] or "")).zfill(14)
+    c=normalizar_cnpj(r[0]).zfill(14)
     if not c.strip("0"): continue
     x={"cnpj":c,"nome_planilha":r[1],"cidade_planilha":r[2],"uf_planilha":r[3],"fase":r[4],"id":r[5]}
     x["rf"]=receita(c); x["hs"]=hubspot(c[:8]); cli.append(x)

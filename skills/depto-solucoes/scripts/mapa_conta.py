@@ -15,6 +15,8 @@ Uso:
 """
 import argparse, collections, glob, json, os, re, sqlite3, sys
 from datetime import date
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from cnpj import normalizar_cnpj  # noqa: E402  CNPJ alfanumérico (IN RFB 2.229/2024)
 
 AP = os.path.expanduser("~/agentes-partners")
 OUT = os.path.join(AP, "departamentos", "solucoes")
@@ -237,7 +239,7 @@ def carregar():
     return os.path.basename(f), neg, res, db
 
 
-def cnpj_de(n): return re.sub(r"\D", "", str((n.get("extras") or {}).get("cnpj") or "")).zfill(14) if (n.get("extras") or {}).get("cnpj") else ""
+def cnpj_de(n): return normalizar_cnpj((n.get("extras") or {}).get("cnpj")).zfill(14) if (n.get("extras") or {}).get("cnpj") else ""
 
 
 def sinais(cnpj, negs, res, db):
@@ -359,7 +361,7 @@ if __name__ == "__main__":
     a = ap.parse_args()
     base, neg, res, db = carregar(); G = por_cnpj(neg)
     if a.negocio or a.cnpj:
-        c = re.sub(r"\D", "", a.cnpj).zfill(14) if a.cnpj else next((cnpj_de(n) for n in neg if str(n["id"]) == a.negocio), "")
+        c = normalizar_cnpj(a.cnpj).zfill(14) if a.cnpj else next((cnpj_de(n) for n in neg if str(n["id"]) == a.negocio), "")
         if not c or c not in G: sys.exit("Negócio ou CNPJ sem CNPJ no HubSpot.")
         raiz = [n for k, v in G.items() if k[:8] == c[:8] for n in v]
         print(json.dumps(mapa(sinais(c, raiz, res, db)), ensure_ascii=False, indent=1, default=str)); sys.exit()

@@ -21,10 +21,12 @@ Uso:
   python3 controle_contratos.py --desde 2025-01-01 # só ganhos fechados a partir da data
   python3 controle_contratos.py --arquivo X.json --saida /tmp/teste --sem-receita
 """
-import argparse, glob, json, os, re, sqlite3, unicodedata
+import argparse, glob, json, os, re, sqlite3, sys, unicodedata
 from collections import Counter, defaultdict
 from datetime import date, datetime
 from difflib import SequenceMatcher
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from cnpj import cnpj_valido as _cnpj_valido, normalizar_cnpj  # noqa: E402  CNPJ alfanumérico (IN RFB 2.229/2024)
 
 HOME = os.path.expanduser("~")
 HS_DIR = f"{HOME}/agentes-partners/departamentos/resultados/dados"
@@ -78,17 +80,12 @@ def similaridade(nome, *oficiais):
 
 
 def cnpj_norm(v):
-    d = re.sub(r"\D", "", str(v or ""))
+    d = normalizar_cnpj(v)
     return d.zfill(14) if d else ""
 
 
 def cnpj_valido(c):
-    if len(c) != 14 or c == c[0] * 14: return False
-    def dv(base, pesos):
-        s = sum(int(x) * p for x, p in zip(base, pesos)); r = s % 11
-        return "0" if r < 2 else str(11 - r)
-    p1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]; p2 = [6] + p1
-    return c[12] == dv(c[:12], p1) and c[13] == dv(c[:12] + c[12], p2)
+    return len(c) == 14 and _cnpj_valido(c)
 
 
 def fmt_cnpj(c):
@@ -121,7 +118,7 @@ def conferir(n, rec, roster_ok):
     """Pendências de um negócio. Retorna lista de (gravidade, texto) e a linha de conferência de CNPJ."""
     p = []; X = n.get("extras") or {}
     bruto = X.get("cnpj"); c = cnpj_norm(bruto); r = rec.get(c)
-    conf = {"cnpj_hubspot": bruto or "", "cnpj_normalizado": fmt_cnpj(c), "zeros_perdidos": bool(bruto) and len(re.sub(r"\D", "", bruto)) < 14,
+    conf = {"cnpj_hubspot": bruto or "", "cnpj_normalizado": fmt_cnpj(c), "zeros_perdidos": bool(bruto) and len(normalizar_cnpj(bruto)) < 14,
             "dv_ok": cnpj_valido(c) if c else False, "na_base": bool(r), "razao_oficial": (r or {}).get("razao", ""),
             "situacao": (r or {}).get("situacao", ""), "matriz_filial": (r or {}).get("matriz", ""), "uf_oficial": (r or {}).get("uf", ""),
             "similaridade": similaridade(n.get("nome"), r.get("razao"), r.get("fantasia")) if r else None}
@@ -237,7 +234,7 @@ def main():
                          "valor_com_pendencia": round(sum(r[4] for r in L_ganhos), 2)},
               "pendencias_mais_comuns": [{"gravidade": g, "pendencia": t, "qtd": q} for (g, t), q in cont_pend.most_common(15)],
               "cnpj": {"conferidos": len(L_cnpj), "dv_invalido": sum(1 for r in L_cnpj if r[4] == "NÃO"),
-                       "zeros_perdidos": sum(1 for n in ganhos + abertos if (n.get("extras") or {}).get("cnpj") and len(re.sub(r'\D', '', n['extras']['cnpj'])) < 14),
+                       "zeros_perdidos": sum(1 for n in ganhos + abertos if (n.get("extras") or {}).get("cnpj") and len(normalizar_cnpj(n['extras']['cnpj'])) < 14),
                        "fora_da_base": sum(1 for r in L_cnpj if r[5] == "não"), "nao_ativos": sum(1 for r in L_cnpj if r[8] and r[8] != "Ativa")},
               "campos_faltantes": [c for c, _, _ in CAMPOS_FALTANTES],
               "limites": ["Sem data de assinatura no HubSpot: usa-se closedate como aproximação.",

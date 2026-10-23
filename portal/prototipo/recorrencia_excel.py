@@ -8,6 +8,7 @@ from openpyxl.drawing.image import Image
 
 sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); sys.path.insert(0, os.path.expanduser("~/agentes-partners/.claude/worktrees/amazing-kirch-442f46/lib"))
 import marca, caminhos, parecer_regras as PRG  # noqa: E402
+from cnpj import normalizar_cnpj  # noqa: E402
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 C = marca.cores("claro") if hasattr(marca, "cores") else json.load(open(marca.PASTA / "marca.json"))["claro"]
@@ -17,7 +18,7 @@ MASTERS = {m["parceiro"] for m in json.load(open(os.path.join(AQUI, "dados.json"
 R = [r for r in json.load(open(os.path.join(AQUI, "recorrencia-todas.json"), encoding="utf-8")) if r["parceiro"] in MASTERS]  # só clientes dos Masters (Luis, 14/10)
 HOJE = date(2026, 10, 14)
 
-fmt_cnpj = lambda c: (lambda d: f"{d[:2]}.{d[2:5]}.{d[5:8]}/{d[8:12]}-{d[12:]}" if len(d) == 14 else d)(re.sub(r"\D", "", str(c or "")).zfill(14)) if c else ""
+fmt_cnpj = lambda c: (lambda d: f"{d[:2]}.{d[2:5]}.{d[5:8]}/{d[8:12]}-{d[12:]}" if len(d) == 14 else d)(normalizar_cnpj(c).zfill(14)) if c else ""
 dt = lambda s: date.fromisoformat(s[:10]) if s else None
 sim = lambda c, item: next((x for x in c if x["item"].startswith(item)), {})
 

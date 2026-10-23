@@ -24,6 +24,7 @@ from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mapa_conta as mc  # noqa: E402
+from cnpj import normalizar_cnpj  # noqa: E402  (lib no caminho pelo mapa_conta)
 
 PESO, ONDA = mc.PESO, mc.ONDA
 # linha de serviço de cada produto (catálogo: docs/ecossistema/catalogo-mix-servicos.json)
@@ -94,7 +95,7 @@ def abrir_receita():
 
 
 def sinais_prospect(row, db):
-    c = re.sub(r"\D", "", row.get("cnpj", "")).zfill(14)
+    c = normalizar_cnpj(row.get("cnpj", "")).zfill(14)
     est = db.execute("select cnae, situacao, uf from estab where cnpj=?", (c,)).fetchone() if db else None
     emp = db.execute("select capital, porte, razao from empresa where basico=?", (c[:8],)).fetchone() if db else None
     cnae = (row.get("cnae") or (est[0] if est else "") or "").replace("-", "").replace("/", "").replace(".", "")

@@ -2,11 +2,13 @@
 """Proteções únicas de tudo o que os agentes escrevem ou enviam (validação Qualidade + Jurídico, 02/10/2026).
 
   interno(enderecos)  trava de domínio: só @savecompany.com.br. Todo ponto de envio chama antes de mandar.
-  limpo(texto)        mascara telefone, CPF, CNPJ sem pontuação, RG/CNH/agência/conta/PIX/senha rotulados;
+  limpo(texto)        mascara telefone, CPF, CNPJ sem pontuação e CNPJ alfanumérico, RG/CNH/agência/conta/PIX/senha rotulados;
                       preserva valores em R$, datas, número de processo e de PER/DCOMP e links.
   auditar(texto)      auditor de promessas da Qualidade: True só se não houver achado (erro conta como reprovado).
 """
 import json, os, re, subprocess, sys, tempfile
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from cnpj import CNPJ_TEXTO_ALFA, cnpj_valido  # noqa: E402  CNPJ alfanumérico (IN RFB 2.229/2024)
 
 AP = os.path.expanduser("~/agentes-partners"); SK = os.path.expanduser("~/.claude/skills")
 DOMINIO = re.compile(r"^[^@\s]+@savecompany\.com\.br$", re.I)
@@ -28,6 +30,7 @@ def limpo(t):
     def _g(m):
         guarda.append(m.group()); return f"\x00{len(guarda) - 1}\x00"
     t = PROTEGE.sub(_g, t)
+    t = CNPJ_TEXTO_ALFA.sub(lambda m: "[número]" if re.search(r"[A-Z]", m.group()) and cnpj_valido(m.group()) else m.group(), t)
     t = TEL.sub(lambda m: "[número]" if sum(c.isdigit() for c in m.group()) >= 10 else m.group(), t)
     for i, v in enumerate(guarda): t = t.replace(f"\x00{i}\x00", v)
     return t

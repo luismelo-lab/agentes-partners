@@ -21,6 +21,8 @@ Uso:
 """
 import argparse, csv, glob, io, json, os, re, sqlite3, subprocess, sys, time, zipfile
 from datetime import date
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from cnpj import normalizar_cnpj  # noqa: E402
 
 SHARE = "YggdBLfdninEJX9"
 DAV = "https://arquivos.receitafederal.gov.br/public.php/webdav"
@@ -81,7 +83,7 @@ def linhas(zip_path):
 def cnpjs_hubspot():
     fs = sorted(glob.glob(os.path.join(HS, "hubspot-*.json")))
     if not fs: return set()
-    return {re.sub(r"\D", "", d["extras"].get("cnpj") or "").zfill(14) for d in json.load(open(fs[-1]))["negocios"] if d["extras"].get("cnpj")}
+    return {normalizar_cnpj(d["extras"].get("cnpj")).zfill(14) for d in json.load(open(fs[-1]))["negocios"] if d["extras"].get("cnpj")}
 
 
 def carregar(mes):
@@ -170,7 +172,7 @@ def enriquecer():
     f = sorted(glob.glob(os.path.join(HS, "hubspot-*.json")))[-1]; N = json.load(open(f))["negocios"]
     out, achados = {}, 0
     for d in N:
-        cn = re.sub(r"\D", "", d["extras"].get("cnpj") or "").zfill(14)
+        cn = normalizar_cnpj(d["extras"].get("cnpj")).zfill(14)
         r = rows.get(cn)
         if r:
             achados += 1

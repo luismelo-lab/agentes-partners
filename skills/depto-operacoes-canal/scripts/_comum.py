@@ -3,8 +3,10 @@
 Lê o download do HubSpot gerado por depto-resultados/scripts/hubspot_fonte.py. Não chama API,
 não lê .env, não grava nada fora de ~/agentes-partners/departamentos/operacoes-canal/.
 """
-import glob, json, os, re, unicodedata
+import glob, json, os, re, sys, unicodedata
 from datetime import datetime
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from cnpj import cnpj_valido as _cnpj_valido, normalizar_cnpj  # noqa: E402  CNPJ alfanumérico (IN RFB 2.229/2024)
 
 BASE = os.path.expanduser("~/agentes-partners/departamentos")
 SRC = os.path.join(BASE, "resultados/dados")
@@ -32,18 +34,13 @@ def sem_acento(s):
 
 
 def cnpj_limpo(v):
-    d = re.sub(r"\D", "", str(v or ""))
+    d = normalizar_cnpj(v)
     if not d or len(d) > 14: return None
     return d.zfill(14)
 
 
 def cnpj_valido(c):
-    if not c or len(c) != 14 or len(set(c)) == 1: return False
-    def dv(base, pesos):
-        s = sum(int(a) * b for a, b in zip(base, pesos)) % 11
-        return "0" if s < 2 else str(11 - s)
-    p1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]; p2 = [6] + p1
-    return c[12] == dv(c[:12], p1) and c[13] == dv(c[:12] + c[12], p2)
+    return bool(c) and len(c) == 14 and _cnpj_valido(c)
 
 
 def canal(d, cfg, roster):

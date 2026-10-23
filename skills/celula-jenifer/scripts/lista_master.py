@@ -22,6 +22,8 @@ Uso:
 import argparse, glob, json, os, re, sqlite3, subprocess, sys, time, unicodedata
 from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta
+sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from cnpj import normalizar_cnpj  # noqa: E402
 
 H = os.path.expanduser("~")
 AP = os.path.join(H, "agentes-partners")
@@ -55,7 +57,7 @@ def nome_chave(s):
 
 
 def raiz(cnpj):
-    d = re.sub(r"\D", "", str(cnpj or ""))
+    d = normalizar_cnpj(cnpj)
     return d.zfill(14)[:8] if d else ""
 
 
