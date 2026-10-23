@@ -17,3 +17,6 @@ form .botao { margin-top: var(--s-4); }
 .res .titulo { font-weight: 600; }
 .res .meta, .res .fonte { font-size: var(--t-pequeno); color: #565B66; margin-top: var(--s-1); }
 .rodape { font-size: var(--t-legenda); color: #565B66; border-top: 1px solid var(--borda); padding-top: var(--s-3); margin-top: var(--s-6); }
+.area-esteira { margin-top: var(--s-3); border-top: 1px solid var(--borda); padding-top: var(--s-3); }
+.res.negocio_ativo { border-left-color: var(--ouro-texto); }
+.esteira { margin: var(--s-1) 0 0; padding-left: var(--s-4); font-size: var(--t-pequeno); }

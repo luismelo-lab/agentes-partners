@@ -12,8 +12,9 @@ import graph  # noqa: E402
 AP = os.path.expanduser("~/agentes-partners")
 REMOTO = "Estado dos agentes"
 ITENS = ["registro/demandas.json", "central-agentes/registro.json", "central-agentes/fila-entrada.json", "central-agentes/aprendizados.md",
-         "celulas/whatsapp-config.json", "celulas/geovana/pareceres/resumos.json", "departamentos/resultados/premissas-financeiras.xlsx",
+         "central-esteira/indice-negocios-ativos.json", "central-esteira/avisos-internos.md", "celulas/whatsapp-config.json", "celulas/geovana/pareceres/resumos.json", "departamentos/resultados/premissas-financeiras.xlsx",
          "departamentos/resultados/mapeamento-hubspot.json"]
+GLOBS_TODOS = ["central-esteira/pedidos/E-*.json"]  # histórico completo (cada pedido é o registro do parceiro)
 GLOBS = ["celulas/whatsapp-triagem-*.json", "celulas/*/whatsapp/caixa-*.json", "celulas/*/whatsapp/demandas-*.json",
          "celulas/*/whatsapp/anexos-cache.json", "departamentos/resultados/dados/metricas-*.json", "departamentos/resultados/dados/texto-*.json"]
 INDICE = "indice.json"
@@ -33,6 +34,8 @@ def subir():
     for g in GLOBS:  # só os mais recentes de cada série (o suficiente para comparar com a rodada anterior)
         fs = sorted(glob.glob(os.path.join(AP, g)), key=os.path.getmtime)[-6:]
         rels += [os.path.relpath(f, AP) for f in fs]
+    for g in GLOBS_TODOS:
+        rels += [os.path.relpath(f, AP) for f in sorted(glob.glob(os.path.join(AP, g)))]
     n = sum(graph.subir(os.path.join(AP, r), f"{REMOTO}/{r}") for r in rels)
     idx = os.path.join(AP, "logs", "estado-indice.json"); json.dump(rels, open(idx, "w")); graph.subir(idx, f"{REMOTO}/{INDICE}")
     print(n, "arquivo(s) de estado enviados")

@@ -8,10 +8,11 @@ central_api/regime.py entram em rotas.py atrás do token do Entra (papel e teto 
 Só escuta em localhost.
 """
 import http.server, json, os, sys
+from urllib.parse import parse_qs
 
 AQUI = os.path.dirname(os.path.abspath(__file__)); WEB = os.path.join(AQUI, "web")
 sys.path.insert(0, os.path.join(AQUI, "api"))
-from central_api import regime  # noqa: E402
+from central_api import esteira, regime  # noqa: E402
 
 CAB = json.load(open(os.path.join(WEB, "staticwebapp.config.json")))["globalHeaders"]
 CAB = {k: v for k, v in CAB.items() if k != "Strict-Transport-Security"}
@@ -41,6 +42,22 @@ def lote(corpo):
     return 200, {"resultados": res, "usadas": usadas, "limite": limite}
 
 
+def pedir_esteira(corpo):
+    r = regime.consultar(corpo.get("cnpj"))  # refaz a consulta no servidor (cache): não confia no que o navegador diz
+    if r["faixa"] in ("negocio_ativo", "invalido", "indisponivel"):
+        return 400, {"erro": r["titulo"]}
+    try:
+        p = esteira.solicitar(r["cnpj"], USUARIO, r)
+    except esteira.Recusa as e:
+        return 400, {"erro": str(e)}
+    return 200, esteira.visao_parceiro(p)
+
+
+def andamento(consulta):
+    v = esteira.ler_do_parceiro((parse_qs(consulta).get("id") or [""])[0], USUARIO)
+    return (200, v) if v else (404, {"erro": "pedido não encontrado"})
+
+
 class H(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *a, **k): super().__init__(*a, directory=WEB, **k)
 
@@ -48,15 +65,22 @@ class H(http.server.SimpleHTTPRequestHandler):
         for k, v in CAB.items(): self.send_header(k, v)
         super().end_headers()
 
+    def do_GET(self):
+        rota, _, consulta = self.path.partition("?")
+        if rota == "/api/esteira":
+            return self._json(*andamento(consulta))
+        return super().do_GET()
+
     def do_POST(self):
-        if self.path.split("?")[0] != "/api/regime":
+        rota = self.path.split("?")[0]
+        if rota not in ("/api/regime", "/api/esteira"):
             return self._json(404, {"erro": "rota não encontrada"})
         try:
             n = min(int(self.headers.get("Content-Length", 0)), 20000)
             corpo = json.loads(self.rfile.read(n) or b"{}")
         except ValueError:
             return self._json(400, {"erro": "corpo inválido"})
-        self._json(*lote(corpo))
+        self._json(*(pedir_esteira(corpo) if rota == "/api/esteira" else lote(corpo)))
 
     def _json(self, st, corpo):
         b = json.dumps(corpo, ensure_ascii=False).encode()

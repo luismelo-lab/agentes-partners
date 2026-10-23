@@ -23,7 +23,50 @@ function cartao(r) {
   c.append(el("div", "titulo", r.titulo + (r.ano_base ? " (ano-base " + r.ano_base + ")" : "")));
   if (r.detalhe) c.append(el("div", "meta", r.detalhe));
   if (r.fonte) c.append(el("div", "fonte", "Fonte: " + r.fonte));
+  if (["confirmado_real", "provavel_real", "nao_real", "sem_dado"].includes(r.faixa)) c.append(areaEsteira(r.cnpj));
   return c;
+}
+
+const BLOCOS = [["fazer", "O que você pediu"], ["precisa", "O que você também precisa"], ["falta", "O que falta e quem fornece"]];
+
+function mostrar(area, v) {
+  area.replaceChildren();
+  if (v.status !== "entregue") { area.append(el("p", "meta", v.andamento + ". Volte aqui: a página atualiza sozinha.")); return; }
+  const r = v.resultado;
+  BLOCOS.forEach(([k, t]) => { area.append(el("div", "titulo", t)); area.append(el("p", "meta", r[k])); });
+  if ((r.esteira || []).length) {
+    area.append(el("div", "titulo", "Esteira"));
+    const ul = el("ul", "esteira");
+    r.esteira.forEach((x) => ul.append(el("li", "", "Onda " + x.onda + " · " + x.produto + " (" + x.status + ")" + (x.nota ? ": " + x.nota : ""))));
+    area.append(ul);
+  }
+}
+
+function acompanhar(area, id) {
+  const t = setInterval(async () => {
+    try {
+      const v = await (await fetch("/api/esteira?id=" + encodeURIComponent(id))).json();
+      mostrar(area, v);
+      if (v.status === "entregue") clearInterval(t);
+    } catch (e) { /* tenta de novo no próximo ciclo */ }
+  }, 15000);
+}
+
+function areaEsteira(cnpj) {
+  const area = el("div", "area-esteira");
+  const b = el("button", "botao-sec", "Pedir análise e esteira");
+  b.type = "button";
+  b.addEventListener("click", async () => {
+    b.disabled = true;
+    try {
+      const resp = await fetch("/api/esteira", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cnpj }) });
+      const v = await resp.json();
+      if (!resp.ok) throw new Error(v.erro || "Não foi possível pedir a análise.");
+      b.remove(); mostrar(area, v); if (v.status !== "entregue") acompanhar(area, v.id);
+    } catch (e) { b.disabled = false; area.append(el("p", "erro-msg", e.message)); }
+  });
+  area.append(b);
+  return area;
 }
 
 function csv(linhas) {

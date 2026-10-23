@@ -10,7 +10,8 @@ ano-base: não é "o regime de hoje".
 ATENÇÃO: cada consulta envia o CNPJ a um serviço de terceiros. Só liga com CENTRAL_API_EXTERNA=1 (a demo liga por
 padrão, local). No piloto, depende do ok do Jurídico e da TI. Sem contrato nem SLA nas duas fontes.
 
-Faixas: confirmado_real | provavel_real | nao_real | sem_dado | indisponivel | invalido.
+Faixas: negocio_ativo | confirmado_real | provavel_real | nao_real | sem_dado | indisponivel | invalido.
+A 1ª checagem é a base Save Company (negocio_ativo.py): empresa com negócio ativo não segue para as APIs.
 """
 import json, os, subprocess, sys, time
 from concurrent.futures import ThreadPoolExecutor
@@ -18,6 +19,7 @@ from datetime import date
 
 sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
 from cnpj import cnpj_valido, normalizar_cnpj  # noqa: E402
+from . import negocio_ativo  # noqa: E402
 
 BASE = os.path.expanduser(os.environ.get("CENTRAL_RECEITA", "~/agentes-partners/dados-publicos/receita"))  # só a trilha de auditoria
 LIMITE_LOTE = 20
@@ -73,6 +75,14 @@ def consultar(entrada, faturamento=None):
     saida = {"cnpj": cnpj, "faixa": "invalido", "titulo": "CNPJ inválido", "fonte": None, "ano_base": None, "empresa": None}
     if not cnpj_valido(cnpj):
         saida["detalhe"] = "Confira os 14 caracteres e os dois dígitos finais."
+        return saida
+    ativo = negocio_ativo.tem_negocio_ativo(cnpj)  # 1ª checagem: cliente Save nunca é enviado a serviço externo
+    if ativo is None:
+        saida.update(faixa="indisponivel", titulo="Consulta indisponível agora", detalhe="Não foi possível conferir a base Save Company. Tente de novo mais tarde.")
+        return saida
+    if ativo:
+        saida.update(faixa="negocio_ativo", titulo="Empresa com negócio ativo na base Save Company", fonte="Base Save Company",
+                     detalhe="Esta empresa já tem um negócio em andamento ou concluído com a Save. Não é preciso consultar o regime. Em caso de dúvida, fale com a Área Partners.")
         return saida
     if os.environ.get("CENTRAL_API_EXTERNA", "1") != "1":
         saida.update(faixa="indisponivel", titulo="Consulta externa desligada", detalhe="A consulta a APIs externas está desligada neste ambiente.")

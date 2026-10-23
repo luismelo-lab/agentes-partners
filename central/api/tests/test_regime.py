@@ -4,6 +4,7 @@
 """
 import os, unittest
 
+from central_api import negocio_ativo as NA
 from central_api import regime as R
 from cnpj import dv_cnpj
 
@@ -40,11 +41,16 @@ def http_falso(url):
     return (200, BASE[c]) if c in BASE else (404, None)
 
 
+CLIENTE = cnpj("99999999")
+os.environ["CENTRAL_SAL"] = "sal-de-teste"
+INDICE = {NA.chave("99999999")}
+
+
 class Regime(unittest.TestCase):
     def setUp(self):
-        self.antes = R._http; R._http = http_falso; R._memoria.clear(); chamadas.clear(); os.environ["CENTRAL_API_EXTERNA"] = "1"
+        self.antes = R._http, NA._carregar; NA._carregar = lambda: INDICE; R._http = http_falso; R._memoria.clear(); chamadas.clear(); os.environ["CENTRAL_API_EXTERNA"] = "1"
 
-    def tearDown(self): R._http = self.antes
+    def tearDown(self): R._http, NA._carregar = self.antes
 
     def test_real_confirmado_usa_o_ano_mais_recente(self):
         r = R.consultar(REAL); self.assertEqual((r["faixa"], r["ano_base"]), ("confirmado_real", ANO)); self.assertEqual(r["empresa"]["razao"], "EMPRESA REAL")
@@ -78,6 +84,15 @@ class Regime(unittest.TestCase):
 
     def test_cache_evita_segunda_chamada(self):
         R.consultar(REAL); R.consultar(REAL); self.assertEqual(len(chamadas), 1)
+
+    def test_cliente_save_para_na_primeira_checagem_sem_chamar_api(self):
+        r = R.consultar(CLIENTE); self.assertEqual((r["faixa"], r["titulo"]), ("negocio_ativo", "Empresa com negócio ativo na base Save Company")); self.assertEqual(chamadas, [])
+
+    def test_filial_de_cliente_tambem_e_cliente(self):
+        self.assertEqual(R.consultar(cnpj("99999999", "0002"))["faixa"], "negocio_ativo")
+
+    def test_sem_indice_falha_fechada_sem_chamar_api(self):
+        NA._carregar = lambda: None; r = R.consultar(REAL); self.assertEqual(r["faixa"], "indisponivel"); self.assertEqual(chamadas, [])
 
     def test_invalido_nao_chama_api(self):
         self.assertEqual(R.consultar("12345")["faixa"], "invalido"); self.assertEqual(chamadas, [])
