@@ -168,3 +168,5 @@ Siga `~/agentes-partners/infra/protocolo-pesquisa.md`. Não se limite ao materia
 - **Visão Big Four:** pergunta de negócio → situação, implicação e recomendação · faixa quantificada com premissas · alternativa de mercado e benchmark · risco explícito · lente do setor · próximo passo com dono e prazo.
 - **Conflito com a base interna:** a decisão da Save continua valendo; sinalize no bloco "o que você também precisa" e proponha a pergunta ao dono.
 - **Registro:** o log da entrega lista as fontes externas (com data), a idade do radar usado e os conflitos encontrados.
+
+- **Fonte nova (23/10/2026):** `references/fonte-video-paulo-paraguai-2026-10-15.md` traz a fala do Paulo em vídeo público sobre o Paraguai, resumida por capítulo, com perguntas P-V1 a P-V7 e conflitos.

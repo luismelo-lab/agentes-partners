@@ -211,3 +211,12 @@
 - **Última revisão:** 22/10/2026 (BACN, MIC, OCDE; Ferrere e EY como benchmark).
 - **Radar semanal vigia:** data de promulgação da Lei 7.547 e fim da transição; resoluções do CNIME; estatísticas mensais de maquila; tarifa da ANDE e Itaipu 2027; salário mínimo e IPS; CRS do Paraguai; lista da IN 1.037; Seção 301 dos EUA.
 - **Fontes:** `references/fontes.md` §3 e §7; `references/radar-mercado-financeiro-maquila.md` §5; `references/radar-tax-internacional-comex.md`.
+
+## Atualização · vídeo do Paulo (15/10/2026)
+Leia `references/fonte-video-paulo-paraguai-2026-10-15.md`. Pontos novos para o método:
+- **Porta de entrada:** o mercado interno paraguaio não é o motivo de ir.
+- **Zona franca:** serve para venda e armazenagem, não para produção.
+- **Maquila:** regime de exportação, com venda interna limitada depois do 1º ano (P-V2).
+- **Maquila de serviços:** só para serviço exportado, com cautela de preço de transferência e substância (C4 e C5).
+- **Relacionamento bancário:** um ano ou mais, o que pesa no cronograma do cliente.
+- **Perguntas ao Paulo:** P-V1 a P-V7.

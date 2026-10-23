@@ -141,3 +141,13 @@ Itens novos, sem apagar os de 16/10:
 - **PN1 · FIDC e crédito judicial (Res. CMN 5.343, vigente desde 13/10/2026):** registrar na ficha do FIDC que crédito judicial e tese tributária não definitiva ficam fora? Algum cliente em andamento tinha essa intenção?
 - **PN2 · Registradoras:** a Federal Invest usa B3, CERC ou Núclea para a carteira registrada? (Reforça a pergunta 2 do radar de 16/10.)
 - **Conflito novo (N1):** a base trata FIDC como destino de recebíveis comerciais, sem excluir crédito judicial. Atualizar `produtos.md` depois da resposta do dono.
+
+## Do vídeo do Paulo sobre o Paraguai (15/10/2026, extraído em 23/10/2026)
+Fonte: `references/fonte-video-paulo-paraguai-2026-10-15.md`. Perguntas ao Paulo:
+- **P-V1:** na maquila, a distribuição de lucro é zero ou 8%? A remessa ao fornecedor no exterior é isenta? O próprio vídeo diverge. Importa porque muda o estudo de viabilidade.
+- **P-V2:** qual o percentual de venda ao mercado paraguaio depois do 1º ano de maquila (cerca de 10%?) e a base legal?
+- **P-V3:** qual a regra exata de origem do Mercosul citada como "50% de beneficiamento" (teor de insumo de fora do bloco e salto de NCM)?
+- **P-V4:** IPS de 16,5%: qual a divisão entre empresa e empregado?
+- **P-V5:** qual o fundamento de "no Paraguai a empresa precisa ser lucrativa"? Importa porque a maquila de serviços depende disso e pesa no preço de transferência.
+- **P-V6:** qual o número e os requisitos da lei que substituiu a "60/90"?
+- **P-V7:** a linha de financiamento com 3 anos de carência e 15 de prazo existe? Por qual programa ou banco, e com que exigências?

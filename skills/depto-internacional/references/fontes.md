@@ -121,3 +121,5 @@ Regra transversal (07/10/2026): todo arquivo anterior que trate a liberação po
 
 ## 8. Kit de marca
 - `departamentos/marketing-marca/padrao/` (Design System Save v0.5): todo material segue o padrão (IBM Plex, ouro, modo claro para cliente e parceiro).
+
+| `references/fonte-video-paulo-paraguai-2026-10-15.md` | 15/10/2026 (extraído em 23/10/2026) | Vídeo público do Paulo em Assunção: para quem serve o Paraguai, custos, maquila industrial e de serviços, regime geral 10-10-10, zona franca, barreira bancária, sucessão, imobiliário e lei de investimentos. Fala do dono; números [conferir] | Vigente como fala do dono |
