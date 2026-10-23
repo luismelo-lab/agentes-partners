@@ -226,6 +226,15 @@ const indice = [
   new Paragraph({ children: [new PageBreak()] }),
 ];
 
+// ---------- topo do modo compacto (one-page)
+const topo = [
+  new Paragraph({ spacing: { before: 0, after: 0 }, tabStops: [{ type: "right", position: LARGURA }],
+    children: [logo(150), R({ text: "\t" + (process.env.DOC_SELO || "Uso interno · Confidencial"), bold: true, size: 18, color: OURO })] }),
+  new Paragraph({ spacing: { before: 200, after: 40 }, border: { top: { style: BorderStyle.SINGLE, size: 24, color: OURO_FAIXA, space: 10 } },
+    children: [R({ text: titulo, bold: true, size: 34, color: PRETO })] }),
+  new Paragraph({ spacing: { before: 0, after: 160 }, children: [R({ text: "Área Partners · " + (process.env.DOC_VERSAO || ""), size: 18, color: CINZA })] }),
+];
+
 const doc = new Document({
   creator: "Área Partners · Save Company",
   // IBM Plex Sans vai embutida no arquivo: abre no padrão mesmo em máquina sem a fonte instalada
@@ -266,7 +275,9 @@ const doc = new Document({
       first: new Footer({ children: [new Paragraph({ alignment: AlignmentType.RIGHT,
         children: [R({ children: ["Página ", PageNumber.CURRENT, " de ", PageNumber.TOTAL_PAGES], size: 16, color: CINZA })] })] }),
     },
-    children: [...capa.slice(0, -1), ...indice.slice(0, -1), new Paragraph({ pageBreakBefore: true, spacing: { before: 0, after: 0 }, children: [] }), ...filhos],
+    // DOC_COMPACTO=1 (one-page): sem capa e sem índice; o título vai num bloco no topo da 1ª página (23/10/2026)
+    children: process.env.DOC_COMPACTO ? [...topo, ...filhos]
+      : [...capa.slice(0, -1), ...indice.slice(0, -1), new Paragraph({ pageBreakBefore: true, spacing: { before: 0, after: 0 }, children: [] }), ...filhos],
   }],
 });
 
