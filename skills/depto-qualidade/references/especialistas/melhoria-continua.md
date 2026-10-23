@@ -69,7 +69,7 @@ ISO 9001, 10002 e 31000 são voluntárias. A LGPD é obrigatória: o art. 50 tra
 6. **Definir a ação** no nível certo: modelo, skill, script, regra de dado, treinamento, decisão do Luis. Uma mudança por vez quando possível.
 7. **Escrever o critério de eficácia** (indicador, meta, janela) e a data de verificação.
 8. **Encaminhar** ao gerente da área dona da causa; ação que muda decisão vai ao Luis ou ao Conselho.
-9. **Verificar** na data: eficaz (fecha), ineficaz (volta ao passo 5), atrasada (escala ao Luis após 2 adiamentos).
+9. **Verificar** na data: eficaz (fecha), ineficaz (volta ao passo 5), atrasada (após 2 adiamentos, escala ao gerente da área e à pessoa dona da entrega e entra no resumo semanal ao Luis; sobe ao Luis só se travar algo da alçada dele, `infra/alcadas.md`).
 10. **Padronizar e registrar** em `aprendizados.md` e, se aplicável, no arquivo do especialista.
 
 ## 6. Perguntas de diagnóstico
@@ -120,7 +120,7 @@ ISO 9001, 10002 e 31000 são voluntárias. A LGPD é obrigatória: o art. 50 tra
 
 ### Caso 3: PDCA em programa de qualidade de serviços (mercado)
 - **Situação típica:** empresas certificadas ISO 9001 relatam que o ganho vem da disciplina de verificar eficácia e da análise crítica pela direção (cláusula 9.3), não do certificado.
-- **Régua para a Save:** revisão mensal curta com o Luis, até 3 problemas, critério de eficácia escrito.
+- **Régua para a Save:** revisão mensal curta na consolidação de sexta (pergunta Q12, vale em 28/10/2026), até 3 problemas, critério de eficácia escrito, com resumo ao Luis.
 
 ### Caso 4: relatório diário que falha (interno, D46 e D72)
 - **Situação:** falhas repetidas do relatório das 06h30.

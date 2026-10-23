@@ -85,7 +85,9 @@ Quando o Luis responder, releia a ata, reconvoque só quem a resposta afeta e fi
 
 ## Passo 5 — Ata
 
-Redija a ata no formato de `references/formato-ata.md`, salve em `conselho/atas/AAAA-MM-DD-<tema-curto>.md` e acrescente as novas decisões em `conselho/decisoes.md` com status `pendente`. No chat, entregue: o resumo executivo (≤ 5 linhas), as decisões para aprovação e as dúvidas bloqueantes, mais o caminho da ata.
+Redija a ata no formato de `references/formato-ata.md`, salve em `conselho/atas/AAAA-MM-DD-<tema-curto>.md` e acrescente as novas decisões em `conselho/decisoes.md` com status `pendente`.
+
+**Filtro de alçada antes de listar (23/10/2026, `infra/alcadas.md`):** o Conselho continua sendo do Luis, mas a ata só pede a aprovação dele para o que é alçada dele (regra, preço, honorário, meta, remuneração, tese na vitrine, frase permitida, produto em validação, material externo em escala, conflito de canal entre Masters, pessoas do time, e os limites da §1). Recomendação operacional, reversível e dentro das regras sai da tabela de aprovação: vira encaminhamento ao dono da entrega (Daniela, Jenifer, Geovana, dono do produto, gerente da área), com prazo, na seção "Encaminhado ao dono". Reversível sem dono natural entra na tabela com `padrao: true` e "vale a recomendação em <data, padrão 3 dias úteis>" (§2); o Luis pode reverter. No chat, entregue: o resumo executivo (≤ 5 linhas), as decisões para aprovação e as dúvidas bloqueantes, mais o caminho da ata.
 
 ## Cuidados
 

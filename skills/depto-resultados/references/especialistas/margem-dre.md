@@ -61,7 +61,7 @@ Fontes secundárias (consulta em 22/10/2026), a conferir no texto oficial:
 
 ## 4. Regras da casa
 - **Regra do Luis (28/09/2026):** relatório calculado antes de impostos; IR e CSLL mostrados à parte (`metricas.md`, métrica 5).
-- **D21 (29/09/2026):** carga por pessoa no relatório, sem indicador "R$ por pessoa". **Conflito:** `metricas.md` (nível 2) e a description da skill citam "margem por colaborador". Vale a D21; a métrica fica fora até o Luis decidir (pergunta ao dono).
+- **D21 (29/09/2026):** carga por pessoa no relatório, sem indicador "R$ por pessoa". **Conflito:** `metricas.md` (nível 2) e a description da skill citam "margem por colaborador". Vale a D21; a métrica saiu do `metricas.md` em 23/10/2026 (decisão do Controller, método da área).
 - **D64 (22/10/2026):** cada parceiro tem o seu percentual de repasse negociado; não há regra única de 50% ou mais; revisão com os novos produtos.
 - **D42 (preliminar, 05/10/2026):** negócio com repasse de 50% ou mais e honorário abaixo de 20% passaria pela Partners antes da proposta. Pendente, depende da D64, já respondida.
 - **D65 (15/10/2026):** registro único de exceções (café a 70%) com aprovação do Luis e validação do Jurídico; atípicos acima de 50% e % do parceiro acima de 100% conferidos contra o contrato.

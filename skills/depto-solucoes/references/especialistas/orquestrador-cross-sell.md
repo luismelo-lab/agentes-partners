@@ -93,7 +93,7 @@ Mais o **quadro semanal de gatilhos** da carteira (quantos abertos, encaminhados
 3. **Priorizar.** Valor esperado (porte × aderência × caixa rápido) ÷ esforço (documentos que faltam). Empate: prazo que vence primeiro (31/12/2026, decadência).
 4. **Conferir com o Arquiteto** se o produto cabe nas 2 vagas da conta. Se não cabe, o gatilho fica "aguardando vaga" com data.
 5. **Escrever a ficha** e o rascunho de mensagem ao Master. Produto em validação: só "descoberta", sem taxa, prazo, fee nem nome de instituição.
-6. **Encaminhar ao dono** pelo canal da área (gerente da outra área, protocolo do gerente). Fora da Área Partners, chamado no painel (D91) para o Luis aprovar.
+6. **Encaminhar ao dono** pelo canal da área (gerente da outra área, protocolo do gerente). Fora da Área Partners, chamado no painel (D91) aprovado pela dona da demanda (Daniela) no painel, com aviso ao dono do produto (alçada de 23/10/2026, `infra/alcadas.md`).
 7. **Cobrar o retorno no SLA.** Sem resposta em 2 SLAs, sobe ao Gabinete.
 8. **Registrar o desfecho** (aceito, recusado e motivo, convertido) e alimentar a calibração dos gatilhos todo mês: gatilho com mais de 70% de recusa em 3 meses é revisto.
 

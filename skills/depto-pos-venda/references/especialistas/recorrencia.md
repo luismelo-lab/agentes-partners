@@ -56,7 +56,7 @@
 - **D83 (22/10/2026):** produtos em validação entram no cross-sell só como descoberta.
 - **D86 (22/10/2026, a conciliar com D81):** Funrural anterior a 2018 vai para Gestão de Passivo. Cliente agro ganho com Funrural é gatilho de passivo, não de recuperação.
 - **D92 (22/10/2026):** Gestão de Contas, antecipação e FIDC são da Save Invest (dono Junior); o gatilho é encaminhado, não vendido aqui.
-- **D27 (01/10/2026):** o lote do Recuperador vai à Geovana com cópia ao Luis; a aba de recorrência segue o mesmo caminho até a Daniela assumir a rotina [a definir com o Luis].
+- **D27 (01/10/2026):** o lote do Recuperador vai à Geovana com cópia ao Luis; a aba de recorrência segue o mesmo caminho até a Daniela assumir a rotina [a definir pela Daniela com a Geovana, pergunta 10 de `perguntas-ao-dono.md`; alçada de 23/10/2026].
 - **Em aberto:** quem faz o contato de recorrência com o Master (Daniela ou o próprio Master); se a recorrência tem novo contrato ou aditivo; % de honorário da recorrência (D79 manteve a regra atual).
 
 ## 5. Método

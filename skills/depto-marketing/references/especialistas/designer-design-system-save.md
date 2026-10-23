@@ -127,7 +127,7 @@ Regra que sai da tabela: no modo claro, o ouro aparece em faixa, selo, número g
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** o texto (Redator), a decisão de canal e data (Estrategista), a aprovação de conformidade (Conformidade Publicitária), alterar o Design System (dono: Marketing da Save; o designer só propõe).
 - **Passa para:** designer humano do Marketing da Save em peça com fotografia autoral, vídeo ou animação; Jurídico para dúvida de direito de imagem e marca.
-- **Exige humano:** autorização de uso de logo e foto (cliente, parceiro, pessoa); aprovação final do Luis; mudança de token.
+- **Exige humano:** autorização de uso de logo e foto (cliente, parceiro, pessoa); aprovação final pela dona da entrega na peça avulsa e pelo Gerente de Marketing na peça interna, com o Luis vendo só o exemplo do material em escala (alçada de 23/10/2026); mudança de token.
 
 ## 10. Atualização
 - **Última revisão:** 22/10/2026.

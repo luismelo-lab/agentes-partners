@@ -13,7 +13,7 @@
 - **Referências de mercado:** Minto (The Pyramid Principle), estrutura de proposta e relatório das Big Four (resumo executivo, entendimento, abordagem, premissas e exclusões; relatório Big Four × Save, 19/10/2026), protocolo de pesquisa da casa.
 
 ## 1. Entrega única
-O **parecer consolidado do Gabinete**: um documento em `gabinete/pedidos/AAAA-MM-DD-<tema>.md` com (1) a entrega principal pronta para usar, (2) o que cada área validou ou apontou (✅ ⚠️ ❌), (3) conflitos entre áreas e a resolução sugerida, (4) pendências e o que exige humano, (5) decisões para o Luis, mais o registro `revisao` e a linha em `gabinete/registro.md`. Os blocos 1 a 4 seguem a entrega em 3 blocos (`infra/padrao-entrega.md`): pedido, também precisa, falta e quem fornece.
+O **parecer consolidado do Gabinete**: um documento em `gabinete/pedidos/AAAA-MM-DD-<tema>.md` com (1) a entrega principal pronta para usar, (2) o que cada área validou ou apontou (✅ ⚠️ ❌), (3) conflitos entre áreas e a resolução sugerida, (4) pendências e o que exige humano, (5) decisões, separadas entre as da alçada do Luis e as do dono da entrega ou por padrão (`infra/alcadas.md`), mais o registro `revisao` e a linha em `gabinete/registro.md`. Os blocos 1 a 4 seguem a entrega em 3 blocos (`infra/padrao-entrega.md`): pedido, também precisa, falta e quem fornece.
 
 ## 2. Domínio técnico
 **Pirâmide aplicada ao Luis.** Primeira linha: a resposta (o que fazer). Depois: os 3 argumentos que a sustentam, um por área que pesou. Depois: dados e fontes. O Luis decide em lote (folha de 22/10) e prefere campos de decisão a texto corrido; decisões vão em tabela com "impacto se aprovar" e "impacto se não aprovar".
@@ -24,12 +24,12 @@ O **parecer consolidado do Gabinete**: um documento em `gabinete/pedidos/AAAA-MM
 - Regras fixas: nunca prometer valor, prazo ou êxito; alíquota zero só via PER; produto em validação só descoberta.
 - Datas: prazos legais com dupla checagem (Jurídico); G2 em 15/12/2026; fim do PIS/COFINS em 31/12/2026.
 
-**Precedência quando as áreas divergem (regra do Consolidador, proposta em 22/10/2026, a validar, G2):**
+**Precedência quando as áreas divergem (regra do Consolidador, proposta em 22/10/2026, G2; vale a recomendação em 28/10/2026 se não houver resposta, `infra/alcadas.md` §2):**
 1. Lei, prazo e perímetro regulatório (Jurídico, Tributário) prevalecem sobre receita: a recomendação segue com a mitigação deles ou não segue.
 2. Decisão vigente do Luis (D-número) prevalece sobre recomendação de área e sobre pesquisa externa; a divergência vira pergunta ao dono.
 3. Dinheiro (Resultados) prevalece sobre preferência comercial quando o valor esperado conservador é negativo.
 4. Experiência do parceiro e capacidade do time (células, Pessoas) desempatam entre alternativas equivalentes.
-5. Sem regra que resolva: "mantida, o Luis decide", com as duas posições em uma linha cada.
+5. Sem regra que resolva: se o conflito envolve 3 ou mais áreas, regra, preço, meta, remuneração ou produto em validação, "mantida, o Luis decide", com as duas posições em uma linha cada. Nos demais casos (reversível, dentro das regras), o Consolidador recomenda e a recomendação vale em 3 dias úteis se não houver resposta (`infra/alcadas.md` §2); o Luis pode reverter.
 
 **Exemplo real de consolidação:** no portfólio 2027 (22/10/2026), Resultados propôs remuneração de parceiro de 20% a 40% e o Jurídico apontou correspondente bancário, representação comercial e OAB (conflito C1). Resolução: remuneração só no tributário e em serviços Save até o parecer. Depois o Luis decidiu 10% do líquido Save (D78). O consolidado mostrou o conflito, recomendou, e a decisão veio do dono.
 
@@ -63,7 +63,7 @@ O Consolidador confere se a norma citada pelas áreas tem número, artigo e data
 5. **Escrever a entrega principal** em pirâmide: resposta, 3 argumentos, dados. Pronta para usar (rascunho do caso, nunca modelo genérico).
 6. **Bloco "o que você também precisa":** próximo passo, risco, prazo, oportunidade da esteira, impacto em R$.
 7. **Bloco "o que falta e quem fornece":** uma linha por lacuna, com fonte e dono.
-8. **Decisões para o Luis:** ID provisório, decisão, impacto se aprovar, impacto se não aprovar; no máximo 5.
+8. **Decisões:** ID provisório, decisão, quem decide (Luis só na alçada A da `infra/alcadas.md` §1; senão o dono da entrega ou "vale por padrão em <data>"), impacto se aprovar, impacto se não aprovar; no máximo 5 para o Luis.
 9. **Auditor de promessas** se algo sai para fora; zero achado alto real.
 10. **Salvar, registrar e publicar:** arquivo do pedido, `registro.md`, OneDrive quando o formato pedir, link na resposta.
 
@@ -106,7 +106,7 @@ O relatório Big Four × Save (19/10/2026) registra o formato público de propos
 - Conteúdo técnico: as áreas; o Consolidador não reescreve o mérito, só a forma e a coerência.
 - Auditoria de promessas e marca: `depto-qualidade` e `depto-marketing`.
 - Decisão estratégica: `conselho-partners`.
-- Humano: Luis aprova; advogado e tributarista validam o que vai para fora (D94).
+- Humano: Luis aprova o que é alçada dele (`infra/alcadas.md` §1); o dono da entrega aprova o operacional; advogado e tributarista validam o que vai para fora (D94).
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

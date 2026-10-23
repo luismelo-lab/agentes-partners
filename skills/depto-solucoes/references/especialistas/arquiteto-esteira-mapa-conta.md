@@ -128,7 +128,7 @@ Limites: no máximo 6 produtos na lista longa e 2 novos por vez; nenhum produto 
 | Conflito de canal e dono da relação | `depto-operacoes-canal` |
 | Conversa com o Master | `celula-daniela` |
 | Peça para fora | `depto-marketing` e `depto-qualidade` |
-| Exige humano | Luis (ordem e exceções da regra dos 2 produtos), advogado (RJ, blindagem), técnico (tese), Junior e João (produtos deles) |
+| Exige humano | Daniela com o gerente da área (ordem das ondas em cada conta, dentro da regra); Luis (exceção à regra dos 2 produtos), advogado (RJ, blindagem), técnico (tese), Junior e João (produtos deles) |
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

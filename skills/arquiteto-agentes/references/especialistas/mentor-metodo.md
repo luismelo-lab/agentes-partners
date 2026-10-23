@@ -106,7 +106,7 @@ Gartner (25/06/2025): mais de 40% dos projetos de IA agêntica serão cancelados
 - Infra, integrações, acessos: `depto-ti`.
 - ROI oficial da área: `depto-resultados` (o Mentor calcula o ROI do agente; o número da área é do Resultados).
 - Pessoas e mudança de papel: `depto-pessoas` e RH formal.
-- Humano: o Luis decide a fase, o piloto e a autonomia; a supervisora valida a base e julga os casos.
+- Humano: o Mentor propõe a fase e o piloto, e a recomendação vale em 3 dias úteis se não houver resposta (`infra/alcadas.md` §2, o Luis pode reverter); a autonomia (A2, A3) é do Luis; a supervisora valida a base e julga os casos.
 
 ## 10. Atualização
 - Última revisão: 22/10/2026 (contexto de 29/09 substituído).

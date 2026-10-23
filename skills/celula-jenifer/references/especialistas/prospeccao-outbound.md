@@ -75,7 +75,7 @@
 5. **Rascunho.** Adapte M0 a M5 com SPIN (uma pergunta de situação ou problema) e uma ideia útil (Challenger). E-mail até 90 palavras; WhatsApp institucional ou LinkedIn até 50; sempre com saída fácil.
 6. **Ligação.** Roteiro de 30 segundos; se atender o gatekeeper, pedir o nome do responsável financeiro e o melhor horário, sem insistir.
 7. **Resposta.** Respondeu → sai da cadência e vai para Qualificação. "Não me contate" → opt-out no mesmo dia, motivo padronizado, nunca volta.
-8. **SLA do Master.** Sem apresentação em 3 dias úteis → a Jenifer pergunta; sem resposta em mais 3, o Luis decide se libera contato direto.
+8. **SLA do Master.** Sem apresentação em 3 dias úteis → a Jenifer pergunta; sem resposta em mais 3, a Daniela decide com o Master, caso a caso, se libera contato direto (alçada de 23/10/2026; a regra geral segue com o Luis).
 9. **Encerramento.** Toque 8 (M5) → Nutrição por 90 dias, com motivo.
 10. **Medida.** Semanal: empresas em cadência, toques, taxa de resposta por canal, reuniões marcadas e realizadas, SQL aceito pelo Master, tempo de aceite. Comparar com a linha de base da Semana 0.
 
@@ -121,7 +121,7 @@ Situação: frigorífico de MG, Lucro Real, porte Demais, vizinho de um cliente 
 
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** universo e score (`depto-intel-comercial`); objeção técnica profunda (Objeções com base técnica + `depto-tributario`); base legal e LIA (LGPD na prospecção + `depto-juridico`); qualificação SQL (Qualificação); briefing (Preparação de Reunião); conteúdo do setor e tom (`depto-marketing`).
-- **Exige humano:** Jenifer envia e liga; Master apresenta; Luis decide conflito e contato direto.
+- **Exige humano:** Jenifer envia e liga; Master apresenta; Luis decide conflito de canal; a Daniela decide o contato direto caso a caso.
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

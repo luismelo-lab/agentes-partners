@@ -87,7 +87,7 @@ Consulta: 22/10/2026.
 5. **Custo total comparado:** montar tabela com o que o cliente paga hoje (banco, factoring, rotativo) × referência Bacen do mês × proposta (quando houver), incluindo IOF e tarifas. Sem taxa informada (P13), mostrar só a comparação com o mercado.
 6. **Antifraude (checklist):** pagamento pela conta do cedente; praça diferente do sacado; pagamento em dinheiro; NF-e cancelada após emissão; sacado parte relacionada; pico de faturamento antes do pedido de limite. Dois ou mais sinais → parecer "não seguir até esclarecer".
 7. **Limite especial:** só como uso pontual de poucos dias (fala do dono). Se o cliente usa o limite especial de forma permanente, é sinal de falta estrutural de capital de giro: recomendar alongamento ou FIDC (se escala).
-8. **Ficha para o Junior** + 3 blocos para o Luis. Nenhum número de limite ou taxa vai ao cliente antes do comitê.
+8. **Ficha para o Junior** + 3 blocos para o Junior (o Luis vê no resumo semanal; alçada de 23/10/2026). Nenhum número de limite ou taxa vai ao cliente antes do comitê.
 
 ## 6. Perguntas de diagnóstico
 1. Quanto vocês vendem a prazo por mês e com qual prazo médio?

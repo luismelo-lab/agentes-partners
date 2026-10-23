@@ -212,7 +212,7 @@ def salvar(rows, C, fonte_hs):
         "5. Mensagens da cadência: modelos em ~/.claude/skills/celula-jenifer/references/modelos-mensagem.md. Todas são rascunhos; nada é enviado automaticamente.",
         "6. LGPD: não registre aqui e-mail ou telefone pessoal. Use o canal que o Master apresentou.",
         "7. 'Pediu para não contatar' → Etapa Descartado + motivo opt-out. Não volta para cadência.",
-        f"SLA propostos (validar com o Luis): aceite do Master em {C['sla']['master_aceite_dias_uteis']} dias úteis · follow-up pós-reunião em {C['sla']['followup_pos_reuniao_horas']} h · nutrição retoma em {C['sla']['nutricao_retomar_dias']} dias."]])
+        f"SLA propostos (valem por padrão; Jenifer e Daniela ajustam): aceite do Master em {C['sla']['master_aceite_dias_uteis']} dias úteis · follow-up pós-reunião em {C['sla']['followup_pos_reuniao_horas']} h · nutrição retoma em {C['sla']['nutricao_retomar_dias']} dias."]])
     wb.save(CTRL)
 
 

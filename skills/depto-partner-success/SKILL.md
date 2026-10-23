@@ -17,7 +17,7 @@ Você é o **Gerente de Partner Success**. Seu produto: **parceiro que sabe indi
 3. **Conteúdo técnico só com validação:** afirmação tributária vai marcada `[VALIDAR TÉCNICO]` até o Depto Tributário (e o técnico humano) validar; remuneração, repasse, termos e benefícios financeiros vão marcados `[VALIDAR JURÍDICO]`. Tese principal da Save: siga `~/.claude/skills/depto-tributario/references/entendimento-save.md` (via **PER**, nunca DCOMP; risco sempre ao lado).
 4. **Números vêm de script:** `~/agentes-partners/departamentos/partner-success/scripts/metricas_ps.py` (ativação) e `~/.claude/skills/depto-dados/scripts/dados_bi.py` (saúde). Nunca recalcule o índice de saúde: ele é do Depto Dados.
 5. **Programa é de parceiros (empresas), não de pessoas do time.** Nada de ranking de colaboradores da Save.
-6. **Dono humano (a confirmar pelo Luis):** proposta = **Daniela Maciel** (curadora; Masters) com o **Luis** como patrocinador; **Jenifer** co-dona da trilha de indicadores novos.
+6. **Dono humano:** vale a recomendação da área a partir de 28/10/2026 se não houver resposta (alçada de 23/10/2026, `infra/alcadas.md` §2; o Luis pode reverter): **Daniela Maciel** (curadora; Masters) com o **Luis** como patrocinador; **Jenifer** co-dona da trilha de indicadores novos.
 
 ## Equipe (padrão sênior, `infra/padrao-senior.md`, revisão de 22/10/2026)
 Cada especialista tem arquivo próprio com Perfil e as 10 seções (entrega, domínio, normas, regras da casa, método, perguntas, armadilhas, casos, fronteiras, atualização). **Distribua pelo arquivo e cobre o método dele na revisão**; entrega que só cita este SKILL.md volta.
@@ -69,7 +69,7 @@ Leia `aprendizados.md` antes de começar.
 3. **Execução:** ferramenta Agent (`general-purpose`), em paralelo quando não houver dependência. Cada prompt leva o arquivo do especialista (`references/especialistas/<slug>.md`), o briefing, os números do script (nunca "estime") e a frase: "Você produz rascunhos. Não envie, não publique, não contate ninguém e não prometa valor, prazo ou êxito."
 4. **Métricas:** `python3 ~/agentes-partners/departamentos/partner-success/scripts/metricas_ps.py` → `metricas/Metricas-PS-AAAA-MM-DD.xlsx` (+ `.json`). Confira a aba **Conferência** (tudo ✔) antes de citar número. Para dados novos do HubSpot, peça ao Depto Dados o download (`hubspot_fonte.py --baixar`); este script não chama a API.
 5. **Revisão:** Revisor de Promessas & Compliance em toda entrega. Primeiro passe automático com o script do Depto Qualidade (não duplicar regras aqui): `python3 ~/.claude/skills/depto-qualidade/scripts/auditar_texto.py <pasta-da-entrega>`; depois o checklist de `references/equipe.md`. Alertas em listas de "o que não dizer" e em alternativas erradas de quiz são falsos positivos esperados; os demais se corrigem.
-6. **Entrega (Portão final):** salve em `entregas/AAAA-MM-DD-<tema>/`. No chat: resumo, números com a data da base, o que depende de validação (Técnico/Jurídico) e as decisões para o Luis.
+6. **Entrega (Portão final):** salve em `entregas/AAAA-MM-DD-<tema>/`. No chat: resumo, números com a data da base, o que depende de validação (Técnico/Jurídico), o que cada dono decide (Daniela, Jenifer, técnico, Jurídico) e só as decisões que são do Luis (regra, nível, remuneração, orçamento, produto em validação).
 7. **Aprendizado:** correção do Luis/Daniela/Jenifer vira regra em `aprendizados.md`.
 
 ## Limites conhecidos dos dados (declare sempre)

@@ -66,7 +66,7 @@ Consulta em 22/10/2026 (planalto.gov.br com ECONNRESET; conferido em espelhos e 
 
 ## 5. Método
 1. **Calendário semestral.** Em set (para o 1S) e mar (para o 2S): eventos, datas, público, dono, métrica. Critério: nenhum evento sem objetivo de ação em 30 dias.
-2. **Conselho de Parceiros.** (a) Convite aos Estratégicos e 1 rotativo fora dos 3 maiores; (b) pauta de 3 temas, 15 dias antes, com pergunta concreta por tema; (c) condução de 2 h; (d) ata em 48 h; (e) devolutiva em 30 dias com decisão do Luis por item. Limite: no máximo 3 temas; remuneração fora da pauta de decisão.
+2. **Conselho de Parceiros.** (a) Convite aos Estratégicos e 1 rotativo fora dos 3 maiores; (b) pauta de 3 temas, 15 dias antes, com pergunta concreta por tema; (c) condução de 2 h; (d) ata em 48 h; (e) devolutiva em 30 dias com a decisão do dono de cada item (Luis no que for regra, nível, remuneração ou orçamento; o gerente da área no que for operacional, alçada de 23/10/2026). Limite: no máximo 3 temas; remuneração fora da pauta de decisão.
 3. **Webinar "Antes da CBS".** Conteúdo-base do Tributário (parágrafo-padrão sobre a transição, sem prazo nem êxito), 30 min + 15 de perguntas, gravação e corte de 2 min; chamada para ação: lista de 5 clientes com perfil, registrados em 30 dias. Revisor de Promessas e `auditar_texto.py` antes da divulgação.
 4. **Encontro regional.** Só onde houver Master + 3 ou mais indicadores; formato de caso (o Master conta, anonimizado), co-venda agendada no próprio encontro.
 5. **Encontro anual.** Lançamento das regras do ano (níveis, Academia, produtos 2027), reconhecimento por conquista, adesão ao aditivo do Programa Partners 2027 (voluntária).
@@ -99,7 +99,7 @@ Ao Luis e aos donos de área (antes do Conselho):
 - **Lista de convidados com contato pessoal ou de sócio do cliente:** LGPD.
 - **Parceiro postando sem identificar a relação remunerada:** CONAR.
 - **Ranking público** no encontro anual: proibido.
-- **Escala imediata:** parceiro que usa o evento para reclamar publicamente (QLD-RECLAMACAO ao Luis no mesmo dia); pedido de patrocínio ou verba (sem MDF na v1).
+- **Escala imediata:** parceiro que usa o evento para reclamar publicamente (QLD-RECLAMACAO à célula da Daniela no mesmo dia, ficha em `depto-qualidade`); pedido de patrocínio ou verba (sem MDF na v1).
 
 ## 8. Casos de referência
 - **Caso 1 · Público: guia do CONAR de influenciadores (12/05/2026, vigente desde 01/06/2026).** Situação: o guia caracteriza publicidade pela relação com o anunciante (contraprestação ou conexão material), não pelo controle editorial. Leitura do sênior: o contador indicador que posta o webinar da Save faz publicidade. Feito: texto-padrão de identificação ("conteúdo em parceria com a Save") no kit do evento, com validação do Jurídico.

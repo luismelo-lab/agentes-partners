@@ -186,7 +186,7 @@ Links do OneDrive saem de `lib/caminhos.py`: só o link de pasta abre, então to
 ## 9. Responsabilidades das pessoas
 | Pessoa | Responde por |
 |---|---|
-| **Luis** | Decide o que a matriz de alçada reserva a ele (`infra/alcadas.md`); aprova; faz o merge e o push; responde a folha de decisões; aprova chamados no painel uma vez por dia |
+| **Luis** | Decide o que a matriz de alçada reserva a ele (`infra/alcadas.md`); aprova; faz o merge e o push; responde a folha de decisões (só o que é alçada dele, D98); aprova só os chamados que tocam regra, preço, conflito de canal ou produto em validação (os demais, a dona da demanda) |
 | **Daniela** | Masters: demandas, retorno ao parceiro, ganhos a completar no HubSpot, plano de conta |
 | **Jenifer** | Prospecção e listas para os Masters |
 | **Geovana** | Decisões do Recuperador e do Revisor; diagnóstico |

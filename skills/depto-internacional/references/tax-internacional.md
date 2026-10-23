@@ -42,7 +42,7 @@ Assessoria à empresa brasileira (e ao sócio) em tudo o que cruza fronteira: es
 | 4 | Diagnóstico | Dossiê | Mapa, matriz e riscos | Especialista |
 | 5 | Revisão técnica | Diagnóstico | Ajustes | `depto-tributario`, `depto-juridico` |
 | 6 | Validação do dono | Diagnóstico revisado | Aprovação e escopo | Paulo e João |
-| 7 | Proposta | Escopo | Honorário por escrito | Paulo, João, Luis |
+| 7 | Proposta | Escopo | Honorário por escrito | Paulo e João, dentro do cardápio e do preço aprovados; Luis só se o honorário sair do cardápio (alçada de 23/10/2026) |
 | 8 | Execução | Contrato | Estudos, documentação, registros | Paulo e equipe; parecer por advogado ou técnico habilitado |
 | 9 | Recorrência | Calendário | Revisão anual | Paulo e equipe |
 **Cronograma típico** [não confirmado com os donos]: diagnóstico em 2 a 4 semanas da documentação completa; estudo de preço de transferência em 4 a 8 semanas; prazos legais conforme o calendário de obrigações.
@@ -54,7 +54,7 @@ Assessoria à empresa brasileira (e ao sócio) em tudo o que cruza fronteira: es
 | Dono do produto e aprovação comercial | João Mattos |
 | Revisão doméstica (PIS/COFINS, ICMS, reforma, IRPJ) | `depto-tributario` e técnico humano |
 | Societário, contrato, OAB, parecer | `depto-juridico` e advogado |
-| Ponto focal na Partners | Luis (D33) |
+| Encaminhamento na Partners | Contas e Soluções (`depto-solucoes`), com aviso ao Paulo e ao João (alçada de 23/10/2026; o ponto focal do Luis, D33, vale para os produtos em validação) |
 | Abre a porta | Master dono da conta |
 | Registro e conflito de canal | Daniela |
 

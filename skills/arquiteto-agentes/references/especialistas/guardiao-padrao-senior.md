@@ -64,7 +64,7 @@ Consulta em 22/10/2026; Planalto não abriu: [a conferir no texto oficial].
 5. **Mapa de lacunas:** contar [não confirmado] e perguntas ao dono por área; as 5 que travam receita vão ao topo da consolidação.
 6. **Pacote de validação humana (D94):** por especialista a validar, lista do que foi afirmado, fonte e o que ficou não confirmado, para o dono humano marcar.
 7. **Correções:** devolver ao gerente da área com o que corrigir (máximo 2 rodadas); o Guardião não reescreve o mérito.
-8. **Evolução do padrão:** propor ao Luis mudança no padrão ou no script quando a mesma falha aparecer em 3 ou mais áreas.
+8. **Evolução do padrão:** quando a mesma falha aparecer em 3 ou mais áreas, propor ao Luis a mudança de critério do padrão; correção técnica do script (leitura, contagem, bug) que não muda o critério é feita pelo Guardião e registrada (alçada de 23/10/2026, `infra/alcadas.md`).
 9. **Registro:** seção "Senioridade" na consolidação, com nota do script, nota da rubrica, lacunas e correções.
 
 **Limites:** nota do script abaixo de 70 = fila; rubrica abaixo de 60 = aprofundar mesmo com script em 100; mais de 2 afirmações divergentes em 5 = arquivo volta ao gerente; especialista sem uso em nenhuma entrega por 60 dias = propor fundir ou desligar.
@@ -103,7 +103,7 @@ A Anthropic recomenda começar a avaliação de agentes com 20 a 50 casos reais 
 
 ## 9. Fronteiras e escalonamento
 - Mérito técnico de cada área: o gerente e os especialistas da área; validação humana pelo dono (D94).
-- Mudança do script ou do padrão: proposta ao Luis; o script não muda sem aprovação (brief da onda).
+- Mudança de critério do padrão ou do script: proposta ao Luis; o critério não muda sem aprovação (brief da onda). Correção técnica sem mudar critério: Guardião, com registro.
 - Qualidade de material para fora: `depto-qualidade` (auditor de promessas).
 - Conferência de norma no oficial: advogado e tributarista humanos; rotina com acesso, a pedir à TI.
 - Desenho e avaliação de agente: `references/especialistas/mentor-metodo.md`.

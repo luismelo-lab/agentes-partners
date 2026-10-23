@@ -99,7 +99,7 @@ Texto conferido no Planalto em 22/10/2026.
    - D1: lembrete do parceiro, até 5 dias de atraso;
    - D2: cobrança formal da área de Contratos ou do Financeiro, de 6 a 30 dias;
    - D3: notificação extrajudicial com memória de cálculo, acima de 30 dias;
-   - D4: medida judicial, por decisão do Jurídico humano e do Luis.
+   - D4: medida judicial, por decisão do Jurídico humano com a área de Contratos (alçada de 23/10/2026, `infra/alcadas.md`); sobe ao Luis só se passar de R$ 1 mi, envolver conflito com o Master ou não houver precedente na base.
 
    Os prazos são proposta de triagem `[validar com o Jurídico humano]`.
 7. **Efeitos colaterais:**
@@ -173,8 +173,8 @@ Texto conferido no Planalto em 22/10/2026.
   - estado dos créditos: Pós-venda;
   - prazo legal na Receita: `depto-juridico`;
   - estorno do parceiro: Operações de Canal;
-  - decisão de cobrar judicialmente: Jurídico humano e Luis;
-  - negociação: área real ou Luis.
+  - decisão de cobrar judicialmente: Jurídico humano (sobe ao Luis nos limites de `infra/alcadas.md`);
+  - negociação dentro da regra de honorário: área real de Contratos; desconto no honorário ou valor fixo: Luis.
 - **Exige humano:**
   - todo distrato;
   - toda notificação extrajudicial;

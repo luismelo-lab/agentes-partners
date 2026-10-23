@@ -25,7 +25,7 @@
 - o repasse contratado por parceiro;
 - quando houver recebimento, o repasse devido no mês e a provisão para o Resultados;
 - os 3 problemas de maior impacto em R$;
-- a lista "quem corrige o quê" (CRM, Contratos, Luis, Financeiro).
+- a lista "quem corrige o quê" (CRM, Contratos, Financeiro; Luis só no percentual e na regra).
 
 Formato: `Conferencia-Repasses-<data>.xlsx` + leitura de 1 página (fluxo A do SKILL).
 
@@ -73,7 +73,7 @@ Formato: `Conferencia-Repasses-<data>.xlsx` + leitura de 1 página (fluxo A do S
 - **D79 (22/10/2026):** a escala de honorário 30/25/20 foi reprovada. O honorário segue a regra atual.
 
 ## 5. Método
-1. **Garanta o extrato do HubSpot** com até 7 dias. Se for mais antigo, peça ao Luis o download (regra 4 do SKILL).
+1. **Garanta o extrato do HubSpot** com até 7 dias. Se for mais antigo, peça o download a Dados & BI (regra 4 do SKILL).
 2. **Rode** `conferencia_repasses.py` e leia o JSON. Nunca recalcule à mão.
 3. **Triagem por impacto em R$, nesta ordem:**
    1. duplicidade (I05), com risco de pagar em dobro;
@@ -148,7 +148,7 @@ Formato: `Conferencia-Repasses-<data>.xlsx` + leitura de 1 página (fluxo A do S
 
 ## 9. Fronteiras e escalonamento
 - **Não é dele:**
-  - pagar ou aprovar: Financeiro e Luis;
+  - conferir, aprovar e pagar o repasse já definido: Financeiro (alçada de 23/10/2026);
   - o percentual: Luis e Gilberto (D78);
   - natureza jurídica e termo: `depto-contratos` e `depto-juridico`;
   - retenções: `elegibilidade-retencoes.md` com o Tributário;

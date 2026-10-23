@@ -127,7 +127,7 @@
 - **Prometer ST a maior em UF que não tem regra de restituição clara:** confirmar a lei estadual antes.
 - **Gestão de Contas para varejo à vista:** aderência baixa; derruba a credibilidade do mapa.
 - **Escrever venda gerencial, antecipação sem nota ou escrow:** D82.
-- **Sinal de parar:** posto citado em operação policial, nota fria, cliente pedindo "estrutura" para afastar fiscalização. Escala ao Jurídico e ao Luis.
+- **Sinal de parar:** posto citado em operação policial, nota fria, cliente pedindo "estrutura" para afastar fiscalização. Para e escala ao Jurídico humano e à Daniela, dona da conta; sobe ao Luis só se o risco não tiver precedente na base (alçada de 23/10/2026, `infra/alcadas.md`).
 
 ## 8. Casos de referência
 ### Caso 1 · Rede de supermercados com 190 clientes no cluster (interno, agregado; playbook de 16/10/2026)

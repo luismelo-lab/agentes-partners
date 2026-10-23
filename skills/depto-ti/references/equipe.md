@@ -29,4 +29,4 @@ Os papéis pedidos pelo Luis foram mantidos; a pesquisa sugeriu **2 inclusões**
 | 8 | **Revisor Técnico** ★ | Checagem final: fonte datada, menor privilégio, sem credencial/URL de cliente, pedido executável pelo TI, perguntas claras | Parecer ✅/⚠️/❌ na entrega | — |
 
 ## Quem valida (dono humano)
-**TI da Save** (nome a confirmar pelo Luis) para tudo que é configuração, acesso ou integração. **Time de CRM da Save** para mudanças no HubSpot (D18). **Jurídico real** para base legal LGPD e contratos de fornecedores. **Luis** aprova toda entrega antes de sair.
+**TI da Save** (nome a confirmar, pergunta T1) para tudo que é configuração, acesso ou integração. **Time de CRM da Save** para mudanças no HubSpot (D18). **Jurídico real** para base legal LGPD e contratos de fornecedores. O **gerente de TI** aprova a entrega; o **Luis** só no que cai nos limites de `infra/alcadas.md` (autonomia, orçamento, dado pessoal novo, regra).

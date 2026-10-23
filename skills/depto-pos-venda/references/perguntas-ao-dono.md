@@ -17,10 +17,10 @@ O que só um humano responde. Cada pergunta tem por que importa e o especialista
 ## À área de Contratos e ao Jurídico (honorário)
 9. **O honorário de êxito incide sobre o valor compensado de ofício?** E sobre a Selic recebida? Existe cláusula padrão? Importa porque é a dúvida que mais gera chamado ("faturamento sobre a compensação de ofício") e muda o aviso M1.
 
-## Ao Luis e à Daniela
-10. **Dono da rotina de recorrência:** a lista mensal vai para a Daniela levar aos Masters, ou para a Geovana junto com o lote do Recuperador (D27)?
-11. **Recorrência tem novo contrato ou aditivo?** Muda se a recorrência é execução (Pós-venda) ou venda nova (Master).
-12. **Fonte oficial do realizado:** o extrato do Pós-venda passa a ser a fonte da coluna "realizado" da D17, e o campo `recebido` volta ao HubSpot? Quem preenche?
+## À Daniela, à Geovana, ao time de CRM e ao Luis (dono revisto pela alçada de 23/10/2026, `infra/alcadas.md`)
+10. **Dono da rotina de recorrência (decidem a Daniela e a Geovana):** a lista mensal vai para a Daniela levar aos Masters, ou para a Geovana junto com o lote do Recuperador (D27)? Vale a recomendação em 28/10/2026 se não houver resposta.
+11. **Recorrência tem novo contrato ou aditivo? (Luis, porque muda a remuneração do parceiro; redação com a área de Contratos)** Muda se a recorrência é execução (Pós-venda) ou venda nova (Master).
+12. **Fonte oficial do realizado (time de CRM com o Dados & BI):** o extrato do Pós-venda passa a ser a fonte da coluna "realizado" da D17, e o campo `recebido` volta ao HubSpot? Quem preenche?
 
 ## Respondida pelo Luis em 22/10/2026 (D95)
 - **Pergunta 9:** sim. O honorário de êxito incide sobre o valor compensado de ofício, com a Selic. Explique isso ao parceiro e ao cliente antes do faturamento, para evitar chamado. A cláusula padrão do contrato fica com o depto-contratos.

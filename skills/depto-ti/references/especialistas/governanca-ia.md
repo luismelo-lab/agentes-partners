@@ -117,7 +117,7 @@ Revisão: 23/10/2026 (fontes consultadas em 22/10/2026) · Área: `depto-ti` · 
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** o padrão sênior e a auditoria de senioridade (`arquiteto-agentes`); casos de avaliação (evals) e ROI dos agentes (`arquiteto-agentes`, Mentor do Método); qualidade das entregas por amostragem (`depto-qualidade`, Controlador de Qualidade); base legal (Jurídico).
 - **Passa para:** Gestão de Incidentes (incidente de IA), Identidade e Segurança (credenciais e acesso dos agentes), Operação e Custos (onde roda).
-- **Exige humano:** aprovação de agente novo e de mudança de autonomia (Luis, por escrito); aprovação da política de uso de IA (Luis, Jurídico, TI).
+- **Exige humano:** agente novo em N1 (só rascunho, sem fonte nova de dado pessoal): gerente de TI com o Arquiteto de Agentes, registrado no inventário e no resumo semanal; mudança de autonomia, envio externo ou fonte nova de dado pessoal: Luis, por escrito (alçada de 23/10/2026); aprovação da política de uso de IA (Luis, Jurídico, TI).
 
 ## 10. Atualização
 - **Última revisão:** 23/10/2026 (fontes de 22/10/2026).

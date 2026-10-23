@@ -50,7 +50,7 @@
 | **Concentração** | % do honorário nos top 3 e top 5 parceiros e clientes | Dependência (alerta: > 50% no top 5) | Mensal |
 | **Parceiros ativos** | Parceiros com ≥ 1 negócio criado em 90 dias ÷ total da carteira | Saúde do canal | Mensal |
 | **Receita por parceiro ativo** | Σ saldoSave ÷ parceiros ativos | Produtividade do canal | Mensal |
-| **Margem por colaborador** | Σ saldoSave ÷ FTE da área | Escalabilidade | Mensal |
+| ~~Margem por colaborador~~ (fora: D21 proíbe R$ por pessoa; retirada pelo Controller em 23/10/2026) | não publicar | n/a | n/a |
 | **Margem de contribuição** | Receita − impostos − repasse − custos variáveis (horas do Técnico por caso) | Quanto cada negócio contribui | Mensal |
 | **EBITDA da área** | Margem de contribuição − custos fixos − rateio acordado | A área se paga? | Mensal |
 | **Custo por oportunidade** | Custos da área ÷ oportunidades criadas | Eficiência comercial | Mensal |

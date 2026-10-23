@@ -17,7 +17,7 @@ from _comum import (LINK, OUT, PCT, RS, canal, carregar, cnpj_limpo, cnpj_valido
 # código: (severidade, bloqueia o cálculo do repasse?, descrição, ação sugerida, dono)
 REGRAS = {
     "C01": ("Alto", True, "% de honorário vazio: honorário e repasse não calculáveis", "Preencher honorarios_contratuais conforme contrato", "CRM / Contratos"),
-    "C02": ("Alto", True, "% do parceiro vazio em negócio com parceiro: repasse não calculável", "Preencher honorarios_parceiro conforme termo de parceria", "CRM / Luis"),
+    "C02": ("Alto", True, "% do parceiro vazio em negócio com parceiro: repasse não calculável", "Preencher honorarios_parceiro conforme termo de parceria", "CRM (Luis só se o % não estiver definido)"),
     "C03": ("Médio", False, "% do parceiro vazio em negócio sem parceiro identificado", "Confirmar que não há repasse (venda direta)", "CRM"),
     "C04": ("Médio", False, "CNPJ vazio ou inválido (dígito verificador)", "Corrigir o CNPJ: sem ele não há registro nem checagem de conflito", "CRM"),
     "C05": ("Médio", False, "Ganho sem data de fechamento", "Preencher closedate", "CRM"),
@@ -30,11 +30,11 @@ REGRAS = {
     "O07": ("Crítico", True, "Outra comissão (vendedor/gestor/indicador/coordenador) acima de 100%", "Corrigir o campo (provável digitação: 125 em vez de 12,5 ou 1,25)", "CRM"),
     "O08": ("Alto", True, "% do parceiro exatamente 1 (ambíguo: 1% ou 100%?)", "Confirmar e regravar em formato único", "CRM"),
     "I01": ("Alto", False, "Soma das comissões (parceiro + vendedor + gestor + indicador + coordenador) acima de 100% do honorário", "Confirmar a base de cada comissão", "Luis / Financeiro"),
-    "I02": ("Médio", False, "Parceiro Master com % do parceiro = 0", "Confirmar se o negócio não gera repasse", "Luis"),
+    "I02": ("Médio", False, "Parceiro Master com % do parceiro = 0", "Confirmar se o negócio não gera repasse", "Daniela"),
     "I03": ("Alto", True, "% do parceiro > 0 sem parceiro identificado: a quem pagar?", "Preencher nome_do_parceiro", "CRM"),
     "I04": ("Médio", False, "Nome do parceiro com valor numérico (campo trocado?)", "Corrigir nome_do_parceiro", "CRM"),
     "I05": ("Alto", False, "Possível duplicidade: mesmo CNPJ e mesmo valor em mais de um ganho", "Confirmar se é o mesmo crédito (risco de repasse em dobro)", "CRM / Financeiro"),
-    "I06": ("Médio", False, "% indicador e % parceiro preenchidos ao mesmo tempo", "Confirmar se indicador = parceiro (risco de pagar duas vezes)", "Luis"),
+    "I06": ("Médio", False, "% indicador e % parceiro preenchidos ao mesmo tempo", "Confirmar se indicador = parceiro (risco de pagar duas vezes)", "Financeiro / CRM"),
 }
 ORD = {"Crítico": 0, "Alto": 1, "Médio": 2}
 
@@ -148,7 +148,7 @@ def main():
         ["Base das outras comissões", "honorarios_vendedor / gestor_comercial / indicador / coordenador: a base (% do honorário? do crédito?) e se descontam do parceiro NÃO estão confirmadas. A soma I01 assume a mesma base do % do parceiro."],
         ["Escala dos percentuais", "O download converte valores > 1 dividindo por 100 (30 → 30%). Por isso '1' é ambíguo (O08) e '125' vira 125% (O03/O07)."],
         ["Limites de triagem", f"honorário > {L['honorario_pct_max']:.0%} · parceiro > {L['parceiro_pct_teto_usual']:.0%} · crédito > R$ {L['valor_credito_alto_rs']:,.0f} (config {cfg.get('versao')}). São alertas, não regra de pagamento."],
-        ["Governança", "N1: rascunho para o Luis, o CRM e o Financeiro. Nada foi pago, enviado ou alterado no HubSpot. Correções são feitas pelo time de CRM (D18)."],
+        ["Governança", "N1: rascunho para o Financeiro e o CRM; percentual e regra com o Luis. Nada foi pago, enviado ou alterado no HubSpot. Correções são feitas pelo time de CRM (D18)."],
     ]
     resumo = [["Negócios ganhos", R["ganhos"]], ["Com algum problema", R["com_algum_problema"]],
               ["  Bloqueados", st["Bloqueado"]], ["  Revisar", st["Revisar"]], ["  OK (aguarda pagamento)", st["OK (aguarda dado de pagamento)"]],

@@ -1,6 +1,6 @@
 # Calendário mensal proposto — Pós-venda (v1, 29/09/2026)
 
-> **Proposta** para validar com a área real (datas, donos, sistemas). **Não há tarefa agendada**: cada etapa roda quando alguém pede, até o Luis aprovar um agendamento.
+> **Proposta** para validar com a área real (datas, donos, sistemas). **Não há tarefa agendada**: cada etapa roda quando alguém pede, até o gerente de Pós-venda e a área real aprovarem um agendamento (vale a recomendação em 3 dias úteis se não houver resposta; o Luis pode reverter; alçada de 23/10/2026, `infra/alcadas.md`).
 > "DU" = dia útil do mês. Prazos legais (compensação de ofício) **não esperam o calendário**: são tratados no dia em que a comunicação chega (Modo B).
 
 | Quando | Etapa | Especialista | Entrada (de quem/qual sistema) | Saída (rascunho) | Aprova |
@@ -12,7 +12,7 @@
 | **DU 5** | Controle de guias: conciliar guias do mês (vencimento × origem × situação) | Controle de Guias | Lista de guias da área (DARF/DCTFWeb do cliente, fornecida pelo parceiro contador) | Conciliação + pendências (guia sem origem, vencida, divergente) | Área real |
 | **DU 8** | Honorários: faturado × recebido × em atraso | Extrato & Saldo | Financeiro/ERP (títulos, pagamentos) | Lista de atrasos + rascunho de lembrete M6 (tom cordial) | Área / Financeiro |
 | **DU 10** | Status mensal ao parceiro Master (por carteira) | Comunicação Pós-venda | Extratos aprovados | Rascunho M5 (resumo por Master) | Daniela |
-| **DU 12** | Informar receita recebida ao `depto-operacoes-canal` (repasse) e ao `depto-resultados` | Gerente | Extrato aprovado | Arquivo de recebidos do mês | Luis |
+| **DU 12** | Informar receita recebida ao `depto-operacoes-canal` (repasse) e ao `depto-resultados` | Gerente | Extrato aprovado | Arquivo de recebidos do mês | Financeiro (confere; o percentual de repasse já está definido) |
 | **Último DU** | Aprendizados do mês + perguntas pendentes às áreas | Gerente | — | `aprendizados.md`, `perguntas-areas.md` | — |
 
 ## Sobre "guias a compensar" (a confirmar com a área)

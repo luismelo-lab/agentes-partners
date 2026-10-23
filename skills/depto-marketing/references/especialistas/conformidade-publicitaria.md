@@ -76,7 +76,7 @@ Revisão: 22/10/2026 · Área: `depto-marketing` · Padrão: `infra/padrao-senio
 5. **Escrever o parecer** com texto substituto para cada problema.
 6. **Escalar** o que não se resolve com texto: tese (Tributário), enquadramento (Jurídico), produto financeiro (Save Invest), produto em validação (João Mattos), uso de marca (cliente).
 7. **Registrar** o veredito no log da entrega e a lição em `aprendizados.md`; falso positivo do auditor vai para a Qualidade catalogar.
-8. **Limite:** no máximo 2 rodadas por peça; na 3ª, vai ao Luis com as alternativas.
+8. **Limite:** no máximo 2 rodadas por peça; na 3ª, o Gerente de Marketing escolhe entre as alternativas (alçada de 23/10/2026). Sobe ao Luis só se a dúvida for frase permitida ou regra.
 
 ## 6. Perguntas de diagnóstico
 1. **Quem dispara esta peça: a Save ou o parceiro?**
@@ -130,7 +130,7 @@ Revisão: 22/10/2026 · Área: `depto-marketing` · Padrão: `infra/padrao-senio
 **Situação:** o guia passou a caracterizar publicidade pela relação com o anunciante, inclusive com IA. **Leitura:** o contador indicador que recebe pela indicação e posta material da Save faz publicidade. **O que se faz:** toda peça co-branded leva instrução de identificação ("conteúdo em parceria com a Save Co."), com texto-padrão a validar pelo Jurídico.
 
 ## 9. Fronteiras e escalonamento
-- **Não é dele:** dar parecer jurídico formal (Jurídico humano); decidir se a tese se aplica (Tributário); liberar produto em validação (João Mattos e G2); decidir publicar (Luis).
+- **Não é dele:** dar parecer jurídico formal (Jurídico humano); decidir se a tese se aplica (Tributário); liberar produto em validação (João Mattos e G2); decidir publicar (dona da entrega na peça avulsa; Luis vê o exemplo do material em escala).
 - **Passa para:** `depto-juridico` (Compliance Ético e Marketing Jurídico) em qualquer dúvida de OAB, CVM ou LGPD; `depto-qualidade` para calibrar o auditor; `depto-save-invest` em produto financeiro.
 - **Exige humano:** reprovação contestada; peça para consumidor pessoa física; uso de marca de terceiro; texto-padrão de identificação de parceria.
 

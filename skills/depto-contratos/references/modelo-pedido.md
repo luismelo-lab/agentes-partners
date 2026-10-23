@@ -1,6 +1,6 @@
 # Modelos de pedido (v1) — Depto Contratos virtual
 
-> Rascunhos. A Daniela (ou o Luis) revisa, aprova e envia pelo canal da área (hoje WhatsApp/e-mail; futuramente GLPI, categoria "Contratos").
+> Rascunhos. A Daniela revisa, aprova e envia (alçada de 23/10/2026, `infra/alcadas.md`; o Luis só entra se o pedido mexer em honorário, repasse ou regra) pelo canal da área (hoje WhatsApp/e-mail; futuramente GLPI, categoria "Contratos").
 > Nunca incluir CPF, e-mail ou telefone de signatário no corpo do WhatsApp: vão no anexo/ficha.
 
 ## Bloco 1 — Pedido de contrato novo / aditivo à área de Contratos
@@ -14,7 +14,7 @@ Honorário: <x%> · Repasse parceiro: <y%> (conforme HubSpot em <data>)
 Modelo: <arquivo/versão>   ·   Pontos para o Jurídico: <n> (lista anexa)
 Checklist: A ✅ · B <✅/⚠️> · C ✅ · D <✅/—>
 Pendências antes do envio: <nenhuma | lista>
-Preparado por: Depto Contratos virtual em <data> · Aprovado por: <Daniela/Luis>
+Preparado por: Depto Contratos virtual em <data> · Aprovado por: <Daniela>
 ```
 
 ## Bloco 2 — Pedido de distrato
@@ -28,7 +28,7 @@ Honorário: devido sobre <…> conforme cláusula <n> — [VALIDAR JURÍDICO]
 Aviso prévio / data de efeito: <data> (cálculo 1: … · cálculo 2: … · cláusula <n>)
 Impacto no parceiro: repasse pendente <…>
 Pontos para o Jurídico: <lista>
-Aprovado por: <Daniela/Luis>
+Aprovado por: <Daniela>
 ```
 
 ## Bloco 3 — Cobrança interna de assinatura parada (à área de Contratos)

@@ -62,7 +62,7 @@
 | CTN | art. 116, parágrafo único; art. 168 | Propósito negocial; restituição em 5 anos | Vigente |
 
 ## 4. Regras da casa
-- **Construção sem playbook nem ICP:** lacuna registrada em `solucoes-jornada.md` (seção 4.2, 22/10/2026); a trilha da construtora é `[HIPÓTESE]` e exige `[VALIDAR TRIBUTÁRIO]`. Pergunta 9 da seção 7.1 ao Luis: abrir playbook e ICP de construtora.
+- **Construção sem playbook nem ICP:** lacuna registrada em `solucoes-jornada.md` (seção 4.2, 22/10/2026); a trilha da construtora é `[HIPÓTESE]` e exige `[VALIDAR TRIBUTÁRIO]`. Abrir playbook e ICP de construtora é decisão do gerente da área com Intel Comercial e Tributário (pergunta S9, alçada de 23/10/2026).
 - **Revisão tributária de 22/10/2026:** na construção, T12 (folha), T02 se Real e T17 se há ACT; T07 e T05 só com parecer; T01 e T04 fora. Em serviços, T07 (R) e T05 (R) no Presumido; T16 fora.
 - **D80 (22/10/2026):** T13 e T16 fora da vitrine. **D79 (22/10/2026):** escala de honorário 30/25/20 reprovada; vale a regra atual.
 - **D92 (22/10/2026):** Gestão de Contas e antecipação (recebíveis de serviços B2B, carteira de clientes da construtora) são da `depto-save-invest` (Junior).

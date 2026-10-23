@@ -1,12 +1,12 @@
 # Perguntas ao dono · Pessoas
 
-O que só o Luis, o RH formal ou o Jurídico trabalhista respondem. Aberta em 22/10/2026 (aprofundamento sênior, D93). Quando a resposta vier, registrar data e quem respondeu, levar a regra para o arquivo do especialista e riscar a linha. Este arquivo não traz dado pessoal de ninguém.
+O que o Luis (remuneração, metas e desempenho do time, como gestor), o RH formal, o CRM ou o Jurídico trabalhista respondem. Reclassificado em 23/10/2026 (`infra/alcadas.md`): pergunta de fato sai do Luis e vai a quem tem o dado. Aberta em 22/10/2026 (aprofundamento sênior, D93). Quando a resposta vier, registrar data e quem respondeu, levar a regra para o arquivo do especialista e riscar a linha. Este arquivo não traz dado pessoal de ninguém.
 
 | # | Data | Para quem | Pergunta | Por que importa | Especialista |
 |---|---|---|---|---|---|
-| P1 | 22/10/2026 | Luis / RH formal | O time da Área Partners é contratado pela CLT, como PJ ou misto? | Muda todo o regime de variável, metas e jornada; PJ com subordinação é risco de vínculo | Remuneração, Guardião |
+| P1 | 22/10/2026 | RH formal | O time da Área Partners é contratado pela CLT, como PJ ou misto? | Muda todo o regime de variável, metas e jornada; PJ com subordinação é risco de vínculo | Remuneração, Guardião |
 | P2 | 22/10/2026 | RH formal | Existe hoje comissão, bônus ou PLR para o time? Por qual instrumento (contrato, regulamento, acordo coletivo) e desde quando? | Condição vigente só muda com acordo e sem prejuízo (CLT, art. 468) | Remuneração |
-| P3 | 22/10/2026 | Luis / CRM da Save | Os campos `honorarios_vendedor`, `honorarios_gestor` e `honorarios_indicador` do HubSpot pagam alguém hoje? Sobre que base (ganho ou recebido)? | Pagar sobre ganho cria estorno que a lei restringe (Lei 3.207/1957, art. 7º) | Remuneração |
+| P3 | 22/10/2026 | CRM da Save / Financeiro | Os campos `honorarios_vendedor`, `honorarios_gestor` e `honorarios_indicador` do HubSpot pagam alguém hoje? Sobre que base (ganho ou recebido)? | Pagar sobre ganho cria estorno que a lei restringe (Lei 3.207/1957, art. 7º) | Remuneração |
 | P4 | 22/10/2026 | RH formal | Quantos empregados a Save tem? Há CIPA e canal de denúncia formal? | Gatilhos de 100 empregados (Lei 14.611/2023, art. 5º; Lei 8.213/1991, art. 93) e Lei 14.457/2022, art. 23 | Guardião, Clima |
 | P5 | 22/10/2026 | RH formal | Qual o sindicato e a convenção coletiva da categoria do time? | Convenção define pisos, regras de comissão e o caminho da PLR | Remuneração, Recrutamento |
 | P6 | 22/10/2026 | RH formal | Existe plano de cargos e salários oficial (norma interna) e ciclo corporativo de avaliação, com datas? | Afasta a equiparação (CLT, art. 461, § 2º) e define o calendário de metas | Metas, Recrutamento |

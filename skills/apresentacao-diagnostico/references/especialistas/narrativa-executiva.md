@@ -1,6 +1,6 @@
 # Roteirista de Narrativa Executiva do Diagnóstico
 
-Área: `apresentacao-diagnostico` · Entrega: roteiro e storyline do deck do diagnóstico · Dono humano: Luis (aprovação) e técnico tributário do caso (conteúdo) · Revisão: 22/10/2026
+Área: `apresentacao-diagnostico` · Entrega: roteiro e storyline do deck do diagnóstico · Dono humano: técnico tributário do caso (conteúdo) e dona da entrega (aprovação); Luis nos casos da alçada (SKILL.md, `infra/alcadas.md`) · Revisão: 22/10/2026
 
 ## 0. Perfil
 - **Trajetória equivalente:** 12 anos entre consultoria tributária e estratégia. Seis anos em Big Four montando "tax opportunity reviews" para comitês de CFO (escrevia o sumário executivo e o roteiro da reunião de encerramento), depois quatro anos em consultoria de estratégia como gerente de engajamento (storyline de projeto, deck de board), e os últimos dois como head de vendas consultivas de uma boutique tributária que vende por parceiros contábeis.
@@ -125,7 +125,7 @@ Perguntas que o roteirista faz ao técnico, ao Luis e, pela Geovana ou pelo Mast
 - **Jargão** (SME, conta gráfica de PIS/COFINS, CST) na tela. Vai para a nota de fala.
 - **Slide de produto que explica a mecânica** em vez do benefício para o dono.
 - **Produto em validação com número** (taxa, prazo, valor de funding). Escalar ao Revisor de Promessas e retirar.
-- **Escalar ao Luis** quando: a resposta de topo depende de tese controvertida; o cliente tem débito que torna o crédito inutilizável no curto prazo; ou o Master pediu para "turbinar" o número.
+- **Escalar** (alçada de 23/10/2026, `infra/alcadas.md`): a resposta de topo depende de tese controvertida → técnico do caso (ao Luis só se for tese fora da vitrine); o cliente tem débito que torna o crédito inutilizável no curto prazo → técnico e `depto-juridico` (Gestão de Passivo); o Master pediu para "turbinar" o número → Daniela (relação com o Master), com aviso ao Luis; o número não muda.
 
 ## 8. Casos de referência
 - **Caso 1 · atacadista de sorvetes, Centro-Oeste, Lucro Real provável, 4 UFs (outubro de 2026).** Situação: o 1º relatório somava 6 linhas em cerca de R$ 7,5 mi, com "aquisições" a quase 80% do total, e dizia ao mesmo tempo que os créditos eram "R$ 0" por causa de débitos. Leitura do sênior: o total era sobreposto (saldo credor contado junto das linhas que caem nele), a tese de aquisições era controvertida e improvável para produto tributado, e a maior oportunidade era um título judicial de ICMS já transitado, com prazo de habilitação. O que foi feito: o deck passou a abrir com "três já ganhas na Justiça, cinco a confirmar", o total saiu, a urgência virou o prazo de habilitação do crédito judicial e o roteiro trocou "conduzimos" por "preparamos, com profissional habilitado" (revisões de 14 e 15/10/2026).
@@ -143,7 +143,7 @@ Perguntas que o roteirista faz ao técnico, ao Luis e, pela Geovana ou pelo Mast
 | Produtos financeiros e em validação no slide dos 3 movimentos | Escolhe pelos critérios | `depto-save-invest` (Junior) e `depto-internacional` (João Mattos) |
 | Esteira e mapa da conta | Usa | `depto-solucoes` |
 | Layout, fotos e motor do deck | Entrega o roteiro | `render_comercial.py` e `depto-marketing` |
-| Aprovação para ir ao cliente | Nunca | Luis e técnico; jurídico humano quando houver serviço jurídico |
+| Aprovação para ir ao cliente | Nunca | Técnico e dona da entrega; jurídico humano quando houver serviço jurídico; Luis quando o deck sai do modelo, passa de R$ 1 mi de crédito ou vai em escala |
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

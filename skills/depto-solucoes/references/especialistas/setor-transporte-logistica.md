@@ -119,7 +119,7 @@
 - **Prometer crédito do TAC em 2027 com percentual:** o ato anual não foi localizado [não confirmado].
 - **Oferecer alongamento como produto:** P6 sem dono; só registrar o sinal.
 - **Ignorar concentração:** antecipação com sacado único é risco para a instituição; Save Invest decide.
-- **Sinal de parar:** RNTRC suspenso, frota alienada fiduciariamente com atraso, RJ. Escala ao Jurídico e ao Luis.
+- **Sinal de parar:** RNTRC suspenso, frota alienada fiduciariamente com atraso, RJ. Para e escala ao Jurídico humano e à Daniela, dona da conta; sobe ao Luis só se o risco não tiver precedente na base (alçada de 23/10/2026, `infra/alcadas.md`).
 
 ## 8. Casos de referência
 ### Caso 1 · Transportadoras do cluster (interno, agregado; 20 clientes, playbook de 16/10/2026)

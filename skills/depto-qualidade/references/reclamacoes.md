@@ -47,11 +47,11 @@ Regra: C8 raramente é a causa-raiz inteira. "O PER demorou" (C8) + "ninguém av
 ## 3. Severidade
 | Nível | Critério | Primeira resposta | Plano / solução |
 |---|---|---|---|
-| **S1 Crítica** | Risco jurídico, LGPD, ameaça de saída de Master, impacto > R$ 100 mil, exposição pública | **mesmo dia** (Luis + Jurídico se for o caso) | plano em 2 d.u. |
+| **S1 Crítica** | Risco jurídico, LGPD, ameaça de saída de Master, impacto > R$ 100 mil, exposição pública | **mesmo dia** (dona do caso, Daniela nos Masters, com aviso ao Luis; Luis + Jurídico se for risco jurídico ou LGPD sem precedente, exposição pública, compensação ou repasse) | plano em 2 d.u. |
 | **S2 Alta** | Master ou cliente com dinheiro atrasado/errado; 3ª cobrança | 1 d.u. | 5 d.u. |
 | **S3 Média** | Insatisfação com prazo/comunicação sem perda financeira | 1 d.u. | 10 d.u. |
 | **S4 Baixa** | Incômodo pontual, sugestão | 2 d.u. | 15 d.u. |
-Os valores de R$ e os prazos são proposta; validar com o Luis (perguntas-luis.md).
+Os valores de R$ e os prazos são proposta (pergunta Q4); vale a recomendação em 28/10/2026 se não houver resposta (`infra/alcadas.md` §2), e o Luis pode reverter.
 
 ## 4. Ficha da reclamação (uma por caso)
 Salvar em `~/agentes-partners/departamentos/qualidade/reclamacoes/AAAA-MM-DD-<id>.md`:
@@ -73,7 +73,7 @@ Encerramento: data · reclamante confirmou? · CSAT do tratamento
 1. Quem colar a conversa (Luis/Daniela) confirma que ela veio de um canal de trabalho.
 2. O agente **pseudonimiza antes de analisar**: nomes → [PESSOA-1], telefones/e-mails → removidos, CNPJ → [CNPJ] (fica só o ID do negócio no HubSpot, se houver).
 3. Extrai **só os trechos de insatisfação** e preenche a ficha. **A conversa bruta não é salva** na pasta de Qualidade.
-4. Classifica nos três eixos, sugere severidade e dono e rascunha a **resposta de acolhimento** (sem prometer prazo que a área não confirmou). Ninguém envia nada: o rascunho vai para a Daniela/Luis.
+4. Classifica nos três eixos, sugere severidade e dono e rascunha a **resposta de acolhimento** (sem prometer prazo que a área não confirmou). Ninguém envia nada: o rascunho vai para a dona do caso (Daniela, nos Masters), que aprova e envia; ao Luis só o que for alçada dele (`infra/alcadas.md` §1).
 5. Registra uma linha em `reclamacoes/registro.csv` (colunas iguais aos campos que se propõe criar no GLPI).
 
 ## 6. Quando o GLPI entrar (proposta ao depto-ti, não decidido)
@@ -81,5 +81,5 @@ Categoria **Qualidade** com subcategorias = Eixo A (`QLD-A1` … `QLD-A11`); cam
 
 ## 7. Análise mensal (Pareto)
 - Volume por tema, etapa e causa; % controlável; tempo médio de 1ª resposta e de solução vs. prazo; reincidência (mesmo reclamante ou mesma causa em 90 dias); CSAT do tratamento.
-- **Pareto:** as 2–3 causas que explicam ~80% dos casos viram proposta de ação preventiva com dono (vai ao Luis; se cruza áreas, ao Gabinete).
+- **Pareto:** as 2–3 causas que explicam ~80% dos casos viram proposta de ação preventiva com dono (vai ao gerente da área dona da causa; se cruza 3 ou mais áreas em conflito ou muda regra, ao Gabinete e ao Luis; o resumo vai ao Luis).
 - Com poucos casos (< 20/mês), mostre a lista e os padrões; não calcule percentuais que enganam.

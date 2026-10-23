@@ -1,4 +1,4 @@
-# Cadência sugerida — PROPOSTA a validar (Luis + Jenifer + Masters)
+# Cadência sugerida — vale por padrão desde 28/10/2026 se não houver resposta (Jenifer e Daniela com os Masters; `infra/alcadas.md` §2)
 
 > v1, 29/09/2026. A cadência vive em `~/agentes-partners/celulas/jenifer/config-jenifer.json` (chave `cadencia`); o `followup.py` calcula a próxima ação a partir dela. Mudou aqui → mude lá.
 
@@ -22,7 +22,7 @@ Boas práticas de SDR/BDR em B2B (pesquisa 29/09/2026): 8 a 12 toques em 2 a 4 s
 **Regras da cadência**
 - Respondeu → sai da cadência (Etapa "Respondeu" ou "Reunião agendada").
 - "Não me contate" → Descartado com motivo *opt-out*. Não volta.
-- Sem apresentação do Master em 3 dias úteis (SLA) → a Jenifer pergunta ao Master; sem resposta em mais 3, o Luis decide se libera contato direto.
+- Sem apresentação do Master em 3 dias úteis (SLA) → a Jenifer pergunta ao Master; sem resposta em mais 3, a Daniela decide com o Master, caso a caso, se libera contato direto (alçada de 23/10/2026; a regra geral segue com o Luis, pergunta 6).
 - No máximo 1 toque por dia na mesma empresa. Nada em fim de semana ou feriado.
 
 ## Variações

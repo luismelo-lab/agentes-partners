@@ -43,7 +43,7 @@ O registro traz a contestação, o dono, o prazo, a resposta e a causa-raiz.
 |---|---|---|
 | último dia de M | corte dos recebimentos | Financeiro |
 | até o 5º dia útil de M+1 | cálculo por script + segunda pessoa | Operações de Canal + Revisor |
-| até o 7º dia útil | aprovação | Luis |
+| até o 7º dia útil | aprovação | Financeiro |
 | até o 8º dia útil | extrato ao parceiro | Daniela |
 | 10 dias corridos | janela de contestação | parceiro |
 | até o dia 20 de M+1 | pagamento contra NF | Financeiro |
@@ -90,14 +90,14 @@ Cada uma fica numa seção própria, porque a base é diferente (honorário × l
    - retenções (de `elegibilidade-retencoes.md`, validadas).
 4. **Concilie:** a soma do detalhe é igual ao resumo; o acumulado anterior mais o mês é igual ao acumulado novo. Diferença acima de R$ 0,01 bloqueia.
 5. **Revisor de Controle** confere cada número contra o JSON.
-6. **Aprovação do Luis**, depois o envio pela Daniela, com prazo de contestação (envio + 10 dias corridos).
+6. **Aprovação do Financeiro** (repasse já definido; alçada de 23/10/2026, `infra/alcadas.md`), depois o envio pela Daniela, com prazo de contestação (envio + 10 dias corridos).
 7. **Contestação:**
    - registro no mesmo dia (parceiro, cliente, valor, motivo alegado);
    - dono por tipo (cálculo: Comissionamento; percentual: Luis; retenção: Tributário; conflito: Registro);
    - resposta em até 5 dias úteis;
    - causa-raiz codificada (cadastro, percentual, duplicidade, recebimento, retenção, conflito);
    - correção na fonte.
-8. **Fechamento do mês:** um indicador por parceiro, com as contestações e o percentual procedente. Mais de 10% de valor contestado procedente num mês vai para a pauta do Luis. É limite de triagem.
+8. **Fechamento do mês:** um indicador por parceiro, com as contestações e o percentual procedente. Mais de 10% de valor contestado procedente num mês vai ao Financeiro e ao Gerente de Operações de Canal para causa-raiz. Sobe ao Luis só se a causa for percentual ou regra. É limite de triagem.
 
 ## 6. Perguntas de diagnóstico
 1. O parceiro quer ver o extrato por cliente ou só o total?
@@ -159,7 +159,7 @@ Cada uma fica numa seção própria, porque a base é diferente (honorário × l
   - relatório de carteira para gestão do Master: `depto-partner-success` e `celula-daniela`;
   - extrato de crédito do **cliente**: `depto-pos-venda`.
 - **Exige humano:**
-  - aprovação de cada extrato (Luis);
+  - aprovação de cada extrato (Financeiro);
   - toda contestação procedente acima de R$ 5 mil (limite de triagem);
   - qualquer estorno.
 

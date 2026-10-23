@@ -89,7 +89,7 @@
 4. **Decidir:** SQL (R + D + A, sem veto) → Master e Técnico com a ficha; faltou só A → Nutrição curta com data do documento (até 15 dias); faltou D → reunião com o decisor em 10 dias úteis; veto → Descartado com motivo.
 5. **Produto de entrada:** se a conversa revelou outra dor (caixa, certidão, sucessão), registrar o produto de entrada e o segundo passo, sem oferecer; encaminhar à área dona.
 6. **Prioridade:** C, H e U somam prioridade; empate por honorário esperado do segmento (ICP).
-7. **SLA:** Master aceita em 3 dias úteis; sem aceite, a Jenifer cobra; sem resposta em mais 3, o Luis decide.
+7. **SLA:** Master aceita em 3 dias úteis; sem aceite, a Jenifer cobra; sem resposta em mais 3, a Daniela decide com o Master, caso a caso (alçada de 23/10/2026; a regra geral de contato direto segue com o Luis, pergunta 6).
 8. **Proposta HubSpot:** etapa, campos, nota e motivo (rascunho; a Jenifer registra).
 9. **Revisão semanal:** SQLs parados mais de 10 dias úteis; motivos de descarte da semana; taxa reunião → SQL.
 

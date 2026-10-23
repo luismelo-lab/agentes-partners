@@ -1,6 +1,6 @@
 # Critérios de qualificação — Central BDR (proposta v1, 29/09/2026)
 
-> Tudo aqui é proposta para o Luis validar. Os pesos do score ficam em `config-jenifer.json` (chave `score`) e o lead scoring de segmento/regime vem da Inteligência Comercial (`icp-*.json`, pendente de validação).
+> Tudo aqui é proposta da célula: vale por padrão e a Jenifer ajusta com o gerente da Inteligência Comercial (alçada de 23/10/2026, `infra/alcadas.md`). O que mexe em conflito de canal segue com o Luis. Os pesos do score ficam em `config-jenifer.json` (chave `score`) e o lead scoring de segmento/regime vem da Inteligência Comercial (`icp-*.json`, pendente de validação).
 
 ## 1. Encaixe (fit) — antes do contato, pela lista (automático, `lista_master.py`)
 | Critério | Regra | Por quê |

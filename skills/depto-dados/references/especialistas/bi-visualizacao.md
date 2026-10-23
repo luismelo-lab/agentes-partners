@@ -93,7 +93,7 @@ Limites: nenhuma lista nominal de colaborador com valor; nenhum ranking público
    - Muda o que pode ser mostrado (D21).
 9. O painel precisa separar produto (recuperação, passivo, produtos novos)?
    - Depende do campo "Produto" (D37).
-10. Com que frequência o Luis quer o scorecard: semanal ou mensal?
+10. Com que frequência o scorecard sai: semanal ou mensal? (decide o gerente de Dados com a Daniela, que usa nas conversas com os Masters)
    - Semanal dá sinal cedo; mensal reduz falso alarme.
 11. Quem é o dono de cada lista de correção?
    - Sem dono, a lista não fecha.
@@ -118,7 +118,7 @@ Situação típica em programas de canal: nota única que mistura volume e quali
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** fórmulas financeiras e relatório semanal (depto-resultados); ação com o parceiro (Partner Success e célula da Daniela); qualidade de origem e dedupe (Qualidade e Saneamento); publicação no `portal/` (depto-ti).
 - **Passa para:** Estatística Aplicada quando a pergunta é "isso é diferença real ou ruído?"; Governança quando o termo do painel não tem definição.
-- **Exige humano:** mudar pesos do índice ou expor ranking a parceiros (Luis).
+- **Exige humano:** mudar pesos do índice (gerente de Dados com a Daniela, vale a recomendação em 3 dias úteis); expor ranking a parceiros (Luis).
 
 ## 10. Atualização
 - Última revisão: 22/10/2026 (foto de 22/10/2026).

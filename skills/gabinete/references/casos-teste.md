@@ -37,7 +37,7 @@
 - Tributário entra pelo crédito de PIS/COFINS · `depto-tributario | tributario`
 - Jurídico valida a antecipação · `depto-juridico | juridico`
 - Diz quem fica de fora, como Soluções só no encaixe da esteira · `fica de fora | ficam de fora | D92 | so no encaixe`
-- Apresenta a Ficha de Rota para o ok do Luis · `ficha de rota | ficha`
+- Apresenta a Ficha de Rota; sobe ao Luis porque o crédito passa de R$ 1 mi (alçada §1) · `ficha de rota | ficha`
 
 **Não pode conter:**
 - Taxa ou limite prometido na antecipação · `re:taxa de \d | re:limite (aprovado|garantido) de`
@@ -99,3 +99,23 @@
 **Não pode conter:**
 - Recomendar o desligamento · `re:recomend\w* (o )?deslig`
 - Ranking entre as pessoas do time · `re:ranking (de uso|entre)`
+
+## CT-06 · Pedido operacional segue com aviso, sem esperar o Luis
+- **Tipo:** fronteira
+- **Especialista:** roteador
+- **Fonte:** `infra/alcadas.md` §1 (alçada de 23/10/2026); matriz-roteamento §0.3; perguntas-ao-dono G6
+- **Encaminhar para:** celula-daniela | depto-dados
+
+**Entrada:**
+> Pedido da Daniela pela Central: "Um Master está com 6 negócios sem atualização há 40 dias. Preciso de um rascunho de cobrança para ele e da lista de campos a corrigir no CRM."
+
+**Deve conter:**
+- É operacional, reversível e dentro das regras · `operacional | reversivel | dentro das regras`
+- Segue com aviso, sem esperar o ok do Luis · `segue com aviso | com aviso | resumo semanal | nao sobe`
+- A Daniela é a dona da entrega e aprova o rascunho · `daniela aprova | dona da entrega | a daniela`
+- Cita a regra de alçada · `alcada | alcadas`
+
+**Não pode conter:**
+- Pedir o ok do Luis para seguir · `re:(aguard|esper)\w* (o )?ok do luis | re:luis (precisa|deve) aprovar`
+- Alterar o HubSpot direto · `re:(atualiz|alter)\w* (direto )?no hubspot`
+

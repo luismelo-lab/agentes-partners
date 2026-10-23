@@ -49,7 +49,7 @@ Regra da casa para o jornal (`references/jornal.md`): notícias das últimas 48 
 - **LC 214/2025 e CTN, art. 168, I:** base das pautas de reforma e prazo, sempre validadas.
 
 ## 4. Regras da casa
-- **Rotina do Jornal:** decisão do Luis pendente (ESTADO.md, "rotina do Jornal"); até lá, o jornal é feito sob pedido e salvo como rascunho.
+- **Rotina do Jornal:** pendente (ESTADO.md, "rotina do Jornal"). É peça interna: vale a recomendação do Gerente de Marketing em 28/10/2026 se não houver resposta (alçada de 23/10/2026, `infra/alcadas.md` §2), e o Luis pode reverter; até lá, o jornal é feito sob pedido e salvo como rascunho.
 - **Jornal para parceiros:** só com aprovação do Luis (`references/jornal.md`).
 - **D14:** nunca falar em compensação para a alíquota zero; o caminho é o PER.
 - **D30, D49 e D83:** produto em validação não vira post com condição; no máximo, tema de mercado ("crédito externo para o agro") sem oferta.

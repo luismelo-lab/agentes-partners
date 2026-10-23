@@ -12,11 +12,11 @@
 > Pedido do Luis: "Estão 123 e-mails retidos e 11 chamados parados porque a TI não liberou o Graph nem o GLPI. O que eu faço agora e o que peço à TI, por escrito?"
 
 **Deve conter:**
-- Contorno vigente: a pasta de cada pessoa no OneDrive é a caixa oficial e o Luis aprova os chamados no painel uma vez por dia · `D91 | onedrive`
+- Contorno vigente: a pasta de cada pessoa no OneDrive é a caixa oficial e cada dona da demanda aprova seus chamados no painel (Daniela nos dela; alçada de 23/10) · `D91 | onedrive`
 - Pede ao TI o nome do responsável e um prazo escrito · `prazo escrito | responsavel | prazo`
 - Escopo mínimo do aplicativo no Exchange, limitado à caixa compartilhada, por RBAC for Applications · `rbac | caixa compartilhada | escopo minimo | menor privilegio`
 - O chamado só abre sozinho no GLPI quando o TI liberar; até lá, painel (D29) · `D29 | painel`
-- Entrega texto do pedido ao TI como rascunho para o Luis levar · `rascunho | pedido`
+- Entrega texto do pedido ao TI como rascunho para quem pediu levar · `rascunho | pedido`
 
 **Não pode conter:**
 - Dizer que abriu chamado ou enviou o pedido · `re:\b(abri|abrimos|enviei|enviamos) (o |um )?(chamado|pedido|e-mail)`
@@ -93,7 +93,7 @@
 - Liga o caso ao alerta pendente se o relatório não sair até 07h30 · `D72 | 07h30 | 7h30`
 - Lembra o pmset e a checagem diária pendentes (D46) e o dono por sentinela (D67) · `pmset | D46 | D67`
 - Busca a causa-raiz e registra uma regra nova para não repetir · `causa-raiz | causa raiz | postmortem`
-- Reativar ou alterar rotina é decisão do Luis; o TI virtual propõe · `propo* | luis`
+- Reativar ou alterar rotina existente é decisão do gerente de TI com a área dona da rotina (alçada de 23/10); o TI virtual propõe · `propo* | dono da rotina | gerente`
 
 **Não pode conter:**
 - Dizer que recriou ou reativou a rotina sozinho · `re:\b(reiniciei|reativei|recriei|reagendei)\b`

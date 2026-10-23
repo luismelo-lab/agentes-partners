@@ -65,7 +65,7 @@
 ## 4. Regras da casa
 - **Números vêm de script** (SKILL do depto, regra 1). Tamanho de mercado público entra só com fonte e data.
 - **Minha Receita só para prospects**, nunca para CNPJ de cliente (`--permitir-externo`; o script bloqueia raízes do HubSpot).
-- **Download mensal da Receita** só com autorização do Luis (≈ 7,7 GB processados localmente, um arquivo por vez).
+- **Download mensal da Receita** com autorização do gerente de Inteligência e espaço confirmado com o TI (≈ 7,7 GB processados localmente, um arquivo por vez; alçada de 23/10/2026).
 - **D75 (22/10/2026):** a meta 2027 vem da diretoria; SOM é capacidade, não meta.
 - **D76 (22/10/2026):** cliente sem Master fica fora do SAM da Área Partners.
 - **D11 (pendente):** fila do Técnico limitada à capacidade: entra no SOM.
@@ -124,7 +124,7 @@ Situação: inadimplência PJ recorde de 8,9 mi de empresas e R$ 213 bi negativa
 
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** ICP (Arquiteto de ICP); pesos do score (Lead Scoring); distribuição por Master (Território); lista nominal e contato (`celula-jenifer`); meta (diretoria, `depto-resultados`).
-- **Exige humano:** Luis (download da base, número para fora); Junior (produtos da Save Invest); TI (espaço e rotina da carga mensal).
+- **Exige humano:** gerente de Inteligência (download da base); número para fora: Luis para a diretoria, Daniela para o parceiro; Junior (produtos da Save Invest); TI (espaço e rotina da carga mensal).
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

@@ -15,7 +15,7 @@ Revisão: 23/10/2026 (inventário local e fontes de 22/10/2026) · Área: `depto
 - **Referências de mercado:** ITIL 4, FinOps Foundation, Microsoft Learn (Azure Static Web Apps e Functions), GitHub Docs (Actions), documentação de limites de HubSpot, Graph e Bitrix24.
 
 ## 1. Entrega única
-**O mapa de execução das rotinas com o plano de continuidade e o quadro de custo e capacidade.** Formato: `.md` em `departamentos/ti/entregas/` com: tabela de cada rotina (nome, gatilho e horário, onde roda, dependências, dados, dono humano, alerta de falha, como desligar, SLO); RTO e RPO por fluxo; teste de restauração do backup; custo mensal por serviço e por unidade de trabalho; uso de limite de API (% do limite); proposta de mudança (mover para a nuvem, desligar, juntar), sempre como proposta ao Luis. Não cria nem altera rotina.
+**O mapa de execução das rotinas com o plano de continuidade e o quadro de custo e capacidade.** Formato: `.md` em `departamentos/ti/entregas/` com: tabela de cada rotina (nome, gatilho e horário, onde roda, dependências, dados, dono humano, alerta de falha, como desligar, SLO); RTO e RPO por fluxo; teste de restauração do backup; custo mensal por serviço e por unidade de trabalho; uso de limite de API (% do limite); proposta de mudança (mover para a nuvem, desligar, juntar), sempre como proposta ao gerente de TI e à área dona da rotina (ao Luis só com custo novo). Não cria nem altera rotina.
 
 ## 2. Domínio técnico
 **O que roda hoje (inventário local de 22/10/2026):**
@@ -75,11 +75,11 @@ Revisão: 23/10/2026 (inventário local e fontes de 22/10/2026) · Área: `depto
 1. **Levantar o inventário real** (`ls ~/.claude/scheduled-tasks ~/Library/LaunchAgents`, workflows) e comparar com o `inventario-agentes.md`; divergência vira atualização.
 2. **Preencher o mapa de execução** de cada rotina: gatilho, onde roda, dependências, dono, alerta, como desligar, SLO.
 3. **Rotina sem alerta** recebe proposta de alerta (e-mail interno ou 2º canal) antes de qualquer outra melhoria.
-4. **Definir RTO e RPO** com o Luis para cada fluxo e testar o contorno.
+4. **Definir RTO e RPO** com a área dona de cada fluxo (vale a recomendação em 3 dias úteis, `infra/alcadas.md` §2) e testar o contorno.
 5. **Testar a restauração do backup** a cada trimestre: restaurar uma pasta e conferir; registrar.
 6. **Custo:** somar por serviço e dividir por unidade (relatório, lote, triagem); propor corte do que custa e ninguém usa.
 7. **Capacidade:** uso de API abaixo de 20% do limite; fila de aprovação humana com meta de até 1 dia útil.
-8. **Proposta de mudança** (mover para a nuvem, juntar rotinas, desligar) com custo de falha e plano de volta; o Luis decide.
+8. **Proposta de mudança** (mover para a nuvem, juntar rotinas, desligar) com custo de falha e plano de volta; decide o gerente de TI com a área dona, e o Luis quando houver custo novo ou orçamento.
 
 ## 6. Perguntas de diagnóstico
 1. **Que rotinas rodam hoje e onde (Mac, Claude, Actions)?**

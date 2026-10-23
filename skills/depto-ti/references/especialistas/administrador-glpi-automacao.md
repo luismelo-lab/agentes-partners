@@ -37,7 +37,7 @@ O tempo em "Pendente" não conta no SLA (help.glpi-project.org, níveis de servi
 
 **Regras de negócio R1 a R7:** atribuir grupo e SLA pela categoria; urgência muito alta e anexo obrigatório em notificação e segurança; chamado de origem "Agente IA" vai para o grupo de rascunhos sem notificar o requerente e com prefixo `[RASCUNHO IA]`; lembrete automático após 3 dias úteis em pendente; fechamento automático 3 dias úteis após a solução sem recusa; coletor de e-mail cria chamado em triagem.
 
-**Estado real (22/10/2026):** GLPI 11 com API v2.1 ativa e OAuth2; API legada desativada; chamados dos agentes em modo `rascunho` (`infra/glpi-config.json`) porque o cliente OAuth não foi criado; 11 chamados aprovados e parados; D91 manda o Luis aprovar no painel uma vez por dia até a liberação. Regras de títulos e categorias dos chamados automáticos em `infra/glpi-regras.md` (v2).
+**Estado real (22/10/2026):** GLPI 11 com API v2.1 ativa e OAuth2; API legada desativada; chamados dos agentes em modo `rascunho` (`infra/glpi-config.json`) porque o cliente OAuth não foi criado; 11 chamados aprovados e parados; D91 mandava o Luis aprovar no painel uma vez por dia até a liberação; desde 23/10/2026 cada dona aprova os chamados das suas demandas (`infra/alcadas.md`). Regras de títulos e categorias dos chamados automáticos em `infra/glpi-regras.md` (v2).
 
 **Prioridade ITIL (impacto × urgência):** impacto = quantos clientes ou parceiros e quanto dinheiro ou prazo legal; urgência = quando o dano acontece. Prazo legal (intimação, manifestação de inconformidade) sempre vence o SLA de tabela.
 
@@ -68,7 +68,7 @@ O tempo em "Pendente" não conta no SLA (help.glpi-project.org, níveis de servi
 5. **Impacto nos agentes:** quais scripts leem o campo ou o código (célula da Daniela, Central, painel); teste depois da mudança.
 6. **Teste de aceite em homologação:** 5 chamados de teste por área sem campo faltando; leitura pela API v2 dos campos novos.
 7. **Medir 60 dias:** TTO e TTR reais por tipo; ajustar SLA e OLA com o dado.
-8. **Revisor Técnico** confere; o Luis leva ao TI.
+8. **Revisor Técnico** confere; quem pediu leva ao TI.
 
 ## 6. Perguntas de diagnóstico
 1. **Que pedido real motivou a mudança e quantos casos houve no mês?**
@@ -86,7 +86,7 @@ O tempo em "Pendente" não conta no SLA (help.glpi-project.org, níveis de servi
 7. **O chamado pode conter dado pessoal sensível?**
    Se sim, campo restrito e fora do painel.
 8. **Quem aprova antes de abrir?**
-   Hoje o Luis, no painel (D91).
+   A dona da demanda, no painel (Daniela nas dela; alçada de 23/10/2026). Antes era o Luis (D91).
 9. **O que acontece em pendente por mais de 3 dias úteis?**
    Lembrete automático (R5).
 10. **Qual o calendário de atendimento e os feriados da sede?**
@@ -121,7 +121,7 @@ O tempo em "Pendente" não conta no SLA (help.glpi-project.org, níveis de servi
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** configurar em produção (TI da Save); taxonomia da célula (`celula-daniela`); cálculo de prazo legal (`depto-juridico`); integração e credencial (Arquiteto de Integrações e Identidade e Segurança); métricas de SLA no relatório (`depto-dados`).
 - **Passa para:** Gestão de Incidentes (chamado de segurança ou falha), Operação e Custos (rotina que lê o GLPI).
-- **Exige humano:** aprovação do Luis e execução do TI em toda mudança; abrir, atribuir, solucionar e fechar chamado.
+- **Exige humano:** execução do TI em toda mudança; aprovação do gerente de TI com a área dona da fila para categoria, modelo e regra técnica, e do Luis só para SLA de parceiro ou mudança de regra (alçada de 23/10/2026); abrir, atribuir, solucionar e fechar chamado.
 
 ## 10. Atualização
 - **Última revisão:** 23/10/2026 (fontes de 22/10/2026).

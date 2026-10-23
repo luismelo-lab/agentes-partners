@@ -380,10 +380,10 @@ def supervisao(E, marca):
         except Exception: continue
         h = (agora - t).total_seconds() / 3600
         if c.get("status") == "proposto" and h >= LIM["aprovacao_h"]:
-            quem = "luis" if h >= LIM["aprovacao_escala_h"] else (c.get("pessoa") or "daniela")  # 5 dias sem decisão: sobe para o Luis
+            quem = c.get("pessoa") or "daniela"  # D98 (23/10/2026): a dona aprova; atraso continua com ela, sem subir ao Luis
             marca(ev(E, f"aprov|chamado|{k}", "aprovacao_parada", quem, c.get("titulo") or k,
                      f"Chamado proposto para {c.get('grupo')} em {c['proposto_em'][8:10]}/{c['proposto_em'][5:7]} aguarda aprovação no painel"
-                     + (f" há {int(h // 24)} dias (de {(c.get('pessoa') or '').capitalize()})." if quem == "luis" else "."), "Supervisor"))
+                     + (f" há {int(h // 24)} dias: atrasado." if h >= LIM["aprovacao_escala_h"] else "."), "Supervisor"))
     for k, p in ler(os.path.join(AP, "central-agentes/registro.json"), {}).get("pedidos", {}).items():
         if p.get("status") != "aguardando_aprovacao": continue
         t = dia(p.get("respondido") or p.get("recebido"))

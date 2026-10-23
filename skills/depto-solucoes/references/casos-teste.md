@@ -36,7 +36,7 @@
 - Tira venda gerencial e escrow do material: tema só presencial com a Save Invest (D82) · `D82 | presencial*`
 - Não põe taxa de produto em validação; a faixa do CI vale só no one-page aprovado (D88) e a conversa é de descoberta até o G2 · `D88 | one-page | one page | G2 | descoberta`
 - Dá valor em faixa, como potencial, com premissas · `estimativa preliminar | faixa | potencial | conservador`
-- Diz que o mapa de valor só vai ao Master depois do ok do Luis · `luis`
+- Diz que o mapa de valor só vai ao Master depois do ok da Daniela, dona da relação com os Masters (alçada de 23/10/2026) · `daniela`
 
 **Não pode conter:**
 - Promete ganho ao cliente · `re:(o cliente |ele )?(vai|ira) (ganhar|economizar|receber) (r\$|\d)`

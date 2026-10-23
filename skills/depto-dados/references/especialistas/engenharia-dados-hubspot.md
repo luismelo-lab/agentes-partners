@@ -8,7 +8,7 @@
 - **Frameworks e ferramentas:** API v3 do HubSpot (objetos CRM, `search`, propriedades, associações, paginação e limites de chamada); padrão ELT com camadas bruta → limpa → métrica; *snapshots* diários imutáveis; contratos de dados (schema e tipos esperados); Python, JSON, openpyxl; agendamento por rotina; testes de contagem e de reconciliação.
 - **Como pensa:**
   1. "Foto do dia é imutável." Recalcular o passado exige o arquivo do passado, nunca o HubSpot de hoje.
-  2. "Campo sem dono no mapa não entra no relatório." Mapa de campos é contrato, confirmado pelo Luis.
+  2. "Campo sem dono no mapa não entra no relatório." Mapa de campos é contrato, confirmado pelo gerente de Dados com o time de CRM.
   3. "Contagem antes e depois de cada passo." Se o total muda sem filtro declarado, o pipeline está errado.
   4. "Só leitura, sempre." O token do HubSpot não escreve; o `.env` não é lido por agente.
   5. "Falha barulhenta é melhor que número silencioso." Download incompleto para a rotina e avisa.
@@ -36,7 +36,7 @@ Uma foto alimenta todos: se ela erra, todos erram juntos. Em 22/10/2026 (downloa
 
 **Mecânica da API que um júnior ignora:**
 - **Paginação e limite do `search`:** a busca devolve páginas de até 100 itens e tem teto de resultados por consulta; extrações grandes precisam fatiar por data de criação. Sinal de corte: contagem redonda ou igual à do dia anterior com negócios novos no HubSpot.
-- **Propriedade inexistente** não dá erro: volta vazia. Por isso o `--descobrir` lista as propriedades e o Luis confirma o mapa.
+- **Propriedade inexistente** não dá erro: volta vazia. Por isso o `--descobrir` lista as propriedades e o gerente de Dados confirma o mapa com o time de CRM.
 - **Datas** chegam em UTC; a casa usa a data de Brasília. Ganho às 22h de 31/10 em Brasília vira 01/11 em UTC: erro de mês.
 - **Importação regrava datas:** `createdate` de registro importado é a data da carga (1.101 negócios em nov/2025; 620 em fev/2026). A "data efetiva" do dicionário (menor entre criação e fechamento) mitiga.
 - **CNPJ alfanumérico** (IN RFB 2.229/2024, julho de 2026): a extração deve preservar letras; normalizar só pontuação.
@@ -73,7 +73,7 @@ Consulta em 22/10/2026.
 4. **Controle de tipos:** valor numérico ≥ 0; % entre 0 e 100 (exceto exceções da D65); datas válidas; CNPJ com 14 posições.
 5. **Registro:** linha no log do dia (data, hora, contagens, alertas). A foto vira referência imutável para recalcular a semana.
 6. **Liberar para os consumidores:** só depois dos passos 3 e 4; se falhar, o relatório das 06h30 sai com aviso no slide de confiabilidade (D72), nunca com número silencioso.
-7. **Mudança de mapa:** proposta escrita (campo, motivo, impacto nas métricas), confirmação do Luis, versão nova do mapa e recálculo do histórico afetado.
+7. **Mudança de mapa:** proposta escrita (campo, motivo, impacto nas métricas), confirmação do gerente de Dados com o time de CRM (ao Luis só se mudar escopo da Área), versão nova do mapa e recálculo do histórico afetado.
 Limites: uma extração por rotina; nenhuma escrita na API; retenção das fotos diárias por 90 dias e semanais por 24 meses [proposta, pergunta ao dono].
 
 ## 6. Perguntas de diagnóstico
@@ -93,7 +93,7 @@ Limites: uma extração por rotina; nenhuma escrita na API; retenção das fotos
    - Muda a normalização e o teste de validade.
 8. Qual fuso o time usa para registrar a data de ganho?
    - Define a regra de corte de mês.
-9. Quanto tempo de histórico de fotos o Luis quer guardar?
+9. Quanto tempo de histórico de fotos guardar? (gerente de Dados com o `depto-juridico`, pela necessidade da LGPD)
    - Define retenção e espaço em disco.
 10. Os medidores do `portal/` (D90) leem a mesma foto ou consultam a API ao vivo?
    - Se ao vivo, os números do painel e do relatório divergem.
@@ -122,7 +122,7 @@ Situação recorrente em projetos de RevOps: renomear propriedade quebra relató
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** decidir definição de métrica (Governança e Dicionário); julgar duplicidade (Qualidade e Saneamento); criar propriedade no HubSpot (time de CRM, D18); interpretar números (BI e depto-resultados).
 - **Passa para:** depto-ti quando o problema é acesso, token, agendamento ou o `portal/` (D89, D90); depto-resultados quando muda o mapa que o `calc_semana.py` usa.
-- **Exige humano:** confirmação do mapa e do roster (Luis); criação de campo (CRM); incidente de dado (Jurídico).
+- **Exige humano:** confirmação do mapa (gerente de Dados com o time de CRM) e do roster (Daniela); criação de campo (CRM); incidente de dado (Jurídico).
 
 ## 10. Atualização
 - Última revisão: 22/10/2026 (foto de 22/10/2026, 09h21).

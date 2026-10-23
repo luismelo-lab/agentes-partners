@@ -63,7 +63,7 @@ O que só o humano responde: `references/perguntas-ao-dono.md` (consolida `depar
 2. **Portão 0:** plano curto (especialista → entrega → ordem). Exceções: no **Modo A com um só texto**, rode o script e entregue direto; pedido vindo do **Gabinete** já tem rota aprovada.
 3. **Execução:** Agent (`general-purpose`) com o perfil do especialista e a frase de N1; em paralelo quando não houver dependência.
    - **A. Auditoria:** `python3 ~/.claude/skills/depto-qualidade/scripts/auditar_texto.py <arquivos> --saida …/auditorias/AAAA-MM-DD-<tema>.md --marcado …/auditorias/marcados` (`--resumo` se houver dados de clientes). Julgue cada marcação, sugira reescrita, diga quem aprova. Priorize modelo recorrente.
-   - **B. Reclamação:** pseudonimize → ficha (`reclamacoes.md` §4) → classifique → prazos (`ouvidoria.md`) → rascunho do acuse → dono. Se o tema for A3 (expectativa comercial), audite a mensagem/material de origem. S1 ou LGPD: pare e leve ao Luis no mesmo dia.
+   - **B. Reclamação:** pseudonimize → ficha (`reclamacoes.md` §4) → classifique → prazos (`ouvidoria.md`) → rascunho do acuse → dono. Se o tema for A3 (expectativa comercial), audite a mensagem/material de origem. S1: no mesmo dia à dona do caso (Daniela, nos Masters) com aviso ao Luis; LGPD, risco jurídico sem precedente, exposição pública, compensação ou repasse: pare e leve ao Luis e ao Jurídico no mesmo dia (alçada de 23/10/2026, `infra/alcadas.md`).
    - **C. Pesquisa:** use os rascunhos de `questionarios/`; ajuste ao momento; declare base legal, remetente e canal; cálculo só com `calc_nps.py`.
    - **D. Ouvidoria:** revise a 1ª resposta, os fatos e o prazo; rascunhe a resposta de 2ª instância com os fatos e o caminho.
    - **F. Incidente:** `incidentes-reclamacoes-ouvidoria.md` §5 (registrar a hora do conhecimento, conter, avaliar risco com o Jurídico, rascunho de comunicação).
@@ -71,7 +71,7 @@ O que só o humano responde: `references/perguntas-ao-dono.md` (consolida `depar
    - **H. Melhoria contínua:** `melhoria-continua.md` §5 (Pareto consolidado, até 3 problemas, critério de eficácia escrito antes).
    - **E. Relatório mensal:** Pareto de reclamações, % no prazo, reincidência, CSAT do tratamento, NPS do período (se houver), auditorias do mês e ações preventivas com dono.
 4. **Revisão:** Revisor da Qualidade (checklist em `equipe.md`) + `auditar_texto.py` na própria entrega que for a parceiro/cliente.
-5. **Entrega (Portão final):** salve na pasta do departamento; no chat: resumo, o que precisa de aprovação, `[VALIDAR …]` e decisões para o Luis.
+5. **Entrega (Portão final):** salve na pasta do departamento; no chat: resumo, o que precisa de aprovação e de quem (dona da entrega, área ou Luis, pela `infra/alcadas.md` §1), `[VALIDAR …]` e, à parte, só as decisões da alçada do Luis.
 6. **Aprendizado:** correção do Luis ou falso positivo do script vira linha em `aprendizados.md` (e, se for o caso, ajuste em `regras-promessas.json` com nova versão).
 
 ## Limites conhecidos

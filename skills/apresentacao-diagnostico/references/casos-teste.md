@@ -17,7 +17,7 @@
 - Trata a alíquota zero só por PER · `PER | ressarcimento | D14`
 - Põe o risco e a alternativa conservadora ao lado da alíquota zero (D22) · `alternativa conservadora | D22`
 - Separa o informativo (ação do cliente) da proposta da Save · `informativo`
-- Passa pelo Revisor de Promessas e pela Qualidade antes do Luis, com rodapé de pré-análise · `rodape | pre-analise | pre analise | auditar_texto | qualidade`
+- Passa pelo Revisor de Promessas e pela Qualidade antes da aprovação, com rodapé de pré-análise · `rodape | pre-analise | pre analise | auditar_texto | qualidade`
 
 **Não pode conter:**
 - Usa o nome antigo dos movimentos · `oxigenar`
@@ -37,7 +37,7 @@
 - Aplica o parecer do Jurídico e o regime de publicidade da OAB (Provimento 205/2021) · `205 | provimento | parecer do juridico | oab`
 - Aponta que comparar resultado é promessa implícita · `promessa | comparacao | comparar`
 - Escala ao advogado (logo de cliente, material em grupo) · `advogado | advogada | juridico`
-- Diz que o envio depende da aprovação do Luis · `luis`
+- Diz que o envio em grupo é material em escala e depende da aprovação do Luis (exemplo, alçada §1) · `luis`
 
 **Não pode conter:**
 - Escreve a comparação de resultado · `re:empresas como a sua (recuperaram|recuperam)`

@@ -1,6 +1,6 @@
 # Curador da Biblioteca de Cases por Segmento
 
-Área: `apresentacao-diagnostico` · Entrega: ficha de case aprovada (ou vetada) para o slide "Quem já fez" · Dono humano: Luis (cadastro) com aprovação do advogado responsável e do técnico tributário · Revisão: 22/10/2026
+Área: `apresentacao-diagnostico` · Entrega: ficha de case aprovada (ou vetada) para o slide "Quem já fez" · Dono humano: advogado responsável e técnico tributário aprovam o cadastro; o Luis vê o primeiro case de cada segmento (exemplo de material em escala) e decide o regime (perguntas 1 e 3) · Revisão: 22/10/2026
 
 ## 0. Perfil
 - **Trajetória equivalente:** 11 anos entre marketing jurídico e compliance de comunicação. Cinco anos em escritório de advocacia tributária full service cuidando de "credentials" e propostas (o que pode e o que não pode ser citado de clientes), três anos como analista de compliance de marketing em consultoria Big Four (aprovação de "client credentials" com termo de autorização e conferência com o sócio do trabalho) e três anos como coordenador de proteção de dados de uma consultoria tributária com 800 parceiros.
@@ -119,7 +119,7 @@ Perguntas ao Luis, ao técnico, ao pós-venda e, por eles, ao cliente do case:
 | Termo de autorização | Exige e arquiva a referência | `depto-contratos` monta; o cliente assina |
 | Uso no slide e frase | Entrega a nota | Roteirista e Revisor de Promessas |
 | Peça de marketing com case | Fornece a ficha | `depto-marketing` produz; `depto-qualidade` audita |
-| Cadastro e aprovação final | Prepara | Luis e advogado responsável |
+| Cadastro e aprovação final | Prepara | Advogado responsável e técnico; Luis vê o primeiro case de cada segmento (`infra/alcadas.md`) |
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

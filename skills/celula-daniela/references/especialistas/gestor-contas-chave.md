@@ -26,7 +26,7 @@ Formato (um arquivo por Master por trimestre, em `~/agentes-partners/celulas/dan
 6. **Compromissos dos dois lados:** o que o Master faz, o que a Save faz, com data e dono.
 7. **Pauta do QBR** e o "o que não prometer".
 
-O plano é rascunho. A Daniela conduz e o Luis aprova antes de ir ao Master.
+O plano é rascunho. A Daniela conduz e aprova antes de ir ao Master (alçada de 23/10/2026, `infra/alcadas.md`). Sobe ao Luis só o plano que mexe em meta, repasse, condição comercial, exclusividade ou produto em validação.
 
 ## 2. Domínio técnico
 **O que é uma conta-chave de canal na Save.** O Master é um escritório (em regra contábil) que indica clientes e, às vezes, tem uma rede própria de consultores e indicadores. Ele não executa o serviço: a Save faz o diagnóstico, a apresentação, o contrato e o pedido. O Master ganha um repasse negociado caso a caso. Não há regra única de repasse: cada parceiro tem o seu percentual negociado (D64, folha de 22/10/2026). Por isso, gestão de conta aqui é gestão de **fluxo de indicação qualificada**, e não de revenda.
@@ -91,7 +91,7 @@ O plano de conta não cria regra jurídica, mas toca três limites que o sênior
 2. **Ler a saúde pelos componentes.** Regras de decisão:
    - ritmo de entrada abaixo de −30% contra a média: conversa de reativação antes do QBR;
    - ritmo de valor abaixo de −60% com entrada estável ou subindo: efeito de pico anterior, não queda; explicar ao Luis, sem alarme;
-   - entrada e valor abaixo de −40% juntos: risco de churn; QBR antecipado com o Luis;
+   - entrada e valor abaixo de −40% juntos: risco de churn; QBR antecipado conduzido pela Daniela, com aviso ao Luis (ele entra se for Master Estratégico e ele quiser);
    - qualidade do dado abaixo de 75% dos ganhos com honorário: pedido de saneamento ao `depto-dados` antes do QBR (a nota cai por dado, não por desempenho);
    - ⚪ base pequena: não usar a nota; usar marcos de rampa (leads, 1ª apresentação, 1º ganho).
 3. **Medir concentração na conta:** maior negócio sobre o valor de 12 meses (acima de 50% = conta dependente de caso isolado) e maior tese sobre o líquido com tese (acima de 85% = dependência de tese).
@@ -145,7 +145,7 @@ O que cada resposta muda: 1 e 13 definem o objetivo; 2 aciona o Coach de Onboard
 - **Listas de contas-alvo:** `celula-jenifer` e `depto-intel-comercial`.
 - **Repasse, política e cálculo:** `depto-operacoes-canal`; contrato e aditivo, `depto-contratos`.
 - **Decisão do Luis:** meta por Master, conflito de canal, condição comercial, exclusividade, qualquer mudança de repasse.
-- **Humano obrigatório:** a Daniela conduz o QBR e envia tudo; o Luis aprova o plano dos Estratégicos e qualquer compromisso financeiro.
+- **Humano obrigatório:** a Daniela conduz o QBR e envia tudo; a Daniela aprova o plano de todos os Masters, inclusive os Estratégicos (alçada de 23/10/2026); o Luis aprova qualquer compromisso financeiro, meta ou mudança de repasse.
 
 ## 10. Atualização
 - **Última revisão:** 22/10/2026 (scorecard de 22/10/2026; Programa Partners 2027 v1.1 de 09/10/2026; folha de decisões de 22/10/2026).

@@ -264,7 +264,7 @@ def main():
                 ok = baixar_hubspot(u, dest, oculto=True)
                 if ok is None: pend.append("Anexo de nota"); cont["pendente_permissao_hubspot"] += 1; continue
                 if not ok: cont["falhou"] += 1; continue
-            elif u.isdigit():  # arquivo no HubSpot: precisa do escopo 'files' (sem ele, fica pendente e o Luis libera na Private App)
+            elif u.isdigit():  # arquivo no HubSpot: precisa do escopo 'files' (sem ele, fica pendente e o administrador do HubSpot (TI) libera na Private App)
                 ok = baixar_hubspot(u, dest)
                 if ok is None: pend.append(CAMPOS[k]); cont["pendente_permissao_hubspot"] += 1; continue
                 if not ok: cont["falhou"] += 1; continue

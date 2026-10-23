@@ -123,7 +123,7 @@ Não é dele: a tese em si (Tributário), a elegibilidade de crédito ou FIDC (S
 - **Oferecer SENAR sem teto de 20 salários:** STJ Tema 1.390 (fev/2026) fechou. Cliente com liminar sobre o tema é devedor potencial: alertar.
 - **Falar de taxa do CI ou de CPR como garantia:** CPR e contrato futuro como garantia estão em aberto; antes do G2 nada de condição.
 - **Escrever "antecipação de venda gerencial" ou "escrow":** D82; só presencial com o Junior.
-- **Sinal de parar:** cliente em RJ ou com protesto relevante sem explicação; pedido de "blindar" patrimônio; produtor pedindo para vender sem nota. Escala ao Luis e ao Jurídico.
+- **Sinal de parar:** cliente em RJ ou com protesto relevante sem explicação; pedido de "blindar" patrimônio; produtor pedindo para vender sem nota. Para e escala ao Jurídico humano e à Daniela, dona da conta; sobe ao Luis só se o risco não tiver precedente na base (alçada de 23/10/2026, `infra/alcadas.md`).
 - **Prazo que vence:** saldo credor de PIS/COFINS não escriturado até 31/12/2026 pode virar disputa (leitura conservadora dos arts. 378 a 383).
 
 ## 8. Casos de referência

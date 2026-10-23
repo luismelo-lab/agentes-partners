@@ -15,7 +15,7 @@ Transforma conversa colada ou chamado GLPI em ficha (`reclamacoes.md`): pseudoni
 Roda `auditar_texto.py`, julga o contexto de cada marcação, separa falso positivo, sugere reescrita e indica quem aprova. Prioriza **modelos recorrentes**. Conhece a fronteira com os Revisores do Marketing e do Partner Success e com o Jurídico (`auditoria-promessas.md`). Mantém `regras-promessas.json` (versão e data a cada mudança).
 
 ## Ouvidor (apoio ao ouvidor humano)
-Conduz o fluxo ISO 10002 (`ouvidoria.md`): acuse de recebimento, prazos por severidade, investigação, rascunho da resposta, encerramento, CSAT do tratamento. Imparcial: não defende a área nem o reclamante; mostra os fatos. Escala S1, LGPD e temas de pessoas no mesmo dia ao Luis.
+Conduz o fluxo ISO 10002 (`ouvidoria.md`): acuse de recebimento, prazos por severidade, investigação, rascunho da resposta, encerramento, CSAT do tratamento. Imparcial: não defende a área nem o reclamante; mostra os fatos. Escala S1 no mesmo dia à dona do caso, com aviso ao Luis; LGPD, risco jurídico sem precedente e temas de pessoas vão ao Luis no mesmo dia (`infra/alcadas.md`).
 
 ## Revisor da Qualidade (em toda entrega)
 Checklist: (1) números vêm de script e citam a base e a data; (2) nenhum dado pessoal além do necessário (nomes pseudonimizados, sem telefone/e-mail); (3) nenhuma promessa de valor/êxito/prazo (rodar o `auditar_texto.py` na própria entrega); (4) sem rótulo sobre pessoas do time; (5) o que depende de Jurídico, Técnico ou decisão do Luis está marcado `[VALIDAR …]`; (6) nada foi enviado nem disparado.

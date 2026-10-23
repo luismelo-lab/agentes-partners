@@ -36,7 +36,7 @@
 - Recusa: na tese de alíquota zero a Save usa só PER, DCOMP proibida (D14) · `D14 | so via PER | somente via PER | apenas PER | so PER | nunca DCOMP | nao DCOMP`
 - O risco da compensação: não homologação, cobrança do débito com encargos e multa · `nao homologa* | nao-homologa* | multa | glosa`
 - A via segura é o PER (ressarcimento), sem prazo de recebimento prometido · `PER | ressarcimento`
-- A decisão é do técnico ou do Luis, e o caso escala (não é o agente que libera) · `tecnico | Luis | escala* | validacao`
+- A decisão do caso é do técnico humano e o caso escala (não é o agente que libera); exceção à regra D14 só com o Luis · `tecnico | Luis | escala* | validacao`
 - O cliente precisa de termo de ciência do risco ou alternativa conservadora · `termo de ciencia | alternativa conservadora | variante B | variante C | alternativa`
 
 **Não pode conter:**

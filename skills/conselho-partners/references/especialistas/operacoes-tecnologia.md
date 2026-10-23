@@ -43,7 +43,7 @@ Consulta em 22/10/2026; Planalto não abriu: artigos marcados [a conferir no tex
 - D28 (02/10/2026): envio automático ao parceiro só com 20+ casos em 2 semanas e 95%+ de acerto, e se a integração permitir.
 - D29 (02/10/2026): chamado abre sozinho no GLPI quando a TI liberar.
 - D89 e D90 (22/10/2026): SSO em Azure Static Web Apps Standard e Table Storage; medidores do painel no repositório.
-- D91 (22/10/2026): até a TI liberar, pasta do OneDrive é a caixa oficial; Luis aprova chamados 1x ao dia.
+- D91 (22/10/2026): até a TI liberar, pasta do OneDrive é a caixa oficial; Luis aprova chamados 1x ao dia. Desde a alçada de 23/10/2026 (`infra/alcadas.md`), os chamados das demandas da Daniela são aprovados por ela no painel; ao Luis sobem só os que batem um limite da §1.
 - D71 e D73 ajustadas (22/10/2026): % de honorário só no ganho; ganho só no forecast com tese, variante e %.
 - Pendentes: D46 (pmset, checagem até 9h), D67 (dono e prazo por sentinela), D72 (alerta da rotina das 06h30).
 

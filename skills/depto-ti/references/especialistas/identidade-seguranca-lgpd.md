@@ -15,7 +15,7 @@ Revisão: 23/10/2026 (fontes consultadas em 22/10/2026) · Área: `depto-ti` · 
 - **Referências de mercado:** ISO/IEC 27001:2022, NIST CSF 2.0, CIS Controls v8.1, Microsoft Learn (Entra ID), ANPD (guias e resoluções), `references/seguranca-lgpd.md` da casa.
 
 ## 1. Entrega única
-**A nota de segurança e acesso de um sistema ou fluxo, com o rascunho do chamado ao TI.** Formato: `.md` em `departamentos/ti/entregas/` com: escopo; exposição medida (contagem, sem URL); classificação do dado (C0–C3); controles existentes e faltantes (referência ISO 27001 Anexo A / CIS); risco (probabilidade × impacto, baixo a crítico); papéis e permissões propostos; mapa do dado pessoal para o Jurídico; rascunho do chamado em `chamados-rascunho.md`; decisão do Luis e do TI.
+**A nota de segurança e acesso de um sistema ou fluxo, com o rascunho do chamado ao TI.** Formato: `.md` em `departamentos/ti/entregas/` com: escopo; exposição medida (contagem, sem URL); classificação do dado (C0–C3); controles existentes e faltantes (referência ISO 27001 Anexo A / CIS); risco (probabilidade × impacto, baixo a crítico); papéis e permissões propostos; mapa do dado pessoal para o Jurídico; rascunho do chamado em `chamados-rascunho.md`; decisão do TI (e do Luis só para acesso de escrita ou dado pessoal novo).
 
 ## 2. Domínio técnico
 **SSO da Central Partners (`docs/sso-entra/`, 16 e 19/10/2026; D89 de 22/10/2026):**
@@ -67,7 +67,7 @@ Revisão: 23/10/2026 (fontes consultadas em 22/10/2026) · Área: `depto-ti` · 
 5. **Propor o controle mínimo** com dono e prazo: crítico em 24 h, alto em 7 dias, médio em 30, baixo no próximo trimestre.
 6. **Papéis e permissões:** tabela papel × ação, sempre negando por padrão.
 7. **Mapa do dado pessoal** para o Jurídico validar base legal e retenção.
-8. **Rascunhar o chamado** com o texto pronto para o TI; o Revisor Técnico confere; o Luis envia.
+8. **Rascunhar o chamado** com o texto pronto para o TI; o Revisor Técnico confere; quem pediu envia ao TI.
 
 ## 6. Perguntas de diagnóstico
 1. **Que dado este sistema guarda e qual a classe (C0 a C3)?**
@@ -121,7 +121,7 @@ Revisão: 23/10/2026 (fontes consultadas em 22/10/2026) · Área: `depto-ti` · 
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** base legal e contrato de operador (Jurídico e DPO); configurar Entra, Exchange, Acesso Condicional (TI); integração ponta a ponta (Arquiteto de Integrações); resposta a incidente (Gestão de Incidentes).
 - **Passa para:** Gestão de Incidentes (quando a exposição já ocorreu), Governança de IA (agente que toca dado pessoal), `depto-juridico` (LGPD & Privacidade).
-- **Exige humano:** toda concessão de papel e de credencial (TI com aprovação do Luis); toda comunicação à ANPD (controlador, com o Jurídico).
+- **Exige humano:** toda concessão de papel e de credencial (TI da Save executa; papel previsto na matriz de papéis não precisa do Luis; papel fora da matriz, acesso de escrita ou credencial nova de integração, Luis); toda comunicação à ANPD (controlador, com o Jurídico).
 
 ## 10. Atualização
 - **Última revisão:** 23/10/2026 (fontes de 22/10/2026).

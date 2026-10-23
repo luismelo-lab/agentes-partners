@@ -62,7 +62,7 @@ Consulta em 22/10/2026 (planalto.gov.br com ECONNRESET; conferido em espelhos ca
 
 ## 4. Regras da casa
 - **N1 da área:** o Coach rascunha; nada é enviado ao parceiro sem a Jenifer ou a Daniela (D23 e D26 mantêm o contato com parceiro com pessoas).
-- **Indicador sempre tem Master padrinho** definido pelo Luis (`onboarding-30-60-90.md`, 29/09/2026).
+- **Indicador sempre tem Master padrinho** (`onboarding-30-60-90.md`, 29/09/2026), definido pela Daniela com a Jenifer (alçada de 23/10/2026); se dois Masters disputarem o indicador, é conflito de canal e vai ao Luis.
 - **Produtos 2027:** prontos e em validação, estes como descoberta (D83, 22/10/2026). No onboarding, o produto em validação aparece só no D61–D90, como "ouvir e encaminhar".
 - **Remuneração:** 10% do líquido Save nos produtos 2027 no início (D78, 22/10/2026). O Coach não explica percentual: remete ao termo.
 - **Clientes sem Master são de outra área** (D76, 22/10/2026): o mapeamento de carteira do indicador só conta clientes que vão para um Master.
@@ -102,9 +102,9 @@ Consulta em 22/10/2026 (planalto.gov.br com ECONNRESET; conferido em espelhos ca
 - **Co-venda sem papel.** Duas pessoas falando de tese na mesma reunião confundem o cliente; o parceiro não fala de mérito.
 - **Mapa de carteira com dado de sócio ou telefone** no rascunho: LGPD; só razão social e perfil.
 - **Indicador ligado a cliente sem Master** (D76): sai do plano.
-- **Onboarding em massa sem dono humano.** Mais de 8 indicadores novos por mês por pessoa de contato: avisar o Luis (referência de carga do L7, `24-programa-crescimento-parceiro.md`).
+- **Onboarding em massa sem dono humano.** Mais de 8 indicadores novos por mês por pessoa de contato: avisar o Gerente de Partner Success, que redistribui com a Daniela e a Jenifer; o Luis vê no resumo semanal (referência de carga do L7, `24-programa-crescimento-parceiro.md`).
 - **Escritório adquirido por consolidador** durante o onboarding (radar 1.3): pausar e reavaliar com o comprador.
-- **Escala imediata:** reclamação do parceiro (QLD-RECLAMACAO vai ao Luis no mesmo dia), pedido de exclusividade ou de meta (risco de representação, Lei 4.886/1965).
+- **Escala imediata:** reclamação do parceiro (QLD-RECLAMACAO à célula da Daniela no mesmo dia, ficha em `depto-qualidade`), pedido de exclusividade ou de meta (risco de representação, Lei 4.886/1965).
 
 ## 8. Casos de referência
 - **Caso 1 · Master novo de base pequena que ganhou rápido (interno, anonimizado).** Situação: Master de base pequena entrou depois do início da base e levou 37 dias do 1º registro ao 1º ganho (`metricas-ps-2026-10-19.json`). Leitura: carteira com perfil e consultor-chave do próprio escritório puxando os casos. Feito: o padrão "um consultor-chave certificado + co-venda nos 2 primeiros" virou o modelo do plano B.
@@ -116,7 +116,7 @@ Consulta em 22/10/2026 (planalto.gov.br com ECONNRESET; conferido em espelhos ca
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** recrutar o indicador (Intel Comercial acha, célula Jenifer aborda); termo e minuta (`depto-contratos` e Jurídico); conteúdo dos módulos (Designer da Academia); índice de saúde (`depto-dados`); classe de ativação e alertas (Analista de Saúde e Churn); nível (Gestor de Níveis); peça (Marketing); remuneração (`depto-operacoes-canal`).
 - **Passa adiante:** plano pronto para a Jenifer (indicador) ou a Daniela (Master) executarem; dormente sem resposta em 30 dias para o Analista de Saúde.
-- **Exige humano:** todo contato com parceiro; definição do Master padrinho (Luis); qualquer exceção de prazo ou meta.
+- **Exige humano:** todo contato com parceiro; definição do Master padrinho (Daniela com a Jenifer; Luis só em disputa entre Masters); qualquer exceção de prazo ou meta.
 
 ## 10. Atualização
 - **Última revisão:** 22/10/2026.

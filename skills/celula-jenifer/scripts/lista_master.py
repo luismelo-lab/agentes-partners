@@ -311,7 +311,7 @@ def modo_clientes(a, C, master, ros):
     fora_base = [c for c in alvo if not any(c.startswith(p) or p.startswith(c) for p in rc["cnaes_alvo"])]
     avisos = []
     if P["ganhos_considerados"] < 15 and not cad and not a.cnaes:
-        avisos.append(f"Perfil de segmento fraco: só {P['ganhos_considerados']} ganhos fora do café em {C['perfil_master']['janela_meses']} meses. A lista usa o território do Master (UF/municípios) + prioridades do Q4; confirmar com o Luis se o {master} quer atuar nesses segmentos (ou preencher masters_cadastro / usar --cnaes).")
+        avisos.append(f"Perfil de segmento fraco: só {P['ganhos_considerados']} ganhos fora do café em {C['perfil_master']['janela_meses']} meses. A lista usa o território do Master (UF/municípios) + prioridades do Q4; a Daniela confirma com o {master} se ele quer atuar nesses segmentos (ou preencher masters_cadastro / usar --cnaes).")
     if fora_base: avisos.append(f"CNAEs sem cobertura na base local da Receita (incluir em receita-config.json 'cnaes_alvo' e recarregar): {', '.join(fora_base)}")
     ufs_fora = [u for u in P["ufs"] if u not in rc["ufs_alvo"]]
     if ufs_fora: avisos.append(f"UFs do Master fora da base local (receita-config.json 'ufs_alvo'): {', '.join(ufs_fora)}")
@@ -413,7 +413,7 @@ def modo_clientes(a, C, master, ros):
                 ["CNAEs buscados", ", ".join(alvo_ok) + f"  ({origem_alvo})"],
                 ["Prioridades Q4", ("ATIVAS como parâmetro — " + C["prioridades_q4"]["_status"]) if q4 else "desligadas (--sem-q4 ou config)"]] + [["Aviso", t] for t in avisos]
     resumo = Counter((r["segmento"], r["uf"]) for r in top)
-    fonte = [[meta.get("fonte", "Receita Federal")], [f"HubSpot: {os.path.basename(fhs)} (download local; a API não foi chamada)"], [f"ICP/lead scoring v1: {os.path.basename(fic)} (pendente de validação do Luis)"],
+    fonte = [[meta.get("fonte", "Receita Federal")], [f"HubSpot: {os.path.basename(fhs)} (download local; a API não foi chamada)"], [f"ICP/lead scoring v1: {os.path.basename(fic)} (vale por padrão; ajuste da Inteligência Comercial com a Jenifer)"],
              ["Matriz tese × perfil: recuperador/references/matriz.json (Depto Tributário, 29/09/2026 — pré-análise, validar com o técnico)"],
              [f"Filtros: ativas, matriz, porte {portes}, capital ≥ R$ {rc['capital_social_minimo_prospeccao']:,.0f}, sem Simples/MEI, café fora. Acima de R$ {teto:,.0f} → aba 'Contas estratégicas'."],
              [f"Score 0–100 = (segmento + regime do lead scoring v1 + aderência da matriz + peso da UF no território do Master + classe do Master + município do Master + filial nova 12m + prioridade Q4 − alerta) ÷ {MAXP} pontos."],
@@ -474,7 +474,7 @@ def modo_parceiros(a, C, master, ros):
     for i, (s, r, anos, conf) in enumerate(escolhidos, 1):
         lin.append([i, s, master, fmt_cnpj(r["cnpj"]), r["razao"], r["fantasia"], r["uf"], r["municipio"], "sim" if norm(r["municipio"]) in mun_m else "não",
                     cart.get(r["municipio"], 0), anos, r["porte"], r["capital"], r["simples"] or "", "",
-                    f"Validar com o Luis se o Master {master} quer sub-indicadores na região → rascunho de convite (persona contador)", "", ""])
+                    f"A Daniela confirma com o Master {master} se ele quer sub-indicadores na região → rascunho de convite (persona contador)", "", ""])
     conf_l = [[i, s, master, fmt_cnpj(r["cnpj"]), r["razao"], r["fantasia"], r["uf"], r["municipio"], "", "", anos, r["porte"], r["capital"], r["simples"] or "",
                f"nome parecido com parceiro existente: {c}", "Não abordar sem checar com a Daniela", "", ""] for i, (s, r, anos, c) in enumerate([x for x in L if x[3]], 1)]
     dest = os.path.join(OUT, f"Lista-Indicadores-{re.sub(r'[^A-Za-z0-9]+', '-', master).strip('-')}-{HOJE.isoformat()}.xlsx")

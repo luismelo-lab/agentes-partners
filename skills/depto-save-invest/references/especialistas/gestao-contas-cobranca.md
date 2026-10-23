@@ -15,7 +15,7 @@
 - **Referências de mercado:** Serasa Experian (indicadores mensais de inadimplência de empresas), Bacen (SGS e Regulamento Pix), PwC Working Capital Study, KPMG "Tendências de Capital de Giro" (out/2025), ANPD, política do WhatsApp Business, CNJ (provimentos de protesto).
 
 ## 1. Entrega única
-**Diagnóstico de carteira e desenho da régua de Gestão de Contas** para um cliente específico. Formato (rascunho para o Luis e o Junior):
+**Diagnóstico de carteira e desenho da régua de Gestão de Contas** para um cliente específico. Formato (rascunho para o Junior; a Daniela quando for ao parceiro; alçada de 23/10/2026):
 1. Leitura da carteira: aging em 5 faixas, % vencido, DSO, concentração (top 10 sacados), ticket médio, B2B × B2C.
 2. Encaixe: seguir / preparar / não seguir, com o motivo.
 3. Régua proposta: dias e canais (pré-vencimento, vencimento, pós), ponto de negativação e de protesto **a decidir pelo cliente**.

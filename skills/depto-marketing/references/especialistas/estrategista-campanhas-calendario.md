@@ -127,7 +127,7 @@ Revisão: 22/10/2026 · Área: `depto-marketing` · Padrão: `infra/padrao-senio
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** escrever a frase técnica (Tributário), decidir a base legal de contato (Jurídico), escolher contas-alvo (ABM e `depto-intel-comercial`), comissão do parceiro (`depto-operacoes-canal`).
 - **Passa para:** Redator (texto), Designer (peça), Enablement (kit por tese), Conformidade Publicitária (aprovação), Autoridade Digital (LinkedIn).
-- **Exige humano:** aprovação do plano trimestral pelo Luis; qualquer disparo real (sempre uma pessoa); qualquer campanha de produto em validação (Luis e dono do produto); uso de marca de cliente (autorização escrita).
+- **Exige humano:** aprovação do plano trimestral pelo Luis (ajuste de data ou de ação dentro do plano aprovado fica com o Gerente de Marketing, alçada de 23/10/2026); qualquer disparo real (sempre uma pessoa); qualquer campanha de produto em validação (Luis e dono do produto); uso de marca de cliente (autorização escrita).
 
 ## 10. Atualização
 - **Última revisão:** 22/10/2026.

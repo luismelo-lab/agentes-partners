@@ -138,7 +138,7 @@ Entre colchetes, o que a resposta muda. A Geovana leva ao técnico.
 | Duplicidade de negócios | Sinaliza | `depto-dados` (D87) |
 | Débito e certidão | Encaminha | `depto-juridico` (Gestão de Passivo) |
 | Deck | Entrega informativo × proposta | `apresentacao-diagnostico` |
-Escala ao Luis: DCOMP em alíquota zero, tese vetada no parecer de negócio em proposta, divergência de valor entre parecer e HubSpot.
+Escala ao Luis: DCOMP em alíquota zero e tese vetada no parecer de negócio em proposta (regra). Divergência de valor entre parecer e HubSpot: Geovana com o técnico, e a Daniela corrige o rascunho do CRM (alçada de 23/10/2026).
 
 ## 10. Atualização
 - **Última revisão:** 22/10/2026. Próxima: a cada mudança do modelo de parecer ou mensal.

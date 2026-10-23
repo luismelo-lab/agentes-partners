@@ -16,6 +16,6 @@ O que só um humano responde, com por que importa e o especialista que depende d
 9. **ADI 4.395:** o marco é "até 31/12/2017" ou "anterior a 2018" e qual a modulação? O acórdão não foi localizado no portal do STF em 22/10/2026.
 10. **Registros da EFD ICMS/IPI** que decidem T03 e T04 (ICMS destacado e ICMS-ST nas entradas): quais o técnico usa hoje? A tabela por perfil marcou como não conferido.
 
-## Ao Luis
-11. **Urgência depois de 30/11/2026:** o peso de +25% para saldo credor acaba em 30/11 (constante do script). Deve ser estendido até 31/12/2026 ou trocado por urgência de decadência (competência que vence em 60 dias)?
-12. **Escopo `files` do HubSpot:** liberar a leitura dos pareceres anexados como arquivo (hoje ficam "aguardando permissão")? Sem isso, parte da fila fica sem sinal do parecer.
+## À Geovana e à TI (saíram do Luis em 23/10/2026, `infra/alcadas.md`)
+11. **Urgência depois de 30/11/2026:** o peso de +25% para saldo credor acaba em 30/11 (constante do script). Deve ser estendido até 31/12/2026 ou trocado por urgência de decadência (competência que vence em 60 dias)? **Dona: Geovana** (parâmetro do lote, reversível); vale a recomendação do Tributário em 28/10/2026 se não houver resposta.
+12. **Escopo `files` do HubSpot:** liberar a leitura dos pareceres anexados como arquivo (hoje ficam "aguardando permissão")? Sem isso, parte da fila fica sem sinal do parecer. **Dono: TI da Save** (administrador do HubSpot), a pedido da Geovana; é só leitura.

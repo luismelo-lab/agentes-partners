@@ -70,9 +70,9 @@ Equipe sênior (padrão de 22/10/2026, D93). Cada especialista tem arquivo próp
 ### A2. Dossiê da conta (estudo padrão Big Four) — modelo aprovado no exemplo do Frigorífico Calafate (16/10/2026)
 1. Gerente e especialistas escrevem `dossie.md` (até 10 seções com títulos que dizem a conclusão, sumário executivo em 1 página, tabelas de no máximo 5 colunas, anexos de fontes, do que falta e do registro da revisão), `mapa-valor.md` (1 a 2 páginas, sem dado interno sensível) e 5 gráficos SVG (cascata, faixas, linha do tempo, matriz de risco, esteira) no padrão Save.
 2. **Revisão obrigatória de todas as áreas, em paralelo:** Tributário (teses, faixa, PER), Jurídico (prazos, riscos, linguagem, procuração e contrato), Produtos Internacionais (travas), Save Invest (Gestão de Contas, antecipação, FIDC), Operações de Canal + Resultados + Dados (números contra o HubSpot, dono, duplicidade) e Qualidade + Marketing (`auditar_texto.py`, narrativa e layout). Cada uma grava `revisao-<area>.md` com veredito.
-3. O Gerente consolida (fica com a posição mais conservadora quando houver divergência) e registra `revisao-final.json` com as pendências do Luis.
+3. O Gerente consolida (fica com a posição mais conservadora quando houver divergência) e registra `revisao-final.json` com as pendências e o dono de cada uma; ao Luis só sobe o que é alçada dele (preço, regra, produto em validação, risco sem precedente; `infra/alcadas.md`).
 4. Converta os SVG em PNG (Playwright) e gere os Word com `departamentos/produtos/credito-internacional/scripts/gerar_manual_docx.js` (`DOC_MD`, `DOC_VERSAO`, `DOC_CABECALHO`, `DOC_SELO`). Publique no OneDrive em `01 · Comercial e Parceiros/Relatórios das áreas/Contas e Soluções/`, com o link do Office Online.
-5. O mapa de valor só vai ao Master depois do ok do Luis.
+5. O mapa de valor só vai ao Master depois do ok da Daniela (dona da relação com os Masters; alçada de 23/10/2026, `infra/alcadas.md`). Sobe ao Luis só se trouxer número de produto em validação, preço ou exceção à regra.
 
 ### B. Carteira do Master (priorizar onde crescer)
 1. Rode `python3 scripts/mapa_conta.py --carteira [--master X]`. Ele gera o Excel com um cliente por linha, as ondas e o índice de aderência.

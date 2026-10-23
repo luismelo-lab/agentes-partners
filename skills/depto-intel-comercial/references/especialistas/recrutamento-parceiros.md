@@ -59,7 +59,7 @@
 - **D61 (06/10/2026):** crédito internacional: indicador com 10% do líquido Save, até 30% no programa de desenvolvimento.
 - **D79 (22/10/2026, reprovada):** escala de honorário 30/25/20: mantém a regra atual.
 - **D76 (22/10/2026):** cliente sem Master é de outra área: escritório recrutado não traz carteira para "fora do Master" sem decisão do Luis.
-- **Fluxo B da `celula-jenifer`:** antes do convite, o Luis confirma se o Master quer sub-indicadores e se a política de remuneração e o termo foram validados pelo Jurídico. No M8, nenhum percentual.
+- **Fluxo B da `celula-jenifer`:** antes do convite, a Daniela confirma com o Master se ele quer sub-indicadores, e a política de remuneração (Luis) e o termo (Jurídico) precisam estar validados. No M8, nenhum percentual.
 - **Regra do estudo de 22/10/2026:** honorário de advogado ao contador só como indicação comercial `[VALIDAR JURÍDICO]`.
 - **D54 (05/10/2026, pendente):** teto de horas da Jenifer em produtos novos (≤ 2 h/semana depois das 1:1): recrutamento para produtos em validação entra nesse teto.
 
@@ -116,7 +116,7 @@ Situação: parceiros perguntam se a remuneração do crédito internacional seg
 
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** contato e cadência (`celula-jenifer`); termo e política de remuneração (`depto-operacoes-canal`, `depto-juridico`, `depto-contratos`); ativação e saúde (`depto-partner-success`); material do parceiro (`depto-marketing`).
-- **Exige humano:** Luis (política por Master, praças, piloto de perfil alto); Gilberto e diretoria (remuneração); Jurídico (termo, OAB); Master (sub-indicador).
+- **Exige humano:** Luis (política por Master, piloto de perfil alto); Jenifer com o gerente (ordem das praças); Gilberto e diretoria (remuneração); Jurídico (termo, OAB); Master (sub-indicador).
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

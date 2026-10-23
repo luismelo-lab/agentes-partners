@@ -121,7 +121,7 @@ Situação: bancos acompanham inadimplência por safra de concessão justamente 
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** decidir tese ou reanálise (Geovana e Técnico); a meta e o forecast oficial (depto-resultados, especialista forecast-pipeline); o ICP comercial e o lead scoring de campanha (depto-intel-comercial, que usa estas estimativas).
 - **Passa para:** BI (apresentar); Governança (definição de "sucesso" e "ganho"); Recuperador e célula da Jenifer (uso da fila).
-- **Exige humano:** qualquer decisão sobre cliente ou parceiro tomada a partir do modelo (LGPD art. 20); mudança de prior ou de alvo (Luis).
+- **Exige humano:** qualquer decisão sobre cliente ou parceiro tomada a partir do modelo (LGPD art. 20); mudança de prior ou de alvo (gerente de Dados com a dona do uso: Geovana ou Jenifer; alçada de 23/10/2026).
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

@@ -113,4 +113,4 @@ Situação: FIDC com R$ 902,2 bi de PL em set/2026 e 4.270 classes. Leitura: exc
 ## 10. Atualização
 - Última revisão: 22/10/2026.
 - Fontes vigiadas: ANBIMA (boletim mensal de fundos), CVM, Bacen (duplicata escritural), sites das Big Four, Contábeis, Valor, Capital Aberto, Brazil Journal, motivos de perda do HubSpot.
-- Radar semanal: novo concorrente citado 3 vezes; mudança de modelo de comissão ao contador no mercado; normas do Bacen sobre duplicata escritural; segunda rodada de pesquisa autorizada pelo Luis (pergunta 12 do estudo).
+- Radar semanal: novo concorrente citado 3 vezes; mudança de modelo de comissão ao contador no mercado; normas do Bacen sobre duplicata escritural; segunda rodada de pesquisa, decidida pelo gerente de Inteligência (pergunta 13; alçada de 23/10/2026).

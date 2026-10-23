@@ -9,7 +9,7 @@ Transforma um diagnóstico tributário pronto (PDF "Proposta de serviços de rev
 
 # Apresentação de diagnóstico (padrão Save)
 
-Leia `~/agentes-partners/departamentos/tributario/apresentacao-diagnostico/FLUXO.md` e o `MODELO-OXIGENAR-ESTRUTURAR-ESCALAR.md` antes de começar. Tudo é pré-análise: nada vai ao cliente sem a aprovação do Luis e do técnico. Português do Brasil.
+Leia `~/agentes-partners/departamentos/tributario/apresentacao-diagnostico/FLUXO.md` e o `MODELO-OXIGENAR-ESTRUTURAR-ESCALAR.md` antes de começar. Tudo é pré-análise: nada vai ao cliente sem a aprovação do técnico do caso e da dona da entrega (Daniela, que conduz com o Master); o Luis aprova quando o deck sai do modelo aprovado (slide novo, case nominal ou com logo, produto em validação, honorário, tese fora da vitrine), quando o crédito passa de R$ 1 mi ou quando o material vai em escala (aí ele vê o exemplo) (alçada de 23/10/2026, `infra/alcadas.md`). Português do Brasil.
 
 
 ## Equipe sênior (padrão de 22/10/2026, `infra/padrao-senior.md`)
@@ -22,7 +22,7 @@ O gerente distribui pelo arquivo do especialista; entrega que não usa o método
 | Revisor de Promessas da Peça | Parecer de linguagem slide a slide (auditor + passada humana, rodapé, 9 avisos, D82, D83, D88, trava G2) | `references/especialistas/revisor-promessas-peca.md` |
 O veredito técnico de cada tese (MANTER, AJUSTAR, RETER ATÉ VALIDAR, RETIRAR) continua com o time tributário (passo 2). Perguntas que só o dono responde: `references/perguntas-ao-dono.md`.
 
-**Ordem no fluxo:** passo 2 (Tributário) → Roteirista (antes do `deck.json`) → Objeções (notas de fala) e Curador (slide de case) em paralelo → `deck.json` e render → Revisor de Promessas → `depto-qualidade` → Luis.
+**Ordem no fluxo:** passo 2 (Tributário) → Roteirista (antes do `deck.json`) → Objeções (notas de fala) e Curador (slide de case) em paralelo → `deck.json` e render → Revisor de Promessas → `depto-qualidade` → aprovação (técnico e dona da entrega; Luis só nos casos da alçada, acima).
 
 ## Fluxo
 

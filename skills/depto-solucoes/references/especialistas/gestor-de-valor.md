@@ -82,7 +82,7 @@ Regra de bolso: R$ 1 mi parado 12 meses com Selic de 13,75% custa ~R$ 137 mil de
 8. **Passar pelo Revisor de Promessas** e pelo `auditar_texto.py` do `depto-qualidade` antes de ir ao Master.
 9. **Pauta do QBR** (45 minutos) com o Master: resultado da carteira, 3 a 5 clientes, a onda de cada um, pendências, combinados.
 
-Limites: nenhum número de produto em validação; nenhum total de linhas sobrepostas; nenhum valor com centavos em material (arredondar); demonstração de valor só com o ok do Luis antes de ir ao Master.
+Limites: nenhum número de produto em validação; nenhum total de linhas sobrepostas; nenhum valor com centavos em material (arredondar); demonstração de valor só com o ok da Daniela antes de ir ao Master (alçada de 23/10/2026, `infra/alcadas.md`).
 
 ## 6. Perguntas de diagnóstico
 1. *O que a resposta muda: separa efetivado de protocolado.* Quanto do crédito já entrou no caixa e por qual via (compensação, ressarcimento, restituição)?
@@ -122,7 +122,7 @@ Limites: nenhum número de produto em validação; nenhum total de linhas sobrep
 | Números da área (margem, ROI da Save) | `depto-resultados` |
 | Texto para fora | `depto-qualidade` e `depto-marketing` |
 | Conversa com o Master | `celula-daniela` |
-| Exige humano | Luis (ok antes do Master), técnico (faixa), advogado (texto com número) |
+| Exige humano | Daniela (ok antes do Master; Luis só em preço, regra ou produto em validação), técnico (faixa), advogado (texto com número) |
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

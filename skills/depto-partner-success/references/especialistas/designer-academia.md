@@ -82,7 +82,7 @@ Consulta em 22/10/2026. O planalto.gov.br não respondeu (ECONNRESET) nesta data
 - **Clientes sem Master são de outra área** (D76): exemplo de módulo não usa cliente sem Master.
 - **Nome do produto:** "estruturação patrimonial", não "holding" (trava da matriz, P10); "crédito de longo prazo", nunca "fundo" (ecossistema, seção 5).
 - **Movimentos da esteira:** Destravar caixa, Proteger e controlar, Crescer (decisão de 21/10/2026). Os módulos de produto usam essa ordem.
-- **Em aberto:** dono humano da Academia (proposta: Daniela curadora, Geovana curadora técnica, Luis patrocinador) e se a certificação entra como critério de nível já no 1º ciclo (decisão 3 do `programa-niveis-v1.md`).
+- **Dono humano da Academia:** proposta Daniela curadora, Geovana curadora técnica, Luis patrocinador; vale a recomendação em 28/10/2026 se não houver resposta (alçada de 23/10/2026). **Em aberto:** se a certificação entra como critério de nível já no 1º ciclo (decisão 3 do `programa-niveis-v1.md`).
 
 ## 5. Método
 1. **Análise (ADDIE-A).** Para cada módulo pedido: quem é o público (sócio do escritório × analista da carteira × consultor do Master), qual comportamento se quer no HubSpot e qual erro mais custa hoje (do `aprendizados.md`, da Qualidade e do GLPI). Critério de entrada: só abre módulo de tese com ficha no catálogo do Tributário (`departamentos/tributario/catalogo-teses-save-completo.md`) e com dono técnico nomeado.

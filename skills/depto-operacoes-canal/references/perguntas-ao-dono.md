@@ -17,8 +17,8 @@ O que só um humano responde, com a data de registro e por que importa. As decis
 | 11 | Unidade protegida: raiz inteira do CNPJ ou raiz × tese? (R1) | Luis | 22/10/2026 | Base de toda decisão de conflito |
 | 12 | Validade do registro: 90 + 60 dias (proposta, ciclo de 80,8% em 90 dias) ou 180 dias (citado em `juridico-revisao.md`)? Validade maior para Masters (120)? (R2) | Luis + Jurídico | 22/10/2026 | Quanto mais longa a proteção, mais ela parece zona exclusiva (Lei 4.886/1965, art. 31) |
 | 13 | Ordem de desempate e divisão só como exceção? (R3) | Luis | 22/10/2026 | Sem regra, o padrão legal é dividir em partes iguais (CC, art. 728) |
-| 14 | O nome individual que aparece em 14 conflitos com um Master é pessoa desse Master? | Luis | 29/09/2026 (repetida) | Separa roster incompleto de disputa real |
+| 14 | O nome individual que aparece em 14 conflitos com um Master é pessoa desse Master? | Daniela (alçada de 23/10/2026) | 29/09/2026 (repetida) | Separa roster incompleto de disputa real |
 | 15 | Os 412 ganhos de Master com percentual zero são "não remunera" ou campo vazio? | Daniela | 22/10/2026 | Muda o passivo do canal |
 | 16 | O Master é indicador ou condutor? A Save aceita o risco da representação comercial (Lei 4.886/1965)? | Luis + Jurídico | 22/10/2026 | Define o termo, o prazo de pagamento (até o dia 15 do mês seguinte, art. 32, § 1º) e a indenização (art. 27, "j") |
 | 17 | Na Save Invest, a remuneração do parceiro sai da receita da Save Invest (paga pelo cliente) ou de valor pago pela Federal Invest (D96)? | Junior + Jurídico | 22/10/2026 | O parceiro nunca recebe da financiadora sem enquadramento (C1) |
-| 18 | O calendário mensal (corte, cálculo, aprovação, extrato, contestação em 10 dias, pagamento até o dia 20) pode ser aprovado? | Luis + Financeiro | 22/10/2026 | Pré-requisito do primeiro extrato |
+| 18 | O calendário mensal (corte, cálculo, aprovação, extrato, contestação em 10 dias, pagamento até o dia 20) pode ser aprovado? | Financeiro, com a Daniela no envio (alçada de 23/10/2026); vale a recomendação em 28/10/2026 se não houver resposta, e o Luis pode reverter | 22/10/2026 | Pré-requisito do primeiro extrato |

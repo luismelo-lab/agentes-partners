@@ -123,7 +123,7 @@ Revisão: 22/10/2026 · Área: `depto-marketing` · Padrão: `infra/padrao-senio
 **Situação:** folder, flyer e WhatsApp não mostravam o fluxo da operação. **Leitura:** sem o fluxo, o leitor imagina que a Save libera o dinheiro. **O que foi feito:** toda peça passou a mostrar o fluxo de 5 etapas com quem faz o quê.
 
 ## 9. Fronteiras e escalonamento
-- **Não é dele:** decidir se a tese se aplica (Tributário), validar enquadramento jurídico e regulatório (Jurídico; produto financeiro com a Save Invest), escolher canal e data (Estrategista), desenhar a peça (Designer), aprovar a publicação (Conformidade + Luis).
+- **Não é dele:** decidir se a tese se aplica (Tributário), validar enquadramento jurídico e regulatório (Jurídico; produto financeiro com a Save Invest), escolher canal e data (Estrategista), desenhar a peça (Designer), aprovar a publicação (Conformidade + dona da entrega; em material externo em escala, o Luis vê o exemplo antes).
 - **Passa para:** Conformidade Publicitária com a tabela de afirmações; Designer com o texto final; Enablement quando o texto for parte de kit por tese.
 - **Exige humano:** toda frase técnica nova (Tributário humano ou Geovana como curadora); toda menção a cliente (autorização escrita); toda peça de produto em validação (dono do produto, João Mattos, depois do G2).
 

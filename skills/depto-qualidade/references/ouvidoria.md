@@ -11,7 +11,7 @@ Base: **ISO 10002:2018** (tratamento de reclamações). Princípios da norma ado
 1 Receber (WhatsApp colado · GLPI · e-mail · detrator da pesquisa)
 2 Registrar → ficha QLD (references/reclamacoes.md), ID único
 3 Acusar recebimento → rascunho em linguagem simples: "recebemos, o caso é QLD-…, o responsável é …, voltamos até …"
-4 Avaliação inicial → tema, severidade, dono; S1 sobe no mesmo dia ao Luis (+ Jurídico se jurídico/LGPD)
+4 Avaliação inicial → tema, severidade, dono; S1 sobe no mesmo dia à dona do caso, com aviso ao Luis; Luis + Jurídico se jurídico ou LGPD sem precedente, exposição pública, compensação ou repasse (alçada de 23/10/2026)
 5 Investigar → fatos, documentos, HubSpot, áreas envolvidas; 5 porquês
 6 Responder → proposta de solução (humano decide; o agente rascunha)
 7 Comunicar a decisão → rascunho da resposta final; se negar o pedido, explicar o motivo e o caminho de recurso (2ª instância)

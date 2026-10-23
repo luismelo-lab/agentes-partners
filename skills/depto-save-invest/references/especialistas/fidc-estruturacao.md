@@ -75,7 +75,7 @@ Consulta: 22/10/2026.
 5. **Desenho preliminar:** classe e público (profissional/qualificado como padrão; varejo só com rating); subordinação proposta pela perda esperada × estresse (perda histórica × 3 como ponto de partida, a calibrar pelo gestor); critérios de elegibilidade (prazo, concentração, sacado sem RJ, sem parte relacionada); eventos de avaliação (inadimplência, subordinação abaixo do mínimo).
 6. **Papéis:** listar administrador, gestor, custodiante, consultoria especializada, agente de cobrança, auditoria, rating e distribuidor, com "quem é" ou "a definir" (P17). A Save Invest só ocupa papel para o qual tenha registro.
 7. **Riscos:** fraude de lastro, concentração, diluição, RJ de sacado (Res. CVM 240), conflito com partes relacionadas, IOF na cota, custo de subordinação.
-8. **Memorando ao Junior** + 3 blocos ao Luis. Nada vai ao cliente com número de rentabilidade, taxa de cota ou "investimento".
+8. **Memorando ao Junior** + 3 blocos ao Junior (o Luis vê no resumo semanal; alçada de 23/10/2026). Nada vai ao cliente com número de rentabilidade, taxa de cota ou "investimento".
 
 ## 6. Perguntas de diagnóstico
 1. Qual o faturamento mensal e quanto é vendido a prazo?

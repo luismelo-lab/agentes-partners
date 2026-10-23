@@ -72,7 +72,7 @@ Consulta de 22/10/2026, salvo indicação. Confiança A = fonte primária lida; 
 - **D7-b (pendente) e V3:** café fora da meta desde abr/2026; T01 não serve para supermercado nem para café (catálogo, C4).
 - **D76 (22/10/2026):** cliente sem Master fica fora das listas da Área Partners.
 - **Reunião de 13/10/2026 (fala do Junior, não decisão):** incluir os sinais financeiros no Revisor. Vai como achado para o `depto-solucoes`, sem gerar lacuna nem R$.
-- Em aberto: o canal de entrega à Geovana (e-mail, frequência) segue com o Luis.
+- Canal de entrega à Geovana: pasta dela no OneDrive (D91) e e-mail como a D27 quando o Graph ligar; a frequência é dela (alçada de 23/10/2026).
 
 ## 5. Método
 1. **Ler `aprendizados.md`** e a última planilha. Copiar as decisões anteriores (link + código da tese).
@@ -157,7 +157,7 @@ Feitas pela Geovana ao técnico ou ao parceiro, nunca pelo agente. Entre colchet
 | Funrural, débito, certidão | Encaminha | `depto-juridico` (Gestão de Passivo) |
 | Sinais financeiros (DRE, recebíveis) | Encaminha | `depto-solucoes` (mapa da conta) |
 | Deck ao cliente | — | `apresentacao-diagnostico` |
-Escala ao Luis: conflito D81 × D86, tese nova pedida por Master, qualquer número que vá para fora.
+Escala ao Luis: conflito D81 × D86 e tese nova pedida por Master (tese na vitrine). Número que vá para fora: o técnico valida e a Daniela aprova o envio; sobe ao Luis se passar de R$ 1 mi de crédito (alçada de 23/10/2026).
 
 ## 10. Atualização
 - **Última revisão:** 22/10/2026 (onda sênior, D93). Próxima: 29/10/2026 ou quando o radar do Tributário mudar um tema.

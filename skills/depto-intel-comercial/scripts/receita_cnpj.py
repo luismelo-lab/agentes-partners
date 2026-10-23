@@ -226,7 +226,7 @@ def prospectar(cnaes=None):
     meta = {x["chave"]: x["valor"] for x in q("SELECT * FROM meta")}
     ws2 = wb.create_sheet("Fonte e regras")
     for t in [meta.get("fonte"), "Filtros: " + json.dumps({k: c[k] for k in c if not k.startswith("_")}, ensure_ascii=False) + (f" · CNAEs desta lista: {cnaes}" if cnaes else ""),
-              "Score parcial = pontos do segmento + pontos da UF (lead scoring v1, pendente de validação do Luis). O regime tributário entra depois (Minha Receita, com autorização).",
+              "Score parcial = pontos do segmento + pontos da UF (lead scoring v1, pendente de validação da Jenifer e do gerente de Inteligência). O regime tributário entra depois (Minha Receita, com autorização).",
               "Clientes e empresas já no HubSpot foram excluídos. Uso sujeito à validação de LGPD (legítimo interesse, opt-out, envio pelo parceiro). Sem dados de sócios."]:
         ws2.append([t])
     dest = os.path.join(OUT, f"Prospects-Receita-{date.today().isoformat()}.xlsx"); wb.save(dest); print(dest, len(rows), "prospects +", len(estrategicas), "contas estratégicas")

@@ -78,7 +78,7 @@ Consulta em 22/10/2026.
 1. **Inventário:** listar todo campo que algum script usa (`hubspot_fonte.py`, `calc_semana.py`, `dados_bi.py`, `ganhos_a_completar.py`, Recuperador). Campo usado e fora do dicionário = lacuna.
 2. **Ficha do campo:** nome interno, rótulo, tipo, lista, obrigatório quando, dono, regra de validade, dimensão DAMA, dado pessoal (sim/não, base legal), decisão de origem.
 3. **Ficha da métrica:** termo, definição em uma frase, fórmula (link ao `metricas.md`), grão, filtro de escopo, dono, versão.
-4. **Conflito de definição:** quando duas áreas usam o mesmo termo de jeitos diferentes (ex.: "pipeline"), escrever as duas, medir a diferença em R$ e levar ao Luis com recomendação. Até decidir, o relatório mostra as duas com rótulo.
+4. **Conflito de definição:** quando duas áreas usam o mesmo termo de jeitos diferentes (ex.: "pipeline"), escrever as duas, medir a diferença em R$ e decidir com os gerentes das áreas envolvidas (vale a recomendação em 3 dias úteis). Sobe ao Luis só se mudar meta ou repasse ou se 3 ou mais áreas discordarem (alçada de 23/10/2026). Até decidir, o relatório mostra as duas com rótulo.
 5. **Mudança:** nota de mudança (o que muda, por quê, efeito em R$ e em contagem, data), versão nova, recálculo do histórico pelo script, aviso na capa do relatório (regra do `metricas.md`).
 6. **Campo novo (ex.: Produto):** proposta ao time de CRM com lista fechada, regra de preenchimento, valor padrão proibido ("Outros" só com texto), teste do filtro nos scripts antes do 1º registro.
 7. **Revisão trimestral:** campos sem uso há 90 dias, listas com valores fora do padrão, completude por campo (a partir do `dados_bi.py`).
@@ -121,7 +121,7 @@ Limites: nenhuma definição entra sem dono; nenhuma lista fechada com mais de 2
 ### Caso 1: % honorário na criação × no ganho (interno, D71)
 Situação: a proposta de 19/10/2026 tornava o % obrigatório na criação; a folha de 22/10/2026 ajustou para "só no ganho". Leitura: o % só existe depois da negociação; exigir antes gera valor fictício. O que se fez: dicionário marca "obrigatório no ganho"; aberto sem % não é erro.
 ### Caso 2: "pipeline" com dois números (interno, D74)
-Situação: R$ 180,6 mi × R$ 123,6 mi. Leitura: termo sem definição única. O que se faz: duas definições lado a lado, diferença explicada filtro a filtro, decisão do Luis registrada como versão.
+Situação: R$ 180,6 mi × R$ 123,6 mi. Leitura: termo sem definição única. O que se faz: duas definições lado a lado, diferença explicada filtro a filtro, decisão registrada como versão (gerente de Dados; ao Luis só se mudar meta ou repasse).
 ### Caso 3: produto novo sem campo (interno, D37 e D57)
 Situação: Crédito Internacional e Maquila sem propriedade de produto. Leitura: sem o campo, os números dos produtos novos se misturam à recuperação e somem da medição. O que se propõe: lista fechada "Produto" com teste do filtro antes do 1º registro.
 ### Caso 4: glossário de negócio em programa de governança (mercado)

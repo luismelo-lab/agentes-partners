@@ -83,7 +83,7 @@
 6. **Camada comportamental.** Para cada produto, liste 2 a 4 sinais observáveis e a fonte (Receita, EFD, e-CAC, conversa). Sinal que só aparece na conversa vira pergunta do parceiro, não filtro de lista.
 7. **Produto de entrada.** Defina o primeiro produto e o segundo passo da esteira (Destravar caixa → Proteger e controlar → Crescer), no máximo 2 produtos novos por cliente por vez.
 8. **Marcação de evidência.** Cada célula leva `[BASE]`, `[REGRA]`, `[HIPÓTESE]`, `[validado pelo dono]` ou `[fala do dono em reunião, data]`.
-9. **Revisão com o dono.** Recuperação: Luis. Save Invest: Junior. Validação: João Mattos (crédito internacional e Maquila). Nada sai para o parceiro sem o Luis.
+9. **Revisão com o dono.** Recuperação: gerente de Inteligência com a Jenifer (café e regra nova: Luis). Save Invest: Junior. Validação: Luis com o João Mattos (crédito internacional e Maquila). Nada sai para o parceiro sem a Daniela (dona da relação com o Master); material para vários parceiros de uma vez, o Luis vê o exemplo (alçada de 23/10/2026).
 10. **Publicação.** Atualize a seção 1 do estudo e o `icp-*.json`. O lead scoring (especialista próprio) relê o ICP no mesmo dia.
 
 **Limites numéricos.** Amostra mínima de 15 fechados por recorte; piso prático de R$ 4,8 mi/ano; porta grande a partir de R$ 10 mi/mês ou garantias acima de R$ 60 mi; revisão trimestral; ICP de produto novo só vira `[BASE]` com 90 dias de funil.
@@ -128,7 +128,7 @@ Situação: Deloitte Private e KPMG Private Enterprise organizam a oferta a empr
 
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** pesos do score (Lead Scoring), contagem de mercado (Dimensionamento), mapa de Master (Território), lista nominal de prospects (`celula-jenifer`), tese e risco tributário (`depto-tributario`), perímetro regulatório de antecipação e FIDC (`depto-juridico` + `depto-save-invest`), elegibilidade de crédito internacional (`depto-internacional`).
-- **Exige humano:** Luis (ICP de recuperação, café, conflito de canal); Junior (Save Invest); João Mattos (produtos em validação); Jurídico (CVM, OAB, LGPD).
+- **Exige humano:** gerente de Inteligência e Jenifer (ICP de recuperação); Luis (café, conflito de canal, produto em validação); Junior (Save Invest); João Mattos (produtos em validação); Jurídico (CVM, OAB, LGPD).
 - **Pedido que cruza áreas** vai ao `gabinete`.
 
 ## 10. Atualização

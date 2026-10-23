@@ -37,7 +37,7 @@ Formato: `Conflito-Canal-<data>.xlsx` + pauta (fluxo B do SKILL).
 - Por envolvidos: 65 "parceiro × sem parceiro" (cadastro), 18 "Master × fora do roster", **3 "Master × Master"** e 1 "fora × fora".
 - Por tipo: 56 Ganho × Ganho, 26 Ganho × Aberto, 5 Aberto × Aberto.
 - R$ 10,0 mi em negócios abertos de quem chegou depois.
-- O maior par fora do roster (um Master × um nome individual, 14 casos) pode ser só roster incompleto, se a pessoa for do Master (pergunta ao Luis desde 29/09/2026).
+- O maior par fora do roster (um Master × um nome individual, 14 casos) pode ser só roster incompleto, se a pessoa for do Master (pergunta aberta desde 29/09/2026; quem responde é a Daniela, alçada de 23/10/2026).
 
 **Ciclo real** (mesmo JSON):
 - 1.099 ganhos com datas coerentes;

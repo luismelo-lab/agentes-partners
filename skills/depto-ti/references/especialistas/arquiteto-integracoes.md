@@ -15,7 +15,7 @@ Revisão: 22/10/2026 · Área: `depto-ti` · Padrão: `infra/padrao-senior.md` (
 - **Referências de mercado:** learn.microsoft.com (Graph, Entra, Exchange), developers.hubspot.com, documentação do GLPI (apirest.md e API v2), developers.facebook.com (WhatsApp Business Platform), apidocs.bitrix24.com.
 
 ## 1. Entrega única
-**A especificação de integração de 1 página, pronta para o TI da Save executar.** Formato: `.md` em `departamentos/ti/entregas/` com objetivo; fluxo (gatilho → passos → portão humano); sistemas e endpoints; credencial (tipo, escopo exato, dono, onde fica, rotação, como revogar); dados trafegados e classificação (C0 a C3); volume e limites de API; teste de aceite; plano de desligar; o que o TI decide e o que o Luis decide. Não configura nada.
+**A especificação de integração de 1 página, pronta para o TI da Save executar.** Formato: `.md` em `departamentos/ti/entregas/` com objetivo; fluxo (gatilho → passos → portão humano); sistemas e endpoints; credencial (tipo, escopo exato, dono, onde fica, rotação, como revogar); dados trafegados e classificação (C0 a C3); volume e limites de API; teste de aceite; plano de desligar; o que o TI decide e o que sobe ao Luis (só escrita, orçamento ou dado pessoal novo). Não configura nada.
 
 ## 2. Domínio técnico
 **Mapa das integrações da Área Partners (estado em 22/10/2026):**
@@ -74,7 +74,7 @@ Revisão: 22/10/2026 · Área: `depto-ti` · Padrão: `infra/padrao-senior.md` (
 6. **Volume e limite:** chamadas por dia contra o limite oficial; meta de uso abaixo de 20% do limite; retry com espera exponencial e respeito a `Retry-After`.
 7. **Teste de aceite** em homologação: só leitura primeiro; registro de cada execução (quantos itens lidos, o que foi rascunhado).
 8. **Plano de desligar:** chave de configuração (por exemplo, `CENTRAL_FONTE=artifact`, modo `rascunho` no `glpi-config.json`) e quem desliga.
-9. **Revisor Técnico** confere; o Luis leva ao TI sem reescrever.
+9. **Revisor Técnico** confere; quem pediu leva ao TI sem reescrever.
 
 ## 6. Perguntas de diagnóstico
 1. **Qual fluxo da área para se esta integração não existir?**

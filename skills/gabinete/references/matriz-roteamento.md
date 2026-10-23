@@ -31,7 +31,7 @@
 
 **Esteira:** Destravar caixa (P1, P2, P3, P4, P5, P9) · Proteger e controlar (P5, P7, P8, P10, P11) · Crescer (P12 a P17, N1) · tax internacional P18 atravessa Proteger e Crescer.
 
-## 0.1 Limites para subir de nível (proposta do Gabinete de 22/10/2026, a validar pelo Luis: pergunta G1)
+## 0.1 Limites para subir de nível (proposta do Gabinete de 22/10/2026, pergunta G1; vale a recomendação em 28/10/2026 se não houver resposta, `infra/alcadas.md` §2)
 | Nível | Qualquer um destes leva a este nível |
 |---|---|
 | 1 · Consulta | Pergunta de uma especialidade, interna, reversível; sem R$ ou crédito abaixo de R$ 100 mil |
@@ -39,6 +39,20 @@
 | 3 · Comitê | 2 a 4 áreas; crédito acima de R$ 1 mi (régua do rigor N3 de 15/10); contrato, aditivo, distrato; sai para parceiro ou cliente; prazo da Receita; conflito de canal; produto em validação; dado pessoal novo |
 | 4 · Conselho | Crédito acima de R$ 10 mi num caso ou honorário líquido acima de R$ 1 mi; 3+ Masters ou um dos 3 maiores (71% do valor); muda repasse, honorário, meta, preço ou dono de produto; portão G0 a G4 (D36); candidato N1 a N5; vai à diretoria |
 Âncoras: ticket médio R$ 0,88 mi e win rate de 28,1% (ata de 19/10/2026); concentração top 3 de 71,0%. Pessoa em risco (desligamento, assédio, conflito grave) vai a RH formal e Jurídico humano antes de qualquer agente.
+
+## 0.3 O que sobe ao Luis (alçada de 23/10/2026, `infra/alcadas.md` §1)
+O nível (§0.1) diz quantas áreas trabalham; esta tabela diz quem decide. A coluna "Escalar a humano" das tabelas abaixo segue esta regra: onde diz Luis, é porque o caso cai numa linha "Sim".
+| Tipo de decisão | Quem decide | Sobe ao Luis? |
+|---|---|---|
+| Operacional, reversível e dentro das regras (rascunho ao parceiro, lista de prospecção, priorizar lote, encaminhar a outra área, rascunho de CRM, formato de relatório) | Dona da entrega (Daniela, Jenifer, Geovana) com o gerente da área de agentes | Não. Vai no resumo semanal |
+| Técnica de caso (tese aplicável, documento a pedir, prazo de despacho) | Time técnico ou advogado humano, com a pré-análise da área | Não, salvo se mudar regra |
+| Encaminhamento de produto pronto (Save Invest, Jurídico, tax internacional) | Contas e Soluções, com aviso ao dono do produto | Não |
+| Regra, preço, honorário, meta, remuneração de parceiro ou do time, tese na vitrine, frase permitida | Luis (com o Conselho quando valer) | Sim |
+| Produto novo ou em validação (condição ao cliente, G0 a G4, parceria) | Luis com o dono do produto | Sim |
+| Material externo em escala | Luis vê um exemplo antes | Sim, só o exemplo |
+| Irreversível ou com exposição (envio, contrato, assinatura, publicação, gasto) | A pessoa responsável, com aprovação explícita | Conforme a regra da casa |
+
+**Limites que levam ao Luis em qualquer nível:** muda regra; mais de R$ 1 mi de crédito com decisão; 3 ou mais áreas em conflito; produto em validação; risco jurídico ou de LGPD sem precedente na base; nova fonte de dado pessoal; conflito de canal entre Masters ou parceiros; pessoas do time (remuneração, metas, desempenho). Decisão reversível sem dono natural: vale a recomendação da área em 3 dias úteis se não houver resposta (§2); o Luis pode reverter.
 
 ## 0.2 Porteiro antes da matriz (regra do Luis de 22/10/2026)
 Antes de usar esta matriz: `python3 ~/agentes-partners/infra/ja_existe.py "<pedido>"`. Repetido (nota ≥ 0,60), continuação em outra conversa ou travado → a Ficha de Rota começa dizendo isso e para para o Luis decidir. Relacionado (0,35 a 0,60) → reaproveitar e citar. Novo → seguir e abrir seção no `gabinete/SESSOES.md`. Registrar com `--registrar`.
@@ -60,7 +74,7 @@ Legenda: **O** = obrigatória · o = opcional (entra se a condição valer) · �
 | Necessidade | Nível típico | Áreas | Escalar a humano |
 |---|---|---|---|
 | Plano de ação comercial, direcionamento de mercado | 3–4 | **O** Tributário (teses) · **O** Resultados (números) · o Marketing · o Jurídico (promessas/contratos) · Conselho se for estratégico | — |
-| Problema ou renegociação com um parceiro específico | 3 | **O** célula Daniela (histórico do Master) · **O** Resultados (números do parceiro) · o Jurídico (contrato) | 👤 Luis conduz |
+| Problema ou renegociação com um parceiro específico | 3 | **O** célula Daniela (histórico do Master) · **O** Resultados (números do parceiro) · o Jurídico (contrato) | 👤 Daniela conduz (operacional); Luis se mexer em repasse, honorário ou conflito entre Masters (§0.3) |
 | Recrutar novos parceiros indicadores | 2–3 | **O** Inteligência Comercial · o Marketing · o Jurídico (termo de parceria) | — |
 | ICP, segmento/região para prospectar, lead scoring, território | 2 | **O** Inteligência Comercial · o Dados & BI | — |
 | Saúde de parceiro, parceiro esfriando, qualidade do HubSpot | 2 | **O** Dados & BI · o célula Daniela | — |
@@ -115,10 +129,10 @@ Legenda: **O** = obrigatória · o = opcional (entra se a condição valer) · �
 |---|---|---|---|
 | O que mais o cliente pode contratar, esteira, mapa de valor | 2 | **O** Contas e Soluções · o Tributário · o Jurídico · o Produtos Internacionais (conforme a onda) | — |
 | Carteira do Master, QBR, onde crescer | 2 | **O** Contas e Soluções · **O** Resultados · o célula Daniela | 👤 Daniela conduz com o Master |
-| Oferta integrada por setor | 3 | **O** Contas e Soluções · **O** Tributário · o Marketing · o Qualidade · o Jurídico | 👤 Luis aprova |
+| Oferta integrada por setor | 3 | **O** Contas e Soluções · **O** Tributário · o Marketing · o Qualidade · o Jurídico | 👤 Luis aprova preço e o exemplo do material em escala (§0.3); o resto fica com Contas e Soluções |
 
 ## Atualização 22/10: Central e pedidos do time
 | Necessidade | Nível típico | Áreas | Escalar a humano |
 |---|---|---|---|
-| Pedido do time que a Central não resolve com uma área (cruza 3+ áreas, muda regra, envolve R$ acima de R$ 1 mi ou produto em validação com condição) | 3–4 | sobe da `central-agentes` ao Gabinete (critério em `skills/central-agentes/references/especialistas/triador-pedidos.md`) | 👤 Luis |
+| Pedido do time que a Central não resolve com uma área (cruza 3+ áreas, muda regra, envolve R$ acima de R$ 1 mi ou produto em validação com condição) | 3–4 | sobe da `central-agentes` ao Gabinete (critério em `skills/central-agentes/references/especialistas/triador-pedidos.md`) | 👤 Luis quando bater um limite da §0.3; se for só cruzar áreas sem conflito, o Gabinete consolida e segue com aviso |
 | Desenhar, avaliar ou evoluir um agente; padrão sênior; ROI de IA | 2 | **O** `arquiteto-agentes` · o `depto-ti` · o `depto-resultados` (ROI) | — |

@@ -33,7 +33,7 @@ Aberto em 22/10/2026 pela onda sênior (receita e risco). Cada pergunta diz **po
 | C2 | A ciência tácita de 15 dias (Decreto 70.235, art. 23 §2º, III, a) corre durante a suspensão de 20/12 a 20/01? | Caso típico de mensagem no DTE em dezembro. | Advogado(a) | aberta |
 | C3 | Recurso especial ao CSRF: 15 dias (Decreto 70.235, art. 37 §2º) ou 20 dias úteis (LC 236/2026, CTN art. 208-D, III, com 2 anos de adaptação)? | Divergência entre norma federal e norma geral nova. | Advogado(a) | aberta |
 | C4 | Artigo vigente da IN RFB 2.055/2021 para manifestação contra PER indeferido e confirmação da IN RFB 2.325/2026 e da ADI RFB 2/2026 no DOU. | Base da peça mais frequente da Save. | Advogado(a) | aberta |
-| C5 | Quem monitora a Caixa Postal do e-CAC de cada cliente e como isso entra no contrato? | Ciência tácita corre sem aviso. | Luis + advogado(a) | aberta (desde 16/10/2026) |
+| C5 | Quem monitora a Caixa Postal do e-CAC de cada cliente e como isso entra no contrato? | Ciência tácita corre sem aviso. | Advogado(a), com a área de Contratos (cláusula) e o Pós-venda (rotina); vale a recomendação em 28/10/2026 (alçada de 23/10/2026) | aberta (desde 16/10/2026) |
 
 ## D. Perímetro Regulatório (`especialistas/perimetro-regulatorio.md`)
 | # | Pergunta | Por que importa | Quem responde | Status |

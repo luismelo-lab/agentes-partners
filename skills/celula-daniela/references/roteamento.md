@@ -21,7 +21,7 @@ Princípio do Gabinete: **só entra quem agrega**. Na dúvida, a Daniela decide.
 | Material novo, co-branding, kit | `depto-marketing` | Enablement de Vendas do Parceiro / Co-branding | Marketing real |
 | Números do parceiro, saúde, qualidade do CRM | `depto-dados` | Performance de Canal / Guardião de Qualidade | Daniela / Luis |
 | Margem, honorário, repasse (análise) | `depto-resultados` | Analista de Margem | Luis |
-| Território, conflito de canal, ICP | `depto-intel-comercial` | Planejador de Territórios | Luis decide |
+| Território, conflito de canal, ICP | `depto-intel-comercial` | Planejador de Territórios | Conflito de canal e exclusividade: Luis decide. ICP e ordem de território: gerente da Inteligência com a Jenifer (alçada de 23/10/2026) |
 
 Como acionar: ferramenta Agent (`general-purpose`), mandando ler o SKILL.md do departamento, dizendo o modo, o que entregar, o limite de palavras e que o Portão 0 do departamento já foi aprovado pela Daniela. Passar só o mínimo de dado do cliente.
 
@@ -36,7 +36,9 @@ Como acionar: ferramenta Agent (`general-purpose`), mandando ler o SKILL.md do d
 | Qualidade & Ouvidoria | `QLD-RECLAMACAO` | até existir: Luis no mesmo dia |
 
 ## Vai para o Luis (decisão, não roteamento)
-Condições comerciais e exceções de honorário (`COM-CONDICOES`) · conflito de canal · reclamação grave · qualquer coisa que envolva promessa ao parceiro, renegociação ou mudança de termo de parceria · tema que cruze 2+ áreas com impacto relevante (sugerir ao Luis levar ao `gabinete`).
+Só o que é alçada dele (`infra/alcadas.md`, 23/10/2026): condições comerciais e exceções de honorário (`COM-CONDICOES`) · conflito de canal · promessa nova ao parceiro (valor, prazo, frase fora da lista permitida), renegociação ou mudança de termo de parceria · reclamação com exposição pública ou ameaça de saída de Master Estratégico · tema com 3 ou mais áreas em conflito (levar ao `gabinete`) · mais de R$ 1 mi de crédito com decisão.
+
+**Fica com a Daniela (não sobe):** retorno ao parceiro dentro das frases permitidas, chamados das demandas dela (aprova no painel), plano de conta e QBR, ganhos a completar, cobrança das áreas e reclamação comum (com o `depto-qualidade`). O Luis vê no resumo de sexta e pode reverter.
 
 ## Não roteia: a Daniela resolve com apoio dos scripts
 `COM-STATUS` (briefing_master.py --negocio) · `COM-NOVO-NEGOCIO` (crm_checagem.py --cnpj) · `CRM-CADASTRO` (crm_checagem.py) · `MKT-MATERIAL` (Biblioteca) · `COM-REUNIAO` (Reuniões).

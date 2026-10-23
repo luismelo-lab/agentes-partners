@@ -17,7 +17,7 @@
 - Aplica o percentual negociado daquele parceiro · `D64 | percentual negociado`
 - Mostra o status dos ganhos (Bloqueado, Revisar, OK) · `Bloqueado | Revisar`
 - Não retém repasse por falta de cadastro do cliente · `sem reter | nao reter | D45 | D62 | D73`
-- Pagamento e aprovação são do Financeiro e do Luis; a resposta ao Master é da Daniela · `Financeiro`
+- Conferência, aprovação e pagamento do repasse já definido são do Financeiro; a resposta ao Master é da Daniela · `Financeiro`
 
 **Não pode conter:**
 - Percentual único aplicado a todos · `re:\b50 ?% (para|a) todos`

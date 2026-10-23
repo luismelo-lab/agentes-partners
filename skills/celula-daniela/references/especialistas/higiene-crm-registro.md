@@ -118,7 +118,7 @@ O que muda: 1 e 5 decidem o conflito; 2 e 3 decidem se vale registrar (Simples q
 ## 9. Fronteiras e escalonamento
 - **Painel de qualidade, saneamento em massa, duplicidade da base toda, dicionário de métricas:** `depto-dados` (Guardião de Qualidade, Governança & Dicionário). Aqui é a carteira dos 9 Masters e o caso a caso.
 - **Obrigatoriedade de campo e configuração do HubSpot:** time de CRM da Save (D18).
-- **Território, ICP e conflito estrutural:** `depto-intel-comercial`; decisão do Luis.
+- **Território, ICP e conflito estrutural:** `depto-intel-comercial`. Conflito de canal e exclusividade: decisão do Luis. ICP e ordem de território: gerente da Inteligência com a Jenifer (alçada de 23/10/2026).
 - **Repasse e % do parceiro:** `depto-operacoes-canal`.
 - **Contato e prospecção:** `celula-jenifer`.
 - **Humano obrigatório:** a Daniela aplica toda correção; o Luis decide conflito de canal.

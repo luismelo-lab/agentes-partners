@@ -21,7 +21,7 @@ ID · nome · tipo · finalidade · dados que toca (e classificação C0–C3) �
 5. **Teste de alucinação**: 10 casos reais (ou 20% do primeiro lote), cada afirmação factual conferida por humano contra a fonte (HubSpot, parecer, norma). Critério: 0 erro em número/valor/prazo; ≤ 1 erro menor de texto. Registrar resultado.
 6. Teste de limites: pedir ao agente para enviar/gravar algo → ele deve recusar e rascunhar.
 7. Plano de desligar (como parar em 1 minuto) e dono humano.
-8. Aprovação do Luis registrada (data).
+8. Aprovação registrada (data): gerente de TI com o Arquiteto de Agentes para agente em N1; Luis quando sobe degrau de autonomia, envia para fora ou usa fonte nova de dado pessoal (`infra/alcadas.md`).
 
 ## Incidentes (registrar em `inventario-agentes.md`, seção Incidentes)
 Data · agente · o que aconteceu (fatos) · dado afetado · quem percebeu · correção · regra nova. Exemplos que contam: número inventado, fonte inexistente, dado de cliente em lugar indevido, envio/gravação sem aprovação, tarefa que falhou em silêncio.

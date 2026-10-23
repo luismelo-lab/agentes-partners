@@ -16,7 +16,7 @@ Rascunho para o Luis, de 23/10/2026. Uso interno. **Data do D0: [a definir pelo 
 | P1 | Compartilhar com cada uma a pasta da Central dela e o painel Central Partners | Luis | Sem acesso não há lançamento |
 | P2 | Gravar o **Plano do dia** na pasta de cada pessoa (`Plano do dia/Plano-do-dia-<Nome>-AAAA-MM-DD.xlsx`), com no máximo 10 itens (C7) | depto-ti, ajuste em `lib/operacao.py` (cerca de meio dia) | Hoje, com o e-mail pausado, o plano dela cai na `Caixa de saída (e-mail pausado)` da pasta do Luis, e a planilha fica só no Mac (`departamentos/operacao/<Nome>/`) |
 | P3 | Coluna **"O que fiz com o rascunho"** (Usei / Ajustei / Não usei) no plano do dia | depto-ti, no mesmo ajuste | Mede o aproveitamento direto. A medição atual compara textos no WhatsApp: de 52 sugestões, 40 ficaram "sem resposta" e 12 sem resultado |
-| P4 | Decidir C5: Daniela aprova os chamados dela e Geovana os lotes dela; o Luis fica com tese, valor e conflito de canal | Luis | Hoje o Luis aprova os chamados uma vez por dia (D91), e tudo espera por ele |
+| P4 | Decidir C5: Daniela aprova os chamados dela e Geovana os lotes dela; o Luis fica com tese, valor e conflito de canal | Luis · **decidido na D98 (23/10/2026)**, aplicado em skills e rotinas (`infra/alcadas.md`) | Antes, o Luis aprovava os chamados uma vez por dia (D91), e tudo esperava por ele |
 | P5 | Ligar o **placar de adoção** no relatório de segunda (C1), lendo as fontes da seção "Indicadores" | depto-resultados | Para o D5 já ter número |
 | P6 | Decidir se a Central lê pedido salvo na pasta (pergunta CA3) | Luis; depto-ti ajusta `central.py` se for sim | Hoje a Central lê só o painel e o e-mail `[AGENTES]`, que está pausado |
 
@@ -25,7 +25,7 @@ Rascunho para o Luis, de 23/10/2026. Uso interno. **Data do D0: [a definir pelo 
 |---|---|---|---|
 | **D0** (segunda) | 15 min com as três juntas: por que, a regra "nada sai sem vocês" e o que muda. Depois, 30 min com cada uma, pelo roteiro dela (`roteiro-<pessoa>.md`). Cada uma faz **1 pedido-modelo ao vivo** no painel e marca **1 decisão ao vivo** na entrega dela. Entrega do one-page em Word | Luis | D0 registrado em `docs/lancamento-2026/lancamento.json`; 3 pedidos e 3 decisões no registro |
 | **D1** (terça) | Primeiro dia com a entrega diária na pasta, às 8h. Cada uma abre, decide e marca. Check-in de 10 min às 17h: o que travou | as três; Luis no check-in | Ajustes anotados em `celulas/<pessoa>/aprendizados.md` |
-| **D2** (quarta) | Segundo pedido de cada uma à Central, sobre um caso real dela. Geovana fecha os 5 primeiros casos do lote 1 do Recuperador. Daniela aprova os chamados dela no painel (se C5 aprovada) | as três | Pedidos P-xxxx do time; decisões no lote |
+| **D2** (quarta) | Segundo pedido de cada uma à Central, sobre um caso real dela. Geovana fecha os 5 primeiros casos do lote 1 do Recuperador. Daniela aprova os chamados dela no painel (C5, D98) | as três | Pedidos P-xxxx do time; decisões no lote |
 | **D3** (quinta) | Jenifer usa a lista e os follow-ups do plano. Geovana marca as lacunas do Revisor nos diagnósticos que entraram. Daniela usa os rascunhos ao parceiro e marca Usei / Ajustei / Não usei | as três | Decisões do Revisor; coluna de aproveitamento preenchida |
 | **D4** (sexta) | Retro de 30 min com as três: o que manter, cortar e mudar (no máximo 3 mudanças). Terceiro pedido de cada uma. A consolidação das 16h junta os aprendizados | Luis e as três | Lista de mudanças para a semana 2 |
 | **D5** (segunda seguinte) | Primeiro **placar de adoção** (D0 a D4) no relatório de segunda. O Luis decide as mudanças. Os critérios de pausa voltam a contar | Luis; depto-resultados | Placar no relatório; decisões registradas |
@@ -49,5 +49,5 @@ Todos contam só o que aconteceu do D0 em diante (data em `docs/lancamento-2026/
 ## Riscos do lançamento
 - **E-mail pausado:** o `[AGENTES]` por e-mail só volta com o Graph. Na semana do lançamento, pede-se pelo painel.
 - **Excesso:** se a entrega diária passar de 10 itens, ela deixa de ser lida (planilhas de 125 e 80 linhas não foram lidas, C7).
-- **Espera no Luis:** sem C5, as decisões do time dependem da aprovação do Luis e a adoção cai.
+- **Espera no Luis:** resolvido pela D98 (23/10/2026): a C5 vale, e só o que é alçada do Luis sobe a ele (`infra/alcadas.md`).
 - **Promessa:** todo rascunho ao parceiro passa pelo auditor de promessas; quem envia é sempre a pessoa.

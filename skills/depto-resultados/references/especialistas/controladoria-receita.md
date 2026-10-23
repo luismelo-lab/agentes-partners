@@ -135,7 +135,7 @@ Limites: diferença de conciliação acima de 1% do contratado do mês bloqueia 
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** a margem e o DRE (especialista `margem-dre`), o ROI (`roi-caixa`), o forecast do pipeline aberto (`forecast-pipeline`), o preço (`precificacao-fee`).
 - **Recebe de:** depto-pos-venda (eventos de deferimento, compensação, ordem bancária); depto-dados (ganhos saneados, D87); Financeiro real (recebido).
-- **Exige humano:** a contabilização oficial é do contador da Save; a política de reconhecimento (evento gatilho por variante) precisa de aprovação do Luis e do Financeiro; dúvida sobre faturar serviço jurídico vai ao depto-juridico e ao advogado.
+- **Exige humano:** a contabilização oficial é do contador da Save; a política de reconhecimento (evento gatilho por variante) precisa de aprovação do Financeiro com o contador da Save (o Luis só se mudar o mês em que a meta é medida; alçada de 23/10/2026); dúvida sobre faturar serviço jurídico vai ao depto-juridico e ao advogado.
 
 ## 10. Atualização
 - Revisão: 22/10/2026. Próxima: no primeiro fechamento com dado do Financeiro ou em 22/01/2027, o que vier antes.

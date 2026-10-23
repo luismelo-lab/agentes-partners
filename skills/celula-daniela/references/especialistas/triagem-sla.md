@@ -63,7 +63,7 @@ Gestão de Passivo e Transação somam 45 chamados (1 a 3 dias); Holding (estrut
 
 ## 4. Regras da casa
 - **D23 (29/09/2026):** caixa do WhatsApp 4 vezes ao dia (8h, 11h, 14h, 17h), com e-mail interno à dona do número; o agente não responde parceiro.
-- **D29 (02/10/2026, substitui a D25):** chamado do que os agentes não encontram abre sozinho no GLPI com o usuário de quem atendeu, quando a TI liberar; até lá fica no painel. **D91 (22/10/2026):** até a TI liberar Graph e GLPI, a pasta de cada pessoa no OneDrive é a caixa oficial e o Luis aprova os chamados no painel uma vez por dia.
+- **D29 (02/10/2026, substitui a D25):** chamado do que os agentes não encontram abre sozinho no GLPI com o usuário de quem atendeu, quando a TI liberar; até lá fica no painel. **D91 (22/10/2026):** até a TI liberar Graph e GLPI, a pasta de cada pessoa no OneDrive é a caixa oficial. **Alçada de 23/10/2026 (kit C5, `infra/alcadas.md`):** os chamados das demandas da Daniela são aprovados pela própria Daniela no painel; o Luis aprova só chamado que toque regra, preço, conflito de canal ou produto em validação.
 - **D26 (01/10/2026):** fluxos entre agentes rodam sem aprovação; falar com parceiro, alterar HubSpot ou GLPI e abrir chamado continuam com pessoa.
 - **D28 (02/10/2026):** resposta automática só no degrau 2 (tipo com 20 ou mais casos em 2 semanas e 95% de acerto); valor, prazo de êxito, tese e cobrança ficam sempre com pessoa.
 - **D47 (05/10/2026, pendente):** resumo diário da Daniela com até 15 itens acionáveis acima de um valor mínimo, filtro definido por ela.

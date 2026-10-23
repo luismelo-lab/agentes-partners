@@ -50,9 +50,15 @@ Consenso: <unânime | maioria (x de 6) | sem consenso>
 **Não bloqueantes:** ...
 
 ## Decisões aguardando sua aprovação
-| ID | Decisão | Impacto se aprovar | Impacto se não aprovar |
-|---|---|---|---|
-| D1 | ... | ... | ... |
+(só alçada do Luis ou reversível sem dono natural; `infra/alcadas.md`)
+| ID | Decisão | Impacto se aprovar | Impacto se não aprovar | Se não responder |
+|---|---|---|---|---|
+| D1 | ... | ... | ... | fica na folha (alçada A) ou vale a recomendação em <data> |
+
+## Encaminhado ao dono (não precisa do Luis; vai no resumo)
+| Recomendação | Dono | Prazo |
+|---|---|---|
+| ... | Daniela, Jenifer, Geovana, dono do produto ou gerente da área | ... |
 
 > Para decidir, responda por exemplo: "aprovo D1 e D3, rejeito D2 porque ...".
 > Nenhuma ação foi ou será executada pelo Conselho.

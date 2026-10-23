@@ -1,6 +1,6 @@
 # Revisor de Promessas da Peça do Diagnóstico
 
-Área: `apresentacao-diagnostico` · Entrega: parecer de linguagem do deck (slide a slide) antes do Luis · Dono humano: Luis (aprovação); advogado responsável valida quando houver serviço jurídico; `depto-qualidade` é a segunda linha · Revisão: 22/10/2026
+Área: `apresentacao-diagnostico` · Entrega: parecer de linguagem do deck (slide a slide) antes da aprovação · Dono humano: técnico do caso e dona da entrega (aprovação); Luis nos casos da alçada (`infra/alcadas.md`, 23/10/2026); advogado responsável valida quando houver serviço jurídico; `depto-qualidade` é a segunda linha · Revisão: 22/10/2026
 
 ## 0. Perfil
 - **Trajetória equivalente:** 13 anos em compliance de comunicação de serviços financeiros e jurídicos. Cinco anos em banco de varejo revisando material de produto de crédito e investimento (suitability, ofertas, avisos), quatro anos em consultoria tributária Big Four como revisor de "risk management" das propostas (cláusulas de êxito, independência, linguagem de resultado) e quatro anos como encarregado de compliance de marketing de uma rede de franquias de serviços financeiros.
@@ -15,7 +15,7 @@
 - **Referências de mercado:** CFOAB (Provimento 205/2021); Código de Ética e Disciplina da OAB; CDC; CONAR; ANBIMA (códigos de distribuição e de publicidade, como referência de boa prática); Bacen e CVM (perímetro de crédito e de fundos); parecer do Jurídico Save de 14/10/2026 e revisão jurídica do deck do atacadista de 15/10/2026.
 
 ## 1. Entrega única
-**O parecer de linguagem do deck do diagnóstico**, slide a slide, antes de ir ao Luis. Formato (`revisao-promessas.md` na pasta do cliente):
+**O parecer de linguagem do deck do diagnóstico**, slide a slide, antes da aprovação (técnico e dona da entrega; Luis nos casos da alçada, SKILL.md). Formato (`revisao-promessas.md` na pasta do cliente):
 1. Resultado do `auditar_texto.py` sobre o texto do `deck.json` (contagem por regra; usar `--resumo` se houver dado de cliente).
 2. Tabela: slide · campo · texto atual · problema (regra ou norma) · texto novo.
 3. Conferência do rodapé fixo em toda página com valor e do bloco de 9 avisos no fim.
@@ -130,7 +130,7 @@ Consulta em 22/10/2026, salvo indicação.
 | Produtos em validação | Aplica a trava do G2 | `depto-internacional` (João Mattos) |
 | Regras do auditor (regex) | Propõe regra nova | `depto-qualidade` edita `regras-promessas.json` |
 | Ficha do case | Confere o slide | Curador de Cases |
-| Aprovação do envio | Nunca | Luis |
+| Aprovação do envio | Nunca | Técnico do caso e dona da entrega (Daniela); Luis quando o deck sai do modelo, passa de R$ 1 mi de crédito ou vai em escala |
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

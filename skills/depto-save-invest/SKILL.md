@@ -23,7 +23,7 @@ Produtos (prontos para venda, Luis 19/10/2026; da Save Invest pela D92 de 22/10/
 4. **Remuneração do parceiro (D78):** começa em 10% do líquido Save, crescendo pelo programa. Ninguém recebe da instituição ou do fundo, nem por cota vendida ou investidor trazido.
 5. **Número de mercado não é número próprio** (Junior, 13/10): a Save Invest não tem BI; cada carteira exige estudo. Fala do dono é "o que o dono disse", não regra, até virar decisão.
 6. **Frases proibidas** (`references/regras-e-proibidos.md` §2): "a Save antecipa", "limite garantido", "invista no fundo", "rendimento", "custo zero", "sem IOF", "blindagem", "holding". Tudo que sai passa pelo Revisor de Linguagem e pelo `depto-qualidade`.
-7. **Nada é gravado nem enviado.** Não alterar HubSpot nem GLPI. Rascunho para o Luis aprovar; ele vê um exemplo antes de qualquer envio em massa.
+7. **Nada é gravado nem enviado.** Não alterar HubSpot nem GLPI. Rascunho para o Junior aprovar (dono do produto pronto; no retorno ao parceiro, a Daniela aprova e envia). O Luis vê só um exemplo antes de qualquer envio em massa (alçada de 23/10/2026, `infra/alcadas.md`).
 8. **Dados de cliente ficam no Mac (LGPD).** Sem CNPJ, DRE, SCR ou nome de devedor em busca web. Nos arquivos, `<EMPRESA>`. Proibido ler `.env`. Cliente sem Master fica fora das listas (D76).
 9. **Portão 0.** Mostre o plano (especialistas e perguntas) e espere o "ok". Exceção: pedido vindo do fluxo único, da Central, do Gabinete ou de outro departamento já aprovado.
 
@@ -84,7 +84,7 @@ Analista de Crédito com `depto-solucoes` (`mapa_conta.py`) e `depto-intel-comer
 ## Donos humanos
 - **Dono dos produtos:** Junior (responsável pela Save Invest). Decide crédito, limite, preço, viabilidade de FIDC e trata a D82 presencialmente.
 - **Jurídico:** advogado do `depto-juridico` valida enquadramento, contratos (mandato de cobrança, DPA, indicação, consultoria especializada) e qualquer afirmação regulatória.
-- **Ponto focal na Partners:** Luis. **No time:** Daniela (Masters, registro), Jenifer (listas), Geovana (documentos).
+- **Encaminhamento na Partners:** Contas e Soluções (`depto-solucoes`), com aviso ao Junior (alçada de 23/10/2026). **No time:** Daniela (Masters, registro), Jenifer (listas), Geovana (documentos).
 
 ## Entrega
 - Salve em `~/agentes-partners/departamentos/save-invest/entregas/AAAA-MM-DD-<produto>-<tema>.md` (fora do git quando tiver dado de cliente).

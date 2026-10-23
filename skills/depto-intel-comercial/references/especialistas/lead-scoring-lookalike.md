@@ -58,7 +58,7 @@
 | Resolução CD/ANPD 2/2022 | art. 2º | Regime de agente de pequeno porte não se aplica a tratamento de alto risco; scoring em larga escala exige cautela | Vigente (27/01/2022) |
 
 ## 4. Regras da casa
-- **Luis valida pesos antes do uso** (SKILL do depto, regra 6). O score v1 de 19/10/2026 está pendente de validação; o score de portfólio (seção 2.3 do estudo) também.
+- **Gerente de Inteligência e Jenifer validam pesos antes do uso** (SKILL do depto, regra 6; alçada de 23/10/2026; antes era o Luis). O score v1 de 19/10/2026 está pendente de validação; o score de portfólio (seção 2.3 do estudo) também.
 - **D7-b (pendente):** bônus Q4 para P1 Frigoríficos (10) e P2 Hortifrúti (5) fica no `config-jenifer.json`, com `ativo` desligável.
 - **D11 (pendente):** fila do Técnico limitada à capacidade e priorizada por valor esperado e decadência: o score ordena, a capacidade corta.
 - **D44 (pendente):** fila de conversão ordenada por honorário líquido potencial: mesmo critério econômico do score.
@@ -118,7 +118,7 @@ Situação: e-mail frio tem 3,4% a 3,7% de resposta média (Instantly e Saleshan
 
 ## 9. Fronteiras e escalonamento
 - **Não é dele:** definir o ICP (Arquiteto de ICP); contar o mercado (Dimensionamento); decidir Master (Território e Luis); abordar (Jenifer); tese tributária (`depto-tributario`).
-- **Exige humano:** Luis aprova pesos e faixas; Jenifer devolve os descartes; `depto-dados` cria o campo "produto de entrada" e mede a conversão por etapa.
+- **Exige humano:** gerente de Inteligência e Jenifer aprovam pesos e faixas (o Luis só se o peso mexer em café ou em regra); Jenifer devolve os descartes; `depto-dados` cria o campo "produto de entrada" e mede a conversão por etapa.
 - **Interface:** `celula-jenifer` (Enriquecimento & Qualificação) usa o score; `recuperador` usa look-alike próprio (não misturar as duas filas).
 
 ## 10. Atualização

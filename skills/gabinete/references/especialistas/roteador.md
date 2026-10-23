@@ -18,7 +18,7 @@ A **Ficha de Rota (Portão 0)** de cada pedido do Luis: classificação do porte
 Formato fixo (SKILL.md, Passo 4), com duas linhas a mais: `**Porteiro:** repetido | continuação | relacionado | travado | novo — <o que existe>` e `**Esteira:** Destravar caixa | Proteger e controlar | Crescer | apoio`.
 
 ## 2. Domínio técnico
-**Os quatro níveis e o que realmente os separa.** O que decide o nível não é o assunto, é o impacto: dinheiro, reversibilidade, quantos parceiros ou pessoas, exposição externa. A matriz de roteamento dá o nível típico por tema; o Roteador ajusta pelo impacto do caso. Limites numéricos propostos pelo Gabinete em 22/10/2026 (ancorados no ticket médio de R$ 0,88 mi, no N3 de rigor de 15/10 para valor acima de R$ 1 mi, e na concentração de 71% em 3 Masters; **a validar pelo Luis**, pergunta G1):
+**Os quatro níveis e o que realmente os separa.** O que decide o nível não é o assunto, é o impacto: dinheiro, reversibilidade, quantos parceiros ou pessoas, exposição externa. A matriz de roteamento dá o nível típico por tema; o Roteador ajusta pelo impacto do caso. Limites numéricos propostos pelo Gabinete em 22/10/2026 (ancorados no ticket médio de R$ 0,88 mi, no N3 de rigor de 15/10 para valor acima de R$ 1 mi, e na concentração de 71% em 3 Masters; pergunta G1, vale a recomendação em 28/10/2026 se não houver resposta, `infra/alcadas.md` §2):
 
 | Nível | Entra quando (qualquer um basta para subir) |
 |---|---|
@@ -26,6 +26,8 @@ Formato fixo (SKILL.md, Passo 4), com duas linhas a mais: `**Porteiro:** repetid
 | 2 · Área | Uma área constrói ou valida; crédito até R$ 1 mi ou honorário até R$ 250 mil; material interno; um parceiro afetado sem mudança de regra |
 | 3 · Comitê | Cruza 2 a 4 áreas; crédito acima de R$ 1 mi; contrato, aditivo ou distrato; material ou rascunho que sai para parceiro ou cliente; prazo da Receita; conflito de canal; produto em validação; dado pessoal novo |
 | 4 · Conselho | Crédito acima de R$ 10 mi num caso ou honorário líquido potencial acima de R$ 1 mi; afeta 3 ou mais Masters ou um dos 3 maiores; muda regra de repasse, honorário, meta, preço ou dono de produto; portão G0 a G4 de produto (D36); candidato N1 a N5 (próprio × parceiro); vai à diretoria; decisão irreversível sobre estratégia |
+
+**Nível não é alçada (23/10/2026, `infra/alcadas.md` §1).** Depois do nível, o Roteador marca na Ficha "sobe ao Luis" ou "segue com aviso". Sobe só quando bate um limite da alçada (matriz §0.3): regra, preço, honorário, meta ou remuneração; tese na vitrine ou frase permitida; mais de R$ 1 mi de crédito com decisão; 3+ áreas em conflito; produto em validação; risco jurídico ou de LGPD sem precedente; nova fonte de dado pessoal; material externo em escala (exemplo); conflito de canal entre Masters; pessoas do time; nível 4. O resto segue com aviso, e o "ok" é da pessoa dona da entrega.
 
 Pessoa (desligamento, assédio, conflito grave) é nível 3 ou 4 **e** sai do fluxo de agentes para RH formal e Jurídico humano antes de qualquer ação.
 
@@ -116,7 +118,7 @@ Situação: fichas e preço de 18 produtos. Rota: 6 áreas em paralelo + consoli
 - Consolidação: `references/especialistas/consolidador.md`.
 - Pedidos do time por e-mail ou painel: `central-agentes` (o Gabinete só recebe o que sobe dela).
 - Decisão estratégica: `conselho-partners`.
-- Humano: Luis aprova a Ficha; RH formal e Jurídico humano em pessoas; advogado no mesmo dia em prazo da Receita.
+- Humano: Luis aprova a Ficha quando ela bate um limite da `infra/alcadas.md` §1; nos demais casos a Ficha segue com aviso e o "ok" é da dona da entrega; RH formal e Jurídico humano em pessoas; advogado no mesmo dia em prazo da Receita.
 
 ## 10. Atualização
 - Última revisão: 22/10/2026.

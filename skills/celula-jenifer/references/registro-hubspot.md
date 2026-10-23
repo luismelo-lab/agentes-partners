@@ -3,7 +3,7 @@
 > v1, 29/09/2026. A Central BDR só **rascunha**: a Jenifer confere e registra (ou aprova) no HubSpot. Nomes internos dos campos vêm de `~/agentes-partners/departamentos/resultados/mapeamento-hubspot.json`.
 
 ## Onde registrar
-- Pipeline existente **"Save Partners - BDR/SDR"** (já usado: etapas vistas no download de 29/09 = "Follow - Up" e "Desqualificado"). **[CONFIRMAR com o Luis a lista completa de etapas e o ID de owner da Jenifer — no download aparece o owner 79401410 nos negócios BDR.]**
+- Pipeline existente **"Save Partners - BDR/SDR"** (já usado: etapas vistas no download de 29/09 = "Follow - Up" e "Desqualificado"). **[CONFIRMAR com o time de CRM a lista completa de etapas e o ID de owner da Jenifer — no download aparece o owner 79401410 nos negócios BDR.]**
 - Pipeline **"Save Partners - Closer"** (Agendamento, Negócio perdido) aparece para alguns Masters. **[CONFIRMAR se a reunião agendada pela Jenifer passa para o Closer ou direto para "RT - Real & Presumido · Agendamento".]**
 
 ## Campos do negócio (rascunho)

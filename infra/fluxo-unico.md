@@ -64,4 +64,4 @@ A resposta "já vem conferida": o que o agente conferiu vai em `conferido`. Em `
 
 ## 5. Enquanto a TI não libera o Graph e o GLPI (Luis, 22/10/2026)
 - **Caixa oficial:** a pasta de cada pessoa no OneDrive (`Área Partners · Agentes/<Central>`), pela chave `caminhos.pasta(<pessoa>)`. O plano do dia, a triagem e as respostas são gravados lá, e o e-mail que não sai fica em `Caixa de saída`.
-- **Chamados:** o Luis aprova no painel uma vez por dia. Quando o GLPI for liberado, os aprovados abrem sozinhos.
+- **Chamados:** a dona da demanda aprova no painel (a Daniela os chamados das demandas dela; a Geovana os do Recuperador e do Revisor; a Jenifer os da prospecção). O Luis aprova só chamado que toque regra, preço, conflito de canal ou produto em validação (alçada de 23/10/2026, kit C5, `infra/alcadas.md`). Quando o GLPI for liberado, os aprovados abrem sozinhos.

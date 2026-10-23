@@ -104,7 +104,7 @@ Gary Klein, "Performing a Project Premortem", Harvard Business Review, 2007: com
 - Norma, prazo, tese: embasamento do `depto-tributario` e do `depto-juridico` antes da Rodada 1; parecer humano quando houver risco de terceiro.
 - Números oficiais: `depto-resultados` e `depto-dados` (D74).
 - Pessoas: decisões são sempre do Luis e do RH formal.
-- Exige humano: aprovação de qualquer decisão (Luis); validação jurídica e tributária (advogado e tributarista).
+- Exige humano: aprovação das decisões da alçada do Luis (Luis); recomendação operacional e reversível vai ao dono da entrega (`infra/alcadas.md`, 23/10/2026); validação jurídica e tributária (advogado e tributarista).
 
 ## 10. Atualização
 - Última revisão: 22/10/2026 (onda sênior D93).

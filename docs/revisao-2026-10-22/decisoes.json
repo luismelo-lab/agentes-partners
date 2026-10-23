@@ -1,5 +1,5 @@
 {
- "_leia_me": "Fonte única das decisões pendentes do Luis (22/10/2026). infra/folha_decisoes.py gera o Excel com campos de seleção; --ler devolve as respostas para registro/decisoes-respostas.json. Cada item é uma decisão só, para aprovar ou reprovar separadamente.",
+ "_leia_me": "Fonte única das decisões pendentes do Luis (22/10/2026). infra/folha_decisoes.py gera o Excel com campos de seleção; --ler devolve as respostas para registro/decisoes-respostas.json. Cada item é uma decisão só, para aprovar ou reprovar separadamente. Desde a D98 (23/10/2026), a folha traz só o que é alçada do Luis (infra/alcadas.md); o resto é delegado ao dono ou aplicado por padrão em conselho/decisoes.md.",
  "itens": [
   {
    "id": "8",
@@ -9,7 +9,9 @@
    "porque": "O Word do programa não pode ser regerado",
    "prazo": "sem data",
    "onde": "SESSOES §2",
-   "dono_aplicacao": "depto-partner-success"
+   "dono_aplicacao": "depto-partner-success",
+   "padrao": false,
+   "alcada": "Fica com o Luis (D98): regra e remuneração do programa (níveis e benefícios)"
   },
   {
    "id": "11",
@@ -29,7 +31,45 @@
    "porque": "Sem as respostas não há como avançar",
    "prazo": "—",
    "onde": "SESSOES §5",
-   "dono_aplicacao": "depto-internacional"
+   "dono_aplicacao": "depto-internacional",
+   "padrao": false,
+   "alcada": "Fica com o Luis (D98): produto em validação (Maquila), com o João; a D56 (perguntas ao João) foi delegada ao João em 23/10/2026"
+  },
+  {
+   "id": "18",
+   "bloco": "Aberta",
+   "tema": "Crédito Internacional",
+   "decisao": "Congelar D30, D31 e D34 a D39 até o pacote de verificação do G2 (D38) e as respostas escritas do João; as D36 e D60 (Padrão de Produto Novo) entram juntas",
+   "porque": "Produto em validação: são portões, meta, material ao parceiro e frases; só o Luis decide, com o João",
+   "prazo": "—",
+   "onde": "conselho/decisoes.md (D98)",
+   "dono_aplicacao": "depto-internacional",
+   "padrao": false,
+   "alcada": "Fica com o Luis (D98): produto em validação e regra"
+  },
+  {
+   "id": "19",
+   "bloco": "Aberta",
+   "tema": "Produtos novos",
+   "decisao": "Confirmar o teto único de horas em produtos novos (D54, que absorve a D33): Luis até 4 h/sem; time 0 h até as 1:1; depois Daniela até 1 h, Jenifer até 2 h e Geovana 0",
+   "porque": "Carga do time em produto em validação; afeta as metas da recuperação",
+   "prazo": "—",
+   "onde": "conselho/decisoes.md (D54, D98)",
+   "dono_aplicacao": "depto-pessoas",
+   "padrao": false,
+   "alcada": "Fica com o Luis (D98): gestão do time em produto em validação"
+  },
+  {
+   "id": "20",
+   "bloco": "Aberta",
+   "tema": "Exceções de honorário",
+   "decisao": "Registro único de exceções de honorário (café a 70%) com aprovação do Luis e validação do Jurídico (D65); a conferência dos atípicos (acima de 50% e % do parceiro acima de 100%) contra o contrato passa ao Financeiro com Contratos",
+   "porque": "Exceção de honorário é preço",
+   "prazo": "—",
+   "onde": "conselho/decisoes.md (D65, D98)",
+   "dono_aplicacao": "depto-operacoes-canal",
+   "padrao": false,
+   "alcada": "Fica com o Luis (D98): preço"
   }
  ],
  "historico": [

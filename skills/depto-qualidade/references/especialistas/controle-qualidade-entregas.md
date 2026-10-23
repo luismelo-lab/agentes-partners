@@ -107,13 +107,13 @@ ISO 9001 e NBR 5426 são normas voluntárias: a Save não é certificada. Servem
 - **Concluir acerto com 3 casos.** Com n abaixo de 20, mostre a lista, não a taxa.
 - **Avaliador com o mesmo contexto do autor** concorda com o erro. Use subagente limpo.
 - **Transformar o boletim em ranking de pessoas.** A Qualidade avalia processo e agente, não colaborador.
-- **Sinais para parar e escalar:** defeito A em material já enviado; dado pessoal exposto (vira incidente no mesmo dia); mesmo defeito A em dois meses seguidos na mesma área (vai ao Luis).
+- **Sinais para parar e escalar:** defeito A em material já enviado; dado pessoal exposto (vira incidente no mesmo dia); mesmo defeito A em dois meses seguidos na mesma área (vai ao gerente da área com ação corretiva da Melhoria Contínua e entra no resumo ao Luis; sobe ao Luis só se a correção mudar regra, `infra/alcadas.md`).
 
 ## 8. Casos de referência
 ### Caso 1: 188 análises aprovadas em 1 rodada (interno, 22/10/2026)
 - **Situação:** `registro/analises-areas.json` com 188 entregas, todas com `rodadas: 1` e `aprovado: true`; nenhuma rejeitada.
 - **Leitura do sênior:** em processo real, alguma fração volta. 100% de aprovação na primeira rodada indica que o checklist do gerente está sendo preenchido, não aplicado.
-- **O que fazer:** primeira amostra apertada nas áreas de maior volume (Comercial com 89 entregas, Dados com 32), checagem de número na fonte e pergunta ao Luis sobre a meta de retrabalho esperada.
+- **O que fazer:** primeira amostra apertada nas áreas de maior volume (Comercial com 89 entregas, Dados com 32), checagem de número na fonte e a meta de retrabalho proposta pelo limite de controle do 1º boletim (pergunta Q9, vale em 28/10/2026 se não houver resposta).
 
 ### Caso 2: medição de acerto do WhatsApp (interno, D28)
 - **Situação:** 52 sugestões registradas; 37 sem resposta medida, 3 diferentes do que foi enviado, 12 sem resultado.
@@ -130,7 +130,7 @@ ISO 9001 e NBR 5426 são normas voluntárias: a Save não é certificada. Servem
 - **Leitura do sênior:** defeito A sistemático de modelo; a 2ª linha existe para pegar o que a 1ª normalizou.
 
 ## 9. Fronteiras e escalonamento
-- **Não é dele:** revisar cada entrega antes de sair (gerente da área); auditar promessa no detalhe (Auditor de Promessas); corrigir dado do HubSpot (`depto-dados` e time de CRM); mudar a skill de outra área (o gerente dela, com aprovação do Luis).
+- **Não é dele:** revisar cada entrega antes de sair (gerente da área); auditar promessa no detalhe (Auditor de Promessas); corrigir dado do HubSpot (`depto-dados` e time de CRM); mudar a skill de outra área (o gerente dela; aprovação do Luis só se mudar regra, alçada de 23/10/2026).
 - **Passa para:** gerente da área com defeito (ação corretiva); `depto-ti` (captura de resposta, registro); especialista de incidentes (dado exposto); Melhoria Contínua (causa sistêmica).
 - **Exige humano:** subir degrau da D28; qualquer conclusão sobre desempenho de pessoa (só o Luis, como tema de pessoas).
 

@@ -33,7 +33,7 @@
 > Conversa colada pela Daniela: um Master cobra pela terceira vez o status do parecer de um atacadista de SP e escreve "se continuar assim, levo meus clientes para outra consultoria".
 
 **Deve conter:**
-- Classifica como crítica por ameaça de saída de Master e sobe ao Luis no mesmo dia · `S1 | critica` + `mesmo dia`
+- Classifica como crítica por ameaça de saída de Master e sobe no mesmo dia à Daniela (dona do caso), com aviso ao Luis · `S1 | critica` + `mesmo dia`
 - Abre ficha única com a conversa pseudonimizada · `pseudonimiz* | ficha`
 - Prevê acuse rápido e plano de mérito no prazo da severidade · `acuse* | 4 h uteis | 4 horas uteis | 2 d.u.`
 - Aponta a causa provável na falta de status e a regra de atualização a cada 5 dias úteis · `5 d.u. | 5 dias uteis | C1 | sem aviso de status`

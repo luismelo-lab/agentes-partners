@@ -38,7 +38,7 @@
 - Piso de FIDC a partir de R$ 10 mi por mês, a confirmar · `re:10 ?mi(lhoes)? ?(por |ao |/ ?)mes|10 milhoes mensais`
 - Lista os eliminatórios (Simples, recuperação judicial) · `eliminatori* | Simples | recuperacao judicial`
 - Usa sinal de compra próprio do produto (venda a prazo B2B, contas a receber, inadimplência) · `venda a prazo | vende a prazo | contas a receber | inadimplencia | B2B`
-- Marca o que é hipótese e pede a validação do Luis antes do uso · `hipotese | validacao do luis | o luis valida | rascunho`
+- Marca o que é hipótese e pede a validação do dono do produto (Junior) antes do uso · `hipotese | validacao do junior | o junior valida | rascunho`
 
 **Não pode conter:**
 - Taxa ou condição no ICP de parceiro · `re:taxa de \d+([.,]\d+)? ?%`

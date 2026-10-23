@@ -53,7 +53,7 @@ Registro: 3 linhas por 1:1 (combinados, prazo, apoio), em pasta confidencial.
 - **D26 (01/10/2026):** falar com parceiro e cliente, alterar sistemas e decidir tese continuam com pessoa; os agentes não tiram o julgamento do time.
 - **D33 e D54 (pendentes):** tetos de horas em produtos novos.
 - **Regras 1, 2, 3 e 5 da área:** rascunho e roteiro, nunca decisão; fatos observáveis; sem dado sensível; escalar desligamento, advertência, assédio, saúde e estabilidade.
-- **Em aberto:** se a Save tem CIPA e canal de denúncia formal; quem é o dono do inventário de riscos da NR-1 (SESMT, RH ou terceiro); se o Luis quer pulso mensal registrado ou só conversado.
+- **Em aberto:** se a Save tem CIPA e canal de denúncia formal; quem é o dono do inventário de riscos da NR-1 (SESMT, RH ou terceiro); pulso mensal registrado ou só conversado: vale a recomendação da área (registro só agregado do time, sem nota por pessoa) em 28/10/2026 se não houver resposta; o Luis pode reverter (`infra/alcadas.md` §2).
 
 ## 5. Método
 1. **Antes da conversa:** juntar fatos da área (fila, SLA, números) com data; checar carga; ler os combinados da última 1:1. Sem fato, a conversa vira opinião e é remarcada.

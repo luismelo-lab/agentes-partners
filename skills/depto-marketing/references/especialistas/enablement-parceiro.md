@@ -75,7 +75,7 @@ Revisão: 22/10/2026 · Área: `depto-marketing` · Padrão: `infra/padrao-senio
 5. **Documentos e fluxo:** lista do que o cliente envia e o fluxo com quem faz o quê.
 6. **"Não diga / diga"** do produto, copiado da linha do Jurídico e das regras do auditor.
 7. **Separar versão interna e externa.** Produto em validação: interna completa (playbook de oportunidade em andamento), externa só descoberta.
-8. **Revisão:** Redator → Designer → Conformidade Publicitária → dono do produto → Luis.
+8. **Revisão:** Redator → Designer → Conformidade Publicitária → dono do produto → Luis (vê o exemplo antes da distribuição em escala).
 9. **Certificação e medição:** quiz de 10 questões (aprovação com 8); medir em 60 dias o uso e os negócios gerados.
 
 ## 6. Perguntas de diagnóstico
@@ -130,7 +130,7 @@ Revisão: 22/10/2026 · Área: `depto-marketing` · Padrão: `infra/padrao-senio
 - **Não é dele:** definir elegibilidade e risco da tese (Tributário), enquadramento jurídico e regulatório (Jurídico; Save Invest nos financeiros; Internacional nos em validação), comissão do parceiro (`depto-operacoes-canal`), academia e níveis (`depto-partner-success`).
 - **Passa para:** Redator e Designer (peças), Conformidade Publicitária (aprovação), Partner Success (o quiz do kit alimenta a certificação N1/N2 do Designer da Academia; a certificação é dele, não do Marketing).
 - **Divisão com as células:** o mapa de objeções do kit parte do especialista de Objeções com Base Técnica da `celula-jenifer` (fonte técnica) e o devolve em linguagem de parceiro; nenhuma resposta técnica nova nasce no Marketing.
-- **Exige humano:** ficha técnica aprovada pelo dono do produto; uso de caso de cliente (autorização escrita); kit externo de produto em validação (João Mattos, depois do G2); aprovação final do Luis.
+- **Exige humano:** ficha técnica aprovada pelo dono do produto; uso de caso de cliente (autorização escrita); kit externo de produto em validação (João Mattos, depois do G2); aprovação do exemplo pelo Luis antes da distribuição em escala; ajustes depois disso ficam com o Gerente de Marketing e o dono do produto (alçada de 23/10/2026).
 
 ## 10. Atualização
 - **Última revisão:** 22/10/2026.

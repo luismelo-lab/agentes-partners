@@ -115,7 +115,7 @@ Todas conferidas em 22/10/2026 (Planalto, BCB, CVM); o detalhe está na seção 
 - Deixar a internacionalização liderar a primeira conversa (R02/10).
 - Repetir falas de reunião como condição (8% a 12%; lucro mínimo no Brasil; CRS).
 - Oferecer dois produtos ao mesmo tempo como pacote.
-- **Parar e escalar ao Luis e ao dono:** pedido de proposta com condições; RJ; receita não formalizada; operação abaixo de US$ 5 mi no CI; garantia fora da lista; pagamento antecipado; estrutura opaca.
+- **Parar e escalar ao dono** (produtos em validação: Luis e o dono; tax internacional e comex: Paulo e João com o Jurídico, e ao Luis só risco jurídico sem precedente; alçada de 23/10/2026): pedido de proposta com condições; RJ; receita não formalizada; operação abaixo de US$ 5 mi no CI; garantia fora da lista; pagamento antecipado; estrutura opaca.
 
 ## 8. Casos de referência
 ### Caso 1 · Uma empresa, quatro produtos (interno, R24/09 e R21/10, anonimizado)

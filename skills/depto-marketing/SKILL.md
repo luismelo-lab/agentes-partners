@@ -75,7 +75,7 @@ No chat: resumo, o que precisa de aprovação e os pontos `[A CONFIRMAR]`.
 Quando o solicitante editar ou rejeitar algo, registre a lição em `aprendizados.md` (data, o que mudou, regra para as próximas vezes).
 
 ## Modo Jornal diário
-Quando o pedido for o jornal (ou disparado por tarefa agendada), pule o Portão 0 (o plano é fixo e já foi aprovado ao ativar a rotina) e siga `references/jornal.md`. O Portão final continua: o jornal fica salvo como rascunho em `jornal/` para o Luis revisar antes de distribuir.
+Quando o pedido for o jornal (ou disparado por tarefa agendada), pule o Portão 0 (o plano é fixo e já foi aprovado ao ativar a rotina) e siga `references/jornal.md`. O Portão final continua: o jornal fica salvo como rascunho em `jornal/`; a distribuição interna é liberada pelo Gerente de Marketing (peça interna avulsa, alçada de 23/10/2026, `infra/alcadas.md`). Jornal aos parceiros é material externo em escala: o Luis vê o exemplo antes.
 
 ## Revisão do Gerente (obrigatória, regra do Luis de 15/10/2026)
 Siga `~/agentes-partners/infra/protocolo-gerente.md`.

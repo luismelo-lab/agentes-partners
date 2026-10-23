@@ -9,7 +9,7 @@ Os dados ficam fora do repositório, em `~/agentes-partners/departamentos/intel-
 | 3 | `UFS=MG python3 regime.py` | Consulta o regime no Minha Receita, só de prospects, em ordem de prioridade, com cache em `dados-publicos/receita/regime-cache.json`. Se houver falhas (tempo esgotado), rode de novo: só consulta o que falta |
 | 4 | `python3 contatos.py` | Grava em `dados-publicos/receita/prospects-contatos.json` (permissão 600, fora do repositório e do OneDrive) os sócios do QSA (nome, qualificação, entrada; sem CPF) e os telefones e o e-mail da empresa. Uso aprovado pelo Luis em 20/10/2026 |
 | 5 | `python3 modelo.py` | Filtra o Lucro Real e tira recuperação judicial e falência. Calcula a similaridade com cada ganho, a empresa exemplo, o cliente mais próximo (bairro, região da cidade, cidade, cidades vizinhas) e o potencial |
-| 6 | `python3 previa.py` | Gera a prévia em PNG para o Luis aprovar antes do Excel |
+| 6 | `python3 previa.py` | Gera a prévia em PNG para a Jenifer conferir antes do Excel (lista interna; alçada de 23/10/2026) |
 | 7 | `LOTE="Lote 1" UFS=MG python3 planilha_bdr.py "<destino>.xlsx"` | Gera a planilha de ligações da BDR |
 
 ## Lotes (não perder as anotações da BDR)

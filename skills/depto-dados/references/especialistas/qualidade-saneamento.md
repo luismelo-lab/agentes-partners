@@ -126,7 +126,7 @@ Situação: 1.101 negócios importados em nov/2025 e 620 em fev/2026. Em 22/10/2
 ### Caso 2: % do parceiro acima de 100% (interno, agregado)
 Situação: 9 ganhos com % do parceiro acima de 100% e 143 honorários atípicos. Leitura: misturam erro de digitação, comissões somadas (vendedor, gestor, indicador, coordenador existem como campos separados) e exceção aprovada. O que se faz: separar exceção registrada (D65) de erro; para erro, propor o valor provável com a evidência do contrato; nunca corrigir sozinho.
 ### Caso 3: número oficial do pipeline (interno, D74)
-Situação: R$ 180,6 mi e 395 negócios no HubSpot bruto × R$ 123,6 mi e 387 no relatório (19/10/2026). Leitura: diferença de escopo (roster, café, clientes sem Master), não de soma. O que se faz: tabela de-para com cada filtro e o R$ que ele retira, para o Luis fixar a regra.
+Situação: R$ 180,6 mi e 395 negócios no HubSpot bruto × R$ 123,6 mi e 387 no relatório (19/10/2026). Leitura: diferença de escopo (roster, café, clientes sem Master), não de soma. O que se faz: tabela de-para com cada filtro e o R$ que ele retira, para o gerente de Dados propor a regra com o gerente de Resultados (vale a recomendação em 3 dias úteis; o Luis pode reverter).
 ### Caso 4: migração de CRM com dedupe em consultoria (mercado)
 Situação comum em projetos de MDM: a base migrada traz de 10% a 30% de registros repetidos [faixa de mercado, sem fonte primária: não confirmado]. Leitura: a regra de *survivorship* precisa ser escrita antes da mescla, ou cada operador escolhe um card diferente. Referência de método: DAMA-DMBOK2, capítulo de Master Data.
 

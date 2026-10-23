@@ -1,18 +1,18 @@
 # Perguntas ao dono · Conselho Consultivo
 
-> Dono: Luis. Registradas em 22/10/2026 (onda sênior, D93). Cada pergunta diz por que importa. Quando respondida, vira D-número em `conselho/decisoes.md` e sai daqui.
+> Registradas em 22/10/2026 (onda sênior, D93). Cada pergunta diz por que importa. Quando respondida, vira D-número em `conselho/decisoes.md` e sai daqui. Reclassificadas pela alçada de 23/10/2026 (`infra/alcadas.md`): A fica com o Luis; B passa ao dono indicado; C vale a recomendação do Conselho na data se não houver resposta, e o Luis pode reverter.
 
-| # | Pergunta | Por que importa | Conselheiro | Data |
-|---|---|---|---|---|
-| C1 | A meta do Q4 de R$ 200 mi (D64) é em crédito ganho, em honorário contratado ou em honorário líquido? | Muda toda a régua do Finanças e do Estratégia; a D41 propunha gerir por líquido | Finanças, Estratégia | 22/10/2026 |
-| C2 | D81 (T19 segue tese) e D86 (Funrural anterior a 2018 em Gestão de Passivo) convivem? Qual vale para o catálogo? | Risco dá parecer diferente para tese e para passivo; o catálogo não pode trazer os dois | Risco | 22/10/2026 |
-| C3 | Os repasses acima de 50% e o café a 70% estão em cláusula assinada? Quem confere os 9 repasses acima de 100% (D65)? | Sem lastro, pagar repasse é risco contratual e de auditoria | Risco, Finanças | 22/10/2026 |
-| C4 | Qual o horário fixo da reunião semanal e quem, além do Luis, pode ler a ata? | Hoje a rotina roda às segundas 7h30 e depende do Mac ligado; ata tem dado de pessoas | Presidente, Operações | 22/10/2026 |
-| C5 | O Conselho deve ter um conselheiro fixo de "advogado do diabo" ou basta o contra-argumento de cada um? | Teste de 28/09 mostrou convergência excessiva | Presidente | 22/10/2026 |
-| C6 | Qual o custo/hora de referência de cada pessoa do time para o ROI de agentes e de iniciativas? | Sem ele, o ROI é parcial (67,8x não serve como argumento) | Finanças, Operações | 22/10/2026 |
-| C7 | O Financeiro consegue informar o honorário recebido por negócio? Em que data? | É a coluna "realizado" da D17 e a métrica de troca do programa de níveis | Finanças | 22/10/2026 |
-| C8 | Quando a diretoria define a meta 2027 (D75) e em que métrica? | O Estratégia não fecha a sequência de 2027 sem ela | Estratégia | 22/10/2026 |
-| C9 | As 1:1 da D48 e o alinhamento sobre IA da D68 vão acontecer? Em que semana? | Pessoas condiciona horas do time em produto novo às 1:1 (D54) | Pessoas | 22/10/2026 |
-| C10 | As reuniões da D43 com G.S.H, JGM e Orteconte aconteceram? Qual foi o motivo da queda de cada um? | O Comercial não diagnostica a queda sem esse dado | Comercial | 22/10/2026 |
-| C11 | Quem são o advogado e o tributarista humanos que validam o que o Risco marca como "a conferir no oficial" (D94)? | A base de risco é de uso interno até a validação | Risco | 22/10/2026 |
-| C12 | Qual é o limite de R$ acima do qual uma decisão comercial precisa vir ao Conselho em vez de ficar no Gabinete? | O Gabinete propôs limites (ver `skills/gabinete/references/perguntas-ao-dono.md`); o Conselho precisa da mesma régua | Presidente | 22/10/2026 |
+| # | Pergunta | Por que importa | Conselheiro | Data | Quem responde |
+|---|---|---|---|---|---|
+| C1 | A meta do Q4 de R$ 200 mi (D64) é em crédito ganho, em honorário contratado ou em honorário líquido? | Muda toda a régua do Finanças e do Estratégia; a D41 propunha gerir por líquido | Finanças, Estratégia | 22/10/2026 | A · Luis (meta) |
+| C2 | D81 (T19 segue tese) e D86 (Funrural anterior a 2018 em Gestão de Passivo) convivem? Qual vale para o catálogo? | Risco dá parecer diferente para tese e para passivo; o catálogo não pode trazer os dois | Risco | 22/10/2026 | A · Luis (tese no catálogo) |
+| C3 | Os repasses acima de 50% e o café a 70% estão em cláusula assinada? Quem confere os 9 repasses acima de 100% (D65)? | Sem lastro, pagar repasse é risco contratual e de auditoria | Risco, Finanças | 22/10/2026 | B · área de Contratos (cláusula assinada) e Financeiro (conferência dos repasses já definidos); mudança de percentual segue A |
+| C4 | Qual o horário fixo da reunião semanal e quem, além do Luis, pode ler a ata? | Hoje a rotina roda às segundas 7h30 e depende do Mac ligado; ata tem dado de pessoas | Presidente, Operações | 22/10/2026 | Horário: C · vale a recomendação (segunda, 7h30) em 28/10/2026. Quem lê a ata: A · Luis (dado de pessoas) |
+| C5 | O Conselho deve ter um conselheiro fixo de "advogado do diabo" ou basta o contra-argumento de cada um? | Teste de 28/09 mostrou convergência excessiva | Presidente | 22/10/2026 | C · vale a recomendação do Presidente (contra-argumento obrigatório de cada conselheiro, sem cadeira fixa) em 28/10/2026 |
+| C6 | Qual o custo/hora de referência de cada pessoa do time para o ROI de agentes e de iniciativas? | Sem ele, o ROI é parcial (67,8x não serve como argumento) | Finanças, Operações | 22/10/2026 | A · Luis (custo do time; dado de remuneração) |
+| C7 | O Financeiro consegue informar o honorário recebido por negócio? Em que data? | É a coluna "realizado" da D17 e a métrica de troca do programa de níveis | Finanças | 22/10/2026 | B · Financeiro |
+| C8 | Quando a diretoria define a meta 2027 (D75) e em que métrica? | O Estratégia não fecha a sequência de 2027 sem ela | Estratégia | 22/10/2026 | A · Luis com a diretoria (meta) |
+| C9 | As 1:1 da D48 e o alinhamento sobre IA da D68 vão acontecer? Em que semana? | Pessoas condiciona horas do time em produto novo às 1:1 (D54) | Pessoas | 22/10/2026 | A · Luis (gestão do time) |
+| C10 | As reuniões da D43 com G.S.H, JGM e Orteconte aconteceram? Qual foi o motivo da queda de cada um? | O Comercial não diagnostica a queda sem esse dado | Comercial | 22/10/2026 | B · Daniela (relação com os Masters) |
+| C11 | Quem são o advogado e o tributarista humanos que validam o que o Risco marca como "a conferir no oficial" (D94)? | A base de risco é de uso interno até a validação | Risco | 22/10/2026 | B · advogado humano e time técnico tributário indicam os nomes |
+| C12 | Qual é o limite de R$ acima do qual uma decisão comercial precisa vir ao Conselho em vez de ficar no Gabinete? | O Gabinete propôs limites (ver `skills/gabinete/references/perguntas-ao-dono.md`); o Conselho precisa da mesma régua | Presidente | 22/10/2026 | C · vale em 28/10/2026 a régua da `infra/alcadas.md` §1 (sobe ao Luis acima de R$ 1 mi com decisão) e o nível 4 do Gabinete (G1) para o Conselho |

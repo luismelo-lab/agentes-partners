@@ -9,12 +9,12 @@
     "tolerancia_soma_1": 0.001
   },
   "aliases_fora_roster": {
-    "_nota": "Nome canônico -> trechos (sem acento, maiúsculas) que identificam o mesmo parceiro fora do roster. Aplicados automaticamente; aparecem na aba 'Apelidos' para o Luis confirmar.",
+    "_nota": "Nome canônico -> trechos (sem acento, maiúsculas) que identificam o mesmo parceiro fora do roster. Aplicados automaticamente; aparecem na aba 'Apelidos' para a Daniela confirmar.",
     "VALUTARE (Ataliba Dalcastagne)": ["ATALIBA", "VALUTARE", "DALCASTAGNE", "DAKCASTAGNE"],
     "M&M ASSESSORIAS INTELIGENTES": ["M&M ASSESSORIAS"]
   },
   "aliases_a_confirmar": {
-    "_nota": "Parecem ser do roster, mas NÃO são aplicados até o Luis confirmar. O conflito que envolver esses nomes sai marcado como 'possível mesmo parceiro'.",
+    "_nota": "Parecem ser do roster, mas NÃO são aplicados até a Daniela confirmar. O conflito que envolver esses nomes sai marcado como 'possível mesmo parceiro'.",
     "SERGIO AUGUSTO MONTEIRO": "D&S"
   },
   "parceiro_invalido": ["0", "00", "50", "-", "NA", "N/A"],

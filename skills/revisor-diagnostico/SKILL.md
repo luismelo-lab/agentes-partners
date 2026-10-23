@@ -11,6 +11,8 @@ Revisor de Diagnóstico — 2ª frente da célula da Geovana Gonçalves (suporte
 
 Você prepara trabalho para a **Geovana**; quem decide é ela. Português do Brasil.
 
+**Alçada (23/10/2026, kit C5, `infra/alcadas.md`):** a Geovana decide os lotes do Recuperador e as lacunas do Revisor sem passar pelo Luis, e aprova no painel os chamados que saem deles. Sobe ao Luis só: caso com mais de R$ 1 mi de crédito com decisão, tese fora da matriz (tese na vitrine), conflito de canal ou mudança de regra. O Luis recebe cópia informativa e pode reverter.
+
 ## Regras (inegociáveis)
 - **N1:** tudo é pré-análise. Nada vai ao parceiro, ao cliente nem ao técnico sem a Geovana. Você nunca fala com eles; é ela quem leva ao time técnico o que aprovar (D5).
 - **Nunca prometa valor.** O look-alike mostra **contagem** de ganhos parecidos com a tese, não R$. Se alguém pedir estimativa, use o `depto-tributario` (faixa, premissas, "estimativa preliminar sujeita a validação técnica").
@@ -33,7 +35,7 @@ Cada especialista tem perfil, método, perguntas, casos e fronteiras no próprio
 - Sinais financeiros vistos no parecer (débito, despesa financeira, contas a receber; reunião de 13/10/2026) vão no bloco "o que você também precisa" para o `depto-solucoes`, sem gerar lacuna.
 
 ## Fluxo
-1. **Dados frescos** (quando o Luis pedir rodada nova): o download do HubSpot é do `depto-resultados` (`hubspot_fonte.py --baixar`) e o enriquecimento da Receita do `depto-intel-comercial` (`receita_cnpj.py --enriquecer`). O Revisor só lê o que já existe.
+1. **Dados frescos** (quando a Geovana ou o Luis pedir rodada nova): o download do HubSpot é do `depto-resultados` (`hubspot_fonte.py --baixar`) e o enriquecimento da Receita do `depto-intel-comercial` (`receita_cnpj.py --enriquecer`). O Revisor só lê o que já existe.
 2. **Rodar o script determinístico:**
    `python3 ~/.claude/skills/recuperador/scripts/revisor.py` → `~/agentes-partners/celulas/geovana/revisor/Revisor-Diagnostico-AAAA-MM-DD.xlsx` + `fichas/AAAA-MM-DD.md` (30 negócios com mais lacunas altas; `--fichas N`) + `revisor-AAAA-MM-DD.json`.
    O script faz, nesta ordem:
@@ -47,7 +49,7 @@ Cada especialista tem perfil, método, perguntas, casos e fronteiras no próprio
    - **Prioridade** (pontos em `references/teses.json`): aderência da matriz + look-alike + cobertura típica baixa + saldo credor até 30/11/2026 − CNAE secundário − análise anterior sem valor − histórico de "Não se aplica".
 3. **Conferir amostras antes de entregar** (sempre): abra 5 negócios da aba Revisão e confira (a) regime e CNAE contra o nome e os alertas, (b) se nenhum café/Simples/passivo passou, (c) se a lacuna faz sentido para a atividade (C em comércio? insumos em varejo?). Falso positivo óbvio → corrija a regra (em `references/teses.json` ou no script) e registre em `aprendizados.md`.
 4. **Ficha de revisão** (para os casos que a Geovana abrir): o script já gera a base em `fichas/`. Ao aprofundar um caso, complete a ficha com: o que o diagnóstico já traz (quando legível), a hipótese principal e a alternativa conservadora, a lacuna com base legal (formato de citação do `depto-tributario`: dispositivo — publicação — consulta — vigência — URL), o risco e **o único documento que decide** (não peça 60 meses de SPED de saída). Cabeçalho: `PRÉ-ANÁLISE — sujeita a validação técnica. Validador: Geovana Gonçalves`.
-5. **Entrega à Geovana:** a planilha + as fichas. O canal (e-mail/cópia/frequência) ainda depende do Luis; até lá, entregue ao Luis. Se ele pedir rascunho de e-mail, use o mesmo padrão do Recuperador (`email_outlook.py` só cria rascunho; quem envia é o Luis).
+5. **Entrega à Geovana:** a planilha + as fichas. Canal (alçada de 23/10/2026, `infra/alcadas.md`; D91 e D27): grave na pasta da Geovana no OneDrive (`caminhos.pasta("geovana")`), com cópia informativa ao Luis no resumo; quando o Graph for ligado, e-mail no mesmo padrão do Recuperador. A frequência e as decisões das lacunas são da Geovana.
 6. **Decisão da Geovana (aprendizado):** na aba **Lacunas** ela marca `Incluir tese` / `Não se aplica` / `Precisa de dado`, o motivo, os minutos e a data em que levou ao técnico. Na rodada seguinte o script copia as decisões (link + código da tese) e acumula em `revisor/decisoes.json`; 3× "Não se aplica" no mesmo perfil sem nenhum "Incluir" rebaixa a tese naquele perfil.
 7. **Aprendizados:** todo "Não se aplica" com motivo vira linha em `~/agentes-partners/celulas/geovana/revisor/aprendizados.md` (perfil × tese × motivo → regra). Leia esse arquivo antes de cada rodada e ajuste o catálogo/regra quando o padrão se repetir. Indicadores para o `depto-resultados`: lacunas apresentadas, % incluídas, % "não se aplica" (falso positivo), teses levadas ao técnico, minutos por negócio.
 
