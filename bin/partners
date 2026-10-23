@@ -69,6 +69,8 @@ case "${1:-ajuda}" in
                 if [ "${2:-}" != "forcar" ] && [ -e "$DADOS/hubspot-$hoje.json" ]; then log hubspot "já baixado hoje"; exit 0; fi
                 esperar_rede || exit 1
                 for t in 1 2 3; do rodar hubspot python3 "$SK/depto-resultados/scripts/hubspot_fonte.py" --baixar && exit 0; sleep 90; done; exit 1 ;;
+  indice-ativos) # índice de chaves (HMAC) das empresas com negócio aberto ou ganho: 1ª checagem do site de consulta dos parceiros
+                ( cd "$AP/central/api" && PYTHONPATH="$AP/lib" rodar indice-ativos python3 -m central_api.negocio_ativo construir ) ;;
   dados-bi)     rodar dados-bi python3 "$SK/depto-dados/scripts/dados_bi.py" ;;
   caixa)        # lê caixas e demandas do WhatsApp; pula se já leu nos últimos 20 min ("partners caixa forcar" lê de novo)
                 if [ "${2:-}" != "forcar" ] && recente "$AP/celulas/daniela/whatsapp/demandas-*.json" 20; then log caixa "já lida há menos de 20 min"; exit 0; fi
@@ -119,9 +121,9 @@ case "${1:-ajuda}" in
   plano)        rodar plano python3 "$AP/lib/operacao.py" plano ;;
   para-areas)   rodar para-areas python3 "$AP/lib/operacao.py" para-areas ;;   # alertas que pedem análise da área (rotina operacao-areas)                # plano do dia por pessoa + supervisor (e-mail interno)
   tarde)        # rodada da tarde (13h30): HubSpot de novo, sentinelas e aviso só do que é novo e urgente
-                "$0" hubspot forcar && "$0" sentinelas && rodar plano python3 "$AP/lib/operacao.py" avisos ;;
+                "$0" hubspot forcar && { "$0" indice-ativos; "$0" sentinelas && rodar plano python3 "$AP/lib/operacao.py" avisos; } ;;
   manha)        # preparação diária (dias úteis, 7h30). Se o download falhar, NÃO segue com dado velho
-                "$0" hubspot && { "$0" bitrix; "$0" caixa; "$0" medicao; "$0" sentinelas; "$0" para-areas; "$0" dados-bi; "$0" portal; "$0" onedrive; } ;;
+                "$0" hubspot && { "$0" indice-ativos; "$0" bitrix; "$0" caixa; "$0" medicao; "$0" sentinelas; "$0" para-areas; "$0" dados-bi; "$0" portal; "$0" onedrive; } ;;
                 # o plano sai depois que as áreas analisam (rotina com IA operacao-areas, 7h40); reserva: rodada central das 9h
   segunda)      # preparação da segunda (6h): números da semana, Recuperador, Revisor e relatórios das áreas
                 "$0" hubspot && { "$0" resultados; "$0" recuperador; "$0" revisor; "$0" areas; "$0" onedrive; } ;;
@@ -134,7 +136,7 @@ case "${1:-ajuda}" in
   ajuda|*)      cat <<'TXT'
 partners <comando>
   Operação     sentinelas · para-areas · plano (depois da rotina operacao-areas das 7h40; reserva às 9h, e-mail por pessoa) · tarde (13h30, só urgentes novos) · operacao.py resumo
-  Dados        hubspot [forcar] · dados-bi · areas · receita (mensal) · portal · onedrive · backup
+  Dados        hubspot [forcar] · indice-ativos · dados-bi · areas · receita (mensal) · portal · onedrive · backup
   WhatsApp     caixa [forcar] (dias úteis 7h45 e a cada 30 min das 8h15 às 18h45) · whatsapp-auto (rodada sem IA, e-mail só se houver pedido novo)
   Central      central [agora] (lê e-mails [AGENTES] e enfileira) · central-fila
   Técnica      recuperador (pareceres + fila) · revisor · resultados (métricas da semana)

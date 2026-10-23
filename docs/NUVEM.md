@@ -43,6 +43,8 @@
 1. `AGENTES_IA=ligado` no GitHub.
 2. No app do Claude, pausar as rotinas equivalentes: WhatsApp com IA, Central, relatório semanal e Recuperador.
 
+- **Índice de negócios ativos (site de consulta):** a rotina Dados do dia (`partners manha` e `tarde`) agora roda `partners indice-ativos` depois do download do HubSpot. Precisa do segredo `CENTRAL_SAL` (o mesmo da Central e da esteira). O índice segue para o SharePoint pelo `lib/estado.py`.
+
 ## O que continua no Mac por enquanto
 - **Portal Central Partners:** só uma sessão do Claude publica o portal. Alternativa: página no SharePoint.
 - **Reunião do Conselho:** usa vários agentes em paralelo. Pode ir para a nuvem depois, como `conselho-reuniao-semanal` em `ia-rotinas.yml`.
