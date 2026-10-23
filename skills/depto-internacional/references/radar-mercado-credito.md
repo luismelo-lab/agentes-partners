@@ -1,10 +1,59 @@
 # Radar de mercado · Crédito Internacional (visão Debt Advisory)
 
-> Uso interno. **Data-base: 16/10/2026. Próxima revisão: 23/10/2026.**
+> Uso interno. **Data-base: 23/10/2026. Próxima revisão: 30/10/2026.** (Revisão anterior: 16/10/2026, 7 dias.)
 > Autor: agente de pesquisa (visão de sênior de Corporate Finance / Debt Advisory). **Pré-análise. Não substitui parecer jurídico ou tributário.** Nada aqui vai a parceiro ou cliente antes do G2 (D30).
 > Regra: fonte primária quando existe. Notícia, escritório, banco e Big Four entram como **pista ou benchmark**. Sem fonte: "não localizado". Data de consulta de todas as fontes: **16/10/2026**, salvo indicação.
 > Limite desta rodada: o teto de buscas web acabou antes de fechar alguns itens: cotação do café em outubro, renegociação de dívida rural 2026, custo de PPE e ACC, spreads corporativos e honorários de debt advisory. Esses itens estão marcados como "não localizado" e entram na revisão de 23/10.
 > Formato de cada item: **O que é / o que mudou** · **Impacto para a Save** · **O agente deve** · **Fonte** · **Confiança**.
+
+## 0. Novidades de 23/10/2026 (desde 16/10/2026)
+
+> Datas de consulta: **23/10/2026**. Rodada com busca web limitada; fonte primária só onde indicado. Itens sem novidade verificável estão listados ao fim desta seção.
+
+### 0.1 Dólar e SOFR: números de mercado atualizados (supera a linha "Dólar" e a SOFR da seção 4)
+- **O que mudou (22/10/2026):** PTAX venda **R$ 5,0383** (22/10). Série da semana: 13/10 5,0096 · 14/10 5,0441 · 15/10 5,0521 · 16/10 5,0826 · 19/10 5,0564 · 20/10 5,0140 · 21/10 5,0277 · 22/10 5,0383. SOFR **3,88%** (21/10; 3,87% em 19/10). Selic meta segue **13,75%**; não há reunião do Copom em outubro, a próxima é em 03 e 04/11/2026.
+- **Impacto para a Save:** o spot deixa de ser "não localizado". O real ficou cerca de 0,9% mais forte que em 16/10 (5,0826 para 5,0383). A conta de hedge (item 4) quase não muda: SOFR 3,88% contra 3,87% a 3,90% antes. Não há mudança de cenário.
+- **Ação do agente:** usar PTAX 22/10 nas simulações internas (sempre com a data). Mantém "sem hedge, com hedge e com hedge natural".
+- **Fonte:** BCB SGS série 1 (PTAX venda), https://api.bcb.gov.br/dados/serie/bcdata.sgs.1/dados/ultimos/8?formato=json (dados de 13 a 22/10/2026; consulta 23/10/2026). SOFR: Federal Reserve Bank of New York via FRED, https://fred.stlouisfed.org/series/SOFR (21/10/2026; atualizado 22/10; consulta 23/10/2026). Selic em 13,75% desde 16/09/2026 (5º corte, 14,00% para 13,75%): imprensa (99Pay, https://99app.com/blog/99pay/selic-cai-para-13-75-o-que-muda-no-seu-bolso-apos-a-decisao-do-copom/; consulta 23/10/2026); a série SGS 432 consultada devolveu datas futuras, por isso não foi usada como prova.
+- **Vigência:** dado diário. **Confiança:** alta (PTAX e SOFR, fonte primária); média (Selic, imprensa).
+
+### 0.2 Res. BCB 575 está em vigor desde 01/10/2026; Res. BCB 599 (08/10/2026) é ajuste técnico de câmbio
+- **O que mudou:** a Res. BCB 575 (18/06/2026) passou a valer em **01/10/2026**: exportador, devedor de crédito externo, empresa com sócio estrangeiro e não residente podem ter conta em moeda estrangeira no Brasil. A imprensa jurídica informa que não muda as restrições ao uso da moeda estrangeira em pagamentos internos e que o BCB exigirá comprovação das operações. A **Res. BCB 599, de 08/10/2026** (DOU 09/10/2026, vigência na publicação) altera o Anexo V da Res. BCB 277/2022 para incluir um código de classificação de finalidade de operação de câmbio. Não foi possível identificar qual código; não parece mexer em crédito externo.
+- **Impacto para a Save:** confirma que o fluxo desenhado em 1.2 já vale. A 599 é nota para o Regulatório & Câmbio: o código de finalidade usado pelo banco de câmbio pode mudar o preenchimento.
+- **Ação do agente:** Regulatório & Câmbio lê o texto oficial da 599 e da 575 (nenhum dos dois foi aberto no site do BCB) antes de qualquer afirmação a cliente.
+- **Fonte:** Res. BCB 575: Lefosse, https://lefosse.com/noticias/banco-central-do-brasil-publica-resolucao-que-amplia-e-detalha-o-regime-de-contas-de-deposito-em-moeda-estrangeira-no-pais/ e okai.com.br/documento/2026-06-18/resolucao-bcb-n-575 (publicações de 18/06/2026; consulta 23/10/2026). Res. BCB 599: https://www.contadores.cnt.br/legislacoes/resolucao-bcb-no-599-de-08-10-2026.html (08/10/2026, DOU 09/10/2026; consulta 23/10/2026; transcrição, não o DOU).
+- **Vigência:** 575 desde 01/10/2026; 599 desde 09/10/2026. **Confiança:** média (fontes secundárias; texto oficial não aberto).
+
+### 0.3 FIDC e crédito judicial: Res. CMN 5.343 (24/09/2026), em vigor desde 13/10/2026 (tema lateral ao CI; detalhe no radar financeiro, item 0.1)
+- **O que mudou:** o CMN vedou novos investimentos de FIDC em créditos de ações judiciais ou arbitrais sem caráter definitivo. Não toca em crédito externo.
+- **Impacto para a Save:** nenhum direto no CI. Só reforça que o regulador local está apertando fundos de crédito; relevante se algum cliente tiver tese de crédito judicial (encaminhar ao Jurídico).
+- **Fonte:** Mattos Filho e Lefosse, via busca de 23/10/2026 (detalhes no radar financeiro). **Confiança:** média.
+
+### 0.4 Café físico: Cepea 01/10/2026 (preenche parte do "não localizado" do item 5.3)
+- **O que mudou:** indicador Cepea do arábica (SP) em **R$ 1.577,42/saca em 01/10/2026**, perto de **10% abaixo do início de setembro** (variação mensal até 30/09: -9,81%). Robusta R$ 972,44. USDA estima a safra 26/27 do Brasil em 71,9 mi de sacas (contra 63 mi). ICE de outubro: **não localizado**.
+- **Impacto para a Save:** o físico em queda confirma o alerta do item 5.3: garantia em café vale menos; pedir fluxo com preço estressado.
+- **Ação do agente:** manter haircut e projeção a -20% e -30% (P14). Subir o rótulo de risco de garantia em café.
+- **Fonte:** Brasil61, https://brasil61.com/n/cafe-arabica-e-acucar-registram-alta-nesta-sexta-feira-2-pagr266566 (01/10/2026; consulta 23/10/2026; pista, repete o Cepea). Cepea (cepea.org.br) não aberto.
+- **Vigência:** dado de 01/10/2026 (22 dias). **Confiança:** média.
+
+### 0.5 Sem novidade verificável nesta rodada (não alterar nada)
+- **IOF câmbio, Decreto 12.499 e ADC 96:** nenhum julgamento de mérito ou nova norma localizado (buscas de 23/10/2026; só há conteúdo de jul/2025). Item 2.1 segue como está.
+- **IOF cripto (3,5%):** continua minuta (fev/2026); nenhum decreto publicado localizado. Item 1.3 segue.
+- **Tratado Brasil–EUA:** nenhuma negociação confirmada por fonte oficial. Segue "sem tratado". Decretos de jun/2026 promulgam acordos com outros países (Suécia, Singapura), sem relação com os EUA.
+- **Big Four (Deloitte, PwC, KPMG, EY):** nenhum alerta de out/2026 sobre crédito externo ou câmbio localizado. Benchmark mantido nas seções 3 e 7.
+- **Lacunas que continuam:** custo de PPE e ACC em 2026, spread de captação externa de empresa média, cupom cambial, DI longo, honorários de debt advisory, Focus de 19/10, Cosit 56/2026 (segue valendo). Ficam para 30/10.
+
+### Itens superados nesta rodada
+- **Item 4, linha "Dólar" (spot não localizado): superado em 23/10/2026** pelo 0.1 (PTAX 22/10: R$ 5,0383).
+- **Item 4, linha "SOFR ~3,87% a 3,90% (01 a 06/10)": superado em 23/10/2026** pelo 0.1 (3,88% em 21/10). A leitura de hedge de 9,7% a.a. segue válida como ordem de grandeza (DI longo não atualizado; ver lacunas).
+- **Cabeçalho "Limite desta rodada" de 16/10: superado em 23/10/2026** para café (parcial); os demais itens citados seguem "não localizado".
+
+### Conflitos com a base interna (rodada de 23/10/2026)
+Nenhum conflito novo. Os C1 a C11 da seção final continuam abertos. C6 (Selic 13,75%) confere em 23/10/2026; próxima revisão após o Copom de 03 e 04/11.
+
+### Perguntas novas ao dono (rodada de 23/10/2026)
+- **P15 · Código de finalidade de câmbio:** o banco de câmbio escolhido já usa o código novo da Res. BCB 599/2026 para o ingresso do crédito? (Regulatório & Câmbio confirma com o banco; pergunta ao João só se houver mudança de fluxo.)
+- **P16 · Conta em moeda estrangeira (Res. BCB 575, vigente desde 01/10/2026):** a Save quer que o cliente use essa conta para a liberação e o pagamento? Quem orienta o cliente: a Save ou o banco?
 
 ---
 

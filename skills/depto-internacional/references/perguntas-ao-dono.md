@@ -133,3 +133,11 @@ Prazo proposto: até o G1 dos produtos (31/10 para as críticas do CI; 04/12 par
 | C8 | "Isso aí é uma garantia que eu dou" (Paulo, 00:22:43) | Regra: nunca prometer êxito | Frase proibida |
 | C9 | Via token, sem IOF (João, R30/09) | Res. BCB 521/2025; Decreto 12.499 | Frase proibida (B10) |
 | C10 | Hedge de cerca de 1% sobre o valor solicitado (João, D77) | Radar: travar o dólar por anos custa perto do diferencial de juros | Vale a D77 só na proposta do originador; pergunta 12 ao João mantida |
+
+## Do radar de mercado (23/10/2026, `radar-mercado-credito.md` e `radar-mercado-financeiro-maquila.md`)
+Itens novos, sem apagar os de 16/10:
+- **P15 · Código de finalidade de câmbio (Res. BCB 599/2026, vigente desde 09/10):** o banco de câmbio escolhido usa o código novo no ingresso do crédito? O Regulatório & Câmbio confirma com o banco; vai ao João só se mudar o fluxo.
+- **P16 · Conta em moeda estrangeira (Res. BCB 575, vigente desde 01/10/2026):** a Save quer que o cliente use essa conta na liberação e no pagamento? Quem orienta o cliente?
+- **PN1 · FIDC e crédito judicial (Res. CMN 5.343, vigente desde 13/10/2026):** registrar na ficha do FIDC que crédito judicial e tese tributária não definitiva ficam fora? Algum cliente em andamento tinha essa intenção?
+- **PN2 · Registradoras:** a Federal Invest usa B3, CERC ou Núclea para a carteira registrada? (Reforça a pergunta 2 do radar de 16/10.)
+- **Conflito novo (N1):** a base trata FIDC como destino de recebíveis comerciais, sem excluir crédito judicial. Atualizar `produtos.md` depois da resposta do dono.
