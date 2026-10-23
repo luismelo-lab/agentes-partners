@@ -6,13 +6,15 @@ A Área Partners construiu um site em que os parceiros (Masters e indicadores) c
 
 Fica **fora deste pedido** qualquer token de API (Claude, HubSpot e o token de disparo do GitHub). O Luis trata esses separadamente.
 
-## 1. GitHub (1 dia)
+## 1. GitHub
+**Já feito pelo Luis em 23/10/2026 (repositório `luismelo-lab/agentes-partners`, privado):** Actions habilitado com permissão padrão **somente leitura** e só ações do próprio GitHub permitidas (`checkout`, `cache`, `setup-node`); variáveis `AGENTES_NUVEM=desligado`, `AGENTES_IA=desligado`, `CENTRAL_APROVACAO=obrigatoria` e `GRAPH_PASTA`. Os fluxos continuam desligados.
+
+**Fica para o TI:**
 | # | Pedido | Detalhe |
 |---|---|---|
-| 1.1 | Repositório **privado** `agentes-partners` na organização da Save | Acesso só para o Luis e o TI. O repositório hoje está na conta pessoal do Luis (`luismelo-lab`) e deve migrar. |
-| 1.2 | Proteções | Secret scanning e proteção da branch `main` (merge só por pull request, com o Luis como revisor). |
-| 1.3 | GitHub Actions habilitado | Os fluxos ficam **desligados** até a chave `AGENTES_NUVEM=ligado`. Uso estimado: 900 a 1.200 minutos por mês; o plano gratuito de repositório privado tem 2.000. |
-| 1.4 | Variáveis do repositório (Settings → Variables) | `AGENTES_NUVEM`, `AGENTES_IA`, `CENTRAL_APROVACAO` (começa em `obrigatoria`), `AGENTES_CAIXA`, `GRAPH_SITE_ID`, `GRAPH_PASTA` (= `Área Partners · Agentes`). |
+| 1.1 | Repositório **privado** `agentes-partners` na organização da Save | Acesso só para o Luis e o TI. O repositório hoje está na conta pessoal do Luis e deve migrar (Settings → Transfer ownership). Mantém histórico, variáveis e fluxos. |
+| 1.2 | **Plano da organização com recursos de segurança** | No plano gratuito de conta pessoal o GitHub **não oferece** proteção de branch nem secret scanning para repositório privado (testado em 23/10: erro 403 e 422). Na organização, ativar secret scanning com push protection e proteção da `main` (sem push direto; merge por pull request com o Luis como revisor). Até lá, vale o hook `infra/checar-dados.py` antes de cada commit. |
+| 1.3 | Variáveis ainda em branco | `AGENTES_CAIXA` e `GRAPH_SITE_ID` (vêm dos itens 2.1 e 2.3). |
 
 ## 2. Microsoft 365 e SharePoint (já detalhado em `integracoes-microsoft.md`, itens 1 a 3)
 | # | Pedido | Para quê |
