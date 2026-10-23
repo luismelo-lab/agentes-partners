@@ -1,6 +1,6 @@
 # Índice de fontes do departamento
 
-> Data-base: 16/10/2026. Caminhos relativos a `~/agentes-partners/` salvo indicação.
+> Data-base: 16/10/2026; seções 6 e 7 acrescentadas em 22/10/2026. Caminhos relativos a `~/agentes-partners/` salvo indicação.
 > **Hierarquia em divergência:** decisões do Luis registradas > definição do dono do produto (João Mattos) > documento interno v2.3 > demais documentos. Na Maquila: K03 é a lista única de perguntas; 06 v0.9 é a referência.
 > Alguns caminhos e nomes de arquivo trazem nomes de clientes. Use o caminho só para localizar; nunca copie o nome para material ou resposta (use `<EMPRESA>`).
 
@@ -79,5 +79,45 @@ Regra transversal (07/10/2026): todo arquivo anterior que trate a liberação po
 | `BRIEFING-revisao-v10.md` | 09/10/2026 | Regras que continuam valendo no kit | Vigente |
 | `revisao-v5-*`, `consolidacao-v6.md`, `conselho-rodada-*`, `aplicacao-conselho-r1.md`, `versao-anterior/` | 07–08/10/2026 | Rodadas anteriores | Superadas pela v11 |
 
-## 6. Kit de marca
+## 6. Transcrição e especialistas (22/10/2026)
+| Arquivo | Data | O que tem |
+|---|---|---|
+| `~/Library/CloudStorage/OneDrive-SAVECOMPANY/00 · Entrada/10-21 Reunião_ Captação Internacional e Expansão Industrial via Paraguai-transcript.txt` | 21/10/2026 | **Transcrição completa** (não é resumo), com o Paulo e o João. Fonte das regras e conflitos citados com minuto (R21/10, hh:mm:ss). Nome de cliente no arquivo: não copiar |
+| `references/especialistas/*.md` | 22/10/2026 | 12 especialistas no padrão sênior (D93) |
+| `references/tax-internacional.md` | 22/10/2026 | Ficha do produto pronto P18 |
+| `references/radar-tax-internacional-comex.md` | 22/10/2026 | Radar de tax, comex, captação e garantias |
+| `docs/portfolio-2027/agentes/internacional-fichas.md`, `docs/portfolio-2027/caracteristicas-produtos.md` | 22/10/2026 | Fichas F1–F16, matriz de elegibilidade, esteira de capital e conflitos (base das seções 4 a 8 de `produtos.md`) |
+
+## 7. Fontes externas consultadas em 22/10/2026
+| Tema | Fonte | Endereço | Confiança |
+|---|---|---|---|
+| Preço de transferência | Lei 14.596/2023 (Planalto) | planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14596.htm | alta |
+| Documentação de preço de transferência | KPMG (IN RFB 2.161, out/2023); Demarest; TaxUp | midia.kpmg.com.br/site/2023/10/COM231015-TAX-NEWS-Precos-transferencia-IN-RFB-2161.html | média |
+| PF no exterior | Lei 14.754/2023 | planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14754.htm | alta |
+| Controladas | Lei 12.973/2014 | planalto.gov.br/ccivil_03/_ato2011-2014/2014/lei/l12973.htm | alta |
+| Pilar 2 | Lei 15.079/2024; RFB, notícia da IN 2.342 (out/2026) | planalto.gov.br/ccivil_03/_ato2023-2026/2024/lei/l15079.htm; gov.br/receitafederal (notícias 2026/outubro) | alta / média |
+| Marco cambial | Lei 14.286/2021 | planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14286.htm | alta |
+| BCB (Res. 131, 277, 278, 279, 281, 575) | API de normativos do BCB | bcb.gov.br/api/conteudo/app/normativos/exibenormativo | alta |
+| Acordos de bitributação | RFB (atualizada em 08/07/2026) | gov.br/receitafederal/.../acordos-para-evitar-a-dupla-tributacao | alta |
+| Paraguai × Brasil (acordo) | Senado, PDL 762/2003 | www25.senado.leg.br/web/atividade/materias/-/materia/62967 | alta |
+| Remessas | MP 2.159-70; Lei 9.779/1999; Lei 10.168/2000; Lei 15.270/2025; LC 224/2025 | planalto.gov.br | alta |
+| Listas de paraísos e regimes | RFB, notícia da IN 2.265 (mai/2025) | gov.br/receitafederal (notícias 2025/maio) | média |
+| IOF | Decreto 6.306/2007 e Decreto 12.499/2025; Cescon Barrieu; Mayer Brown (STF) | planalto.gov.br; cesconbarrieu.com.br | alta |
+| Drawback e Reintegra | Lei 11.945/2009; Decreto 6.759/2009; Lei 13.043/2014; Decreto 12.565/2025; LC 214/2025 | planalto.gov.br; normaslegais.com.br | alta |
+| Recof | IN RFB 2.126/2022 (consolidada) | legisweb.com.br/legislacao/?id=440830 | média |
+| Origem Mercosul e certificado digital | Decisão CMC 06/23 (texto publicado pela Argentina); ADE Coana 87/2025 | argentina.gob.ar/normativa/nacional/norma-402016/texto; legisweb.com.br/legislacao/?id=488031 | média |
+| Tarifas dos EUA | MDIC (jul/2026); EY; Holland & Knight; Foley Hoag | gov.br/mdic (notícias 2026, julho); hklaw.com/en/insights/publications/2026/07 | alta / média |
+| Maquila | Lei PY 7.547/2025 (BACN); Decreto 5.714/2026 (MIC); Ferrere (06/05/2026) | bacn.gov.py/leyes-paraguayas/12853; mic.gov.py; ferrere.com | alta / média |
+| Investimento PY | Lei PY 7.548/2025 (BACN); Decreto 5.432/2026; Ferrere (13/04/2026) | bacn.gov.py/leyes-paraguayas/12854 | alta / média |
+| Tributos PY e IPS | EY; Ferrere; Bloomberg Línea (salário mínimo) | — | média |
+| CRS | OCDE, lista de compromissos AEOI (30/09/2026) | oecd.org/content/dam/oecd/en/networks/global-forum-tax-transparency/aeoi-commitments.pdf | alta |
+| Zona Franca PY | Lei 523/1995 (BACN); MIC (dez/2024) | bacn.gov.py/leyes-paraguayas/11620 | média |
+| Ofertas e crowdfunding | Res. CVM 160, 88, 178, 19 | conteudo.cvm.gov.br/legislacao/resolucoes | alta |
+| Startups | LC 182/2021; LC 123/2006 | planalto.gov.br | alta |
+| Garantias | Lei 9.514/1997; Lei 14.711/2023; Lei 13.986/2020; Código Civil | planalto.gov.br | alta |
+| Recuperação extrajudicial | Lei 11.101/2005 (Lei 14.112/2020) | planalto.gov.br | alta |
+| Selic e taxas de crédito | BCB SGS (séries 432, 1178, 20718–20725, 21093, 25441–25444) | api.bcb.gov.br | alta |
+| Home equity | ABECIP via imprensa (27/08/2026); Creditas (26/06/2026) | — | baixa |
+
+## 8. Kit de marca
 - `departamentos/marketing-marca/padrao/` (Design System Save v0.5): todo material segue o padrão (IBM Plex, ouro, modo claro para cliente e parceiro).

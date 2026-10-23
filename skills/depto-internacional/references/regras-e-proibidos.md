@@ -69,6 +69,19 @@
 | "Exportar e produzir fora do Brasil" (como se a Save fizesse) / "dezenas de países" | "Apoio para abrir mercados e estruturar a exportação" (11 países citados). |
 | "A carga no Paraguai é menor" (sem estudo) | "Depende de análise tributária específica." |
 
+### 2.2-A Novas frases (transcrição de 21/10/2026; detalhe em `especialistas/revisor-linguagem-promessas.md` §2.2)
+| Não diga | Diga no lugar |
+|---|---|
+| "O Paraguai não está no CRS; o Brasil pode nunca ficar sabendo" | "A estrutura é declarada no Brasil (IRPF, CBE); a vantagem está no custo de produzir." |
+| "Deixe o lucro no Paraguai; no Brasil, lucro mínimo" | "O lucro da controlada continua tributado no Brasil, e o preço entre as empresas segue o valor de mercado." |
+| "Lei 6090: com o mesmo dinheiro você monta duas fábricas" | "Há incentivo à importação de bens de capital no Paraguai (Lei 7.548/2025), com requisitos; o estudo diz se cabe." |
+| "Entra como monofásico; o imposto tende a zero" | "Com origem Mercosul válida, o II é zero; os demais tributos seguem a regra e geram crédito." |
+| "Nos EUA o Brasil paga 40% e o Paraguai 10%" | "As tarifas dos EUA mudam; analisamos a NCM do seu produto na data." |
+| "Payback de 3 anos"; "20% a 30% mais barato" | "Só o estudo com os seus números mostra o retorno." |
+| "Isso é uma garantia que eu dou" | "O estudo mapeia os riscos antes de qualquer decisão." |
+| "Temos investidores para isso"; "fundos que aceitam valores menores" | "Apresentamos a quem faz sentido, e o investidor decide." |
+| "Seu imóvel cobre"; "dá para ficar dois anos sem pagar" | "A instituição avalia e decide; primeiro mapeamos a dívida e o caixa." |
+
 ### 2.3 Ecossistema e institucional
 | Não diga | Diga no lugar |
 |---|---|
@@ -112,7 +125,7 @@
 ## 4. Regras tributárias (referências a verificar)
 
 **Crédito Internacional**
-- **IOF:** alíquota no ingresso de empréstimo externo acima de 364 dias (zero ou 0,38%) e efeito de estrutura "via token" (T1). Alíquotas mudaram em 2025. Decreto 6.306/2007; Decreto 12.499/2025.
+- **IOF:** alíquota no ingresso de empréstimo externo acima de 364 dias (zero ou 0,38%) e efeito de estrutura "via token" (T1). Alíquotas mudaram em 2025. Decreto 6.306/2007; Decreto 12.499/2025. **Atualização de 22/10/2026:** até 364 dias de prazo médio, 3,5% (art. 15-B, XII); acima disso, o art. 15-B não traz alíquota específica e a regra residual de entrada é 0,38% (inferência) [VALIDAR TRIBUTÁRIO; pergunta J7].
 - **IR retido na fonte sobre juros remetidos ao exterior:** em regra 15%; 25% se credor em país de tributação favorecida. Contratos costumam prever *gross-up* (o tomador paga o imposto e o custo sobe). A convenção Brasil–Suíça (Decreto 10.714/2021) pode reduzir a alíquota em certos casos (T2).
 - **Variação cambial** no Lucro Real (caixa ou competência) (T3).
 - **Tributação do fee** recebido pela Save e retenções sobre a remuneração do parceiro (T4).

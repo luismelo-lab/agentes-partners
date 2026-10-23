@@ -1,4 +1,4 @@
-# Perguntas ao dono do produto (João Mattos) · lista única
+# Perguntas aos donos dos produtos (João Mattos, Paulo e Luis) · lista única
 
 Quem mantém esta lista é o **Guardião do Produto Novo**. Ela foi criada em 16/10/2026.
 
@@ -75,5 +75,61 @@ Os itens abaixo contradizem a base interna. Eles vão ao João antes de qualquer
 |---|---|---|---|
 | 22/10 | Taxa de 7% a 10% como exemplo no one-page | Confirmada pelo João | D88 |
 | 22/10 | UBS como instituição suíça | Aprovada em ligação por vídeo com o João | D77 |
-| 22/10 | Hedge na proposta Canex | Pode-se informar que acrescenta cerca de 1% sobre o valor solicitado (João) | D77 |
+| 22/10 | Hedge na proposta do originador sucroenergético | Pode-se informar que acrescenta cerca de 1% sobre o valor solicitado (João) | D77 |
 | 22/10 | Remuneração do parceiro nos produtos 2027 | 10% do líquido Save no início, definido pelo Gilberto | D78 |
+
+
+---
+
+## Novas em 22/10/2026 (transcrição de 21/10, pesquisa normativa e reconstrução sênior da área)
+Prazo proposto: até o G1 dos produtos (31/10 para as críticas do CI; 04/12 para o MQ). Fonte: **R21/10** = transcrição de 21/10/2026 (minuto).
+
+### Ao Luis (decisão interna)
+| # | Pergunta | Por que importa | Status |
+|---|---|---|---|
+| L1 ★ | Quem é o dono do **passivo bancário, alongamento e carência (P6)**: Save Invest (Junior) ou João Mattos? | Sem dono não há G0, nem ficha, nem parceiro de execução; casos de "muitos bancos" chegam pelo fluxo único sem destino | aberta |
+| L2 ★ | Registrar como regra da casa as falas do Paulo de 21/10: sem venda casada (00:26:40); estudo pode concluir "não" (00:22:11); manter a operação no Brasil (00:29:11); números só com anuência (00:43:03); dor imediata primeiro (00:43:03) | Hoje são "fala do dono"; viram D-número e passam a valer para todos os agentes e para o material | aberta |
+| L3 | Estudo do Paraguai: vale a D51 (sem estudo pago até 30/06/2027) ou a fala do Paulo de que o estudo é o primeiro serviço (00:15:48)? | Há oportunidade em andamento pedindo estudo | aberta |
+| L4 | Home equity entra na próxima rodada do portfólio? | Ficou fora da rodada de 22/10 | aberta |
+
+### Ao Paulo (tax internacional, Maquila, turnkey)
+| # | Pergunta | Por que importa | Status |
+|---|---|---|---|
+| P1 ★ | Qual a linha oficial sobre **CRS e declaração**? A fala "o Paraguai não está no CRS… o Brasil pode nunca ficar sabendo" (R21/10, 00:11:34) conflita com a regra "sem sigilo de capitais" e com a lista da OCDE (primeiras trocas até 2028) | Risco reputacional e penal (Lei 7.492, art. 22); precisa sair do discurso antes de qualquer cliente | aberta |
+| P2 ★ | Como a tese "operação no Brasil com lucro mínimo; 1% no Paraguai × 34% no Brasil" (00:19:26) convive com a Lei 12.973, art. 77, e a Lei 14.596 (arm's length)? Qual método de preço de transferência a maquiladora usa? | Sem isso, o estudo promete um ganho que a lei anula | aberta |
+| P3 ★ | Cardápio e preço do tax internacional (produto pronto); quem assina parecer (advogado no Brasil? no Paraguai?) | Produto pronto sem preço não vende | aberta |
+| P4 | A "Lei 6090" citada (00:17:53) é a Lei 60/90, revogada pela Lei 7.548/2025 (Decreto 5.432/2026)? A combinação com a maquila continua? Investimento mínimo de US$ 13 mi para INR e IDU isentos (art. 4º) muda a tese? | Corrigir o material e o estudo | aberta |
+| P5 | O tributo único de 1% sobre fatura é creditável no Brasil (Lei 12.973, art. 87)? A maquila pode ser enquadrada como regime fiscal privilegiado (Lei 9.430, art. 24-A)? | Muda o custo efetivo e o IRRF de remessas | aberta |
+| P6 | "Entra como monofásico… tende a zero o imposto" (00:18:55): qual o mecanismo? IPI, PIS/COFINS-Importação e ICMS incidem e geram crédito | Corrigir a comunicação | aberta |
+| P7 | Tarifas dos EUA: a comparação Brasil 40% × Paraguai 10% (00:30:46) é de 2025. Em out/2026 vale a Seção 301 (25% e 12,5% para parte da pauta). Quais NCMs o Paulo considera e qual a regra de origem americana aplicada? | Tese de "Paraguai para o mundo" depende disso | aberta |
+| P8 | Payback de cerca de 3 anos (00:16:19) e margem 20% a 30% melhor (00:42:32): de quais casos vêm? Há estudo anonimizado para calibrar o simulador (D59)? | Calibração do simulador de faixa | aberta |
+| P9 | Programa de imersão de 6 meses no Brasil para funcionários paraguaios (00:23:58): qual o veículo (convênio, visto, contrato) e quem paga? | Custo e risco trabalhista do estudo | aberta |
+| P10 | Submaquila (00:32:27): há fábricas locais com programa ativo por setor? Quem responde pela qualidade? | Reduz capex; define viabilidade | aberta |
+| P11 | Governança nas 3 verticais (00:35:15): quem presta no Paraguai (Save, associado, parceiro)? Como evitar prestar e auditar o mesmo serviço? | Conflito de independência; N3 | aberta |
+| P12 | Rede de representantes nos 11 países (R24/09): há contrato, remuneração e capacidade? | Turnkey sem rede é promessa | aberta |
+| P13 | A assessoria ao MIC (00:24:20) gera conflito de interesse? O que pode ser dito ao cliente? | Regra 8 de `regras-e-proibidos.md` | aberta |
+
+### Ao João Mattos (captação, home equity, turnkey, CI)
+| # | Pergunta | Por que importa | Status |
+|---|---|---|---|
+| J1 ★ | Captação: quais investidores e fundos existem na rede, com tíquete mínimo; existe estrutura abaixo de US$ 5 mi (B17), já que o Paulo citou "fundos que aceitam valores menores" (R24/09)? | Caso em andamento de cerca de US$ 3,9 mi | aberta |
+| J2 ★ | Captação: como a Save é remunerada sem configurar intermediação de valor mobiliário (Lei 6.385, arts. 16 e 27-E) ou oferta pública (Res. CVM 160, art. 3º)? Quem assina o mandato? | Condição do G2 da captação | aberta |
+| J3 | A taxa de 8% a 12% e a carência de 3 anos citadas pelo Paulo (R24/09) são de qual estrutura? Diferem do exemplo de 7% a 10% do one-page (D88) | Conflito de números entre donos | aberta |
+| J4 | O resumo de 24/09 cita "João Marcos" como responsável pela proposta comercial. É erro do resumo (João Mattos) ou outra pessoa? | Quem envia a proposta prometida em 24/09 (K01) | aberta |
+| J5 | Home equity: com quais bancos ou fintechs a Save opera? Como é remunerada? Precisa de contrato de correspondente (Res. CMN 4.935/2021)? | G0 do P14 | aberta |
+| J6 | A contrapartida de cerca de 10% do sócio numa rodada para a planta do Paraguai (cliente, R21/10, 00:43:45) é regra de algum investidor? | Expectativa do cliente | aberta |
+| J7 | IOF no ingresso do CI acima de 364 dias: a base interna dizia "zero"; o art. 15-B do Decreto 6.306 (Decreto 12.499) não traz alíquota específica e a regra residual de entrada é 0,38%. Qual é a leitura do dono e do Tributário? | Custo do CI e frase do one-page | aberta |
+
+### Conflitos registrados entre falas e decisões (22/10/2026)
+| # | Fala | Decisão ou norma | Tratamento |
+|---|---|---|---|
+| C1 | Estudo do Paraguai é o primeiro serviço (Paulo, R21/10, 00:15:48) | D51: sem estudo pago até 30/06/2027 | Vale a D51 até o Luis decidir (L3) |
+| C2 | Taxa de 8% a 12% (Paulo, R24/09) | D88: 7% a 10% só como exemplo no one-page | Nenhuma taxa fora do one-page |
+| C3 | Fundos abaixo de US$ 10 mi e "valores menores" (Paulo, R24/09) | CI v2.3: piso de US$ 5 mi | Pergunta J1 |
+| C4 | Paraguai fora do CRS (Paulo, 00:11:34) | Regra "sem sigilo" (P18); OCDE: CRS até 2028 | Pergunta P1; frase proibida |
+| C5 | Lucro mínimo no Brasil (Paulo, 00:19:26) | Lei 12.973, art. 77; Lei 14.596 | Pergunta P2; frase proibida |
+| C6 | "Lei 6090" (Paulo, 00:17:53) | Lei 7.548/2025 revogou a Lei 60/90 | Corrigido na base |
+| C7 | Tarifa EUA 40% × 10% (Paulo, 00:30:46) | IEEPA derrubada em 20/02/2026; Seção 301 vigente | Corrigido na base |
+| C8 | "Isso aí é uma garantia que eu dou" (Paulo, 00:22:43) | Regra: nunca prometer êxito | Frase proibida |
+| C9 | Via token, sem IOF (João, R30/09) | Res. BCB 521/2025; Decreto 12.499 | Frase proibida (B10) |
+| C10 | Hedge de cerca de 1% sobre o valor solicitado (João, D77) | Radar: travar o dólar por anos custa perto do diferencial de juros | Vale a D77 só na proposta do originador; pergunta 12 ao João mantida |

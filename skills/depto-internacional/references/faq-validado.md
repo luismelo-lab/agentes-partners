@@ -105,6 +105,8 @@
 
 ## Parte D · Ecossistema (reunião de 13/10/2026; números a confirmar com o Júnior e o João)
 
+> **D92 (22/10/2026):** Gestão de Contas, antecipação e FIDC passaram ao `depto-save-invest`, que mantém o FAQ vigente desses produtos. A tabela abaixo fica como registro.
+
 | # | Pergunta | Resposta | Situação |
 |---|---|---|---|
 | D1 | Qual a porta de entrada do ecossistema? | Gestão de Contas (cobrança por IA, paga no êxito) | Decidido em reunião |
@@ -116,3 +118,37 @@
 | D7 | Quem cabe no FIDC? | Faturamento acima de cerca de R$ 10 mi/mês | A confirmar |
 | D8 | Quem cabe no funding? | Ativos/garantias acima de cerca de R$ 60 mi; operação acima de cerca de R$ 30 mi | A confirmar (diverge do CI v2.3) |
 | D9 | Quando remunerar parceiro em produto novo? | Só depois da validação (1º recurso) | Decidido em reunião |
+
+
+---
+
+## Parte E · Tax internacional e comércio exterior (produto pronto; respostas de norma, consulta em 22/10/2026)
+Respostas de fonte normativa, não validadas pelo Paulo ou pelo João; toda resposta ao cliente passa pelo `depto-tributario` ou `depto-juridico`.
+
+| # | Pergunta | Resposta | Fonte |
+|---|---|---|---|
+| E1 | Se eu abrir empresa no Paraguai, pago só 1%? | Não. A maquiladora paga 1% lá (o maior entre valor agregado e fatura), mas o lucro da controlada entra no lucro real da controladora brasileira em 31/12 (IRPJ e CSLL) | Lei PY 7.547/2025, art. 37; Lei 12.973/2014, art. 77 |
+| E2 | E se o dono for pessoa física? | Lucro de controlada em regime privilegiado ou com renda ativa abaixo de 60% é tributado a 15% em 31/12; as demais, na distribuição | Lei 14.754/2023, arts. 5º e 6º |
+| E3 | Posso fixar o preço entre a empresa do Brasil e a do Paraguai? | Só a preço de mercado (arm's length), com método documentado; acima de R$ 15 mi/ano de transações há obrigação de Arquivo Local | Lei 14.596/2023, arts. 2º e 11; IN RFB 2.161/2023 |
+| E4 | O Brasil fica sabendo da minha conta lá fora? | A declaração é obrigação do residente: IRPF, CBE a partir de US$ 1 mi e Lei 14.754. O Paraguai prevê troca automática (CRS) até 2028 e já troca a pedido | Res. BCB 279/2022; OCDE, lista de 30/09/2026 |
+| E5 | Há acordo de bitributação com o Paraguai? | Não em vigor (assinado em 2000, nunca promulgado). Com os EUA também não há | Lista da RFB, 08/07/2026 |
+| E6 | Quanto se retém numa remessa de royalties? | IRRF de 15% e CIDE de 10% (salvo licença de software sem transferência de tecnologia); IOF câmbio de 3,5% na saída | MP 2.159-70, art. 3º; Lei 10.168/2000, art. 2º; Decreto 6.306, art. 15-B |
+| E7 | E de dividendos a sócio no exterior? | IRRF de 10% desde 01/01/2026 (lucros até 2025 aprovados até 31/12/2025 isentos); IOF zero | Lei 15.270/2025 |
+| E8 | O drawback continua com a reforma? | A suspensão continua para CBS e IBS; isenção e restituição não valem para CBS e IBS; partes da Lei 11.945 são revogadas em 01/01/2027 | LC 214/2025, arts. 90, 91 e 542 |
+| E9 | O Reintegra continua? | 3% para ME e EPP e 0,1% para as demais até 31/12/2026; revogado em 01/01/2027 | Decreto 12.565/2025; LC 214/2025, art. 542 |
+| E10 | Produzir no Paraguai livra da tarifa dos EUA? | Em out/2026, as tarifas IEEPA caíram (20/02/2026); vigora a Seção 301 para parte da pauta brasileira. Sem transformação substancial no Paraguai, a origem continua brasileira | MDIC, jul/2026 |
+| E11 | O produto volta ao Brasil sem imposto? | II zero só com origem Mercosul válida por NCM (Paraguai: até 60% de não originário até 2038). IPI, PIS/COFINS-Importação e ICMS incidem e viram crédito | Decisão CMC 06/23; `06` v0.9 |
+| E12 | Qual a multa por não entregar a CBE? | Até 5% do valor, limitada a R$ 125 mil; informação falsa até R$ 250 mil | Res. BCB 131/2021, art. 66 |
+| E13 | A Lei 60/90 do Paraguai ainda vale? | Não. Foi revogada pela Lei 7.548/2025 (Decreto 5.432/2026) | BACN |
+
+## Parte F · Captação, turnkey, home equity e passivo bancário (a confirmar com os donos)
+| # | Pergunta | O que foi dito e por quem | Como responder até lá | Fonte |
+|---|---|---|---|---|
+| F1 | A Save consegue investidor para a minha empresa? | Paulo: bancos, fundos, family offices e investidores brasileiros na rede | "Preparamos a empresa e apresentamos a quem faz sentido; o investidor decide." | R24/09; R21/10, 00:46:07 |
+| F2 | Estou no prejuízo; dá para captar? | Paulo: não inviabiliza se o plano, o payback e os colaterais convencerem | "O investidor olha plano, histórico e garantias; ele decide." | R24/09 |
+| F3 | Existe captação abaixo de US$ 5 mi? | Paulo: fundos que aceitam valores menores; base do CI: piso de US$ 5 mi | "Avaliamos o caminho que cabe no seu porte." | R24/09; J1 |
+| F4 | Posso captar com muitos investidores pequenos? | Norma: crowdfunding por plataforma registrada, até R$ 15 mi e receita até R$ 40 mi | "Existe rota regulada por plataforma; avaliamos se cabe." | Res. CVM 88/2022, art. 3º |
+| F5 | Vocês abrem mercado lá fora para mim? | Paulo: turnkey com representantes em 11 países (sem confirmação escrita) | "Montamos o plano de entrada por etapas; não há venda garantida." | R24/09; P12 |
+| F6 | Posso usar meu imóvel para trocar dívida cara? | Reunião de 13/10: home equity como alternativa; sem parceiro definido | "A instituição avalia o imóvel e decide; comparamos o custo total." | R13/10; J5 |
+| F7 | Dá para ficar sem pagar parcela por um tempo? | Pergunta de descoberta da ficha P6 | "Depende da negociação com cada banco; primeiro mapeamos a dívida e o caixa." | R13/10 |
+| F8 | Quem conduz a renegociação com os bancos? | Sem dono (P6) | "Um especialista conduz depois do diagnóstico." | L1 |

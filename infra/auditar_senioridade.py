@@ -25,7 +25,7 @@ import argparse, glob, json, os, re, sys, unicodedata
 from datetime import date
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EXCLUIR_PADRAO = {"depto-internacional"}  # em reconstrução (22/10/2026)
+EXCLUIR_PADRAO = set()  # em reconstrução (22/10/2026)
 LIMIAR_FILA = 70
 TETO_HEURISTICA = 40
 

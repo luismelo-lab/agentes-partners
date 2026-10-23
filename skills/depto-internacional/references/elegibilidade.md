@@ -192,6 +192,8 @@ DRE e balanço de 2 anos · composição de custo (folha, energia, aluguel, log�
 
 ## 3. Ecossistema financeiro (reunião de 13/10/2026; números a confirmar)
 
+> **D92 (22/10/2026):** a elegibilidade de Gestão de Contas, antecipação e FIDC é mantida pelo `depto-save-invest`. Home equity e passivo bancário: ver `especialistas/home-equity-passivo-bancario.md` §2.4 e §5. Captação: `especialistas/captacao-capital-investidor.md` §5. Tax internacional: `tax-internacional.md` §2.
+
 | Produto | Corte objetivo citado | Sinal de candidato |
 |---|---|---|
 | Gestão de Contas | Não informado. Prioridade: faturamento mensal alto e recebíveis | Inadimplência; contas a receber acima do faturamento mensal; vencidos |
