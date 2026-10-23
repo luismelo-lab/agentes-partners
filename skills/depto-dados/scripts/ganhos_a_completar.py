@@ -28,10 +28,20 @@ def main():
     L = [d for d in N if d["status"] == "ganho" and (d.get("fechado") or "")[:7] == a.mes]
     linhas = []
     for d in L:
-        falta = [n for n, ok in (("% honorário", d["hContr"] is not None), ("% parceiro", d["hParc"] is not None), ("tese", bool(d.get("variante")))) if not ok]
+        falta = [n for n, ok in (("% honorário", d.get("hContr") is not None), ("% parceiro", d.get("hParc") is not None), ("tese", bool(d.get("variante")))) if not ok]
         if falta: linhas.append((d, falta))
     linhas.sort(key=lambda x: (-len(x[1]), -(x[0]["valor"] or 0)))
     saida = a.saida or os.path.join(caminhos.pasta("daniela"), f"Ganhos-a-completar-{a.mes}.xlsx")
+    # o arquivo do mês é regerado a cada rodada: guarda o que a Daniela já marcou ('Feito no HubSpot?' e 'Observação'), pelo id do link
+    marcado = {}
+    if os.path.exists(saida):
+        try:
+            wa = openpyxl.load_workbook(saida)["Completar"]
+            for r in range(3, wa.max_row + 1):
+                h = wa.cell(r, 12).hyperlink
+                if h and (wa.cell(r, 10).value or wa.cell(r, 11).value): marcado[h.target.rsplit("/", 1)[-1]] = (wa.cell(r, 10).value, wa.cell(r, 11).value)
+        except Exception as e:
+            print("aviso: não li as marcações anteriores:", e)
 
     wb = openpyxl.Workbook(); ws = wb.active; ws.title = "Completar"; ws.sheet_view.showGridLines = False
     ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(COLS))
@@ -43,8 +53,9 @@ def main():
         ws.column_dimensions[get_column_letter(j)].width = w
     fino = Border(bottom=Side(style="thin", color=C["borda"]))
     for i, (d, falta) in enumerate(linhas, 3):
-        vals = [d["nome"], d["parceiro"], d["owner"], round(d["valor"] or 0), d["fechado"][:10], ", ".join(falta),
-                d["hContr"], d["hParc"], d.get("variante") or None, None, None, "Abrir"]
+        feito, obs = marcado.get(str(d["id"]), (None, None))
+        vals = [d.get("nome"), d.get("parceiro"), d.get("owner"), round(d.get("valor") or 0), d["fechado"][:10], ", ".join(falta),
+                d.get("hContr"), d.get("hParc"), d.get("variante") or None, feito, obs, "Abrir"]
         for j, v in enumerate(vals, 1):
             c = ws.cell(i, j, v); c.border = fino; c.alignment = Alignment(vertical="top", wrap_text=j in (1, 6, 11))
             c.font = Font(name=FM if j in (4, 7, 8) else F, size=10, color=C["texto"])

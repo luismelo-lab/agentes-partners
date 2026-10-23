@@ -1,0 +1,6 @@
+{
+ "_leia": "A3 (avaliação de publicação, 23/10/2026): só registros do painel gravados por estas contas são processados pelas rotinas. Só o id da conta do Claude (user.me().id), sem e-mail. Mantido pelo depto-ti; o Luis confirma cada inclusão. Incluir: python3 lib/portal_contas.py registrar <pessoa> <id>. Ids desconhecidos que tentaram gravar: python3 lib/portal_contas.py alertas.",
+ "contas": {
+  "u_S2can8zZUO_JcH3JDa9mXw": "luis"
+ }
+}

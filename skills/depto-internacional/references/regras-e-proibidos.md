@@ -36,13 +36,13 @@
 | "Pagamento antecipado relevante" (dá a entender que há algum) | "Não há pagamento antecipado ao fundo." (só depois da confirmação escrita do dono) |
 | "A análise sai em 15 a 20 dias" / "em 6 meses o dinheiro entra" | "É uma operação de alguns meses; não é solução imediata de caixa." |
 | "É tokenizado, via blockchain, e não paga IOF" | Não tocar no assunto. Se perguntarem: "Entrada dos recursos e tributos são tratados pelos especialistas e pelo jurídico na etapa técnica." |
-| "Hedge custa 1% ao ano" | "Existe opção de proteção cambial, com custo, avaliada com o seu assessor financeiro." |
+| "Hedge custa 1% ao ano" | "Existe opção de proteção cambial, com custo, avaliada com o seu assessor financeiro." Exceção (D77, 22/10/2026): só na proposta do originador sucroenergético (Canex), a resposta aprovada é "o hedge acrescenta cerca de 1% sobre o valor solicitado" (fala do João). |
 | "O dólar não vai subir" / "não há risco de câmbio" | "O risco cambial existe. Para quem exporta, a receita em moeda forte ajuda." |
 | "O acesso ao Brasil é só por nós" / exclusividade | Não falar em exclusividade. |
 | "O fundo já aceitou fluxo futuro como garantia" | "Recebíveis podem ser avaliados." |
 | "Fundo internacional" como nome de produto; "investidores" | "Crédito internacional"; "instituições credoras". |
 | "A Save leva crédito" / "estrutura projetos **para** instituições" | "A Save estrutura projetos dos clientes para a análise de instituições dos Estados Unidos e da Suíça." |
-| Nome da instituição, do representante, de autoridade estrangeira ou de cliente | "Instituições parceiras nos EUA e na Suíça." |
+| Nome da instituição, do representante, de autoridade estrangeira ou de cliente | "Instituições parceiras nos EUA e na Suíça." Exceção: a UBS no one-page confidencial e na proposta Canex (D77 e D88). |
 | Percentual de fee ou de remuneração do comercial ou do parceiro | "Os detalhes vão no contrato, por escrito." |
 | "Já fizemos várias operações" / usar o caso da construtora como prova | "O produto está em fase inicial, com poucos casos selecionados." |
 | "Reorganize a dívida antes do crédito" / "contrate X para ter o crédito" | "Cada serviço é contratado em separado; nenhum é condição para o crédito." |

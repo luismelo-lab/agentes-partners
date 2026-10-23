@@ -74,7 +74,7 @@
 ## 4. Regras da casa
 - **Criterios v1 (29/09/2026):** SQL = R + D + A sem veto; SLA de aceite do Master de 3 dias úteis (proposta).
 - **D11 e D44 (pendentes):** fila do Técnico limitada à capacidade, ordenada por valor esperado e decadência.
-- **D7-b (pendente):** prioridade Q4 em P1 e P2.
+- **D7-b (superada em 23/10/2026 pela D98: o Luis decidiu só a meta do Q4, D64, e o foco por segmento vai para 2027 com a meta da diretoria, D75):** prioridade Q4 em P1 e P2.
 - **D76 (22/10/2026):** cliente sem Master não entra.
 - **D85 (22/10/2026):** procuração no e-CAC em vez de senha (o "A" se cumpre com procuração).
 - **D83 e D93 (22/10/2026):** produtos em validação qualificados por inteiro, sem condição para fora.

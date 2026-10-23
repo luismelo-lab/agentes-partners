@@ -65,7 +65,7 @@ Formato: `Conferencia-Repasses-<data>.xlsx` + leitura de 1 página (fluxo A do S
 - **D64 (15/10/2026, aprovada com ajuste na folha de 22/10/2026):** cada parceiro tem o seu percentual negociado. Não há regra única de 50% ou mais, e o percentual será revisto com os novos produtos.
 - **D78 (22/10/2026):** produtos 2027 começam em 10% do líquido Save, definido pelo Gilberto, e crescem pelo programa.
 - **D61 (06/10/2026):** Crédito Internacional começa com o indicador a 10% do líquido Save, com teto de 30% pelo programa de desenvolvimento.
-- **D42 (05/10/2026, preliminar):** negócio com repasse de 50% ou mais e honorário abaixo de 20% passa pela aprovação da Partners antes da proposta. Destravada pela D64: sem regra única, vira alerta de margem, não bloqueio.
+- **D42 (05/10/2026, superada pela D64 (D98)):** negócio com repasse de 50% ou mais e honorário abaixo de 20% passa pela aprovação da Partners antes da proposta. Destravada pela D64: sem regra única, vira alerta de margem, não bloqueio.
 - **D45 (05/10/2026), D62 (15/10/2026), D71 e D73 (19/10 e 22/10/2026):** completar percentual, tese e variante nos ganhos **sem reter repasse**.
 - **D65 (15/10/2026, pendente):** registro único de exceções (café a 70%); atípicos acima de 50% e percentual do parceiro acima de 100% conferidos contra o contrato.
 - **D18 (28/09/2026):** campos de pagamento e percentual obrigatórios, feitos pelo time de CRM.

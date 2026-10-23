@@ -1,16 +1,31 @@
 # Radar jurídico e de compliance: Save Co.
 
-- **Data-base:** 16/10/2026 · **Próxima revisão:** 23/10/2026
+- **Data-base:** 23/10/2026 · **Próxima revisão:** 30/10/2026 (anterior: 16/10/2026, idade 7 dias)
+- **Resumo da rodada de 23/10/2026:** 3 itens novos (ANPD dosimetria, CVM taxa de performance de FIDC, nota técnica OAB-SP sobre a Res. CMN 5.343) e 2 atualizações de status (consulta de fiscalização da ANPD, PL 2.338). Sem novidade verificável em: Estatuto/Provimento 205 da OAB, STJ (honorário de êxito, representação comercial), BCB (correspondente), Big Four. Itens novos levam o rótulo **[NOVO 23/10]**.
 - **Escopo:** LGPD, IA, remuneração de parceiros, contratos de êxito, contencioso administrativo federal, anticorrupção/PLD/ofertas, benchmark Big Four.
 - **Regra de leitura:** é pré-análise. Só advogado com OAB valida. Fonte primária = planalto, gov.br, stj, stf, oab, cvm. Escritórios e Big Four = pista. Sem fonte = "não localizado".
 - **Confiança:** **Alta** = texto oficial lido · **Média** = fonte oficial com resumo ou várias fontes secundárias coincidentes · **Baixa** = fonte secundária única.
-- Consulta de todas as fontes: 16/10/2026.
+- Consulta das fontes: itens marcados [NOVO 23/10] ou [ATUALIZADO 23/10] foram consultados em 23/10/2026; os demais em 16/10/2026 (sem revisão de conteúdo nesta rodada).
 
 Formato de cada item: **O que mudou (data)** · **Impacto Save** · **Ação do agente** · **Fonte** (URL, publicação) · **Vigência** · **Confiança**.
 
 ---
 
 ## 1. LGPD e ANPD
+
+### 1.0 [NOVO 23/10] Consulta pública sobre a dosimetria das sanções
+- **O que mudou (15/10/2026):** Aviso de Consulta Pública nº 3/2026 (DOU de 15/10/2026): minuta que **altera o Regulamento de Dosimetria** (Res. CD/ANPD 4/2023). Sugestões de 15/10 a **30/11/2026** pelo Brasil Participativo. Audiência pública virtual em **29/10/2026** (inscrição de 15 a 24/10, canal da ANPD no YouTube). O conteúdo da minuta **não foi lido** (a página consultada não detalha as mudanças).
+- **Impacto Save:** a dosimetria define o tamanho da multa (item 1.6). Mudança pode agravar ou abrandar critérios; saber só com o texto.
+- **Ação do agente:** baixar a minuta no portal da ANPD e comparar com a Res. 4/2023 antes de 30/11. Não usar os parâmetros do item 1.6 como definitivos até o fim do processo. O Jurídico decide se a Save contribui.
+- **Fonte:** https://atlaspublico.com.br/noticias/anpd-abre-consulta-publica-sobre-mudancas-no-regulamento-de-92522 (publicada 15/10/2026, secundária; consulta 23/10/2026). Primária a conferir: https://www.gov.br/anpd
+- **Vigência:** minuta, **não vigente**. **Confiança:** média-baixa (fonte secundária única; os dois avisos citam artigos diferentes da Lei 13.848/2019).
+
+### 1.0b [ATUALIZADO 23/10] Consulta da revisão do regulamento de fiscalização (item 1.3)
+- **O que mudou:** a mesma fonte secundária informa que a consulta da revisão da Res. CD/ANPD 1/2021 recebe contribuições **até 26/10/2026**. Isso **supera em parte** a ressalva do item 1.3 ("datas de abertura/encerramento não confirmadas"). Fonte e data: ver abaixo. Tentativa de ler a página da Cescon Barrieu devolveu 403 (não lida).
+- **Impacto Save:** a janela para contribuir fecha em 3 dias; depois, esperar a versão final.
+- **Ação do agente:** perguntar ao Luis/Jurídico se a Save quer contribuir (provavelmente não; o ganho é só acompanhar). Registrar a versão final quando sair.
+- **Fonte:** https://atlaspublico.com.br/noticias/anpd-abre-consulta-publica-sobre-mudancas-no-regulamento-de-92522 (15/10/2026, secundária; consulta 23/10/2026) · https://cesconbarrieu.com.br/anpd-abre-consulta-publica-para-atualizacao-das-regras-de-fiscalizacao-e-processo-sancionador/ (título confirmado em busca; página não lida)
+- **Vigência:** minuta. **Confiança:** baixa-média.
 
 ### 1.1 ANPD virou agência reguladora
 - **O que mudou:** Lei 15.352, de 25/02/2026 (conversão da MP 1.317/2025). Autonomia funcional, técnica, decisória e financeira. Carreira própria de fiscais. Novas atribuições (ECA Digital).
@@ -31,7 +46,7 @@ Formato de cada item: **O que mudou (data)** · **Impacto Save** · **Ação do 
 - **Impacto Save:** resposta à ANPD fica mais rápida e formal. Documento entregue sem pedido de sigilo vira público.
 - **Ação do agente:** monitorar a versão final. Preparar modelo de resposta a ofício da ANPD com campo "informação sigilosa + base legal".
 - **Fonte:** https://brasilparticipativo.presidencia.gov.br/processes/regulamento-de-fiscalizacao/f/5408/ (minuta 2026; processo SEI 00261.005349/2026-12)
-- **Vigência:** **ainda não vigente** (minuta). **Confiança:** média (datas de abertura/encerramento não confirmadas na página).
+- **Vigência:** **ainda não vigente** (minuta). **Confiança:** média (datas de abertura/encerramento não confirmadas na página). *Ressalva de datas **superada em 23/10/2026** em parte pelo item 1.0b (contribuições até 26/10/2026, fonte secundária).*
 
 ### 1.4 Transferência internacional: prazo das cláusulas-padrão acabou
 - **O que mudou:** Res. CD/ANPD 19, de 23/08/2024 (retificada em 18/08/2025). Prazo para incorporar as cláusulas-padrão (CCPs) nos contratos terminou em **23/08/2025**. Res. CD/ANPD 32, de 26/01/2026, reconheceu a **União Europeia** como adequada. EUA **não** têm adequação.
@@ -79,6 +94,13 @@ Formato de cada item: **O que mudou (data)** · **Impacto Save** · **Ação do 
 
 ## 2. Inteligência artificial
 
+### 2.0 [ATUALIZADO 23/10] PL 2.338/2023: situação reconferida, sem parecer
+- **O que mudou:** nada. Ficha da Câmara lida em 23/10/2026: **"Aguardando Parecer do Relator"**; Comissão Especial criada em 29/04/2025; Aguinaldo Ribeiro relator desde 20/05/2025; histórico de pareceres e substitutivos = 0; 37 apensados; última movimentação 02/09/2026 (apensação do PL 1542/2026). Uma fonte secundária afirma que o relator teria apresentado parecer em maio/2026 com votação marcada: **contradiz a ficha oficial; tratar como não confirmado**. (Lida só a primeira parte da ficha; as movimentações recentes constam nela.)
+- **Impacto Save:** igual ao item 2.1: não é lei, sem obrigação.
+- **Ação do agente:** manter "não citar como obrigação". Rever depois do 2º turno das eleições.
+- **Fonte:** https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2487262 (consulta 23/10/2026) · https://www.demarest.com.br/inteligencia-artificial-reacende-debates-na-camara-dos-deputados/ (pista; data não verificada)
+- **Vigência:** não vigente. **Confiança:** alta (ficha oficial).
+
 ### 2.1 PL 2.338/2023 (Marco da IA)
 - **O que mudou:** aprovado no Senado em 10/12/2024. Na Câmara, Comissão Especial instalada em 20/05/2025. Situação oficial: "Aguardando Parecer do Relator". Última movimentação: 02/09/2026 (apensações). O relator, Aguinaldo Ribeiro, falou em votar **depois das eleições de out/2026** (imprensa). Se a Câmara alterar, volta ao Senado.
 - **Impacto Save:** **não é lei**. Nenhuma obrigação em vigor. O texto do Senado prevê avaliação de risco, transparência e multa até R$ 50 mi ou 2% do faturamento.
@@ -111,6 +133,13 @@ Formato de cada item: **O que mudou (data)** · **Impacto Save** · **Ação do 
 
 ## 3. Remuneração de parceiros e captação
 
+### 3.0 [ATUALIZADO 23/10] OAB: sem alteração verificável desde 16/10
+- **O que mudou:** **nenhuma norma nova localizada** sobre publicidade, honorários, parcerias ou captação. Em 21/10/2026 a OAB noticiou o Encontro Nacional de Fiscalização (modernização dos TEDs e combate ao exercício ilegal da advocacia): sinal de foco disciplinar, **sem ato normativo**. Uma matéria (Rota Jurídica, data não verificada) fala em votação de **novo provimento de publicidade** no Pleno: **não confirmado** se concluída ou quando vigora. Nada novo sobre provimento de IA.
+- **Impacto Save:** nenhum novo. Risco de captação segue como no item 3.1; fiscalização do exercício ilegal reforça a necessidade de a Save não praticar ato privativo.
+- **Ação do agente:** manter Provimento 205/2021 como regra vigente. Procurar no DEOAB e no site do CFOAB o novo provimento de publicidade na próxima rodada.
+- **Fonte:** http://www.oab.org.br/noticia/64707/encontro-nacional-de-fiscalizacao-da-oab-debate-modernizacao-dos-teds-e-fortalecimento-da-atuacao-disciplinar (21/10/2026; consulta 23/10/2026) · https://www.rotajuridica.com.br/?p=98667 (pista, sem data)
+- **Vigência:** Provimento 205/2021 em vigor. **Confiança:** alta (ausência de ato novo nas fontes consultadas, cobertura parcial da página da OAB); baixa (novo provimento).
+
 ### 3.1 Estatuto da OAB, Código de Ética e Provimento 205/2021
 - **O que mudou:** **nenhuma alteração localizada** em 2025–2026. Valem: art. 34, III e IV, da Lei 8.906/94 (vedado captar causa por intermediário e valer-se de agenciador); Código de Ética (vedada a partilha de honorários com não advogado e a mercantilização); Provimento 205/2021 (publicidade informativa, sem promessa de resultado). Há debate no CFOAB sobre atualizar o 205: **não localizado** texto aprovado. Acórdão do Conselho Pleno 01/2026 (DEOAB 20/02/2026) cita captação indevida entre infrações (mérito não lido).
 - **Impacto Save:** se a Save ou parte dela atuar como sociedade de advogados, pagar parceiro contábil por indicação é o risco central. Indicação comercial só se sustenta se a Save **não** for sociedade de advogados no serviço vendido.
@@ -141,6 +170,13 @@ Formato de cada item: **O que mudou (data)** · **Impacto Save** · **Ação do 
 ---
 
 ## 4. Contratos com clientes de recuperação de crédito
+
+### 4.0 [ATUALIZADO 23/10] STJ: sem novidade verificável desde 16/10
+- **O que mudou:** não localizada notícia ou acórdão do STJ de 17 a 23/10/2026 sobre honorário de êxito, representação comercial ou crédito tributário. Em busca aparece decisão da 3ª Turma (3 a 2) de que honorário de êxito **não pode ser executado contra o herdeiro** quando o êxito ocorre após a morte do contratante; ano e número **não verificados** (Migalhas). A página de notícias do STJ não pôde ser lida (404).
+- **Impacto Save:** só relevante se cliente pessoa física falecer durante o serviço (estruturação patrimonial, passivo de sócio). Baixo.
+- **Ação do agente:** nenhuma. Localizar o acórdão antes de citar.
+- **Fonte:** https://www.migalhas.com.br/quentes/443496/stj-julga-cobranca-de-honorarios-de-exito-apos-morte-do-contratante (pista; data não verificada; consulta 23/10/2026)
+- **Vigência:** n/a. **Confiança:** baixa.
 
 ### 4.1 Honorário de êxito sobre crédito compensado ou ressarcido
 - **O que mudou:** **não localizado** precedente do STJ de 2025–2026 sobre honorário **contratual** quando o crédito não é homologado. Pista no TJSP: cláusula de êxito funciona como **condição suspensiva**; sem prova do benefício efetivo (compensação ou ressarcimento), não nasce o direito ao honorário (trecho de acórdão em agregador; inteiro teor não lido).
@@ -216,6 +252,27 @@ Formato de cada item: **O que mudou (data)** · **Impacto Save** · **Ação do 
 
 ## 6. Anticorrupção, PLD e oferta de produtos financeiros
 
+### 6.0 [NOVO 23/10] CVM: taxa de performance de FIDC não pode ir a consultor (Ofício-Circular 3/2026/CVM/SSE)
+- **O que mudou (11/09/2026; noticiado em 02/10/2026):** a área técnica da CVM (Superintendência de Securitização e Agronegócio) entende que a taxa de performance de FIDC **não pode ser repassada, nem em parte, a consultor** contratado pelo gestor. Ela remunera só a gestão da carteira (Res. CVM 175, Anexo Normativo II, art. 35, que remete ao art. 28 do Anexo Normativo I). Vincular a remuneração do consultor a ela pode configurar **gestão de carteira sem autorização** (Res. CVM 21), com responsabilidade de consultor, gestor e administrador. Texto do ofício **não lido** (resumos de imprensa e escritório).
+- **Impacto Save:** toca o desenho de remuneração em estruturas com FIDC (Save Invest) e qualquer arranjo em que a Save ou um parceiro receba **parte do resultado do fundo**. Remuneração de parceiro atrelada à performance do FIDC fica de alto risco. Ainda não sabemos se existe tal arranjo.
+- **Ação do agente:** barrar rascunho que ligue remuneração da Save ou de parceiro à taxa de performance de FIDC. Pedir ao Save Invest o desenho de remuneração de todo FIDC em estudo. Ler o ofício na CVM antes de citar em material.
+- **Fonte:** https://lefosse.com/newsletter/cvm-veda-destinacao-de-taxa-de-performance-de-fidc-a-consultores-especializados/ (02/10/2026, escritório) · https://capitalaberto.com.br/regulacao/2026/09/cvm-veta-repasse-de-taxa-de-performance-de-fidc-a-consultor (09/2026, imprensa; consulta 23/10/2026). Primária a conferir: site da CVM (ofícios-circulares SSE).
+- **Vigência:** entendimento da área técnica (ofício-circular, não vinculante como resolução, mas orienta a fiscalização). **Confiança:** média.
+
+### 6.0b [ATUALIZADO 23/10] Res. CMN 5.343/2026: nota técnica da OAB-SP e confirmação de datas
+- **O que mudou:** OAB-SP divulgou em 09/10/2026 nota técnica (comissões de ativos judiciais, precatórios e arbitragem) sobre os efeitos da resolução na liquidez dos credores, no financiamento de litígios e no acesso à Justiça; posição conclusiva está no PDF (**não lido**). **Não localizada** ADI ou pedido de revisão. Várias fontes secundárias coincidem: aprovada em 24/09/2026; vedação a novas aquisições em **13/10/2026**; regras para carteiras existentes em **04/01/2027**; teste de "definitivo" = decisão final na fase de conhecimento, final na liquidação quando houver, e esgotamento ou ausência de impugnação à execução. Contexto: casos Banco Master e Carbono Oculto. Texto no BCB **não acessado** (página sem conteúdo).
+- **Impacto Save:** confirma o item 6.3. Há pressão de mercado e da advocacia por revisão, mas sem mudança. Antecipação de crédito **administrativo** (PER deferido) não é "judicial", mas "indireto" segue a validar.
+- **Ação do agente:** manter a regra de não oferecer antecipação de crédito judicial via FIDC. Acompanhar eventual revisão pelo CMN.
+- **Fonte:** https://www.oabsp.org.br/jornaldaadvocacia/26-10-09-1735-oab-sp-divulga-nota-tecnica-sobre-restricoes-a-aquisicao-de-creditos-judiciais-por-fundos (09/10/2026) · https://www.mattosfilho.com.br/unico/cmn-fidcs-creditos-judiciais-arbitrais/ · https://www.machadomeyer.com.br/pt/inteligencia-juridica/publicacoes-ij/fundos-de-investimento/resolucao-cmn-5-343-26-novas-restricoes-aos-fidcs-no-mercado-de-creditos-judiciais-e-arbitrais (consulta 23/10/2026)
+- **Vigência:** 13/10/2026 e 04/01/2027. **Confiança:** média.
+
+### 6.0c [ATUALIZADO 23/10] BCB, CVM e COAF: sem norma nova sobre correspondente, oferta ou PLD
+- **O que mudou:** não localizada norma do BCB de outubro/2026 sobre correspondente bancário ou intermediação de crédito; nem resolução da CVM de outubro/2026 sobre Res. 160 ou 178; nem norma do COAF para consultores. Normas de maio e junho/2026 do BCB (Res. BCB 571 e 573) tratam de outros temas.
+- **Impacto Save:** nenhum novo. Itens 6.2 e 6.4 seguem.
+- **Ação do agente:** nenhuma.
+- **Fonte:** buscas em 23/10/2026; sem URL primária que prove a ausência (conferir normativos do BCB e da CVM).
+- **Vigência:** n/a. **Confiança:** baixa-média (ausência de resultado em busca não prova ausência de norma).
+
 ### 6.1 Lei Anticorrupção e leniência
 - **O que mudou:** Lei 12.846/2013 e Decreto 11.129/2022 sem alteração localizada. Portaria Normativa Interministerial CGU/AGU 1, de 19/12/2025 (vigente desde 23/12/2025): metodologia de vantagem indevida, perdimento e parcelamento em até 60 (ou 120) meses. 2ª edição do Guia de Leniência da CGU em 30/06/2026.
 - **Impacto Save:** responsabilidade objetiva pelos atos de terceiros (parceiros) que agem em nome da Save, inclusive perante a Receita.
@@ -265,7 +322,21 @@ Formato de cada item: **O que mudou (data)** · **Impacto Save** · **Ação do 
 
 ---
 
-## O que contradiz ou atualiza a base atual (`riscos-chave.md`)
+## 7b. Big Four (rodada de 23/10/2026)
+- Nenhuma publicação nova das Big Four (tax alert, pesquisa) localizada sobre Brasil, LGPD, IA ou TPRM desde 16/10/2026. Os itens 7.1 e 7.2 seguem como estão. Fonte: busca de 23/10/2026, sem resultado de Deloitte, PwC, EY ou KPMG.
+
+## Conflitos com a base interna (rodada de 23/10/2026)
+1. **Possível conflito, a confirmar:** a base de remuneração de parceiros e do Save Invest (`depto-save-invest` e `docs/portfolio-2027/agentes/precos-fees.md`) não menciona o Ofício-Circular 3/2026 da CVM. Se algum desenho previr repasse de taxa de performance de FIDC a consultor ou parceiro, **conflita** com o entendimento da CVM (6.0). Não verificado: não li esses arquivos nesta rodada.
+2. **Reforço do conflito já aberto:** a base ainda diz 30 dias para impugnação e recurso (item 1 da lista abaixo). Sem mudança nesta rodada.
+3. Nenhum outro conflito novo.
+
+## Perguntas novas ao dono (23/10/2026)
+1. Existe ou está em estudo algum arranjo em que a Save ou um parceiro receba parte da taxa de performance de um FIDC? (Define se o item 6.0 vira regra.) Quem responde: Luis e Save Invest.
+2. A Save quer contribuir nas consultas públicas da ANPD (fiscalização, até 26/10; dosimetria, até 30/11, audiência 29/10)? Quem responde: Luis e Jurídico.
+3. Quem é o advogado(a) responsável para validar este radar e o texto das consultas da ANPD? (Pendência herdada: nome a preencher.)
+4. Há produto de antecipação ou cessão de crédito (inclusive PER deferido) em estudo com FIDC que possa ser lido como "indireto" na Res. CMN 5.343? Quem responde: Save Invest e estruturador.
+
+## O que contradiz ou atualiza a base atual (`riscos-chave.md`) · rodada de 16/10/2026 (ainda válida)
 
 1. **CONTRADIZ — prazos.** A base diz "Impugnação: 30 dias (art. 15)" e "Recurso voluntário: 30 dias (art. 33)". **Errado desde 14/01/2026:** são **20 dias úteis** (LC 227/2026). Há também suspensão de 20/12 a 20/01 e prazo residual de 10 dias úteis. A manifestação de inconformidade segue 30 dias.
 2. **ATUALIZA — DTE.** A base não trata do DTE. Agora é automático para toda PJ, com ciência tácita em 15 dias.
@@ -288,4 +359,6 @@ Formato de cada item: **O que mudou (data)** · **Impacto Save** · **Ação do 
 8. **Rescisão de contrato com prazo (médio).** Art. 603 do CC pode gerar indenização em distratos sem justa causa.
 
 ---
+*Log 23/10/2026: WebSearch e WebFetch. Lidos: ficha do PL 2.338 na Câmara (primeira parte), nota da OAB-SP, Lefosse e Capital Aberto (CVM), página de notícias da OAB (primeira página), atlaspublico (ANPD). Falharam: gov.br/anpd (conteúdo dinâmico), Cescon Barrieu (403), STJ (404), BCB (sem conteúdo). Nenhum texto normativo primário novo foi lido; os itens novos têm confiança média ou baixa. Idade do radar anterior: 7 dias. Pendente validação de advogado(a) responsável [nome a preencher].*
+
 *Log: pesquisa web em 16/10/2026 (WebSearch/WebFetch). Textos lidos na íntegra: LC 227/2026 (arts. 173 e 182) e Decreto 70.235/72 compilado (arts. 5º, 5º-A, 5º-B, 15, 23, 33), no planalto.gov.br; lista de resoluções da ANPD; ficha da Câmara do PL 2.338/2023; notícias do STJ citadas. Demais itens por resumo de busca. Pendente validação de advogado(a) responsável [nome a preencher].*

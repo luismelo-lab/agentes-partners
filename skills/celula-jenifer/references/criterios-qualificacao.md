@@ -9,7 +9,7 @@
 | Estabelecimento | Matriz (uma linha por raiz do CNPJ) | A tese é por empresa; evita duplicar filiais |
 | Regime | Lucro Real (principal) · Presumido (aderência baixa/média) · **Simples = descarta** | Crédito não cumulativo depende do regime |
 | Porte e capital | EPP ou Demais; capital ≥ R$ 100 mil; acima de R$ 500 mi → Contas estratégicas | Honorário esperado × esforço |
-| Segmento | Classes CNAE em que o Master já ganha + prioridades do Q4 (parâmetro, D7-b pendente) · **café fora** | Onde a Save e o Master já sabem ganhar |
+| Segmento | Classes CNAE em que o Master já ganha + prioridades do Q4 (parâmetro, D7-b superada em 23/10/2026 pela D98: o Luis decidiu só a meta do Q4, D64, e o foco por segmento vai para 2027 com a meta da diretoria, D75) · **café fora** | Onde a Save e o Master já sabem ganhar |
 | Território | UF e municípios onde o Master já ganha | Respeita a base do Master e facilita a apresentação |
 | Aderência à matriz | alta / média / baixa (matriz tese × perfil do Tributário) | Probabilidade de haver tese |
 | Sinais | Filial aberta nos últimos 12 meses | Crescimento = mais créditos e mais apetite |

@@ -22,6 +22,7 @@ from datetime import date, timedelta
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from comum import (CELULA, DADOS_BI, LINK, PENDENCIAS, brl, cnpj_digitos, dt, e_cafe, fonte_hubspot, mi, pct,
                    receita, resolver_master, roster, saude_master, slug, ultima_atividade)
+from cnpj import raiz_cnpj  # noqa: E402  (lib no caminho pelo comum; raiz com os zeros à esquerda recompostos)
 
 # campos que a Daniela (ou o time) deveria manter preenchidos, por status
 CAMPOS_ABERTO = [("CNPJ", lambda d: bool(cnpj_digitos(d["extras"].get("cnpj")))),
@@ -229,8 +230,8 @@ def main():
     w("## 7. Principais clientes (por valor ganho desde 2024)")
     cli = defaultdict(list)
     for d in L:
-        c = cnpj_digitos(d["extras"].get("cnpj"))
-        cli[c[:8] if len(c) >= 8 else "nome:" + (d["nome"] or "").strip().upper()].append(d)
+        c = raiz_cnpj(d["extras"].get("cnpj")) if len(cnpj_digitos(d["extras"].get("cnpj"))) >= 8 else ""
+        cli[c or "nome:" + (d["nome"] or "").strip().upper()].append(d)
     rank = []
     for k, X in cli.items():
         G = [d for d in X if d["status"] == "ganho"]
@@ -263,7 +264,7 @@ def main():
         w(tabela(["Campo", "Valor"], linhas))
         c = cnpj_digitos(e.get("cnpj"))
         if c:
-            hist = [x for x in N if x["id"] != d["id"] and cnpj_digitos(x["extras"].get("cnpj"))[:8] == c[:8]]
+            hist = [x for x in N if x["id"] != d["id"] and raiz_cnpj(x["extras"].get("cnpj")) == raiz_cnpj(c)]  # raiz com zeros recompostos
             w(f"**Outros negócios do mesmo grupo (raiz do CNPJ), qualquer parceiro: {len(hist)}**")
             w(tabela(["Negócio", "Parceiro", "Status / etapa", "Criado", "Fechado", "Valor", "Link"],
                      [(nome(x, regras), x["parceiro"], f"{x['status']} / {x['etapa']}", x["criado"], x["fechado"] or "—", brl(x["valor"]), link(x)) for x in sorted(hist, key=lambda x: x["criado"])]))

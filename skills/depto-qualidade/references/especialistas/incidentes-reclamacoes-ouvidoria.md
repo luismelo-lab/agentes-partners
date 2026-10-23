@@ -54,8 +54,8 @@ Conferido no texto oficial em 22/10/2026, salvo marcação.
 ## 4. Regras da casa
 - **N1 (regra do departamento, 29/09/2026):** tudo é rascunho; nada é enviado; conversa colada é pseudonimizada antes da análise e não é guardada em bruto.
 - **D25 substituída pela D29 (02/10/2026):** chamado do que os agentes não encontram abre no GLPI quando a TI liberar; até lá fica no painel. **D91 (22/10/2026):** até a TI liberar Graph e GLPI, a pasta de cada pessoa no OneDrive é a caixa oficial e o Luis aprova os chamados no painel uma vez por dia. Desde a alçada de 23/10/2026 (`infra/alcadas.md`), a Daniela aprova os chamados das suas demandas; ao Luis sobem só os que batem um limite da §1.
-- **D72 (19/10/2026, pendente):** alerta se o relatório das 06h30 não sair até 07h30. É o primeiro incidente operacional com regra de detecção.
-- **D67 (15/10/2026, pendente):** dono e prazo por sentinela; sem dono, o incidente não tem quem conter.
+- **D72 (19/10/2026, aplicada por padrão em 23/10/2026, D98; dono: depto-ti):** alerta se o relatório das 06h30 não sair até 07h30. É o primeiro incidente operacional com regra de detecção.
+- **D67 (15/10/2026, aplicada por padrão em 23/10/2026, D98; dono: depto-ti):** dono e prazo por sentinela; sem dono, o incidente não tem quem conter.
 - **Regra de pessoas:** reclamação sobre alguém do time vai só ao Luis (fatos observáveis; depto-pessoas).
 - **Regra financeira:** compensação, desconto de honorário ou mudança de repasse só o Luis decide.
 - **Em aberto:** quem é o ouvidor de 2ª instância; se vale o SLA da célula da Daniela (3 d.u. para toda reclamação) ou o prazo por severidade; se a Save é agente de pequeno porte na LGPD.

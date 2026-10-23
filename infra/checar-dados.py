@@ -5,8 +5,12 @@ Uso: python3 infra/checar-dados.py [arquivos...]  (sem argumentos: tudo o que o 
 Exceções conhecidas: infra/checar-dados-permitidos.txt (um valor por linha).
 """
 import os, re, subprocess, sys
-R = os.path.expanduser("~/agentes-partners")
+R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # repositório do próprio script (o hook chama o da raiz)
 sys.path.insert(0, os.path.join(R, "lib"))
+# raiz do repositório onde o commit acontece (worktree): o hook passa caminhos relativos a ela. Antes os caminhos eram
+# lidos em ~/agentes-partners, então num worktree o arquivo novo não era achado e passava sem checagem.
+_top = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True)
+RAIZ = _top.stdout.strip() if _top.returncode == 0 and _top.stdout.strip() else R
 from partners_dados import cnpj_valido  # noqa: E402
 from cnpj import CNPJ_TEXTO_ALFA, normalizar_cnpj  # noqa: E402
 
@@ -24,10 +28,10 @@ PADROES = [("token HubSpot", re.compile(r"pat-(na|eu)\d-[0-9a-f-]{20,}")), ("cha
 perm = set()
 pf = os.path.join(R, "infra/checar-dados-permitidos.txt")
 if os.path.exists(pf): perm = {l.strip() for l in open(pf) if l.strip() and not l.startswith("#")}
-arqs = sys.argv[1:] or subprocess.run(["git", "-C", R, "ls-files", "--cached", "--others", "--exclude-standard"], capture_output=True, text=True).stdout.split()
+arqs = sys.argv[1:] or subprocess.run(["git", "-C", RAIZ, "ls-files", "--cached", "--others", "--exclude-standard"], capture_output=True, text=True).stdout.splitlines()  # nomes com espaço (· Gestão) não se partem
 achados = []
 for a in arqs:
-    p = a if os.path.isabs(a) else os.path.join(R, a)
+    p = a if os.path.isabs(a) else os.path.join(RAIZ, a)
     if not os.path.isfile(p) or os.path.getsize(p) > 2_000_000: continue
     try: t = open(p, encoding="utf-8").read()
     except UnicodeDecodeError: continue

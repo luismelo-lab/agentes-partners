@@ -61,6 +61,11 @@ def dt(v):
     return None
 
 
+def n_toques(r):
+    try: return int(float(str(r.get("Toques feitos") or 0).replace(",", ".")))
+    except (TypeError, ValueError): return 0
+
+
 def mais_uteis(d, n):
     while d.weekday() >= 5: d += timedelta(days=1)
     k = 0
@@ -111,8 +116,7 @@ def recalcular(rows, C, R):
     cad = C["cadencia"]; fim = {"Descartado", "Enviado ao Master/Técnico", "Nutrição"}
     for r in rows:
         ini = dt(r["Data de início"]) or HOJE
-        try: feitos = int(r["Toques feitos"] or 0)
-        except (TypeError, ValueError): feitos = 0
+        feitos = n_toques(r)
         et = r["Etapa"] or "Conta-alvo"
         if et in fim:
             r["Próximo toque (nº)"] = ""; r["Data próxima ação"] = ""
@@ -196,7 +200,7 @@ def salvar(rows, C, fonte_hs):
         [p for p in (proposta_hubspot(r) for r in rows) if p], 22)
     et = Counter(r["Etapa"] for r in rows); pm = defaultdict(Counter)
     for r in rows: pm[r["Master"]][r["Etapa"]] += 1
-    toques = sum(int(r["Toques feitos"] or 0) for r in rows if str(r["Toques feitos"] or "0").isdigit())
+    toques = sum(n_toques(r) for r in rows)  # 2.0 (número do Excel) ficava fora da soma com o isdigit()
     reun = sum(1 for r in rows if r["Etapa"] in ("Reunião agendada", "Reunião realizada", "Qualificado (SQL)", "Enviado ao Master/Técnico"))
     painel = [[f"Atualizado em {HOJE.strftime('%d/%m/%Y')} · HubSpot: {fonte_hs}"], [""], ["Indicador", "Valor"], ["Empresas em controle", len(rows)], ["Toques feitos (total)", toques],
               ["Reuniões (agendadas ou além)", reun], ["Taxa empresa → reunião", f"{reun / len(rows) * 100:.0f}%" if rows else "—"],

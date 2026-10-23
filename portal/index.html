@@ -164,13 +164,16 @@ const Fonte = {
     const [db, user] = await Promise.all([claude.use("db").catch(() => null), claude.use("user").catch(() => null)]);
     this.db = db; this.user = user;
   },
+  /* Identidade (A1, 23/10/2026): o perfil vem só da conta do Claude. Luis = dono do Artifact (isOwner);
+     Daniela, Jenifer e Geovana = nome da conta (palavra inteira), nunca "luis". Quem não é reconhecido fica só leitura. */
+  dono: false,
   async quemSou() {
-    if (!this.user) return {id: null, chave: null};
-    let me = null; try { me = await this.user.me() } catch (e) {}
-    const n = sem(me?.name || "");
-    let chave = ["luis", "daniela", "jenifer", "geovana"].find(k => n.includes(k)) || null;
-    try { if (!chave && await this.user.isOwner()) chave = "luis" } catch (e) {}
-    return {id: me?.id || null, chave};
+    if (!this.user) return {id: null, chave: null, dono: false};
+    let me = null, dono = false; try { me = await this.user.me() } catch (e) {}
+    try { dono = (await this.user.isOwner()) === true } catch (e) {}
+    const ps = sem(me?.name || "").split(/[^a-z]+/);
+    const chave = dono ? "luis" : ["daniela", "jenifer", "geovana"].find(k => ps.includes(k)) || null;
+    this.dono = dono; return {id: me?.id || null, chave, dono};
   },
   ouvir(col, ordem, limite, cb, erro) {
     let q = this.db.collection(col); if (ordem) q = q.orderBy(ordem, "desc");
@@ -185,7 +188,7 @@ const Fonte = {
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
 const url = u => /^https:\/\//i.test(String(u || "")) ? esc(u) : "";
-const sem = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const sem = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 const agora = () => new Date().toISOString();
 const dataBR = iso => { try { return iso ? new Date(iso).toLocaleString("pt-BR", {day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"}) : "" } catch (e) { return "" } };
 const mi = v => !v ? "—" : v >= 1e6 ? "R$ " + (v / 1e6).toFixed(1).replace(".", ",") + " mi" : "R$ " + Math.round(v / 1e3).toLocaleString("pt-BR") + " mil";
@@ -213,12 +216,13 @@ const S = {D: null, DIR: null, eu: null, meuId: null, identificado: false, aba: 
 
 const areaDe = sk => (S.DIR?.areas || []).find(a => a.skill === sk);
 const nomeArea = sk => sk ? (areaDe(sk)?.nome || sk) : "Central (sem área)";
-const online = () => !!Fonte.db;
+const online = () => !!Fonte.db && S.identificado;
+const podeDecidir = dono => online() && S.eu === dono && (dono !== "luis" || Fonte.dono);
 const faseDe = p => FASE[p.status] || "fila";
 const chipFase = p => { const f = faseDe(p); const r = FASES.find(x => x[0] === f)[1]; return `<span class="chip ponto ${f}">${esc(p.status === "nao_aprovado" ? "Concluído · não aprovado" : p.status === "nova_analise" ? "Na fila · nova análise" : r)}</span>` };
 const linksHtml = ls => (ls || []).filter(l => url(l.url)).map(l => `<a href="${url(l.url)}" target="_blank" rel="noopener">Abrir pasta ${esc(l.rotulo)}</a>`).join(" ");
 const msg = k => S.msg[k] ? `<span class="${S.msg[k].ok ? "ok-msg" : "erro-msg"}" role="status">${esc(S.msg[k].t)}</span>` : "";
-const avisoLeitura = () => online() ? "" : `<div class="aviso" role="note"><b>Modo leitura.</b> Pedir, aprovar e registrar funcionam quando a Central é aberta pelo link do Claude, com a sua conta da Save. Aqui você consulta tudo, mas os botões ficam desligados.</div>`;
+const avisoLeitura = () => online() ? "" : `<div class="aviso" role="note"><b>Modo leitura.</b> Pedir, aprovar e registrar funcionam quando a Central é aberta pelo link do Claude, com a sua conta da Save${Fonte.db ? " (esta conta não foi reconhecida: peça ao Luis para conferir o seu acesso)" : ""}. Aqui você consulta tudo, mas os botões ficam desligados.</div>`;
 
 /* ===================== Abas ===================== */
 function pendencias(p) {
@@ -244,13 +248,13 @@ function cardDemanda(d) {
     ${d.proximo_passo ? `<p class="peq">Próximo passo: ${esc(d.proximo_passo)}${d.prazo ? " · prazo " + esc(d.prazo) : ""}</p>` : ""}
     ${url(d.link) ? `<p class="peq"><a href="${url(d.link)}" target="_blank" rel="noopener">${esc(d.negocio || "Abrir no HubSpot")}</a></p>` : ""}
     <p class="peq mono">${esc(d.id)} · ${esc(d.origem || "")} · aberta em ${dataBR(d.aberta_em)}</p>
-    ${meu && !a ? `<div class="acoes"><button class="btn sec" data-acao="respondido" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Respondi</button>
+    ${meu && !a && online() ? `<div class="acoes"><button class="btn sec" data-acao="respondido" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Respondi</button>
       <button class="btn sec" data-acao="encaminhado" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Encaminhei à área</button>
       <button class="btn link" data-acao="nao_e_demanda" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Não é demanda</button></div>` : ""}
   </article>`;
 }
 function cardChamado(c) {
-  const pode = S.eu === c.pessoa && c.status === "proposto";
+  const pode = c.status === "proposto" && podeDecidir(c.pessoa);
   return `<article class="cartao"><header><strong>${esc(c.grupo || "Chamado")}</strong><span class="chip ponto ${c.status === "proposto" ? "aprovar" : c.status === "recusado" ? "" : "concluido"}">${esc(ST_CH[c.status] || c.status)}</span>
       ${c.urgencia >= 4 ? `<span class="chip urgente">Urgência ${esc(c.urgencia)}</span>` : ""}${c.master ? `<span class="chip">${esc(c.master)}</span>` : ""}</header>
     <p class="peq mono">${esc(c.id)}${c.conversa ? " · " + esc(c.conversa) : ""}</p>
@@ -264,7 +268,7 @@ function cardChamado(c) {
   </article>`;
 }
 function cardLote(r) {
-  const d = S.recup[r.deal], dona = S.eu === "geovana";
+  const d = S.recup[r.deal], dona = podeDecidir("geovana");
   return `<article class="cartao"><header><strong><a href="${url(r.link)}" target="_blank" rel="noopener">${esc(r.negocio)}</a></strong><span class="chip">${esc(r.parceiro)}</span><span class="chip">${esc(r.tipo)}</span>
       ${d ? `<span class="chip ponto concluido">${esc(d.decisao)}</span>` : ""}</header>
     <p class="peq">${esc(r.segmento)} · ${esc(r.uf)} · parecidos ${esc(String(r.taxa || "").split(" ")[0])} · esperado ${mi(r.esperado)}</p>
@@ -286,7 +290,7 @@ function cardPedido(p, completo) {
       ${R.tambem ? `<h3>O que você também precisa</h3>${md(R.tambem)}` : ""}${R.falta ? `<h3>O que falta e quem fornece</h3>${md(R.falta)}` : ""}
       ${(R.conferir || []).length ? `<h3>Antes de usar, confira</h3>${md(R.conferir.map(c => "- " + c).join("\n"))}` : ""}
       ${(R.arquivos || []).length ? `<p class="peq">Arquivos no OneDrive: ${R.arquivos.map(esc).join(", ")}</p>` : ""}</div></details>` : ""}
-    ${meu && p.status === "aguardando_aprovacao" ? `<label for="c-${esc(p.id)}">Comentário <small>(obrigatório em Pedir ajuste e Não aprovado)</small></label><textarea id="c-${esc(p.id)}" maxlength="1500" rows="3"></textarea>
+    ${p.status === "aguardando_aprovacao" && podeDecidir(p.solicitante) ? `<label for="c-${esc(p.id)}">Comentário <small>(obrigatório em Pedir ajuste e Não aprovado)</small></label><textarea id="c-${esc(p.id)}" maxlength="1500" rows="3"></textarea>
       <div class="acoes"><button class="btn" data-dec="aprovado" data-id="${esc(p.id)}" ${online() ? "" : "disabled"}>Aprovar</button><button class="btn sec" data-dec="nova_analise" data-id="${esc(p.id)}" ${online() ? "" : "disabled"}>Pedir ajuste</button><button class="btn perigo" data-dec="nao_aprovado" data-id="${esc(p.id)}" ${online() ? "" : "disabled"}>Não aprovado</button>${msg("p-" + p.id)}</div>` : ""}
   </article>`;
 }
@@ -302,7 +306,8 @@ function arquivosDia(p) {
     <p class="peq">O OneDrive abre a pasta; o arquivo aparece na lista.</p></section>`;
 }
 function apontamento(p) {
-  const hoje = new Date().toISOString().slice(0, 10), meus = S.apont.filter(x => x.pessoa === p && (x.data || "").startsWith(hoje));
+  const dia = v => { const d = new Date(v || ""); return isNaN(d) ? String(v || "").slice(0, 10) : d.toLocaleDateString("sv-SE") };
+  const hoje = dia(new Date()), meus = S.apont.filter(x => x.pessoa === p && dia(x.data) === hoje);
   return `<details class="cartao"><summary>Registrar uma tarefa (Semana 0) · ${meus.length} hoje, ${meus.reduce((s, x) => s + (x.minutos || 0), 0)} min</summary>
     <form id="f-apont" class="secao"><div class="campos">
       <label>O que fez<input id="a-desc" required maxlength="160" placeholder="Ex.: encaminhei o pedido de contrato"></label>
@@ -313,8 +318,7 @@ function apontamento(p) {
       <div class="acoes"><button class="btn sec" type="submit" ${online() ? "" : "disabled"}>Registrar</button>${msg("apont")}</div></form></details>`;
 }
 function escolherPessoa() {
-  return `<section class="secao"><div class="cab"><span class="rotulo">Minha mesa</span><h2>Quem está usando?</h2><p class="lead">Escolha o seu nome no alto da página. A mesa mostra só o que é seu agora.</p></div>
-    <div class="acoes">${Object.entries(EQUIPE).map(([k, v]) => `<button class="btn sec" data-sou="${k}">${v}</button>`).join("")}</div></section>`;
+  return `<section class="secao"><div class="cab"><span class="rotulo">Minha mesa</span><h2>Não reconheci a sua conta</h2><p class="lead">A mesa mostra o que é de cada pessoa, pela conta do Claude. Aqui você consulta áreas, entregas, rotinas, pastas e pedidos.</p></div>${avisoLeitura()}</section>`;
 }
 function mesa() {
   const p = S.eu; if (!p) return escolherPessoa();
@@ -352,8 +356,8 @@ function mesaLuis() {
       <p class="lead">Aqui ficam só regra, preço, meta, remuneração, produto em validação e material em escala. Chamados, lotes e listas são decididos por quem é dona da entrega.</p></div>${avisoLeitura()}
     <div class="lista">${vis.map(d => `<article class="cartao"><header><strong class="mono">${esc(d.id)}</strong><span class="chip ponto aprovar">Pendente</span><span class="peq">${esc(d.data)} · ${esc(d.ata)}</span></header>
       <p>${esc(d.texto)}</p>${d.obs ? `<p class="peq">${esc(d.obs)}</p>` : ""}
-      <label for="n-${esc(d.id)}">Observação <small>(opcional)</small></label><input id="n-${esc(d.id)}" maxlength="400">
-      <div class="acoes"><button class="btn" data-cons="aprovada" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Aprovar</button><button class="btn sec" data-cons="aprovada com ajuste" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Aprovar com ajuste</button><button class="btn perigo" data-cons="rejeitada" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Rejeitar</button>${msg("cons-" + d.id)}</div></article>`).join("") || `<div class="vazio">Nenhuma decisão esperando você.</div>`}</div>
+      ${podeDecidir("luis") ? `<label for="n-${esc(d.id)}">Observação <small>(opcional)</small></label><input id="n-${esc(d.id)}" maxlength="400">
+      <div class="acoes"><button class="btn" data-cons="aprovada" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Aprovar</button><button class="btn sec" data-cons="aprovada com ajuste" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Aprovar com ajuste</button><button class="btn perigo" data-cons="rejeitada" data-id="${esc(d.id)}" ${online() ? "" : "disabled"}>Rejeitar</button>${msg("cons-" + d.id)}</div>` : ""}</article>`).join("") || `<div class="vazio">Nenhuma decisão esperando você.</div>`}</div>
     ${ds.length > vis.length ? `<div><button class="btn sec" data-todas="1">Mostrar todas as ${ds.length}</button></div>` : ""}</section>
     ${prontos.length ? `<section class="secao"><h3>Respostas prontas para você aprovar (${prontos.length})</h3><div class="lista">${prontos.map(x => cardPedido(x)).join("")}</div></section>` : ""}
     ${ch.length ? `<section class="secao"><h3>Chamados seus para aprovar (${ch.length})</h3><div class="lista">${ch.map(cardChamado).join("")}</div></section>` : ""}
@@ -493,12 +497,12 @@ function acompanhar() {
 const VISTAS = {inicio: mesa, pedir, onde, acompanhar};
 function render() {
   nav(); if (!S.D || !S.DIR) return;
-  const sel = $("#sou"); if (sel) { sel.value = S.eu || ""; sel.disabled = S.identificado }
-  $("#quem-txt").textContent = S.identificado ? "Você:" : "Você é";
+  const sel = $("#sou"); if (sel) { sel.value = S.eu || ""; sel.disabled = true; sel.hidden = true }
+  $("#quem-txt").textContent = S.identificado ? "Você: " + EQUIPE[S.eu] : "Modo leitura";
   const vals = {}, ativo = document.activeElement, foco = ativo?.id, pos = ativo && "selectionStart" in ativo ? [ativo.selectionStart, ativo.selectionEnd] : null;
   const abertos = new Set([...document.querySelectorAll("#conteudo details[open]")].map((d, i) => d.id || "d" + i));
   document.querySelectorAll("#conteudo input[id], #conteudo select[id], #conteudo textarea[id]").forEach(el => { vals[el.id] = el.type === "checkbox" ? el.checked : el.value });
-  $("#conteudo").innerHTML = VISTAS[S.aba]() + `<p class="rodape">Pré-análises dos agentes da Área Partners para o time validar. Nada aqui é enviado a parceiros ou clientes. Dados de ${esc(S.D.atualizado)}; diretório de ${esc(S.DIR.atualizado)}.</p>`;
+  $("#conteudo").innerHTML = (S.msg.geral ? `<div class="aviso" role="alert">${esc(S.msg.geral.t)}</div>` : "") + VISTAS[S.aba]() + `<p class="rodape">Pré-análises dos agentes da Área Partners para o time validar. Nada aqui é enviado a parceiros ou clientes. Dados de ${esc(S.D.atualizado)}; diretório de ${esc(S.DIR.atualizado)}.</p>`;
   const limpar = S.limpar; S.limpar = null;
   for (const [id, v] of Object.entries(vals)) { if (limpar && id.startsWith(limpar)) continue; const el = document.getElementById(id); if (!el || id === "p-entrega") continue; if (el.type === "checkbox") el.checked = v; else if (v !== "" || el.tagName !== "SELECT") el.value = v }
   [...document.querySelectorAll("#conteudo details")].forEach((d, i) => { if (abertos.has(d.id || "d" + i)) d.open = true });
@@ -530,38 +534,39 @@ async function salvarPedido(e) {
 }
 async function decidirPedido(id, dec) {
   const p = S.pedidos.find(x => x.id === id), campo = $("#c-" + id), nota = (campo?.value || "").trim();
-  if (p?.solicitante !== S.eu) return;
+  if (!p || p.status !== "aguardando_aprovacao" || !podeDecidir(p.solicitante)) return render();
   if (dec !== "aprovado" && !nota) { campo.focus(); return aviso("p-" + id, "Escreva o motivo ou o que mudar.") }
   try { await Fonte.atualizar("pedidos/" + id, {status: dec, decisao: {tipo: dec, nota, quando: agora(), por: S.eu, por_id: S.meuId}, historico: [...(p.historico || []), {quando: agora(), evento: dec, por: S.eu, nota}].slice(-30)}) }
   catch (x) { aviso("p-" + id, "Não consegui registrar a decisão.") }
 }
-async function acaoDemanda(id, st) { try { await Fonte.gravar("acoes_demandas/" + id, {status: st, por: S.eu, quando: agora()}) } catch (x) { aviso("geral", "Não consegui registrar.") } }
+async function acaoDemanda(id, st) { const d = (S.D.demandas_lista || []).find(x => x.id === id); if (!d || d.pessoa !== S.eu || !online()) return render();
+  try { await Fonte.gravar("acoes_demandas/" + id, {status: st, por: S.eu, por_id: S.meuId, quando: agora()}) } catch (x) { aviso("geral", "Não consegui registrar.") } }
 async function decidirRecup(id, dec) {
-  if (S.eu !== "geovana") return; const v = s => ($(s)?.value || "").trim();
-  try { await Fonte.gravar("recuperador/" + id, {decisao: dec, motivo: v("#r-m-" + id), valor_validado: v("#r-v-" + id), minutos: Number(v("#r-t-" + id)) || null, por: S.eu, quando: agora()}) }
+  if (!podeDecidir("geovana")) return render(); const v = s => ($(s)?.value || "").trim();
+  try { await Fonte.gravar("recuperador/" + id, {decisao: dec, motivo: v("#r-m-" + id), valor_validado: v("#r-v-" + id), minutos: Number(v("#r-t-" + id)) || null, por: S.eu, por_id: S.meuId, quando: agora()}) }
   catch (x) { aviso("geral", "Não consegui registrar a decisão do lote.") }
 }
 async function decidirConselho(id, dec) {
-  if (S.eu !== "luis") return;
-  try { await Fonte.gravar("conselho/" + id, {decisao: dec, nota: ($("#n-" + id)?.value || "").trim(), quando: agora()}) } catch (x) { aviso("cons-" + id, "Só o Luis registra decisões do Conselho.") }
+  if (!podeDecidir("luis")) return render();
+  try { await Fonte.gravar("conselho/" + id, {decisao: dec, nota: ($("#n-" + id)?.value || "").trim(), por: S.eu, por_id: S.meuId, quando: agora()}) } catch (x) { aviso("cons-" + id, "Só o Luis registra decisões do Conselho.") }
 }
 async function decidirChamado(id, dec) {
-  const c = S.chamados.find(x => x.id === id); if (!c || c.pessoa !== S.eu) return;
+  const c = S.chamados.find(x => x.id === id); if (!c || c.status !== "proposto" || !podeDecidir(c.pessoa)) return render();
   const v = s => ($(s)?.value || "").trim();
-  const dados = dec === "aprovado" ? {status: "aprovado", titulo_editado: v("#ct-" + id), descricao_editada: v("#cd-" + id), aprovado_por: S.eu, aprovado_em: agora()}
-                                   : {status: "recusado", motivo: v("#cm-" + id), recusado_por: S.eu, recusado_em: agora()};
+  const dados = dec === "aprovado" ? {status: "aprovado", titulo_editado: v("#ct-" + id), descricao_editada: v("#cd-" + id), aprovado_por: S.eu, aprovado_por_id: S.meuId, aprovado_em: agora()}
+                                   : {status: "recusado", motivo: v("#cm-" + id), recusado_por: S.eu, recusado_por_id: S.meuId, recusado_em: agora()};
   if (dec === "recusado" && !dados.motivo) { $("#cm-" + id).focus(); return aviso("ch-" + id, "Diga por que não abrir.") }
   try { await Fonte.atualizar("chamados/" + id, dados) } catch (x) { aviso("ch-" + id, "Não consegui registrar a decisão do chamado.") }
 }
 async function salvarApont(e) {
-  e.preventDefault(); if (!online()) return;
+  e.preventDefault(); if (!online() || !S.eu) return;
   if (!$("#a-desc").value.trim()) { $("#a-desc").focus(); return }
-  try { await Fonte.criar("apontamentos", {pessoa: S.eu, data: agora(), descricao: $("#a-desc").value.trim(), tipo: $("#a-tipo").value, master: $("#a-master").value, minutos: Number($("#a-min").value) || 0, ponte: $("#a-ponte").checked}); S.limpar = "a-"; aviso("apont", "Tarefa registrada.", true) }
+  try { await Fonte.criar("apontamentos", {pessoa: S.eu, por_id: S.meuId, data: agora(), descricao: $("#a-desc").value.trim(), tipo: $("#a-tipo").value, master: $("#a-master").value, minutos: Number($("#a-min").value) || 0, ponte: $("#a-ponte").checked}); S.limpar = "a-"; aviso("apont", "Tarefa registrada.", true) }
   catch (x) { aviso("apont", "Não consegui registrar a tarefa.") }
 }
 
 /* ===================== Eventos ===================== */
-function definirPessoa(k) { S.eu = k || null; lsSet("sou", k || ""); render() }
+function definirPessoa(k) { /* A1: o perfil vem só da conta do Claude; a escolha manual não vale */ }
 document.addEventListener("click", e => {
   const t = e.target.closest("[data-aba]"); if (t) return irPara(t.dataset.aba);
   const s = e.target.closest("[data-sou]"); if (s) return definirPessoa(s.dataset.sou);
@@ -601,7 +606,7 @@ async function iniciar() {
   try { [S.D, S.DIR] = await Promise.all([Fonte.json("dados.json"), Fonte.json("diretorio.json")]) }
   catch (e) { $("#conteudo").innerHTML = `<div class="vazio">Não consegui carregar os dados da Central. Recarregue a página em alguns segundos.</div>`; return }
   $("#quando").textContent = "dados de " + S.D.atualizado;
-  S.eu = lsGet("sou") || null;
+  S.eu = null;
   const h = (location.hash || "").slice(1); S.aba = ABAS.some(([k]) => k === h) ? h : (ABAS.some(([k]) => k === lsGet("aba")) ? lsGet("aba") : "inicio");
   render();
   await Fonte.conectar();

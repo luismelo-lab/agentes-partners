@@ -73,10 +73,10 @@ Leia `aprendizados.md` antes de começar.
 7. **Aprendizado:** correção do Luis/Daniela/Jenifer vira regra em `aprendizados.md`.
 
 ## Limites conhecidos dos dados (declare sempre)
-- O HubSpot **não guarda a data de entrada do parceiro**: o tempo até o 1º negócio conta do 1º negócio registrado, a menos que `scripts/datas-entrada-parceiros.json` esteja preenchido. A maioria dos Masters é anterior à base (não mede onboarding).
+- O HubSpot **não guarda a data de entrada do parceiro**: o tempo até o 1º negócio conta do 1º negócio registrado, a menos que `~/agentes-partners/departamentos/partner-success/scripts/datas-entrada-parceiros.json` esteja preenchido. A maioria dos Masters é anterior à base (não mede onboarding).
 - As importações de nov/2025 e fev/2026 regravaram a data de criação: o script usa a **data efetiva** (menor entre criação e fechamento).
 - **Certificação, trilha concluída e nível** ainda não existem no HubSpot: propriedades propostas em `entregas/2026-09-29-v1/programa-niveis-v1.md` (pedido ao Depto Dados, governança).
-- O nome do parceiro é texto livre; aliases do script em `scripts/aliases-parceiros.json`; o roster oficial continua no `mapeamento-hubspot.json` (dono: Dados & BI).
+- O nome do parceiro é texto livre; aliases do script em `~/agentes-partners/departamentos/partner-success/scripts/aliases-parceiros.json`; o roster oficial continua no `mapeamento-hubspot.json` (dono: Dados & BI).
 
 ## Revisão do Gerente (obrigatória, regra do Luis de 15/10/2026)
 Siga `~/agentes-partners/infra/protocolo-gerente.md`.

@@ -120,7 +120,7 @@ Limites: diferença de conciliação acima de 1% do contratado do mês bloqueia 
 ### Caso 2: alíquota zero e o fator do item 57 (interno, set/2026)
 - **Situação:** a tese de alíquota zero em grãos tinha honorário no ressarcimento, via PER, com risco contrário da Receita e STJ dividido.
 - **Leitura do sênior:** presentes quatro dos cinco fatores do item 57 (terceiro decide, prazo longo, pouca experiência, ampla gama de valores). Não há como afirmar que a reversão é improvável.
-- **O que foi feito:** D14: variante A fora do forecast e da meta; receita contingente em linha própria; honorário só no ressarcimento.
+- **O que foi feito:** D14 (parcialmente confirmada; a parte do forecast e da meta segue pendente com o Luis): variante A fora do forecast e da meta; receita contingente em linha própria; honorário só no ressarcimento.
 
 ### Caso 3: ganhos sem % de honorário (interno, out/2026)
 - **Situação:** em 22/10/2026, 958 ganhos sem % de honorário e 900 sem tese no HubSpot (Dados-BI).

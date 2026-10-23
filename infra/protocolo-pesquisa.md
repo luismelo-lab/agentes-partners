@@ -6,7 +6,7 @@ Vale para todo departamento, célula, Gabinete e Conselho, junto com `protocolo-
 ## 1. As quatro camadas de conhecimento (nesta ordem, em toda entrega)
 1. **Base interna.** `references/` da skill, `aprendizados.md`, decisões do Conselho e documentos do produto. Diz o que a Save decidiu.
 2. **Dados da Save.** HubSpot (leitura), pareceres, Receita local, Bitrix e planilhas, sempre por script. Diz o que acontece de fato.
-3. **Radar da área.** `references/radar-mercado.md`, atualizado toda semana pela rotina `radar-mercado`. Diz o que mudou no mercado.
+3. **Radar da área.** O arquivo de radar da área (tabela do §6), atualizado toda semana pela rotina `radar-mercado`. Diz o que mudou no mercado.
 4. **Pesquisa na hora.** WebSearch e WebFetch (carregue com ToolSearch) quando o pedido toca em norma, julgado, taxa, número de mercado, concorrente ou tendência. Também quando o radar da área tem mais de 7 dias sobre o tema, ou quando a base interna está "a confirmar".
 
 A decisão interna **não muda** por causa da pesquisa: o que a Save decidiu continua valendo até o dono decidir de novo. Se o mercado contradiz a base, o agente **sinaliza o conflito** no bloco "o que você também precisa" e propõe a pergunta ao dono.
@@ -42,7 +42,7 @@ Sem fonte, escreva "não localizado". Nunca invente número, norma ou julgado.
 - **Conector do HubSpot:** só leitura.
 
 ## 6. Radar semanal (rotina `radar-mercado`)
-Toda semana, cada área atualiza o `references/radar-mercado.md` da sua skill:
+Toda semana, cada área atualiza o radar da sua skill (arquivo na tabela abaixo; a maioria das áreas usa o radar de outra skill):
 - novidades desde a última data-base;
 - impacto para a Save;
 - ação do agente;
@@ -56,7 +56,8 @@ O resumo vai ao Luis. Itens que mudam regra, tese ou produto viram proposta ao C
 |---|---|
 | Tributário | `depto-tributario/references/radar-mercado.md` |
 | Jurídico, Contratos, Qualidade | `depto-juridico/references/radar-mercado.md` |
-| Produtos Internacionais | `depto-internacional/references/radar-mercado-credito.md` e `radar-mercado-financeiro-maquila.md` |
+| Produtos Internacionais | `depto-internacional/references/radar-mercado-credito.md`, `radar-mercado-financeiro-maquila.md` e `radar-tax-internacional-comex.md` |
+| Save Invest (Gestão de Contas, antecipação, FIDC) | `depto-save-invest/references/radar-mercado.md` |
 | Áreas comerciais (Partner Success, Operações de Canal, Intel Comercial, Marketing, Pós-venda, Pessoas, células) | `depto-partner-success/references/radar-mercado.md` |
 | Dados, Resultados, TI | seguem o radar comercial e o jurídico (LGPD e IA) |
 

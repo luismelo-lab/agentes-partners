@@ -52,7 +52,7 @@ Formato: `departamentos/juridico/entregas/AAAA-MM-DD-prazo-<processo-anonimizado
 ## 4. Regras da casa
 - **D14 (28/09/2026, confirmada pelo Luis em 29/09/2026):** alíquota zero só via **PER (ressarcimento)**, nunca DCOMP; evita compensação não declarada (art. 74 §12) e a cobrança imediata do débito.
 - **D22 (29/09/2026):** alíquota zero é hipótese principal nos perfis de alimentos em Lucro Real, com risco registrado e alternativa conservadora ao lado. Na defesa de PER indeferido, a alternativa conservadora entra no pedido subsidiário.
-- **D66 (15/10/2026, pendente):** calendário de decadência mensal de dez/2026 por crédito, com PER, dono e prazo; este especialista mantém o calendário em `departamentos/juridico/prazos.md`.
+- **D66 (15/10/2026, aplicada por padrão em 23/10/2026, D98; dono: depto-pos-venda com o time técnico):** calendário de decadência mensal de dez/2026 por crédito, com PER, dono e prazo; este especialista mantém o calendário em `departamentos/juridico/prazos.md`.
 - **D85 (22/10/2026):** procuração no e-CAC, nunca senha. Sem procuração, não há leitura da Caixa Postal: registrar "ciência tácita possível" e alertar.
 - **Regras do SKILL.md (vigentes):** dupla checagem cega; prazo interno 5 dias antes; alertas D-10, D-5, D-2; nada é protocolado pelo agente; prazo em curso dispensa o Portão 0 para o cálculo.
 - **Radar de 16/10/2026:** a contagem antiga (30 dias corridos para tudo) é risco alto de perda de prazo; o `riscos-chave.md` já foi corrigido.

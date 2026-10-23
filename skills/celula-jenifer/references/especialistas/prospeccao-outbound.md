@@ -61,7 +61,7 @@
 - **Luis, 20/10/2026:** uso dos sócios do QSA (nome, qualificação, entrada; sem CPF) e dos telefones e e-mail da empresa aprovado para a prospecção D&S; ficam só em `dados-publicos/receita/prospects-contatos.json` (permissão 600).
 - **Luis, 21/10/2026:** prospecção só em MG e só Lucro Real; lotes separados, nunca regravar lote anotado.
 - **D14 e D22 (29/09/2026):** alíquota zero via PER, nunca DCOMP; tese com risco registrado.
-- **D7-b (pendente):** prioridade Q4 em frigoríficos e hortifrúti (só B); café fora da meta desde abr/2026.
+- **D7-b (superada em 23/10/2026 pela D98: o Luis decidiu só a meta do Q4, D64, e o foco por segmento vai para 2027 com a meta da diretoria, D75):** prioridade Q4 em frigoríficos e hortifrúti (só B); café fora da meta desde abr/2026.
 - **D76 (22/10/2026):** cliente sem Master não entra em lista da Área Partners.
 - **D83 (22/10/2026):** produtos em validação entram como descoberta, sem taxa, prazo ou fee.
 - **D54 (pendente):** Jenifer com no máximo 2 h por semana em produtos novos depois das 1:1.

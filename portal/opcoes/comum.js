@@ -4,7 +4,7 @@ const C = (() => {
   const X = window.EX;
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
   const url = u => /^https:\/\//i.test(String(u || "")) ? esc(u) : "";
-  const sem = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const sem = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   const data = iso => { if (!iso) return ""; const [d, h] = iso.split("T"); const [, m, dd] = d.split("-"); return `${dd}/${m}${h ? " " + h.slice(0, 5) : ""}` };
   const mi = v => !v ? "—" : v >= 1e6 ? "R$ " + (v / 1e6).toFixed(1).replace(".", ",") + " mi" : "R$ " + Math.round(v / 1e3) + " mil";
   const PESSOAS = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: "Geovana"};

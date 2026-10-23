@@ -319,7 +319,7 @@ def avaliar_area(pasta, pastas_validas=None, pasta_avaliacoes=AVALIACOES_PADRAO)
         falta.append(f"acerto {av['acerto']} nos casos de teste (abaixo de {LIMIAR_FILA})")
     r.update({"nota_especialistas": nota_esp, "casos_teste": ct, "nota_estrutura": estrutura,
               "nota_acerto": av["acerto"] if av else None, "avaliacao": av, "nota": final,
-              "veredito": veredito(final), "fila": final < LIMIAR_FILA, "falta": falta})
+              "veredito": veredito(final), "fila": final < LIMIAR_FILA or (av is not None and av.get("acerto") is not None and av["acerto"] < LIMIAR_FILA), "falta": falta})  # acerto abaixo de 70 também vai à fila (23/10/2026)
     return r
 
 

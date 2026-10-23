@@ -45,7 +45,7 @@ Legenda: aderência é a da matriz de 29/09/2026, ajustada pelas decisões e err
 | Padarias (1091, 4721) | Presumido | Exclusões, CST, T12 | — | T01, T16 | baixa | D80 |
 | Indústria de alimentos (10, 11) | Real | T02 + C; T08; T15 e T14 se incentivo; T12 | T01 A | T13, T16 | média | D80 |
 | Indústria de alimentos | Presumido | Exclusões, T12, T15 | — | T01, T02, T08, T16 | baixa | D80 |
-| **Agro e cooperativas adquirentes de produção rural** | Real | T18 (compra de PF); T02; T08 | T01 grãos (35%) | T13; **T19 como recuperação** | média | Sim: Funrural vira passivo (D86) |
+| **Agro e cooperativas adquirentes de produção rural** | Real | T18 (compra de PF); T02; T08 | T01 grãos (35%) | T13; **T19 como recuperação** | média | Sim: Funrural vira passivo (D86) [em aberto: D81 × D86, decisão do Luis] |
 | Outros | Real | Insumos (T02) | — | T13, T16 | média | D80 |
 | Outros | Presumido | Exclusões, CST, T12 | — | T16 | baixa | D80 |
 | Qualquer CNAE | Simples | — | — | todas as teses de PIS/COFINS de crédito | vetar (V2) | — |
@@ -81,7 +81,7 @@ Legenda: aderência é a da matriz de 29/09/2026, ajustada pelas decisões e err
 | Lei 11.116/2005 | art. 16 | Saldo trimestral ressarcível | idem |
 | IN RFB 2.055/2021 | arts. 49, II, 53 e 55 | PER por trimestre, EFD antes | Vigente (compilação até IN 2.272/2025) |
 | LC 214/2025 | arts. 378 e 542 | Fim do PIS/COFINS em 01/01/2027; saldo preservado se escriturado | Vigente |
-| STF ADI 4.395 (Funrural) | Resultado proclamado em 15/10/2026 segundo o documento interno e uma fonte de imprensa; inconstitucional só antes de 2018; modulação e acórdão pendentes | T19 sai da recuperação e vai a passivo (D86) | **[não confirmado no portal do STF]**; fontes divergem entre "até 2017" e "anterior a 2018" |
+| STF ADI 4.395 (Funrural) | Resultado proclamado em 15/10/2026 segundo o documento interno e uma fonte de imprensa; inconstitucional só antes de 2018; modulação e acórdão pendentes | T19 sai da recuperação e vai a passivo (D86) [em aberto: D81 × D86, decisão do Luis] | **[não confirmado no portal do STF]**; fontes divergem entre "até 2017" e "anterior a 2018" |
 | Guia Prático EFD-Contribuições v1.35 (18/06/2021) | registros e Tabela 4.3.6 | Seção 2.2 | Oficial (sped.rfb.gov.br) |
 
 ## 4. Regras da casa
@@ -106,7 +106,7 @@ Legenda: aderência é a da matriz de 29/09/2026, ajustada pelas decisões e err
    - Supermercados (4711, 4712), Real: aderência "alta" → "média"; retirar `tese_save` (T01) e anotar "catálogo de 15/10/2026 e C4".
    - Hortifrúti varejo e sacolão (4724), Real: "alta" → "média, caso a caso" (C4).
    - Todas as linhas: observação "T13 e T16 fora (D80)"; PREV = T12.
-   - Nova linha agro e cooperativas adquirentes (0161, 4622, 4623 e afins **[prefixos a definir pelo Tributário]**): T18 + T02; Funrural → passivo (D86).
+   - Nova linha agro e cooperativas adquirentes (0161, 4622, 4623 e afins **[prefixos a definir pelo Tributário]**): T18 + T02; Funrural → passivo (D86). [em aberto: D81 × D86, decisão do Luis]
 8. **Revisão do gerente** e registro `revisao` na entrega.
 
 **Limites:** nenhuma linha muda sem D-número ou errata; 3 ocorrências no mês disparam proposta de mudança; tese "contrária" (T09, T13) nunca entra como hipótese da ficha.
@@ -143,7 +143,7 @@ Legenda: aderência é a da matriz de 29/09/2026, ajustada pelas decisões e err
 - **Usar o Tema 1.093 como apoio da alíquota zero.** É adverso por analogia (E3).
 - **Dar "alta" a supermercado** porque o histórico de ganhos é bom. O catálogo exclui; vale "caso a caso" (C4).
 - **Manter T13 ou T16 em ficha antiga.** Revisar fichas abertas depois de 22/10/2026.
-- **Oferecer Funrural como recuperação de 5 anos.** Pagamentos até 2017 em regra estão prescritos; o produto agora é passivo (D86).
+- **Oferecer Funrural como recuperação de 5 anos.** Pagamentos até 2017 em regra estão prescritos; o produto agora é passivo (D86). [em aberto: D81 × D86, decisão do Luis]
 - **Confundir regime do ano atual com o do período.** A tese depende do regime de cada ano.
 - **Pedir "SPED" genérico.** A ficha diz o registro e o período.
 - **Escalar ao Tributário:** CNAE fora da tabela com volume relevante; caso agro com Funrural; supermercado com proposta de T01; qualquer tese contrária pedida pelo parceiro.

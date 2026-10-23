@@ -49,7 +49,7 @@ Leitura do sênior: a parte operacional (triagem, rascunho, lista) migrou para o
 ## 4. Regras da casa
 - **Regra 5 da área:** mudança de cargo ou função, desligamento e admissão vão ao RH formal e ao Jurídico trabalhista; o agente prepara a pauta.
 - **Regra 6 da área:** documentos de pessoas ficam em `gabinete/pessoas/`, confidenciais.
-- **D13 (28/09/2026, pendente):** papéis de cada pessoa do time no Q4; a descrição de cargo usa o papel decidido, não o presumido.
+- **D13 (28/09/2026, superada em 23/10/2026 pela D98 e pelo kit de lançamento):** papéis de cada pessoa do time no Q4; a descrição de cargo usa o papel decidido, não o presumido.
 - **D4 (28/09/2026):** a Semana 0 (combinado, baseline e triagem) foi o modelo de entrada de uma pessoa num fluxo novo com agentes; o 30-60-90 reaproveita esse formato.
 - **D33 e D54 (pendentes):** tetos de horas em produtos novos por pessoa entram no perfil da vaga se ela atender esses produtos.
 - **D3 (29/09/2026):** sem SPED nem folha na fase 1 dos agentes; vale para teste prático (só material anonimizado).

@@ -70,9 +70,9 @@ Consulta em 22/10/2026 (planalto.gov.br com ECONNRESET; conferido em espelhos e 
 - **Sem ranking de pessoas da Save** (regra 5): indicadores são de parceiros (empresas).
 - **Café fora das contas desde abr/2026**; **clientes sem Master fora** (D76, 22/10/2026).
 - **Ganho só entra no relatório com tese, variante e %** (D73, ajustada em 22/10/2026); o % de honorário só é informado no ganho (D71, ajustada em 22/10/2026). A análise de qualidade do dado segue essas regras.
-- **Número oficial do pipeline** depende da reconciliação do Dados (D74, pendente): citar a regra de escopo usada.
+- **Número oficial do pipeline** depende da reconciliação do Dados (D74, delegada ao depto-dados em 23/10/2026, D98): citar a regra de escopo usada.
 - **Relatório com 3 colunas** quando houver valor: contratado, conservador, realizado (D17).
-- **Sentinelas** sem IA geram eventos; o resumo diário da Daniela tem até 15 itens acionáveis (D26 aprovada; D47 pendente).
+- **Sentinelas** sem IA geram eventos; o resumo diário da Daniela tem até 15 itens acionáveis (D26 aprovada; D47 delegada à Daniela em 23/10/2026, D98).
 - **Desconcentração:** a meta de referência da área para 2027 (até 65% nos 3 maiores; 5 ou mais efetivos) é indicador da Save, não critério do parceiro (`25-programa-partners-2027.md`, seção 7).
 
 ## 5. Método
@@ -108,7 +108,7 @@ Perguntas que a lista sugere à Daniela ou à Jenifer, uma por motivo:
 - **Lista com nome de pessoa física** que não é contato profissional do parceiro, ou com telefone: LGPD.
 - **Plano de retenção com exclusividade, meta mínima ou redução de repasse:** escalar ao Jurídico e ao Luis.
 - **Confundir nível com saúde:** Master Avançado pode estar vermelho.
-- **Nome de parceiro em texto livre** gerando parceiro duplicado: aliases em `scripts/aliases-parceiros.json`; o roster é do Dados.
+- **Nome de parceiro em texto livre** gerando parceiro duplicado: aliases em `~/agentes-partners/departamentos/partner-success/scripts/aliases-parceiros.json`; o roster é do Dados.
 - **Sinal de escala imediata:** reclamação formal, Master anunciando venda do escritório, queda de mais de 50% no trimestre num dos 3 maiores.
 
 ## 8. Casos de referência

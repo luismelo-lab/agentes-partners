@@ -63,7 +63,7 @@ Consulta em 22/10/2026, salvo indicação.
 - **D88 (22/10/2026):** o one-page do Crédito Internacional pode usar a taxa de 7% a 10% como exemplo e a UBS; a liberação é da peça, não do deck do diagnóstico.
 - **D77 (22/10/2026):** no caso Canex, a UBS pode ser citada e o hedge "acrescenta cerca de 1%"; sem telefone ou contato na proposta.
 - **D92 (22/10/2026):** Gestão de Contas, antecipação e FIDC são da Save Invest (Junior); o texto diz quem presta.
-- **D1 (21/10/2026):** nomes dos movimentos. "Oxigenar", "Estruturar", "Escalar" em peça nova é erro.
+- **D1 do ecossistema (21/10/2026, `docs/ecossistema/racional-e-fechamento-ecossistema-save.md`; não é a D1 do Conselho; aplicada pela D84):** nomes dos movimentos. "Oxigenar", "Estruturar", "Escalar" em peça nova é erro.
 - **Parecer do Jurídico (14/10/2026):** sem valor de mercado da Save, sem "offshores", sem "estruturas preservadas", sem preço de serviço, "estruturação patrimonial" em vez de "holding", rodapé e 9 avisos.
 - **Em aberto:** quem assina o diagnóstico (regime OAB ou não) e se o slide de case com logos institucionais continua (pergunta ao dono 1 e 3).
 

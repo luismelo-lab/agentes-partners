@@ -53,12 +53,12 @@ Inconsistências na mesma base: 958 ganhos sem % de honorário, 900 sem tese, 99
 
 ## 4. Regras da casa
 - **D18 (29/09/2026, aprovada com ajuste):** a obrigatoriedade dos campos de pagamento e % de honorário é feita pelo time de CRM da Save, não pelos agentes.
-- **D62 (15/10/2026, pendente)** e **D71 (22/10/2026, ajustada):** completar honorário %, % do parceiro, tese e variante nos ganhos de outubro; o % de honorário só é informado no ganho, não é obrigatório na criação; sem reter repasse.
+- **D62 (15/10/2026, superada pelas D71 e D73, D98)** e **D71 (22/10/2026, ajustada):** completar honorário %, % do parceiro, tese e variante nos ganhos de outubro; o % de honorário só é informado no ganho, não é obrigatório na criação; sem reter repasse.
 - **D73 (22/10/2026, ajustada):** ganho só entra no forecast e no relatório com tese, variante e %.
 - **D87 (22/10/2026):** o `depto-dados` saneia os ~295 ganhos possivelmente duplicados antes de rodar a carteira.
-- **D74 (19/10/2026, pendente):** número oficial do pipeline (R$ 180,6 mi × R$ 123,6 mi) reconciliado pelo `depto-dados`.
+- **D74 (19/10/2026, delegada ao depto-dados em 23/10/2026, D98):** número oficial do pipeline (R$ 180,6 mi × R$ 123,6 mi) reconciliado pelo `depto-dados`.
 - **D76 (22/10/2026):** cliente sem Master é de outra área; não entra no saneamento da carteira dos Masters.
-- **D12 (28/09/2026, pendente):** 343 negócios com parceiro "Não informado" tratados como pipeline.
+- **D12 (28/09/2026, delegada ao depto-dados em 23/10/2026, D98):** 343 negócios com parceiro "Não informado" tratados como pipeline.
 - **Regra da casa:** não alterar HubSpot nem GLPI; só leitura e rascunho (`CLAUDE.md`, seção 3). A Daniela aplica à mão.
 - **Conflito de canal:** decisão do Luis, sempre (`references/roteamento.md`).
 - **Em aberto:** prazo de validade do registro de oportunidade (quanto tempo sem atividade derruba a proteção); lista fechada de parceiros no campo do negócio (pedido de governança ao `depto-dados`).

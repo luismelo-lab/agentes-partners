@@ -15,11 +15,39 @@ Fluxo:
 import glob, json, os, re, sys
 from datetime import datetime
 
-AP = os.path.expanduser("~/agentes-partners")
+AP = os.environ.get("PARTNERS_AP") or os.path.expanduser("~/agentes-partners")
 PROP = os.path.join(AP, "registro", "chamados-propostos.json")
 SAIDA = os.path.join(AP, "registro", "chamados-para-painel.json")
 APRENDE = os.path.join(AP, "registro", "chamados-aprendizados.md")
-sys.path.insert(0, os.path.join(AP, "lib"))
+sys.path.insert(0, os.path.join(AP, "lib")); sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+
+def _do_portal(did, d):
+    """Chamado gerado na tela "WhatsApp · Demandas" do portal (origem "portal"): vira proposta local se foi gravado pela conta da
+    dona, sobre uma demanda dela no registro único, com o texto do especialista (chamado ideal). Senão, {} (fica ignorado)."""
+    import portal_contas as PC, registro_demandas as RD
+    if d.get("origem") != "portal": return {}
+    ok, motivo = PC.conferir(d.get("proposto_por"), d.get("proposto_por_id"), d.get("pessoa"))
+    with RD.Registro() as R: dem = (R.get("demandas") or {}).get(d.get("demanda") or did)
+    if ok and (not dem or dem.get("pessoa") != d.get("pessoa")): ok, motivo = False, "demanda inexistente ou de outra pessoa"
+    if ok and not ((d.get("especialista") or {}).get("pedidos")): ok, motivo = False, "sem o texto do especialista (chamado ideal)"
+    if not ok:
+        PC.alertar("chamados", did, "chamado do portal: " + motivo, d.get("proposto_por"), d.get("proposto_por_id")); return {}
+    return {**{k: d.get(k) for k in ("pessoa", "area", "grupo", "titulo", "descricao", "urgencia", "master", "link", "negocio", "empresa", "prazo", "assunto", "o_que_pede", "especialista", "conversa")},
+            "id": did, "status": "proposto", "origem": "portal", "proposto_em": d.get("proposto_em"), "publicado": True}
+
+
+def _autor(did, d, loc, campo):
+    """Só a dona do chamado (a pessoa da proposta local, não a do db) aprova ou recusa, e só por uma das quatro contas (A3)."""
+    import portal_contas as PC
+    if not loc:
+        PC.alertar("chamados", did, "chamado não proposto pelos agentes (não está em chamados-propostos.json)", d.get(campo), d.get(campo + "_id"))
+        return False, "Ignorado: este chamado não foi proposto pelos agentes."
+    ok, motivo = PC.conferir(d.get(campo), d.get(campo + "_id"), loc.get("pessoa"))
+    if not ok:
+        PC.alertar("chamados", did, motivo, d.get(campo), d.get(campo + "_id"))
+        return False, f"Decisão ignorada: só {str(loc.get('pessoa') or '').capitalize()} aprova este chamado, pela conta dela no Claude."
+    return True, ""
 
 
 def ler():
@@ -80,14 +108,22 @@ def aplicar(pasta):
     for f in glob.glob(os.path.join(pasta, "chamados", "*.json")):
         did = os.path.basename(f)[:-5]; d = json.load(open(f)); d = d["data"] if isinstance(d.get("data"), dict) else d
         loc = P.get(did) or {}
+        if not loc and d.get("origem") == "portal" and d.get("status") in ("proposto", "aprovado", "recusado"):
+            loc = _do_portal(did, d)
+            if loc: P[did] = loc
+        if d.get("status") in ("aprovado", "recusado") and loc.get("status") not in ("aberto", "aprovado_manual", "recusado"):
+            ok, nota = _autor(did, d, loc, "aprovado_por" if d.get("status") == "aprovado" else "recusado_por")
+            if not ok:
+                if d.get("nota_agente") != nota: atualiza.append({"doc_id": did, "data": {"nota_agente": nota}})
+                continue
         if d.get("status") == "aprovado" and loc.get("status") not in ("aberto", "aprovado_manual"):
-            titulo = d.get("titulo_editado") or d.get("titulo"); desc = d.get("descricao_editada") or d.get("descricao")
+            titulo = d.get("titulo_editado") or d.get("titulo") or loc.get("titulo"); desc = d.get("descricao_editada") or d.get("descricao") or loc.get("descricao")
             import chamado_modelo as CM  # mesmo formulário da área usado na proposta; texto editado no painel entra no corpo
             origem = (f"<p><i>Chamado redigido pelo {(loc.get('especialista') or {}).get('agente') or CM.AGENTE(d.get('area', ''))} (agente da Área Partners) "
                       f"e aprovado por {d.get('aprovado_por') or d.get('pessoa')} no painel.</i></p>")
             ctx = {**loc, **{k: d.get(k) for k in ("link", "master", "negocio") if d.get(k)}}
             corpo = CM.formulario(d.get("area", "outros"), ctx, {**loc, "urgencia": d.get("urgencia", loc.get("urgencia", 3))}, desc, origem)
-            r = glpi.abrir(d.get("area", "outros"), titulo, corpo, d.get("urgencia", 3), pessoa=d.get("pessoa"))
+            r = glpi.abrir(loc.get("area") or d.get("area", "outros"), titulo, corpo, d.get("urgencia", 3), pessoa=loc.get("pessoa"))
             agora = datetime.now().isoformat(timespec="minutes")
             if r.get("id"):
                 loc.update(status="aberto", glpi_id=r["id"], url=r["url"], aberto_em=agora)

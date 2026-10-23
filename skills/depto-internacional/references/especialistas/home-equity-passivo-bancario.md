@@ -79,7 +79,7 @@
 - **Sinais de entrada** [R13/10]: despesa financeira alta, resultado baixo, contas a receber acima do faturamento mensal, vencidos, dívida de curto prazo de 3 a 4 faturamentos, SCR. Pergunta-chave: "tem algum mês do ano em que o seu caixa aperta mais?".
 - **A Save não empresta e não antecipa** (`regras-e-proibidos.md` §1). No home equity, quem concede é banco ou fintech autorizada; a Save diagnostica, prepara e indica. Remuneração por indicação de crédito pode exigir enquadramento como correspondente (Res. CMN 4.935/2021) [VALIDAR JURÍDICO].
 - **Remuneração do parceiro:** 10% do líquido Save nos produtos 2027 (D78, 22/10/2026), quando houver regra do produto.
-- **D80 (22/10/2026):** T13 vira triagem de passivo (tributário). D86: Funrural anterior a 2018 entra em Gestão de Passivo tributário. Não confundir com passivo bancário.
+- **D80 (22/10/2026):** T13 vira triagem de passivo (tributário). D86: Funrural anterior a 2018 entra em Gestão de Passivo tributário. [em aberto: D81 × D86, decisão do Luis] Não confundir com passivo bancário.
 - **Sequência técnica, nunca condição comercial:** reorganizar dívida antes de crédito novo é ordem técnica (quitação → baixa → nova garantia), nunca exigência para vender outro serviço (`internacional-fichas.md` §3).
 - **Em aberto:** dono do P6; parceiro de home equity (banco, fintech); remuneração da Save; parceria com escritório de insolvência; ficha de elegibilidade.
 

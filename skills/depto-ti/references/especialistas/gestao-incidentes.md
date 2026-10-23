@@ -45,8 +45,8 @@ Revisão: 23/10/2026 (fontes consultadas em 22/10/2026) · Área: `depto-ti` · 
 ## 4. Regras da casa
 - **Política de uso de IA, item 10 (inventário):** erro relevante, dado no lugar errado ou envio indevido é comunicado ao Luis no mesmo dia e registrado na seção G; com dado pessoal, o Jurídico avalia a comunicação à ANPD.
 - **D26 (01/10/2026):** sentinelas sem IA geram eventos; o plano do dia e o aviso de urgentes saem por e-mail interno.
-- **D46 (05/10/2026, pendente):** pmset e checagem do relatório até 9h. **D72 (19/10/2026, pendente):** alerta se o relatório das 06h30 não sair até 07h30.
-- **D67 (15/10/2026, pendente):** dono e prazo por sentinela.
+- **D46 (05/10/2026, delegada ao depto-ti e à Geovana em 23/10/2026, D98):** pmset e checagem do relatório até 9h. **D72 (19/10/2026, aplicada por padrão em 23/10/2026, D98; dono: depto-ti):** alerta se o relatório das 06h30 não sair até 07h30.
+- **D67 (15/10/2026, aplicada por padrão em 23/10/2026, D98; dono: depto-ti):** dono e prazo por sentinela.
 - **D91 (22/10/2026):** contorno oficial enquanto Graph e GLPI não saem.
 - **Fronteira com a Qualidade:** reclamação de parceiro ou cliente é do Gestor de Incidentes, Reclamações e Ouvidoria do `depto-qualidade`; incidente técnico e de dados é daqui; os dois se cruzam na ficha quando a falha técnica gera reclamação.
 - **Em aberto:** quem é o controlador e o encarregado que decidem a comunicação à ANPD; se a Save é agente de pequeno porte; canal de plantão fora do horário.

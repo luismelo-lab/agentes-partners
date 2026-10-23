@@ -17,7 +17,7 @@ Você prepara trabalho para a **Geovana**; quem decide é ela. Português do Bra
 | Especialista | Arquivo | Entrega única |
 |---|---|---|
 | **Analista de Triagem de Perdidos** | `references/especialistas/triagem-de-perdidos.md` | Fila priorizada e lote de 20: vetos V1 a V6 e V11, sinais do parecer, look-alike, urgência e métricas D2 |
-| **Curador da Tabela de Teses por Perfil** | `references/especialistas/tabela-de-teses-por-perfil.md` | Tabela tese × segmento × regime vigente (D80: T13 e T16 fora; D86: Funrural vira passivo; C4: supermercado e sacolão caso a caso) e o registro do SPED que decide cada tese |
+| **Curador da Tabela de Teses por Perfil** | `references/especialistas/tabela-de-teses-por-perfil.md` | Tabela tese × segmento × regime vigente (D80: T13 e T16 fora; D86: Funrural vira passivo; [em aberto: D81 × D86, decisão do Luis] C4: supermercado e sacolão caso a caso) e o registro do SPED que decide cada tese |
 | **Redator da Ficha de Reanálise** (papel do gerente nesta versão) | este SKILL.md, passo 4 do fluxo | Ficha por caso com a hipótese da tabela por perfil e o registro a pedir |
 | **Recorrência (P2)** | `~/.claude/skills/depto-pos-venda/references/especialistas/recorrencia.md` | A aba "Recorrência (já clientes)" segue para o calendário de recorrência do Pós-venda |
 Perguntas que só o humano responde: `references/perguntas-ao-dono.md`. **Atenção:** o `references/matriz.json` ainda não tem as correções de 22/10/2026; até a Geovana e o Tributário aprovarem o diff, a ficha aplica a tabela por perfil por cima da matriz (sem T13, T16 e Funrural como recuperação; supermercado e sacolão "caso a caso", sem T01).
@@ -30,7 +30,7 @@ Perguntas que só o humano responde: `references/perguntas-ao-dono.md`. **Atenç
 - **Matriz tese × perfil** (`references/matriz.json`, revisão do Depto Tributário em 29/09/2026): define tese, variante, aderência, documentos e se é saldo credor, por CNAE e regime (indústria × atacado × varejo). Vetar Temas 1093 (monofásicos) e 1231 (crédito sobre ICMS-ST pago); a tese de aquisições com alíquota zero não é vetada (decisão do Luis).
 - **Vetos:** V1 CNPJ baixado/inapto · V2 Simples · V3 café · V4 Gestão de Passivo (aba própria) · V5 já é cliente no grupo (aba Recorrência) · V6 duplicidade com negócio aberto · V11 parecer estrutural. Look-alike nunca usa a própria empresa (raiz do CNPJ).
 - **Sinal do parecer:** crescimento líquido da base (período cobrável hoje ÷ período analisado, já descontando a decadência); +25% de urgência só para saldo credor até 30/11/2026.
-- Nunca prometa valor. Toda afirmação técnica cita a base legal (use o skill `depto-tributario`, com `references/fontes-oficiais.md`).
+- Nunca prometa valor. Toda afirmação técnica cita a base legal (use o skill `depto-tributario`, com `~/.claude/skills/depto-tributario/references/fontes-oficiais.md`).
 
 ## Fluxo semanal
 1. **Dados frescos:** `python3 ~/.claude/skills/depto-resultados/scripts/hubspot_fonte.py --baixar` e, se a base da Receita tiver menos de 35 dias, `python3 ~/.claude/skills/depto-intel-comercial/scripts/receita_cnpj.py --enriquecer`.

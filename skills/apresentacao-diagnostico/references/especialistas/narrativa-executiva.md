@@ -65,7 +65,7 @@ Consulta em 22/10/2026, salvo indicação. O que o roteiro pode citar no slide o
 **Em transição:** a reforma (2026 teste, 2027 CBS cheia, 2029 a 2032 redução de ICMS e ISS, 2033 extinção). O roteiro diz o calendário e não projeta carga.
 
 ## 4. Regras da casa
-- **D1 (21/10/2026, Luis):** os movimentos se chamam Destravar caixa, Proteger e controlar e Crescer. "Oxigenar, estruturar e escalar" é nome antigo e não aparece em material novo.
+- **D1 do ecossistema (21/10/2026, Luis; `docs/ecossistema/racional-e-fechamento-ecossistema-save.md`, não confundir com a D1 do Conselho; aplicada pela D84):** os movimentos se chamam Destravar caixa, Proteger e controlar e Crescer. "Oxigenar, estruturar e escalar" é nome antigo e não aparece em material novo.
 - **Regra do Luis de 15/10/2026 (FLUXO.md):** informativo separado da proposta; o slide mostra como a Save ajuda o cliente, não como o produto funciona; usar só imagens e slides do PowerPoint institucional.
 - **D14 (28/09/2026) e D22 (29/09/2026):** alíquota zero é hipótese principal em alimentos no Lucro Real, com risco registrado e alternativa conservadora; sempre PER, nunca DCOMP.
 - **D83 (22/10/2026):** produtos em validação aparecem como descoberta, sem condição. **D82 (22/10/2026):** antecipação sobre venda gerencial e conta escrow nunca vão ao slide nem à nota de fala.
@@ -81,7 +81,7 @@ Consulta em 22/10/2026, salvo indicação. O que o roteiro pode citar no slide o
 4. **Ghost deck.** Escrever só os títulos (máximo 12 palavras cada), um por slide. Fazer o "title test": ler os títulos em sequência em voz alta; a história precisa fechar. Cortar o slide cujo título repete outro.
 5. **Classificar cada slide** como INFORMATIVO, PROPOSTA, CONTEXTO ou PRÓXIMO PASSO. Regra dura: nenhum slide é ao mesmo tempo INFORMATIVO e PROPOSTA.
 6. **Valores.** Só linhas MANTER e AJUSTAR com valor confirmado. Total só se o Tributário atestou ausência de sobreposição. Valor em R$ arredondado (milhar), com "estimativa preliminar". Faixas genéricas de mercado ("2% a 8% do faturamento") não entram.
-7. **Slide dos 3 movimentos.** De 2 a 4 itens por movimento, só os que o diagnóstico fundamenta, pelas perguntas do `MODELO-OXIGENAR-ESTRUTURAR-ESCALAR.md`. Produto em validação entra como "conversa de descoberta", sem condição.
+7. **Slide dos 3 movimentos.** De 2 a 4 itens por movimento, só os que o diagnóstico fundamenta, pelas perguntas do `MODELO-OXIGENAR-ESTRUTURAR-ESCALAR.md` (nome antigo do arquivo). Produto em validação entra como "conversa de descoberta", sem condição.
 8. **Notas de fala.** Para cada slide: frase de abertura, a fonte técnica, a pergunta que o slide antecipa e a frase proibida correspondente (lista do Revisor de Promessas).
 9. **Leitura por persona.** Marcar no roteiro o slide em que cada persona decide. Se o contador participa, revisar todo verbo que sugira erro do escritório.
 10. **Entregar ao Revisor de Promessas** e ao Curador de Cases antes do `deck.json`. Limite de rodadas: 2 (protocolo do gerente).

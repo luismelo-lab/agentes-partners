@@ -9,13 +9,22 @@ Gera dois arquivos ao lado do portal/index.html:
                   Sem dado de cliente: só o manual oficial, as skills e as pastas fixas.
 Nada de dados bancários, textos de pareceres ou conversas brutas do WhatsApp.
 Uso: python3 infra/portal_dados.py → <repositório>/portal/dados.json e diretorio.json (PORTAL_SAIDA muda a pasta)
+Perfil "time" (ajuste A2 da avaliação de publicação, 23/10/2026): PORTAL_PERFIL=time gera a versão do Artifact compartilhado
+com o time, em <repositório>/portal/time/ (ou PORTAL_SAIDA): sem as decisões do Conselho, sem os arquivos e os links das pastas
+do Luis (04 · Gestão e 01 · Relatórios das áreas; no lugar do link, "pasta do Luis: peça pela Central") e com as demandas só
+da Daniela, da Jenifer e da Geovana. O Artifact entrega o mesmo arquivo a todos: o filtro por pessoa dentro do time é feito na
+tela (cada uma vê a própria mesa); as demandas cruzadas entre as três ficam no arquivo (risco aceito na avaliação).
 """
 import glob, json, os, re, sys, time
 from datetime import datetime
 
 AP = os.path.expanduser("~/agentes-partners")          # dados dos agentes (fora do git) ficam na pasta principal
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SAIDA = os.environ.get("PORTAL_SAIDA") or os.path.join(REPO, "portal")
+PERFIL = os.environ.get("PORTAL_PERFIL") or "completo"
+if PERFIL not in ("completo", "time"): sys.exit("PORTAL_PERFIL deve ser 'completo' ou 'time'")
+SAIDA = os.environ.get("PORTAL_SAIDA") or os.path.join(REPO, "portal", "time" if PERFIL == "time" else "")
+TIME = ("daniela", "jenifer", "geovana")
+PASTAS_LUIS = ("04 · ", "01 · ")  # pastas do OneDrive do Luis que o time não abre
 ult = lambda p: (sorted(glob.glob(os.path.join(AP, p))) or [None])[-1]
 ler = lambda p: json.load(open(p)) if p else {}
 
@@ -113,6 +122,69 @@ def demandas_lista():
     return [{k: d.get(k) for k in ("id", "pessoa", "origem", "titulo", "master", "o_que_pede", "rota", "proximo_passo", "prazo", "status", "aberta_em", "negocio", "link", "urgente", "id_origem")}
             for d in sorted(R["demandas"].values(), key=lambda d: d.get("aberta_em") or "")
             if d["status"] in ("responder", "acompanhar", "em_analise", "aguardando_aprovacao")]
+
+
+GLPI_SKILL = lambda k: "depto-tributario" if str(k).startswith("trib_") else "depto-juridico" if str(k).startswith(("jur_", "contrato")) else ""
+
+
+def _auditar(texto):
+    """Auditor de promessas (depto-qualidade) no rascunho ao parceiro: devolve os achados ALTO/MÉDIO, curtos."""
+    if not texto: return {"ok": True, "achados": []}
+    try:
+        sys.path.insert(0, os.path.join(REPO, "skills/depto-qualidade/scripts")); import auditar_texto as AT
+        regras = AT.carregar_regras(AT.REGRAS_PADRAO)
+        r = AT.auditar_linhas([(n + 1, l) for n, l in enumerate(str(texto).split("\n"))], regras)
+        ach = [{"termo": a["termo"], "regra": a["categoria"], "sugestao": a["sugestao"]} for a in r["achados"] if a["severidade"] in ("ALTO", "MEDIO")]
+        return {"ok": not ach, "achados": ach[:5]}
+    except Exception as e:  # auditor indisponível: não diz que passou
+        return {"ok": None, "achados": [], "erro": str(e)[:120]}
+
+
+def chamado_sugerido(enc, glpi_areas):
+    """Chamado ideal (infra/chamado-ideal.md) pré-preenchido a partir do "encaminhar" da triagem; sem o texto do especialista, None."""
+    if not isinstance(enc, dict): return None
+    es = enc.get("especialista") or {}
+    k = enc.get("area") or "outros"
+    base = {"area": k, "grupo": (glpi_areas.get(k) or glpi_areas.get("outros") or {}).get("nome", k), "titulo": enc.get("titulo") or "",
+            "urgencia": enc.get("urgencia") or 3, "prazo": enc.get("prazo") or "", "empresa": enc.get("empresa") or "", "assunto": enc.get("assunto") or "",
+            "documentos": enc.get("documentos") or "", "skill": GLPI_SKILL(k)}
+    if not es.get("pedidos") or es.get("nao_abrir"):
+        return {**base, "pronto": False, "nao_abrir": es.get("nao_abrir") or "", "descricao": enc.get("descricao") or ""}
+    lista = lambda xs: "\n".join("- " + str(x) for x in xs or [])
+    blocos = [("O que entendemos", es.get("entendemos")), ("O que pedimos", "\n".join(f"{n}. {p}" for n, p in enumerate(es.get("pedidos") or [], 1))),
+              ("Anexos", lista(es.get("anexos"))), ("O que falta e quem providencia", lista(es.get("faltam"))), ("Prazo", es.get("prazo_motivo")),
+              ("O que esperamos receber", es.get("entrega")), ("Riscos", es.get("riscos")), ("O que os agentes já conferiram", lista(es.get("checagens")))]
+    desc = "\n\n".join(f"**{t}**\n{v}" for t, v in blocos if v)
+    return {**base, "pronto": True, "agente": es.get("agente") or "", "descricao": desc, "especialista": es}
+
+
+def whatsapp_demandas():
+    """Demandas lidas no WhatsApp dos parceiros (registro único + última triagem com IA), com a avaliação dos agentes.
+    Contém nome de Master e de empresa: no perfil "time" vai só das três (cada uma vê as suas na tela)."""
+    f = os.path.join(AP, "registro/demandas.json")
+    if not os.path.exists(f): return []
+    R = json.load(open(f)); glpi_areas = (ler(os.path.join(REPO, "infra/glpi-config.json")) or {}).get("areas", {})
+    itens = {}
+    for tf in sorted(glob.glob(os.path.join(AP, "celulas/whatsapp-triagem-*.json")))[-6:]:  # a mais recente vence
+        try: T = json.load(open(tf))
+        except (OSError, ValueError): continue
+        for p, P in (T.get("pessoas") or {}).items():
+            for i in P.get("itens", []): itens[f"whatsapp|{p}|{i.get('chat')}"] = {**i, "_rodada": T.get("rodada") or os.path.basename(tf)[18:-5]}
+    out = []
+    for d in sorted(R["demandas"].values(), key=lambda d: d.get("aberta_em") or "", reverse=True):
+        if d.get("origem") != "WhatsApp" or d["status"] not in ("responder", "acompanhar"): continue
+        i = itens.get(d.get("chave"), {}); rv = i.get("revisao") or {}; enc = i.get("encaminhar")
+        out.append({"id": d["id"], "pessoa": d["pessoa"], "chat": d.get("titulo"), "grupo": i.get("grupo"), "master": d.get("master") or i.get("master"),
+                    "status": d["status"], "urgente": bool(d.get("urgente") or i.get("urgente")), "aguardando_h": d.get("aguardando_h"),
+                    "aberta_em": d.get("aberta_em"), "o_que_pede": d.get("o_que_pede") or i.get("o_que_pede"), "rota": d.get("rota") or i.get("rota"),
+                    "proximo_passo": d.get("proximo_passo") or i.get("proximo_passo"), "prazo": d.get("prazo") or i.get("prazo"),
+                    "negocio": d.get("negocio"), "link": d.get("link"),
+                    "tipo": "Chamado à área" if enc else ("Responder ao parceiro" if d["status"] == "responder" else "Acompanhar"),
+                    "area_sugerida": GLPI_SKILL((enc or {}).get("area")) if enc else "", "entrega": i.get("entrega"), "precisa": i.get("precisa"), "falta": i.get("falta"),
+                    "rascunho": i.get("rascunho"), "auditoria": _auditar(i.get("rascunho")),
+                    "revisao": {"gerente": rv.get("gerente"), "aprovado": rv.get("aprovado"), "rodadas": rv.get("rodadas"), "areas": rv.get("areas_consultadas")} if rv else None,
+                    "rodada": i.get("_rodada"), "chamado": d.get("chamado"), "chamado_sugerido": chamado_sugerido(enc, glpi_areas)})
+    return out
 
 
 def catalogo():
@@ -300,20 +372,46 @@ def arquivos_dia():
     return out
 
 
+def para_time(d, D):
+    """Versão "time" (A2): tira o que é só do Luis e troca o link das pastas dele por um aviso."""
+    d = dict(d); D = json.loads(json.dumps(D))
+    d.pop("conselho", None); d["gestao"] = {k: v for k, v in (d.get("gestao") or {}).items() if k != "decisoes_pendentes"}
+    d["demandas"] = {k: v for k, v in (d.get("demandas") or {}).items() if k in TIME}
+    d["demandas_lista"] = [x for x in d.get("demandas_lista") or [] if x.get("pessoa") in TIME]
+    d["whatsapp_demandas"] = [x for x in d.get("whatsapp_demandas") or [] if x.get("pessoa") in TIME]
+    d["arquivos_dia"] = {k: v for k, v in (d.get("arquivos_dia") or {}).items() if k in TIME}
+    d["pastas_web"] = {k: v for k, v in (d.get("pastas_web") or {}).items() if k in TIME}
+    d["pastas"] = {k: v for k, v in (d.get("pastas") or {}).items() if k in TIME}
+    d["perfil"] = "time"
+    do_luis = lambda caminho: str(caminho or "").startswith(PASTAS_LUIS)
+    aviso = "pasta do Luis: peça pela Central"
+    D["pastas"] = [p for p in D["pastas"] if not do_luis(p["caminho"])]
+    def limpa(ls): return [l for l in ls or [] if not do_luis(l.get("caminho"))]
+    for a in D["areas"]:
+        a["links"] = limpa(a["links"])
+        for e in a["entregas"]: e["links"] = limpa(e["links"])
+    for r in D["rotinas"]: r["links"] = limpa(r["links"])
+    for p in D["pessoas"]:
+        if p["chave"] not in TIME: p["url"] = p["plano_url"] = ""; p["pasta"] = aviso if p["chave"] == "luis" else p["pasta"]
+    D["perfil"] = "time"
+    return d, D
+
+
 def main():
     d = {"atualizado": datetime.now().strftime("%d/%m/%Y %H:%M"), "whatsapp": whatsapp(), "recuperador": recuperador(),
          "revisor": revisor(), "gestao": gestao(), "demandas": demandas(),
-         "demandas_lista": demandas_lista(), "conselho": conselho_pendentes(), "catalogo": catalogo(), "lote": lote_completo(),
+         "demandas_lista": demandas_lista(), "whatsapp_demandas": whatsapp_demandas(), "conselho": conselho_pendentes(), "catalogo": catalogo(), "lote": lote_completo(),
          "pastas": {"daniela": "Área Partners · Agentes / Central Masters · Daniela", "jenifer": "Área Partners · Agentes / Central BDR · Jenifer",
                     "geovana": "Área Partners · Agentes / Central Técnica · Geovana", "luis": "04 · Gestão, Metas e Estratégia / Central de Agentes"}}
     D = diretorio()
     d["pastas_web"] = {p["chave"]: {"url": p["url"], "plano_url": p["plano_url"]} for p in D["pessoas"] if p["url"]}
     d["arquivos_dia"] = arquivos_dia()
     d["janelas"] = janelas()
+    if PERFIL == "time": d, D = para_time(d, D)
     os.makedirs(SAIDA, exist_ok=True)
     json.dump(d, open(os.path.join(SAIDA, "dados.json"), "w"), ensure_ascii=False, indent=1)
     json.dump(D, open(os.path.join(SAIDA, "diretorio.json"), "w"), ensure_ascii=False, indent=1)
-    print(f"{SAIDA}/dados.json e diretorio.json atualizados:", d["atualizado"],
+    print(f"[perfil {PERFIL}] {SAIDA}/dados.json e diretorio.json atualizados:", d["atualizado"],
           f"· {len(D['areas'])} áreas, {sum(len(a['especialistas']) for a in D['areas'])} especialistas, {sum(len(a['entregas']) for a in D['areas'])} entregas")
 
 

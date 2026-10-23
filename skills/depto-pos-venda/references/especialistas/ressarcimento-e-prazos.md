@@ -60,11 +60,11 @@
 ## 4. Regras da casa
 - **D14 (28/09, confirmada pelo Luis em 29/09/2026):** alíquota zero só por PER, nunca DCOMP. Nenhuma ficha sugere compensar esse crédito.
 - **D22 (29/09/2026):** a alíquota zero no entendimento da Save é hipótese principal em alimentos no Lucro Real, com risco registrado. Para o pós-venda, isso significa: PER de tese controvertida, com probabilidade alta de intimação e despacho fundamentado; o cliente assinou termo de ciência do risco.
-- **D7 (Luis, 28/09/2026):** honorário da variante A no ressarcimento. O honorário nasce quando o dinheiro chega (ou quando há compensação de ofício, se o contrato prevê: pergunta aberta).
+- **D7 (Luis, 28/09/2026; a D7 foi superada pela D7-b e pela D98, mas o ponto segue pela D14: alíquota zero só via PER):** honorário da variante A no ressarcimento. O honorário nasce quando o dinheiro chega ou quando há compensação de ofício: a **D95 (22/10/2026)** fixou que o êxito incide sobre o valor compensado de ofício, considerando a Selic.
 - **D17 (29/09/2026):** relatório em três colunas, contratado × conservador × realizado. O realizado vem daqui.
 - **D85 (22/10/2026):** acesso ao e-CAC por procuração, nunca por senha do cliente.
-- **D66 (15/10/2026, pendente):** calendário de decadência mensal até dez/2026 por crédito, com PER, dono e prazo.
-- **D25 (01/10/2026):** demanda que precisa de outra área vira proposta de chamado no GLPI, aberta só depois de aprovada no painel.
+- **D66 (15/10/2026, aplicada por padrão em 23/10/2026, D98; dono: depto-pos-venda com o time técnico):** calendário de decadência mensal até dez/2026 por crédito, com PER, dono e prazo.
+- **D25 (01/10/2026), substituída pela D29 (02/10/2026):** demanda que precisa de outra área vira chamado no GLPI, que abre sozinho quando a TI liberar; até lá fica no painel e é aprovado pela dona da demanda (Daniela nas dela; alçada de 23/10/2026, `infra/alcadas.md`).
 - **Regra N1 da área:** o agente nunca acessa e-CAC, PER/DCOMP Web ou banco. Trabalha com o que a área real exporta.
 - **Em aberto:** quem é o dono do controle mestre de PER (pergunta 8 em `departamentos/pos-venda/perguntas-areas.md`); o campo `recebido` do HubSpot está 100% vazio (29/09/2026).
 

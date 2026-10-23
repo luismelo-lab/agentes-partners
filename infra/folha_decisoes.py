@@ -8,7 +8,7 @@ Fonte: docs/revisao-2026-10-22/decisoes.json (um item = uma decisão). Pedido do
 
 Ao gerar de novo, as respostas já dadas no arquivo anterior são mantidas (mesmo id).
 """
-import json, os, sys
+import glob, json, os, re, sys
 from datetime import date
 import openpyxl
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -26,12 +26,37 @@ COLS = [("Nº", 6), ("Bloco", 15), ("Tema", 18), ("Decisão proposta", 58), ("Po
 
 def respostas_anteriores(f):
     if not f or not os.path.exists(f): return {}
-    ws = openpyxl.load_workbook(f, data_only=True)["Decisões"]
-    return {str(r[0]): (r[6], r[7]) for r in ws.iter_rows(min_row=3, values_only=True) if r and r[0]}
+    wb = openpyxl.load_workbook(f, data_only=True)
+    if "Decisões" not in wb.sheetnames: return {}
+    return {str(r[0]).strip(): (r[6], r[7]) for r in wb["Decisões"].iter_rows(min_row=3, values_only=True) if r and len(r) > 7 and r[0] is not None}
+
+
+def folhas_anteriores(saida):
+    """Folhas cujas respostas a folha nova herda, da mais antiga para a mais nova: as Decisoes-Pendentes-AAAA-MM-DD.xlsx da
+    pasta com data até a da saída, e a própria saída se já existe. Antes só lia a própria saída, que leva a data de hoje: na
+    sexta seguinte a folha nova saía em branco (aconteceu em 23/10: as respostas 8, 11 e 14 da folha de 22/10 sumiram)."""
+    pasta, nome = os.path.dirname(os.path.abspath(saida)), os.path.basename(saida)
+    rx = re.compile(r"Decisoes-Pendentes-(\d{4}-\d{2}-\d{2})\.xlsx")
+    m = rx.fullmatch(nome); teto = m.group(1) if m else "9999-99-99"
+    fs = sorted(f for f in glob.glob(os.path.join(pasta, "Decisoes-Pendentes-*.xlsx"))
+                if rx.fullmatch(os.path.basename(f)) and rx.fullmatch(os.path.basename(f)).group(1) <= teto)
+    if os.path.exists(saida) and os.path.abspath(saida) not in map(os.path.abspath, fs): fs.append(saida)
+    return fs
+
+
+def respostas_herdadas(saida):
+    """id → (decisão, comentário); a resposta mais nova vence, mas célula em branco não apaga a resposta de antes."""
+    out = {}
+    for f in folhas_anteriores(saida):
+        for i, (dec, com) in respostas_anteriores(f).items():
+            ant = out.get(i, (None, None))
+            out[i] = (dec if dec not in (None, "") else ant[0], com if com not in (None, "") else ant[1])
+    return out
 
 
 def gerar(saida):
-    D = json.load(open(FONTE))["itens"]; ant = respostas_anteriores(saida)
+    D = json.load(open(FONTE))["itens"]; ant = respostas_herdadas(saida)
+    print("respostas herdadas de", ", ".join(os.path.basename(f) for f in folhas_anteriores(saida)) or "nenhuma folha anterior")
     wb = openpyxl.Workbook(); ws = wb.active; ws.title = "Decisões"; ws.sheet_view.showGridLines = False
     ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=len(COLS))
     c = ws.cell(1, 1, f"Decisões pendentes · escolha na coluna 'Sua decisão' e comente quando precisar · {date.today():%d/%m/%Y}")
@@ -42,7 +67,7 @@ def gerar(saida):
         ws.column_dimensions[get_column_letter(j)].width = w
     fino = Side(style="thin", color=BORDA)
     for i, d in enumerate(D, 3):
-        dec, com = ant.get(d["id"], (None, None))
+        dec, com = ant.get(str(d["id"]).strip(), (None, None))
         vals = [d["id"], d["bloco"], d["tema"], d["decisao"], d["porque"], d["prazo"], dec, com, d["onde"], d["dono_aplicacao"],
                 f"Vale a recomendação em {d['prazo']}" if d.get("padrao") else "Continua pendente"]  # infra/alcadas.md
         for j, v in enumerate(vals, 1):
@@ -78,7 +103,7 @@ def ler(f):
     D = {d["id"]: d for d in json.load(open(FONTE))["itens"]}; resp = []
     for i, (dec, com) in respostas_anteriores(f).items():
         if dec: resp.append({"id": i, "decisao": D.get(i, {}).get("decisao"), "resposta": dec, "comentario": com, "quem_aplica": D.get(i, {}).get("dono_aplicacao")})
-    out = os.path.join(AP, "registro", "decisoes-respostas.json")
+    out = os.environ.get("DECISOES_RESPOSTAS") or os.path.join(AP, "registro", "decisoes-respostas.json")  # variável: teste sem tocar o registro
     json.dump({"lido_em": date.today().isoformat(), "arquivo": f, "respostas": resp}, open(out, "w"), ensure_ascii=False, indent=1)
     for r in resp: print(f"{r['id']:>4}  {r['resposta']:<20} {str(r['comentario'] or '')[:60]}")
     print(f"{len(resp)} respondidas de {len(D)} · {out}")

@@ -78,7 +78,7 @@ O desenho da Save (percentual por parceiro + base fixa de 10% nos produtos 2027 
 ## 4. Regras da casa
 - **D64, D78 e D83 (22/10/2026); D61 (06/10/2026):** ver a tabela da seção 2.
 - **D79 (22/10/2026):** a escala de honorário 30/25/20 foi reprovada. Não vincular o percentual do parceiro a uma escala de honorário que não existe.
-- **D42 (05/10/2026, preliminar):** repasse de 50% ou mais com honorário abaixo de 20% passa pela Partners. Com a D64, vira alerta de margem na política.
+- **D42 (05/10/2026, superada pela D64 (D98)):** repasse de 50% ou mais com honorário abaixo de 20% passa pela Partners. Com a D64, vira alerta de margem na política.
 - **D53 (05/10/2026, pendente):** Maquila usa conta da casa no piloto, com preferência ao parceiro de origem. É uma regra de engajamento por produto.
 - **D76 (22/10/2026):** clientes sem Master são de outra área.
 - **Reunião de 13/10/2026** (fala da liderança, não decisão): não definir remuneração definitiva para parceiro de produto novo antes da validação; produto maduro e MVP com tratamentos distintos. A D78 depois fixou o ponto de partida de 10%.

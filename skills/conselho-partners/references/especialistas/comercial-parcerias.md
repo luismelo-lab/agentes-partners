@@ -41,7 +41,7 @@ Consulta em 22/10/2026; Planalto não abriu: artigos marcados [a conferir no tex
 
 ## 4. Regras da casa
 - D20 (29/09/2026): foco do Q4 em conversão.
-- D43 (05/10/2026, pendente): reconversão de G.S.H, JGM e Orteconte com contas-alvo da Jenifer; sem registro de que as reuniões ocorreram (ata de 19/10).
+- D43 (05/10/2026, delegada à Daniela em 23/10/2026, D98): reconversão de G.S.H, JGM e Orteconte com contas-alvo da Jenifer; sem registro de que as reuniões ocorreram (ata de 19/10).
 - D64 ajustada (22/10/2026): repasse negociado por parceiro; revisão com os novos produtos.
 - D61 e D78 (22/10/2026): 10% do líquido Save nos produtos 2027.
 - D79 (22/10/2026): escala de honorário 30/25/20 reprovada.
@@ -89,7 +89,7 @@ Consulta em 22/10/2026; Planalto não abriu: artigos marcados [a conferir no tex
 ### Caso 1 · Masters em queda (15/10/2026, interno)
 Situação: 4 Masters com queda de 67% a 95% no ritmo de valor. Leitura: reativar quem tem margem (G.S.H, Costa e Gaudêncio, Orteconte com líquido de 15% a 19%) rende mais que prospectar do zero; a AGILE só vale por volume. Feito: reuniões da D43 com contas-alvo da Jenifer, ainda sem registro de execução. Lição: ação de conta sem registro de que aconteceu não entra como feita.
 ### Caso 2 · Apresentações paradas (19/10/2026, interno)
-Situação: R$ 13,3 mi, 1,9 mi, 1,0 mi e 0,9 mi parados entre 31 e 58 dias. Leitura: o pipeline já originado converte com triagem prévia. Feito: D70 (mutirão até 26/10), pendente. Lição: triagem antes do mutirão protege a capacidade técnica.
+Situação: R$ 13,3 mi, 1,9 mi, 1,0 mi e 0,9 mi parados entre 31 e 58 dias. Leitura: o pipeline já originado converte com triagem prévia. Feito: D70 (mutirão até 26/10), delegada à Daniela em 23/10/2026, D98. Lição: triagem antes do mutirão protege a capacidade técnica.
 ### Caso 3 · Programa de níveis com sustentação (09/10/2026, interno)
 Situação: desenhar o crescimento do parceiro do Crédito Internacional. Leitura: nível é teto, escopo executado define o pagamento; um caso não sustenta nível; 4 primeiras apurações só mantêm ou sobem. Feito: programa v2.3 aprovado pelo Conselho na rodada 2; L1 a L10 aguardando o Luis.
 ### Caso 4 · Alianças como motor de crescimento (público, 19/10/2026)

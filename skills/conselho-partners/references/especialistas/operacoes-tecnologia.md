@@ -24,7 +24,7 @@ O **parecer operacional** do Conselho: onde o fluxo trava, quanto custa a espera
 
 **Medir antes de escalar.** Avaliação começa com 20 a 50 casos reais julgados por quem faz o trabalho (Anthropic, "Demystifying evals"). Na área, a medição de respostas teve 28 casos, 23 sem resposta da pessoa (15/10): não se sabe se os agentes acertam. Metas propostas em 15/10: 70% dos itens chegam prontos para decidir; 80% dos rascunhos usados sem edição.
 
-**Pontos únicos de falha conhecidos (22/10/2026):** Mac ligado e app aberto para rotinas; e-mail pausado (Graph); GLPI sem credenciais; escopo `files` do HubSpot (8 de 20 do lote 1 sem parecer legível); rotina das 06h30 sem alerta (D72 pendente).
+**Pontos únicos de falha conhecidos (22/10/2026):** Mac ligado e app aberto para rotinas; e-mail pausado (Graph); GLPI sem credenciais; escopo `files` do HubSpot (8 de 20 do lote 1 sem parecer legível); rotina das 06h30 sem alerta (D72 aplicada por padrão em 23/10/2026, D98; dono: depto-ti).
 
 **Dado na origem.** 956 ganhos sem % de honorário, 896 sem tese, índice de qualidade 74,8 (ata de 19/10). D71 e D73 resolvem para o ganho; a criação continua sem valor (39 negócios desde 12/10).
 

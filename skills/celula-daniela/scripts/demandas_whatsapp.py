@@ -121,6 +121,16 @@ def ler_anexo(url, pasta, cache):
     return info
 
 
+def quando(txt, agora):
+    """'dd/mm HH:MM' da caixa (sem ano) → datetime no fuso de Brasília. Na virada do ano, 31/12 lido em 01/01
+    caía no ano corrente (data no futuro) e entrava como mensagem recente: data mais de 1 dia à frente volta um ano."""
+    try: q = datetime.strptime(f"{agora.year}/{txt}", "%Y/%d/%m %H:%M").replace(tzinfo=TZ)
+    except ValueError:
+        try: q = datetime.strptime(f"{agora.year - 1}/{txt}", "%Y/%d/%m %H:%M").replace(tzinfo=TZ)  # 29/02 de ano bissexto
+        except ValueError: return None
+    return q.replace(year=q.year - 1) if q > agora + timedelta(days=1) and not (q.month == 2 and q.day == 29) else q
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--pessoa", required=True); ap.add_argument("--horas", type=float, default=6)
     a = ap.parse_args()
@@ -140,13 +150,13 @@ def main():
     R = json.load(open(RESUMOS)) if os.path.exists(RESUMOS) else {}
     from comum import cfg_time, e_do_time
     cfg = cfg_time()
-    limite = datetime.now(TZ) - timedelta(hours=a.horas)
+    agora = datetime.now(TZ); limite = agora - timedelta(hours=a.horas)
     saida = []
     for conv in C:
         externas = []
         for m in conv["conversa"]:
-            try: q = datetime.strptime(f"{datetime.now().year}/{m['quando']}", "%Y/%d/%m %H:%M").replace(tzinfo=TZ)
-            except ValueError: continue
+            q = quando(m["quando"], agora)
+            if not q: continue
             if q >= limite and not e_do_time(m["de"], cfg): externas.append(m)
         if not externas: continue
         ev = {"chat": conv["chat"], "tipo": conv["tipo"], "master": conv.get("master"), "negocios_da_conversa": conv.get("negocios"),

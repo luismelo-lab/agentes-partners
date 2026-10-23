@@ -442,6 +442,9 @@ def plano(previa=False, so_urgentes=False):
     chave = lambda e: f"{HOJE.isoformat()}|{e['tipo']}|{e['titulo']}"  # aviso: uma vez por item por dia
     for p, (nome, email) in PESSOAS.items():
         meus = [e for e in at if (e["pessoa"] == p and e["tipo"] != "demanda_atrasada") or (p == "luis" and (e.get("cc_luis") or e["tipo"] == "demanda_atrasada"))]
+        # "entrou em diagnóstico" é aviso de chegada: só no 1º dia (ficava 8 dias no plano; 106 de 309 eventos eram isso).
+        # Filtra ANTES de juntar o cadastro incompleto: senão o crm_incompleto era absorvido por um aviso que some do plano.
+        meus = [e for e in meus if e["tipo"] != "entrou_diagnostico" or (HOJE - date.fromisoformat(e.get("primeiro") or HOJE.isoformat())).days <= 1]
         outros_neg = {e.get("negocio") for e in meus if e["tipo"] != "crm_incompleto" and e.get("negocio")}
         for e in meus:  # mesmo negócio com cadastro incompleto e outra pendência: um cartão só (Dados, 02/10)
             e.pop("tambem", None)
@@ -449,8 +452,6 @@ def plano(previa=False, so_urgentes=False):
             alvo = next(o for o in meus if o.get("negocio") == e["negocio"] and o["tipo"] != "crm_incompleto")
             alvo["tambem"] = "cadastro incompleto: " + e["texto"].split(". ", 1)[-1]
         meus = [e for e in meus if not (e["tipo"] == "crm_incompleto" and e.get("negocio") in outros_neg)]
-        # "entrou em diagnóstico" é aviso de chegada: só no 1º dia (ficava 8 dias no plano; 106 de 309 eventos eram isso)
-        meus = [e for e in meus if e["tipo"] != "entrou_diagnostico" or (HOJE - date.fromisoformat(e.get("primeiro") or HOJE.isoformat())).days <= 1]
         if so_urgentes:
             ja = set(est.get(f"avisados|{p}", []))
             meus = [e for e in meus if e["tipo"] in AVISO_TARDE and novo(e) and chave(e) not in ja]
@@ -511,7 +512,7 @@ def plano(previa=False, so_urgentes=False):
         linhas.append(L.rodape("Plano montado pelos agentes da Área Partners às " + datetime.now().strftime("%Hh%M")
                                + ". Quando a situação se resolve no HubSpot, o item sai sozinho do plano do dia seguinte."))
         corpo = L.documento(*linhas)
-        anexo = planilha(p, nome, meus, so_urgentes) if meus else None
+        anexo = planilha(p, nome, meus, so_urgentes, copiar=not previa) if meus else None
         assunto = f"[Partners · automático] {'Aviso da tarde' if so_urgentes else 'Plano do dia'} · {nome} · {HOJE.strftime('%d/%m')}"
         if previa:
             f = os.path.join(tempfile.gettempdir(), f"plano-{p}.html"); open(f, "w").write(corpo); print(p, len(meus), "→", f, "·", anexo or "sem anexo"); continue
@@ -527,7 +528,7 @@ def plano(previa=False, so_urgentes=False):
     if falhas: sys.exit(f"{falhas} e-mail(s) do plano não saíram (Outlook)")
 
 
-def planilha(p, nome, evs, aviso=False):
+def planilha(p, nome, evs, aviso=False, copiar=True):
     """Lista completa do dia com links clicáveis (o e-mail mostra só os principais)."""
     from openpyxl import Workbook
     from openpyxl.styles import Font, PatternFill, Alignment
@@ -550,9 +551,11 @@ def planilha(p, nome, evs, aviso=False):
     dv = DataValidation(type="list", formula1='"Usei,Ajustei,Não usei"', allow_blank=True); ws.add_data_validation(dv); dv.add(f"K2:K{max(2, ws.max_row)}")
     for row in ws.iter_rows(min_row=2):
         for c in row: c.alignment = Alignment(vertical="top", wrap_text=c.column in (2, 3, 10))
-    ws.freeze_panes = "C2"; ws.auto_filter.ref = ws.dimensions
+    ws.freeze_panes = "C2"; ws.auto_filter.ref = f"A1:K{max(2, ws.max_row)}"  # inclui a coluna K (vazia; ws.dimensions parava em J)
     wb.save(f)
     # entrega diária na pasta da pessoa (lançamento ao time, Luis 23/10/2026): a planilha também vai para a Central dela no OneDrive
+    # prévia e simulação (OPERACAO_REG) não publicam: a prévia sobrescrevia a planilha do dia na pasta da pessoa antes do envio
+    if not copiar or os.environ.get("OPERACAO_REG"): return f
     try:
         import shutil, caminhos
         if p in ("daniela", "jenifer", "geovana"):

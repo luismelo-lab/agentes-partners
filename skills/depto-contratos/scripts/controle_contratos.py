@@ -240,7 +240,7 @@ def main():
               "limites": ["Sem data de assinatura no HubSpot: usa-se closedate como aproximação.",
                           "Sócios/representante legal NÃO estão na base local (não baixados por LGPD): conferência manual no QSA/contrato social.",
                           "Similaridade nome × razão é heurística: 🔴 significa 'conferir', não 'errado'.",
-                          "Dias em etapa são aproximados pela última modificação do negócio (hs_lastmodifieddate)."]}
+                          "Dias na etapa: data de entrada na etapa quando o download traz; senão, última atividade ou última modificação (aproximação)."]}
 
     from openpyxl import Workbook
     wb = Workbook(); ws = wb.active; ws.title = "Resumo"
@@ -263,7 +263,7 @@ def main():
 
     for titulo, cab, dados, larg, col_link in [
         ("Em contrato", ["Etapa", "Negócio", "Parceiro", "Parceiro (campo)", "Pipeline", "Valor (R$)", "Criado", "Dias desde criação",
-                         "Última modificação", "Dias sem modificação", "Alerta", "Qtd 🔴", "Pendências de dado", "HubSpot"], L_contrato,
+                         "Última modificação", "Dias na etapa (aprox.)", "Alerta", "Qtd 🔴", "Pendências de dado", "HubSpot"], L_contrato,
          [18, 42, 20, 20, 20, 13, 11, 10, 12, 10, 40, 7, 70, 8], 14),
         ("Ganhos pendentes", ["Qtd 🔴", "Negócio", "Parceiro", "Parceiro (campo)", "Valor (R$)", "Fechado (proxy assinatura)", "Data de assinatura",
                               "% honorário", "% parceiro", "Tese", "Pendências", "HubSpot"], L_ganhos,

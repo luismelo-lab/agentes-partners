@@ -26,7 +26,7 @@ Formato: tabela fase × objetivo × atividade (quem) × marco × onde medir, mai
 - Parceiros que entraram depois do início da base: 4 medidos, mediana de 121,5 dias do 1º registro ao 1º ganho, p75 de 152 dias (`metricas-ps-2026-10-19.json`).
 - Fora do roster: 12 parceiros, 2 ativos em 90 dias, 3 dormentes, 7 inativos.
 - Consultores dos Masters: 27, 9 ativos e produtivos, 10 dormentes, 8 inativos.
-- A data de entrada do parceiro não existe no HubSpot; o D0 vem de `scripts/datas-entrada-parceiros.json` ou do 1º negócio.
+- A data de entrada do parceiro não existe no HubSpot; o D0 vem de `~/agentes-partners/departamentos/partner-success/scripts/datas-entrada-parceiros.json` ou do 1º negócio.
 
 Conclusão já adotada (aprendizado de 29/09/2026): meta de D+90 = **1ª apresentação de diagnóstico**; meta do 1º ganho = **D+120**; recalibrar com 10 ou mais parceiros medidos.
 

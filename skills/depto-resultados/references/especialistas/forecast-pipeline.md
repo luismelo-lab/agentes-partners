@@ -48,14 +48,14 @@ Fontes secundárias (consulta em 22/10/2026):
 - **STF, Tema 69 (exclusão do ICMS da base do PIS e da COFINS):** tese consolidada, a mais comoditizada; pressiona preço e conversão.
 
 ## 4. Regras da casa
-- **D14 (29/09/2026):** variante A fora do forecast e da meta; só PER.
+- **D14 (29/09/2026, parcialmente confirmada):** só PER (firme); variante A fora do forecast e da meta [pendente na D14, que está só parcialmente confirmada: o PER é firme; variante A no forecast e na meta segue com o Luis, e até lá o tratamento conservador abaixo é o padrão].
 - **D20 (29/09/2026):** foco do Q4 em conversão do pipeline aberto.
-- **D12 (pendente, 28/09/2026):** os 343 "Não informado" tratados como pipeline. Até decisão, entram em linha separada, sem probabilidade de etapa.
-- **D41 (preliminar, 05/10/2026):** Q4 gerido por honorário líquido potencial; ordenação pelo líquido esperado (líquido/crédito × conversão × volume); entrada pela média móvel de 4 semanas por Master.
-- **D44 (pendente, 05/10/2026):** fila de conversão dos 66 em diagnóstico e das 39 apresentações paradas, ordenada pelo líquido potencial, dentro da capacidade do Técnico (D11).
+- **D12 (delegada ao depto-dados em 23/10/2026, D98, 28/09/2026):** os 343 "Não informado" tratados como pipeline. Até decisão, entram em linha separada, sem probabilidade de etapa.
+- **D41 (delegada ao depto-resultados em 23/10/2026, D98; a meta segue a D64, 05/10/2026):** Q4 gerido por honorário líquido potencial; ordenação pelo líquido esperado (líquido/crédito × conversão × volume); entrada pela média móvel de 4 semanas por Master.
+- **D44 (delegada à Daniela com o time técnico em 23/10/2026, D98, 05/10/2026):** fila de conversão dos 66 em diagnóstico e das 39 apresentações paradas, ordenada pelo líquido potencial, dentro da capacidade do Técnico (D11).
 - **D70 (19/10/2026):** mutirão sobre as apresentações paradas de maior valor até 26/10/2026.
 - **D73 (22/10/2026):** ganho só entra no forecast com tese, variante e %.
-- **D74 (pendente, 19/10/2026):** Dados reconcilia o pipeline oficial e fixa a regra de escopo.
+- **D74 (delegada ao depto-dados em 23/10/2026, D98, 19/10/2026):** Dados reconcilia o pipeline oficial e fixa a regra de escopo.
 - **D76 (22/10/2026):** clientes sem Master ficam fora do pipeline da área.
 - **D64 (22/10/2026):** meta do Q4 de R$ 200 mi. **Em aberto:** a unidade (crédito ou honorário líquido). Ver `metas-medicao-produto.md`.
 

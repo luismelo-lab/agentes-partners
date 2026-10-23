@@ -73,12 +73,12 @@ Consultada em 22/10/2026 no Planalto (texto compilado), salvo indicação.
 - **D95 (22/10/2026, Luis):** o honorário de êxito **incide sobre o valor compensado de ofício, considerando a Selic**. A cláusula entra na minuta de prestação de serviços tributários (`modelos/01`, item 3.2-b). Isso resolve a dúvida de **base** (a compensação de ofício integra o proveito, com a atualização pela Selic). O **gatilho** e o prazo de pagamento nesse componente seguem como ponto de redação para o Jurídico.
 - **D14 (28/09/2026, confirmada pelo Luis em 29/09):** alíquota zero só via PER (ressarcimento), nunca DCOMP. Pendentes: termo de ciência revisado e separação nos kits.
 - **D22 (29/09/2026):** alíquota zero como hipótese principal nos perfis de alimentos em Lucro Real, com o risco registrado ao lado.
-- **D45 (05/10/2026, pendente):** o termo de ciência vai junto com o contrato, sem segurar a assinatura; a exceção do café a 70% fica registrada.
+- **D45 (05/10/2026, superada pelas D71, D73 e D65, D98):** o termo de ciência vai junto com o contrato, sem segurar a assinatura; a exceção do café a 70% fica registrada.
 - **D65 (15/10/2026, pendente):** registro único de exceções com aprovação do Luis e validação do Jurídico; atípicos acima de 50% são conferidos contra o contrato.
 - **D71 e D73 (19/10/2026, aprovadas com ajuste em 22/10):** o percentual de honorário é informado só no ganho e é obrigatório nele; o ganho só entra no relatório com tese, variante e percentual.
 - **D79 (22/10/2026):** a escala 30/25/20 com piso de 20% foi reprovada. Vale a regra atual de honorário.
 - **D85 (22/10/2026):** pede-se procuração no e-CAC, nunca senha.
-- **D86 (22/10/2026):** Funrural anterior a 2018 vai para a Gestão de Passivo, com êxito sobre o débito cancelado e o depósito levantado. Isso exige um contrato de passivo, não o de RT.
+- **D86 (22/10/2026):** Funrural anterior a 2018 vai para a Gestão de Passivo, com êxito sobre o débito cancelado e o depósito levantado. Isso exige um contrato de passivo, não o de RT. [em aberto: D81 × D86, decisão do Luis]
 - **Em aberto:** natureza jurídica da Save e enquadramento do repasse (parecer previsto para 31/10/2026, `precos-fees.md`); modelos aprovados pela área real (a pasta `departamentos/contratos/modelos/` estava vazia em 22/10/2026).
 
 ## 5. Método
@@ -104,7 +104,7 @@ Consultada em 22/10/2026 no Planalto (texto compilado), salvo indicação.
 
 ## 6. Perguntas de diagnóstico
 1. Qual tese e qual variante? É alíquota zero?
-   → Se for, o escopo cita só PER e o termo de ciência vai junto (D14, D45).
+   → Se for, o escopo cita só PER (D14, firme) e o termo de ciência vai junto (D45, superada; o texto do termo segue pendente na D14).
 2. O cliente tem débitos federais em aberto ou parcelados?
    → Compensação de ofício provável: a base e o gatilho precisam cobrir esse caso.
 3. O cliente já recuperou ou compensou algo desses períodos com outro prestador?

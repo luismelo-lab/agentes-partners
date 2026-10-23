@@ -66,7 +66,7 @@ Gestão de Passivo e Transação somam 45 chamados (1 a 3 dias); Holding (estrut
 - **D29 (02/10/2026, substitui a D25):** chamado do que os agentes não encontram abre sozinho no GLPI com o usuário de quem atendeu, quando a TI liberar; até lá fica no painel. **D91 (22/10/2026):** até a TI liberar Graph e GLPI, a pasta de cada pessoa no OneDrive é a caixa oficial. **Alçada de 23/10/2026 (kit C5, `infra/alcadas.md`):** os chamados das demandas da Daniela são aprovados pela própria Daniela no painel; o Luis aprova só chamado que toque regra, preço, conflito de canal ou produto em validação.
 - **D26 (01/10/2026):** fluxos entre agentes rodam sem aprovação; falar com parceiro, alterar HubSpot ou GLPI e abrir chamado continuam com pessoa.
 - **D28 (02/10/2026):** resposta automática só no degrau 2 (tipo com 20 ou mais casos em 2 semanas e 95% de acerto); valor, prazo de êxito, tese e cobrança ficam sempre com pessoa.
-- **D47 (05/10/2026, pendente):** resumo diário da Daniela com até 15 itens acionáveis acima de um valor mínimo, filtro definido por ela.
+- **D47 (05/10/2026, delegada à Daniela em 23/10/2026, D98):** resumo diário da Daniela com até 15 itens acionáveis acima de um valor mínimo, filtro definido por ela.
 - **Aprendizado de 01/10/2026** (`registro/chamados-aprendizados.md`): status de assinatura de contrato não vira chamado; responde-se pelo HubSpot ou pela plataforma de assinatura.
 - **Fora do GLPI:** contrato, aditivo e distrato do parceiro vão a Contratos; repasse e prestação de contas ao Financeiro; Sistema S não é compensável (responder com a regra).
 - **Em aberto:** SLA por tipo validado com a Daniela e com cada área (Semana 0); dono da escala quando a área atrasa (proposta: responsável na área → gestor da área → Luis).
@@ -126,7 +126,7 @@ O que cada resposta muda: 1 e 2 fixam o prazo legal; 3 define a categoria (Comun
 - **Texto ao parceiro:** Retorno ao Parceiro (`retorno-parceiro.md`).
 - **Cadastro e registro de oportunidade:** Higiene de CRM (`higiene-crm-registro.md`).
 - **Passivo, estruturação patrimonial, LGPD, contrato:** Apoio Jurídico ao Canal (`apoio-juridico-canal.md`).
-- **Abertura do chamado e envio:** sempre a Daniela (ou o Luis no painel, D91).
+- **Abertura do chamado e envio:** sempre a Daniela, no painel (alçada de 23/10/2026); o Luis só quando o chamado toca um limite da `infra/alcadas.md` §1 (antes D91).
 - **Reclamação grave, repasse, conflito de canal:** Luis no mesmo dia.
 
 ## 10. Atualização

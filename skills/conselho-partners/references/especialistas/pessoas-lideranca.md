@@ -42,8 +42,8 @@ Consulta em 22/10/2026; Planalto não abriu: artigos marcados [a conferir no tex
 - D5 (29/09/2026): Geovana coautora; automação só dentro da estrutura.
 - D21 (29/09/2026): carga por pessoa no relatório; sem "R$ por pessoa".
 - D27 (01/10/2026): o lote do Recuperador vai direto à Geovana; a decisão sobre cada tese é dela.
-- D48 (05/10/2026, pendente): 1:1 de 20 min com cada uma; regra de 72 h para as decisões do Luis.
-- D68 (15/10/2026, pendente): alinhamento sobre o papel da IA, 3 prioridades por pessoa, apontamento leve de 1 semana.
+- D48 (05/10/2026, superada pelo kit de lançamento e pela D98): 1:1 de 20 min com cada uma; regra de 72 h para as decisões do Luis.
+- D68 (15/10/2026, superada pelo kit de lançamento, D98): alinhamento sobre o papel da IA, 3 prioridades por pessoa, apontamento leve de 1 semana.
 - D33 e D54 (pendentes): time com 0 h em produto novo até as 1:1.
 - Temas de pessoas ficam em `gabinete/pessoas/` (confidencial); nada é compartilhado com o time sem o Luis decidir.
 
@@ -88,7 +88,7 @@ Situação: o lote 1 do Recuperador foi reenviado 3 vezes e ficou 3 semanas sem 
 ### Caso 2 · Piloto com coautoria (28/09/2026, interno)
 Situação: primeiro agente da Central Técnica podia ser lido como substituição. Leitura: quem faz o trabalho tem de ser coautora e dona da decisão. Feito: D5 (Geovana coautora) e D27 (decisão da tese é dela). Lição: dar autoria reduz a sensação de ameaça.
 ### Caso 3 · Uso perto de zero (22/10/2026, interno)
-Situação: auditoria mostrou uso do time perto de zero. Leitura: barreira técnica (Graph, GLPI) + barreira de reforço (sem resposta). Feito: D91 (pasta do OneDrive como caixa); D68 pendente. Lição: separar o que é TI do que é liderança antes de concluir que o time "não quer".
+Situação: auditoria mostrou uso do time perto de zero. Leitura: barreira técnica (Graph, GLPI) + barreira de reforço (sem resposta). Feito: D91 (pasta do OneDrive como caixa); D68 superada pelo kit de lançamento, D98. Lição: separar o que é TI do que é liderança antes de concluir que o time "não quer".
 ### Caso 4 · Riscos psicossociais na NR-1 (público)
 A Portaria MTE 1.419/2024 incluiu fatores psicossociais no PGR; depois de prorrogação, a fiscalização passou a valer em maio de 2026 (contabeis.com.br e CBIC, consultados em 22/10/2026). Leitura: carga e hiperconectividade viram obrigação documentada da empresa; a área registra carga por pessoa (D21) e leva sinais ao RH.
 

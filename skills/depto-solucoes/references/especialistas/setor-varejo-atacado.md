@@ -64,8 +64,8 @@
 | Lei 15.348/2026 (13/02/2026) | — | Programa Gás do Povo permanente | Vigente |
 
 ## 4. Regras da casa
-- **C4 (consolidado do portfólio, 22/10/2026) e catálogo de 15/10/2026:** T01 (alíquota zero nas aquisições) **não serve para supermercado nem mercado**; para hortifrúti e atacado de hortifrúti está no perfil ideal (variante B no varejo hortifrúti). **D8 (28/09/2026, pendente):** supermercados fora do Q4.
-- **D7-b (pendente):** P2 Hortifrúti só com a frente B (manutenção de crédito legítimo).
+- **C4 (consolidado do portfólio, 22/10/2026) e catálogo de 15/10/2026:** T01 (alíquota zero nas aquisições) **não serve para supermercado nem mercado**; para hortifrúti e atacado de hortifrúti está no perfil ideal (variante B no varejo hortifrúti). **D8 (28/09/2026, superada em 23/10/2026 pela D98 e pelo item 2a da folha de 22/10; supermercado segue caso a caso, C4):** supermercados fora do Q4.
+- **D7-b (superada em 23/10/2026 pela D98: o Luis decidiu só a meta do Q4, D64, e o foco por segmento vai para 2027 com a meta da diretoria, D75):** P2 Hortifrúti só com a frente B (manutenção de crédito legítimo).
 - **D22 e D14:** onde T01 couber (hortifrúti, atacado de alimentos no Real), só via PER, com risco ao lado.
 - **D80 (22/10/2026):** T13 e T16 fora da vitrine.
 - **D92 (22/10/2026):** Gestão de Contas, antecipação e FIDC (inclusive o **multicedente de fornecedores** de supermercado e o multissacado) são da `depto-save-invest` (Junior). O Junior citou supermercado com CMV de ~80% como candidato a multicedente (13/10/2026, fala do dono); está "a aprofundar".

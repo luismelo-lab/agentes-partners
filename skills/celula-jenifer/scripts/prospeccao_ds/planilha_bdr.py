@@ -60,9 +60,13 @@ def teses(p):
     return "\n".join("• " + x.split(" (")[0].strip() for x in t[:6])
 
 
-JEN = "/Users/luisfernandomelo/Library/CloudStorage/OneDrive - SAVE COMPANY/Área Partners · Agentes/Central BDR · Jenifer/"
+try:  # pasta da Jenifer pelo ponto único dos caminhos (o atalho "OneDrive - SAVE COMPANY" já apontou para pasta morta)
+    sys.path.insert(0, os.path.join(AP, "lib")); import caminhos  # noqa: E402
+    JEN = os.environ.get("PASTA_JENIFER") or caminhos.pasta("jenifer") + "/"
+except (Exception, SystemExit):
+    JEN = os.environ.get("PASTA_JENIFER", "")  # sem OneDrive: segue sem o aviso "já estava na lista"
 ANTIGAS = set()
-for f in ("Listas/Lista-D-S-2026-09-29.xlsx", "Controle-Followup-Jenifer.xlsx"):
+for f in ("Listas/Lista-D-S-2026-09-29.xlsx", "Controle-Followup-Jenifer.xlsx") if JEN else ():
     try:
         for w in openpyxl.load_workbook(JEN + f, read_only=True, data_only=True).worksheets:
             for r in w.iter_rows(values_only=True):
@@ -143,7 +147,7 @@ ws.row_dimensions[2].height = 32
 
 for i, p in enumerate(pros, 1):
     c14 = p["cnpj"]; cnpj = f"{c14[:2]}.{c14[2:5]}.{c14[5:8]}/{c14[8:12]}-{c14[12:]}"
-    busca = "https://www.google.com/search?q=" + urllib.parse.quote(f"{nome(p)} {p['municipio'].title()} {p['uf']} telefone")
+    busca = "https://www.google.com/search?q=" + urllib.parse.quote(f"{nome(p)} {(p['municipio'] or '').title()} {p['uf']} telefone")
     ex = p["exemplo"]; ag = p["ancora_geo"]
     perto = p["nivel_geo"][4:] + (f" ({(ag['rf']['fantasia'] or ag['rf']['razao'] or '').strip()[:24]})" if not p["nivel_geo"].startswith("4") else "")
     cep = p["cep"] or ""
@@ -164,13 +168,14 @@ for i, p in enumerate(pros, 1):
     ws.cell(r, 24).number_format = '#,##0'; ws.cell(r, 30).number_format = "0%"
     ws.cell(r, 31).number_format = ws.cell(r, 32).number_format = '"R$" #,##0'
     ws.row_dimensions[r].height = 96
-fim = len(pros) + 2
+fim = max(len(pros) + 2, 3)  # lista vazia gerava faixa invertida (C3:C2)
 STATUS = ["A ligar", "Sem resposta", "Retornar depois", "Contato errado", "Respondeu: interesse", "Reunião marcada", "Pediu material",
           "Não é o decisor (indicou outro)", "Respondeu: sem interesse agora", "Já trabalha com outra consultoria", "Não é Lucro Real", "Pediu para não contatar"]
 dv = DataValidation(type="list", formula1='"' + ",".join(STATUS) + '"', allow_blank=True); ws.add_data_validation(dv); dv.add(f"C3:C{fim}")
 PASSO = ["Ligar de novo", "Enviar e-mail de apresentação", "Pedir apresentação à D&S", "Marcar reunião", "Reunião marcada: registrar no HubSpot", "Encerrar"]
 dv2 = DataValidation(type="list", formula1='"' + ",".join(PASSO) + '"', allow_blank=True); ws.add_data_validation(dv2); dv2.add(f"E3:E{fim}")
-dvd = DataValidation(type="date", allow_blank=True); ws.add_data_validation(dvd); dvd.add(f"D3:D{fim}"); dvd.add(f"F3:F{fim}")
+dvd = DataValidation(type="date", operator="greaterThan", formula1="DATE(2020,1,1)", allow_blank=True)  # validação de data sem fórmula é inválida no Excel
+ws.add_data_validation(dvd); dvd.add(f"D3:D{fim}"); dvd.add(f"F3:F{fim}")
 # cor da linha pelo status
 for st, cor in (("Reunião marcada", "DCEFE0"), ("Respondeu: interesse", "E8F5E9"), ("Pediu para não contatar", "FBE3E2"), ("Não é Lucro Real", "F1F2F5")):
     ws.conditional_formatting.add(f"A3:G{fim}", FormulaRule(formula=[f'$C3="{st}"'], fill=PatternFill("solid", fgColor=cor)))

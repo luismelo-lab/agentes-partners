@@ -58,7 +58,7 @@ Não é dele: o número de valor (Gestor de Valor), a leitura de DRE e balanço 
 Em transição: CBS/IBS (2026 teste, 2027 CBS cheia, 2029 a 2032 redução de ICMS e ISS, 2033 extinção). [Não confirmado] o artigo exato da LC 214 que fixa a extinção do PIS/COFINS: conferir no texto consolidado (o Planalto não abriu em 22/10/2026).
 
 ## 4. Regras da casa
-- **D1 (21/10/2026, Luis):** os movimentos se chamam Destravar caixa, Proteger e controlar e Crescer.
+- **D1 do ecossistema (21/10/2026, Luis; `docs/ecossistema/racional-e-fechamento-ecossistema-save.md`, não é a D1 do Conselho; aplicada pela D84):** os movimentos se chamam Destravar caixa, Proteger e controlar e Crescer.
 - **D92 (22/10/2026, Luis):** Gestão de Contas, antecipação e FIDC são da Save Invest (`depto-save-invest`, dono Junior). Soluções fica com a esteira e o mapa da conta. O mapa indica; quem qualifica e decide é a Save Invest.
 - **D83 (22/10/2026):** o escopo 2027 ao parceiro inclui os prontos e os em validação, estes como descoberta, sem condição.
 - **D82 (22/10/2026):** antecipação sobre venda gerencial e escrow ficam no portfólio, mas só presencialmente, com o Junior. O mapa não escreve essas palavras.

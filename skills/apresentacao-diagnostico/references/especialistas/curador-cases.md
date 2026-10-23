@@ -99,7 +99,7 @@ Perguntas ao Luis, ao técnico, ao pós-venda e, por eles, ao cliente do case:
 - **Achar que autorização do cliente libera tudo.** Ela não afasta a vedação ética da OAB se o material for de advocacia.
 - **Anonimizar só o nome** e deixar UF pequena, valor exato e período.
 - **Case de outra tese** "porque é do mesmo segmento". O cliente lê que terá o mesmo resultado na tese dele.
-- **Case de tese fora da vitrine** (T13, T16 após D80) ou de Funrural como restituição (D86 tratou como passivo).
+- **Case de tese fora da vitrine** (T13, T16 após D80) ou de Funrural como restituição (D86 tratou como passivo) [em aberto: D81 × D86, decisão do Luis].
 - **Comparar** ("empresas como a sua recuperaram em média…"). É promessa implícita.
 - **Montar agregado pelo HubSpot** antes do saneamento de duplicados (D87).
 - **Parar e escalar ao advogado** quando: o Master pede logo de cliente; o cliente quer aparecer com nome; o valor veio de decisão judicial com nome público; ou há dúvida se o material é de advocacia.

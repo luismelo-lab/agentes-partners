@@ -22,7 +22,7 @@ Uso:
 import argparse, csv, glob, io, json, os, re, sqlite3, subprocess, sys, time, zipfile
 from datetime import date
 sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
-from cnpj import normalizar_cnpj  # noqa: E402
+from cnpj import completar_cnpj, normalizar_cnpj  # noqa: E402
 
 SHARE = "YggdBLfdninEJX9"
 DAV = "https://arquivos.receitafederal.gov.br/public.php/webdav"
@@ -172,8 +172,8 @@ def enriquecer():
     f = sorted(glob.glob(os.path.join(HS, "hubspot-*.json")))[-1]; N = json.load(open(f))["negocios"]
     out, achados = {}, 0
     for d in N:
-        cn = normalizar_cnpj(d["extras"].get("cnpj")).zfill(14)
-        r = rows.get(cn)
+        cn = completar_cnpj(d["extras"].get("cnpj"))
+        r = rows.get(cn) if cn else None
         if r:
             achados += 1
             out[d["id"]] = {"cnpj": cn, "cnae_oficial": r["cnae"], "cnae_desc_oficial": r["cnae_desc"], "situacao": r["situacao"], "porte_oficial": r["porte"],
@@ -248,12 +248,13 @@ def regime(permitir, somente_com_master=True):
     cache_p = os.path.join(BASE, "regime-cache.json"); cache = json.load(open(cache_p)) if os.path.exists(cache_p) else {}
     fs = sorted(glob.glob(os.path.join(OUT, "icp-*.json"))); I = json.load(open(fs[-1]))
     pts = {x["valor"].upper(): x["pontos_sugeridos"] for x in I["lead_scoring_v1"] if x["dimensao"] == "Regime"}
-    hs = cnpjs_hubspot(); feitos = 0
+    hs_raiz = {x[:8] for x in cnpjs_hubspot()}; feitos = 0
+    for l in linhas_: l[iC] = completar_cnpj(l[iC]) or l[iC]  # planilha reaberta no Excel perde o zero à esquerda
     alvo = [l for l in linhas_ if (not somente_com_master or not str(l[iM]).startswith("a definir"))]
     print(f"{len(alvo)} prospects para consultar (cache: {sum(1 for l in alvo if str(l[iC]) in cache)})", flush=True)
     for l in alvo:
         cn = str(l[iC])
-        if cn in hs: continue  # proteção: nunca consultar cliente/negócio existente
+        if cn[:8] in hs_raiz: continue  # proteção: nunca consultar cliente/negócio existente (pela raiz, como na prospecção)
         if cn not in cache:
             r = subprocess.run(["curl", "-sS", "-m", "20", f"https://minhareceita.org/{cn}"], capture_output=True, text=True)
             try:

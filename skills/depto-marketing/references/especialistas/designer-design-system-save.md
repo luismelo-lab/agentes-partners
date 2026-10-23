@@ -59,7 +59,7 @@ Regra que sai da tabela: no modo claro, o ouro aparece em faixa, selo, número g
 ## 4. Regras da casa
 - **Padrão visual (Luis, 07/10/2026, CLAUDE.md global):** Design System Save v0.5 em todo material; modo claro para cliente e parceiro, escuro para painéis e capas; nunca escrever cor ou fonte à mão.
 - **D84 (22/10/2026):** autorização escrita para logo e fotos de cliente antes de usar; o deck da cooperativa trocou a esteira para "Destravar caixa, Proteger e controlar, Crescer".
-- **D1 da esteira (21/10/2026, skill `apresentacao-diagnostico`):** nome oficial da esteira é "Destravar caixa, proteger e controlar, crescer"; "Oxigenar, estruturar e escalar" é nome antigo.
+- **D1 do ecossistema (21/10/2026, `docs/ecossistema/racional-e-fechamento-ecossistema-save.md`; não é a D1 do Conselho; aplicada pela D84):** nome oficial da esteira é "Destravar caixa, proteger e controlar, crescer"; "Oxigenar, estruturar e escalar" é nome antigo.
 - **D50 (09/10/2026):** peça de produto em validação leva a marca "RASCUNHO PRÉ-G2 · NÃO ENVIAR"; o gerador do Maquila recusa peça sem ela até existir `G2-LIBERADO`.
 - **D77 (22/10/2026):** sem telefone ou contato pessoal na peça.
 - **Aprendizado de 07/10/2026:** toda peça (não só a apresentação) mostra o fluxo de 5 etapas da operação.

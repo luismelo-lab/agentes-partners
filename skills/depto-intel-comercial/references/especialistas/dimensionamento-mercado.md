@@ -68,7 +68,7 @@
 - **Download mensal da Receita** com autorização do gerente de Inteligência e espaço confirmado com o TI (≈ 7,7 GB processados localmente, um arquivo por vez; alçada de 23/10/2026).
 - **D75 (22/10/2026):** a meta 2027 vem da diretoria; SOM é capacidade, não meta.
 - **D76 (22/10/2026):** cliente sem Master fica fora do SAM da Área Partners.
-- **D11 (pendente):** fila do Técnico limitada à capacidade: entra no SOM.
+- **D11 (aplicada por padrão em 23/10/2026, D98; dono: time técnico tributário):** fila do Técnico limitada à capacidade: entra no SOM.
 - **Luis, 21/10/2026:** universo D&S só MG e só Lucro Real.
 - **Café fora da meta desde abr/2026:** café fica fora do SAM de recuperação; entra no TAM de produtos financeiros até o Luis decidir (pergunta P1 do estudo).
 

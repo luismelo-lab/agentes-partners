@@ -59,9 +59,9 @@
 
 ## 4. Regras da casa
 - **Gerente de Inteligência e Jenifer validam pesos antes do uso** (SKILL do depto, regra 6; alçada de 23/10/2026; antes era o Luis). O score v1 de 19/10/2026 está pendente de validação; o score de portfólio (seção 2.3 do estudo) também.
-- **D7-b (pendente):** bônus Q4 para P1 Frigoríficos (10) e P2 Hortifrúti (5) fica no `config-jenifer.json`, com `ativo` desligável.
-- **D11 (pendente):** fila do Técnico limitada à capacidade e priorizada por valor esperado e decadência: o score ordena, a capacidade corta.
-- **D44 (pendente):** fila de conversão ordenada por honorário líquido potencial: mesmo critério econômico do score.
+- **D7-b (superada em 23/10/2026 pela D98: o Luis decidiu só a meta do Q4, D64, e o foco por segmento vai para 2027 com a meta da diretoria, D75):** bônus Q4 para P1 Frigoríficos (10) e P2 Hortifrúti (5) fica no `config-jenifer.json`, com `ativo` desligável.
+- **D11 (aplicada por padrão em 23/10/2026, D98; dono: time técnico tributário):** fila do Técnico limitada à capacidade e priorizada por valor esperado e decadência: o score ordena, a capacidade corta.
+- **D44 (delegada à Daniela com o time técnico em 23/10/2026, D98):** fila de conversão ordenada por honorário líquido potencial: mesmo critério econômico do score.
 - **D76 (22/10/2026):** empresa sem Master não entra na lista da Área Partners; o score não "cria" Master.
 - **Café fora da meta desde abr/2026:** café recebe 0 no segmento de recuperação (não é eliminatório nos produtos financeiros até o Luis decidir).
 - **Luis, 21/10/2026:** universo D&S só MG e só Lucro Real; o score da D&S não precisa do peso de regime (todos são Real) e passa esse peso para a geografia e a similaridade.

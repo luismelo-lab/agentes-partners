@@ -57,7 +57,7 @@ Consulta de 22/10/2026.
 ## 4. Regras da casa
 - **D3 (29/09/2026):** sem SPED nem folha na fase 1. A ficha cita o registro; o técnico abre. Mudar isso exige decisão do Luis.
 - **D14 e D22:** alíquota zero sai por PER. No SPED, o PER parte do saldo do 1100/1500; nunca sugerir DCOMP.
-- **D66 (pendente, 15/10/2026):** calendário de decadência mensal de dez/2026 por crédito, com PER, dono e prazo. Este especialista fornece o "mês que vence" de cada tese.
+- **D66 (aplicada por padrão em 23/10/2026, D98; dono: depto-pos-venda com o time técnico, 15/10/2026):** calendário de decadência mensal de dez/2026 por crédito, com PER, dono e prazo. Este especialista fornece o "mês que vence" de cada tese.
 - **D85 (22/10/2026):** acesso por procuração no e-CAC, nunca senha do cliente.
 - **Regra do Revisor:** "não peça 60 meses de SPED de saída". O pedido mínimo é um arquivo e um registro.
 - **LGPD e D3:** arquivo do cliente fica no Mac; nada de XML ou SPED em e-mail fora da célula.

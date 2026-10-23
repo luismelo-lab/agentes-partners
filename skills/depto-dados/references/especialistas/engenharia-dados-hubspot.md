@@ -59,7 +59,7 @@ Consulta em 22/10/2026.
 - **D18 (29/09/2026):** campos obrigatórios são configurados pelo time de CRM da Save; o agente propõe.
 - **D37 e D57 (02/10 e 05/10/2026, pendentes):** propriedade "Produto" (ou pipeline próprio) para separar produtos novos; a separação precisa estar no `calc_semana.py` e no `operacao.py` antes do 1º negócio. A engenharia testa o filtro antes do registro.
 - **D90 (22/10/2026):** os medidores do painel (HubSpot web) entram no repositório (`portal/`) e no fluxo; a fonte de dados deles é a mesma foto.
-- **D74 (19/10/2026, pendente):** número oficial do pipeline depende da regra de escopo.
+- **D74 (19/10/2026, delegada ao depto-dados em 23/10/2026, D98):** número oficial do pipeline depende da regra de escopo.
 - **D76 (22/10/2026):** cliente sem Master fora das listas; o escopo do download já separa pelo roster.
 - **Em aberto:** campo de valor recebido (para o ROI realizado); confirmação do roster ("CONFIRMAR" no mapa).
 

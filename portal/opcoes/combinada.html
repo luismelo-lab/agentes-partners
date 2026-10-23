@@ -234,12 +234,12 @@ const Fonte = {
         decisoes: X.decisoes, decisoesTotal: X.decisoes_total, demandas: X.demandas, demandasNum: X.demandas_num, alertas: X.alertas, manchete: X.manchete,
         masters: X.masters, janelas: X.janelas, lote: X.lote, arquivos: X.arquivos,
         pedidos: X.pedidos.map(p => ({...p, campos: {precisa: p.precisa, uso: p.uso, prazo: p.prazo}, para: {"celula-daniela": "daniela", "celula-jenifer": "jenifer", "recuperador": "geovana", "revisor-diagnostico": "geovana"}[p.area] || "luis"})),
-        chamados: X.chamados} }
+        chamados: X.chamados, whatsapp: X.whatsapp || []} }
     const [D, R] = await Promise.all([this.json("dados.json"), this.json("diretorio.json")]);
     const pw = D.pastas_web || {};
     return {atualizado: D.atualizado, areas: R.areas, blocos: R.blocos, rotinas: R.rotinas, pastas: R.pastas, pessoas: R.pessoas, regras: R.regras_casa || [],
       decisoes: D.conselho || [], decisoesTotal: null, demandas: D.demandas_lista || [], demandasNum: D.demandas || {}, alertas: D.gestao?.alertas || [], manchete: D.gestao?.manchete,
-      masters: D.gestao?.masters || [], janelas: D.janelas || [], lote: D.lote || [], arquivos: D.arquivos_dia || {}, pedidos: [], chamados: [], pastasWeb: pw, mastersLista: D.gestao?.masters || []};
+      masters: D.gestao?.masters || [], janelas: D.janelas || [], lote: D.lote || [], arquivos: D.arquivos_dia || {}, pedidos: [], chamados: [], pastasWeb: pw, mastersLista: D.gestao?.masters || [], perfil: D.perfil || "completo", whatsapp: D.whatsapp_demandas || []};
   },
   async conectar() {
     if (this.previa && /demo/.test(location.search)) { this.sample = demoSample(); return }
@@ -247,15 +247,20 @@ const Fonte = {
     const [db, user, sample] = await Promise.all(["db", "user", "sample"].map(n => claude.use(n).catch(() => null)));
     if (!this.previa) { this.db = db; this.user = user } this.sample = sample;
   },
+  /* Identidade (A1, avaliação de publicação de 23/10/2026): o perfil vem só da conta do Claude.
+     Luis = dono do Artifact (isOwner). Daniela, Jenifer e Geovana = nome da conta (palavra inteira), nunca "luis".
+     Quem não é reconhecido fica só leitura. */
+  dono: false,
   async quemSou() {
-    if (!this.user) return {id: null, chave: null};
-    let me = null; try { me = await this.user.me() } catch (e) {}
-    const n = sem(me?.name || ""); let chave = ["luis", "daniela", "jenifer", "geovana"].find(k => n.includes(k)) || null;
-    try { if (!chave && await this.user.isOwner()) chave = "luis" } catch (e) {}
-    return {id: me?.id || null, chave};
+    if (!this.user) return {id: null, chave: null, dono: false};
+    let me = null, dono = false; try { me = await this.user.me() } catch (e) {}
+    try { dono = (await this.user.isOwner()) === true } catch (e) {}
+    const ps = sem(me?.name || "").split(/[^a-z]+/);
+    const chave = dono ? "luis" : ["daniela", "jenifer", "geovana"].find(k => ps.includes(k)) || null;
+    this.dono = dono; return {id: me?.id || null, chave, dono};
   },
   ouvir(col, ordem, lim, cb, erro) { let q = this.db.collection(col); if (ordem) q = q.orderBy(ordem, "desc"); return q.limit(lim).onSnapshot(s => cb(s.docs.map(d => ({id: d.id, ...d.data()}))), erro) },
-  pode() { return this.previa || !!this.db },
+  pode() { return this.previa || (!!this.db && S.identificado) },
   async criar(col, dados) { if (this.previa) return {id: "prev-" + Date.now()}; return this.db.collection(col).add(dados) },
   async atualizar(c, dados) { if (this.previa) return; return this.db.doc(c).update(dados) },
   async gravar(c, dados) { if (this.previa) return; return this.db.doc(c).set(dados) },
@@ -270,9 +275,13 @@ function demoSample() {
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
 const url = u => /^https:\/\//i.test(String(u || "")) ? esc(u) : "";
-const sem = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const sem = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 const agora = () => new Date().toISOString();
-const data = iso => { if (!iso) return ""; const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}:\d{2}))?/); return m ? `${m[3]}/${m[2]}${m[4] ? " " + m[4] : ""}` : esc(iso) };
+const data = iso => { if (!iso) return ""; const s = String(iso);
+  if (/T\d{2}:\d{2}.*(Z|[+-]\d{2}:?\d{2})$/.test(s)) { const d = new Date(s); if (!isNaN(d)) { const z = n => String(n).padStart(2, "0"); return `${z(d.getDate())}/${z(d.getMonth() + 1)} ${z(d.getHours())}:${z(d.getMinutes())}` } }
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}:\d{2}))?/); return m ? `${m[3]}/${m[2]}${m[4] ? " " + m[4] : ""}` : esc(s) };
+const hojeLocal = () => { const d = new Date(), z = n => String(n).padStart(2, "0"); return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}` };
+const diaLocal = iso => { const d = new Date(iso || ""); if (isNaN(d)) return String(iso || "").slice(0, 10); const z = n => String(n).padStart(2, "0"); return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}` };
 const mi = v => !v ? "—" : v >= 1e6 ? "R$ " + (v / 1e6).toFixed(1).replace(".", ",") + " mi" : "R$ " + Math.round(v / 1e3).toLocaleString("pt-BR") + " mil";
 const md = t => { let h = "", l = false; for (const x of String(t || "").split("\n")) { const s = esc(x.trim()).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
   if (s.startsWith("- ")) { if (!l) { h += "<ul>"; l = true } h += `<li>${s.slice(2)}</li>`; continue } if (l) { h += "</ul>"; l = false }
@@ -290,10 +299,16 @@ const PESSOAS = {luis: "Luis", daniela: "Daniela", jenifer: "Jenifer", geovana: 
 const FASES = [["fila", "Na fila"], ["analise", "Em análise"], ["aprovar", "Pronto para aprovar"], ["concluido", "Concluído"]];
 const FASE = {novo: "fila", nova_analise: "fila", em_analise: "analise", aguardando_aprovacao: "aprovar", aprovado: "concluido", concluido: "concluido", nao_aprovado: "concluido"};
 const PARA_AREA = {"celula-daniela": "daniela", "celula-jenifer": "jenifer", "recuperador": "geovana", "revisor-diagnostico": "geovana"};
+const GLPI_SKILL = k => /^trib_/.test(k || "") ? "depto-tributario" : /^(jur_|contrato)/.test(k || "") ? "depto-juridico" : "";
 const ST_CH = {proposto: "Aguarda aprovação", aprovado: "Aprovado · abrindo no GLPI", aberto: "Aberto no GLPI", aprovado_manual: "Aprovado · abrir manualmente", recusado: "Recusado"};
 const S = {M: null, eu: null, meuId: null, identificado: false, acoes: {}, recup: {}, conselho: {}, apont: [],
-  f: {fase: "", area: "", pessoa: ""}, kPessoa: "", kCol: "aprovar", novo: {sel: null, busca: ""}, chats: {}, chatOff: "", msg: ""};
+  f: {fase: "", area: "", pessoa: ""}, wa: {q: "", pessoa: "", status: ""}, kPessoa: "", kCol: "aprovar", novo: {sel: null, busca: ""}, chats: {}, chatOff: "", msg: ""};
 const fase = p => FASE[p.status] || "fila";
+/* Aprovações valem só para a dona (alçadas): na versão online, a pessoa precisa estar identificada pela conta do Claude
+   (o seletor de perfil é só para consulta). Na prévia, basta o perfil escolhido. */
+const podeDecidir = dono => !!S.eu && S.eu === dono && (Fonte.previa || (S.identificado && (dono !== "luis" || Fonte.dono)));
+const semIdent = dono => S.eu === dono && !podeDecidir(dono) ? `<div class="nota">Para aprovar, abra a Central pelo link do Claude com a sua conta da Save (perfil escolhido à mão não aprova).</div>` : "";
+const perfil = k => PESSOAS[k] ? k : null;
 const rotFase = p => p.status === "nova_analise" ? "Na fila · ajuste pedido" : p.status === "nao_aprovado" ? "Concluído · não aprovado" : FASES.find(f => f[0] === fase(p))[1];
 const chip = p => `<span class="chip p ${fase(p)}">${esc(rotFase(p))}</span>`;
 const area = sk => S.M.areas.find(a => a.skill === sk);
@@ -302,7 +317,7 @@ const sigla = n => n.replace(/[&(),·]/g, " ").split(/\s+/).filter(w => w.length
 const linkPastas = ls => (ls || []).filter(l => url(l.url)).map(l => `<a href="${url(l.url)}" target="_blank" rel="noopener">Abrir pasta ${esc(l.rotulo)}</a>`).join(" ");
 const foraOD = o => /^(Mac:|na conversa|repositório|pasta confidencial|~\/)/i.test(o || "");
 const toast = t => { const el = $("#toast"); el.textContent = t + (Fonte.previa ? " (prévia: nada foi gravado)" : ""); el.className = "toast mostra"; clearTimeout(el._t); el._t = setTimeout(() => el.className = "toast", 3400) };
-const rota = () => { const h = decodeURIComponent((location.hash || "").slice(1)); const [r, ...p] = h.split("/"); return {r: r || "mesa", p} };
+const rota = () => { let h = (location.hash || "").slice(1); try { h = decodeURIComponent(h) } catch (e) {} const [r, ...p] = h.split("/"); return {r: r || "mesa", p} };
 
 /* ===================== Mesa ===================== */
 function mesaDe(p) {
@@ -331,7 +346,7 @@ const kpi = (r, v, s, go, dest) => `<${go ? `button class="kpi ${dest ? "destaqu
 function tabelaAcao(itens, max = 10) {
   return `<section class="painel"><div class="painel-cab"><h2>Para agir agora</h2><span class="sub">${itens.length} ${itens.length === 1 ? "item" : "itens"}</span></div>
     <div class="linhas" style="--cols:160px minmax(0,1fr) 170px"><div class="lh cab"><span>Tipo</span><span>Item</span><span>Situação</span></div>
-    ${itens.slice(0, max).map(i => `<button class="lh" data-go="${i.go}"><span class="sub esconde-m">${esc(i.tipo)}</span><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.sub || "")}${i.quando ? " · " + data(i.quando) : ""}</span></span><span>${i.c}</span></button>`).join("") || `<div class="vazio">Nada pendente com você.</div>`}
+    ${itens.slice(0, max).map(i => `<button class="lh" data-go="${esc(i.go)}"><span class="sub esconde-m">${esc(i.tipo)}</span><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.sub || "")}${i.quando ? " · " + data(i.quando) : ""}</span></span><span>${i.c}</span></button>`).join("") || `<div class="vazio">Nada pendente com você.</div>`}
     ${itens.length > max ? `<button class="lh" data-go="decisoes"><span class="sub">Ver as outras ${itens.length - max}</span></button>` : ""}</div></section>`;
 }
 function painelPedidos(t, xs, vazio) {
@@ -345,6 +360,7 @@ function painelArquivos(m) {
 }
 function telaMesa() {
   const p = S.eu;
+  if (!p && !Fonte.previa) return cab("Minha mesa", "Não reconheci a sua conta", "A Central está em modo leitura: você consulta áreas, entregas, rotinas e pastas. Para pedir e aprovar, abra a Central pelo link do Claude com a sua conta da Save; se ainda assim não funcionar, peça ao Luis para conferir o seu acesso.");
   if (!p) return cab("Minha mesa", "Quem está usando?", "Escolha o seu nome. A mesa mostra só o que é seu agora.") + `<div class="acoes">${Object.entries(PESSOAS).map(([k, v]) => `<button class="btn sec" data-sou="${k}">${v}</button>`).join("")}</div>`;
   return p === "luis" ? mesaLuis() : mesaTime(p);
 }
@@ -358,7 +374,7 @@ function mesaTime(p) {
   ${painelApont(p)}`;
 }
 function painelApont(p) {
-  const hoje = new Date().toISOString().slice(0, 10), meus = S.apont.filter(x => x.pessoa === p && (x.data || "").startsWith(hoje));
+  const hoje = hojeLocal(), meus = S.apont.filter(x => x.pessoa === p && diaLocal(x.data) === hoje);
   return `<details class="painel"><summary class="painel-cab" style="cursor:pointer"><h2>Registrar uma tarefa (Semana 0)</h2><span class="sub">${meus.length} hoje · ${meus.reduce((s, x) => s + (x.minutos || 0), 0)} min</span></summary>
     <form id="f-apont" class="painel-corpo"><div class="campos"><label>O que fez<input id="a-desc" required maxlength="160" placeholder="Ex.: encaminhei o pedido de contrato"></label>
       <label>Tipo<select id="a-tipo">${["Atendimento ao parceiro", "Encaminhamento a área", "Cobrança de área", "Atualização de CRM", "Reunião", "Prospecção", "Análise técnica", "Relatório", "Outro"].map(t => `<option>${t}</option>`).join("")}</select></label>
@@ -389,7 +405,7 @@ function mesaLuis() {
   <div class="duas">${tabelaAcao(itens, 6)}
     <section class="painel"><div class="painel-cab"><h2>Janelas de receita</h2><span class="sub">por prazo</span></div>
       ${js.map(j => { const d = dias(j.prazo); return `<div class="janela"><span class="dias ${d !== null && d <= 14 ? "perto" : ""}">${d === null ? "sem data" : d < 0 ? "encerrada" : d + " dias"}</span><span><span class="tit quebra" style="font-size:14px">${esc(j.janela)}</span><span class="sub quebra">${esc(j.prazo_texto)} · ${esc(j.produto)}</span></span></div>` }).join("") || `<div class="vazio">Sem janelas cadastradas.</div>`}</section></div>
-  <div class="duas"><section class="painel"><div class="painel-cab"><h2>Alertas das áreas</h2></div>${M.alertas.map(a => `<div class="janela alerta" style="grid-template-columns:150px minmax(0,1fr)"><span><span class="chip">${esc(a.area)}</span></span><span class="quebra" style="font-size:14px">${esc(a.texto)}</span></div>`).join("")}</section>
+  <div class="duas"><section class="painel"><div class="painel-cab"><h2>Alertas das áreas</h2></div>${M.alertas.map(a => `<div class="janela alerta" style="grid-template-columns:150px minmax(0,1fr)"><span><span class="chip">${esc(a.area)}</span></span><span class="quebra" style="font-size:14px">${esc(a.texto)}</span></div>`).join("") || `<div class="vazio">Sem alertas.</div>`}</section>
     <details class="painel"><summary class="painel-cab" style="cursor:pointer"><h2>Saúde dos Masters</h2><span class="sub">${M.masters.length} Masters</span></summary>
       <div class="linhas" style="--cols:minmax(0,1fr) 70px 70px 80px"><div class="lh cab"><span>Master</span><span>Saúde</span><span>Parados</span><span>Ganhos 90d</span></div>
       ${M.masters.slice().sort((a, b) => a.saude - b.saude).map(m => `<div class="lh" style="grid-template-columns:minmax(0,1fr) 70px 70px 80px !important"><span>${esc(m.parceiro)}</span><span class="mono">${esc(m.saude)}${m.saude < 60 ? " ↓" : ""}</span><span class="mono">${esc(m.parados)}</span><span class="mono">${esc(m.ganhos_90d)}</span></div>`).join("")}</div></details></div>
@@ -409,12 +425,108 @@ function telaPedidos() {
       || `<div class="vazio">${Fonte.pode() ? "Nenhum pedido com esses filtros." : "Os pedidos aparecem quando a Central é aberta pelo link do Claude."}</div>`}</div></section>`;
 }
 
+/* ===================== WhatsApp · Demandas =====================
+   O que a rotina whatsapp-caixa-time leu nos grupos e conversas dos parceiros, com a avaliação dos agentes (dados.json → whatsapp_demandas).
+   Tem nome de Master e de empresa: cada pessoa vê só as suas; o Luis vê todas. "Gerar chamado GLPI" grava em chamados/<id da demanda>
+   com status "proposto" e origem "portal" (a dona aprova; a rotina da Central abre no GLPI por chamados_painel.py aplicar).
+   Sem o texto do especialista (regra de 14/10), a tela não escreve o chamado: grava um pedido à área para os agentes escreverem. */
+const ST_WA = {responder: "Responder", acompanhar: "Acompanhar"};
+const waVis = () => !S.eu ? [] : S.M.whatsapp.filter(d => (S.eu === "luis" ? !S.wa.pessoa || d.pessoa === S.wa.pessoa : d.pessoa === S.eu) && !S.acoes[d.id]);
+function waBusca(xs) { const ts = sem(S.wa.q).trim().split(/\s+/).filter(Boolean); if (!ts.length) return xs;
+  return xs.filter(d => { const a = sem([d.id, d.master, d.chat, d.grupo, d.o_que_pede, d.negocio, d.rota, d.tipo].join(" ")); return ts.every(t => a.includes(t)) }) }
+const chamadoDe = d => S.M.chamados.find(c => c.id === d.id) || (d.chamado ? {id: d.id, ...d.chamado} : null);
+function listaWa() {
+  const xs = waBusca(waVis().filter(d => !S.wa.status || d.status === S.wa.status));
+  return `<div class="linhas" style="--cols:minmax(0,1.1fr) minmax(0,1.4fr) 150px 120px"><div class="lh cab"><span>Conversa</span><span>O que pede</span><span>Avaliação</span><span>Espera</span></div>
+    ${xs.map(d => `<button class="lh" data-go="wa/${esc(d.id)}"><span><span class="tit">${esc(d.master || d.chat)}</span><span class="sub">${esc(d.chat || "")}${S.eu === "luis" ? " · " + esc(PESSOAS[d.pessoa] || d.pessoa) : ""}</span></span>
+      <span class="esconde-m"><span class="tit quebra" style="font-weight:500">${esc(d.o_que_pede || "—")}</span></span>
+      <span><span class="chip p ${d.status === "responder" ? "analise" : "fila"}">${esc(d.tipo || ST_WA[d.status])}</span>${d.urgente ? ` <span class="chip urg">Urgente</span>` : ""}</span>
+      <span class="mono esconde-m">${d.aguardando_h != null ? esc(Math.round(d.aguardando_h)) + " h" : "—"}</span></button>`).join("")
+      || `<div class="vazio">${!S.eu ? "Entre com a sua conta do Claude para ver as suas demandas." : S.wa.q.trim() ? "Nenhuma demanda com essa busca." : "Nenhuma demanda aberta no WhatsApp."}</div>`}</div>
+    ${S.wa.q.trim() && S.eu ? `<div class="painel-corpo"><div class="acoes"><a class="btn sec" href="#wachamado">${icone("mais")}Gerar chamado GLPI a partir da busca</a><span class="sub">Os agentes escrevem o chamado no formato da área e ele volta para você aprovar.</span></div></div>` : ""}`;
+}
+function telaWhatsapp() {
+  const xs = waVis(), n = k => xs.filter(d => !k || d.status === k).length;
+  return cab("WhatsApp · Demandas", "O que os parceiros pediram", "Lidas nos grupos e conversas pela rotina das 8h e 14h, com a avaliação dos agentes. Responda com o rascunho conferido, peça à área ou gere o chamado do GLPI.")
+  + `<section class="painel"><div class="painel-cab"><div class="seg" role="group" aria-label="Situação"><button data-wa-st="" aria-pressed="${!S.wa.status}">Todas <span class="n">${n("")}</span></button>${Object.entries(ST_WA).map(([k, v]) => `<button data-wa-st="${k}" aria-pressed="${S.wa.status === k}">${v} <span class="n">${n(k)}</span></button>`).join("")}</div>
+    <div class="filtros">${S.eu === "luis" ? `<select class="f" id="wa-pessoa" aria-label="Pessoa"><option value="">Todas as pessoas</option>${["daniela", "jenifer", "geovana"].map(k => `<option value="${k}" ${S.wa.pessoa === k ? "selected" : ""}>${PESSOAS[k]}</option>`).join("")}</select>` : ""}</div></div>
+    <div class="painel-corpo" style="padding-bottom:0"><label><span class="so-leitor">Buscar demanda</span><input id="q-wa" type="search" value="${esc(S.wa.q)}" placeholder="Buscar por Master, empresa ou assunto" autocomplete="off"></label></div>
+    <div id="res-wa">${listaWa()}</div></section>`;
+}
+function gWhats(id) {
+  const d = S.M.whatsapp.find(x => x.id === id); if (!d || !waVis().concat(S.M.whatsapp.filter(x => S.acoes[x.id] && x.pessoa === S.eu)).includes(d)) return;
+  const A = d.auditoria || {}, rv = d.revisao, ch = chamadoDe(d), dona = podeDecidir(d.pessoa), CS = d.chamado_sugerido;
+  gaveta(esc(d.master || d.chat), `<span class="mono">${esc(d.id)}</span> · ${esc(d.chat || "")}`,
+    `<div class="filtros"><span class="chip p ${d.status === "responder" ? "analise" : "fila"}">${esc(d.tipo || ST_WA[d.status])}</span>${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}${ch ? `<span class="chip p ${ch.status === "proposto" ? "aprovar" : "concluido"}">Chamado: ${esc(ST_CH[ch.status] || ch.status)}</span>` : ""}</div>
+    <p style="margin:0;font-size:16px">${esc(d.o_que_pede || "")}</p>
+    <dl class="dl"><dt>Master / grupo</dt><dd>${esc(d.master || "—")}${d.grupo ? " · " + esc(d.grupo) : ""}</dd><dt>Dona</dt><dd>${esc(PESSOAS[d.pessoa] || d.pessoa)}</dd>
+      <dt>Área sugerida</dt><dd>${esc(d.area_sugerida ? nomeArea(d.area_sugerida) : d.rota || "—")}</dd><dt>Prazo</dt><dd>${d.prazo ? data(d.prazo) : "—"}${d.aguardando_h != null ? ` · esperando há ${esc(Math.round(d.aguardando_h))} h` : ""}</dd>
+      <dt>Próximo passo</dt><dd class="quebra">${esc(d.proximo_passo || "—")}</dd>
+      <dt>Confiança</dt><dd>${rv ? `${rv.aprovado ? "Conferida" : "Com ressalva"} pelo ${esc(rv.gerente || "gerente da área")}${rv.rodadas ? ` (${esc(rv.rodadas)} rodada${rv.rodadas > 1 ? "s" : ""})` : ""}` : "Sem revisão do gerente: confira antes de usar"}</dd>
+      ${d.rodada ? `<dt>Lida em</dt><dd>${esc(d.rodada)}</dd>` : ""}${url(d.link) ? `<dt>HubSpot</dt><dd><a href="${url(d.link)}" target="_blank" rel="noopener">${esc(d.negocio || "Abrir negócio")}</a></dd>` : ""}</dl>
+    ${d.entrega ? `<div class="resp"><h4>O que os agentes já levantaram</h4>${md(d.entrega)}</div>` : ""}
+    ${d.precisa ? `<div class="resp"><h4>O que você também precisa</h4>${md(d.precisa)}</div>` : ""}
+    ${d.falta && d.falta !== "nada" ? `<div class="resp"><h4>O que falta e quem fornece</h4>${md(d.falta)}</div>` : ""}
+    ${d.rascunho ? `<div><span class="rot">Rascunho de resposta ao parceiro</span><div class="nota quebra" style="margin-top:6px;color:var(--texto)">${esc(d.rascunho)}</div>
+      ${A.ok === true ? `<p class="sub">Passou no auditor de promessas.</p>` : A.ok === false ? `<div class="aviso" role="alert"><b>O auditor de promessas apontou:</b><ul style="margin:4px 0 0;padding-left:18px">${(A.achados || []).map(a => `<li>“${esc(a.termo)}” (${esc(a.regra)}): ${esc(a.sugestao)}</li>`).join("")}</ul>Ajuste antes de enviar.</div>` : `<p class="sub">Auditor de promessas indisponível nesta rodada: confira antes de enviar.</p>`}</div>`
+      : `<p class="sub">Sem rascunho: a resposta depende do que falta acima.</p>`}
+    ${S.eu === d.pessoa && !dona ? semIdent(d.pessoa) : ""}`,
+    `${d.rascunho ? `<button class="btn ${A.ok === false ? "sec" : ""}" data-copiar="${esc(d.id)}">Responder: copiar rascunho</button>` : ""}
+     ${dona ? `<button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="respondido">Respondi</button><button class="btn sec" data-wa-pedir="${esc(d.id)}">Pedir à área</button>
+       ${ch ? `<a class="btn sec" href="#chamado/${esc(ch.id)}">Ver chamado</a>` : `<a class="btn sec" href="#wachamado/${esc(d.id)}">Gerar chamado GLPI</a>`}` : ""}`);
+}
+function gChamadoWa(id) {
+  const d = id ? S.M.whatsapp.find(x => x.id === id) : null, CS = d?.chamado_sugerido, dona = d ? podeDecidir(d.pessoa) : Fonte.pode() && !!S.eu;
+  if (id && (!d || !waVis().includes(d))) return;
+  const pronto = CS && CS.pronto && !CS.nao_abrir;
+  gaveta(d ? "Gerar chamado GLPI" : "Chamado a partir da busca", d ? `<span class="mono">${esc(d.id)}</span> · ${esc(d.master || d.chat || "")}` : esc(S.wa.q),
+    pronto ? `<div class="nota">Chamado escrito pelo ${esc(CS.agente || "especialista da área")} no formato da área (chamado ideal). Revise; ele só vai ao GLPI depois que você aprova.</div>
+      <dl class="dl"><dt>Categoria</dt><dd>${esc(CS.grupo)} <span class="mono">(${esc(CS.area)})</span></dd>${CS.documentos ? `<dt>Anexos</dt><dd class="quebra">${esc(Array.isArray(CS.documentos) ? CS.documentos.join("; ") : CS.documentos)}</dd>` : ""}</dl>
+      <label for="wc-t">Título</label><input id="wc-t" maxlength="200" value="${esc(CS.titulo)}">
+      <div class="campos"><label>Urgência<select id="wc-u">${[1, 2, 3, 4, 5].map(n => `<option ${Number(CS.urgencia) === n ? "selected" : ""}>${n}</option>`).join("")}</select></label><label>Prazo<input id="wc-p" type="date" value="${esc(/^\d{4}-\d{2}-\d{2}$/.test(CS.prazo || "") ? CS.prazo : "")}"></label></div>
+      <label for="wc-d">Descrição <small>(blocos do chamado ideal)</small></label><textarea id="wc-d" rows="12">${esc(CS.descricao)}</textarea>`
+    : `<div class="aviso">${CS?.nao_abrir ? `O especialista concluiu que <b>não é chamado</b>: ${esc(CS.nao_abrir)}` : `Ainda não há o texto do especialista para este chamado. Pela regra da casa (14/10), quem escreve o chamado é o especialista da área.`}</div>
+      <p style="margin:0">Peça aos agentes: eles escrevem no formato da área (o que entendemos, o que pedimos, anexos, prazo, riscos) e o chamado volta para ${d ? "a dona aprovar" : "você aprovar"} na mesa.</p>
+      <label for="wc-o">O que a área precisa resolver</label><textarea id="wc-o" maxlength="1500" rows="4">${esc(d ? d.o_que_pede || "" : S.wa.q)}</textarea>`,
+    !dona ? (d ? semIdent(d.pessoa) : `<span class="sub">Entre com a sua conta para gerar chamado.</span>`)
+      : pronto ? `<button class="btn" id="salvar-chamado" data-id="${esc(d.id)}">Gravar chamado para aprovação</button><button class="btn sec" data-fechar>Cancelar</button>`
+      : `<button class="btn" id="pedir-chamado" data-id="${esc(d?.id || "")}">Pedir o texto do chamado aos agentes</button><button class="btn sec" data-fechar>Cancelar</button>`);
+}
+async function salvarChamadoWa(id) {
+  const d = S.M.whatsapp.find(x => x.id === id), CS = d?.chamado_sugerido; if (!d || !CS?.pronto || !podeDecidir(d.pessoa) || chamadoDe(d)) return;
+  const v = s => ($(s)?.value || "").trim(), titulo = v("#wc-t"), descricao = v("#wc-d");
+  if (!titulo || !descricao) return toast("Título e descrição são obrigatórios");
+  const doc = {pessoa: d.pessoa, area: CS.area, grupo: CS.grupo, titulo, descricao, urgencia: Number(v("#wc-u")) || 3, prazo: v("#wc-p"), master: d.master || "", link: d.link || "", negocio: d.negocio || "",
+    empresa: CS.empresa || "", assunto: CS.assunto || "", o_que_pede: d.o_que_pede || "", especialista: CS.especialista || null, conversa: d.chat || "", demanda: d.id, origem: "portal",
+    status: "proposto", proposto_por: S.eu, proposto_por_id: S.meuId, proposto_em: agora()};
+  try { await Fonte.gravar("chamados/" + d.id, doc); if (Fonte.previa) S.M.chamados.unshift({id: d.id, ...doc}); toast("Chamado gravado: aprove na sua mesa para ir ao GLPI"); location.hash = "chamado/" + d.id }
+  catch (x) { toast("Não consegui gravar o chamado") }
+}
+async function pedirChamadoWa(id) {
+  const d = id ? S.M.whatsapp.find(x => x.id === id) : null; if (d ? !podeDecidir(d.pessoa) : !(Fonte.pode() && S.eu)) return;
+  const precisa = ($("#wc-o")?.value || "").trim(); if (!precisa) { $("#wc-o")?.focus(); return toast("Diga o que a área precisa resolver") }
+  const sk = d?.chamado_sugerido?.skill || (area(d?.area_sugerida) ? d.area_sugerida : ""), a = sk ? area(sk) : null;
+  const doc = {criado_em: agora(), solicitante: S.eu, solicitante_id: S.meuId, codigo: "", status: "novo", area: a ? a.skill : "", area_nome: a ? a.nome : "", direto: !!a,
+    entrega: "Chamado GLPI (chamado ideal)", canal: "portal-v2", chamado_de: d ? d.id : "", para: a ? (PARA_AREA[a.skill] || "luis") : "luis",
+    campos: {master: d?.master || "", cliente: d?.negocio || "", precisa: "Escrever o chamado do GLPI no formato da área: " + precisa, uso: "Chamado GLPI", formato: "Chamado ideal (infra/chamado-ideal.md)", prazo: "",
+      contexto: d ? `Demanda ${d.id} do WhatsApp. Rota sugerida: ${d.rota || "—"}. O que os agentes já levantaram: ${(d.entrega || "").replace(/\s+/g, " ")}`.slice(0, 1500) : "A partir da busca na tela WhatsApp · Demandas: " + S.wa.q},
+    historico: [{quando: agora(), evento: "Pedido de chamado GLPI", por: S.eu, nota: d ? d.id : "busca"}]};
+  try { await Fonte.criar("pedidos", doc); if (Fonte.previa) S.M.pedidos.unshift({id: "P-NOVO", ...doc}); toast(`Pedido enviado ${a ? "para " + a.nome : "à Central"}: o chamado volta para aprovação`); location.hash = "pedidos" }
+  catch (x) { toast("Não consegui enviar o pedido") }
+}
+function copiar(texto, ok) {
+  if (!texto) return toast("Nada para copiar");
+  const fim = () => toast(ok), falha = () => { const el = document.createElement("textarea"); el.value = texto; el.setAttribute("readonly", ""); el.style.position = "fixed"; el.style.opacity = "0"; document.body.appendChild(el); el.select();
+    try { document.execCommand("copy"); fim() } catch (e) { toast("Não consegui copiar: selecione o texto e copie") } el.remove() };
+  try { navigator.clipboard.writeText(texto).then(fim, falha) } catch (e) { falha() }
+}
+
 /* ===================== Áreas ===================== */
 function telaAreas() {
   return cab("Áreas", `${S.M.areas.length} áreas de agentes`, "Escolha a área para ver o que ela faz, quem é o dono, os especialistas e onde ficam as entregas. Em cada uma você faz o pedido ou conversa com os agentes.", `<button class="btn sec" id="ir-busca">${icone("onde")}Buscar</button>`)
   + S.M.blocos.map(b => `<section class="bloco"><span class="rot">${esc(b)}</span><div class="servicos">${S.M.areas.filter(a => a.bloco === b).map(a => `<button class="servico" data-go="area/${esc(a.skill)}">
       <span class="topo-s"><span class="sig" aria-hidden="true">${esc(sigla(a.nome))}</span><strong>${esc(a.nome)}</strong></span><p>${esc(a.missao)}</p>
-      <span class="base"><span>${a.entregas.length} entregas · ${a.especialistas.length} especialistas</span><span style="width:100%">Dono: ${esc(a.dono.split(" (")[0])}</span></span></button>`).join("")}</div></section>`).join("");
+      <span class="base"><span>${a.entregas.length} entregas · ${a.especialistas.length} especialistas</span><span style="width:100%">Dono: ${esc(String(a.dono || "—").split(" (")[0])}</span></span></button>`).join("")}</div></section>`).join("");
 }
 function telaArea(sk) {
   const a = area(sk); if (!a) return telaAreas();
@@ -479,6 +591,7 @@ function telaRotinas() {
 function telaDecisoes() {
   const ds = decisoesPend(), dono = S.eu === "luis";
   return cab("Decisões", `Decisões do Conselho · ${totalDecisoes()} pendentes`, dono ? "Aprove, rejeite ou ajuste. O agente registra no livro de decisões na próxima rodada." : "Só o Luis decide. As aprovações operacionais ficam com quem é dona da entrega.")
+  + (S.M.perfil === "time" ? `<div class="nota">Esta é a Central do time: as decisões do Conselho ficam no painel do Luis e na Folha Única de decisões.</div>` : "")
   + (Fonte.previa && S.M.decisoesTotal > ds.length ? `<div class="nota">Prévia: mostrando ${ds.length} de ${S.M.decisoesTotal} decisões, sem as que citam cliente.</div>` : "")
   + `<section class="painel"><div class="linhas" style="--cols:70px minmax(0,1fr) 100px 120px"><div class="lh cab"><span>Nº</span><span>Decisão</span><span>Data</span><span>Situação</span></div>${ds.map(d => `<button class="lh" data-go="decisao/${esc(d.id)}"><span class="mono">${esc(d.id)}</span><span class="tit quebra">${esc(d.texto)}</span><span class="mono esconde-m">${esc(d.data)}</span><span><span class="chip p aprovar">Pendente</span></span></button>`).join("") || `<div class="vazio">Nenhuma decisão pendente.</div>`}</div></section>`;
 }
@@ -489,15 +602,15 @@ function gaveta(titulo, sub, corpo, rodape = "", extra = "") {
   $("#g-tit").focus({preventScroll: true});
 }
 function gPedido(id) {
-  const p = S.M.pedidos.find(x => x.id === id); if (!p) return; const R = p.resposta, meu = p.solicitante === S.eu && p.status === "aguardando_aprovacao";
+  const p = S.M.pedidos.find(x => x.id === id); if (!p) return; const R = p.resposta, meu = p.status === "aguardando_aprovacao" && podeDecidir(p.solicitante);
   gaveta(`${esc(p.entrega || "Pedido")}`, `<span class="mono">${esc(p.pid || p.id)}</span> · ${esc(nomeArea(p.area))}`,
     `<div class="filtros">${chip(p)}<span class="chip">${p.direto ? "Direto à área" : "Pela Central"}</span></div>
     <p style="margin:0;font-size:16px">${esc(p.campos?.precisa)}</p>
-    <dl class="dl"><dt>Pedido por</dt><dd>${esc(PESSOAS[p.solicitante] || p.solicitante)} em ${data(p.criado_em)}</dd>${p.campos?.uso ? `<dt>Para que</dt><dd>${esc(p.campos.uso)}</dd>` : ""}${p.campos?.prazo ? `<dt>Prazo</dt><dd>${data(p.campos.prazo)}</dd>` : ""}<dt>Quem aprova</dt><dd>${esc(PESSOAS[p.solicitante] || "")} (quem pediu)</dd>${p.campos?.contexto ? `<dt>Contexto</dt><dd class="quebra">${esc(p.campos.contexto).slice(0, 600)}</dd>` : ""}</dl>
+    <dl class="dl"><dt>Pedido por</dt><dd>${esc(PESSOAS[p.solicitante] || p.solicitante)} em ${data(p.criado_em)}</dd>${p.campos?.uso ? `<dt>Para que</dt><dd>${esc(p.campos.uso)}</dd>` : ""}${p.campos?.prazo ? `<dt>Prazo</dt><dd>${data(p.campos.prazo)}</dd>` : ""}<dt>Quem aprova</dt><dd>${esc(PESSOAS[p.solicitante] || "")} (quem pediu)</dd>${p.campos?.contexto ? `<dt>Contexto</dt><dd class="quebra">${esc(String(p.campos.contexto).slice(0, 600))}</dd>` : ""}</dl>
     ${(p.reencaminhado || []).map(r => `<div class="nota">Reencaminhado de ${esc(nomeArea(r.de))} para ${esc(nomeArea(r.para))}: ${esc(r.motivo)} (${data(r.quando)}).</div>`).join("")}
     ${R ? `<div class="resp"><span class="rot">Resposta v${esc(R.versao)} · ${esc(nomeArea(p.area))}</span><p><b>${esc(R.resumo)}</b></p>${(R.secoes || []).map(s => `<h4>${esc(s.titulo)}</h4>${md(s.texto)}`).join("")}${R.tambem ? `<h4>O que você também precisa</h4>${md(R.tambem)}` : ""}${R.falta ? `<h4>O que falta e quem fornece</h4>${md(R.falta)}` : ""}${(R.conferir || []).length ? `<h4>Antes de usar, confira</h4>${md(R.conferir.map(c => "- " + c).join("\n"))}` : ""}${(R.arquivos || []).length ? `<p class="sub quebra">Arquivos: ${R.arquivos.map(esc).join(", ")}</p>` : ""}</div>` : ""}
     <div><span class="rot">Linha do tempo</span><ol class="linha-tempo" style="margin-top:10px">${(p.historico || []).map(h => `<li><b>${esc(h.evento)}</b> · ${esc(PESSOAS[h.por] || h.por)} <span class="mono" style="color:var(--texto-2)">${data(h.quando)}</span>${h.nota ? `<br><span class="sub quebra">${esc(h.nota)}</span>` : ""}</li>`).join("")}</ol></div>
-    ${meu ? `<label for="com">Comentário <small>(obrigatório para pedir ajuste ou não aprovar)</small><textarea id="com" maxlength="1500"></textarea></label>` : ""}`,
+    ${p.status === "aguardando_aprovacao" ? semIdent(p.solicitante) : ""}${meu ? `<label for="com">Comentário <small>(obrigatório para pedir ajuste ou não aprovar)</small><textarea id="com" maxlength="1500"></textarea></label>` : ""}`,
     meu ? `<button class="btn" data-dec="aprovado" data-id="${esc(p.id)}">Aprovar</button><button class="btn sec" data-dec="nova_analise" data-id="${esc(p.id)}">Pedir ajuste</button><button class="btn perigo" data-dec="nao_aprovado" data-id="${esc(p.id)}">Não aprovado</button>` : "");
 }
 function listaAreasNovo() {
@@ -598,11 +711,11 @@ async function enviarPedido(sel) {
     historico: [{quando: agora(), evento: a ? "Pedido direto à área" : "Pedido à Central", por: S.eu, nota: a ? a.skill : ""}]};
   $("#enviar-pedido").disabled = true;
   try { const r = await Fonte.criar("pedidos", doc); if (Fonte.previa) S.M.pedidos.unshift({id: "P-NOVO", ...doc});
-    S.novo = {sel: null, busca: ""}; toast(`Pedido enviado para ${a ? a.nome : "a Central"}`); location.hash = "pedidos" }
+    S.novo = {sel: null, busca: "", entrega: "", texto: "", contexto: ""}; toast(`Pedido enviado para ${a ? a.nome : "a Central"}`); location.hash = "pedidos" }
   catch (x) { $("#enviar-pedido").disabled = false; toast(x?.code === "invalid_argument" ? "Sem permissão para enviar. Peça ao Luis acesso de Colaborador." : "Não consegui enviar agora. Tente de novo.") }
 }
 async function decidirPedido(id, dec) {
-  const p = S.M.pedidos.find(x => x.id === id), nota = ($("#com")?.value || "").trim(); if (!p || p.solicitante !== S.eu) return;
+  const p = S.M.pedidos.find(x => x.id === id), nota = ($("#com")?.value || "").trim(); if (!p || p.status !== "aguardando_aprovacao" || !podeDecidir(p.solicitante)) return;
   if (dec !== "aprovado" && !nota) { $("#com").focus(); return toast("Escreva o motivo ou o que mudar") }
   const dados = {status: dec, decisao: {tipo: dec, nota, quando: agora(), por: S.eu, por_id: S.meuId}, historico: [...(p.historico || []), {quando: agora(), evento: dec, por: S.eu, nota}].slice(-30)};
   try { await Fonte.atualizar("pedidos/" + id, dados); if (Fonte.previa) Object.assign(p, dados); toast({aprovado: "Resposta aprovada", nova_analise: "Ajuste pedido à área", nao_aprovado: "Marcado como não aprovado"}[dec]); location.hash = "pedidos" }
@@ -611,11 +724,11 @@ async function decidirPedido(id, dec) {
 async function acao(tipo, id, valor) {
   const v = s => ($(s)?.value || "").trim();
   try {
-    if (tipo === "demanda") { await Fonte.gravar("acoes_demandas/" + id, {status: valor, por: S.eu, quando: agora()}); S.acoes[id] = {status: valor}; toast({respondido: "Marcada como respondida", encaminhado: "Marcada como encaminhada", nao_e_demanda: "Marcada como não é demanda"}[valor]) }
-    if (tipo === "lote") { if (S.eu !== "geovana") return; await Fonte.gravar("recuperador/" + id, {decisao: valor, motivo: v("#r-m"), por: S.eu, quando: agora()}); S.recup[id] = {decisao: valor}; toast(valor) }
-    if (tipo === "decisao") { if (S.eu !== "luis") return; await Fonte.gravar("conselho/" + id, {decisao: valor, nota: v("#n-dec"), quando: agora()}); S.conselho[id] = {decisao: valor}; toast("Decisão registrada: " + valor) }
-    if (tipo === "chamado") { const c = S.M.chamados.find(x => x.id === id); if (!c || c.pessoa !== S.eu) return;
-      const dados = valor === "aprovado" ? {status: "aprovado", titulo_editado: v("#ct"), descricao_editada: v("#cd"), aprovado_por: S.eu, aprovado_em: agora()} : {status: "recusado", motivo: v("#cm"), recusado_por: S.eu, recusado_em: agora()};
+    if (tipo === "demanda") { const d = S.M.demandas.find(x => x.id === id) || S.M.whatsapp.find(x => x.id === id); if (!d || d.pessoa !== S.eu) return; await Fonte.gravar("acoes_demandas/" + id, {status: valor, por: S.eu, por_id: S.meuId, quando: agora()}); S.acoes[id] = {status: valor}; toast({respondido: "Marcada como respondida", encaminhado: "Marcada como encaminhada", nao_e_demanda: "Marcada como não é demanda"}[valor]) }
+    if (tipo === "lote") { if (!podeDecidir("geovana")) return; await Fonte.gravar("recuperador/" + id, {decisao: valor, motivo: v("#r-m"), por: S.eu, por_id: S.meuId, quando: agora()}); S.recup[id] = {decisao: valor}; toast(valor) }
+    if (tipo === "decisao") { if (!podeDecidir("luis")) return; await Fonte.gravar("conselho/" + id, {decisao: valor, nota: v("#n-dec"), por: S.eu, por_id: S.meuId, quando: agora()}); S.conselho[id] = {decisao: valor}; toast("Decisão registrada: " + valor) }
+    if (tipo === "chamado") { const c = S.M.chamados.find(x => x.id === id); if (!c || c.status !== "proposto" || !podeDecidir(c.pessoa)) return;
+      const dados = valor === "aprovado" ? {status: "aprovado", titulo_editado: v("#ct"), descricao_editada: v("#cd"), aprovado_por: S.eu, aprovado_por_id: S.meuId, aprovado_em: agora()} : {status: "recusado", motivo: v("#cm"), recusado_por: S.eu, recusado_por_id: S.meuId, recusado_em: agora()};
       if (valor === "recusado" && !dados.motivo) { $("#cm").focus(); return toast("Diga por que não abrir") }
       await Fonte.atualizar("chamados/" + id, dados); if (Fonte.previa) Object.assign(c, dados); toast(valor === "aprovado" ? "Chamado aprovado" : "Chamado não aberto") }
     location.hash = tipo === "decisao" && S.eu === "luis" ? "decisoes" : "mesa";
@@ -623,19 +736,20 @@ async function acao(tipo, id, valor) {
 }
 
 /* ===================== Render e rotas ===================== */
-const MENU = [["mesa", "Minha mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["areas", "Áreas", "areas"], ["onde", "Onde está", "onde"], ["rotinas", "Rotinas", "rotinas"], ["decisoes", "Decisões", "decisoes"]];
+const MENU = [["mesa", "Minha mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "WhatsApp · Demandas", "chat"], ["areas", "Áreas", "areas"], ["onde", "Onde está", "onde"], ["rotinas", "Rotinas", "rotinas"], ["decisoes", "Decisões", "decisoes"]];
 function moldura(r) {
-  const n = pendentes(S.eu), dono = {pedido: "pedidos", novo: "pedidos", area: "areas", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r] || r;
-  $("#menu").innerHTML = `<span class="grupo">Trabalho</span>` + MENU.map(([k, t, ic], i) => (i === 3 ? `<span class="grupo">Consulta</span>` : "") + `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}${t}${k === "mesa" && n ? `<span class="cont">${n}</span>` : ""}${k === "decisoes" && S.eu === "luis" && totalDecisoes() ? `<span class="cont">${totalDecisoes()}</span>` : ""}</a>`).join("");
+  const n = pendentes(S.eu), dono = {pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: "whatsapp", area: "areas", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r] || r;
+  $("#menu").innerHTML = `<span class="grupo">Trabalho</span>` + MENU.map(([k, t, ic], i) => (i === 4 ? `<span class="grupo">Consulta</span>` : "") + `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}${t}${k === "mesa" && n ? `<span class="cont">${n}</span>` : ""}${k === "decisoes" && S.eu === "luis" && totalDecisoes() ? `<span class="cont">${totalDecisoes()}</span>` : ""}</a>`).join("");
   $("#sino").innerHTML = icone("sino") + (n ? `<span class="pt">${n}</span>` : ""); $("#sino").setAttribute("aria-label", `Notificações: ${n}`);
-  $("#av").textContent = S.eu ? PESSOAS[S.eu].slice(0, 2).toUpperCase() : "—"; $("#sou").value = S.eu || ""; $("#sou").disabled = S.identificado;
+  $("#av").textContent = S.eu ? PESSOAS[S.eu].slice(0, 2).toUpperCase() : "—"; $("#sou").value = S.eu || ""; $("#sou").disabled = S.identificado || !Fonte.previa; $("#sou").closest("label").hidden = !Fonte.previa;
   $("#tema").innerHTML = icone(document.documentElement.dataset.theme === "dark" ? "sol" : "lua");
   $("#faixa").innerHTML = Fonte.previa ? `<div class="faixa-previa" role="note"><b>Prévia para validação.</b><span>Áreas, entregas, rotinas, pastas, alertas e janelas são reais. Pedidos, demandas, chamados e lote são exemplos, sem cliente. Nada é gravado.</span></div>`
-    : !Fonte.db ? `<div class="faixa-previa" role="note"><b>Modo leitura.</b><span>Pedir, aprovar e registrar funcionam quando a Central é aberta pelo link do Claude, com a sua conta da Save.</span></div>` : "";
+    : !Fonte.pode() ? `<div class="faixa-previa" role="note"><b>Modo leitura.</b><span>Pedir, aprovar e registrar funcionam quando a Central é aberta pelo link do Claude, com a sua conta da Save.</span></div>` : "";
 }
 function abrir() {
   if (!S.M) return; const {r, p} = rota(); moldura(r); document.body.classList.remove("menu-aberto");
   const fundo = {mesa: telaMesa, pedidos: telaPedidos, pedido: telaPedidos, novo: telaPedidos, areas: telaAreas, area: () => telaArea(p[0]), onde: () => telaOnde(p.join("/")), rotinas: telaRotinas, decisoes: telaDecisoes,
+    whatsapp: telaWhatsapp, wa: telaWhatsapp, wachamado: telaWhatsapp,
     demanda: telaMesa, chamado: telaMesa, lote: telaMesa, decisao: S.eu === "luis" ? telaMesa : telaDecisoes}[r] || telaMesa;
   const manter = document.activeElement?.id === "q-onde";
   $("#pag").innerHTML = fundo(); $("#camada").innerHTML = "";
@@ -645,17 +759,20 @@ function abrir() {
   if (r === "area" && p[1] === "conversa") gConversa(p[0]);
   if (r === "demanda") { const d = S.M.demandas.find(x => x.id === p[0]); if (d) gaveta(esc(d.titulo), `<span class="mono">${esc(d.id)}</span> · ${esc(d.master || "")}`, `<div class="filtros">${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}<span class="chip">${esc(d.origem || "WhatsApp")}</span></div><p style="margin:0">${esc(d.o_que_pede)}</p><dl class="dl"><dt>Aberta</dt><dd>${data(d.aberta_em)}</dd>${d.rota ? `<dt>Encaminhar</dt><dd>${esc(d.rota)}</dd>` : ""}${d.proximo_passo ? `<dt>Próximo passo</dt><dd>${esc(d.proximo_passo)}</dd>` : ""}</dl>${url(d.link) ? `<a href="${url(d.link)}" target="_blank" rel="noopener">${esc(d.negocio || "Abrir no HubSpot")}</a>` : ""}`,
       d.pessoa === S.eu ? `<button class="btn" data-acao="demanda" data-id="${esc(d.id)}" data-v="respondido">Respondi</button><button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="encaminhado">Encaminhei à área</button><button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="nao_e_demanda">Não é demanda</button>` : "") }
-  if (r === "chamado") { const c = S.M.chamados.find(x => x.id === p[0]); if (c) { const pode = c.pessoa === S.eu && c.status === "proposto"; gaveta(esc(c.titulo_editado || c.titulo), esc(c.grupo || "Chamado"), `<div class="filtros"><span class="chip p ${c.status === "proposto" ? "aprovar" : "concluido"}">${esc(ST_CH[c.status] || c.status)}</span>${c.urgencia >= 4 ? `<span class="chip urg">Urgência ${esc(c.urgencia)}</span>` : ""}</div>
-      ${pode ? `<label for="ct">Título</label><input id="ct" value="${esc(c.titulo_editado || c.titulo)}" maxlength="200"><label for="cd">Descrição</label><textarea id="cd" rows="7">${esc(c.descricao_editada || c.descricao)}</textarea><label for="cm">Motivo, se não for abrir <small>(ensina os agentes)</small></label><input id="cm" maxlength="300"><div class="nota">O chamado só vai ao GLPI depois que você aprova.</div>` : `<div class="resp">${md(c.descricao_editada || c.descricao)}</div>`}`,
-      pode ? `<button class="btn" data-acao="chamado" data-id="${esc(c.id)}" data-v="aprovado">Aprovar e abrir no GLPI</button><button class="btn perigo" data-acao="chamado" data-id="${esc(c.id)}" data-v="recusado">Não abrir</button>` : "") } }
-  if (r === "lote") { const l = S.M.lote.find(x => x.deal === p[0]); if (l) gaveta(esc(l.negocio), esc(l.parceiro), `<div class="filtros"><span class="chip">${esc(l.tipo)}</span><span class="chip">${esc(l.segmento)} · ${esc(l.uf)}</span></div><p style="margin:0">Potencial estimado ${mi(l.esperado)}, a validar caso a caso.</p>${l.hipotese ? `<div class="resp"><p>${esc(l.hipotese)}</p>${l.parecer ? `<p>Parecer: ${esc(l.parecer)}</p>` : ""}${l.documentos ? `<p>Pedir: ${esc(l.documentos)}</p>` : ""}</div>` : ""}${url(l.link) ? `<a href="${url(l.link)}" target="_blank" rel="noopener">Abrir no HubSpot</a>` : ""}${S.eu === "geovana" ? `<label for="r-m">Motivo ou observação</label><input id="r-m" maxlength="300">` : `<div class="nota">Quem decide o lote é a Geovana.</div>`}`,
-      S.eu === "geovana" ? `<button class="btn" data-acao="lote" data-id="${esc(l.deal)}" data-v="Aprovar para reanálise">Aprovar para reanálise</button><button class="btn perigo" data-acao="lote" data-id="${esc(l.deal)}" data-v="Vetar">Vetar</button><button class="btn sec" data-acao="lote" data-id="${esc(l.deal)}" data-v="Precisa de dado">Precisa de dado</button>` : "") }
-  if (r === "decisao") { const d = S.M.decisoes.find(x => x.id === p[0]); if (d) gaveta(esc(d.id), esc(d.data || "") + (d.ata ? " · " + esc(d.ata) : ""), `<p style="margin:0;font-size:16px">${esc(d.texto)}</p>${d.obs ? `<p class="sub quebra">${esc(d.obs)}</p>` : ""}${S.eu === "luis" ? `<label for="n-dec">Observação <small>(opcional)</small></label><input id="n-dec" maxlength="400">` : `<div class="nota">Só o Luis decide as decisões do Conselho.</div>`}`,
-      S.eu === "luis" ? `<button class="btn" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada com ajuste">Aprovar com ajuste</button><button class="btn perigo" data-acao="decisao" data-id="${esc(d.id)}" data-v="rejeitada">Rejeitar</button>` : "") }
+  if (r === "chamado") { const c = S.M.chamados.find(x => x.id === p[0]); if (c) { const pode = c.status === "proposto" && podeDecidir(c.pessoa); gaveta(esc(c.titulo_editado || c.titulo), esc(c.grupo || "Chamado"), `<div class="filtros"><span class="chip p ${c.status === "proposto" ? "aprovar" : "concluido"}">${esc(ST_CH[c.status] || c.status)}</span>${c.urgencia >= 4 ? `<span class="chip urg">Urgência ${esc(c.urgencia)}</span>` : ""}</div>
+      ${pode ? `<label for="ct">Título</label><input id="ct" value="${esc(c.titulo_editado || c.titulo)}" maxlength="200"><label for="cd">Descrição</label><textarea id="cd" rows="7">${esc(c.descricao_editada || c.descricao)}</textarea><label for="cm">Motivo, se não for abrir <small>(ensina os agentes)</small></label><input id="cm" maxlength="300"><div class="nota">O chamado só vai ao GLPI depois que você aprova.</div>` : `${c.status === "proposto" ? semIdent(c.pessoa) : ""}<div class="resp">${md(c.descricao_editada || c.descricao)}</div>`}`,
+      pode ? `<button class="btn" data-acao="chamado" data-id="${esc(c.id)}" data-v="aprovado">Aprovar e abrir no GLPI</button><button class="btn perigo" data-acao="chamado" data-id="${esc(c.id)}" data-v="recusado">Não abrir</button>`
+        : ["aprovado_manual", "aprovado", "aberto"].includes(c.status) ? `${url(c.url) ? `<a class="btn sec" href="${url(c.url)}" target="_blank" rel="noopener">Chamado #${esc(c.glpi_id)} no GLPI</a>` : ""}<button class="btn sec" data-copiar-ch="${esc(c.id)}">Copiar texto do chamado</button>${c.nota_agente ? `<span class="sub quebra">${esc(c.nota_agente)}</span>` : ""}` : "") } }
+  if (r === "wa") gWhats(p[0]);
+  if (r === "wachamado") gChamadoWa(p[0] || "");
+  if (r === "lote") { const l = S.M.lote.find(x => x.deal === p[0]); if (l) gaveta(esc(l.negocio), esc(l.parceiro), `<div class="filtros"><span class="chip">${esc(l.tipo)}</span><span class="chip">${esc(l.segmento)} · ${esc(l.uf)}</span></div><p style="margin:0">Potencial estimado ${mi(l.esperado)}, a validar caso a caso.</p>${l.hipotese ? `<div class="resp"><p>${esc(l.hipotese)}</p>${l.parecer ? `<p>Parecer: ${esc(l.parecer)}</p>` : ""}${l.documentos ? `<p>Pedir: ${esc(l.documentos)}</p>` : ""}</div>` : ""}${url(l.link) ? `<a href="${url(l.link)}" target="_blank" rel="noopener">Abrir no HubSpot</a>` : ""}${podeDecidir("geovana") ? `<label for="r-m">Motivo ou observação</label><input id="r-m" maxlength="300">` : semIdent("geovana") || `<div class="nota">Quem decide o lote é a Geovana.</div>`}`,
+      podeDecidir("geovana") ? `<button class="btn" data-acao="lote" data-id="${esc(l.deal)}" data-v="Aprovar para reanálise">Aprovar para reanálise</button><button class="btn perigo" data-acao="lote" data-id="${esc(l.deal)}" data-v="Vetar">Vetar</button><button class="btn sec" data-acao="lote" data-id="${esc(l.deal)}" data-v="Precisa de dado">Precisa de dado</button>` : "") }
+  if (r === "decisao") { const d = S.M.decisoes.find(x => x.id === p[0]); if (d) gaveta(esc(d.id), esc(d.data || "") + (d.ata ? " · " + esc(d.ata) : ""), `<p style="margin:0;font-size:16px">${esc(d.texto)}</p>${d.obs ? `<p class="sub quebra">${esc(d.obs)}</p>` : ""}${podeDecidir("luis") ? `<label for="n-dec">Observação <small>(opcional)</small></label><input id="n-dec" maxlength="400">` : semIdent("luis") || `<div class="nota">Só o Luis decide as decisões do Conselho.</div>`}`,
+      podeDecidir("luis") ? `<button class="btn" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada com ajuste">Aprovar com ajuste</button><button class="btn perigo" data-acao="decisao" data-id="${esc(d.id)}" data-v="rejeitada">Rejeitar</button>` : "") }
   if (manter) { const q = $("#q-onde"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length) } }
 }
 function fechar() {
-  const {r, p} = rota(); const volta = {pedido: "pedidos", novo: "pedidos", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r];
+  const {r, p} = rota(); const volta = {pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: "whatsapp", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r];
   if (r === "area" && p[1]) { const c = chatDe(p[0]); c.ctl?.abort(); location.hash = "area/" + p[0]; return }
   if (volta) location.hash = volta; else $("#camada").innerHTML = "";
 }
@@ -672,7 +789,7 @@ function paleta() {
 function notificacoes() {
   const it = itensAcao(S.eu).slice(0, 6);
   $("#camada").innerHTML = `<div class="veu" data-fechar-p style="background:transparent"></div><div class="pop" role="dialog" aria-label="Notificações"><div class="painel-cab"><h2>Para você</h2><span class="sub">${pendentes(S.eu)} itens</span></div>
-    <div class="linhas" style="--cols:minmax(0,1fr)">${it.map(i => `<button class="lh" data-go="${i.go}"><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.tipo)}</span></span></button>`).join("") || `<div class="vazio">${S.eu ? "Nada pendente." : "Escolha o seu perfil."}</div>`}</div></div>`;
+    <div class="linhas" style="--cols:minmax(0,1fr)">${it.map(i => `<button class="lh" data-go="${esc(i.go)}"><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.tipo)}</span></span></button>`).join("") || `<div class="vazio">${S.eu ? "Nada pendente." : "Escolha o seu perfil."}</div>`}</div></div>`;
 }
 
 /* ===================== Eventos ===================== */
@@ -680,12 +797,20 @@ document.addEventListener("click", e => {
   const go = e.target.closest("[data-go]"); if (go) { location.hash = go.dataset.go; return }
   if (e.target.closest("[data-fechar]")) return fechar();
   if (e.target.closest("[data-fechar-p]")) { $("#camada").innerHTML = ""; return }
-  const so = e.target.closest("[data-sou]"); if (so) { S.eu = so.dataset.sou; lsSet("sou", S.eu); abrir(); return }
+  const so = e.target.closest("[data-sou]"); if (so) { if (S.identificado || !Fonte.previa) return; S.eu = perfil(so.dataset.sou); lsSet("sou", S.eu); abrir(); return }
   const fa = e.target.closest("[data-fase]"); if (fa) { S.f.fase = fa.dataset.fase; abrir(); return }
   const kp = e.target.closest("[data-kp]"); if (kp) { S.kPessoa = kp.dataset.kp; abrir(); return }
   const sl = e.target.closest("[data-sel]"); if (sl) { S.novo.sel = sl.dataset.sel; S.novo.entrega = ""; gNovo(); return }
   const pe = e.target.closest("[data-pedir]"); if (pe) { S.novo = {sel: pe.dataset.pedir, busca: "", entrega: pe.dataset.entrega || ""}; location.hash = "area/" + pe.dataset.pedir + "/pedido"; return }
   const q = e.target.closest("[data-q]"); if (q) { location.hash = "onde/" + encodeURIComponent(q.dataset.q); return }
+  const cp = e.target.closest("[data-copiar]"); if (cp) { const d = S.M.whatsapp.find(x => x.id === cp.dataset.copiar); copiar(d?.rascunho || "", "Rascunho copiado. Depois de enviar no WhatsApp, marque Respondi."); return }
+  const cc = e.target.closest("[data-copiar-ch]"); if (cc) { const c = S.M.chamados.find(x => x.id === cc.dataset.copiarCh); copiar(c ? `${c.titulo_editado || c.titulo}\n\n${c.descricao_editada || c.descricao}` : "", "Texto do chamado copiado. Abra no GLPI e cole."); return }
+  const wf = e.target.closest("[data-wa-st]"); if (wf) { S.wa.status = wf.dataset.waSt; abrir(); return }
+  const wp = e.target.closest("[data-wa-pedir]"); if (wp) { const d = S.M.whatsapp.find(x => x.id === wp.dataset.waPedir); if (d) { const sk = area(d.area_sugerida) ? d.area_sugerida : null;
+    S.novo = {sel: sk, busca: "", entrega: "", texto: d.o_que_pede || "", contexto: `Demanda ${d.id} do WhatsApp (${d.master || d.chat || ""}). O que os agentes já levantaram: ${(d.entrega || "").replace(/\s+/g, " ")}`.slice(0, 1500)};
+    location.hash = sk ? "area/" + sk + "/pedido" : "novo" } return }
+  if (e.target.closest("#salvar-chamado")) return salvarChamadoWa(e.target.closest("#salvar-chamado").dataset.id);
+  if (e.target.closest("#pedir-chamado")) return pedirChamadoWa(e.target.closest("#pedir-chamado").dataset.id || "");
   const sg = e.target.closest("[data-sug]"); if (sg) { const f = $("#f-chat"); if (f) perguntar(f.dataset.area, sg.dataset.sug); return }
   const dc = e.target.closest("[data-dec]"); if (dc) { decidirPedido(dc.dataset.id, dc.dataset.dec); return }
   const ac = e.target.closest("[data-acao]"); if (ac) { acao(ac.dataset.acao, ac.dataset.id, ac.dataset.v); return }
@@ -700,7 +825,7 @@ document.addEventListener("click", e => {
 document.addEventListener("submit", e => {
   if (e.target.id === "f-chat") { e.preventDefault(); const t = $("#chat-in"); const v = t.value; t.value = ""; perguntar(e.target.dataset.area, v) }
   if (e.target.id === "f-apont") { e.preventDefault(); if (!$("#a-desc").value.trim()) return $("#a-desc").focus();
-    Fonte.criar("apontamentos", {pessoa: S.eu, data: agora(), descricao: $("#a-desc").value.trim(), tipo: $("#a-tipo").value, minutos: Number($("#a-min").value) || 0, ponte: $("#a-ponte").checked}).then(() => { toast("Tarefa registrada"); $("#a-desc").value = "" }, () => toast("Não consegui registrar a tarefa")) }
+    if (!Fonte.pode() || !S.eu) return; Fonte.criar("apontamentos", {pessoa: S.eu, por_id: S.meuId, data: agora(), descricao: $("#a-desc").value.trim(), tipo: $("#a-tipo").value, minutos: Number($("#a-min").value) || 0, ponte: $("#a-ponte").checked}).then(() => { toast("Tarefa registrada"); $("#a-desc").value = "" }, () => toast("Não consegui registrar a tarefa")) }
 });
 document.addEventListener("keydown", e => {
   if (e.target.id === "chat-in" && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("#f-chat").requestSubmit() }
@@ -709,27 +834,40 @@ document.addEventListener("keydown", e => {
 });
 document.addEventListener("input", e => {
   if (e.target.id === "q-onde") { $("#res-onde").innerHTML = resOnde(e.target.value) }
+  if (e.target.id === "q-wa") { S.wa.q = e.target.value; $("#res-wa").innerHTML = listaWa() }
   if (e.target.id === "q-area") { S.novo.busca = e.target.value; $("#lista-areas").innerHTML = listaAreasNovo() }
+  if (e.target.id === "p-precisa") S.novo.texto = e.target.value;
+  if (e.target.id === "p-contexto") S.novo.contexto = e.target.value;
 });
 document.addEventListener("change", e => {
-  if (e.target.id === "sou") { S.eu = e.target.value || null; lsSet("sou", S.eu || ""); abrir() }
+  if (e.target.id === "sou") { if (!Fonte.previa) return; S.eu = perfil(e.target.value); lsSet("sou", S.eu || ""); abrir() }
   if (e.target.id === "f-area") { S.f.area = e.target.value; abrir() } if (e.target.id === "f-pessoa") { S.f.pessoa = e.target.value; abrir() }
   if (e.target.id === "k-col") { S.kCol = e.target.value; abrir() }
+  if (e.target.id === "wa-pessoa") { S.wa.pessoa = e.target.value; abrir() }
   if (e.target.id === "p-entrega") S.novo.entrega = e.target.value;
 });
 window.addEventListener("hashchange", abrir);
+/* A pessoa está escrevendo? (foco num campo, texto digitado na gaveta ou no registro de tarefa, busca ou notificações abertas)
+   Nesse caso a atualização do db só refaz a moldura; a tela é refeita quando ela sai do campo. */
+function editando() {
+  const a = document.activeElement;
+  if (a && a.matches?.("input,textarea,select") && a.closest("#pag,#camada")) return true;
+  if ($("#camada .paleta, #camada .pop")) return true;
+  return [...document.querySelectorAll("#camada textarea, #camada input:not([type=search]), #f-apont input[type=text], #a-desc")].some(el => el.value !== el.defaultValue);
+}
+document.addEventListener("focusout", () => setTimeout(() => { if (S.pendente && !editando()) { S.pendente = false; abrir() } }, 0));
 
 async function iniciar() {
   const t = lsGet("tema"); if (t === "dark" || t === "light") document.documentElement.dataset.theme = t; else document.documentElement.dataset.theme = "light";
   $("#abrir-menu").innerHTML = icone("menu"); $("#ic-busca").innerHTML = icone("onde");
   try { S.M = await Fonte.carregar() } catch (e) { $("#pag").innerHTML = `<div class="vazio">Não consegui carregar os dados da Central. Recarregue a página em alguns segundos.</div>`; return }
-  S.eu = lsGet("sou") || (Fonte.previa ? "daniela" : null);
+  S.eu = Fonte.previa ? perfil(lsGet("sou")) || "daniela" : null;
   abrir();
   await Fonte.conectar();
-  const eu = await Fonte.quemSou(); S.meuId = eu.id; if (eu.chave) { S.eu = eu.chave; S.identificado = true }
+  const eu = await Fonte.quemSou(); S.meuId = eu.id; if (eu.chave && !Fonte.previa) { S.eu = eu.chave; S.identificado = true }
   if (Fonte.db) {
     const erro = () => toast("Não consegui carregar os registros agora");
-    const refaz = () => { if (!$("#camada .gaveta textarea:focus, #camada .gaveta input:focus, #camada .paleta")) abrir(); else moldura(rota().r) };
+    const refaz = () => { if (editando()) { moldura(rota().r); S.pendente = true } else abrir() };
     Fonte.ouvir("pedidos", "criado_em", 300, xs => { S.M.pedidos = xs; refaz() }, erro);
     Fonte.ouvir("acoes_demandas", null, 500, xs => { S.acoes = Object.fromEntries(xs.map(d => [d.id, d])); refaz() }, erro);
     Fonte.ouvir("recuperador", null, 500, xs => { S.recup = Object.fromEntries(xs.map(d => [d.id, d])); refaz() }, erro);

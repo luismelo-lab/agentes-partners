@@ -69,7 +69,7 @@ Consulta de 22/10/2026, salvo indicação. Confiança A = fonte primária lida; 
 - **D22 (29/09/2026):** alíquota zero (AQ_SAVE) é hipótese válida e principal em alimentos no Lucro Real, com risco e alternativa conservadora ao lado. **D14:** sempre PER (ressarcimento), nunca DCOMP.
 - **D80 (22/10/2026):** T13 e T16 saem da vitrine; T13 vira **triagem de passivo** (cliente com liminar sobre o teto que agora é devedor). Nunca aparecem como lacuna; se o parecer as trouxer como crédito, a ficha marca "retirar, D80".
 - **D86 (22/10/2026)** manda lançar a "Revisão do Funrural anterior a 2018" em Gestão de Passivo; **D81** (mesma data) diz que T19 segue como tese. As duas conflitam e o Luis ainda não conciliou. Até lá: Funrural nunca é lacuna de recuperação; vai para o bloco "o que você também precisa", rotulado "Gestão de Passivo, D86, a conciliar com D81".
-- **D7-b (pendente) e V3:** café fora da meta desde abr/2026; T01 não serve para supermercado nem para café (catálogo, C4).
+- **D7-b (superada em 23/10/2026 pela D98: o Luis decidiu só a meta do Q4, D64, e o foco por segmento vai para 2027 com a meta da diretoria, D75) e V3:** café fora da meta desde abr/2026; T01 não serve para supermercado nem para café (catálogo, C4).
 - **D76 (22/10/2026):** cliente sem Master fica fora das listas da Área Partners.
 - **Reunião de 13/10/2026 (fala do Junior, não decisão):** incluir os sinais financeiros no Revisor. Vai como achado para o `depto-solucoes`, sem gerar lacuna nem R$.
 - Canal de entrega à Geovana: pasta dela no OneDrive (D91) e e-mail como a D27 quando o Graph ligar; a frequência é dela (alçada de 23/10/2026).

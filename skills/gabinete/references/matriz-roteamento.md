@@ -9,7 +9,7 @@
 | P2 | Recorrência (novas competências) | Pronto | `depto-tributario`, `depto-pos-venda` | `depto-juridico` | `recuperador` | 2 | 👤 Técnico; decadência de 5 anos |
 | P3 | Crédito presumido de PF e Funrural (T18, T19) | Pronto (T19 a conciliar: D81 × D86) | `depto-tributario` (Agro) | `depto-juridico` | — | 2–3 | 👤 Luis decide D81 × D86 |
 | P4 | Gestão de Contas (cobrança, escrow, e-CAC) | Pronto · Save Invest | `depto-save-invest` | `depto-juridico`, `depto-qualidade` | `depto-solucoes` (só encaixe na esteira) | 2 | 👤 Junior |
-| P5 | Gestão de Passivo (inclui Funrural anterior a 2018, D86) | Pronto | `depto-juridico` | `depto-tributario` | `depto-pos-venda` (compensação de ofício) | 2–3 | 👤 Jurídico valida até 07/11/2026 (D94) |
+| P5 | Gestão de Passivo (inclui Funrural anterior a 2018, D86) [em aberto: D81 × D86, decisão do Luis] | Pronto | `depto-juridico` | `depto-tributario` | `depto-pos-venda` (compensação de ofício) | 2–3 | 👤 Jurídico valida até 07/11/2026 (D94) |
 | P6 | Passivo bancário, alongamento, carência | Sem ficha | `depto-internacional` | `depto-juridico` | `depto-save-invest` | 4 (próprio × parceiro) | 👤 Luis define dono |
 | P7 | Produtos jurídicos | Pronto | `depto-juridico` | `depto-qualidade` | `depto-marketing` | 2 | 👤 Advogado; OAB |
 | P8 | Planejamento tributário e reforma (P01) | Pronto | `depto-tributario` (Reforma) | `depto-juridico` | `depto-solucoes` | 2 | 👤 Técnico; CBS em 2027 |

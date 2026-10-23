@@ -53,10 +53,10 @@ O tempo em "Pendente" não conta no SLA (help.glpi-project.org, níveis de servi
 
 ## 4. Regras da casa
 - **D25 (01/10/2026), substituída pela D29 (02/10/2026):** chamado do que os agentes não encontram abre sozinho no GLPI com o usuário de quem atendeu, quando o TI liberar; até lá, painel.
-- **D91 (22/10/2026):** aprovação diária dos chamados no painel pelo Luis até a liberação.
+- **D91 (22/10/2026):** aprovação diária dos chamados no painel pelo Luis até a liberação. Desde 23/10/2026 (D98, kit C5, `infra/alcadas.md`) cada dona aprova os chamados das demandas dela; ao Luis sobem só os que tocam regra, preço, conflito de canal ou produto em validação.
 - **D26 (01/10/2026):** abrir chamado e alterar GLPI continuam com pessoa (a D29 é a exceção aprovada para a abertura).
-- **D47 (05/10/2026, pendente):** resumo diário da Daniela com até 15 itens acionáveis.
-- **D67 (15/10/2026, pendente):** dono e prazo por sentinela.
+- **D47 (05/10/2026, delegada à Daniela em 23/10/2026, D98):** resumo diário da Daniela com até 15 itens acionáveis.
+- **D67 (15/10/2026, aplicada por padrão em 23/10/2026, D98; dono: depto-ti):** dono e prazo por sentinela.
 - **Aprendizado de 29/09/2026:** códigos de subcategoria seguem o `sla.json` da célula da Daniela; tipo novo aprovado é avisado ao dono da célula, que inclui no arquivo (não editar skill de outro).
 - **Em aberto:** responsável do TI pelo GLPI; se as áreas de apoio trabalham dentro do GLPI; se os Masters terão portal; plugin Fields ou formulários nativos; política de retenção.
 

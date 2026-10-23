@@ -65,7 +65,7 @@
 ## CT-04 · Número oficial do pipeline e duplicados
 - **Tipo:** fronteira
 - **Especialista:** forecast-pipeline
-- **Fonte:** D74 (19/10/2026, pendente), D87 (22/10/2026), forecast-pipeline caso 1, perguntas-ao-dono R11
+- **Fonte:** D74 (19/10/2026, delegada ao depto-dados em 23/10/2026, D98), D87 (22/10/2026), forecast-pipeline caso 1, perguntas-ao-dono R11
 - **Encaminhar para:** depto-dados
 
 **Entrada:**

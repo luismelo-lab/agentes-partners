@@ -13,7 +13,8 @@ Decisão do Luis (22/10/2026): citar a taxa média de 7% a 10% ao ano como exemp
 Confirmado pelo João em 22/10/2026 (D77, D88): pode ser usado. Liberado pelo Luis em 22/10/2026 (D88).
 Gera <saida>/Credito-Internacional-One-Page-<empresa>-<copia>.pdf e .png (prévia).
 """
-import argparse, html, os, re, sys
+import argparse, html, os, re, sys, unicodedata
+from pathlib import Path
 from datetime import date
 from playwright.sync_api import sync_playwright
 
@@ -101,11 +102,12 @@ if __name__ == "__main__":
     ap.add_argument("--responsavel", default="Luis Fernando de Melo, Gerente Comercial da Área Partners, pelo e-mail luis.melo@savecompany.com.br")
     a = ap.parse_args()
     hoje = date.today().strftime("%d/%m/%Y"); os.makedirs(a.saida, exist_ok=True)
-    base = os.path.join(a.saida, "Credito-Internacional-One-Page-" + re.sub(r"[^A-Za-z0-9]+", "-", a.empresa).strip("-") + f"-{a.copia}")
+    slug = re.sub(r"[^A-Za-z0-9]+", "-", unicodedata.normalize("NFKD", a.empresa).encode("ascii", "ignore").decode()).strip("-") or "empresa"  # "São José" virava "S-o-Jos"
+    base = os.path.join(os.path.abspath(a.saida), "Credito-Internacional-One-Page-" + slug + f"-{a.copia}")
     open(base + ".html", "w").write(pagina(a.empresa, a.copia, hoje, a.responsavel))
     with sync_playwright() as p:
         b = p.chromium.launch(); pg = b.new_page(viewport={"width": 794, "height": 1123}, device_scale_factor=2)
-        pg.goto("file://" + base + ".html"); pg.wait_for_timeout(300)
+        pg.goto(Path(base + ".html").as_uri()); pg.wait_for_timeout(300)  # as_uri: pasta com espaço ou "·" (OneDrive) vira URL válida
         pg.pdf(path=base + ".pdf", format="A4", print_background=True, margin={"top": "0", "bottom": "0", "left": "0", "right": "0"})
         pg.screenshot(path=base + ".png", full_page=True); n = pg.evaluate("document.body.scrollHeight"); b.close()
     os.remove(base + ".html"); print("ok", base + ".pdf", "altura", n)

@@ -33,6 +33,9 @@ REMETENTES = {"daniela.maciel@savecompany.com.br": "daniela", "jenifer.carvalho@
 NOMES = {"daniela": "Daniela", "jenifer": "Jenifer", "geovana": "Geovana", "luis": "Luis"}
 PASTA_OD = {"daniela": "Central Masters · Daniela", "jenifer": "Central BDR · Jenifer", "geovana": "Central Técnica · Geovana", "luis": "04 · Gestão / Central de Agentes"}  # rótulo; o caminho vem de caminhos.pasta()
 sys.path.insert(0, H("~/agentes-partners/lib")); import caminhos  # noqa: E402  (pasta ativa do OneDrive)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "lib"))
+try: import portal_contas as PC  # noqa: E402  (A3: autor dos registros do painel)
+except ImportError: sys.path.insert(0, H("~/agentes-partners/lib")); import portal_contas as PC  # noqa: E402
 # pasta do OneDrive resolvida na hora do uso ({mod}.area()): sem OneDrive, só a parte de arquivos falha (TI, 02/10)
 CAMPOS = [("tipo", "Tipo de pedido"), ("master", "Master ou parceiro"), ("cliente", "Cliente, CNPJ ou link do negócio no HubSpot"),
           ("precisa", "O que você precisa"), ("uso", "Para que vai usar"), ("formato", "Formato da resposta"),
@@ -197,6 +200,8 @@ def cmd_ler(a):
         if ref and ref.group(1) in R["pedidos"]:
             dec, info = decisao(atual)
             P = R["pedidos"][ref.group(1)]
+            if dec and pessoa != P["pessoa"]:  # alçada: quem aprova é quem pediu (infra/alcadas.md)
+                info = f"[{dec} ignorado: quem decide é {NOMES[P['pessoa']]}, quem pediu] " + info; dec = None
             P["historico"].append({"quando": m["quando"], "evento": dec or "resposta_sem_decisao", "texto": info[:4000], "anexos": anexos})
             novos.append({"tipo": "resposta", "pedido": ref.group(1), "decisao": dec, "informacoes": info[:4000], "anexos": anexos, "pessoa": pessoa,
                           "pedido_original": {k: P[k] for k in ("codigo", "campos", "assunto")}, "versao_atual": P["versao"]})
@@ -275,7 +280,7 @@ def como_responder():
 def cmd_responder(a):
     R = reg(); J = json.load(open(H(a.arquivo)))
     P = R["pedidos"][J["pedido"]]; P["versao"] += 1; v = P["versao"]
-    nome = NOMES[P["pessoa"]]; cat = CAT.get(P.get("codigo") or "", {})
+    nome = NOMES[P["pessoa"]]; cat = CAT.get(P.get("codigo") or "", {}) or ({"celula": P.get("area_nome") or P.get("area")} if P.get("area") else {})
     pedido_ls = [(rot, L.esc(P["campos"].get(k))) for k, rot in CAMPOS if P["campos"].get(k)] or [("Pedido", L.esc(P["historico"][0]["texto"][:600]))]
     blocos = [L.cabecalho("Central de Agentes · " + (cat.get("celula") or "Área Partners"), f"Pedido {P['id']} · versão {v}", datetime.now().strftime("%d/%m/%Y %H:%M")),
               L.paragrafo(f"Olá, {nome}!", "28px 32px 12px"),
@@ -328,8 +333,26 @@ def cmd_responder(a):
     print(("enviado" if ok and not a.rascunho else "rascunho criado" if ok else "FALHOU " + msg[:200]) + " · " + assunto)
 
 
+def decisao_do_painel(P, arquivo, esperado=None):
+    """A decisão gravada no painel vale só se for de quem pediu, pela conta dela (A3). Devolve a decisão ou sai com erro."""
+    d = json.load(open(H(arquivo))); d = d["data"] if isinstance(d.get("data"), dict) else d
+    dec = d.get("decisao") or {}
+    ok, motivo = PC.conferir(dec.get("por"), dec.get("por_id"), P["pessoa"])
+    if ok and esperado and dec.get("tipo") != esperado: ok, motivo = False, f"decisão no painel é {dec.get('tipo')!r}, não {esperado!r}"
+    if not ok:
+        PC.alertar("pedidos", P.get("portal_id") or P["id"], motivo, dec.get("por"), dec.get("por_id"))
+        sys.exit(f"DESCARTADO {P['id']}: {motivo}")
+    return dec
+
+
+def cmd_conferir_decisao(a):
+    dec = decisao_do_painel(reg()["pedidos"][a.pedido], a.arquivo)
+    print(json.dumps({"ok": True, "tipo": dec.get("tipo"), "nota": dec.get("nota") or ""}, ensure_ascii=False))
+
+
 def cmd_confirmar(a):
     R = reg(); P = R["pedidos"][a.pedido]; nome = NOMES[P["pessoa"]]
+    if a.arquivo: decisao_do_painel(P, a.arquivo, a.decisao)
     aprovado = a.decisao == "aprovado"
     txt = ("Registrei a sua aprovação. A versão final ficou guardada na sua pasta do OneDrive, em <b>Pedidos aprovados</b>."
            if aprovado else "Registrei que a entrega não atendeu. O motivo entra nos aprendizados dos agentes para os próximos pedidos.")
@@ -391,16 +414,24 @@ def cmd_modelos(a):
 
 def cmd_importar_portal(a):
     """Pedido feito no painel → número P-NNNN na Central (o painel guarda o mesmo número em 'pid')."""
-    d = json.load(open(H(a.arquivo))); d = d.get("data", d)
+    d = json.load(open(H(a.arquivo))); d = d["data"] if isinstance(d.get("data"), dict) else d
+    pessoa = d.get("solicitante")
+    ok, motivo = PC.conferir(pessoa, d.get("solicitante_id"))  # A3: só as quatro contas criam pedido
+    if not ok:
+        PC.alertar("pedidos", a.portal_id, motivo, pessoa, d.get("solicitante_id"))
+        sys.exit(f"DESCARTADO {a.portal_id}: {motivo}. Não vira pedido; alerta em registro/portal-alertas.json.")
+    area = d.get("area") or ""
+    if area and not (re.fullmatch(r"[a-z0-9-]{2,40}", area) and os.path.isdir(H(f"~/.claude/skills/{area}"))):
+        area = ""  # área desconhecida: vai à triagem normal
+    d = {**d, "area": area, "direto": bool(d.get("direto") and area)}
     R = reg()
     ja = next((p for p in R["pedidos"].values() if p.get("portal_id") == a.portal_id), None)
     if ja: print(ja["id"]); return
     R["seq"] += 1; pid = f"P-{R['seq']:04d}"; c = dict(d.get("campos") or {}); c["codigo"] = d.get("codigo"); c["tipo"] = d.get("codigo")
-    pessoa = d.get("solicitante") or "luis"
     R["pedidos"][pid] = {"id": pid, "portal_id": a.portal_id, "origem": "painel", "pessoa": pessoa, "email": next((e for e, k in REMETENTES.items() if k == pessoa), CAIXA),
                          "assunto": " · ".join(x for x in [d.get("codigo") or d.get("area"), (c.get("precisa") or "")[:60]] if x), "recebido": d.get("criado_em"),
                          "codigo": d.get("codigo"), "campos": c, "status": "em_analise",
-                         "area": d.get("area") or "", "direto": bool(d.get("direto") and d.get("area")), "entrega": d.get("entrega") or "", "versao": 0, "anexos": [], "historico": [{"quando": d.get("criado_em"), "evento": "pedido direto à área " + d["area"] + " (painel)" if d.get("direto") and d.get("area") else "pedido (painel)"}]}
+                         "area": area, "area_nome": d.get("area_nome") or "", "direto": d["direto"], "entrega": d.get("entrega") or "", "versao": 0, "anexos": [], "historico": [{"quando": d.get("criado_em"), "evento": "pedido direto à área " + d["area"] + " (painel)" if d.get("direto") and d.get("area") else "pedido (painel)"}]}
     salvar(R); print(pid)
 
 
@@ -419,6 +450,8 @@ if __name__ == "__main__":
     x = sp.add_parser("responder"); x.add_argument("--arquivo", required=True); x.add_argument("--rascunho", action="store_true"); x.add_argument("--previa", help="só gera o HTML (teste)"); x.add_argument("--aviso", action="store_true", help="pedido do painel: só um e-mail curto avisando que a resposta está no painel")
     x.add_argument("--painel", action="store_true", help="pedido do painel: resposta COMPLETA por e-mail ao solicitante + arquivos no OneDrive + aprovação também pelo painel")
     x = sp.add_parser("confirmar"); x.add_argument("--pedido", required=True); x.add_argument("--decisao", required=True, choices=["aprovado", "nao_aprovado"]); x.add_argument("--nota"); x.add_argument("--rascunho", action="store_true"); x.add_argument("--sem-email", action="store_true", help="pedido do painel: só registra")
+    x.add_argument("--arquivo", help="documento do painel: confere que a decisão é de quem pediu, pela conta dela (A3)")
+    x = sp.add_parser("conferir-decisao"); x.add_argument("--pedido", required=True); x.add_argument("--arquivo", required=True)
     sp.add_parser("modelos"); sp.add_parser("registro")
     a = ap.parse_args()
-    {"ler": cmd_ler, "responder": cmd_responder, "confirmar": cmd_confirmar, "modelos": cmd_modelos, "registro": cmd_registro, "fila": cmd_fila, "importar-portal": cmd_importar_portal}[a.cmd](a)
+    {"ler": cmd_ler, "responder": cmd_responder, "confirmar": cmd_confirmar, "modelos": cmd_modelos, "registro": cmd_registro, "fila": cmd_fila, "importar-portal": cmd_importar_portal, "conferir-decisao": cmd_conferir_decisao}[a.cmd](a)

@@ -139,7 +139,7 @@ Formato: `departamentos/juridico/entregas/AAAA-MM-DD-passivo-<cliente-anonimizad
 ### Caso 2 · Adquirentes de produção rural com Funrural antigo (interno, agregado; doc. de 20/10/2026)
 - **Situação:** 412 adquirentes no HubSpot (199 clientes), 23 pareceres citam Funrural e 19 têm ação ou suspensão de exigibilidade.
 - **Leitura sênior:** com a ADI 4.395, o ganho está em cancelar débito não pago, destravar processo e levantar depósito; a modulação ressalva o não pago. Restituição de pagamento até 2017 sem ação está prescrita.
-- **O que foi feito:** produto aprovado em Gestão de Passivo (D86), onda 1 pelos 19 casos com ação; trava: nada de valor ao cliente antes da ficha validada e do acórdão.
+- **O que foi feito:** produto aprovado em Gestão de Passivo (D86) [em aberto: D81 × D86, decisão do Luis], onda 1 pelos 19 casos com ação; trava: nada de valor ao cliente antes da ficha validada e do acórdão.
 
 ### Caso 3 · Pequena empresa com débito em impugnação de R$ 80 mil (caso-tipo público, Edital RFB 10/2026)
 - **Situação:** EPP com auto de infração impugnado, valor abaixo de 60 SM.

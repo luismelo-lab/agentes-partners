@@ -10,7 +10,7 @@ import argparse, glob, json, os, re, statistics, subprocess, sys
 from collections import Counter, defaultdict
 from datetime import date, datetime, timedelta
 sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
-from cnpj import normalizar_cnpj  # noqa: E402
+from cnpj import completar_cnpj  # noqa: E402
 
 BASE = os.path.expanduser("~/agentes-partners/departamentos")
 SRC = os.path.join(BASE, "resultados/dados")
@@ -32,12 +32,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--baixar", action="store_true", help="baixa o HubSpot antes (≈1–2 min)")
     ap.add_argument("--parados", type=int, default=30, help="dias sem atividade para considerar negócio aberto parado")
-    a = ap.parse_args()
+    ap.add_argument("--saida", help="pasta de saída (padrão: departamentos/dados)")
+    a = ap.parse_args(); out = a.saida or OUT
     if a.baixar:
         subprocess.run([sys.executable, HS, "--baixar"], check=True)
     f = sorted(glob.glob(os.path.join(SRC, "hubspot-*.json")))[-1]
     D = json.load(open(f)); N = D["negocios"]; hoje = date.today()
-    os.makedirs(OUT, exist_ok=True)
+    os.makedirs(out, exist_ok=True)
     R = {"fonte": f, "baixado_em": D["baixado_em"], "negocios": len(N)}
 
     # ---------- 1. Completude por campo e status ----------
@@ -57,7 +58,8 @@ def main():
     R["completude"] = comp
     # índice de qualidade dos ganhos: média dos campos essenciais para margem e ROI
     ess = ["valor", "% honorário", "% parceiro", "tese aplicada", "CNAE/segmento", "CNPJ"]
-    R["indice_qualidade_ganhos"] = round(statistics.mean(l["ganho"] for l in comp if l["campo"] in ess), 1)
+    vals_ess = [l["ganho"] for l in comp if l["campo"] in ess and l["ganho"] is not None]
+    R["indice_qualidade_ganhos"] = round(statistics.mean(vals_ess), 1) if vals_ess else None  # sem ganhos no download: antes TypeError
 
     # ---------- 2. Listas de correção ----------
     def row(d, motivo):
@@ -86,7 +88,7 @@ def main():
     # duplicidade: mesmo CNPJ com 2+ negócios abertos ao mesmo tempo (vários ganhos do mesmo CNPJ podem ser teses diferentes)
     porc = defaultdict(list)
     for d in N:
-        c = normalizar_cnpj(d["extras"].get("cnpj"))
+        c = completar_cnpj(d["extras"].get("cnpj"))  # com os zeros à esquerda: o HubSpot perde o zero e o mesmo CNPJ não se agrupava
         if c and d["status"] == "aberto": porc[c].append(d)
     dup = [dict(row(d, "CNPJ com 2+ negócios abertos"), cnpj=c) for c, L in porc.items() if len(L) > 1 for d in L]
     R["duplicidade_abertos"] = {"cnpjs": sum(1 for L in porc.values() if len(L) > 1), "negocios": len(dup)}
@@ -97,7 +99,7 @@ def main():
     d90, d180, d365 = hoje - timedelta(days=90), hoje - timedelta(days=180), hoje - timedelta(days=365)
     P = defaultdict(list)
     for d in N: P[d["parceiro"]].append(d)
-    sc = []
+    sc = []; ids_parados = {r["link"].rsplit("/", 1)[1] for r in parados}
     for p, L in P.items():
         cri90 = [d for d in L if (dt(ef(d)) or date.min) >= d90]
         g = lambda a_, b_: [d for d in L if d["status"] == "ganho" and a_ <= (dt(d["fechado"]) or date.min) < b_]
@@ -110,7 +112,7 @@ def main():
         v90, v90a = sum(d["valor"] for d in g90), sum(d["valor"] for d in g90a)
         tend = (v90 / v90a - 1) * 100 if v90a else (100.0 if v90 else None)
         hon_pct = len([d for d in g12 if d["hContr"] is not None]) / len(g12) * 100 if g12 else None
-        par = sum(1 for d in ab if d["id"] in {r["link"].rsplit("/", 1)[1] for r in parados})
+        par = sum(1 for d in ab if d["id"] in ids_parados)
         # índice de saúde 0–100, comparando o parceiro com a média trimestral dele mesmo nos 12 meses
         # (pesos: ritmo de entrada 30 · conversão 25 · ritmo de valor fechado 25 · qualidade do dado 20)
         cri_ant = [d for d in L if d365 <= (dt(ef(d)) or date.min) < d90]
@@ -136,7 +138,7 @@ def main():
 
     # ---------- Saída ----------
     stamp = hoje.isoformat()
-    json.dump(R, open(os.path.join(OUT, f"dados-bi-{stamp}.json"), "w"), ensure_ascii=False, indent=1, default=str)
+    json.dump(R, open(os.path.join(out, f"dados-bi-{stamp}.json"), "w"), ensure_ascii=False, indent=1, default=str)
     from openpyxl import Workbook
     from openpyxl.styles import Font, PatternFill, Alignment
     wb = Workbook(); H = Font(bold=True, color="FFFFFF"); HF = PatternFill("solid", fgColor="1F1F1F")
@@ -158,7 +160,7 @@ def main():
     resumo += [{"indicador": k, "valor": v} for k, v in R["inconsistencias"].items()]
     aba("Resumo", resumo, primeira=True); aba("Scorecard parceiros", sc); aba("Completude", comp)
     aba("Abertos parados", parados); aba("Inconsistências", incons); aba("Duplicidade", dup)
-    x = os.path.join(OUT, f"Dados-BI-{stamp}.xlsx"); wb.save(x); print(x)
+    x = os.path.join(out, f"Dados-BI-{stamp}.xlsx"); wb.save(x); print(x)
 
 
 if __name__ == "__main__":

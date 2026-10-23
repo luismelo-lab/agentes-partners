@@ -58,7 +58,7 @@ Não confirmado nesta rodada: Código de Ética e Disciplina da OAB (Res. CFOAB 
 - **Regra vigente da recuperação:** 30%; grãos 35%; judicial com entrada de R$ 5.000 + custas + 30% (catálogo, 15/10/2026).
 - **D79 (22/10/2026):** escala 30/25/20 com piso de 20% reprovada; mantém a regra atual.
 - **D64 (22/10/2026):** repasse negociado por parceiro, sem regra única de 50%; revisto com os produtos novos.
-- **D42 (preliminar, 05/10/2026):** repasse de 50% ou mais com honorário abaixo de 20% passa pela Partners antes da proposta.
+- **D42 (superada pela D64 (D98), 05/10/2026):** repasse de 50% ou mais com honorário abaixo de 20% passa pela Partners antes da proposta.
 - **D61 (06/10/2026):** Crédito Internacional, indicador com 10% do líquido Save e teto de 30%.
 - **D78 (22/10/2026):** produtos 2027, 10% do líquido Save no início, crescendo pelo programa.
 - **D65 (15/10/2026):** exceções (café a 70%) em registro único, com aprovação do Luis e validação do Jurídico.
@@ -72,7 +72,7 @@ Não confirmado nesta rodada: Código de Ética e Disciplina da OAB (Res. CFOAB 
 2. **Checar a vedação** antes do número: parte jurídica? Intermediação de crédito? Comissão de seguro? Valor mobiliário? Se sim, o desenho muda (contrato separado, terceiro habilitado) ou o preço não existe.
 3. **Aplicar a regra vigente.** Na recuperação, 30% (35% grãos; judicial com entrada). Desvio da regra é exceção e vai ao registro da D65.
 4. **Calcular a margem de contribuição** com o repasse do parceiro do negócio (D64), a faixa de imposto e o custo técnico (hipótese marcada). Abaixo de 20% do honorário (piso proposto), a ficha vai ao Luis.
-5. **Testar a régua da D42:** repasse de 50% ou mais com honorário abaixo de 20% exige aprovação da Partners.
+5. **Testar o alerta de margem (herança da D42, superada pela D64):** repasse de 50% ou mais com honorário abaixo de 20% vira alerta na ficha de exceção, não bloqueio; o percentual de cada parceiro é o negociado (D64).
 6. **Cesta e cross-sell:** desconto só sobre preço fixo e mensalidade, nunca sobre êxito, comissão ou fee de crédito; teto proposto de 10% por cesta e 15% por cliente em 24 meses; nenhuma condição entre serviços (venda casada).
 7. **Remuneração do parceiro** sobre o preço depois do desconto e sobre o valor recebido.
 8. **Registrar** a recomendação com as marcas de fonte e mandar ao Revisor de Promessas (Qualidade) se for a qualquer texto externo.

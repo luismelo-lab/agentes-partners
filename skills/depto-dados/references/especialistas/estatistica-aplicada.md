@@ -49,8 +49,8 @@ Consulta em 22/10/2026.
 
 ## 4. Regras da casa
 - **D2 (29/09/2026):** métricas do piloto do Recuperador: valor validado, % de falso positivo, reanálises abertas, horas por caso; o estatístico dá intervalo a cada uma.
-- **D11 (28/09/2026, pendente):** fila do Técnico limitada à capacidade, priorizada por valor esperado e decadência; o look-alike fornece o "valor esperado".
-- **D41 (05/10/2026, preliminar):** ordenação pelo líquido esperado (líquido/crédito × conversão × volume) e média móvel de 4 semanas por Master.
+- **D11 (28/09/2026, aplicada por padrão em 23/10/2026, D98; dono: time técnico tributário):** fila do Técnico limitada à capacidade, priorizada por valor esperado e decadência; o look-alike fornece o "valor esperado".
+- **D41 (05/10/2026, delegada ao depto-resultados em 23/10/2026, D98; a meta segue a D64):** ordenação pelo líquido esperado (líquido/crédito × conversão × volume) e média móvel de 4 semanas por Master.
 - **D73 (22/10/2026):** só ganho com tese, variante e % entra na semente do modelo.
 - **D21 (29/09/2026):** nenhum modelo pontua pessoas do time.
 - **D76 (22/10/2026):** cliente sem Master fora das bases de treino da Área.

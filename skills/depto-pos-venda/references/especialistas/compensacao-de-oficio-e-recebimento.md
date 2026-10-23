@@ -29,7 +29,7 @@ Tudo em `departamentos/pos-venda/entregas/`, como rascunho para a área real.
 4. **Três saídas.** Concorda (expresso ou tácito): o débito é quitado na ordem legal e o saldo é pago (art. 92, §§ 5º e 6º). Discorda: o valor fica retido até o débito ser liquidado (art. 92, § 4º; Decreto 2.138, art. 6º, § 3º). Débito parcelado ativo: não entra (art. 92, § 2º; STF Tema 874).
 5. **Ordem de quitação.** Primeiro débitos próprios, depois de responsabilidade; contribuições de melhoria, taxas, impostos e contribuições; prazo prescricional crescente; montante decrescente (IN 2.055, art. 94). O débito é atualizado até a data do consentimento (art. 96, II) e o crédito é valorado pela Selic quando o PER passou dos 360 dias (art. 152, § 2º, III: termo final é a data em que a compensação de ofício se considera feita).
 6. **Ordem bancária.** O saldo é pago na conta cadastrada. O Decreto 2.138, art. 5º, III, manda expedir a ordem bancária do saldo e certificar no processo o valor usado e o saldo.
-7. **Honorário.** A Save fatura o êxito conforme o contrato. Na alíquota zero, o honorário nasce no ressarcimento (D7). Se o contrato conta o valor compensado de ofício como proveito (o cliente quitou um débito sem pagar em dinheiro), ele entra na base; se não conta, não entra. Hoje isso está em aberto e é a pergunta mais cara da área.
+7. **Honorário.** A Save fatura o êxito conforme o contrato. Na alíquota zero, o honorário nasce no ressarcimento (D7, hoje pela D14). **D95 (22/10/2026):** o êxito incide sobre o valor compensado de ofício (o cliente quitou um débito sem pagar em dinheiro), considerando a Selic. Contrato antigo sem essa cláusula: o aviso para e a redação vai a Contratos (a cláusula padrão é do `depto-contratos`). Antes da D95 esta era a pergunta mais cara da área.
 8. **Repasse.** O repasse ao parceiro nasce do honorário **recebido** (`depto-operacoes-canal`), nunca do contratado.
 
 **Como acompanhar no e-CAC (feito pela área real, com procuração; D85).** Caixa postal (comunicações de compensação de ofício e intimações; registrar data de disponibilização e de abertura); PER/DCOMP Web (situação do pedido e despacho); processos digitais (e-Processo, quando há manifestação); relatório de situação fiscal (débitos que vão travar o pagamento); dados bancários cadastrados. Os nomes dos serviços mudam de tempos em tempos: confirmar com a área o caminho atual [não confirmado no portal].
@@ -51,7 +51,8 @@ Tudo em `departamentos/pos-venda/entregas/`, como rascunho para a área real.
 | LC 214/2025 | art. 378, IV | Saldo de PIS/COFINS após a extinção continua ressarcível pelas regras vigentes na extinção | Vigente |
 
 ## 4. Regras da casa
-- **D7 (28/09/2026):** na variante A, honorário no ressarcimento.
+- **D7 (28/09/2026; superada pela D7-b e pela D98, o ponto segue pela D14):** na variante A, honorário no ressarcimento.
+- **D95 (22/10/2026, Luis):** o honorário de êxito incide sobre o valor compensado de ofício, considerando a Selic. Explicar ao parceiro e ao cliente antes do faturamento (`../perguntas-ao-dono.md`, pergunta 9).
 - **D14 (29/09/2026):** só PER. Nada de "compensar" o crédito da alíquota zero; compensação de ofício é ato da Receita, não do cliente.
 - **D17 (29/09/2026):** contratado × conservador × realizado. O extrato daqui alimenta o realizado.
 - **D73 (22/10/2026):** ganho só entra no relatório com tese, variante e %; o pós-venda sinaliza ganho sem % quando for avisar honorário.
@@ -60,7 +61,7 @@ Tudo em `departamentos/pos-venda/entregas/`, como rascunho para a área real.
 - **D85 (22/10/2026):** procuração e-CAC, nunca senha.
 - **D91 (22/10/2026):** até a TI liberar Graph e GLPI, a pasta de cada pessoa no OneDrive é a caixa oficial; o extrato vai para a pasta da Daniela.
 - **Hipótese interna, não decisão:** "êxito sem caixa não é receita" (`docs/portfolio-2027/agentes/precos-fees.md`, 22/10/2026).
-- **Em aberto:** honorário sobre o valor compensado de ofício e sobre a Selic; quem informa a ordem bancária (cliente, parceiro ou área); qual é o ERP do Financeiro.
+- **Em aberto:** (honorário sobre o compensado de ofício e a Selic foi respondido pela D95) quem informa a ordem bancária (cliente, parceiro ou área); qual é o ERP do Financeiro.
 
 ## 5. Método
 **A. Chegou comunicação de compensação de ofício (prazo correndo, primeiro o prazo).**
@@ -73,7 +74,7 @@ Tudo em `departamentos/pos-venda/entregas/`, como rascunho para a área real.
 **B. Fechamento do mês (DU 1 a DU 3 do calendário).**
 1. Receber a extração da área (PER, situação, compensações de ofício efetivadas, ordens bancárias) e do Financeiro (títulos e pagamentos).
 2. Conciliar em três vias: valor deferido = compensado de ofício + pago + retido. Diferença maior que R$ 1,00 vai para "a explicar" com a área.
-3. Calcular a base do honorário pela cláusula do contrato: valor pago; mais compensado de ofício, se a cláusula prevê; Selic, se prevê. Sem cláusula clara: aviso parado e pergunta a Contratos.
+3. Calcular a base do honorário: valor pago + valor compensado de ofício, com a Selic (D95). Contrato antigo sem a cláusula da D95 ou com redação divergente: aviso parado e pergunta a Contratos.
 4. Montar M1 (cliente) e M3 (parceiro). Nunca prometer data do próximo pagamento.
 5. Gerar o arquivo de recebidos para Operações de Canal e Resultados (DU 12).
 
@@ -114,7 +115,7 @@ Tudo em `departamentos/pos-venda/entregas/`, como rascunho para a área real.
 - **Perder os 15 dias por ciência tácita.** Mensagem não aberta conta ciência no 15º dia; quem não abre a caixa postal perde metade do prazo sem perceber.
 - **Mandar o cliente discordar sem prova.** Discordar retém todo o valor; sem prova de pagamento, parcelamento ou suspensão, o cliente fica sem o dinheiro e com o débito.
 - **Avisar honorário sobre valor deferido, não sobre o pago.** O deferido pode ser consumido em débitos ou retido.
-- **Somar Selic sem cláusula.** Pode gerar cobrança indevida e reclamação.
+- **Somar Selic sem conferir o contrato.** A D95 manda considerar a Selic, mas contrato antigo com redação divergente gera cobrança contestada e reclamação: confira com Contratos.
 - **Repassar ao parceiro antes de receber do cliente.** Quebra o caixa da Save e a regra de repasse.
 - **Dado fiscal em grupo de WhatsApp com terceiros.** Débito e saldo do cliente são dados sensíveis: mínimo necessário e só no canal da área.
 - **Escalar no mesmo dia:** comunicação com prazo interno vencido; débito de valor maior que o crédito; débito que o cliente diz desconhecer; pedido de "reverter compensação"; divergência entre os cálculos de prazo.
@@ -124,7 +125,7 @@ Tudo em `departamentos/pos-venda/entregas/`, como rascunho para a área real.
 Situação: restituição reconhecida e débito parcelado sem garantia; a Receita reteve para compensar. Leitura do sênior: o parcelamento suspende a exigibilidade, e só lei complementar poderia tirar esse efeito. O que foi feito: o STF, no Tema 874 (RE 917.285, acórdão publicado em 06/10/2020), declarou inconstitucional a expressão "ou parcelados sem garantia" do art. 73 da Lei 9.430. Aplicação: na tabela de comunicações, débito parcelado em dia é marcado "candidato a discordar com prova".
 
 ### Caso 2 · "Faturamento sobre a compensação de ofício" (interno, anonimizado)
-Situação: pedidos no GLPI (categoria Tributário > Compensação) para faturar o honorário sobre valores quitados de ofício, e pedidos de clientes para "reverter compensação". Leitura: o cliente sente que não recebeu dinheiro e estranha o boleto; a base do honorário não está padronizada. O que fazer: o aviso M1 mostra em linhas separadas "pago em conta" e "usado pela Receita para quitar o débito X", e só inclui a segunda se a cláusula prevê. A padronização é pergunta ao Jurídico e a Contratos.
+Situação: pedidos no GLPI (categoria Tributário > Compensação) para faturar o honorário sobre valores quitados de ofício, e pedidos de clientes para "reverter compensação". Leitura: o cliente sente que não recebeu dinheiro e estranha o boleto; a base do honorário não está padronizada. O que fazer: o aviso M1 mostra em linhas separadas "pago em conta" e "usado pela Receita para quitar o débito X", e só inclui a segunda se a cláusula prevê. A padronização era pergunta ao Jurídico e a Contratos; a D95 (22/10/2026) respondeu: a compensação de ofício entra na base, com a Selic, e o aviso explica isso antes do faturamento.
 
 ### Caso 3 · Débito de filial consome o ressarcimento (padrão normativo, anonimizado)
 Situação típica: atacadista com várias filiais tem o PER deferido e recebe comunicação de compensação de ofício por débito de multa de declaração de uma filial. Leitura: a verificação alcança todos os estabelecimentos (art. 92, § 7º) e o débito pequeno trava a ordem bancária inteira até a manifestação. O que fazer: checar a situação fiscal de todas as filiais antes do dia 300 do PER e sugerir ao cliente regularizar antes da decisão.

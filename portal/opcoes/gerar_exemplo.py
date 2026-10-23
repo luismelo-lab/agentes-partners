@@ -96,6 +96,39 @@ LOTE = [{"deal": f"L{i}", "negocio": f"Empresa {c}", "parceiro": f"Master {m}", 
         for i, (c, m, t, s, u, e) in enumerate([("A", 3, "Perdido", "Indústria de alimentos", "SP", 180000), ("B", 1, "Zerado", "Atacado", "SC", 95000),
                                                 ("C", 5, "Parado", "Transporte", "PR", 120000), ("D", 2, "Perdido", "Frigorífico", "GO", 240000),
                                                 ("E", 7, "Zerado", "Hortifrúti", "MG", 60000)])]
+ESP = {"agente": "Gerente Jurídico", "entendemos": "Cliente do Master 4 recebeu despacho decisório negando parte do PER de 2024. O parceiro quer saber se cabe defesa e o prazo.",
+       "pedidos": ["Confirmar a data de ciência do despacho no e-CAC", "Calcular o prazo da manifestação de inconformidade", "Dizer se recomenda manifestação e o que o cliente precisa autorizar"],
+       "anexos": ["Despacho decisório (PDF enviado no grupo)"], "faltam": ["Autorização do cliente para seguir: Daniela pede ao Master 4"],
+       "prazo_motivo": "2026-10-31 · ciência estimada em 01/10, 30 dias; prazo interno 5 dias antes (a confirmar)", "entrega": "Orientação e decisão de defesa no card",
+       "riscos": "Perda do prazo de manifestação", "checagens": ["Etapa no HubSpot: execução", "Parecer no card: sim"]}
+WHATS = [
+    {"id": "D-0412", "pessoa": "daniela", "chat": "Grupo Master 2 · Save", "grupo": "Master 2 · Save", "master": "Master 2", "status": "responder", "urgente": False, "aguardando_h": 3,
+     "aberta_em": "2026-10-23T08:10", "o_que_pede": "Status de 3 negócios e o próximo passo de cada um", "rota": "Daniela responde com o status do HubSpot", "proximo_passo": "Enviar o status hoje", "prazo": "2026-10-23",
+     "tipo": "Responder ao parceiro", "area_sugerida": "", "entrega": "- Empresa A: diagnóstico em andamento\n- Empresa B: contrato assinado, execução\n- Empresa C: aguardando documentos do cliente",
+     "precisa": "A Empresa C está parada há 12 dias por falta de documento.", "falta": "nada", "rascunho": "Oi! Segue o status: A em diagnóstico, B em execução e C aguardando os documentos do cliente (lista em anexo). Assim que chegarem, seguimos.",
+     "auditoria": {"ok": True, "achados": []}, "revisao": {"gerente": "Gerente da Central Masters", "aprovado": True, "rodadas": 1, "areas": []}, "rodada": "2026-10-23 08h", "chamado": None, "chamado_sugerido": None},
+    {"id": "D-0415", "pessoa": "daniela", "chat": "Grupo Master 6 · Save", "grupo": "Master 6 · Save", "master": "Master 6", "status": "responder", "urgente": True, "aguardando_h": 26,
+     "aberta_em": "2026-10-22T09:20", "o_que_pede": "Extrato de repasse de setembro", "rota": "Operações de Canal", "proximo_passo": "Pedir o extrato à área", "prazo": "2026-10-24",
+     "tipo": "Responder ao parceiro", "area_sugerida": "depto-operacoes-canal", "entrega": "O extrato de setembro ainda não foi fechado pelo Financeiro.", "precisa": "Dois ganhos sem % de honorário travam o extrato.",
+     "falta": "% de honorário de 2 ganhos: Financeiro.", "rascunho": "Oi! O extrato de setembro sai garantido até sexta, com o valor final.",
+     "auditoria": {"ok": False, "achados": [{"termo": "garantido", "regra": "Promessa de prazo", "sugestao": "Troque por 'a previsão é'"}]}, "revisao": {"gerente": "Gerente de Operações de Canal", "aprovado": False, "rodadas": 2, "areas": []},
+     "rodada": "2026-10-23 08h", "chamado": None, "chamado_sugerido": None},
+    {"id": "D-0417", "pessoa": "daniela", "chat": "Grupo Master 4 · Save", "grupo": "Master 4 · Save", "master": "Master 4", "status": "responder", "urgente": True, "aguardando_h": 5,
+     "aberta_em": "2026-10-23T10:45", "o_que_pede": "Cliente recebeu despacho decisório; quer saber se cabe defesa e o prazo", "rota": "Jurídico", "proximo_passo": "Aprovar o chamado ao Jurídico", "prazo": "2026-10-26",
+     "tipo": "Chamado à área", "area_sugerida": "depto-juridico", "entrega": "O despacho nega parte do PER de 2024. A ciência parece ser de 01/10.", "precisa": "O prazo pode estar correndo desde a ciência.",
+     "falta": "Autorização do cliente: Master 4.", "rascunho": "Recebemos o despacho e já encaminhamos ao Jurídico para avaliar a defesa e confirmar o prazo. Retornamos com a orientação.",
+     "auditoria": {"ok": True, "achados": []}, "revisao": {"gerente": "Gerente Jurídico", "aprovado": True, "rodadas": 1, "areas": ["depto-juridico"]}, "rodada": "2026-10-23 14h", "chamado": None,
+     "chamado_sugerido": {"area": "jur_comunicados", "grupo": "Juridico > Comunicados RFB", "titulo": "Demandas Diversas - Jurídico EMPRESA D x despacho decisório PER 2024", "urgencia": 4, "prazo": "2026-10-26",
+                          "empresa": "Empresa D", "assunto": "despacho decisório", "documentos": "Despacho decisório (PDF)", "skill": "depto-juridico", "pronto": True, "agente": "Gerente Jurídico", "especialista": ESP,
+                          "descricao": "**O que entendemos**\n" + ESP["entendemos"] + "\n\n**O que pedimos**\n" + "\n".join(f"{n}. {p}" for n, p in enumerate(ESP["pedidos"], 1)) + "\n\n**Prazo**\n" + ESP["prazo_motivo"]}},
+    {"id": "D-0420", "pessoa": "jenifer", "chat": "Master 5", "grupo": "", "master": "Master 5", "status": "responder", "urgente": False, "aguardando_h": 2, "aberta_em": "2026-10-23T08:40",
+     "o_que_pede": "Nova lista de transporte no PR", "rota": "Central BDR", "proximo_passo": "Fazer o pedido à área", "prazo": "2026-10-27", "tipo": "Responder ao parceiro", "area_sugerida": "celula-jenifer",
+     "entrega": "", "precisa": "", "falta": "Critério de porte: Master 5.", "rascunho": "", "auditoria": {"ok": True, "achados": []}, "revisao": None, "rodada": "2026-10-23 08h", "chamado": None, "chamado_sugerido": None},
+    {"id": "D-0421", "pessoa": "geovana", "chat": "Técnico · diagnósticos", "grupo": "Técnico · diagnósticos", "master": "Master 3", "status": "acompanhar", "urgente": False, "aguardando_h": 30,
+     "aberta_em": "2026-10-22T09:00", "o_que_pede": "Segunda opinião antes do cliente", "rota": "Revisor de Diagnóstico", "proximo_passo": "Rodar o Revisor", "prazo": "", "tipo": "Chamado à área", "area_sugerida": "depto-tributario",
+     "entrega": "", "precisa": "", "falta": "Parecer do técnico.", "rascunho": "", "auditoria": {"ok": True, "achados": []}, "revisao": None, "rodada": "2026-10-23 08h", "chamado": None,
+     "chamado_sugerido": {"area": "trib_diagnostico", "grupo": "Tributário > Diagnóstico", "titulo": "", "urgencia": 2, "prazo": "", "skill": "depto-tributario", "pronto": False, "nao_abrir": "", "descricao": ""}},
+]
 ARQ = {"daniela": [{"nome": "Plano-do-dia-2026-10-23.xlsx", "hora": "07:42", "pasta": "Plano do dia"}, {"nome": "Controle-Pendencias-Masters.xlsx", "hora": "08:05", "pasta": ""},
                    {"nome": "Briefing-Master-1-QBR.docx", "hora": "09:30", "pasta": "Briefings"}],
        "jenifer": [{"nome": "Plano-do-dia-2026-10-23.xlsx", "hora": "07:42", "pasta": "Plano do dia"}, {"nome": "Lista-Master-5-transporte-PR.xlsx", "hora": "10:10", "pasta": "Listas"}],
@@ -104,7 +137,7 @@ ARQ = {"daniela": [{"nome": "Plano-do-dia-2026-10-23.xlsx", "hora": "07:42", "pa
 
 EX = {"atualizado": D["atualizado"], "hoje": "2026-10-23", "blocos": DIR["blocos"], "areas": DIR["areas"], "rotinas": DIR["rotinas"], "pastas": DIR["pastas"], "pessoas": DIR["pessoas"], "regras_casa": DIR.get("regras_casa", []),
       "demandas_num": D.get("demandas", {}), "alertas": D["gestao"]["alertas"], "manchete": D["gestao"]["manchete"], "masters": masters, "decisoes": dec,
-      "decisoes_total": len(D.get("conselho", [])), "janelas": janelas, "pedidos": PEDIDOS, "demandas": DEMANDAS, "chamados": CHAMADOS, "lote": LOTE, "arquivos": ARQ}
+      "decisoes_total": len(D.get("conselho", [])), "janelas": janelas, "pedidos": PEDIDOS, "demandas": DEMANDAS, "chamados": CHAMADOS, "lote": LOTE, "arquivos": ARQ, "whatsapp": WHATS}
 open(os.path.join(AQUI, "exemplo-dados.js"), "w").write("/* Gerado por gerar_exemplo.py. Pedidos, demandas, chamados, lote e arquivos são EXEMPLOS fictícios. */\nwindow.EX = "
                                                         + json.dumps(EX, ensure_ascii=False) + ";\n")
 print("exemplo-dados.js:", len(PEDIDOS), "pedidos de exemplo,", len(DIR["areas"]), "áreas")

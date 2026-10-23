@@ -417,7 +417,7 @@ def modo_clientes(a, C, master, ros):
     resumo = Counter((r["segmento"], r["uf"]) for r in top)
     fonte = [[meta.get("fonte", "Receita Federal")], [f"HubSpot: {os.path.basename(fhs)} (download local; a API não foi chamada)"], [f"ICP/lead scoring v1: {os.path.basename(fic)} (vale por padrão; ajuste da Inteligência Comercial com a Jenifer)"],
              ["Matriz tese × perfil: recuperador/references/matriz.json (Depto Tributário, 29/09/2026 — pré-análise, validar com o técnico)"],
-             [f"Filtros: ativas, matriz, porte {portes}, capital ≥ R$ {rc['capital_social_minimo_prospeccao']:,.0f}, sem Simples/MEI, café fora. Acima de R$ {teto:,.0f} → aba 'Contas estratégicas'."],
+             [f"Filtros: ativas, matriz, porte {portes}, capital ≥ R$ {rc['capital_social_minimo_prospeccao']:,.0f}, sem Simples/MEI, café fora." + (f" Acima de R$ {teto:,.0f} → aba 'Contas estratégicas'." if teto else "")],
              [f"Score 0–100 = (segmento + regime do lead scoring v1 + aderência da matriz + peso da UF no território do Master + classe do Master + município do Master + filial nova 12m + prioridade Q4 − alerta) ÷ {MAXP} pontos."],
              ["Conflito de canal: raiz do CNPJ no HubSpot (ganho, aberto, perdido < 12 meses, desqualificado BDR < 180 dias) ou nome igual sem CNPJ, e listas anteriores de outros Masters. Limite: o download cobre só a Área Master desde 2024 (Daniela + roster); negócios de outros parceiros fora desse escopo não aparecem."],
              [f"Regime: cache da Minha Receita (consultas desta execução: {consultados}; externas só com --permitir-externo e só para prospects)." ],
@@ -448,6 +448,7 @@ def modo_parceiros(a, C, master, ros):
     cad = C.get("masters_cadastro", {}).get(master)
     if cad: P.update({k: v for k, v in cad.items() if k in ("ufs", "classes", "municipios")})
     if a.uf: P["ufs"] = [u.strip().upper() for u in a.uf.split(",")]
+    if not P["ufs"]: sys.exit("Sem UF para este Master (nenhum ganho com UF nem cadastro). Use --uf.")
     ph = ",".join("?" * len(P["ufs"]))
     rows = q(VIEW + f" WHERE e.situacao='Ativa' AND e.matriz='matriz' AND e.cnae='6920601' AND e.uf IN ({ph})", tuple(P["ufs"]))
     # carteira potencial local: empresas-alvo (Q4 + classes do Master) ativas por município

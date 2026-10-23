@@ -63,7 +63,7 @@
 ## 4. Regras da casa
 - **D22 (29/09/2026):** alíquota zero nas aquisições é hipótese válida e principal nos perfis de alimentos no Lucro Real, com risco registrado e alternativa conservadora ao lado.
 - **D14 (28/09/2026, parcialmente confirmada):** sempre PER (ressarcimento), nunca DCOMP.
-- **D7-b (pendente):** Q4 com P1 Frigoríficos (B+C) e P2 Hortifrúti (só B). Frigorífico é o perfil prioritário da recuperação.
+- **D7-b (superada em 23/10/2026 pela D98: o Luis decidiu só a meta do Q4, D64, e o foco por segmento vai para 2027 com a meta da diretoria, D75):** Q4 com P1 Frigoríficos (B+C) e P2 Hortifrúti (só B). Frigorífico é o perfil prioritário da recuperação.
 - **D59 (05/10/2026, pendente):** simulador da Maquila bloqueia setores com fator pendente, inclusive frigoríficos. Para este grupo, Maquila não se oferece; carne segue "em aberto" na pergunta MQ-Q6 do João.
 - **D80 (22/10/2026):** T13 e T16 fora da vitrine. **D86/D81:** Funrural do adquirente (abatedouro e laticínio que reteve do produtor) como passivo, a conciliar.
 - **D92 (22/10/2026):** Gestão de Contas, antecipação e FIDC são da `depto-save-invest` (Junior). Antecipação de duplicata de varejo e food service é o 1º produto além da RT no cluster (playbook de 16/10/2026), mas quem qualifica é a Save Invest.
@@ -97,7 +97,7 @@
 6. Há auto de infração ou intimação sobre crédito presumido, Funrural ou ressarcimento?
    - Muda: produtos jurídicos e Gestão de Passivo antes de crescer.
 7. A empresa já discutiu o Funrural do produtor na Justiça ou tem depósito judicial?
-   - Muda: Funrural antigo como passivo (D86); depósito pode ser levantado após a modulação.
+   - Muda: Funrural antigo como passivo (D86) [em aberto: D81 × D86, decisão do Luis]; depósito pode ser levantado após a modulação.
 8. A planta é habilitada para exportar (SIF, China, EUA) ou está em processo de habilitação?
    - Muda: habilitação exige capital de giro e certidão; gatilho de onda 3 descoberta.
 9. Quantos funcionários e qual o peso da folha na receita?

@@ -161,7 +161,7 @@ def gerar(j, saida):
         "5. Nenhum texto daqui vai ao parceiro ou ao cliente sem passar pela área dona, pelo validador humano e pelo auditor de promessas. Teto de edital é limite, não regra.",
         "6. Para atualizar: edite docs/lancamento-2026/janelas.json e rode skills/depto-marketing/scripts/janelas_receita.py."], 1):
         c = u.cell(i, 1, t); c.font = Font(name=F, bold=(i == 1), size=13 if i == 1 else 11, color=C["texto"]); c.alignment = Alignment(wrap_text=True)
-    os.makedirs(os.path.dirname(saida), exist_ok=True); wb.save(saida); return saida
+    os.makedirs(os.path.dirname(os.path.abspath(saida)), exist_ok=True); wb.save(saida); return saida  # abspath: "--saida arquivo.xlsx" dava makedirs("")
 
 
 def main():
@@ -172,7 +172,9 @@ def main():
     if a.auditar: sys.exit(auditar(j))
     saida = a.saida or os.path.join(caminhos.luis("central"), f"Janelas-de-Receita-{date.today().isoformat()}.xlsx")
     print("ok", gerar(j, saida), len(j["janelas"]), "janelas")
-    try: print("link da pasta:", caminhos.web(saida))
+    try:  # fora do OneDrive (--saida em pasta local) caminhos.web montava um link com "../.." que não abre
+        if os.path.realpath(saida).startswith(os.path.realpath(caminhos.onedrive()) + os.sep): print("link da pasta:", caminhos.web(saida))
+        else: print("fora do OneDrive: sem link")
     except Exception as e: print("link indisponível:", e)
 
 

@@ -66,7 +66,7 @@ EXTRA = [
     ("TIN", "Tax internacional e comércio exterior", 3, "pronto", "Paulo e João Mattos", r_tax_internacional),
 ]
 ABERTURA = {  # pergunta de abertura por produto (linguagem de caixa, sem oferta)
-    "RT": "Há anos em que sua empresa pagou PIS/COFINS sobre compras que não geram débito? Posso olhar suas notas e dizer, sem custo, se há crédito.",
+    "RT": "Há anos em que sua empresa pagou PIS/COFINS sobre compras que não geram débito? Posso olhar suas notas e dizer se há crédito.",
     "GC": "Quanto da sua carteira a receber está vencida hoje? E em que mês do ano o seu caixa aperta mais?",
     "PAS": "Hoje você consegue emitir certidão negativa quando o banco ou um cliente pede?",
     "JUR": "Há algum débito ou auto de infração com prazo correndo?",
@@ -81,12 +81,18 @@ ABERTURA = {  # pergunta de abertura por produto (linguagem de caixa, sem oferta
     "HE": "Há imóvel quitado que poderia sustentar capital mais barato?",
     "CAP": "A demanda é maior do que a sua capacidade? Como você pretende financiar a expansão?",
 }
-RECEITA_PORTE = {"01": "Não informado", "03": "ME", "05": "Demais (acima de R$ 4,8 mi)"}
+# a base local guarda o porte e a situação já traduzidos (receita_cnpj.py: "Demais", "Ativa"); os códigos ficam por compatibilidade
+PORTE_DEMAIS = ("05", "Demais")
 
 
 def num(v):
-    try: return float(str(v).replace(".", "").replace(",", ".")) if "," in str(v) else float(v)
-    except Exception: return None
+    """Número do CSV: aceita 12000000, 12.000.000, 12.000.000,00 e 1234.5. Vazio ou texto → None."""
+    t = re.sub(r"[R$\s]", "", str(v if v is not None else ""))
+    if not t: return None
+    if "," in t: t = t.replace(".", "").replace(",", ".")
+    elif re.fullmatch(r"-?\d{1,3}(\.\d{3})+", t): t = t.replace(".", "")  # milhar com ponto, sem centavos
+    try: return float(t)
+    except ValueError: return None
 
 
 def abrir_receita():
@@ -101,7 +107,7 @@ def sinais_prospect(row, db):
     cnae = (row.get("cnae") or (est[0] if est else "") or "").replace("-", "").replace("/", "").replace(".", "")
     f = num(row.get("faturamento"))
     estimado = False
-    if not f and emp and str(emp[1]) == "05":
+    if not f and emp and str(emp[1]) in PORTE_DEMAIS:
         f, estimado = 4.8e6, True  # "Demais": piso do porte, não é o faturamento
     s = {"cnpj": c, "nome": row.get("nome") or (emp[2] if emp else c), "cnae": cnae, "setor": mc.setor(cnae), "uf": row.get("uf") or (est[2] if est else ""),
          "situacao": est[1] if est else "", "regime": row.get("regime") or None, "faturamento": f, "faixa": None, "capital": emp[0] if emp else None,
@@ -141,7 +147,7 @@ def mapear(s, ja_hubspot):
     falta += ["EFD-Contribuições e notas (confirmam a tese)"] if any(o["id"] == "RT" for o in ops) else []
     if any(o["id"] in ("ALONG", "FIDC", "CI") for o in ops): falta.append("DRE, balanço e SCR")
     alertas = list(ja_hubspot)
-    if s["situacao"] and str(s["situacao"]) not in ("02", "2", "ativa", "ATIVA"): alertas.append(f"situação cadastral {s['situacao']}: conferir")
+    if s["situacao"] and str(s["situacao"]).strip().lower() not in ("02", "2", "ativa"): alertas.append(f"situação cadastral {s['situacao']}: conferir")
     return {"cnpj": s["cnpj"], "nome": s["nome"], "setor": s["setor"], "cnae": s["cnae"], "uf": s["uf"], "regime": s["regime"], "faturamento": s["faturamento"],
             "faturamento_estimado": s["fat_estimado"], "oportunidades": ops, "indice": sum(PESO[o["aderencia"]] for o in ops),
             "entrada": entrada, "abertura": ABERTURA.get(entrada["id"]) if entrada else None, "mes_caixa": s["mes_caixa"], "falta": falta, "alertas": alertas}

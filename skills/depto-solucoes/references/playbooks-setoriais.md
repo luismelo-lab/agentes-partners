@@ -105,8 +105,8 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 ### Esteira em 3 ondas
 | Onda | Produtos (ordem) | Depende de | Prazo indicativo | Quem entrega |
 |---|---|---|---|---|
-| 1 Destravar caixa | RT alíquota zero (PER) → crédito presumido de PF → CPP → Gestão de Contas (atacado) | Parecer, SPED, folha | 0–6 meses | `depto-tributario`, `revisor-diagnostico`, ecossistema |
-| 2 Proteger e controlar | Passivo (com o crédito abatendo débito) → defesa adm. → planejamento para 2027 → antecipação | Débitos mapeados; CND | 3–12 meses | `depto-juridico`, `depto-tributario`, instituição autorizada |
+| 1 Destravar caixa | RT alíquota zero (PER) → crédito presumido de PF → CPP → Gestão de Contas (atacado) | Parecer, SPED, folha | 0–6 meses | `depto-tributario`, `revisor-diagnostico`, `depto-save-invest` (D92) |
+| 2 Proteger e controlar | Passivo (com o crédito abatendo débito) → defesa adm. → planejamento para 2027 → antecipação | Débitos mapeados; CND | 3–12 meses | `depto-juridico`, `depto-tributario`, `depto-save-invest` (antecipação, D92; Federal Invest financia, D96) |
 | 3 Crescer | CI (frigorífico grande, com terra e planta) → FIDC | CND, 2 anos de demonstrações, garantias | 6–24 meses | `depto-internacional` (CI só após o G2) + Save Invest (FIDC, pronto) |
 
 ### Demonstração de valor
@@ -185,7 +185,7 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 ### Esteira em 3 ondas
 | Onda | Produtos (ordem) | Depende de | Prazo | Quem entrega |
 |---|---|---|---|---|
-| 1 Destravar caixa | Conta gráfica e insumos (exportador) ou alíquota zero (grãos) → Funrural → antecipação via instituição autorizada | SPED, exportações, DCTFWeb | 0–6 meses | `depto-tributario`, ecossistema |
+| 1 Destravar caixa | Conta gráfica e insumos (exportador) ou alíquota zero (grãos) → Funrural → antecipação via instituição autorizada | SPED, exportações, DCTFWeb | 0–6 meses | `depto-tributario`, `depto-save-invest` (D92) |
 | 2 Proteger e controlar | Defesa de glosas → passivo → planejamento (2027, regime agro) → estruturação patrimonial | Débitos e despachos mapeados | 3–12 meses | `depto-juridico`, `depto-tributario` |
 | 3 Crescer | CI (giro de safra ou troca de dívida) → FIDC | CND, garantias reais livres, 2 anos de demonstrações | 6–24 meses | `depto-internacional` (CI só após o G2) + Save Invest (FIDC, pronto) |
 
@@ -260,9 +260,9 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 ### Esteira em 3 ondas
 | Onda | Produtos (ordem) | Depende de | Prazo | Quem entrega |
 |---|---|---|---|---|
-| 1 Destravar caixa | Supermercado: ICMS-ST e ICMS → CPP. Hortifruti: alíquota zero (PER) → ICMS. Atacado: + Gestão de Contas | SPED, regime, folha | 0–6 meses | `depto-tributario`, ecossistema |
-| 2 Proteger e controlar | Planejamento da reforma (mix por NCM) → passivo → antecipação | Cadastro de NCM, débitos | 3–12 meses | `depto-tributario`, `depto-juridico` |
-| 3 Crescer | FIDC (rede grande) → CI (atacado de hortifruti com porte) | Porte, CND, garantias | 6–24 meses | Ecossistema, `depto-internacional` |
+| 1 Destravar caixa | Supermercado: ICMS-ST e ICMS → CPP. Hortifruti: alíquota zero (PER) → ICMS. Atacado: + Gestão de Contas | SPED, regime, folha | 0–6 meses | `depto-tributario`, `depto-save-invest` (D92) |
+| 2 Proteger e controlar | Planejamento da reforma (mix por NCM) → passivo → antecipação | Cadastro de NCM, débitos | 3–12 meses | `depto-tributario`, `depto-juridico`, `depto-save-invest` (D92) |
+| 3 Crescer | FIDC (rede grande) → CI (atacado de hortifruti com porte) | Porte, CND, garantias | 6–24 meses | `depto-save-invest` (D92), `depto-internacional` |
 
 ### Demonstração de valor
 - **KPIs:** caixa liberado (R$); ICMS-ST recuperado sobre ST pago; custo da antecipação do cartão (% a.a.); DSO (atacado); carga efetiva antes e depois de 2027 por NCM.
@@ -332,9 +332,9 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 ### Esteira em 3 ondas
 | Onda | Produtos (ordem) | Depende de | Prazo | Quem entrega |
 |---|---|---|---|---|
-| 1 Destravar caixa | CPP → teses fora do combustível (conveniência) → Gestão de Contas (GLP e frotas) | Folha, SPED | 0–6 meses | `depto-tributario`, ecossistema |
+| 1 Destravar caixa | CPP → teses fora do combustível (conveniência) → Gestão de Contas (GLP e frotas) | Folha, SPED | 0–6 meses | `depto-tributario`, `depto-save-invest` (D92) |
 | 2 Proteger e controlar | Passivo → defesa adm. → estruturação patrimonial → planejamento | Débitos, intimações, mapa de imóveis | 3–12 meses | `depto-juridico`, `depto-tributario` |
-| 3 Crescer | Antecipação de cartão (instituição autorizada) | CND | 6–12 meses | Ecossistema |
+| 3 Crescer | Antecipação de cartão (instituição autorizada) | CND | 6–12 meses | `depto-save-invest` (D92) |
 
 ### Demonstração de valor
 - **KPIs:** débito regularizado (R$) e desconto obtido; CND emitida (sim/não); DSO de frotas e GLP; custo do cartão (% do faturamento).
@@ -408,8 +408,8 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 ### Esteira em 3 ondas
 | Onda | Produtos (ordem) | Depende de | Prazo | Quem entrega |
 |---|---|---|---|---|
-| 1 Destravar caixa | ICMS → insumos/IPI → CPP → Gestão de Contas | Regime Real ou Presumido, SPED, folha | 0–6 meses | `depto-tributario`, ecossistema |
-| 2 Proteger e controlar | Planejamento (regime 2027, Simples híbrido) → antecipação → passivo | Diagnóstico de regime | 3–12 meses | `depto-tributario`, instituição autorizada |
+| 1 Destravar caixa | ICMS → insumos/IPI → CPP → Gestão de Contas | Regime Real ou Presumido, SPED, folha | 0–6 meses | `depto-tributario`, `depto-save-invest` (D92) |
+| 2 Proteger e controlar | Planejamento (regime 2027, Simples híbrido) → antecipação → passivo | Diagnóstico de regime | 3–12 meses | `depto-tributario`, `depto-save-invest` (antecipação, D92; Federal Invest financia, D96) |
 | 3 Crescer | Maquila (descoberta) | Lucro Real, mão de obra intensiva, clientes no Sul/SP/CO | 12–24 meses | `depto-internacional` |
 
 ### Demonstração de valor
@@ -484,9 +484,9 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 ### Esteira em 3 ondas
 | Onda | Produtos (ordem) | Depende de | Prazo | Quem entrega |
 |---|---|---|---|---|
-| 1 Destravar caixa | Insumos → CPP → Gestão de Contas | Lucro Real, SPED, folha | 0–6 meses | `depto-tributario`, ecossistema |
-| 2 Proteger e controlar | Passivo (crédito abate débito) → crédito presumido de ICMS (JUD) → planejamento 2027 → antecipação | Débitos, CND | 3–12 meses | `depto-juridico`, `depto-tributario`, instituição autorizada |
-| 3 Crescer | FIDC (só grande) | Porte | 12–24 meses | Ecossistema |
+| 1 Destravar caixa | Insumos → CPP → Gestão de Contas | Lucro Real, SPED, folha | 0–6 meses | `depto-tributario`, `depto-save-invest` (D92) |
+| 2 Proteger e controlar | Passivo (crédito abate débito) → crédito presumido de ICMS (JUD) → planejamento 2027 → antecipação | Débitos, CND | 3–12 meses | `depto-juridico`, `depto-tributario`, `depto-save-invest` (antecipação, D92; Federal Invest financia, D96) |
+| 3 Crescer | FIDC (só grande) | Porte | 12–24 meses | `depto-save-invest` (D92) |
 
 ### Demonstração de valor
 - **KPIs:** caixa liberado (R$); crédito por litro de diesel; custo da folha (% da receita); DSO dos embarcadores; débito regularizado.
@@ -563,9 +563,9 @@ Atenção: o CNAE **1081 é torrefação e moagem de café**. Esses clientes usa
 ### Esteira em 3 ondas
 | Onda | Produtos (ordem) | Depende de | Prazo | Quem entrega |
 |---|---|---|---|---|
-| 1 Destravar caixa | Insumos e ICMS → IPI e conta gráfica → CPP → Gestão de Contas | Lucro Real, SPED, folha | 0–6 meses | `depto-tributario`, ecossistema |
-| 2 Proteger e controlar | Planejamento (mix por NCM para 2027) → antecipação → passivo | Cadastro de produtos | 3–12 meses | `depto-tributario`, instituição autorizada |
-| 3 Crescer | FIDC ou CI (só indústria grande) | Porte, CND, garantias | 12–24 meses | Ecossistema, `depto-internacional` |
+| 1 Destravar caixa | Insumos e ICMS → IPI e conta gráfica → CPP → Gestão de Contas | Lucro Real, SPED, folha | 0–6 meses | `depto-tributario`, `depto-save-invest` (D92) |
+| 2 Proteger e controlar | Planejamento (mix por NCM para 2027) → antecipação → passivo | Cadastro de produtos | 3–12 meses | `depto-tributario`, `depto-save-invest` (antecipação, D92; Federal Invest financia, D96) |
+| 3 Crescer | FIDC ou CI (só indústria grande) | Porte, CND, garantias | 12–24 meses | `depto-save-invest` (D92), `depto-internacional` |
 
 ### Demonstração de valor
 - **KPIs:** caixa liberado (R$); carga efetiva por linha de produto (antes e depois de 2027); DSO das redes; custo do giro na sazonalidade.

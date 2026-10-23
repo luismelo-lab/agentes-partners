@@ -24,7 +24,7 @@ Revisão: 22/10/2026 · Área: `depto-marketing` · Padrão: `infra/padrao-senio
 |---|---|---|---|
 | P1 Recuperação tributária (T01 a T19, sem T13 e T16 na vitrine, D80) | Pronto | Tese, perguntas, documentos, fluxo; sem valor prometido | `depto-tributario` |
 | P2 Recorrência | Pronto | Revisão de novas competências; decadência de 5 anos | `depto-tributario` |
-| P5 Gestão de Passivo (inclui revisão do Funrural anterior a 2018, D86) | Pronto | Mapa do passivo antes do crédito novo | `depto-juridico` + Tributário |
+| P5 Gestão de Passivo (inclui revisão do Funrural anterior a 2018, D86) [em aberto: D81 × D86, decisão do Luis] | Pronto | Mapa do passivo antes do crédito novo | `depto-juridico` + Tributário |
 | P7 Produtos jurídicos | Pronto | Só peça própria do escritório responsável (Provimento 205/2021, art. 8º) | `depto-juridico` |
 | P8 Planejamento e reforma | Pronto | Escriturar e preservar saldos conforme regras vigentes | `depto-tributario` |
 | P10 Estruturação patrimonial | Pronto | "Estruturação patrimonial", nunca "holding" ou "blindagem" | `depto-juridico` |
@@ -62,7 +62,7 @@ Revisão: 22/10/2026 · Área: `depto-marketing` · Padrão: `infra/padrao-senio
 - **D88 (22/10/2026):** one-page do CI pode usar 7% a 10% como exemplo e citar a UBS.
 - **D92 (22/10/2026):** Gestão de Contas, antecipação e FIDC são da Save Invest (Junior); o kit é feito com `depto-save-invest`.
 - **D82 (22/10/2026):** antecipação sobre venda gerencial e escrow só presencialmente, tema sensível; não entra em kit escrito.
-- **D45 (05/10/2026, pendente):** termo de ciência junto do contrato.
+- **D45 (05/10/2026, superada pelas D71, D73 e D65, D98):** termo de ciência junto do contrato.
 - **Aprendizados de 07/10/2026:** exemplo de reunião não é regra; toda peça mostra o fluxo de 5 etapas.
 - **Certificação:** é do `depto-partner-success` (Academia, N1/N2); o kit entrega o quiz como insumo.
 - **Em aberto:** se o quiz é requisito de nível no programa (níveis L1 a L10 pendentes, folha de 22/10).

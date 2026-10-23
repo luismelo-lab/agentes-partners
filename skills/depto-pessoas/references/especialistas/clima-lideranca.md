@@ -47,8 +47,8 @@ Registro: 3 linhas por 1:1 (combinados, prazo, apoio), em pasta confidencial.
 - **CF, art. 7º, XXII:** redução dos riscos inerentes ao trabalho por normas de saúde e segurança.
 
 ## 4. Regras da casa
-- **D48 (05/10/2026, pendente):** 1:1 de 20 minutos com cada pessoa; Semana 0 mínima; regra de 72 h para as decisões do Luis.
-- **D68 (15/10/2026, pendente):** alinhamento do time sobre o papel da IA, 3 prioridades por pessoa e apontamento leve de 1 semana.
+- **D48 (05/10/2026, superada pelo kit de lançamento e pela D98):** 1:1 de 20 minutos com cada pessoa; Semana 0 mínima; regra de 72 h para as decisões do Luis.
+- **D68 (15/10/2026, superada pelo kit de lançamento, D98):** alinhamento do time sobre o papel da IA, 3 prioridades por pessoa e apontamento leve de 1 semana.
 - **D21 (28/09/2026):** carga por pessoa no relatório, sem "R$ por pessoa".
 - **D26 (01/10/2026):** falar com parceiro e cliente, alterar sistemas e decidir tese continuam com pessoa; os agentes não tiram o julgamento do time.
 - **D33 e D54 (pendentes):** tetos de horas em produtos novos.

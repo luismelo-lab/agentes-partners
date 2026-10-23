@@ -108,7 +108,11 @@ def valores_citados(txt):
 def carregar():
     fonte = sorted(glob.glob(os.path.join(HS, "hubspot-*.json")))[-1]
     D = json.load(open(fonte)); N = D["negocios"]
-    fila = sorted(glob.glob(os.path.join(FILA, "Fila-Recuperador-*.xlsx")))[-1]
+    # só a fila semanal (data ISO no nome): o "*" pegava também Fila-Recuperador-Lote1-decidir-…, que vem depois na ordem
+    # alfabética e não tem a aba "Gestão de Passivo" (o veto V4 sumia sem aviso)
+    filas = sorted(glob.glob(os.path.join(FILA, "Fila-Recuperador-????-??-??.xlsx")))
+    if not filas: sys.exit("sem Fila-Recuperador-AAAA-MM-DD.xlsx em " + FILA)
+    fila = filas[-1]
     v4 = {}
     wb = openpyxl.load_workbook(fila, read_only=True)
     if "Gestão de Passivo" in wb.sheetnames:
@@ -122,7 +126,8 @@ def carregar():
 
 
 def receita(raizes):
-    db = sqlite3.connect(DB); q = ",".join("?" * len(raizes)); rz = list(raizes)
+    if not raizes or not os.path.exists(DB): return {}, "?"  # sem sinal (SQL "in ()" quebrava) ou sem a base local (connect criava um arquivo vazio)
+    db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True); q = ",".join("?" * len(raizes)); rz = list(raizes)
     emp = {r[0]: {"razao": r[1], "porte": r[2], "capital": r[3]} for r in db.execute(f"select basico,razao,porte,capital from empresa where basico in ({q})", rz)}
     for b, s, m in db.execute(f"select basico,simples,mei from simples where basico in ({q})", rz):
         emp.setdefault(b, {})["simples"] = s; emp[b]["mei"] = m

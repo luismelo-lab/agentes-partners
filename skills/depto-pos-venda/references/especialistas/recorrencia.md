@@ -49,12 +49,13 @@
 
 ## 4. Regras da casa
 - **P2 Recorrência é produto pronto** (`docs/portfolio-2027/matriz-agentes.md`; dono técnico: time técnico; área: `depto-tributario`; ponto de atenção: decadência de 5 anos).
-- **D66 (15/10/2026, pendente):** calendário de decadência mensal até dez/2026 por crédito, com PER, dono e prazo, como pré-análise para validação humana.
-- **D11 (28/09/2026, pendente):** fila do técnico limitada à capacidade, em lotes, priorizada por valor esperado e decadência. A lista mensal de recorrência respeita esse limite.
+- **D66 (15/10/2026, aplicada por padrão em 23/10/2026, D98; dono: depto-pos-venda com o time técnico):** calendário de decadência mensal até dez/2026 por crédito, com PER, dono e prazo, como pré-análise para validação humana.
+- **D11 (28/09/2026, aplicada por padrão em 23/10/2026, D98; dono: time técnico tributário):** fila do técnico limitada à capacidade, em lotes, priorizada por valor esperado e decadência. A lista mensal de recorrência respeita esse limite.
 - **D14 e D22 (29/09/2026):** alíquota zero por PER, nunca DCOMP; hipótese principal em alimentos no Lucro Real com risco registrado.
 - **D76 (22/10/2026):** cliente sem Master pertence a outra área: fica fora da lista.
 - **D83 (22/10/2026):** produtos em validação entram no cross-sell só como descoberta.
 - **D86 (22/10/2026, a conciliar com D81):** Funrural anterior a 2018 vai para Gestão de Passivo. Cliente agro ganho com Funrural é gatilho de passivo, não de recuperação.
+- **D95 (22/10/2026):** o êxito incide também sobre o valor compensado de ofício, com a Selic; a recorrência de um cliente com débitos considera isso no honorário esperado.
 - **D92 (22/10/2026):** Gestão de Contas, antecipação e FIDC são da Save Invest (dono Junior); o gatilho é encaminhado, não vendido aqui.
 - **D27 (01/10/2026):** o lote do Recuperador vai à Geovana com cópia ao Luis; a aba de recorrência segue o mesmo caminho até a Daniela assumir a rotina [a definir pela Daniela com a Geovana, pergunta 10 de `perguntas-ao-dono.md`; alçada de 23/10/2026].
 - **Em aberto:** quem faz o contato de recorrência com o Master (Daniela ou o próprio Master); se a recorrência tem novo contrato ou aditivo; % de honorário da recorrência (D79 manteve a regra atual).
@@ -73,7 +74,7 @@
    |---|---|---|
    | Compensação de ofício ou débito em aberto na situação fiscal | Gestão de Passivo (transação, parcelamento) | Jurídico e Tributário, via Daniela |
    | Recebeu ressarcimento relevante e tem contas a receber altas ou dívida de curto prazo | Gestão de Contas ou antecipação (descoberta) | Save Invest (D92) |
-   | Agroindústria ou adquirente de produção rural | Revisão do Funrural anterior a 2018 como passivo (D86) | Jurídico e Tributário |
+   | Agroindústria ou adquirente de produção rural | Revisão do Funrural anterior a 2018 como passivo (D86) [em aberto: D81 × D86, decisão do Luis] | Jurídico e Tributário |
    | Recebe crédito presumido de ICMS do Estado | T15 (STF Tema 843, segundo o Tributário) | Tributário |
    | Sócios com patrimônio relevante ou sucessão em pauta | Estruturação patrimonial | Jurídico |
    | Faturamento acima de R$ 1 mi/ano e decisão de regime para 2027 | Planejamento tributário e reforma (P01, P8) | Tributário |

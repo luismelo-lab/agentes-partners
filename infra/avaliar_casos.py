@@ -169,9 +169,18 @@ def validar(area, casos, pastas_validas):
                 pass
         if "fronteira" in c["tipo"] and norm(enc) == "nenhuma":
             erros.append(f"{p}: caso de fronteira sem área de destino")
-        if re.search(r"\b\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}\b|\(\d{2}\)\s?\d{4,5}-?\d{4}|@\w+\.\w", c["entrada"]):
+        if re.search(r"\b\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}\b|\(\d{2}\)\s?\d{4,5}-?\d{4}|@\w+\.\w", c["entrada"]) or _cnpj_alfa(c["entrada"]):
             erros.append(f"{p}: entrada com CNPJ, telefone ou e-mail (anonimize)")
     return erros
+
+
+def _cnpj_alfa(texto):
+    """CNPJ alfanumérico (IN RFB 2.229/2024) com DV válido na entrada do caso: o padrão numérico acima não o pega."""
+    try:
+        sys.path.insert(0, os.path.join(REPO, "lib")); from cnpj import CNPJ_TEXTO_ALFA, cnpj_valido, normalizar_cnpj
+    except ImportError:
+        return False
+    return any(re.search(r"[A-Z]", m) and cnpj_valido(normalizar_cnpj(m)) for m in CNPJ_TEXTO_ALFA.findall(texto or ""))
 
 
 # ---------- pontuação ----------
@@ -458,15 +467,25 @@ def main():
     avaliadas = [r for r in res if r["respondidos"]]
     if not avaliadas:
         sys.exit("nenhuma resposta gravada: rode --preparar e grave as respostas em registro/avaliacoes/<área>/CT-nn.md")
+    # rodada com --area: junta ao relatório do mesmo dia em vez de sobrescrever. Antes, "--pontuar --area X" regravava
+    # relatorio-<data>.json só com X, e as outras áreas perdiam a nota de acerto no auditor de senioridade.
+    areas_rel = {}
+    try:
+        with open(os.path.join(base, f"relatorio-{a.data}.json"), encoding="utf-8") as f:
+            areas_rel = json.load(f).get("areas") or {}
+    except (OSError, ValueError):
+        pass
+    areas_rel.update({r["area"]: r for r in avaliadas})
     saida = {"data": a.data, "versao": 1, "padrao": "infra/casos-teste.md",
              "pesos": {"conteudo": PESO_CONTEUDO, "limpeza": PESO_LIMPEZA, "encaminhamento": PESO_ENCAMINHAMENTO,
                        "teto_critico": TETO_CRITICO, "aprovado": APROVADO},
-             "areas": {r["area"]: r for r in avaliadas}}
+             "areas": dict(sorted(areas_rel.items()))}
     os.makedirs(base, exist_ok=True)
     with open(os.path.join(base, f"relatorio-{a.data}.json"), "w", encoding="utf-8") as f:
         json.dump(saida, f, ensure_ascii=False, indent=2)
+    sem_resp = [r for r in res if not r["respondidos"] and r["area"] not in areas_rel]
     with open(os.path.join(base, f"relatorio-{a.data}.md"), "w", encoding="utf-8") as f:
-        f.write(relatorio_md(res, a.data))
+        f.write(relatorio_md(sorted(list(saida["areas"].values()) + sem_resp, key=lambda r: r["area"]), a.data))
     if a.json:
         print(json.dumps(saida, ensure_ascii=False, indent=2))
     else:

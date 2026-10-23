@@ -230,7 +230,7 @@ def main():
         from openpyxl import load_workbook
         f = sorted(glob.glob(os.path.join(FILA, "Fila-Recuperador-*.xlsx")))[-1]
         ws = load_workbook(f, read_only=True)["Fila"]; rows = list(ws.iter_rows(values_only=True)); iL = rows[0].index("link")
-        alvo = [r[iL].rsplit("/", 1)[1] for r in rows[1:]]
+        alvo = [str(r[iL]).rstrip("/").rsplit("/", 1)[-1] for r in rows[1:] if r[iL]]  # linha sem link derrubava a leitura
     elif a.ganhos:
         alvo = [i for i, d in N.items() if d["status"] == "ganho"]
     else:

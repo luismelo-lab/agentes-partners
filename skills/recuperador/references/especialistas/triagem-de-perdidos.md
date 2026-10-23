@@ -74,9 +74,9 @@ O Presumido não é veto automático: a tabela por perfil dá teses de exclusão
 - **D5 (ajustada, 29/09/2026):** a automação fica dentro da estrutura; a Geovana comunica o técnico.
 - **D6 (29/09/2026):** continuidade e escala condicionadas aos resultados.
 - **D27 (01/10/2026):** lote enviado automaticamente à Geovana com cópia ao Luis; só destinatários @savecompany.com.br.
-- **D11 (pendente):** fila do técnico limitada à capacidade, por valor esperado e decadência.
+- **D11 (aplicada por padrão em 23/10/2026, D98; dono: time técnico tributário):** fila do técnico limitada à capacidade, por valor esperado e decadência.
 - **D76 (22/10/2026):** clientes sem Master ficam fora das listas da Área Partners [o script ainda não aplica: ver perguntas].
-- **D80 e D86 (22/10/2026):** T13 e T16 fora; Funrural como passivo.
+- **D80 e D86 (22/10/2026):** T13 e T16 fora; Funrural como passivo. [em aberto: D81 × D86, decisão do Luis]
 - **D87 (22/10/2026):** Dados saneia os ~295 ganhos possivelmente duplicados; até lá, o V5 e o look-alike podem contar o mesmo grupo duas vezes.
 - **Regra do Luis (16/10/2026):** parecer anexado em nota também é lido (`--notas`).
 
@@ -130,7 +130,7 @@ O Presumido não é veto automático: a tabela por perfil dá teses de exclusão
 ## 7. Armadilhas e sinais de alerta
 - **Ler valor zero como "não tem crédito".** Sem parecer, o zero é ausência de análise, não resultado.
 - **Look-alike com a própria empresa.** O script exclui a raiz do CNPJ; ao montar exemplos à mão, manter a regra.
-- **Contar ganhos duplicados duas vezes** (D87 pendente): infla a taxa de sucesso dos parecidos.
+- **Contar ganhos duplicados duas vezes** (D87 aprovada): infla a taxa de sucesso dos parecidos.
 - **Confiar no regime do HubSpot.** Regime vazio ou desatualizado: confirmar antes de escrever hipótese.
 - **Reapresentar caso vetado** sem fato novo (regime, meses, documento).
 - **Mandar à Geovana caso com parecer estrutural.** O V11 existe para isso; se escapou, é bug.

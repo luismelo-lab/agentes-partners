@@ -1,7 +1,13 @@
 # Radar Tributário de Mercado: Depto Tributário (Save Co.)
 
-**Data-base:** 16/10/2026 · **Próxima revisão:** 23/10/2026
+**Data-base:** 23/10/2026 · **Próxima revisão:** 30/10/2026
+**Radar anterior:** data-base 16/10/2026 (7 dias).
 **Escopo:** últimos 12–18 meses (abr/2025 a out/2026).
+
+**Resumo da revisão de 23/10/2026 (rotina `radar-mercado`, gerente tributário).**
+- **Mudou e é verificável:** STF Tema 843 (07/10), STF Tema 118 (21/10), STJ Tema 1.364 (14/10), ADI 4.395 (modulação ainda aberta), calendário da CBS de 2027 (TCU até 30/10), PUC/PER/DCOMP Web para saldo credor, STJ ZFM (2ª Turma, out/2026), STJ Tema 1.276 (09/09).
+- **Sem novidade verificável:** EREsp 2.215.482 (sem julgamento nem pauta localizados), percentuais do crédito presumido do produtor rural 2027 (ato conjunto não localizado), edital de transação de PIS/COFINS (não localizado), nova IN da RFB sobre PIS/COFINS ou PER/DCOMP em out/2026 (não localizada), alerta de Big Four de out/2026 (não localizado).
+- **Limite:** o STF e o STJ não abriram nas buscas desta rodada; as datas de julgamento vêm de notícias do próprio STF (Tema 843) e de imprensa jurídica. Toda tese nova abaixo está marcada com a confiança real.
 **Como ler cada item:** o que mudou (data) · impacto (Save e parceiros) · ação do agente · fonte (URL, publicação, consulta) · vigência · risco · confiança.
 
 **Legenda.**
@@ -12,7 +18,7 @@
   - **B**: uma fonte secundária só. Serve de pista.
 - Quando a fonte é escritório ou Big Four, o item diz "pista". Antes de usar com cliente, confirmar na fonte primária.
 
-**Limite desta rodada.** O limite de buscas web da sessão acabou antes do fim da revisão. Ficaram sem verificação nova:
+**Limite da rodada de 16/10/2026 (superado em 23/10/2026: as buscas foram refeitas; ver o resumo acima).** O limite de buscas web da sessão acabou antes do fim da revisão. Ficaram sem verificação nova:
 - DCTFWeb e EFD-Reinf;
 - editais da PGFN de out/2026;
 - percentuais do crédito presumido do produtor rural para 2027;
@@ -24,12 +30,77 @@ Esses pontos estão marcados como "não localizado" e entram primeiro na revisã
 
 ## 1. STF e STJ (precedentes de 2025 a out/2026)
 
+### 1.0 Novidades de 23/10/2026 (itens novos, desde 16/10/2026)
+
+#### 1.0.1 STF Tema 118: ISS fora da base do PIS/COFINS (favorável, julgado em 21/10/2026)
+- **O que mudou (21/10/2026):** o STF concluiu o RE 592.616 por 6 a 5 a favor do contribuinte (excluem: Cármen Lúcia, Celso de Mello, Lewandowski, Mendonça, Rosa Weber e Fux; incluem: Moraes, Toffoli, Fachin, Gilmar e Barroso). **Modulação não definida**; será discutida nos embargos, com Dino, Nunes Marques e Zanin. Fux propôs efeitos a partir da publicação da ata, ressalvados processos e procedimentos em curso. Tese em texto: não localizada.
+- **Impacto para a Save:** a T07 deixa de ser só proteção de prazo. Risco central: se a modulação valer só dali para frente, o passivo de 5 anos fica restrito a quem já ajuizou ou tem procedimento aberto. Por isso a data da ação importa.
+- **Ação do agente:** não somar valor administrativo antes da ata, da modulação e da manifestação da PGFN (art. 19 da Lei 10.522/2002); levantar clientes prestadores de serviço do Real com ISS relevante; sinalizar ao Jurídico a janela de ajuizamento.
+- **Fonte:** Reforma Tributária (imprensa): https://www.reformatributaria.com/justica/iss-fica-fora-da-base-de-calculo-do-pis-cofins-decide-stf/ · pub. 21/10/2026 · cons. 23/10/2026. Ata e acórdão do STF: não localizados.
+- **Vigência:** vinculante após a publicação do acórdão; modulação pendente.
+- **Confiança:** B (uma fonte de imprensa; placar e modulação a confirmar na ata).
+
+#### 1.0.2 STF Tema 843: crédito presumido de ICMS fora da base do PIS/COFINS (favorável, julgado em 07/10/2026)
+- **O que mudou (07/10/2026):** o STF negou provimento ao RE da União (RE 835.818/PR). Tese: é incompatível com a Constituição incluir os créditos presumidos de ICMS na base da COFINS e do PIS. A imprensa reporta 7 a 4 (vencidos Moraes, Gilmar, Nunes Marques e Fux). **Modulação não analisada**; pode vir nos embargos.
+- **Impacto:** a T15 vira a tese mais forte para indústria e atacado com incentivo de ICMS; recuperação de 5 anos, sujeita à modulação.
+- **Ação do agente:** varrer a EFD-Contribuições (receitas outras que incluem crédito presumido) e a EFD ICMS/IPI (E111); decidir via judicial ou administrativa depois do acórdão e da PGFN. Não prometer prazo.
+- **Fonte:**
+  - STF, notícia do julgamento: https://noticias.stf.jus.br/postsnoticias/stf-exclui-creditos-presumidos-de-icms-da-base-de-calculo-do-pis-e-da-cofins/ · pub. 07/10/2026 · cons. 23/10/2026
+  - Mayer Brown (pista): https://www.mayerbrown.com/pt/insights/publications/2026/10/general-repercussion-theme-no-843-stf-rules-that-icms-presumed-credits-must-be-excluded-from-pis-and-cofins-tax-basis · pub. 09/10/2026
+- **Vigência:** vinculante após o acórdão; modulação pendente.
+- **Confiança:** M (notícia do portal do STF lida via WebFetch, sem a ata nem o acórdão; placar 7 a 4 só em imprensa).
+
+#### 1.0.3 STJ Tema 1.364: ICMS da aquisição não gera crédito de PIS/COFINS (contrário, 14/10/2026)
+- **O que mudou (14/10/2026):** a 1ª Seção, por unanimidade (rel. Min. Paulo Sérgio Domingues), fixou: é vedada a apuração de créditos de PIS/COFINS no regime não cumulativo sobre o ICMS que incidiu na operação de aquisição (art. 3º, § 2º, III, das Leis 10.637/2002 e 10.833/2003, incluído pela Lei 14.592/2023). Publicada no Informativo de Jurisprudência 906 (20/10/2026). Reportagens não tratam de modulação nem do ICMS-ST (matéria do Tema 1.231).
+- **Impacto:** fecha a "tese do século de volta" no crédito de aquisição. **Veto** da tese de crédito sobre ICMS de compras, inclusive em prospecção de concorrentes. Há tema correlato no STF (Tema 1.394), ainda pendente.
+- **Ação do agente:** pôr na lista de veto; checar se há cliente com ação em curso nesse tema (alertar sobre passivo e honorário).
+- **Fonte:**
+  - Contábeis (imprensa): https://www.contabeis.com.br/noticias/80243/stj-barra-credito-de-pis-e-cofins-sobre-icms-de-compras/ · pub. 21/10/2026 · cons. 23/10/2026
+  - APET (pista): https://apet.org.br/?p=143653 · 16/10/2026
+  - STJ, repetitivos: https://processo.stj.jus.br/repetitivos/temas_repetitivos/pesquisa.jsp?novaConsulta=true&tipo_pesquisa=T&cod_tema_inicial=1364&cod_tema_final=1364 (não aberto nesta rodada)
+- **Vigência:** vinculante.
+- **Risco:** alto para quem oferecer a tese.
+- **Confiança:** M (várias fontes de imprensa convergentes; primária não aberta).
+
+#### 1.0.4 STF ADI 4.395 (Funrural): resultado de 15/10/2026, modulação aberta
+- **O que mudou:** a imprensa do agro confirma o resultado: contribuição do empregador rural PF (art. 25) e sub-rogação do adquirente (art. 30, IV) inconstitucionais para fatos anteriores a 01/01/2018; mantidas depois (Lei 13.606/2018); art. 12, V e VII constitucional. Toffoli redige o acórdão. **Modulação reservada**; embargos podem reabrir. Um site (AgFeed) fala em 6 a 5; Cultivar não traz placar.
+- **Impacto:** consistente com o radar de 16/10 (item 1.7). Nada novo para o produto; o risco é a modulação.
+- **Ação:** manter a estratégia de `docs/teses/funrural-adi-4395-estrategia.md`; esperar o acórdão e a modulação antes de prometer restituição.
+- **Fonte:** Revista Cultivar: https://revistacultivar.com.br/noticias/stf-declara-inconstitucional-cobranca-do-funrural-anterior-a-2018 · pub. 16/10/2026 · cons. 23/10/2026. AgFeed (pista, placar): https://agfeed.com.br/?p=84052
+- **Vigência:** pendente de acórdão e modulação.
+- **Confiança:** M.
+
+#### 1.0.5 STJ, 2ª Turma: crédito de PIS/COFINS na ZFM sobre insumo desonerado (favorável, não vinculante)
+- **O que mudou:** no AREsp 3.295.872 (rel. Min. Francisco Falcão), a 2ª Turma manteve o direito de empresas da ZFM no não cumulativo a crédito sobre insumos adquiridos com isenção, não tributação ou alíquota zero, se a saída é tributada. Divulgação do STJ em 06/10/2026; data do julgamento não localizada.
+- **Impacto:** mais um precedente da 2ª Turma na linha do REsp 2.134.586, **antes** do EREsp 2.215.482. Não vincula a 1ª Seção.
+- **Ação:** só como argumento de apoio na ficha de alíquota zero. Não pesa no corte de risco.
+- **Fonte:** Contábeis (imprensa): https://www.contabeis.com.br/noticias/80041/stj-permite-creditos-de-pis-e-cofins-sobre-insumos-na-zona-franca/ · pub. 13/10/2026 · cons. 23/10/2026
+- **Vigência:** decisão de turma, sem efeito vinculante.
+- **Confiança:** B.
+
+#### 1.0.6 STJ Tema 1.276: CPRB integra a base do PIS/COFINS (contrário, 09/09/2026; lacuna do radar anterior)
+- **O que mudou:** a 1ª Seção, por unanimidade (rel. Min. Bellizze), fixou que a CPRB compõe as bases do PIS/Pasep e da COFINS. Mesma sessão: Tema 1.455 (cigarros, sem restituição ao varejista). Temas 1.415 (vista) e 1.392 (retirado) adiados.
+- **Impacto:** **Veto** da exclusão da CPRB da base do PIS/COFINS.
+- **Fonte:** APET (pista): https://apet.org.br/?p=142795 · pub. 11/09/2026 · cons. 23/10/2026
+- **Vigência:** vinculante. **Confiança:** B.
+
+#### 1.0.7 EREsp 2.215.482/SP e Tema 1.412: sem novidade verificável
+- **EREsp 2.215.482:** não está entre os cinco repetitivos da pauta da 1ª Seção de 14/10/2026 e não achei notícia de julgamento. Segue pendente. Consulta: 23/10/2026, só buscas na imprensa; o andamento no portal do STJ não foi aberto.
+- **Tema 1.244 (ZFM, importação) e Tema 1.412 (bonificações):** o 1.244 estava pautado em 14/10 e não achei resultado; o 1.412 segue adiado sem data (adiamento de 20/08/2026).
+- **Ação:** manter a vigília semanal da pauta da 1ª Seção. A frase ao parceiro do item 1.1 continua valendo.
+- **Fonte:** Rota da Jurisprudência (pista): https://rotadajurisprudencia.com.br/2026/09/stj-pauta-para-outubro-cinco-temas-sobre-creditos-de-pis-cofins-stock-options-e-outras-questoes-tributarias/ · pub. 30/09/2026 · cons. 23/10/2026
+- **Confiança:** B.
+
+#### 1.0.8 Pauta de out/2026 que ainda pode mexer na carteira
+- STF, plenário virtual: ADPF 248 (marco inicial da prescrição na repetição de indébito), 16 a 23/10/2026; STF Tema 1.348 (ITBI), virtual. STJ: REsp 2.271.580 (JCP na base do PIS/COFINS, 2ª Turma, 06/10/2026), REsp 2.228.998 (PIS/COFINS na interconexão, 1ª Seção, 08/10/2026). Resultado: não localizado.
+- **Fonte:** Velloza em Pauta: https://velloza.com.br/?p=15445 · pub. 06/10/2026 · cons. 23/10/2026 · **Confiança:** B.
+
 ### 1.1 Precedente decisivo para a tese principal: crédito sobre insumo com alíquota zero (EREsp 2.215.482/SP)
 - **O que mudou:**
   - A divergência entre as Turmas do STJ subiu à 1ª Seção. São os Embargos de Divergência 2.215.482/SP (Lins Agroindustrial × Fazenda), com relatoria da Min. Maria Thereza.
   - 1ª Turma: nega o crédito. 2ª Turma: admite (REsp 2.134.586/RS).
   - O MPF opinou contra estender o crédito à alíquota zero. Admite o crédito só para insumo isento com saída tributada.
-  - Até 31/08/2026: em julgamento, sem resultado localizado.
+  - Até 31/08/2026: em julgamento, sem resultado localizado. **Em 23/10/2026: segue sem resultado localizado e fora da pauta de 14/10 (ver 1.0.7).**
   - Em paralelo, o REsp 2.165.276/RS (19/05/2026) admitiu crédito na suspensão sem condição (art. 29 da Lei 12.865/2013).
 - **Impacto:**
   - É o precedente que define cerca de 99% do valor ganho da carteira.
@@ -144,10 +215,10 @@ Todas consultadas em 16/10/2026.
 | Caso | O que é | Situação (data) | Efeito | Conf. |
 |---|---|---|---|---|
 | **ADIs 7.587 e 7.609** | Limite mensal de compensação de crédito judicial (Lei 14.873/2024) | **Validado por unanimidade**, sessão virtual encerrada em 14/09/2026 (rel. Zanin) | Crédito judicial acima de R$ 10 mi segue em 12 a 60 parcelas mensais. Ver 2.3 | M |
-| **Tema 118** (RE 592.616) | ISS na base do PIS/COFINS | Placar 5×5. Saiu da pauta de 25/02/2026, sem nova data | Não somar ao valor. Só tese de proteção | M |
-| **Tema 843** (RE 835.818) | Crédito presumido de ICMS na base do PIS/COFINS | Saiu da pauta de 25/02/2026 | Monitorar | M |
+| **Tema 118** (RE 592.616) | ISS na base do PIS/COFINS | **Superado em 23/10/2026:** julgado em 21/10/2026, 6×5 pró-contribuinte, modulação pendente (ver 1.0.1). Antes: placar 5×5, fora da pauta de 25/02/2026 | Ver 1.0.1 | B |
+| **Tema 843** (RE 835.818) | Crédito presumido de ICMS na base do PIS/COFINS | **Superado em 23/10/2026:** julgado em 07/10/2026, favorável (ver 1.0.2). Antes: fora da pauta de 25/02/2026 | Ver 1.0.2 | M |
 | **Tema 1.266** (RE 1.426.271) | DIFAL de 2022: só a anterioridade nonagesimal | Concluído em 2025. Embargos da Fazenda rejeitados em mar/2026. Modulação protege quem ajuizou até 29/11/2023 e não pagou | **Veto** para quem não ajuizou | M |
-| **ADI 4.395** | Funrural: art. 25 (empregador rural PF) e sub-rogação do adquirente (art. 30, IV) | **Julgada em 15/10/2026:** inconstitucionais para fatos anteriores a 1º/1/2018 (voto médio de Toffoli); art. 12, V e VII constitucional; **modulação não decidida** (proposta: efeitos para frente, ressalvados não pagos, saldo do PRR e processos pendentes). Superado o "adiado" de 08/2026 | Passivo e processos de adquirentes (frigoríficos, laticínios, cerealistas). Restituição de pagos sem ação: prescrita. Estratégia em `docs/teses/funrural-adi-4395-estrategia.md` | A |
+| **ADI 4.395** | Funrural: art. 25 (empregador rural PF) e sub-rogação do adquirente (art. 30, IV) | **Julgada em 15/10/2026:** inconstitucionais para fatos anteriores a 1º/1/2018 (voto médio de Toffoli); art. 12, V e VII constitucional; **modulação não decidida** (proposta: efeitos para frente, ressalvados não pagos, saldo do PRR e processos pendentes). Superado o "adiado" de 08/2026. **Confirmado em 23/10/2026 por Revista Cultivar (16/10/2026); ver 1.0.4** | Passivo e processos de adquirentes (frigoríficos, laticínios, cerealistas). Restituição de pagos sem ação: prescrita. Estratégia em `docs/teses/funrural-adi-4395-estrategia.md` | A |
 | **Tema 1.445** (RE 1.566.336) | Contribuição patronal sobre o 13º proporcional ao aviso prévio indenizado | Repercussão reconhecida em mar/2026. Mérito vai ao plenário físico | Monitorar. Não somar | M |
 | **Tema 736** (RE 796.939) | Multa isolada de 50% por compensação não homologada | Inconstitucional (2023). Confirmar a modulação no acórdão dos embargos | Reduz o risco da DCOMP de boa-fé. **Não alcança** a multa de 75–150% por falsidade (art. 18 da Lei 10.833/2003) | M |
 
@@ -163,6 +234,21 @@ Todas consultadas em 16/10/2026.
 ---
 
 ## 2. CARF e Receita: compensação, PER/DCOMP, prazos e transação
+
+### 2.0 Novidades de 23/10/2026
+
+#### 2.0.1 Saldo credor de PIS/COFINS na CBS: pedido de utilização e PER/DCOMP Web (Decreto 12.955/2026, art. 602, parágrafo único)
+- **O que mudou:** o regulamento da CBS (Decreto 12.955/2026) condiciona o uso do saldo credor a um "pedido de utilização de crédito", em ato futuro da RFB; a RFB respondeu que haverá procedimento simplificado no PER/DCOMP Web a partir de 2027, puxando o saldo da EFD-Contribuições de dez/2026. Críticos dizem que a exigência não tem base em lei. A RFB estima cerca de 100 mil empresas com saldo e R$ 140 bi (imprensa, 15/10/2026). A contagem dos 5 anos (art. 383) está em disputa (parte da imprensa fala em 31/12/2031; o texto fala em "fluência do prazo").
+- **Impacto:** reforça o radar de 16/10 (3.1): vale o que estiver escriturado em dez/2026. Novo: a operação ainda depende de ato da RFB, e há risco de judicialização.
+- **Ação do agente:** controlar a idade de cada crédito (não presumir 31/12/2031); manter "retificar a EFD-Contribuições até dez/2026" como gancho; pedir ao técnico o texto do art. 602 e do ato da RFB quando sair.
+- **Fonte:** Análise: https://analise.com/opiniao/22747 · pub. 26/08/2026 (ano inferido) · cons. 23/10/2026. Pinheiro Guimarães (não abriu por redirecionamento; citado pelo buscador): https://pinheiroguimaraes.com.br/?p=4149 · 15/10/2026. Decreto 12.955/2026 no Planalto: não aberto.
+- **Vigência:** 2027. **Confiança:** B/M.
+
+#### 2.0.2 Transação, normas e Codar: sem novidade verificável
+- **Transação:** edital de PIS/COFINS de 2026: não localizado. Novos: Edital PGDAU 10 (30/09/2026) prorrogou a adesão dos editais 6, 8 e 9/2026 (o 6 vai a 29/01/2027); Edital PGFN/RFB 4/2026 (IRRF de não residente) com adesão até 29/12/2026. Pista JOTA (03/07/2026): teses de PIS/COFINS "engatilhadas". Fonte: busca de 23/10/2026 (imprensa), sem URL aberta; **confiança B**.
+- **Codar:** Portaria Codar 348, de 17/08/2026, criou mais duas equipes de auditoria em São José dos Campos (SP); somam-se às Portarias 316 e 319 (item 2.2). Fonte: Okai (pista): https://okai.com.br/documento/2026-06-16/portaria-codar-no-316-de-15-de-junho-de-2026 · cons. 23/10/2026 · **confiança B**.
+- **IN da RFB:** nenhuma norma nova de PIS/COFINS ou PER/DCOMP em out/2026 localizada.
+- **Solução de Consulta Cosit (23/09/2026):** afasta crédito de PIS/COFINS sobre energia autogerada consumida pela própria empresa; SC de 01/09/2026 reconhece alíquota zero sobre energia na geração compartilhada (art. 8º da Lei 13.169/2015, revogado em 01/01/2027). Fonte: Lefosse, newsletter de 22/10/2026: https://lefosse.com/newsletter/energia-tributacao-sobre-consumo-outubro-2026/ · cons. 23/10/2026 · **confiança B** (números das SC não informados).
 
 ### 2.1 IN RFB 2.314/2026: altera a IN 2.055/2021 (restituição, compensação e ressarcimento)
 - **O que mudou:** publicada no DOU de 19/03/2026, com vigência imediata.
@@ -290,11 +376,34 @@ Todas consultadas em 16/10/2026.
 - **Mudanças de 2026 que se ligam ao tema:** a IN 2.314/2026 alterou os arts. 94 e 95 da IN 2.055/2021.
   - A compensação de ofício passa a tratar à parte os débitos previdenciários confessados em GFIP.
   - Esses débitos seguem a ordem dos prazos de prescrição.
-- **Ação:** revisar na rodada de 23/10.
+- **Ação:** revisar na rodada de 23/10. **Revisado em 23/10/2026:** sem norma nova de DCTFWeb ou EFD-Contribuições em out/2026. Novidades de EFD-Reinf (Notas Técnicas 01, 04 e 05/2026: ajustes por causa da LC 224, novo CNR 20011 a partir de 01/10/2026, R-2010 desde a folha de set/2026). Fonte (pista): https://jornalcontabil.com.br/noticia/efd-reinf-nota-tecnica-04-2026-atualiza-tabelas-da-versao-2-1-2/ · cons. 23/10/2026 · confiança B.
 
 ---
 
 ## 3. Reforma tributária: transição, saldos credores, agro e janela de recuperação
+
+### 3.0 Novidades de 23/10/2026
+
+#### 3.0.1 Alíquota de referência da CBS de 2027: cronograma confirmado, número ainda não público (atualiza 3.3)
+- **O que mudou:** a Receita enviou o modelo de cálculo ao TCU em 14/09/2026 (prazo original 31/07), sem estimativa numérica. O TCU tem até **30/10/2026** (próxima semana) para validar e enviar ao Senado; o Senado tem até **15/12/2026**; se não deliberar, vale o cálculo do TCU a partir de 01/01/2027. A proposta só fica pública depois de 30/10. O "9,21%" que circula é implícito, não oficial. Controvérsia: dispensa da noventena (possível ADI) e risco de alíquota dupla (provisória e definitiva).
+- **Impacto:** o número do preço de 2027 pode sair já na semana que vem. Sobe a demanda por simulação de margem (P8).
+- **Ação do agente:** na revisão de 30/10, abrir o resultado do TCU. Até lá, simular só em cenários, nunca com número "oficial". Não citar 9,21% nem 9,43% ao parceiro.
+- **Fonte:** APET: https://apet.org.br/?p=142819 · pub. 14/09/2026 · cons. 23/10/2026. Capital Aberto: https://capitalaberto.com.br/regulamentacao/noventena-cbs-dupla-aliquota-elevam-risco-em-2027/ · pub. 19/06/2026 · cons. 23/10/2026. Resolução TCU 388/2026 (citada por buscador, não aberta).
+- **Vigência:** 01/01/2027. **Confiança:** M.
+
+#### 3.0.2 Prazos de opção do Simples e das cooperativas
+- **O que mudou:** 30/10/2026 é o prazo para o optante do Simples exercer a opção pelo regime regular de IBS/CBS; 31/10/2026, para as cooperativas formalizarem o regime específico (Lefosse, 22/10/2026).
+- **Impacto:** cliente do Simples com muitos compradores PJ pode ganhar com a opção (crédito para o comprador). Prazo em 7 dias.
+- **Ação:** alertar o parceiro hoje; confirmar o prazo na fonte primária (CGIBS/RFB), que não abri.
+- **Fonte:** https://lefosse.com/newsletter/energia-tributacao-sobre-consumo-outubro-2026/ · pub. 22/10/2026 · cons. 23/10/2026. **Confiança:** B.
+
+#### 3.0.3 Percentuais do crédito presumido do produtor rural 2027: ainda não localizados
+- Ato conjunto MF/CGIBS (LC 214, art. 168; divulgação até setembro): **não localizado** em 23/10/2026. Pista Tozzini Freire: a média de 5 anos exclui 2027 e 2031 (não confirmado no texto). Regulamentos: Resolução CGIBS 6/2026 (30/04/2026), alterada pela 13/2026 (22/07/2026), e Decreto 12.955/2026.
+- **Ação:** manter "não localizado"; nenhum percentual na proposta ao cliente.
+- **Fonte:** NetCPA: https://netcpa.com.br/noticias/urgente-cpa-publicada-a-resolucao-cgibs-no-62026-que-institui-o-regulamento-do-ibs/24389 · cons. 23/10/2026 · **Confiança:** B.
+
+#### 3.0.4 LC 224/2025, vedação de crédito (art. 4º, § 7º): litígio ainda sem decisão de tribunal superior
+- Há liminares em primeira instância e no TRF-1/TRF-3 (divergentes); a CNI informou que levará o direito ao crédito ao STF; a PGFN defende a vedação com base no Tema 756. Nada do STF localizado. Fonte: APET (pista): https://apet.org.br/?p=141772 · cons. 23/10/2026. **Confiança:** B. Ação: manter o corte da tese A em 31/03/2026 (item 3.5).
 
 ### 3.1 O que acontece com o saldo de PIS/COFINS na extinção (LC 214/2025, arts. 378 a 383)
 - **O que mudou (texto lido no Planalto):**
@@ -348,7 +457,7 @@ Todas consultadas em 16/10/2026.
 - **Risco:** baixo.
 - **Confiança:** A.
 
-### 3.3 Cronograma 2026–2027: alíquota da CBS e split payment
+### 3.3 Cronograma 2026–2027: alíquota da CBS e split payment (parte da alíquota de referência: **atualizada em 23/10/2026, ver 3.0.1**; a pista de "TCU até 30/10 e Senado até 15/12" foi confirmada)
 - **O que mudou:**
   - 2026 é ano-teste (CBS 0,9% e IBS 0,1%, compensáveis). Já está na base.
   - Pista para a alíquota de referência da CBS de 2027, com prazos prorrogados só em 2026:
@@ -479,6 +588,8 @@ Todas consultadas em 16/10/2026.
 
 ## 5. Benchmark Big Four: como vendem e entregam
 
+**Novidade de 23/10/2026:** nenhum tax alert novo de EY, Deloitte, KPMG ou PwC de out/2026 foi localizado. A PwC *Tax Intelligence* (gestão de saldos credores) segue como a pista mais recente (consulta 23/10/2026, citada em buscas, PDF não reaberto). Tom do mercado em out/2026, segundo escritórios brasileiros: saldo credor de PIS/COFINS (R$ 140 bi, 100 mil empresas, números da RFB repetidos pela imprensa), PUC e alíquota da CBS. **Confiança:** B. Honorários de êxito de mercado: continua "não localizado".
+
 **O que foi encontrado (páginas institucionais, consulta em 16/10/2026):**
 - **KPMG Brasil:** "Tax Transformation" (jornada orientada a dados, com "plataforma exclusiva"), "Consultoria em reforma tributária", outsourcing, tributos indiretos e aduaneiros, consultoria trabalhista e previdenciária. Fonte: https://kpmg.com/br/pt/home/servicos/tax.html
 - **Deloitte Brasil:** Indirect Tax ("gestão de caixa" com tecnologia), Tax Transformation Consulting (integração, dados e analytics) e a plataforma **Intela** (IA + nuvem, automação de fluxos). Fonte: https://www.deloitte.com/br/pt/services/tax.html
@@ -525,3 +636,25 @@ Todas consultadas em 16/10/2026.
 6. **Monetizar ICMS antes de 2033:** ST a maior, CIAP e crédito acumulado. Depois, o pagamento vira 240 parcelas.
 7. **Agro:** Súmula CARF 189 ("insumo do insumo" na fase agrícola) e estudo de opção do produtor pelo IBS/CBS.
 8. **Planejamento de renda do sócio (Lei 15.270 e LC 224):** distribuição, JCP e Real × Presumido para 2027.
+
+## Conflitos com a base interna (revisão de 23/10/2026)
+
+| # | Base interna | O que o mercado mostra (fonte, consulta 23/10/2026) | Tratamento |
+|---|---|---|---|
+| C1 | `exclusoes-da-base.md` (T07) cita a tese do Tema 118 em texto e diz "julgado por maioria" | Só localizei imprensa (Reforma Tributária, 21/10/2026): 6×5, **sem tese em texto, sem ata, modulação aberta** (Fux propõe efeitos da ata para frente, ressalvados os processos em curso) | Não mexo. Peço ao técnico conferir a tese no portal do STF antes de usar a frase. Ver 1.0.1 |
+| C2 | Base: T15 (Tema 843) com "acórdão a publicar" e tese citada | Notícia do STF (07/10/2026) confere a tese; **placar 7×4 só em imprensa**; modulação não analisada | Consistente. Falta só o acórdão e o risco de modulação nos embargos |
+| C3 | Catálogo e `insumos-pis-cofins.md`: sem veto para crédito sobre ICMS de compras | **STJ Tema 1.364 (14/10/2026): vedado, unânime.** Há também Tema 1.276 (CPRB na base), de 09/09/2026 | Propor inclusão na lista de veto (proposta P1) |
+| C4 | Radar de 16/10 (1.7): Tema 118 "5×5, fora da pauta" e Tema 843 "monitorar" | Superados (itens marcados acima) | Já corrigido no radar |
+| C5 | `reforma-tributaria.md` e P8: percentuais do produtor rural 2027 "a confirmar" | Ato conjunto ainda não localizado, mesmo depois do prazo legal (set/2026) | Sem conflito; manter "não localizado" |
+| C6 | Base trata a contagem de 5 anos do saldo (art. 383) sem controvérsia | Imprensa registra disputa: 31/12/2031 versus idade original de cada crédito | Propor linha de cautela (P3) |
+
+## Perguntas novas ao dono (23/10/2026)
+
+| # | Pergunta | A quem | Por que importa |
+|---|---|---|---|
+| N1 | Com o Tema 118 julgado (21/10) e **modulação ainda aberta**, a Save ajuíza ISS já para proteger o período de clientes de serviço, antes da ata? (complementa a pergunta 12 de 22/10) | Tributarista + Jurídico + Luis | Se a modulação valer só da ata para frente, quem não ajuizou perde o passivo de 5 anos |
+| N2 | Incluímos o **Tema 1.364** (ICMS de compras) e o **Tema 1.276** (CPRB) na lista de veto do catálogo? Quem edita? | Luis + time técnico | Evita vender tese fechada pelo STJ |
+| N3 | A Save adota a regra "contar a idade de cada crédito" para o prazo de 5 anos do saldo de PIS/COFINS (art. 383) até a RFB definir? | Tributarista | Evita prometer uso até 2031 |
+| N4 | Quem avisa os clientes do Simples e das cooperativas dos prazos de **30 e 31/10/2026** (opção IBS/CBS)? Entra como serviço ou só como aviso? | Luis + parceiros | Prazo em 7 dias; é gancho comercial e risco de omissão |
+| N5 | Na revisão de 30/10 (resultado do TCU), a Save autoriza simulação P8 com o número oficial, com o texto "estimativa preliminar sujeita a validação técnica"? | Luis + tributarista | Primeira vez que o preço de 2027 tem número |
+| N6 | Há acesso ao portal do STF/STJ (tese em texto, ata, andamento do EREsp 2.215.482) para o time técnico conferir o que o radar só leu em imprensa? | Tributarista | Vários itens desta rodada estão com confiança B/M por falta da fonte primária |

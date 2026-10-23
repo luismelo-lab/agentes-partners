@@ -22,7 +22,7 @@
 **Quem ganha onde (valor ganho em 12 meses, base de 19/10/2026, `[BASE]`):** D&S em Carnes MG e SP e Hortifrúti MG; AGILE em Carnes SP; G.S.H, Orteconte e Costa e Gaudêncio em Café MG; JGM em Café ES; Assecont em Supermercados SC; Gerson em RS. Cardoso e os demais com histórico menor (ler no perfil do Master de cada lista).
 
 **Leitura do sênior sobre esse mapa.**
-- Quatro Masters (G.S.H, Orteconte, Costa e Gaudêncio, JGM) têm território em **café**, que está fora da meta de recuperação desde abr/2026. A D43 (05/10/2026, pendente) propõe reconverter G.S.H, JGM e Orteconte para P1 e P2 (frigoríficos e hortifrúti). O mapa precisa mostrar, para cada um, onde há universo de P1 e P2 dentro da praça que eles já frequentam.
+- Quatro Masters (G.S.H, Orteconte, Costa e Gaudêncio, JGM) têm território em **café**, que está fora da meta de recuperação desde abr/2026. A D43 (05/10/2026, delegada à Daniela em 23/10/2026, D98) propõe reconverter G.S.H, JGM e Orteconte para P1 e P2 (frigoríficos e hortifrúti). O mapa precisa mostrar, para cada um, onde há universo de P1 e P2 dentro da praça que eles já frequentam.
 - Assecont em supermercados de SC: T01 não serve a supermercado; o território é real, o produto de entrada é reforma e Gestão de Contas, não recuperação T01 (conflito C4 a regrar).
 - **Praças sem histórico** na lista de 29/09/2026: 4.203 prospects (ex.: hortifrúti SP com 978 empresas, carnes PR com 348, carnes GO com 227). Isso é cobertura a construir, não lista para Master distante.
 
@@ -61,8 +61,8 @@
 ## 4. Regras da casa
 - **Conflito de canal é decisão do Luis** (SKILL do depto, regra 5; `celula-jenifer`, regra 5).
 - **D76 (22/10/2026, aprovada):** clientes sem Master pertencem a outra área e ficam fora do planejamento e das listas da Área Partners.
-- **D43 (05/10/2026, pendente):** reconversão de G.S.H, JGM e Orteconte para P1 e P2, com contas-alvo da Jenifer.
-- **D7-b (29/09/2026, pendente):** foco Q4 em frigoríficos e hortifrúti (só B).
+- **D43 (05/10/2026, delegada à Daniela em 23/10/2026, D98):** reconversão de G.S.H, JGM e Orteconte para P1 e P2, com contas-alvo da Jenifer.
+- **D7-b (29/09/2026, superada em 23/10/2026 pela D98: o Luis decidiu só a meta do Q4, D64, e o foco por segmento vai para 2027 com a meta da diretoria, D75):** foco Q4 em frigoríficos e hortifrúti (só B).
 - **D78 (22/10/2026, aprovada):** remuneração de parceiro nos produtos 2027: 10% do líquido Save no início, crescendo pelo programa. Território de produto 2027 não altera essa regra.
 - **D61 (06/10/2026):** crédito internacional: indicador com 10% do líquido Save, até 30% no programa de desenvolvimento.
 - **Luis, 21/10/2026:** prospecção para a D&S só em MG e só Lucro Real.
@@ -109,7 +109,7 @@ Situação: 5.629 prospects de carnes, hortifrúti e pescados; 1.426 com Master 
 ### Caso 2 · Quatro anéis geográficos da D&S (interno, 20 e 21/10/2026)
 Situação: o Master vende onde tem relação. Leitura: o anel geográfico em torno do cliente mais próximo é o melhor previsor de abertura. O que foi feito: Lote 1 (755) e Lote 2 (1.688) em MG, com o cliente mais próximo por prospect, só Lucro Real.
 
-### Caso 3 · Reconversão de Masters de café (interno, 05/10/2026, D43 pendente)
+### Caso 3 · Reconversão de Masters de café (interno, 05/10/2026, D43 delegada à Daniela em 23/10/2026, D98)
 Situação: G.S.H, JGM e Orteconte com território em café, fora da meta. Leitura: o território geográfico é bom, o segmento não; há universo de frigoríficos e hortifrúti nas mesmas regiões imediatas. O que foi feito: proposta de reunião com cada Master com contas-alvo da Jenifer.
 
 ### Caso 4 · Exclusividade de zona no Código Civil (público)

@@ -19,7 +19,7 @@ Revisão: 23/10/2026 (inventário local e fontes de 22/10/2026) · Área: `depto
 
 ## 2. Domínio técnico
 **O que roda hoje (inventário local de 22/10/2026):**
-- **8 tarefas agendadas do Claude:** `central-agentes-email`, `conselho-reuniao-semanal`, `consolidacao-semanal` (sexta 16h), `operacao-areas`, `radar-mercado`, `recuperador-lote-semanal` (segunda 9h), `relatorio-semanal-resultados` (segunda 06h30), `whatsapp-caixa-time` (dias úteis 8h e 14h). O inventário v1.1 de 02/10/2026 registra só 5: está desatualizado.
+- **8 tarefas agendadas do Claude:** `central-agentes-email` (dias úteis, a cada 2 h, das 8h às 18h), `conselho-reuniao-semanal`, `consolidacao-semanal` (sexta 16h), `operacao-areas`, `radar-mercado`, `recuperador-lote-semanal` (segunda 9h), `relatorio-semanal-resultados` (segunda 06h30), `whatsapp-caixa-time` (dias úteis 8h e 14h). O inventário v1.1 de 02/10/2026 registra só 5: está desatualizado.
 - **7 jobs do launchd** (`com.savecompany.partners.*`): backup (19h30), caixa (7h45 e 13h45), central (a cada 15 min), manhã (7h30), segunda (6h), tarde, whatsapp-auto (11h e 17h, sem IA). Reinstalados por `infra/launchd/instalar.sh`.
 - **7 workflows do GitHub Actions, desligados:** diário, segunda, WhatsApp leitura, WhatsApp automático, leitura da Central, Receita mensal, rotinas com IA.
 - **Dependências do Mac:** ligado e acordado (D46 pede `pmset repeat wakeorpoweron` às 07h25 nos dias úteis), app do Claude aberto para as tarefas agendadas, rede, OneDrive sincronizando, permissão de Acesso Total ao Disco para o backup.
@@ -65,7 +65,7 @@ Revisão: 23/10/2026 (inventário local e fontes de 22/10/2026) · Área: `depto
 ## 4. Regras da casa
 - **Regra 6 da área:** o TI virtual não cria tarefas agendadas nem automações; propõe com horário, dono e custo de falha.
 - **D26 (01/10/2026):** operação contínua com sentinelas sem IA; plano do dia às 7h30 e urgentes às 13h30.
-- **D46 (pendente):** pmset e checagem até 9h. **D72 (pendente):** alerta se o relatório não sair até 07h30. **D67 (pendente):** dono e prazo por sentinela.
+- **D46 (delegada ao depto-ti e à Geovana em 23/10/2026, D98):** pmset e checagem até 9h. **D72 (aplicada por padrão em 23/10/2026, D98; dono: depto-ti):** alerta se o relatório não sair até 07h30. **D67 (aplicada por padrão em 23/10/2026, D98; dono: depto-ti):** dono e prazo por sentinela.
 - **D89 (22/10/2026):** Azure Static Web Apps (Standard) e Table Storage. **D91:** contorno pelo OneDrive.
 - **D19 (rejeitada, 29/09/2026):** rotina de orçado × realizado e revisão de softwares retiradas do fluxo; custo é acompanhado aqui sob demanda, não como rotina.
 - **CLAUDE.md:** ao alterar rotina, copiar para a cópia viva (`~/.claude/scheduled-tasks/<rotina>/SKILL.md`), conferindo antes que a cópia viva é igual ao `HEAD`; processos fora do scratchpad.

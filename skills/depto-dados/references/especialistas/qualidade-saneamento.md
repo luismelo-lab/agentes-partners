@@ -63,7 +63,7 @@ Consulta em 22/10/2026, texto oficial do Planalto quando indicado.
 - **D18 (29/09/2026):** a obrigatoriedade de campos é feita pelo time de CRM da Save, não pelos agentes.
 - **D62 (15/10/2026):** completar % honorário, % parceiro, tese e variante nos ganhos de outubro, sem reter repasse.
 - **D71 e D73 (22/10/2026):** o % de honorário só é informado no ganho; ganho só entra no forecast e no relatório com tese, variante e %. Logo, "aberto sem % honorário" não é erro.
-- **D74 (19/10/2026, pendente):** o Dados reconcilia o número oficial do pipeline (R$ 180,6 mi no HubSpot bruto × R$ 123,6 mi no relatório) e fixa a regra de escopo.
+- **D74 (19/10/2026, delegada ao depto-dados em 23/10/2026, D98):** o Dados reconcilia o número oficial do pipeline (R$ 180,6 mi no HubSpot bruto × R$ 123,6 mi no relatório) e fixa a regra de escopo.
 - **D76 (22/10/2026):** cliente sem Master fica fora das listas da Área Partners; o saneamento cobre só o escopo do roster.
 - **Regra de café** (Luis, 20/08/2026, no `mapeamento-hubspot.json`): café fora da meta desde abr/2026; o dedupe não mistura a regra de escopo com a de duplicidade.
 - **Em aberto:** quem do time de CRM executa a mescla e em que prazo; se negócio de matriz e filial com mesma tese é um ou dois.

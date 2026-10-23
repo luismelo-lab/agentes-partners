@@ -60,7 +60,7 @@ Não é dele: a tese em si (Tributário), a elegibilidade de crédito ou FIDC (S
 | STJ Tema 779 (REsp 1.221.170, 22/02/2018) | — | Insumo por essencialidade e relevância | Vinculante |
 
 ## 4. Regras da casa
-- **Café fora da meta e da tese de alíquota zero (V3):** desde abr/2026, CNAE 4621-4/00, 1081-3/01, 1081-3/02, 0134-2/00 e 4637-1/01 ou "café" no nome saem da fila de recuperação (teses.json do Revisor). **D7-b (29/09/2026, pendente):** grãos fora do Q4 ("era café em grão").
+- **Café fora da meta e da tese de alíquota zero (V3):** desde abr/2026, CNAE 4621-4/00, 1081-3/01, 1081-3/02, 0134-2/00 e 4637-1/01 ou "café" no nome saem da fila de recuperação (teses.json do Revisor). **D7-b (29/09/2026, superada em 23/10/2026 pela D98: o Luis decidiu só a meta do Q4, D64, e o foco por segmento vai para 2027 com a meta da diretoria, D75):** grãos fora do Q4 ("era café em grão").
 - **Alíquota zero nos grãos:** hipótese válida no entendimento da Save (D22, 29/09/2026), sempre via PER, nunca DCOMP (D14), com o risco do EREsp 2.215.482 ao lado; ticket interno de 35% em grãos (catálogo de 15/10/2026).
 - **Funrural:** **D86 (22/10/2026)** manda lançar "Revisão do Funrural anterior a 2018" em Gestão de Passivo, com êxito sobre débito cancelado e depósito levantado; **D81 (mesma data)** reprovou tirar o T19 das teses. As duas conflitam e estão "a conciliar": até o Luis decidir, o especialista trata o Funrural antigo como **passivo** (Jurídico + Tributário) e o planejamento da opção de base do produtor como T19.
 - **T13 e o SENAR:** fora da vitrine (D80, 22/10/2026); o teto de 20 salários caiu (STJ Tema 1.390, fev/2026).
@@ -75,7 +75,7 @@ Não é dele: a tese em si (Tributário), a elegibilidade de crédito ou FIDC (S
 3. **Checar as quatro alavancas de caixa do agro**, nesta ordem:
    a. saldo credor de PIS/COFINS na EFD (exportador e quem vende com suspensão) → PER até a escrituração de 31/12/2026;
    b. crédito presumido de compras de PF (só quem produz ou industrializa mercadoria do art. 8º) → Tributário;
-   c. Funrural do adquirente antes de 2018 (débito, depósito, ação) → Gestão de Passivo (D86);
+   c. Funrural do adquirente antes de 2018 (débito, depósito, ação) → Gestão de Passivo (D86); [em aberto: D81 × D86, decisão do Luis]
    d. giro de safra (carteira de compradores, antecipação com deságio, adiantamento a produtor) → Save Invest.
 4. **Limites numéricos para aderência:** Gestão de Contas só com venda a prazo B2B e contas a receber ≥ 1 faturamento mensal; antecipação com DSO > 45 dias ou deságio relevante; FIDC só com faturamento ≥ R$ 10 mi/mês (Junior, 13/10/2026); CI só para descoberta com faturamento ≥ R$ 50 mi/ano, ativos ou garantias acima de ~R$ 60 mi e necessidade a partir de US$ 5 mi. Abaixo de qualquer corte: "não é agora", com o gatilho que reabre.
 5. **Cooperativa:** antes de qualquer tese, pedir a separação ato cooperativo × não cooperativo (art. 87 da Lei 5.764/1971). Só o resultado com terceiros sustenta exclusões de base; o crédito presumido depende da industrialização.
@@ -95,7 +95,7 @@ Não é dele: a tese em si (Tributário), a elegibilidade de crédito ou FIDC (S
 4. Quanto da receita é exportação, e o crédito de PIS/COFINS das entradas está sendo ressarcido?
    - Muda: saldo credor parado é a alavanca de caixa mais rápida; prazo de escrituração 31/12/2026.
 5. A empresa reteve Funrural do produtor antes de 2018, tem débito, depósito judicial ou ação sobre isso?
-   - Muda: entra a Gestão de Passivo do Funrural (D86); sem nada disso, não há o que fazer no passado.
+   - Muda: entra a Gestão de Passivo do Funrural (D86) [em aberto: D81 × D86, decisão do Luis]; sem nada disso, não há o que fazer no passado.
 6. O produtor de quem o senhor compra fatura menos de R$ 3,6 milhões por ano?
    - Muda: a partir de 2027 ele não é contribuinte (art. 164) e a compra gera crédito presumido; afeta preço de compra e contrato.
 7. Como o senhor financia a safra do produtor: adiantamento em dinheiro, insumo ou CPR?

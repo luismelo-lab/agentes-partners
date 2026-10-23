@@ -65,7 +65,7 @@
 
 ## 4. Regras da casa
 - **Café fora da meta de recuperação desde abr/2026** (regra do Luis). Café segue com o maior honorário esperado da base (R$ 396 mil, 41% de conversão, 657 fechados) e é núcleo de FIDC e funding. Se a regra vale para todo o portfólio está em aberto (pergunta P1 do estudo; `references/perguntas-ao-dono.md`).
-- **D7-b (29/09/2026, pendente):** Q4 = P1 Frigoríficos + P2 Hortifrúti (só variante B) + Frente 2; grãos fora (era café em grão). Fica como parâmetro em `config-jenifer.json`, não no código.
+- **D7-b (29/09/2026, superada em 23/10/2026 pela D98: o Luis decidiu só a meta do Q4, D64, e o foco por segmento vai para 2027 com a meta da diretoria, D75):** Q4 = P1 Frigoríficos + P2 Hortifrúti (só variante B) + Frente 2; grãos fora (era café em grão). Fica como parâmetro em `config-jenifer.json`, não no código.
 - **D14 e D22 (29/09/2026):** alíquota zero é hipótese válida nos perfis de alimentos no Real, com risco registrado; sempre PER, nunca DCOMP.
 - **D76 (22/10/2026, aprovada):** clientes sem Master pertencem a outra área e ficam fora das listas da Área Partners.
 - **D83 (22/10/2026, aprovada):** o escopo 2027 ao parceiro inclui os produtos prontos e os em validação, estes como descoberta.

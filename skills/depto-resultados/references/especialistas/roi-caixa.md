@@ -56,7 +56,7 @@ Fontes secundárias (consulta em 22/10/2026):
 - **D17 (29/09/2026):** 3 colunas, contratado · conservador · realizado.
 - **D19 (rejeitada em 29/09/2026):** sem rotina de orçado × realizado no relatório.
 - **D21 (29/09/2026):** carga por pessoa, sem "R$ por pessoa".
-- **D14:** variante A fora do ROI oficial e da meta; honorário só no ressarcimento.
+- **D14 (parcialmente confirmada):** honorário só no ressarcimento (PER, firme). Variante A fora do ROI oficial e da meta é a parte pendente da D14 [pendente na D14, que está só parcialmente confirmada: o PER é firme; variante A no forecast e na meta segue com o Luis, e até lá o tratamento conservador abaixo é o padrão].
 - **D33 e D54 (pendentes, 02/10/2026 e 05/10/2026):** tetos de horas para produtos novos (Luis até 4 h por semana); a hora gasta é custo de oportunidade no business case.
 - **D34 (pendente, 02/10/2026):** Crédito Internacional com receita só como potencial, 3 colunas, líquida do parceiro.
 - **D60 (05/10/2026):** custo de oportunidade no K00 de produto novo.

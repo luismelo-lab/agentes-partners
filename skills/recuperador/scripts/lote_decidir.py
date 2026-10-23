@@ -24,12 +24,20 @@ EDITA = {"decisão da Geovana", "motivo da decisão", "valor validado (R$)", "mi
 
 
 def main():
-    a = argparse.ArgumentParser(); a.add_argument("--lote", type=int, default=1); a.add_argument("--fila"); a = a.parse_args()
-    fila = a.fila or sorted(glob.glob(os.path.join(AP, "celulas/geovana/recuperador/Fila-Recuperador-????-??-??.xlsx")))[-1]
+    a = argparse.ArgumentParser(); a.add_argument("--lote", type=int, default=1); a.add_argument("--fila"); a.add_argument("--saida"); a = a.parse_args()
+    filas = sorted(glob.glob(os.path.join(os.environ.get("RECUPERADOR_OUT") or os.path.join(AP, "celulas/geovana/recuperador"), "Fila-Recuperador-????-??-??.xlsx")))
+    fila = a.fila or (filas[-1] if filas else sys.exit("sem Fila-Recuperador-AAAA-MM-DD.xlsx: rode fila.py antes"))
     rows = list(openpyxl.load_workbook(fila, read_only=True, data_only=True)["Fila"].iter_rows(values_only=True)); h = list(rows[0])
     L = [dict(zip(h, r)) for r in rows[1:]]; L = [g for g in L if str(g.get("lote") or "") == str(a.lote)]
     L.sort(key=lambda g: g.get("prioridade") or 999)
-    saida = os.path.join(caminhos.pasta("geovana"), f"Fila-Recuperador-Lote{a.lote}-decidir-{date.today()}.xlsx")
+    # decisões já marcadas em qualquer folha anterior (inclusive esta mesma, se for gerada de novo no dia) não se perdem:
+    # antes, rodar de novo a partir de uma fila mais antiga sobrescrevia o que a Geovana já tinha marcado na folha curta.
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from fila import decisoes_anteriores
+    ant = decisoes_anteriores()
+    for g in L:
+        for k, v in (ant.get(g.get("link")) or {}).items():
+            if g.get(k) in (None, ""): g[k] = v
+    saida = a.saida or os.path.join(caminhos.pasta("geovana"), f"Fila-Recuperador-Lote{a.lote}-decidir-{date.today()}.xlsx")
 
     wb = openpyxl.Workbook(); ws = wb.active; ws.title = "Fila"; ws.sheet_view.showGridLines = False
     for j, (t, w) in enumerate(COLS, 1):

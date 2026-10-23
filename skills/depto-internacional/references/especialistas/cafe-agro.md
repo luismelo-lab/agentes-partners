@@ -57,7 +57,7 @@
 | IOF de exportação | Decreto 6.306/2007, art. 15-B, I (zero) | Vigente |
 | EUDR | Regulamento (UE) 2023/1115 e adiamentos | 30/12/2026 e 30/06/2027 |
 | RJ do produtor rural | Lei 11.101/2005 (Lei 14.112/2020) | Vigente |
-| Funrural | ADI 4.395; D86 (Gestão de Passivo) | Passivo tributário, outra área |
+| Funrural | ADI 4.395; D86 (Gestão de Passivo) [em aberto: D81 × D86, decisão do Luis] | Passivo tributário, outra área |
 
 ## 4. Regras da casa
 - **Café é o maior segmento da base:** 82% da faixa A do CI (1.007 empresas, 02/10/2026); ranking de segmentos: café 3,9 (v2.3 §14).
@@ -107,7 +107,7 @@
 10. **Vendem para a Europa? Têm geolocalização dos talhões?**
     - EUDR em 30/12/2026.
 11. **Há passivo de Funrural ou débito fiscal?**
-    - Vai à Gestão de Passivo (D86) antes.
+    - Vai à Gestão de Passivo (D86) antes. [em aberto: D81 × D86, decisão do Luis]
 12. **Algum membro da família ou empresa do grupo está em RJ ou renegociação?**
     - K7 pela raiz do CNPJ e pelos CPFs do grupo.
 13. **Qual o custo de produção por saca e a que preço vocês empatam?**

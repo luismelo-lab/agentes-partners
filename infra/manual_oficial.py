@@ -14,7 +14,7 @@ from datetime import date
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "lib"))
-VERSAO = "2.1"
+VERSAO = "2.2"
 SAIDA_MD = os.path.join(REPO, "docs/manual-oficial-agentes.md")
 
 # área: (nome, bloco, missão, dono humano, onde entrega)
@@ -98,7 +98,7 @@ def perguntas(area):
 
 FIXO_INICIO = f"""# Manual Oficial dos Agentes · Área Partners
 
-> Versão {VERSAO}, {date.today():%d/%m/%Y}. Substitui a v2.0 de 23/10/2026 e o Manual dos Agentes v1.0 (13/10/2026). A v2.1 detalha o que cada área e cada especialista entrega. Uso interno. O conteúdo das áreas é lido das próprias skills (`infra/manual_oficial.py`), então este manual se regera quando uma área muda.
+> Versão {VERSAO}, {date.today():%d/%m/%Y}. Substitui a v2.1 e a v2.0 de 23/10/2026 e o Manual dos Agentes v1.0 (13/10/2026). A v2.1 detalha o que cada área e cada especialista entrega. Uso interno. O conteúdo das áreas é lido das próprias skills (`infra/manual_oficial.py`), então este manual se regera quando uma área muda.
 
 ## 1. Para que serve este manual
 Este é o documento oficial da operação de agentes de IA da Área Partners da Save Co. Ele diz:
@@ -135,6 +135,21 @@ Todo pedido, demanda ou originação segue o mesmo caminho (`infra/fluxo-unico.m
 5. **Revisão do gerente.** Até 2 rodadas. A revisão aprovada registra ajustes concretos ou o motivo de não haver ajuste (`infra/protocolo-gerente.md`).
 6. **Devolução em 3 blocos.** O que você pediu; o que você também precisa; o que falta e quem fornece (`infra/padrao-entrega.md`).
 7. **Se a área não resolve com os dados,** o especialista escreve o chamado ideal e ele vai para aprovação no painel antes de abrir no GLPI. Contrato vai ao time de Contratos; repasse vai ao Financeiro.
+
+### 3.1 Demandas do WhatsApp dos parceiros
+A rotina `whatsapp-caixa-time` lê os grupos dos Masters e as caixas do time (dias úteis, 8h e 14h com IA; 11h e 17h sem IA). Cada mensagem vira uma demanda avaliada pelos agentes:
+- **Quem pediu e o que pede:** Master, grupo, horário e o pedido em uma frase.
+- **Classificação:** tipo (prazo e intimação, contrato, status de crédito, material, originação…), área responsável, urgência e prazo (o prazo legal vem antes do prazo de tabela) e confiança da leitura.
+- **Rota sugerida:** responder direto, pedir à área ou abrir chamado. Status de crédito nunca vira chamado.
+- **Rascunho de resposta ao Master:** passa pelo auditor de promessas. Quem envia é a dona da demanda (Daniela nos grupos de Master; Jenifer em indicação de empresa; Geovana em dúvida técnica dirigida a ela).
+- **Onde ver:** na seção "WhatsApp · Demandas" do portal (com busca por Master, assunto ou área) e no registro único `registro/demandas.json`.
+
+### 3.2 Chamado no GLPI gerado pelos agentes
+Quando a área não resolve com os dados, o especialista escreve o **chamado ideal** (`infra/chamado-ideal.md`): categoria, título, o que entendemos, pedidos objetivos (1 a 5), anexos, o que falta e quem fornece, prazo e motivo. O caminho:
+1. **Gerar:** a partir da demanda selecionada ou do resultado da busca, o portal mostra o chamado pronto ("Gerar chamado GLPI").
+2. **Aprovar:** a dona da demanda aprova, edita ou recusa com o motivo (D98). Só sobe ao Luis o chamado que toca regra, preço, conflito de canal ou produto em validação.
+3. **Abrir:** a rotina abre no GLPI em nome de quem atendeu (`lib/chamados_painel.py aplicar`). Enquanto o TI não libera o acesso ao GLPI (pedido único à TI, 23/10/2026), o chamado aprovado fica como "abrir manualmente", com o texto pronto para copiar.
+4. **Fora do GLPI:** contrato, aditivo e distrato vão ao time de Contratos; repasse e prestação de contas, ao Financeiro.
 
 **Quando sobe de nível:** 3 ou mais áreas envolvidas, mudança de regra, mais de R$ 1 mi de crédito com decisão ou produto em validação.
 

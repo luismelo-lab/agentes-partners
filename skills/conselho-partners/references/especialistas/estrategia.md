@@ -25,7 +25,7 @@ O **parecer de estratégia** do Conselho: para cada ponto da pauta, se aproxima 
 
 **Economia que limita a estratégia.** Receita potencial jul a set de R$ 17,7 mi de lucro sobre R$ 271 mil de custo (ata de 28/09) mostra alavanca de conversão, não de custo. Win rate de 28,1% e ticket de R$ 0,88 mi (ata de 19/10) dizem que 1 ponto de conversão no pipeline de R$ 123,6 mi vale cerca de R$ 1,2 mi de crédito ganho. O hipotético "ecossistema rende ≈ 1,5x só recuperação" na média e na grande (consolidado de 22/10, [HIPÓTESE]) justifica a esteira, mas não antes de a recuperação estar saudável.
 
-**Capacidade é o recurso escasso.** O time tem 3 pessoas além do Luis. Tetos de horas para produto novo: Luis até 4 h/semana em CI + Maquila; time 0 h até as 1:1 (D54, pendente; D33, pendente). Cada frente nova consome Luis primeiro.
+**Capacidade é o recurso escasso.** O time tem 3 pessoas além do Luis. Tetos de horas para produto novo: Luis até 4 h/semana em CI + Maquila; time 0 h até as 1:1 (D54, pendente; D33, superada pela D54). Cada frente nova consome Luis primeiro.
 
 **OKR aplicado à área (método):** 1 objetivo por horizonte; resultados-chave medidos no HubSpot (valor ganho, % dos ganhos com tese e honorário, nº de Masters ativos no mês); no máximo 3 por objetivo; revisão quinzenal na reunião do Conselho.
 

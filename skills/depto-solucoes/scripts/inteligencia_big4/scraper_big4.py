@@ -44,7 +44,7 @@ class Extrator(HTMLParser):
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         if tag in ("script", "style", "noscript", "svg", "nav", "footer", "header"): self._skip += 1
-        if tag == "meta" and a.get("name") in ("description", "og:description") or a.get("property") == "og:description":
+        if tag == "meta" and (a.get("name") in ("description", "og:description") or a.get("property") == "og:description"):
             self.desc = self.desc or a.get("content", "")
         if tag == "a" and a.get("href"): self.links.append(a["href"])
         if tag in ("h1", "h2", "h3", "p", "li", "title"): self._tag = tag; self._buf = []
@@ -107,10 +107,12 @@ def rastrear(firma, prof, maximo):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--firma", choices=list(SEMENTES)); ap.add_argument("--profundidade", type=int, default=1)
     ap.add_argument("--max", type=int, default=25); a = ap.parse_args()
-    saida = Path(os.path.expanduser("~/agentes-partners/departamentos/solucoes/inteligencia-big-four/corpus")); saida.mkdir(parents=True, exist_ok=True)  # dados fora do repositório; resumo = ["# Índice do corpus (webscrap)\n"]
+    saida = Path(os.path.expanduser("~/agentes-partners/departamentos/solucoes/inteligencia-big-four/corpus")); saida.mkdir(parents=True, exist_ok=True)  # dados fora do repositório
+    resumo = ["# Índice do corpus (webscrap)\n"]  # estava dentro do comentário acima: NameError na 1ª firma
     for f in ([a.firma] if a.firma else SEMENTES):
         print(f"[{f}]"); pgs = rastrear(f, a.profundidade, a.max)
-        (saida / f"{f}.jsonl").write_text("\n".join(json.dumps(p, ensure_ascii=False) for p in pgs), encoding="utf-8")
+        if pgs:  # rodada bloqueada ou sem rede não apaga o corpus anterior
+            (saida / f"{f}.jsonl").write_text("\n".join(json.dumps(p, ensure_ascii=False) for p in pgs), encoding="utf-8")
         resumo.append(f"\n## {f.upper()} ({len(pgs)} páginas)")
         resumo += [f"- [{p['titulo'] or p['url']}]({p['url']}) · {p['consultado_em']}" for p in pgs]
     (saida / "indice.md").write_text("\n".join(resumo), encoding="utf-8")

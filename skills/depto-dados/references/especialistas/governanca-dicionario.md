@@ -45,7 +45,7 @@ Formato: tabela em markdown (proposta de arquivo `references/dicionario-dados.md
 - **Data efetiva:** menor entre criação e fechamento; em aberto, a criação (dicionário `metricas.md`).
 - **Parceiro ativo:** parceiro com ≥ 1 negócio criado em 90 dias.
 - **Pipeline oficial:** abertos no escopo da Área Master, sem café desde abr/2026 e sem cliente sem Master (D76); número pendente da D74.
-- **Variante A:** honorário no ressarcimento via PER; fora da meta e do ROI oficial (D14).
+- **Variante A:** honorário no ressarcimento via PER (D14, firme); fora da meta e do ROI oficial (parte pendente da D14, com o Luis; até lá é o padrão).
 
 **Produto e "produto de entrada".** O portfólio 2027 pede medir conversão por produto (pronto ou em validação). Proposta de modelo: propriedade **Produto** (lista fechada: Recuperação tributária; Recorrência; Gestão de Passivo; Planejamento; Estruturação patrimonial; Tax internacional; Gestão de Contas; Antecipação; FIDC; Crédito Internacional; Maquila; Captação; outros) + propriedade **Produto de entrada** no objeto Empresa (o primeiro produto ganho do cliente, gravado uma vez). Com as duas, o BI mede funil por produto, cross-sell (2º produto) e tempo entre produtos. Produto em validação entra só como atividade de descoberta até o diagnóstico aceito (D57).
 
@@ -68,7 +68,7 @@ Consulta em 22/10/2026.
 - **D18 (29/09/2026):** o time de CRM da Save configura obrigatoriedade; a Governança propõe.
 - **D71 e D73 (22/10/2026):** % honorário só no ganho; valor e segmento na criação.
 - **D37 (02/10/2026) e D57 (05/10/2026), pendentes:** propriedade "Produto" (opção A) ou pipeline próprio (B); filtro testado no `calc_semana.py` antes do 1º registro.
-- **D74 (19/10/2026), pendente:** regra de escopo do pipeline oficial.
+- **D74 (19/10/2026), delegada ao depto-dados em 23/10/2026, D98:** regra de escopo do pipeline oficial.
 - **D76 (22/10/2026):** cliente sem Master fora.
 - **D64 (22/10/2026):** repasse sem regra única; o dicionário não valida % parceiro contra 50%.
 - **Regra do café** (Luis, 20/08/2026): fora da meta desde abr/2026; data de referência = mês de fechamento (abertos: criação).

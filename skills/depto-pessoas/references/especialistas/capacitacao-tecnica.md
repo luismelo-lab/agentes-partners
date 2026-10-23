@@ -59,8 +59,8 @@ Regra da casa: "a prova está no SPED, não na opinião". O consultor sabe pedir
 - **Lei 14.457/2022, art. 23, IV:** capacitação anual sobre assédio e violência no trabalho para empresas com CIPA (entra na trilha comum quando aplicável).
 
 ## 4. Regras da casa
-- **D68 (15/10/2026, pendente):** alinhamento sobre o papel da IA, 3 prioridades por pessoa e apontamento leve de 1 semana. A trilha "trabalhar com agentes" atende essa decisão.
-- **D48 (05/10/2026, pendente):** 1:1 de 20 minutos; o PDI é revisto nela, mensalmente.
+- **D68 (15/10/2026, superada pelo kit de lançamento, D98):** alinhamento sobre o papel da IA, 3 prioridades por pessoa e apontamento leve de 1 semana. A trilha "trabalhar com agentes" atende essa decisão.
+- **D48 (05/10/2026, superada pelo kit de lançamento e pela D98):** 1:1 de 20 minutos; o PDI é revisto nela, mensalmente.
 - **D5 (28/09/2026):** a técnica é coautora do Recuperador e se alinha com o Técnico Tributário; o aprendizado técnico dela passa pelo time responsável.
 - **D2:** métricas do piloto como resultado de aprendizagem da função técnica.
 - **D3 (29/09/2026):** sem SPED nem folha na fase 1 dos agentes; o treino usa arquivo de exemplo anonimizado, nunca SPED de cliente no agente.

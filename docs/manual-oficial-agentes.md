@@ -1,6 +1,6 @@
 # Manual Oficial dos Agentes · Área Partners
 
-> Versão 2.1, 23/10/2026. Substitui a v2.0 de 23/10/2026 e o Manual dos Agentes v1.0 (13/10/2026). A v2.1 detalha o que cada área e cada especialista entrega. Uso interno. O conteúdo das áreas é lido das próprias skills (`infra/manual_oficial.py`), então este manual se regera quando uma área muda.
+> Versão 2.2, 23/10/2026. Substitui a v2.1 e a v2.0 de 23/10/2026 e o Manual dos Agentes v1.0 (13/10/2026). A v2.1 detalha o que cada área e cada especialista entrega. Uso interno. O conteúdo das áreas é lido das próprias skills (`infra/manual_oficial.py`), então este manual se regera quando uma área muda.
 
 ## 1. Para que serve este manual
 Este é o documento oficial da operação de agentes de IA da Área Partners da Save Co. Ele diz:
@@ -37,6 +37,21 @@ Todo pedido, demanda ou originação segue o mesmo caminho (`infra/fluxo-unico.m
 5. **Revisão do gerente.** Até 2 rodadas. A revisão aprovada registra ajustes concretos ou o motivo de não haver ajuste (`infra/protocolo-gerente.md`).
 6. **Devolução em 3 blocos.** O que você pediu; o que você também precisa; o que falta e quem fornece (`infra/padrao-entrega.md`).
 7. **Se a área não resolve com os dados,** o especialista escreve o chamado ideal e ele vai para aprovação no painel antes de abrir no GLPI. Contrato vai ao time de Contratos; repasse vai ao Financeiro.
+
+### 3.1 Demandas do WhatsApp dos parceiros
+A rotina `whatsapp-caixa-time` lê os grupos dos Masters e as caixas do time (dias úteis, 8h e 14h com IA; 11h e 17h sem IA). Cada mensagem vira uma demanda avaliada pelos agentes:
+- **Quem pediu e o que pede:** Master, grupo, horário e o pedido em uma frase.
+- **Classificação:** tipo (prazo e intimação, contrato, status de crédito, material, originação…), área responsável, urgência e prazo (o prazo legal vem antes do prazo de tabela) e confiança da leitura.
+- **Rota sugerida:** responder direto, pedir à área ou abrir chamado. Status de crédito nunca vira chamado.
+- **Rascunho de resposta ao Master:** passa pelo auditor de promessas. Quem envia é a dona da demanda (Daniela nos grupos de Master; Jenifer em indicação de empresa; Geovana em dúvida técnica dirigida a ela).
+- **Onde ver:** na seção "WhatsApp · Demandas" do portal (com busca por Master, assunto ou área) e no registro único `registro/demandas.json`.
+
+### 3.2 Chamado no GLPI gerado pelos agentes
+Quando a área não resolve com os dados, o especialista escreve o **chamado ideal** (`infra/chamado-ideal.md`): categoria, título, o que entendemos, pedidos objetivos (1 a 5), anexos, o que falta e quem fornece, prazo e motivo. O caminho:
+1. **Gerar:** a partir da demanda selecionada ou do resultado da busca, o portal mostra o chamado pronto ("Gerar chamado GLPI").
+2. **Aprovar:** a dona da demanda aprova, edita ou recusa com o motivo (D98). Só sobe ao Luis o chamado que toca regra, preço, conflito de canal ou produto em validação.
+3. **Abrir:** a rotina abre no GLPI em nome de quem atendeu (`lib/chamados_painel.py aplicar`). Enquanto o TI não libera o acesso ao GLPI (pedido único à TI, 23/10/2026), o chamado aprovado fica como "abrir manualmente", com o texto pronto para copiar.
+4. **Fora do GLPI:** contrato, aditivo e distrato vão ao time de Contratos; repasse e prestação de contas, ao Financeiro.
 
 **Quando sobe de nível:** 3 ou mais áreas envolvidas, mudança de regra, mais de R$ 1 mi de crédito com decisão ou produto em validação.
 
@@ -94,7 +109,7 @@ Cada área tem um gerente, que distribui e revisa, e especialistas sêniores com
 
 **Especialistas e o que cada um entrega (2)**
 
-**Consolidador do Gabinete.** O **parecer consolidado do Gabinete**: um documento em gabinete/pedidos/AAAA-MM-DD-<tema>.md com (1) a entrega principal pronta para usar, (2) o que cada área validou ou apontou (✅ ⚠️ ❌), (3) conflitos entre áreas e a resolução sugerida, (4) pendências e o que exige humano, (5) decisões para o Luis, mais o registro revisao e a linha em gabinete/registro.md. Os blocos 1 a 4 seguem a entrega em 3 blocos (infra/padrao-entrega.md): pedido, também precisa, falta e quem fornece.
+**Consolidador do Gabinete.** O **parecer consolidado do Gabinete**: um documento em gabinete/pedidos/AAAA-MM-DD-<tema>.md com (1) a entrega principal pronta para usar, (2) o que cada área validou ou apontou (✅ ⚠️ ❌), (3) conflitos entre áreas e a resolução sugerida, (4) pendências e o que exige humano, (5) decisões, separadas entre as da alçada do Luis e as do dono da entrega ou por padrão (infra/alcadas.md), mais o registro revisao e a linha em gabinete/registro.md. Os blocos 1 a 4 seguem a entrega em 3 blocos (infra/padrao-entrega.md): pedido, também precisa, falta e quem fornece.
 
 **Roteador do Gabinete.** A **Ficha de Rota (Portão 0)** de cada pedido do Luis: classificação do porteiro, tipo de entrega, nível (1 a 4) com o motivo e o limite que o justifica, áreas em ordem com por que entram e o que entregam, quem fica de fora e por quê, o gatilho para subir de nível e o prazo. No nível 1, a própria resposta curta com o especialista que respondeu.
 Formato fixo (SKILL.md, Passo 4), com duas linhas a mais: **Porteiro:** repetido | continuação | relacionado | travado | novo — <o que existe> e **Esteira:** Destravar caixa | Proteger e controlar | Crescer | apoio.
@@ -330,7 +345,7 @@ Formato: departamentos/juridico/entregas/AAAA-MM-DD-prazo-<processo-anonimizado>
 
 **Gerente da Save Invest.** **A resposta única da Save Invest, revisada**: recebe o pedido (oportunidade, dúvida, reunião, varredura, material), decide quais especialistas entram e em que profundidade, revisa pelo checklist e devolve **um** texto nos 3 blocos, com o registro revisao. Também mantém o **playbook de oportunidade em andamento** (estágio, próximo passo, dono, data) e a lista de perguntas ao Junior.
 
-**Gestão de Contas e Cobrança.** **Diagnóstico de carteira e desenho da régua de Gestão de Contas** para um cliente específico. Formato (rascunho para o Luis e o Junior):
+**Gestão de Contas e Cobrança.** **Diagnóstico de carteira e desenho da régua de Gestão de Contas** para um cliente específico. Formato (rascunho para o Junior; a Daniela quando for ao parceiro; alçada de 23/10/2026):
 - Leitura da carteira: aging em 5 faixas, % vencido, DSO, concentração (top 10 sacados), ticket médio, B2B × B2C.
 - Encaixe: seguir / preparar / não seguir, com o motivo.
 - Régua proposta: dias e canais (pré-vencimento, vencimento, pós), ponto de negativação e de protesto **a decidir pelo cliente**.
@@ -558,7 +573,7 @@ Não é dele: o veredito técnico por linha (time tributário, etapa 3 do FLUXO.
 - As 3 perguntas que o Luis ou o Master devem fazer antes de responder.
 Não é dele: mudar o veredito de uma tese (time tributário), redigir o deck (Roteirista) ou aprovar a linguagem final (Revisor de Promessas).
 
-**Revisor de Promessas da Peça do Diagnóstico.** **O parecer de linguagem do deck do diagnóstico**, slide a slide, antes de ir ao Luis. Formato (revisao-promessas.md na pasta do cliente):
+**Revisor de Promessas da Peça do Diagnóstico.** **O parecer de linguagem do deck do diagnóstico**, slide a slide, antes da aprovação (técnico e dona da entrega; Luis nos casos da alçada, SKILL.md). Formato (revisao-promessas.md na pasta do cliente):
 - Resultado do auditar_texto.py sobre o texto do deck.json (contagem por regra; usar --resumo se houver dado de cliente).
 - Tabela: slide · campo · texto atual · problema (regra ou norma) · texto novo.
 - Conferência do rodapé fixo em toda página com valor e do bloco de 9 avisos no fim.
@@ -704,7 +719,7 @@ Formato (um arquivo por Master por trimestre, em ~/agentes-partners/celulas/dani
 - **Riscos:** dependência de tese ou de um cliente, atrito aberto, pendência de repasse, conflito de canal.
 - **Compromissos dos dois lados:** o que o Master faz, o que a Save faz, com data e dono.
 - **Pauta do QBR** e o "o que não prometer".
-O plano é rascunho. A Daniela conduz e o Luis aprova antes de ir ao Master.
+O plano é rascunho. A Daniela conduz e aprova antes de ir ao Master (alçada de 23/10/2026, infra/alcadas.md). Sobe ao Luis só o plano que mexe em meta, repasse, condição comercial, exclusividade ou produto em validação.
 
 **Higiene de CRM e Registro de Oportunidade.** **A proposta de atualização do CRM e o parecer de registro de oportunidade.** Dois formatos, gerados com scripts/crm_checagem.py e completados pelo especialista:
 - **Proposta de atualização** (modelo 4 de references/modelos.md): campo, valor atual, valor sugerido, fonte com data, ação, coluna de decisão da Daniela. Sai em celulas/daniela/crm/AAAA-MM-DD-proposta-crm-*.md.
@@ -825,7 +840,7 @@ O plano é rascunho. A Daniela conduz e o Luis aprova antes de ir ao Master.
 - o repasse contratado por parceiro;
 - quando houver recebimento, o repasse devido no mês e a provisão para o Resultados;
 - os 3 problemas de maior impacto em R$;
-- a lista "quem corrige o quê" (CRM, Contratos, Luis, Financeiro).
+- a lista "quem corrige o quê" (CRM, Contratos, Financeiro; Luis só no percentual e na regra).
 Formato: Conferencia-Repasses-<data>.xlsx + leitura de 1 página (fluxo A do SKILL).
 
 **Elegibilidade e Retenções do Pagamento a Parceiro.** **Checklist de elegibilidade e quadro de retenções por lote de pagamento.** Para cada parceiro do lote, traz:
@@ -1204,15 +1219,15 @@ Nada é alterado no HubSpot: a lista é proposta (D87 e item 10b da folha de 22/
 
 **Administrador do GLPI e Automação de Processos.** **A mudança de configuração do GLPI (ou de um processo automatizado) especificada para o TI executar.** Formato: .md + linha na planilha GLPI-pronto-para-agente.xlsx com: o que muda (categoria, código, modelo, campo, grupo, SLA/OLA, regra, notificação, formulário); por quê (dado de uso ou decisão); impacto nos agentes e na célula da Daniela; teste de aceite em homologação; pergunta ao TI. Para processos fora do GLPI: fluxo gatilho → passos → portões, separando regra determinística de passo de agente.
 
-**Arquiteto de Integrações.** **A especificação de integração de 1 página, pronta para o TI da Save executar.** Formato: .md em departamentos/ti/entregas/ com objetivo; fluxo (gatilho → passos → portão humano); sistemas e endpoints; credencial (tipo, escopo exato, dono, onde fica, rotação, como revogar); dados trafegados e classificação (C0 a C3); volume e limites de API; teste de aceite; plano de desligar; o que o TI decide e o que o Luis decide. Não configura nada.
+**Arquiteto de Integrações.** **A especificação de integração de 1 página, pronta para o TI da Save executar.** Formato: .md em departamentos/ti/entregas/ com objetivo; fluxo (gatilho → passos → portão humano); sistemas e endpoints; credencial (tipo, escopo exato, dono, onde fica, rotação, como revogar); dados trafegados e classificação (C0 a C3); volume e limites de API; teste de aceite; plano de desligar; o que o TI decide e o que sobe ao Luis (só escrita, orçamento ou dado pessoal novo). Não configura nada.
 
 **Gestão de Incidentes e Registro.** **A ficha do incidente, do registro à regra nova.** Formato: linha na seção G de departamentos/ti/inventario-agentes.md e .md em departamentos/ti/entregas/ com: data e hora de detecção; sistema ou agente; severidade (S1–S4); o que aconteceu (fatos, linha do tempo); dado afetado e classe (C0–C3); impacto (quantas pessoas, mensagens, chamados, negócios); contenção; causa-raiz (5 porquês); correção; regra nova; se envolve dado pessoal, o insumo para o controlador e o Jurídico decidirem a comunicação à ANPD em 3 dias úteis. Guarda de 5 anos.
 
 **Governança de IA.** **O registro de governança de cada agente: linha do inventário, ficha de avaliação antes do uso real e decisão de autonomia.** Formato: atualização de departamentos/ti/inventario-agentes.md (ID, finalidade, dados e classe, sistemas, onde roda, gatilho, autonomia, portão humano, dono, riscos, controles, status, última revisão) e .md da ficha (8 itens de references/governanca-ia.md, com o resultado do teste de alucinação e a aprovação do Luis com data). Inclui a revisão trimestral e os incidentes de IA.
 
-**Identidade, Segurança e LGPD Técnica.** **A nota de segurança e acesso de um sistema ou fluxo, com o rascunho do chamado ao TI.** Formato: .md em departamentos/ti/entregas/ com: escopo; exposição medida (contagem, sem URL); classificação do dado (C0–C3); controles existentes e faltantes (referência ISO 27001 Anexo A / CIS); risco (probabilidade × impacto, baixo a crítico); papéis e permissões propostos; mapa do dado pessoal para o Jurídico; rascunho do chamado em chamados-rascunho.md; decisão do Luis e do TI.
+**Identidade, Segurança e LGPD Técnica.** **A nota de segurança e acesso de um sistema ou fluxo, com o rascunho do chamado ao TI.** Formato: .md em departamentos/ti/entregas/ com: escopo; exposição medida (contagem, sem URL); classificação do dado (C0–C3); controles existentes e faltantes (referência ISO 27001 Anexo A / CIS); risco (probabilidade × impacto, baixo a crítico); papéis e permissões propostos; mapa do dado pessoal para o Jurídico; rascunho do chamado em chamados-rascunho.md; decisão do TI (e do Luis só para acesso de escrita ou dado pessoal novo).
 
-**Operação, Rotinas Agendadas, Continuidade, Custos e Capacidade.** **O mapa de execução das rotinas com o plano de continuidade e o quadro de custo e capacidade.** Formato: .md em departamentos/ti/entregas/ com: tabela de cada rotina (nome, gatilho e horário, onde roda, dependências, dados, dono humano, alerta de falha, como desligar, SLO); RTO e RPO por fluxo; teste de restauração do backup; custo mensal por serviço e por unidade de trabalho; uso de limite de API (% do limite); proposta de mudança (mover para a nuvem, desligar, juntar), sempre como proposta ao Luis. Não cria nem altera rotina.
+**Operação, Rotinas Agendadas, Continuidade, Custos e Capacidade.** **O mapa de execução das rotinas com o plano de continuidade e o quadro de custo e capacidade.** Formato: .md em departamentos/ti/entregas/ com: tabela de cada rotina (nome, gatilho e horário, onde roda, dependências, dados, dono humano, alerta de falha, como desligar, SLO); RTO e RPO por fluxo; teste de restauração do backup; custo mensal por serviço e por unidade de trabalho; uso de limite de API (% do limite); proposta de mudança (mover para a nuvem, desligar, juntar), sempre como proposta ao gerente de TI e à área dona da rotina (ao Luis só com custo novo). Não cria nem altera rotina.
 
 **O que a área não faz:** Não altera nenhum sistema (HubSpot, GLPI, Outlook, Microsoft 365, WhatsApp ou tarefas agendadas); Não abre chamado nem envia e-mail sozinho; Não lê nem pede senhas, tokens ou chaves; Não cria automação ou rotina agendada: propõe, e o Luis decide; Não altera agentes de outros departamentos.
 
@@ -1249,7 +1264,7 @@ Links do OneDrive saem de `lib/caminhos.py`: só o link de pasta abre, então to
 ## 9. Responsabilidades das pessoas
 | Pessoa | Responde por |
 |---|---|
-| **Luis** | Decide o que a matriz de alçada reserva a ele (`infra/alcadas.md`); aprova; faz o merge e o push; responde a folha de decisões; aprova chamados no painel uma vez por dia |
+| **Luis** | Decide o que a matriz de alçada reserva a ele (`infra/alcadas.md`); aprova; faz o merge e o push; responde a folha de decisões (só o que é alçada dele, D98); aprova só os chamados que tocam regra, preço, conflito de canal ou produto em validação (os demais, a dona da demanda) |
 | **Daniela** | Masters: demandas, retorno ao parceiro, ganhos a completar no HubSpot, plano de conta |
 | **Jenifer** | Prospecção e listas para os Masters |
 | **Geovana** | Decisões do Recuperador e do Revisor; diagnóstico |

@@ -63,7 +63,7 @@ Fontes secundárias (consulta em 22/10/2026), a conferir no texto oficial:
 - **Regra do Luis (28/09/2026):** relatório calculado antes de impostos; IR e CSLL mostrados à parte (`metricas.md`, métrica 5).
 - **D21 (29/09/2026):** carga por pessoa no relatório, sem indicador "R$ por pessoa". **Conflito:** `metricas.md` (nível 2) e a description da skill citam "margem por colaborador". Vale a D21; a métrica saiu do `metricas.md` em 23/10/2026 (decisão do Controller, método da área).
 - **D64 (22/10/2026):** cada parceiro tem o seu percentual de repasse negociado; não há regra única de 50% ou mais; revisão com os novos produtos.
-- **D42 (preliminar, 05/10/2026):** negócio com repasse de 50% ou mais e honorário abaixo de 20% passaria pela Partners antes da proposta. Pendente, depende da D64, já respondida.
+- **D42 (superada pela D64 (D98), 05/10/2026):** negócio com repasse de 50% ou mais e honorário abaixo de 20% passaria pela Partners antes da proposta. A D64 respondeu (repasse negociado por parceiro) e a régua virou alerta de margem.
 - **D65 (15/10/2026):** registro único de exceções (café a 70%) com aprovação do Luis e validação do Jurídico; atípicos acima de 50% e % do parceiro acima de 100% conferidos contra o contrato.
 - **D78 (22/10/2026):** parceiro nos produtos 2027 recebe 10% do líquido Save no início, crescendo pelo programa (D61: teto de 30% no Crédito Internacional).
 - **D79 (22/10/2026):** escala de honorário 30/25/20 com piso de 20% reprovada; vale a regra atual (30%; grãos 35%).
@@ -121,7 +121,7 @@ Limites numéricos: variação de margem líquida acima de 3 pontos em um mês e
 ### Caso 1: setembro de 2026, o mês do repasse alto (interno)
 - **Situação:** honorário efetivo de 18,8% e repasse de 48% em setembro; dois dos maiores Masters com repasse entre 44% e 50%.
 - **Leitura do sênior:** a queda do líquido veio de dois fatores ao mesmo tempo (preço e repasse), não do volume. O volume escondia a perda.
-- **O que foi feito:** D42 (preliminar) propôs a régua repasse ≥ 50% com honorário < 20%; a D64 (22/10/2026) respondeu que o repasse é negociado por parceiro. A ponte PVM passou a separar o efeito do repasse.
+- **O que foi feito:** D42 (superada pela D64 (D98)) propôs a régua repasse ≥ 50% com honorário < 20%; a D64 (22/10/2026) respondeu que o repasse é negociado por parceiro. A ponte PVM passou a separar o efeito do repasse.
 
 ### Caso 2: a tabela de 30% que realiza 25% (interno, out/2026)
 - **Situação:** tabela de 30% e carteira realizando 25,0% (716 ganhos). A proposta de escala 30/25/20 com piso de 20% foi ao Luis.

@@ -77,10 +77,10 @@ O plano de conta não cria regra jurídica, mas toca três limites que o sênior
 - **D76 (22/10/2026, Luis):** clientes sem Master pertencem a outra área e ficam fora do plano de conta e das listas da Área Partners.
 - **D64 (22/10/2026, Luis):** meta do Q4 de R$ 200 mi; cada parceiro tem o seu percentual de repasse negociado, a ser revisto com os novos produtos.
 - **D75 (22/10/2026):** a meta 2027 será sugerida pela diretoria; o cenário-base de R$ 49,8 mi não é meta. Até lá, o plano de conta usa **objetivos de atividade** (leads, diagnósticos, apresentações), sem meta em R$ por Master.
-- **D43 (05/10/2026, pendente):** reconversão de G.S.H, JGM e Orteconte para frigoríficos e hortifrúti, com contas-alvo da Jenifer.
-- **D44 (05/10/2026, pendente):** fila de conversão dos negócios em diagnóstico e das apresentações paradas, ordenada por honorário líquido potencial, dentro da capacidade do Técnico (D11).
+- **D43 (05/10/2026, delegada à Daniela em 23/10/2026, D98):** reconversão de G.S.H, JGM e Orteconte para frigoríficos e hortifrúti, com contas-alvo da Jenifer.
+- **D44 (05/10/2026, delegada à Daniela com o time técnico em 23/10/2026, D98):** fila de conversão dos negócios em diagnóstico e das apresentações paradas, ordenada por honorário líquido potencial, dentro da capacidade do Técnico (D11).
 - **D87 (22/10/2026):** modelo do dossiê de conta aprovado; o `depto-dados` saneia os ~295 ganhos possivelmente duplicados antes de rodar a carteira.
-- **D78 e D61:** nos produtos 2027 o parceiro recebe 10% do líquido Save no início, crescendo pelo programa até 30% (Crédito Internacional). **D83:** o escopo 2027 ao parceiro inclui produtos prontos e, como descoberta, os em validação.
+- **D78 e D61:** nos produtos 2027 o parceiro recebe 10% do líquido Save no início, crescendo pelo programa; o teto de 30% é do Crédito Internacional (D61) [em aberto: D61 × D78, decisão do Luis]. **D83:** o escopo 2027 ao parceiro inclui produtos prontos e, como descoberta, os em validação.
 - **D92:** Gestão de Contas, antecipação e FIDC são da Save Invest (Junior). Oportunidade desses produtos no plano é encaminhada ao `depto-save-invest`.
 - **Programa Partners 2027 v1.1 (09/10/2026):** opção A em 2027 (só benefícios não financeiros), fila técnica não muda (L4/P27-4), níveis Master Estratégico, Master Avançado e Master. Decisões L1 a L10 pendentes na folha de 22/10 (item 8, "decidir depois").
 - **Café fora das contas desde abr/2026** (regra do Luis registrada no programa de níveis v1 de 29/09/2026).

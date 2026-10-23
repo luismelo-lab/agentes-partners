@@ -48,7 +48,7 @@ Consulta em 22/10/2026; Planalto não abriu: artigos marcados [a conferir no tex
 - D64 ajustada, D75, D78, D79 (22/10/2026): meta do Q4, meta 2027 da diretoria, 10% do líquido nos produtos 2027, escala de honorário reprovada.
 - D71 e D73 ajustadas (22/10/2026): % só no ganho; ganho só no forecast com tese, variante e %.
 - Relatório antes de impostos (decisão do Luis, 28/09/2026).
-- **Pendentes:** D41 e D42 (gestão por honorário líquido potencial; repasse ≥50% e honorário <20%), D62 (ganhos de outubro), D65 (exceções), D74 (número oficial do pipeline).
+- **Situação em 23/10/2026 (D98):** D41 (gestão por honorário líquido potencial) delegada ao depto-resultados; D42 (repasse ≥50% e honorário <20%) superada pela D64; D62 (ganhos de outubro) superada pelas D71 e D73; D74 (número oficial do pipeline) delegada ao depto-dados. Segue pendente com o Luis: D65 (exceções).
 
 ## 5. Método
 1. **Fonte e data de cada número:** relatório semanal, HubSpot do dia ou ata. Sem fonte, é lacuna.
@@ -60,7 +60,7 @@ Consulta em 22/10/2026; Planalto não abriu: artigos marcados [a conferir no tex
 7. **Sensibilidade:** o que acontece com ±5 pontos de repasse, ±5 pontos de win rate e com a tese principal desfavorável.
 8. **Recomendação** com o indicador financeiro que mostra, em 30 dias, se deu certo.
 
-**Limites numéricos:** iniciativa sem payback em 12 meses no cenário conservador = não recomendar sem decisão do Luis; negócio com repasse ≥50% e honorário <20% = alerta (proposta D42, a refazer pela D64); honorário >50% ou % parceiro >100% = conferir contrato antes de qualquer pagamento (D65); número com mais de 7 dias = declarar a data.
+**Limites numéricos:** iniciativa sem payback em 12 meses no cenário conservador = não recomendar sem decisão do Luis; negócio com repasse ≥50% e honorário <20% = alerta (herança da D42, superada pela D64: alerta de margem, não bloqueio); honorário >50% ou % parceiro >100% = conferir contrato antes de qualquer pagamento (D65); número com mais de 7 dias = declarar a data.
 
 ## 6. Perguntas de diagnóstico
 1. **Muda o valor:** Qual é o crédito, o honorário %, o repasse % e o líquido deste negócio ou Master?

@@ -7,7 +7,7 @@ Você é o Presidente do Conselho Consultivo da Área Partners da Save Company (
 
 Dossiê desta execução:
 1. Fonte preferencial de números: o relatório semanal de hoje, gerado às 6h30 pela tarefa `relatorio-semanal-resultados` (~/agentes-partners/departamentos/resultados/relatorios/Resultado-Semanal-<hoje>.md e ~/agentes-partners/departamentos/resultados/dados/metricas-<hoje>.json). Se o de hoje ainda não existir, use o mais recente e diga a data do dado. Não use o cockpit/S&OE como fonte (parados e pouco confiáveis).
-2. ~/agentes-partners/ESTADO.md (inclui o "Checklist para 100% rodando"), ARQUITETURA.md, conselho/decisoes.md (cobre as pendentes, especialmente D7-b a D15), as 2 últimas atas.
+2. ~/agentes-partners/ESTADO.md (inclui o "Checklist para 100% rodando"), ARQUITETURA.md, conselho/decisoes.md (cobre as pendentes que ficaram com o Luis pela D98 de 23/10/2026; D7-b a D15 foram superadas, delegadas ou aplicadas por padrão), as 2 últimas atas.
 3. Andamento das células: Recuperador da Geovana (~/agentes-partners/celulas/geovana/recuperador/: fila mais recente, decisões registradas, indicadores D2 se houver), células da Daniela e da Jenifer (~/agentes-partners/celulas/daniela e /jenifer, se existirem), qualidade do CRM (~/agentes-partners/departamentos/dados/dados-bi-*.json mais recente).
 4. Na análise dos negócios, o foco é o critério financeiro (lucro antes de impostos, ROI, margem, volume). Concentração de tese ou parceiro aparece só como risco. Lucro/ROI são sempre POTENCIAIS (honorário contratado, não recebido).
 

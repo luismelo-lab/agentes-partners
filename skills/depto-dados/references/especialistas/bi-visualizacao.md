@@ -57,9 +57,9 @@ Consulta em 22/10/2026.
 - **D21 (29/09/2026):** carga por pessoa no relatório; **sem indicador "R$ por pessoa"**. O scorecard é de parceiros (empresas), não de colaboradores (regra 3 do `SKILL.md`).
 - **D90 (22/10/2026):** os medidores do painel (HubSpot web) entram no repositório (`portal/`) e no fluxo; o BI define o que cada medidor mostra.
 - **D16 e D17 (29/09/2026):** ROI trimestral rotulado como potencial; 3 colunas. O BI não cria outra versão.
-- **D41 (05/10/2026, preliminar):** Q4 gerido por honorário líquido potencial, com quadro mensal por Master e média móvel de 4 semanas.
+- **D41 (05/10/2026, delegada ao depto-resultados em 23/10/2026, D98; a meta segue a D64):** Q4 gerido por honorário líquido potencial, com quadro mensal por Master e média móvel de 4 semanas.
 - **D76 (22/10/2026):** cliente sem Master fora do painel.
-- **D47 (05/10/2026, pendente):** resumo diário da Daniela com até 15 itens acionáveis acima de um valor mínimo.
+- **D47 (05/10/2026, delegada à Daniela em 23/10/2026, D98):** resumo diário da Daniela com até 15 itens acionáveis acima de um valor mínimo.
 - **Design System Save v0.5 (CLAUDE.md do Luis):** todo painel no padrão Save; claro para parceiro, escuro para painel interno.
 - **Em aberto:** se o NPS dos parceiros entra no índice (proposta da Qualidade, não decidida); pesos do índice revistos com 2 trimestres de série.
 

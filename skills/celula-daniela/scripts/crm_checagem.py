@@ -22,7 +22,7 @@ from datetime import date
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from comum import CELULA, LINK, cnpj_digitos, digitos, fonte_hubspot, norm, receita, resolver_master, slug
-from cnpj import cnpj_valido as _cnpj_valido  # noqa: E402  (lib no caminho pelo comum)
+from cnpj import cnpj_valido as _cnpj_valido, completar_cnpj, raiz_cnpj  # noqa: E402  (lib no caminho pelo comum)
 
 RECEITA_PY = os.path.expanduser("~/.claude/skills/depto-intel-comercial/scripts/receita_cnpj.py")
 # campos do HubSpot (nomes internos, ver mapeamento-hubspot.json) sem fonte oficial: de onde vem o dado certo
@@ -41,7 +41,7 @@ INFORMAVEIS = {"faturamento": "faturamento", "regime": "qual_e_o_regime_tributar
 
 
 def cnpj_valido(c):
-    c = cnpj_digitos(c)
+    c = completar_cnpj(c)  # o HubSpot/Excel perde os zeros à esquerda (90 cards com 13 dígitos em 23/10/2026)
     return len(c) == 14 and _cnpj_valido(c)
 
 
@@ -126,8 +126,8 @@ def main():
       "Nada foi gravado no HubSpot: a Daniela confere, aprova e aplica à mão. Valores sugeridos só com fonte.*\n")
 
     def mesmo_grupo(c, excluir=None):
-        c = cnpj_digitos(c)[:8]
-        return [x for x in N if c and cnpj_digitos(x["extras"].get("cnpj"))[:8] == c and x["id"] != excluir]
+        c = raiz_cnpj(c)  # raiz com os zeros recompostos: sem isso, CNPJ salvo sem o zero inicial não achava o grupo
+        return [x for x in N if c and raiz_cnpj(x["extras"].get("cnpj")) == c and x["id"] != excluir]
 
     def bloco_conflito(c, parceiro, excluir=None):
         H = mesmo_grupo(c, excluir)
@@ -173,7 +173,7 @@ def main():
             if a.negocio: bloco_conflito(d["extras"].get("cnpj"), d["parceiro"], d["id"])
         w(f"\n**Total de linhas de proposta:** {total}. Marque cada linha como ✅ aplicar / ✏️ ajustar / ❌ não aplicar e registre no controle de pendências se depender de alguém.")
     else:
-        c = cnpj_digitos(a.cnpj); nome_arq = f"cnpj-{c[:8]}"
+        c = completar_cnpj(a.cnpj); nome_arq = f"cnpj-{c[:8]}"
         w(f"## Checagem de registro — CNPJ {a.cnpj}")
         w(f"- Dígito verificador: {'válido' if cnpj_valido(c) else '**inválido**: confirmar com o parceiro'}")
         fonte_db, r = receita_local(c)

@@ -73,7 +73,7 @@
 > Pedido do Luis: "Conselho, qual é o número oficial do pipeline aberto: R$ 123,6 mi ou R$ 180,6 mi? Preciso fechar isso hoje para o relatório."
 
 **Deve conter:**
-- A reconciliação dos dois números é a D74, ainda pendente · `D74 | reconcilia*`
+- A reconciliação dos dois números é a D74, delegada ao depto-dados (D98) · `D74 | reconcilia*`
 - Quem fixa o número é Dados e Resultados, não o Conselho · `depto-dados | dados & bi | depto-resultados | calc_semana`
 - Falta a regra de escopo do pipeline · `escopo | criterio`
 - Até lá, cada número sai com fonte e data · `fonte`

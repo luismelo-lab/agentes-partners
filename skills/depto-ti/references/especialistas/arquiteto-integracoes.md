@@ -60,7 +60,7 @@ Revisão: 22/10/2026 · Área: `depto-ti` · Padrão: `infra/padrao-senior.md` (
 - **D28 (02/10/2026):** envio automático ao parceiro no WhatsApp só no degrau 2: tipo com 20+ casos em 2 semanas e 95%+ de acerto, e se o Eazybe permitir.
 - **D29 (02/10/2026):** chamado abre sozinho no GLPI com o usuário de quem atendeu, quando o TI liberar; até lá, painel.
 - **D89 (22/10/2026):** SSO no Azure Static Web Apps (Standard) com Table Storage.
-- **D91 (22/10/2026):** até o TI liberar Graph e GLPI, a pasta de cada pessoa no OneDrive é a caixa oficial e o Luis aprova os chamados no painel uma vez por dia.
+- **D91 (22/10/2026):** até o TI liberar Graph e GLPI, a pasta de cada pessoa no OneDrive é a caixa oficial e o Luis aprovava os chamados no painel uma vez por dia; desde 23/10/2026 (D98, `infra/alcadas.md`) a dona da demanda aprova os dela.
 - **D18 (29/09/2026):** campos obrigatórios do HubSpot são feitos pelo time de CRM da Save.
 - **Decisão do Luis de 13/10/2026:** não reinstalar o Outlook no Mac; e-mail volta pelo Graph.
 - **Em aberto:** nome do responsável do TI e prazo escrito para Graph e GLPI (D46 pedia prazo escrito); licença Premium do Power Automate para o receptor do Eazybe; repositório privado na organização da Save no GitHub.

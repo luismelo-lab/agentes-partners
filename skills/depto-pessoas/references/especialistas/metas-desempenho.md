@@ -18,7 +18,7 @@ Revisão: 22/10/2026 · Área: `depto-pessoas` · Padrão: `infra/padrao-senior.
 **O desdobramento de metas por função e por pessoa, com a régua de avaliação e o roteiro de calibração.** Formato: `.md` + `.xlsx` em `gabinete/pessoas/` com: meta da área (com D-número e fonte); contribuição de cada função; 3 a 5 indicadores por pessoa (fórmula, fonte em script, meta, peso, periodicidade); régua de avaliação (BARS de 4 níveis); evidências exigidas; teste de critério igual; checagem de carga; perguntas para a calibração. Rascunho para o Luis conduzir.
 
 ## 2. Domínio técnico
-**A meta da área hoje.** Q4 de 2026 gerido por honorário líquido potencial (D41 preliminar; D64 aprovada em 22/10/2026 com meta do Q4 de R$ 200 mi); foco em converter o pipeline aberto (D20); números em 3 colunas, contratado, conservador e realizado (D17); meta 2027 a ser sugerida pela diretoria (D75). O desdobramento parte daí.
+**A meta da área hoje.** Q4 de 2026 gerido por honorário líquido potencial (D41 delegada ao depto-resultados em 23/10/2026, D98; a meta segue a D64; D64 aprovada em 22/10/2026 com meta do Q4 de R$ 200 mi); foco em converter o pipeline aberto (D20); números em 3 colunas, contratado, conservador e realizado (D17); meta 2027 a ser sugerida pela diretoria (D75). O desdobramento parte daí.
 
 **Desdobramento por função (proposta de partida, a validar com o Luis):**
 
@@ -54,11 +54,11 @@ Revisão: 22/10/2026 · Área: `depto-pessoas` · Padrão: `infra/padrao-senior.
 - **Lei 14.457/2022, art. 23:** empresas com CIPA adotam regras de conduta e canal de denúncia contra assédio e outras formas de violência, com capacitação a cada 12 meses; cobrança humilhante de meta entra aqui.
 
 ## 4. Regras da casa
-- **D20 (28/09/2026):** foco do Q4 em conversão do pipeline aberto. **D41 (preliminar) e D64 (22/10/2026):** gestão por honorário líquido potencial; meta do Q4 de R$ 200 mi. **D75:** meta 2027 vem da diretoria.
+- **D20 (28/09/2026):** foco do Q4 em conversão do pipeline aberto. **D41 (delegada ao depto-resultados em 23/10/2026, D98; a meta segue a D64) e D64 (22/10/2026):** gestão por honorário líquido potencial; meta do Q4 de R$ 200 mi. **D75:** meta 2027 vem da diretoria.
 - **D21:** carga por pessoa no relatório; sem "R$ por pessoa".
 - **D2 (28/09/2026):** métricas do piloto da técnica: valor validado, % de falso positivo, reanálises abertas, horas por caso; reversão em 60 a 90 dias.
 - **D33 e D54 (pendentes):** tetos de horas por pessoa para produtos novos; usados como premissa de carga até a decisão.
-- **D48 (05/10/2026, pendente):** 1:1 de 20 minutos com cada pessoa; regra de 72 h para as decisões do Luis. **D68 (15/10/2026, pendente):** alinhamento sobre o papel da IA, 3 prioridades por pessoa e apontamento leve de 1 semana.
+- **D48 (05/10/2026, superada pelo kit de lançamento e pela D98):** 1:1 de 20 minutos com cada pessoa; regra de 72 h para as decisões do Luis. **D68 (15/10/2026, superada pelo kit de lançamento, D98):** alinhamento sobre o papel da IA, 3 prioridades por pessoa e apontamento leve de 1 semana.
 - **Regras 1 e 4 da área:** nenhuma nota, 9-box ou promoção sai do agente; critérios iguais para funções equivalentes.
 - **Em aberto:** se existe ciclo formal de avaliação da Save (RH corporativo) e em que datas; se a meta individual de 2027 será oficial ou só de gestão (ver `perguntas-ao-dono.md`).
 

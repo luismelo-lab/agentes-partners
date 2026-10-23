@@ -40,7 +40,7 @@ Formato: tabela por produto + esqueleto `modelos/04-consultoria-produto-2027-esq
 | FIDC (Save Invest) | Pronto | Estruturadora e consultora especializada. A Save Invest não é credora (D96); o financiador e o registro na CVM são da Federal Invest | Consultoria; política de crédito; partes relacionadas; contratos com administrador, gestor e custodiante; **sem** cláusula de distribuição | Fee de estruturação e de gestão recorrente; vedada a remuneração por cota colocada | Sim: CVM Res. 175 (Anexo II); PLD |
 | Estruturação patrimonial (P10, N4) | Pronto | Coordenadora; atos jurídicos pelo advogado | Consultoria; contrato do escritório à parte; declaração de ausência de passivo e de demandas; NDA familiar | Cliente declara ausência de fraude a credores (CC arts. 158 a 165; CTN art. 185) | Sim: todo ato societário e sucessório |
 | Tax internacional | Pronto | Consultora | Consultoria; contrato do advogado; cláusula de declaração (CBE) | Dever de informação de bens no exterior | Sim, nos atos jurídicos |
-| Gestão de Passivo (P5) e Funrural anterior a 2018 (D86) | Pronto | Consultora com advogado | Consultoria de passivo; contrato do escritório; dever de veracidade | Êxito sobre o débito cancelado e o depósito levantado (D86) | Sim |
+| Gestão de Passivo (P5) e Funrural anterior a 2018 (D86) [em aberto: D81 × D86, decisão do Luis] | Pronto | Consultora com advogado | Consultoria de passivo; contrato do escritório; dever de veracidade | Êxito sobre o débito cancelado e o depósito levantado (D86) | Sim |
 | Produtos jurídicos | Pronto | Apresenta a sociedade de advogados | Contrato do escritório com o cliente; indicação Save–escritório **sem divisão de honorários** | Fatura jurídica sempre do escritório (C2) | Sim |
 | Crédito Internacional | Em validação (D30: NO-GO para condições até o G2) | Assessora | NDA com transferência internacional; assessoria com fee de sucesso **após a liberação**; KYC do garantidor; conflito; parecer J1 a J14 | Fee sem pagamento antecipado nem cobrança pela análise. Taxa de 7% a 10% só como exemplo aprovado (D88) | Sim (D38: pacote de verificação antes do G2) |
 | Maquila / Paraguai | Em validação (D49) | Consultora do estudo | Contrato do estudo; NDA; contrato com parceiro local (Lei 12.846; LGPD); aviso ilustrativo | Estudo pode concluir pela inviabilidade | Sim |
@@ -88,7 +88,7 @@ Conferida em 22/10/2026, salvo marcação.
 - **D30 e D38 (02/10/2026, pendentes):** NO-GO para conversa de condições até o G2; pacote de verificação (parecer jurídico J1, J2, J3, J4, J7 e J11) antes do G2.
 - **D88 (22/10/2026):** o one-page do Crédito Internacional com taxa de 7% a 10% como exemplo pode ser usado.
 - **D82 (22/10/2026):** antecipação sobre venda gerencial e escrow continua no portfólio e é tratada só presencialmente.
-- **D86 (22/10/2026):** Funrural anterior a 2018 é Gestão de Passivo, com êxito sobre o débito cancelado e o depósito levantado.
+- **D86 (22/10/2026):** Funrural anterior a 2018 é Gestão de Passivo, com êxito sobre o débito cancelado e o depósito levantado. [em aberto: D81 × D86, decisão do Luis]
 - **D93 (22/10/2026):** produto em validação é desenvolvido por inteiro na base interna.
 - **Em aberto:**
   - autorizações da Save e da Save Invest (BCB, CVM, SUSEP). A instituição financiadora já está definida (Federal Invest, D96);

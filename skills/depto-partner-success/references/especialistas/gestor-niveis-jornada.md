@@ -63,7 +63,7 @@ Consulta em 22/10/2026. Planalto.gov.br com ECONNRESET nesta data; textos confer
 | Lei 13.709/2018, arts. 7º, IX, e 10 | Nível e extrato usam dado do parceiro (empresa e contato); finalidade concreta, mínimo necessário |
 
 ## 4. Regras da casa
-- **D61 (06/10/2026):** Crédito Internacional começa em 10% do líquido Save e pode chegar a 30% por programa de desenvolvimento. **D78 (22/10/2026):** a mesma regra (10% no início, crescendo pelo programa) vale para os produtos 2027.
+- **D61 (06/10/2026):** Crédito Internacional começa em 10% do líquido Save e pode chegar a 30% por programa de desenvolvimento. **D78 (22/10/2026):** os produtos 2027 começam em 10% do líquido Save e crescem pelo programa; se o teto e os degraus do CI valem para eles [em aberto: D61 × D78, decisão do Luis].
 - **D64 (22/10/2026, ajustada):** meta do Q4 de R$ 200 mi; cada parceiro tem o seu percentual de repasse negociado, sem regra única de ≥ 50%; será revisto com os novos produtos.
 - **D79 (22/10/2026):** escala de honorário 30/25/20 com piso de 20% reprovada; mantém a regra atual. O programa não mexe em honorário do cliente.
 - **D75 (22/10/2026):** a meta 2027 vem da diretoria; os patamares em R$ do 25 foram calibrados no cenário-base reprovado e precisam ser recalibrados quando a meta sair.

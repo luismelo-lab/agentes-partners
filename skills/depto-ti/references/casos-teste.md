@@ -82,7 +82,7 @@
 ## CT-05 · Relatório das 06h30 não saiu
 - **Tipo:** padrão
 - **Especialista:** gestao-incidentes
-- **Fonte:** D72 (19/10/2026, pendente), D46, D67, gestao-incidentes (método), perguntas-ao-dono T14
+- **Fonte:** D72 (19/10/2026, aplicada por padrão em 23/10/2026, D98; dono: depto-ti), D46, D67, gestao-incidentes (método), perguntas-ao-dono T14
 - **Encaminhar para:** nenhuma
 
 **Entrada:**

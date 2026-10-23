@@ -365,7 +365,16 @@ if __name__ == "__main__":
         if not c or c not in G: sys.exit("Negócio ou CNPJ sem CNPJ no HubSpot.")
         raiz = [n for k, v in G.items() if k[:8] == c[:8] for n in v]
         print(json.dumps(mapa(sinais(c, raiz, res, db)), ensure_ascii=False, indent=1, default=str)); sys.exit()
-    clientes = {c: v for c, v in G.items() if any(n["status"] == "ganho" and n["pipeline"].startswith("RT") for n in v)}
+    # um mapa por grupo (raiz do CNPJ), como no --negocio: matriz e filial com ganho viravam duas linhas e o funil de um
+    # CNPJ (ex.: Gestão de Passivo na matriz) não aparecia como "já contratado" no outro
+    rt = lambda v: any(n["status"] == "ganho" and n["pipeline"].startswith("RT") for n in v)
+    grupos = collections.defaultdict(list)
+    for c, v in G.items(): grupos[c[:8]].append((c, v))
+    clientes = {}
+    for rz, cs in grupos.items():
+        if not any(rt(v) for _, v in cs): continue
+        rep = min((c for c, v in cs if rt(v)), key=lambda c: (c[8:12] != "0001", c))  # CNPJ com ganho de RT, matriz primeiro
+        clientes[rep] = [n for _, v in cs for n in v]
     M = [mapa(sinais(c, v, res, db)) for c, v in clientes.items()]
     if a.master: M = [m for m in M if (m["master"] or "").lower() == a.master.lower()]
     M.sort(key=lambda m: (m["master"] or "~", -m["indice_aderencia"]))
