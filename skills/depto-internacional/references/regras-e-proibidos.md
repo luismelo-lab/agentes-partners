@@ -183,3 +183,11 @@ Só no one-page confidencial do cliente (`scripts/one_page_cliente.py`) é permi
 - citar a UBS como a instituição suíça.
 
 **Confirmado em 22/10/2026 (D77 e D88):** o João confirmou a faixa de 7% a 10% como exemplo, e a UBS foi aprovada em ligação por vídeo. O one-page pode ser usado. A UBS também pode aparecer na proposta Canex. Em qualquer outro material, valem as regras acima.
+
+## Regras do Paraguai (D99, 23/10/2026)
+1. O Paraguai não é paraíso fiscal: serve a quem produz ou presta serviço no interesse do país.
+2. Mapear as dores da operação no Brasil antes de internacionalizar.
+3. O mercado interno paraguaio não é o motivo de ir: ele é base para vender ao Brasil e ao exterior.
+4. Indicar só assessoria local que vive o Paraguai.
+5. Prever ao menos um ano para abrir conta e criar relacionamento bancário.
+Fonte: `references/fonte-video-paulo-paraguai-2026-10-15.md` e a reunião de 21/10.
