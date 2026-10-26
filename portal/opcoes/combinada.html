@@ -326,6 +326,55 @@ table.t .num{text-align:right;font-family:var(--mono);font-variant-numeric:tabul
 .janela .base.rs{font-size:12.5px}
 .fora-l{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--linha-fina)} .fora-l:last-child{border-bottom:0}
 .fora-l strong{font:500 18px/1 var(--mono);font-variant-numeric:tabular-nums;color:var(--texto)}
+/* Meta mensal D111, pré-análise por farol, dossiê das decisões e histórico das demandas (26/10/2026) */
+.meta-duo{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:12px}
+.meta-bloco{border:1px solid var(--linha);border-radius:12px;background:var(--poco);padding:14px;display:grid;gap:10px;min-width:0;align-content:start}
+.meta-bloco.destaque-mes{border-color:var(--ouro-linha);box-shadow:inset 3px 0 0 var(--ouro)}
+.mb-topo{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mb-num{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px} .mb-num strong{font:500 32px/1 var(--mono);letter-spacing:-1px;color:var(--texto);font-variant-numeric:tabular-nums}
+.destaque-mes .mb-num strong{color:var(--ouro-texto);font-size:40px} .mb-num span{font-size:13px;color:var(--texto-3)} .mb-num b{font:500 13.5px var(--mono);color:var(--texto)}
+.meta-bloco .meta-cab{grid-template-columns:minmax(0,.9fr) minmax(0,1.7fr) minmax(0,.8fr);gap:8px}
+.meta-bloco.q4 .meta-cab{grid-template-columns:repeat(2,minmax(0,1fr))} .meta-bloco.q4 .meta-cab>div.largo{grid-column:1/-1;order:3} .meta-bloco .meta-cab>div{background:var(--sup);padding:10px 12px} .meta-bloco .meta-cab b{font-size:16px}
+.prog.marcada{position:relative;overflow:visible} .prog.marcada b{border-radius:4px} .prog .marca{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px solid var(--texto)}
+.meses-lh{--cols:minmax(0,.9fr) 96px 110px minmax(0,1.3fr) minmax(0,1.3fr) 104px} .meses-lh .lh>span .sub{white-space:normal}
+.lh.total{background:var(--sup-2)} .lh.total .tit{font-weight:600}
+.met.clicavel{cursor:pointer} .met.clicavel:hover{background:var(--hover)}
+.met .m-acao{border-top:1px dashed var(--linha-2);padding-top:8px;display:grid;gap:2px;font-size:12.5px;color:var(--texto-2)}
+.met .m-pa{justify-self:start;min-height:28px;font-size:12.5px}
+.gaveta.larga{width:min(760px,100%)}
+.pa-topo{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px} .pa-topo strong{font:500 28px/1 var(--mono);font-variant-numeric:tabular-nums;color:var(--texto)}
+.pa-sec{display:grid;gap:6px;min-width:0} .pa-sec h3{margin:0;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:8px;color:var(--texto)}
+.pa-sec p{margin:0;color:var(--texto-2);font-size:13.5px;overflow-wrap:anywhere} .pa-sec p.forte{color:var(--texto);font-size:15px}
+.fh{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px} .fh>div{display:grid;gap:6px;align-content:start;border:1px solid var(--linha);border-radius:10px;padding:10px 12px;min-width:0} .fh>div:last-child{border-style:dashed}
+.lst{margin:0;padding-left:16px;display:grid;gap:6px;font-size:13px;color:var(--texto-2)} .lst li{overflow-wrap:anywhere} .lst.hip{color:var(--texto-3)}
+.pa-acao{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--linha-fina);font-size:13.5px;color:var(--texto-2)} .pa-acao:last-child{border-bottom:0}
+.pa-acao .n{width:22px;height:22px;border-radius:6px;border:1px solid var(--linha-3);display:flex;align-items:center;justify-content:center;color:var(--texto-2)}
+.pa-dec{border:1px solid var(--ouro);border-radius:12px;background:var(--ouro-suave);padding:12px 14px;display:grid;gap:8px;justify-items:start} .pa-dec p{margin:0;color:var(--texto);font-size:14px;overflow-wrap:anywhere}
+.dos-tit{margin:0;font-size:16px;font-weight:600;color:var(--texto)}
+.mini.dos-mini{grid-template-columns:repeat(2,minmax(0,1fr))} .dos-mini span{font-size:13px;color:var(--texto-2);display:block;overflow-wrap:anywhere}
+.valid{border:1px solid var(--linha-3);border-radius:12px;padding:12px;display:grid;gap:10px;background:var(--poco)}
+.valid-cab{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px} .valid-cab h3{margin:0;font-size:14px;font-weight:600} .valid-cab .pars{margin:0}
+.pars{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.par{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1.6 var(--mono);padding:1px 8px;border-radius:6px;border:1px solid var(--linha-3);color:var(--texto-2);white-space:nowrap}
+.par::before{content:"";width:8px;height:8px;border-radius:50%;flex:none;background:var(--texto-3)}
+.par.concorda{color:var(--texto)} .par.concorda::before{background:var(--texto)}
+.par.ressalva{background:var(--ouro);border-color:var(--ouro);color:var(--sobre-ouro)} .par.ressalva::before{background:var(--sobre-ouro)}
+.par.discorda{border-color:var(--erro);color:var(--erro)} .par.discorda::before{background:var(--erro)}
+.val-card{border:1px solid var(--linha);border-left-width:3px;border-radius:10px;background:var(--sup);padding:10px 12px;display:grid;gap:6px;font-size:13px;color:var(--texto-2);min-width:0} .val-card p{margin:0;overflow-wrap:anywhere}
+.val-card.concorda{border-left-color:var(--texto-3)} .val-card.ressalva{border-left-color:var(--ouro)} .val-card.discorda{border-left-color:var(--erro)} .val-card .rot{margin-right:4px}
+.val-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;min-width:0}
+.opcao{border:1px solid var(--linha);border-radius:10px;padding:10px 12px;display:grid;gap:8px;margin-top:6px} .opcao.rec{border-color:var(--ouro)} .opcao .dl{grid-template-columns:72px minmax(0,1fr);font-size:13px}
+.ctx{list-style:none;margin:0;padding:0;display:grid;gap:10px} .ctx li{display:grid;grid-template-columns:90px minmax(0,1fr);gap:10px;align-items:start;font-size:13px;color:var(--texto-2)} .ctx .chip{justify-content:center}
+.chip.tipo-estimativa{border-style:dashed} .chip.tipo-opiniao{border-style:dotted;color:var(--texto-3)}
+.hist{border:1px solid var(--ouro);border-radius:12px;padding:12px 14px;display:grid;gap:10px;background:var(--ouro-suave)}
+.hist-cab{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px} .selo-h{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--texto)} .selo-h .ic{width:16px;height:16px;color:var(--ouro-texto)}
+.hist .rasc{background:var(--sup)}
+.fontes-h{list-style:none;margin:0;padding:0;display:grid;gap:8px} .fontes-h li{display:grid;gap:4px;font-size:12.5px;color:var(--texto-2);border-left:2px solid var(--linha-3);padding-left:10px;min-width:0}
+.hist-falta{border:1px dashed var(--linha-3);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--texto-2);overflow-wrap:anywhere} .hist-falta b{color:var(--texto)} .hist-falta .sub{margin-top:4px}
+.chip.hist-chip{border-color:var(--ouro);color:var(--ouro-texto)}
+.legenda i.esf{background:var(--texto-3)} .graf .b-esforco{fill:var(--texto-3)}
+@media (max-width:900px){ .meta-duo{grid-template-columns:1fr} .meta-bloco .meta-cab{grid-template-columns:repeat(2,minmax(0,1fr))} .meta-bloco .meta-cab>div.largo{order:3} .mb-num strong{font-size:26px} .destaque-mes .mb-num strong{font-size:32px}
+  .fh,.mini.dos-mini{grid-template-columns:1fr} .ctx li{grid-template-columns:1fr} .ctx .chip{justify-self:start} }
 @media (max-width:900px){ .meta-cab{grid-template-columns:repeat(2,minmax(0,1fr))} .meta-cab b{font-size:17px} .meta-cab>div.largo{grid-column:1/-1} .sem-grade{grid-template-columns:1fr} .met strong{font-size:24px}
   .desv-lh .d-acoes{justify-content:flex-start} .dec-lh .acoes{justify-content:flex-start} .fora-l{padding:12px 16px} }
 /* Onde está */
@@ -643,7 +692,7 @@ function mesaLuis() {
   const mx = Math.max(1, ...linhasTime.map(x => x.uso));
   return cab(dataLonga(), `${saudacao()}, Luis`, time ? "Esta é a Central do time. As suas decisões ficam no seu painel próprio; aqui você acompanha os pedidos, as demandas e as janelas de receita." : "Aqui fica só o que é da sua alçada: regra, preço, meta, remuneração, produto em validação e material em escala. Chamados, lotes e listas são decididos por quem é dona da entrega.", `${time ? "" : `<a class="btn sec" href="#decisoes">Ver decisões</a>`}<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`, true)
   + avisoEntregas()
-  + `<div class="kpis">${time ? "" : kpiMetaQ4()}${time ? kpi({r: "Decisões suas", v: "—", s: "ficam no seu painel próprio", tag: "alçada", tagForte: true}) : kpi({r: "Decisões suas", v: totalDecisoes(), s: "regra, preço, meta e produto em validação", go: "decisoes", dest: true, tag: "alçada", tagForte: true, sp: spark(serie(M.decisoes.map(d => d.data), 8, 7), "Decisões pendentes por semana de registro, últimas 8 semanas")})}
+  + `<div class="kpis">${time ? "" : kpiMeta()}${time ? kpi({r: "Decisões suas", v: "—", s: "ficam no seu painel próprio", tag: "alçada", tagForte: true}) : kpi({r: "Decisões suas", v: totalDecisoes(), s: "regra, preço, meta e produto em validação", go: "decisoes", dest: true, tag: "alçada", tagForte: true, sp: spark(serie(M.decisoes.map(d => d.data), 8, 7), "Decisões pendentes por semana de registro, últimas 8 semanas")})}
       ${kpi({r: "Pedidos em andamento", v: nf + na + nap, s: `${nf} na fila · ${na} em análise · ${nap} para aprovar`, go: "pedidos", tag: "14 dias", sp: spark(serie(ps.map(p => p.criado_em)), "Pedidos abertos por dia nos últimos 14 dias")})}
       ${kpi({r: "Janela mais próxima", v: prox ? prox.d + "d" : "—", s: prox ? esc(prox.j.janela) : "sem janela com data", tag: prox ? data(prox.j.prazo) : "", tagForte: prox && prox.d <= 14, dest: prox && prox.d <= 14})}
       ${kpi({r: "Para responder", v: resp, s: ["daniela", "jenifer", "geovana"].map(k => `${PESSOAS[k]} ${dn[k]?.responder || 0}`).join(" · "), go: "whatsapp", tag: "14 dias", sp: spark(serie(M.demandas.map(d => d.aberta_em)), "Demandas abertas por dia nos últimos 14 dias")})}</div>
@@ -741,7 +790,8 @@ function marcarLidas(ids, lida = true) {
 
 /* ===================== Gestão (26/10/2026) =====================
    Sistema de gestão do Luis (infra/gestao-schema.md → infra/gestao.py → dados.json "gestao"): meta do Q4, semáforo, previsão,
-   desvios e decisões. Gravações: "Definir unidade" → conselho/meta-q4-unidade (só o Luis, como as decisões do Conselho);
+   desvios e decisões. Meta mensal da D111 (unidade decidida: crédito de contrato fechado; o botão "Definir unidade" saiu em 26/10).
+   Cada farol abre a pré-análise da área (gaveta "farol"); cada decisão abre o dossiê com a validação das áreas antes dos botões. Gravações:
    andamento de desvio ou ação → acoes/<id> (só a dona da ação ou o Luis, com por_id). Perfil time: só o semáforo, sem R$ nem decisões.
    Cenários e curvas são estimativas com premissas escritas; nada aqui é promessa. Tudo o que vem do JSON ou do db passa por esc(). */
 const G = () => (S.M && S.M.gestao && typeof S.M.gestao === "object") ? S.M.gestao : {};
@@ -760,17 +810,24 @@ const foraTol = m => m.status === "vermelho" || m.status === "amarelo";
 const semaforo = () => (Array.isArray(G().semaforo) ? G().semaforo : []).filter(m => m && typeof m === "object");
 const dist = m => !vazioN(m.meta) && !vazioN(m.valor) && +m.meta ? Math.abs(m.valor - m.meta) / Math.abs(m.meta) : 0;
 const piores = () => semaforo().filter(foraTol).sort((a, b) => (a.status === "vermelho" ? 0 : 1) - (b.status === "vermelho" ? 0 : 1) || dist(b) - dist(a));
-const unidadeDef = () => { const u = String(S.conselho["meta-q4-unidade"]?.decisao || "").toLowerCase(), m = gMeta().unidade; return /cred/.test(u) ? "credito" : /liq/.test(u) ? "liquido" : (m === "credito" || m === "liquido") ? m : "indefinida" };
-const UNID = {credito: "crédito contratado", liquido: "líquido Save", indefinida: "unidade a definir"};
-const donoNome = d => PESSOAS[d] || {controller: "Controller", "gerente-ti": "Gerente de TI", "gerente-central": "Gerente da Central", "gerente-dados": "Gerente de Dados", "arquiteto-agentes": "Arquiteto de Agentes"}[d] || String(d || "—").replace(/^gerente-/, "Gerente de ").replace(/^\w/, c => c.toUpperCase());
+const donoNome = d => PESSOAS[d] || {controller: "Controller", "gerente-ti": "Gerente de TI", "gerente-central": "Gerente da Central", "gerente-dados": "Gerente de Dados", "arquiteto-agentes": "Arquiteto de Agentes", "gerente-intel-comercial": "Gerente de Inteligência Comercial"}[d] || String(d || "—").replace(/^gerente-/, "Gerente de ").replace(/-/g, " ").replace(/^\w/, c => c.toUpperCase());
 const mesCurto = m => { const [a, mm] = String(m || "").split("-"), n = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"][+mm - 1]; return n ? `${n}/${String(a).slice(2)}` : String(m || "") };
 const largG = () => Math.max(300, Math.min(680, ($("#pag")?.clientWidth || 900) - 40));
 const gestaoDoTime = () => S.M.perfil === "time" || S.eu !== "luis";
 /* Mesa do Luis: cartão da meta e os 3 piores do semáforo. */
-function kpiMetaQ4() {
-  const m = gMeta(); if (!m.q4_rs) return kpi({r: "Meta do Q4", v: "—", s: "sem pacote de gestão ainda", go: "gestao", tag: "gestão"});
-  const u = unidadeDef(), L = (m.leituras || {})[u] || m, real = L.realizado_rs ?? m.realizado_rs ?? 0, alvo = L.meta_rs || m.q4_rs;
-  return kpi({r: "Meta do Q4", v: pct(real, alvo) + "%", s: `${rs(real)} de ${rs(alvo)} · ${UNID[u]}`, go: "gestao", dest: true, tag: m.dias_uteis_restantes ? num(m.dias_uteis_restantes) + " dias úteis" : "", tagForte: true});
+/* Meta mensal (D111, 26/10/2026): crédito de contrato fechado, out R$ 75 mi · nov R$ 100 mi · dez R$ 75 mi; Q4 R$ 250 mi. Pacote: meta.mes_atual, meta.meses[], meta.total. */
+const metaMes = () => { const m = gMeta(); return m.mes_atual && typeof m.mes_atual === "object" && m.mes_atual.meta_rs ? m.mes_atual : null };
+const metaQ4 = () => { const m = gMeta(), t = m.total && typeof m.total === "object" && m.total.meta_rs ? m.total : {};
+  return {meta_rs: t.meta_rs || m.q4_rs || 0, realizado_rs: t.realizado_rs ?? m.realizado_rs ?? 0, falta_rs: t.falta_rs ?? m.falta_rs, ritmo_necessario_rs_dia: t.ritmo_necessario_rs_dia ?? m.ritmo_necessario_rs_dia,
+    ritmo_atual_rs_dia: t.ritmo_atual_rs_dia ?? m.ritmo_atual_rs_dia, fator_ritmo: t.fator_ritmo, dias_uteis_restantes: t.dias_uteis_restantes ?? m.dias_uteis_restantes, dias_uteis_total: t.dias_uteis_total, dias_uteis_decorridos: t.dias_uteis_decorridos, status: t.status} };
+const nomeMes = x => x && x.nome ? String(x.nome) : mesCurto(x && x.mes);
+/* Mesa do Luis: cartão da meta do mês com a do Q4 na linha de baixo, e os 3 piores do semáforo. */
+function kpiMeta() {
+  const mm = metaMes(), q = metaQ4(); if (!mm && !q.meta_rs) return kpi({r: "Meta do mês", v: "—", s: "sem pacote de gestão ainda", go: "gestao", tag: "gestão"});
+  const sq = `Q4 ${pct(q.realizado_rs, q.meta_rs)}% · ${rs(q.realizado_rs)} de ${rs(q.meta_rs)}`;
+  if (!mm) return kpi({r: "Meta do Q4", v: pct(q.realizado_rs, q.meta_rs) + "%", s: sq, go: "gestao", dest: true, tag: q.dias_uteis_restantes ? num(q.dias_uteis_restantes) + " dias úteis" : "", tagForte: true});
+  return kpi({r: `Meta de ${esc(nomeMes(mm))}`, v: pct(mm.realizado_rs, mm.meta_rs) + "%", s: `${rs(mm.realizado_rs)} de ${rs(mm.meta_rs)}<br>${sq}`, go: "gestao", dest: true,
+    tag: vazioN(mm.dias_uteis_restantes) ? "" : num(mm.dias_uteis_restantes) + (+mm.dias_uteis_restantes === 1 ? " dia útil" : " dias úteis"), tagForte: true});
 }
 function painelFora() {
   const xs = piores().slice(0, 3);
@@ -786,20 +843,50 @@ function telaGestao(sub, id) {
     + (time ? "" : secMeta()) + secSemaforo() + (time ? "" : secPrevisao() + secDesvios() + secDecisoes());
 }
 function secMeta() {
-  const m = gMeta(); if (!m.q4_rs) return `<section class="painel"><div class="painel-cab"><h2>Meta do Q4</h2></div><div class="vazio">Sem pacote do Controller ainda.</div></section>`;
-  const u = unidadeDef(), ind = u === "indefinida", L = ind ? m : ((m.leituras || {})[u] || m);
-  const real = L.realizado_rs ?? m.realizado_rs ?? 0, alvo = L.meta_rs || m.q4_rs, falta = L.falta_rs ?? Math.max(0, alvo - real), rn = L.ritmo_necessario_rs_dia ?? m.ritmo_necessario_rs_dia, ra = L.ritmo_atual_rs_dia ?? m.ritmo_atual_rs_dia;
-  const ritmoOk = rn && ra ? ra >= rn : null, per = m.periodo || {};
-  const bloco = (rot, val, sub, ouro, largo) => `<div class="${largo ? "largo" : ""}"><small>${rot}</small><b class="${ouro ? "ouro" : ""}">${val}</b>${sub ? `<span>${sub}</span>` : ""}</div>`;
-  const leitura = (k, t) => { const x = (m.leituras || {})[k]; if (!x) return ""; const a = x.meta_rs || m.q4_rs; return `<div class="leitura"><h3>${t}</h3><dl><dt>Meta</dt><dd>${rs(a)}</dd><dt>Realizado</dt><dd>${rs(x.realizado_rs)} (${pct(x.realizado_rs, a)}%)</dd><dt>Falta</dt><dd>${rs(x.falta_rs ?? a - x.realizado_rs)}</dd><dt>Ritmo necessário × atual</dt><dd>${rs(x.ritmo_necessario_rs_dia)} × ${rs(x.ritmo_atual_rs_dia)}/dia</dd></dl></div>` };
-  return `<section class="painel" aria-labelledby="t-meta"><div class="painel-cab"><h2 id="t-meta">Meta do Q4${per.trimestre ? ` · ${esc(per.trimestre)}` : ""}</h2>
-      <div class="acoes">${ind ? `<span class="chip urg">Unidade indefinida</span>` : `<span class="chip">${esc(UNID[u])}${S.conselho["meta-q4-unidade"] || m.unidade_definida_no_painel ? " · definida no painel" : ""}</span>`}${S.eu === "luis" ? `<button class="btn ${ind ? "" : "sec"} peq" data-go="gestao/unidade">${ind ? "Definir unidade" : "Mudar unidade"}</button>` : ""}</div></div>
-    <div class="painel-corpo">
-      <div class="meta-cab">${bloco("Meta", rs(alvo), ind ? "leitura principal em crédito" : UNID[u], true)}${bloco("Realizado", rs(real), pct(real, alvo) + "% da meta")}${bloco("Falta", rs(falta), ind ? "para a meta em crédito" : "para a meta")}
-        ${bloco("Ritmo necessário × atual", `${rs(rn)} × ${rs(ra)}`, ritmoOk === null ? "por dia útil" : ritmoOk ? "por dia útil · no ritmo" : "por dia útil · abaixo do ritmo", ritmoOk === false, true)}${bloco("Dias úteis restantes", num(m.dias_uteis_restantes), per.trimestre ? "no " + esc(per.trimestre) : "no trimestre")}</div>
-      <div class="prog" role="img" aria-label="${pct(real, alvo)}% da meta realizado"><b style="width:${pct(real, alvo)}%"></b></div>
-      ${ind ? `<div class="aviso"><b>Pergunta ao Luis:</b> a meta de ${rs(m.q4_rs)} do Q4 é em crédito contratado ou em líquido Save? Enquanto não for definida, as duas leituras ficam lado a lado.</div><div class="leituras">${leitura("credito", "Leitura em crédito contratado")}${leitura("liquido", "Leitura em líquido Save")}</div>` : ""}
-    </div></section>`;
+  const m = gMeta(), mm = metaMes(), q = metaQ4();
+  if (!mm && !q.meta_rs) return `<section class="painel"><div class="painel-cab"><h2>Meta</h2></div><div class="vazio">Sem pacote do Controller ainda.</div></section>`;
+  const ritmo = (x, larg) => { const rn = x.ritmo_necessario_rs_dia, ra = x.ritmo_atual_rs_dia, f = !vazioN(x.fator_ritmo) ? +x.fator_ritmo : rn && ra ? rn / ra : null;
+    return `<div class="${larg ? "largo" : ""}"><small>Ritmo necessário × atual</small><b class="${f !== null && f > 1 ? "ouro" : ""}">${rs(rn)} × ${rs(ra)}</b><span>por dia útil${f !== null ? (f > 1 ? ` · precisa de ${num(f, 1)}× o ritmo atual` : " · no ritmo") : ""}</span></div>` };
+  const barra = (x, rot) => { const p = pct(x.realizado_rs, x.meta_rs), dt = +x.dias_uteis_total || 0, dd = +x.dias_uteis_decorridos || 0, pl = dt ? Math.round(dd / dt * 100) : null;
+    return `<div class="prog marcada" role="img" aria-label="${p}% da meta de ${esc(rot)} realizado${pl !== null ? `; ${pl}% dos dias úteis já passaram` : ""}"><b style="width:${p}%"></b>${pl !== null ? `<i class="marca" style="left:${pl}%"></i>` : ""}</div>
+      ${pl !== null ? `<span class="sub quebra">Barra: realizado. Traço: ${pl}% dos dias úteis passados (${num(dd)} de ${num(dt)}).</span>` : ""}` };
+  const unid = String(m.unidade_detalhe || "").startsWith("credito") || m.unidade === "credito" ? "crédito de contrato fechado" : m.unidade === "liquido" ? "líquido Save" : "unidade a definir";
+  const mes = mm ? `<div class="meta-bloco destaque-mes"><div class="mb-topo"><span class="rot">Meta de ${esc(nomeMes(mm))}</span>${selo(mm.status)}</div>
+      <div class="mb-num"><strong>${rs(mm.realizado_rs)}</strong><span>de <b>${rs(mm.meta_rs)}</b> · ${num(pct(mm.realizado_rs, mm.meta_rs))}%${vazioN(mm.ganhos_n) ? "" : ` · ${num(mm.ganhos_n)} ganhos`}</span></div>
+      ${barra(mm, nomeMes(mm))}
+      <div class="meta-cab">${`<div><small>Falta</small><b>${rs(mm.falta_rs ?? Math.max(0, mm.meta_rs - mm.realizado_rs))}</b><span>para a meta do mês</span></div>`}${ritmo(mm, true)}<div><small>Dias úteis</small><b>${num(mm.dias_uteis_restantes)}</b><span>restantes de ${num(mm.dias_uteis_total)}</span></div></div></div>` : "";
+  const q4 = `<div class="meta-bloco q4"><div class="mb-topo"><span class="rot">Meta do Q4</span>${q.status ? selo(q.status) : ""}</div>
+      <div class="mb-num"><strong>${rs(q.realizado_rs)}</strong><span>de <b>${rs(q.meta_rs)}</b> · ${num(pct(q.realizado_rs, q.meta_rs))}%</span></div>${barra(q, "Q4")}
+      <div class="meta-cab"><div><small>Falta</small><b>${rs(q.falta_rs ?? Math.max(0, q.meta_rs - q.realizado_rs))}</b><span>no trimestre</span></div>${ritmo(q, true)}<div><small>Dias úteis</small><b>${num(q.dias_uteis_restantes)}</b><span>restantes no Q4</span></div></div></div>`;
+  return `<section class="painel" aria-labelledby="t-meta"><div class="painel-cab"><h2 id="t-meta">Meta${mm ? " do mês e do Q4" : " do Q4"}</h2>
+      <span class="filtros"><span class="chip">${esc(unid)}</span>${m.decisao ? `<span class="chip">${esc(String(m.decisao).replace(/\s*\(.*\)$/, ""))}</span>` : ""}</span></div>
+    <div class="painel-corpo"><div class="meta-duo">${mes}${q4}</div>${tabMeses()}${secMasters()}</div></section>`;
+}
+/* Mês a mês: meta e realizado do pacote, cenário base e esforço da previsão (previsao.por_mes). Estimativas, sem promessa. */
+function tabMeses() {
+  const ms = Array.isArray(gMeta().meses) ? gMeta().meses.filter(x => x && x.mes) : []; if (!ms.length) return "";
+  const pm = (G().previsao || {}).por_mes || {}, pv = Array.isArray(pm.meses) ? pm.meses : [], cen = (x, k) => ((pv.find(y => y && y.mes === x.mes) || {}).cenarios || {})[k];
+  const tot = pm.total && pm.total.cenarios ? pm.total.cenarios : {}, q = metaQ4();
+  const cel = c => !c ? `<span class="mono">—</span>` : `<span class="mono">${rs(c.esperado_rs)}</span><span class="sub">${vazioN(c.pct_da_meta) ? "" : num(c.pct_da_meta, 0) + "% da meta · "}chance da meta ${vazioN(c.probabilidade_meta_pct) ? "—" : num(c.probabilidade_meta_pct, 0) + "%"}</span>`;
+  const linha = (rot, meta, real, b, e, st, sit, total) => `<div class="lh ${total ? "total" : ""}"><span><span class="tit">${esc(rot)}</span><span class="sub esconde-m">${esc(sit || "")}</span>
+      <span class="sub quebra so-m-b">Meta ${rs(meta)} · realizado ${rs(real)} (${pct(real, meta)}%)<br>Base ${b ? rs(b.esperado_rs) : "—"} · esforço ${e ? rs(e.esperado_rs) : "—"}</span></span>
+    <span class="mono esconde-m">${rs(meta)}</span><span class="esconde-m"><span class="mono">${rs(real)}</span><span class="sub">${pct(real, meta)}%</span></span><span class="esconde-m">${cel(b)}</span><span class="esconde-m">${cel(e)}</span><span>${/iniciar/.test(sit || "") ? `<span class="chip">A iniciar</span>` : st ? selo(st) : ""}</span></div>`;
+  return `<div class="pilha" style="gap:8px"><span class="rot">Mês a mês</span><div class="painel"><div class="linhas meses-lh"><div class="lh cab"><span>Mês</span><span>Meta</span><span>Realizado</span><span>Cenário base</span><span>Esforço</span><span>Situação</span></div>
+    ${ms.map(x => linha(nomeMes(x).replace(/^\w/, c => c.toUpperCase()), x.meta_rs, x.realizado_rs, cen(x, "base"), cen(x, "esforco"), x.status, x.situacao)).join("")}
+    ${linha("Q4", q.meta_rs, q.realizado_rs, tot.base, tot.esforco, q.status, "trimestre", true)}</div></div>
+    <span class="sub quebra">Cenários da previsão${(G().previsao || {}).data ? " de " + data(G().previsao.data) : ""}: estimativas com premissas escritas e faixa P10–P90; não são promessa de resultado.</span></div>`;
+}
+/* Desdobramento por Master: PROPOSTA do Controller (meta é alçada do Luis); a Daniela valida Master a Master antes de comunicar. */
+function secMasters() {
+  const P = gMeta().por_master || {}, xs = Array.isArray(P.masters) ? P.masters.filter(x => x && x.master) : []; if (!xs.length) return "";
+  const ms = (Array.isArray(gMeta().meses) ? gMeta().meses : []).map(x => x.mes), mx = (x, k) => (Array.isArray(x.meses) ? x.meses : []).find(y => y && y.mes === k) || {};
+  const cols = `minmax(0,1fr) 64px ${ms.map(() => "110px").join(" ")} 120px`;
+  return `<details class="painel prop"><summary class="painel-cab" style="cursor:pointer"><h2>Desdobramento por Master</h2><span class="filtros"><span class="chip urg">Proposta</span><span class="sub">${xs.length} Masters · não aprovada</span></span></summary>
+    <div class="painel-corpo" style="padding-bottom:6px">${P.status ? `<div class="nota"><b>${esc(P.status)}.</b> ${esc(P.metodo || "")}</div>` : ""}${P.alerta ? `<div class="aviso">${esc(P.alerta)}</div>` : ""}</div>
+    <div class="linhas" style="--cols:${cols}"><div class="lh cab"><span>Master</span><span>Peso</span>${ms.map(k => `<span>${esc(mesCurto(k))}</span>`).join("")}<span>Q4</span></div>
+    ${xs.map(x => `<div class="lh"><span><span class="tit">${esc(x.master)}</span><span class="sub quebra so-m-b">peso ${num(x.peso_pct, 1)}% · Q4 ${rs(x.meta_q4_rs)} · realizado ${rs(x.realizado_q4_rs)}</span></span><span class="mono esconde-m">${num(x.peso_pct, 1)}%</span>
+      ${ms.map(k => { const y = mx(x, k); return `<span class="esconde-m"><span class="mono">${rs(y.meta_rs)}</span><span class="sub">real. ${rs(y.realizado_rs)}</span></span>` }).join("")}
+      <span><span class="mono">${rs(x.meta_q4_rs)}</span><span class="sub esconde-m">real. ${rs(x.realizado_q4_rs)}</span></span></div>`).join("")}</div></details>`;
 }
 function secSemaforo() {
   const xs = semaforo(), vis = S.g.fora ? xs.filter(foraTol) : xs, nFora = xs.filter(foraTol).length, conta = s => xs.filter(m => stG(m.status) === s).length;
@@ -810,18 +897,21 @@ function secSemaforo() {
     <div class="painel-corpo">${blocos.map(b => grupo(BLOCO_G[b], vis.filter(m => m.bloco === b))).join("")}${soltos.length ? grupo("Outras", soltos) : ""}${vis.length ? "" : `<div class="vazio">${xs.length ? "Nenhuma métrica fora da tolerância." : "Sem métricas ainda."}</div>`}</div></section>`;
 }
 function cartaoMet(m) {
+  const P = preDe(m), a1 = P && stG(m.status) === "vermelho" && Array.isArray(P.acoes) ? P.acoes[0] : null;
   if (gestaoDoTime()) m = {...m, valor: m.unidade === "R$" ? null : m.valor, anterior: m.unidade === "R$" ? null : m.anterior, meta: null, limite_proposto: null, tolerancia: {}, nota: String(m.nota || "").replace(/R\$\s?[\d.,]+(\s?(mi|mil|bi))?/g, "R$ —")};  /* time: sem R$ nem meta, mesmo que o JSON traga */
   const v = vazioN(m.variacao_pct) ? null : +m.variacao_pct, cls = v > 0 ? "sobe" : v < 0 ? "desce" : "", st = stG(m.status), semMeta = vazioN(m.meta);
   const tol = m.tolerancia && typeof m.tolerancia === "object" ? Object.entries(m.tolerancia).filter(([k, x]) => !k.startsWith("_") && k !== "origem" && x).map(([k, x]) => `${k}: ${x}`).join(" · ") : "";
   const uMeta = m.meta_unidade || (m.unidade === "%" && +m.meta > 100 ? "R$" : m.unidade);
-  return `<article class="met ${st}"><div class="m-topo"><span class="nome">${esc(m.nome)}</span>${selo(st)}</div>
+  return `<article class="met ${st} ${P ? "clicavel" : ""}" ${P ? `data-go="gestao/farol/${esc(m.id)}"` : ""}><div class="m-topo"><span class="nome">${esc(m.nome)}</span>${selo(st)}</div>
     <div class="m-val"><strong>${fmtU(m.valor, m.unidade)}</strong>${v !== null ? `<span class="var ${cls}">${num(Math.abs(v), 1)}% vs. anterior</span>` : ""}</div>
     <div class="m-meta"><span>${gestaoDoTime() ? "" : semMeta ? `Meta proposta <b>${vazioN(m.limite_proposto) ? "não aprovada" : fmtU(m.limite_proposto, m.unidade) + ", não aprovada"}</b>` : `Meta <b>${fmtU(m.meta, uMeta)}</b>${m.meta_proposta ? " (proposta)" : ""}`}</span>${vazioN(m.anterior) ? "" : `<span>Anterior <b>${fmtU(m.anterior, m.unidade)}</b></span>`}${tol ? `<span title="${esc(tol)}">Tolerância <b>${esc(tol.length > 44 ? tol.slice(0, 43) + "…" : tol)}</b></span>` : ""}</div>
-    ${m.nota ? `<div class="m-nota">${esc(m.nota)}</div>` : ""}<div class="m-meta"><span class="conf ${esc(m.confianca || "")}">confiança ${esc(m.confianca || "—")}</span>${m.fonte ? `<span>${esc(m.fonte)}</span>` : ""}</div></article>`;
+    ${m.nota ? `<div class="m-nota">${esc(m.nota)}</div>` : ""}<div class="m-meta"><span class="conf ${esc(m.confianca || "")}">confiança ${esc(m.confianca || "—")}</span>${m.fonte ? `<span>${esc(m.fonte)}</span>` : ""}</div>
+    ${a1 ? `<div class="m-acao"><span class="rot">1ª ação</span><span class="quebra">${esc(a1.acao)}</span><span class="sub">${esc(donoNome(a1.dono))}${a1.prazo ? " · " + data(a1.prazo) : ""}</span></div>` : ""}
+    ${P ? `<button class="lnk m-pa" data-go="gestao/farol/${esc(m.id)}">Pré-análise da área${P.pendente ? " (pendente)" : ""}<span class="so-leitor">: ${esc(m.nome)}</span> →</button>` : ""}</article>`;
 }
 /* Gráficos em SVG inline (sem biblioteca): barras dos cenários, área da curva de caixa e barras da decadência. Texto em mono, cor por token. */
 function grafCenarios(c) {
-  const ks = [["conservador", "Conservador"], ["base", "Base"], ["meta", "Meta"]].filter(([k]) => c[k] && typeof c[k] === "object");
+  const ks = [["conservador", "Conservador"], ["base", "Base"], ["esforco", "Esforço"], ["meta", "Meta"]].filter(([k]) => c[k] && typeof c[k] === "object");
   if (!ks.length) return `<div class="vazio">Sem cenários.</div>`;
   const W = largG(), L = 96, R = 84, H = 24, gap = 6, grupos = [["fechamento_q4_rs", "Fechamento no Q4"], ["liquido_q4_rs", "Líquido Save no Q4"]];
   const mx = Math.max(1, ...ks.flatMap(([k]) => grupos.map(([f]) => +c[k][f] || 0)));
@@ -861,8 +951,8 @@ function secPrevisao() {
   const js = (Array.isArray(p.janelas) ? p.janelas : []).slice().sort((a, b) => String(a.prazo || "9999").localeCompare(String(b.prazo || "9999"))), rk = Array.isArray(p.riscos) ? p.riscos : [];
   return `<section class="painel" aria-labelledby="t-prev"><div class="painel-cab"><h2 id="t-prev">Previsão</h2><span class="sub">${p.data ? "previsão de " + data(p.data) + " · " : ""}estimativas com premissas, sem promessa</span></div>
     <div class="painel-corpo"><div class="grade-2">
-      <div class="pilha"><span class="rot">Três cenários do Q4</span>${grafCenarios(c)}<div class="legenda"><span><i class="cons"></i>Conservador</span><span><i class="base"></i>Base</span><span><i class="meta"></i>Meta</span><span>Clique numa barra para ver as premissas</span></div>
-        ${sel ? `<div class="premissas" id="premissas"><h3>${esc({conservador: "Premissas do cenário conservador", base: "Premissas do cenário base", meta: "O que a meta precisa"}[sel] || sel)}</h3><ul>${prem.map(x => `<li>${esc(x)}</li>`).join("") || "<li>Sem premissas escritas.</li>"}</ul></div>` : ""}</div>
+      <div class="pilha"><span class="rot">Três cenários do Q4</span>${grafCenarios(c)}<div class="legenda"><span><i class="cons"></i>Conservador</span><span><i class="base"></i>Base</span>${c.esforco ? `<span><i class="esf"></i>Esforço</span>` : ""}<span><i class="meta"></i>Meta</span><span>Clique numa barra para ver as premissas</span></div>
+        ${sel ? `<div class="premissas" id="premissas"><h3>${esc({conservador: "Premissas do cenário conservador", base: "Premissas do cenário base", esforco: "Premissas do cenário de esforço", meta: "O que a meta precisa"}[sel] || sel)}</h3><ul>${prem.map(x => `<li>${esc(x)}</li>`).join("") || "<li>Sem premissas escritas.</li>"}</ul></div>` : ""}</div>
       <div class="pilha"><span class="rot">Caixa em ${num(p.horizonte_semanas || cx.length || 13)} semanas</span>${grafCaixa(cx)}<div class="legenda"><span><i class="base"></i>Base · soma ${rs(sb)}</span><span><i class="linha-c"></i>Conservador · soma ${rs(sc)}</span></div>${cx[0]?.fonte ? `<span class="sub quebra">Fonte: ${esc(cx[0].fonte)}</span>` : ""}</div>
     </div><div class="grade-2">
       <div class="pilha"><span class="rot">Decadência mensal</span>${grafDecad(Array.isArray(p.decadencia_mensal) ? p.decadencia_mensal : [])}<span class="sub quebra">Crédito que sai por mês se o pedido não entrar antes; pré-análise, com validação do técnico por crédito.</span></div>
@@ -889,23 +979,71 @@ function secDesvios() {
 function secDecisoes() {
   const ds = decisoesPend(), pode = podeDecidir("luis");
   return `<section class="painel" aria-labelledby="t-decg"><div class="painel-cab"><h2 id="t-decg">Decisões do Luis</h2><span class="sub">${ds.length} pendentes · alçada do Luis</span></div>
-    <div class="linhas dec-lh">${ds.map(d => `<div class="lh"><span class="mono esconde-m">${esc(d.id)}</span><span><span class="tit quebra">${esc(d.texto)}</span><span class="sub quebra">${esc(d.id)}${d.data ? " · " + data(d.data) : ""}${d.obs ? " · " + esc(String(d.obs).length > 120 ? String(d.obs).slice(0, 119) + "…" : d.obs) : ""}</span></span>
-      <span class="acoes">${pode ? `<button class="btn peq" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec peq" data-go="gestao/decisao/${esc(d.id)}">Aprovar com ajuste</button><button class="btn perigo peq" data-go="gestao/decisao/${esc(d.id)}">Reprovar</button>` : `<button class="btn sec peq" data-go="gestao/decisao/${esc(d.id)}">Ver</button>`}</span></div>`).join("") || `<div class="vazio">Nenhuma decisão pendente.</div>`}</div>
+    <div class="linhas dec-lh">${ds.map(d => { const D = dossieDe(d.id); return `<div class="lh"><span class="mono esconde-m">${esc(d.id)}</span><span><span class="tit quebra">${esc(D && D.titulo ? D.titulo : d.texto)}</span><span class="sub quebra">${esc(d.id)}${d.data ? " · " + data(d.data) : ""}${d.obs && !D ? " · " + esc(String(d.obs).length > 120 ? String(d.obs).slice(0, 119) + "…" : d.obs) : ""}</span>${D ? resumoPar(D) : ""}</span>
+      <span class="acoes">${D ? `<button class="btn ${pode ? "" : "sec"} peq" data-go="gestao/decisao/${esc(d.id)}">${pode ? "Ver dossiê e decidir" : "Ver dossiê"}</button>` : pode ? `<button class="btn peq" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec peq" data-go="gestao/decisao/${esc(d.id)}">Aprovar com ajuste</button><button class="btn perigo peq" data-go="gestao/decisao/${esc(d.id)}">Reprovar</button>` : `<button class="btn sec peq" data-go="gestao/decisao/${esc(d.id)}">Ver</button>`}</span></div>` }).join("") || `<div class="vazio">Nenhuma decisão pendente.</div>`}</div>
     ${S.eu === "luis" && !pode && ds.length ? `<div class="nota" style="margin:12px 18px">Para aprovar, abra a Central pelo link do Claude com a sua conta da Save.</div>` : ""}</section>`;
 }
-/* Gaveta "Definir unidade": grava conselho/meta-q4-unidade como o Luis grava as decisões do Conselho (painel_sync lê a coleção; gestao.py aplica a unidade). */
-function gUnidade() {
-  const m = gMeta(), pode = podeDecidir("luis");
-  gaveta("Definir a unidade da meta", "Meta do Q4 · " + rs(m.q4_rs), `<p style="margin:0">A meta de ${rs(m.q4_rs)} é medida em <b>crédito contratado</b> (valor do crédito dos contratos fechados) ou em <b>líquido Save</b> (honorário da Save, sem o parceiro)? A escolha vai para o livro de decisões como registro seu, e o painel passa a mostrar só a leitura escolhida.</p>
-    <div class="leituras">${["credito", "liquido"].map(k => { const x = (m.leituras || {})[k]; return `<div class="leitura"><h3>${UNID[k].replace(/^\w/, c => c.toUpperCase())}</h3>${x ? `<dl><dt>Meta</dt><dd>${rs(x.meta_rs || m.q4_rs)}</dd><dt>Realizado</dt><dd>${rs(x.realizado_rs)}</dd><dt>Ritmo necessário × atual</dt><dd>${rs(x.ritmo_necessario_rs_dia)} × ${rs(x.ritmo_atual_rs_dia)}</dd></dl>` : `<span class="sub">sem leitura no pacote</span>`}</div>` }).join("")}</div>
-    ${pode ? `<label for="n-dec">Observação <small>(opcional)</small></label><input id="n-dec" maxlength="400">` : semIdent("luis") || `<div class="nota">Só o Luis define a unidade da meta.</div>`}`,
-    pode ? `<button class="btn" data-acao="unidade" data-id="meta-q4-unidade" data-v="credito">Crédito contratado</button><button class="btn sec" data-acao="unidade" data-id="meta-q4-unidade" data-v="liquido">Líquido Save</button>` : "");
+/* Pré-análise da área por farol (registro/gestao/pre-analise-<data>.json → semaforo[i].pre_analise). Só no painel do Luis: traz R$ e decisão sugerida.
+   Leitura, fatos × hipóteses, ações com dono e prazo, decisão sugerida, efeito estimado e o que melhoraria a confiança. Estimativas, sem promessa. */
+const CONF_T = {alta: "alta", media: "média", baixa: "baixa"};
+const preDe = m => !gestaoDoTime() && m && m.pre_analise && typeof m.pre_analise === "object" ? m.pre_analise : null;
+const idDecisao = t => { const x = String(t || "").match(/\b([DF]\d{1,3}(?:-b)?)\b/); return x && dossieDe(x[1]) ? x[1] : null };
+function gFarol(id) {
+  const m = semaforo().find(x => x.id === id), P = preDe(m); if (!m) return;
+  if (!P) return gaveta(esc(m.nome), "Pré-análise da área", `<div class="vazio">${gestaoDoTime() ? "A pré-análise fica no painel do Luis." : "A área ainda não publicou a pré-análise desta métrica."}</div>`);
+  const hj = hoje(), acs = Array.isArray(P.acoes) ? P.acoes : [], fs = P.causa?.fatos || [], hs = P.causa?.hipoteses || [], dId = idDecisao(P.decisao_sugerida);
+  const uMeta = m.meta_unidade || m.unidade;
+  gaveta(esc(m.nome), `Pré-análise da área · ${esc(nomeArea(P.area) || P.area || "—")}${P.especialista ? " · " + esc(P.especialista) : ""}`,
+    `<div class="pa-topo">${selo(m.status)}<strong>${fmtU(m.valor, m.unidade)}</strong><span class="sub">${vazioN(m.meta) ? "sem meta aprovada" : "meta " + fmtU(m.meta, uMeta)}${esc(BLOCO_G[m.bloco] ? " · " + BLOCO_G[m.bloco] : "")}</span></div>
+    ${P.pendente ? `<div class="aviso">Pré-análise pendente: a área ainda está levantando os dados. O que está abaixo é parcial.</div>` : ""}
+    <div class="pa-sec"><h3>Leitura</h3><p>${esc(P.leitura || "—")}</p></div>
+    <div class="pa-sec"><h3>Causa</h3><div class="fh"><div><span class="rot">Fatos <span class="mono">${fs.length}</span></span><ul class="lst fato">${fs.map(x => `<li>${esc(x)}</li>`).join("") || "<li>Sem fato registrado.</li>"}</ul></div>
+      <div><span class="rot">Hipóteses <span class="mono">${hs.length}</span></span><ul class="lst hip">${hs.map(x => `<li>${esc(x)}</li>`).join("") || "<li>Sem hipótese registrada.</li>"}</ul></div></div></div>
+    <div class="pa-sec"><h3>Ações</h3>${acs.map((a, i) => { const atras = a.prazo && String(a.prazo) < hj; return `<div class="pa-acao"><span class="n mono">${i + 1}</span><span style="min-width:0"><span class="quebra" style="display:block">${esc(a.acao)}</span><span class="sub">${esc(donoNome(a.dono))}${a.prazo ? ` · <span class="mono">${data(a.prazo)}</span>` : ""}${atras ? ` <span class="chip urg">atrasada</span>` : ""}</span></span></div>` }).join("") || `<span class="sub">Sem ação proposta.</span>`}</div>
+    ${P.decisao_sugerida ? `<div class="pa-dec"><span class="rot">Decisão sugerida ao Luis</span><p>${esc(P.decisao_sugerida)}</p>${dId ? `<button class="btn sec peq" data-go="gestao/decisao/${esc(dId)}">Abrir o dossiê da ${esc(dId)}</button>` : ""}</div>` : ""}
+    ${P.efeito ? `<div class="pa-sec"><h3>Efeito estimado</h3><p>${esc(P.efeito)}</p></div>` : ""}
+    <div class="pa-sec"><h3>Confiança <span class="conf ${esc(P.confianca)}">${esc(CONF_T[P.confianca] || P.confianca || "—")}</span></h3>${P.melhorar_confianca ? `<p><span class="sub" style="display:inline">O que melhoraria:</span> ${esc(P.melhorar_confianca)}</p>` : ""}</div>
+    <p class="sub quebra">Pré-análise de agentes, com estimativas e premissas escritas; não é promessa de valor, prazo ou êxito.</p>`);
 }
-/* Gaveta de uma decisão do Conselho (mesa, tela Decisões e tela Gestão). */
+/* Dossiê de cada decisão (registro/gestao/dossies/<id>.json → gestao.decisoes[i].dossie): o Luis lê tudo antes de Aprovar, Aprovar com ajuste ou Reprovar.
+   Validação das áreas em destaque (concorda · ressalva · discorda) e divergências logo abaixo da recomendação. */
+const dossieDe = id => { const g = G(), d = (Array.isArray(g.decisoes) ? g.decisoes : []).find(x => x && x.id === id) || (Array.isArray(g.decisoes_sugeridas) ? g.decisoes_sugeridas : []).find(x => x && x.chave === id);
+  const x = d && d.dossie && typeof d.dossie === "object" ? d.dossie : g.dossies && typeof g.dossies === "object" ? g.dossies[id] : null; return x && typeof x === "object" ? x : null };
+const PAR = {concorda: ["concorda", "Concorda"], "concorda com ressalva": ["ressalva", "Com ressalva"], discorda: ["discorda", "Discorda"]};
+const parK = p => PAR[p] ? p : "concorda com ressalva";
+const chipPar = p => `<span class="par ${PAR[parK(p)][0]}">${PAR[parK(p)][1]}</span>`;
+function contaPar(D) { const vs = Array.isArray(D?.validacoes) ? D.validacoes : [], n = k => vs.filter(v => parK(v.parecer) === k).length;
+  return {total: vs.length, concorda: n("concorda"), ressalva: n("concorda com ressalva"), discorda: n("discorda")} }
+const resumoPar = D => { const c = contaPar(D); if (!c.total) return ""; return `<span class="pars">${c.concorda ? `<span class="par concorda">${c.concorda} concorda${c.concorda > 1 ? "m" : ""}</span>` : ""}${c.ressalva ? `<span class="par ressalva">${c.ressalva} com ressalva</span>` : ""}${c.discorda ? `<span class="par discorda">${c.discorda} discorda${c.discorda > 1 ? "m" : ""}</span>` : ""}</span>` };
+const TIPO_C = {fato: "fato", estimativa: "estimativa", opiniao: "opinião"};
+function htmlDossie(D) {
+  const vs = Array.isArray(D.validacoes) ? D.validacoes : [], ops = Array.isArray(D.opcoes) ? D.opcoes : [], cx = Array.isArray(D.contexto) ? D.contexto : [], dv = (Array.isArray(D.divergencias) ? D.divergencias : []).filter(x => x && !/^\s*(nenhuma|sem diverg[eê]ncias?)\.?\s*$/i.test(x));
+  const rec = (String(D.recomendacao || "").match(/op[cç][aã]o\s+([A-E])\b/i) || [])[1], ex = D.execucao || {};
+  const sec = (t, c, cls = "") => c ? `<div class="pa-sec ${cls}"><h3>${t}</h3>${c}</div>` : "";
+  return `${D.titulo ? `<p class="dos-tit">${esc(D.titulo)}</p>` : ""}
+    <div class="filtros">${D.prazo ? `<span class="chip">prazo ${esc(/^\d{4}-\d{2}-\d{2}$/.test(D.prazo) ? data(D.prazo) : D.prazo)}</span>` : ""}${D.revisao ? `<span class="chip">${D.revisao.aprovado ? "revisado" : "em revisão"} · ${esc(D.revisao.gerente || "Gabinete")}</span>` : ""}${D.atualizado_em ? `<span class="chip">atualizado ${esc(/^\d{4}-\d{2}-\d{2}/.test(D.atualizado_em) ? data(D.atualizado_em.slice(0, 10)) : D.atualizado_em)}</span>` : ""}</div>
+    ${sec("O que decidir", `<p class="forte">${esc(D.o_que_decidir || "—")}</p>`)}
+    <div class="mini dos-mini"><div><small>Por que agora</small><span>${esc(D.por_que_agora || "—")}</span></div><div><small>Custo de não decidir</small><span>${esc(D.custo_nao_decidir || "—")}</span></div></div>
+    ${D.recomendacao ? `<div class="pa-dec"><span class="rot">Recomendação</span><p>${esc(D.recomendacao)}</p></div>` : ""}
+    <div class="valid"><div class="valid-cab"><h3>Validação das áreas</h3>${resumoPar(D) || `<span class="sub">nenhuma área validou ainda</span>`}</div>
+      ${vs.map(v => `<article class="val-card ${PAR[parK(v.parecer)][0]}"><div class="val-topo"><span style="min-width:0"><b>${esc(v.area || "—")}</b><span class="sub quebra">${esc(v.especialista || "")}</span></span>${chipPar(v.parecer)}</div>
+        ${v.motivo ? `<p>${esc(v.motivo)}</p>` : ""}${v.ressalva ? `<p><span class="rot">Ressalva</span> ${esc(v.ressalva)}</p>` : ""}${v.condicao ? `<p><span class="rot">Condição</span> ${esc(v.condicao)}</p>` : ""}${v.base ? `<span class="sub quebra">Base: ${esc(v.base)}</span>` : ""}</article>`).join("")}</div>
+    ${dv.length ? `<div class="aviso"><b>Divergências</b><ul style="margin:4px 0 0;padding-left:18px">${dv.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : vs.length ? `<span class="sub">Sem divergência entre as áreas.</span>` : ""}
+    ${ops.length ? sec("Opções", ops.map(o => { const r = rec && new RegExp("^\\s*" + rec + "\\b").test(o.nome); return `<div class="opcao ${r ? "rec" : ""}"><div class="val-topo"><b class="quebra">${esc(o.nome)}</b>${r ? `<span class="chip forte">recomendada</span>` : ""}</div>
+      <dl class="dl">${[["pros", "Prós"], ["contras", "Contras"], ["risco", "Risco"], ["efeito", "Efeito"]].filter(([k]) => o[k]).map(([k, t]) => `<dt>${t}</dt><dd>${esc(o[k])}</dd>`).join("")}</dl></div>` }).join("")) : ""}
+    ${cx.length ? sec("Contexto", `<ul class="ctx">${cx.map(c => `<li><span class="chip tipo-${esc(c.tipo)}">${esc(TIPO_C[c.tipo] || c.tipo)}</span><span style="min-width:0"><span class="quebra" style="display:block">${esc(c.fato)}</span>${c.fonte ? `<span class="sub quebra">${esc(c.fonte)}</span>` : ""}</span></li>`).join("")}</ul>`) : ""}
+    ${sec("Se for reprovada", D.se_reprovada ? `<p>${esc(D.se_reprovada)}</p>` : "")}
+    ${ex.dono || ex.prazo || ex.indicador ? sec("Execução", `<dl class="dl"><dt>Dono</dt><dd>${esc(ex.dono || "—")}</dd><dt>Prazo</dt><dd>${esc(/^\d{4}-\d{2}-\d{2}$/.test(ex.prazo || "") ? data(ex.prazo) : ex.prazo || "—")}</dd><dt>Indicador</dt><dd>${esc(ex.indicador || "—")}</dd></dl>`) : ""}`;
+}
+/* Gaveta de uma decisão do Conselho (mesa, tela Decisões e tela Gestão): o dossiê vem antes dos botões. */
 function gDecisao(id) {
-  const d = S.M.decisoes.find(x => x.id === id); if (!d) return;
-  gaveta(esc(d.id), esc(data(d.data) || "") + (d.ata ? " · " + esc(d.ata) : ""), `<p style="margin:0;font-size:15px">${esc(d.texto)}</p>${d.obs ? `<p class="sub quebra">${esc(d.obs)}</p>` : ""}${podeDecidir("luis") ? `<label for="n-dec">Observação <small>(opcional)</small></label><input id="n-dec" maxlength="400">` : semIdent("luis") || `<div class="nota">Só o Luis decide as decisões do Conselho.</div>`}`,
-    podeDecidir("luis") ? `<button class="btn" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada com ajuste">Aprovar com ajuste</button><button class="btn perigo" data-acao="decisao" data-id="${esc(d.id)}" data-v="rejeitada">Reprovar</button>` : "");
+  const d = S.M.decisoes.find(x => x.id === id) || (Array.isArray(G().decisoes) ? G().decisoes : []).find(x => x && x.id === id); if (!d) return;
+  const D = dossieDe(id), pode = podeDecidir("luis");
+  gaveta(esc(d.id) + (D && D.titulo ? " · Dossiê" : ""), esc(data(d.data) || "") + (d.ata ? " · " + esc(d.ata) : ""), `<p style="margin:0;font-size:15px">${esc(d.texto)}</p>${d.obs ? `<p class="sub quebra" style="margin:0">${esc(d.obs)}</p>` : ""}
+    ${D ? htmlDossie(D) : `<div class="nota">Dossiê ainda não preparado pelo Gabinete: decida pelo texto acima ou peça o dossiê na próxima rodada.</div>`}
+    ${pode ? `<label for="n-dec">Observação <small>(opcional; obrigatória no ajuste)</small></label><input id="n-dec" maxlength="400">` : semIdent("luis") || `<div class="nota">Só o Luis decide as decisões do Conselho.</div>`}`,
+    pode ? `<button class="btn" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada com ajuste">Aprovar com ajuste</button><button class="btn perigo" data-acao="decisao" data-id="${esc(d.id)}" data-v="rejeitada">Reprovar</button>` : "");
+  if (D) $("#camada .gaveta")?.classList.add("larga");
 }
 
 /* ===================== Pedidos ===================== */
@@ -946,7 +1084,7 @@ function listaWa() {
   return `${xs.map(d => `<button class="wa-linha ${d.id === S.waSel ? "sel" : ""}" data-go="wa/${esc(d.id)}" ${d.id === S.waSel ? 'aria-current="true"' : ""}><span class="wl">
       <span class="wl-topo"><b>${esc(d.master || d.chat)}</b><small>${esc(d.chat || "")}${d.aberta_em ? " · " + data(d.aberta_em) : ""}${S.eu === "luis" ? " · " + esc(PESSOAS[d.pessoa] || d.pessoa) : ""}</small></span>
       <span class="wl-pede">${esc(d.o_que_pede || "—")}</span>
-      <span class="filtros" style="gap:6px">${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}${d.area_sugerida ? `<span class="chip area">${esc(nomeArea(d.area_sugerida))}</span>` : ""}${d.tipo ? `<span class="sub" style="display:inline">${esc(d.tipo)}</span>` : ""}</span></span>
+      <span class="filtros" style="gap:6px">${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}${rhDe(d) ? `<span class="chip hist-chip">Pelo histórico</span>` : ""}${d.area_sugerida ? `<span class="chip area">${esc(nomeArea(d.area_sugerida))}</span>` : ""}${d.tipo && !rhDe(d) ? `<span class="sub" style="display:inline">${esc(d.tipo)}</span>` : ""}</span></span>
       <span class="wl-dir"><span class="chip p ${d.status === "responder" ? "analise" : "fila"}">${esc(ST_WA[d.status] || d.status || "—")}</span><span class="mono" style="color:var(--texto-4)">${d.aguardando_h != null ? "espera " + esc(Math.round(d.aguardando_h)) + " h" : ""}</span></span></button>`).join("")
     || `<div class="vazio">${!S.eu ? "Entre com a sua conta do Claude para ver as suas demandas." : S.wa.q.trim() ? "Nenhuma demanda com essa busca." : "Nenhuma demanda aberta no WhatsApp."}</div>`}
     ${S.wa.q.trim() && S.eu ? `<div class="painel-corpo"><div class="acoes"><a class="btn sec" href="#wachamado">${icone("glpi")}Gerar chamado GLPI a partir da busca</a><span class="sub quebra">Os agentes escrevem o chamado no formato da área e ele volta para você aprovar.</span></div></div>` : ""}`;
@@ -966,18 +1104,34 @@ function passosGlpi(ch, dona) {
   const st = ch?.status, f = [!!ch, ["aprovado", "aprovado_manual", "aberto"].includes(st), st === "aberto"], i = f.indexOf(false);
   return `<ol class="passos" aria-label="Etapas do chamado">${["Proposto", `Aprovado por ${esc(PESSOAS[dona] || "a dona")}`, "Aberto no GLPI"].map((t, k) => `<li class="${f[k] ? "feito" : k === i && st !== "recusado" ? "agora" : ""}">${t}${f[k] ? `<span class="so-leitor"> (feito)</span>` : ""}</li>`).join("")}</ol>${st === "recusado" ? `<div class="nota">A dona decidiu não abrir este chamado${ch.motivo ? ": " + esc(ch.motivo) : "."}</div>` : ""}`;
 }
+/* Histórico antes do GLPI (infra/historico-antes-do-glpi.md, 26/10/2026): com resposta_historico, a resposta vem pronta com as fontes;
+   sem resposta suficiente, a tela diz o que foi consultado e o que faltou antes de oferecer o chamado. */
+const CRIT_H = {dado_do_caso: "dado do caso", chamado_existente: "chamado já existente", mesma_pergunta_respondida: "mesma pergunta já respondida", regra_da_casa: "regra da casa"};
+const FONTE_H = {caso: "Caso (HubSpot)", chamado: "Chamado", triagem: "Triagem", whatsapp: "WhatsApp", central: "Central", base: "Base da área", demanda: "Registro de demandas"};
+const confPct = c => vazioN(c) ? "" : `confiança ${Math.round(Math.max(0, Math.min(1, +c)) * 100)}%`;
+const rhDe = d => d && d.resposta_historico && typeof d.resposta_historico === "object" && d.resposta_historico.resposta ? d.resposta_historico : null;
+const hDe = d => d && d.historico && typeof d.historico === "object" && d.historico.consultado !== false ? d.historico : null;
+function blocoHist(d, A) {
+  const R = rhDe(d), fs = Array.isArray(R.fontes) ? R.fontes : [];
+  return `<div class="hist"><div class="hist-cab"><span class="selo-h">${icone("onde")}Respondido pelo histórico</span><span class="sub quebra">${[CRIT_H[R.criterio] || R.criterio, confPct(R.confianca)].filter(Boolean).map(esc).join(" · ")}</span></div>
+    ${R.area || R.especialista ? `<span class="sub quebra">Conferido por ${esc([R.especialista, R.area].filter(Boolean).join(" · "))}</span>` : ""}
+    <div style="display:grid;gap:6px"><span class="sub">Rascunho de resposta ao Master</span><div class="rasc">${esc(R.resposta)}</div>
+      ${A.ok === true || (R.auditado && A.ok !== false) ? `<span class="sub">Passou no auditor de promessas.</span>` : A.ok === false ? `<div class="aviso" role="alert"><b>O auditor de promessas apontou:</b><ul style="margin:4px 0 0;padding-left:18px">${(A.achados || []).map(a => `<li>“${esc(a.termo)}” (${esc(a.regra)}): ${esc(a.sugestao)}</li>`).join("")}</ul>Ajuste antes de enviar.</div>` : `<span class="sub quebra">Auditor de promessas indisponível nesta rodada: confira antes de enviar.</span>`}</div>
+    ${fs.length ? `<div style="display:grid;gap:6px"><span class="sub">Fontes</span><ul class="fontes-h">${fs.map(f => `<li><span class="filtros" style="gap:6px"><span class="chip">${esc(FONTE_H[f.fonte] || f.fonte || "fonte")}</span>${f.data ? `<span class="mono" style="color:var(--texto-4)">${esc(/^\d{4}-\d{2}-\d{2}$/.test(f.data) ? data(f.data) : f.data)}</span>` : ""}</span>${f.trecho ? `<span class="quebra">${esc(f.trecho)}</span>` : ""}</li>`).join("")}</ul></div>` : ""}</div>`;
+}
 function detalheWa(id, glpi) {
   const d = id ? S.M.whatsapp.find(x => x.id === id) : null;
   const fecharM = `<button class="icbtn fechar-m" data-fechar aria-label="Voltar à lista">${icone("fechar")}</button>`;
   if (!d) return glpi ? `<div class="d-topo"><div><span class="rot">Chamado a partir da busca</span><h2>${esc(S.wa.q || "Busca")}</h2></div>${fecharM}</div>${blocoGlpi(null)}`
     : `<div class="vazio" style="padding:8px 0">${S.eu ? "Escolha uma demanda na lista para ver a avaliação dos agentes." : "Entre com a sua conta do Claude para ver as suas demandas."}</div>`;
   if (!waVis().concat(S.M.whatsapp.filter(x => S.acoes[x.id] && x.pessoa === S.eu)).includes(d)) return `<div class="vazio">Demanda fora do seu perfil.</div>`;
-  const A = d.auditoria || {}, rv = d.revisao, ch = chamadoDe(d), dona = podeDecidir(d.pessoa);
+  const A = d.auditoria || {}, rv = d.revisao, ch = chamadoDe(d), dona = podeDecidir(d.pessoa), R = rhDe(d), H = R ? null : hDe(d);
   const urgTxt = d.urgente ? "Alta" + (d.prazo ? " · " + data(d.prazo) : "") : d.prazo ? "Prazo " + data(d.prazo) : "Normal";
   return `<div class="d-topo"><div style="min-width:0"><span class="rot">Avaliação dos agentes · ${esc(d.master || d.chat)}</span><h2>${esc(d.tipo || ST_WA[d.status] || "Demanda")}</h2></div>
       <span style="display:flex;gap:10px;align-items:center"><span class="sub" style="white-space:nowrap">Dona: <b style="color:var(--texto)">${esc(PESSOAS[d.pessoa] || d.pessoa)}</b></span>${fecharM}</span></div>
     <div class="filtros"><span class="mono" style="color:var(--texto-4)">${esc(d.id)}</span><span class="chip p ${d.status === "responder" ? "analise" : "fila"}">${esc(ST_WA[d.status] || d.status || "")}</span>${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}${ch ? `<span class="chip p ${ch.status === "proposto" ? "aprovar" : "concluido"}">Chamado: ${esc(ST_CH[ch.status] || ch.status)}</span>` : ""}</div>
     <p style="margin:0;font-size:15px;color:var(--texto)">${esc(d.o_que_pede || "")}</p>
+    ${R ? blocoHist(d, A) : ""}
     <div class="mini"><div><small>Área</small><b>${esc(d.area_sugerida ? nomeArea(d.area_sugerida) : "—")}</b></div><div><small>Urgência</small><b>${esc(urgTxt)}</b></div><div><small>Rota sugerida</small><b class="ouro">${esc(d.rota || "—")}</b></div></div>
     <dl class="dl"><dt>Master / grupo</dt><dd>${esc([...new Set([d.master, d.grupo, d.chat].filter(Boolean))].join(" · ") || "—")}</dd>
       <dt>Próximo passo</dt><dd>${esc(d.proximo_passo || "—")}</dd>${d.aguardando_h != null ? `<dt>Esperando</dt><dd>há ${esc(Math.round(d.aguardando_h))} h</dd>` : ""}
@@ -986,13 +1140,14 @@ function detalheWa(id, glpi) {
     ${d.entrega ? `<div class="resp"><h4>O que os agentes já levantaram</h4>${md(d.entrega)}</div>` : ""}
     ${d.precisa ? `<div class="resp"><h4>O que você também precisa</h4>${md(d.precisa)}</div>` : ""}
     ${d.falta && d.falta !== "nada" ? `<div class="resp"><h4>O que falta e quem fornece</h4>${md(d.falta)}</div>` : ""}
-    ${d.rascunho ? `<div style="display:grid;gap:6px"><span class="sub">Rascunho de resposta ao Master</span><div class="rasc">${esc(d.rascunho)}</div>
+    ${R ? "" : d.rascunho ? `<div style="display:grid;gap:6px"><span class="sub">Rascunho de resposta ao Master</span><div class="rasc">${esc(d.rascunho)}</div>
       ${A.ok === true ? `<span class="sub">Passou no auditor de promessas.</span>` : A.ok === false ? `<div class="aviso" role="alert"><b>O auditor de promessas apontou:</b><ul style="margin:4px 0 0;padding-left:18px">${(A.achados || []).map(a => `<li>“${esc(a.termo)}” (${esc(a.regra)}): ${esc(a.sugestao)}</li>`).join("")}</ul>Ajuste antes de enviar.</div>` : `<span class="sub quebra">Auditor de promessas indisponível nesta rodada: confira antes de enviar.</span>`}</div>`
       : `<span class="sub">Sem rascunho: a resposta depende do que falta acima.</span>`}
     ${S.eu === d.pessoa && !dona ? semIdent(d.pessoa) : ""}
-    <div class="acoes">${d.rascunho ? `<button class="btn sec" data-copiar="${esc(d.id)}">Copiar resposta</button>` : ""}
+    ${H ? `<div class="hist-falta"><b>Histórico consultado</b>${H.buscas ? ` <span class="mono" style="color:var(--texto-4)">${esc(H.buscas)} ${H.buscas === 1 ? "busca" : "buscas"}</span>` : ""}${H.faltou ? ` · faltou: ${esc(H.faltou)}` : " · sem resposta suficiente no que já temos"}${H.nota ? `<span class="sub quebra">${esc(H.nota)}</span>` : ""}</div>` : ""}
+    <div class="acoes">${R ? `<button class="btn" data-copiar="${esc(d.id)}">Copiar resposta</button>` : d.rascunho ? `<button class="btn sec" data-copiar="${esc(d.id)}">Copiar resposta</button>` : ""}
       ${dona ? `<button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="respondido">Respondi</button><button class="btn sec" data-wa-pedir="${esc(d.id)}">Pedir à área</button>
-        ${ch ? `<a class="btn sec" href="#chamado/${esc(ch.id)}">Ver chamado</a>` : glpi ? "" : `<a class="btn" href="#wachamado/${esc(d.id)}">${icone("glpi")}Gerar chamado GLPI</a>`}` : ""}</div>
+        ${ch ? `<a class="btn sec" href="#chamado/${esc(ch.id)}">Ver chamado</a>` : glpi ? "" : R ? `<a class="lnk" href="#wachamado/${esc(d.id)}">Abrir chamado mesmo assim</a>` : `<a class="btn" href="#wachamado/${esc(d.id)}">${icone("glpi")}Gerar chamado GLPI</a>`}` : ""}</div>
     ${glpi || ch ? blocoGlpi(d) : ""}`;
 }
 /* Bloco "Gerar chamado GLPI" (antes na gaveta): mesmos campos e botões (#wc-*, #salvar-chamado, #pedir-chamado). */
@@ -1122,7 +1277,7 @@ function telaDecisoes() {
   return cab("", `Decisões do Conselho · ${totalDecisoes()} pendentes`, dono ? "Aprove, rejeite ou ajuste. O agente registra no livro de decisões na próxima rodada." : "Só o Luis decide. As aprovações operacionais ficam com quem é dona da entrega.")
   + (S.M.perfil === "time" ? `<div class="nota">Esta é a Central do time: as decisões do Conselho ficam no painel do Luis e na Folha Única de decisões.</div>` : "")
   + (Fonte.previa && S.M.decisoesTotal > ds.length ? `<div class="nota">Prévia: mostrando ${ds.length} de ${S.M.decisoesTotal} decisões, sem as que citam cliente.</div>` : "")
-  + `<section class="painel"><div class="linhas" style="--cols:70px minmax(0,1fr) 100px 120px"><div class="lh cab"><span>Nº</span><span>Decisão</span><span>Data</span><span>Situação</span></div>${ds.map(d => `<button class="lh" data-go="decisao/${esc(d.id)}"><span class="mono">${esc(d.id)}</span><span class="tit quebra">${esc(d.texto)}</span><span class="mono esconde-m">${esc(data(d.data))}</span><span><span class="chip p aprovar">Pendente</span></span></button>`).join("") || `<div class="vazio">Nenhuma decisão pendente.</div>`}</div></section>`;
+  + `<section class="painel"><div class="linhas" style="--cols:70px minmax(0,1fr) 100px 120px"><div class="lh cab"><span>Nº</span><span>Decisão</span><span>Data</span><span>Situação</span></div>${ds.map(d => `<button class="lh" data-go="decisao/${esc(d.id)}"><span class="mono">${esc(d.id)}</span><span><span class="tit quebra">${esc(d.texto)}</span>${dossieDe(d.id) ? resumoPar(dossieDe(d.id)) || `<span class="sub">dossiê pronto</span>` : ""}</span><span class="mono esconde-m">${esc(data(d.data))}</span><span><span class="chip p aprovar">Pendente</span></span></button>`).join("") || `<div class="vazio">Nenhuma decisão pendente.</div>`}</div></section>`;
 }
 
 /* ===================== Gaveta ===================== */
@@ -1259,13 +1414,12 @@ async function acao(tipo, id, valor) {
     if (tipo === "demanda") { const d = S.M.demandas.find(x => x.id === id) || S.M.whatsapp.find(x => x.id === id); if (!d || d.pessoa !== S.eu) return; await Fonte.gravar("acoes_demandas/" + id, {status: valor, por: S.eu, por_id: S.meuId, quando: agora()}); S.acoes[id] = {status: valor}; toast({respondido: "Marcada como respondida", encaminhado: "Marcada como encaminhada", nao_e_demanda: "Marcada como não é demanda"}[valor]) }
     if (tipo === "lote") { if (!podeDecidir("geovana")) return; await Fonte.gravar("recuperador/" + id, {decisao: valor, motivo: v("#r-m"), por: S.eu, por_id: S.meuId, quando: agora()}); S.recup[id] = {decisao: valor}; toast(valor) }
     if (tipo === "decisao") { if (!podeDecidir("luis")) return; await Fonte.gravar("conselho/" + id, {decisao: valor, nota: v("#n-dec"), por: S.eu, por_id: S.meuId, quando: agora()}); S.conselho[id] = {decisao: valor}; toast("Decisão registrada: " + valor) }
-    if (tipo === "unidade") { if (!podeDecidir("luis") || !UNID[valor] || valor === "indefinida") return; const dec = "unidade: " + valor; await Fonte.gravar("conselho/meta-q4-unidade", {decisao: dec, nota: v("#n-dec"), por: S.eu, por_id: S.meuId, quando: agora(), tipo: "meta_q4_unidade"}); S.conselho["meta-q4-unidade"] = {decisao: dec}; toast("Unidade da meta registrada: " + UNID[valor]) }
     if (tipo === "acaoG") { const x = itensAcaoG().find(y => y.id === id); if (!x || !podeMarcar(x) || !ST_A[valor]) return; await Fonte.gravar("acoes/" + id, {status: valor, por: S.eu, por_id: S.meuId, quando: agora(), dono: x.dono || "", origem: x.origem || "controle"}); S.acoesG[id] = {status: valor}; toast("Marcado: " + ST_A[valor]) }
     if (tipo === "chamado") { const c = S.M.chamados.find(x => x.id === id); if (!c || c.status !== "proposto" || !podeDecidir(c.pessoa)) return;
       const dados = valor === "aprovado" ? {status: "aprovado", titulo_editado: v("#ct"), descricao_editada: v("#cd"), aprovado_por: S.eu, aprovado_por_id: S.meuId, aprovado_em: agora()} : {status: "recusado", motivo: v("#cm"), recusado_por: S.eu, recusado_por_id: S.meuId, recusado_em: agora()};
       if (valor === "recusado" && !dados.motivo) { $("#cm").focus(); return toast("Diga por que não abrir") }
       await Fonte.atualizar("chamados/" + id, dados); if (Fonte.previa) Object.assign(c, dados); toast(valor === "aprovado" ? "Chamado aprovado" : "Chamado não aberto") }
-    const fica = rota().r === "gestao" || tipo === "unidade" || tipo === "acaoG";
+    const fica = rota().r === "gestao" || tipo === "acaoG";
     location.hash = fica ? "gestao" : tipo === "decisao" && S.eu === "luis" ? "decisoes" : "mesa"; if (fica) abrir();
   } catch (x) { toast("Não consegui registrar") }
 }
@@ -1321,7 +1475,7 @@ function abrir() {
       podeDecidir("geovana") ? `<button class="btn" data-acao="lote" data-id="${esc(l.deal)}" data-v="Aprovar para reanálise">Aprovar para reanálise</button><button class="btn perigo" data-acao="lote" data-id="${esc(l.deal)}" data-v="Vetar">Vetar</button><button class="btn sec" data-acao="lote" data-id="${esc(l.deal)}" data-v="Precisa de dado">Precisa de dado</button>` : "") }
   if (r === "decisao") gDecisao(p[0]);
   if (r === "gestao" && p[0] === "decisao") gDecisao(p[1]);
-  if (r === "gestao" && p[0] === "unidade") gUnidade();
+  if (r === "gestao" && p[0] === "farol") gFarol(p[1]);
   if (foco) { const q = $("#" + foco); if (q && !$("#camada .gaveta")) { q.focus({preventScroll: true}); try { q.setSelectionRange(q.value.length, q.value.length) } catch (e) {} } }
 }
 function fechar() {
@@ -1359,7 +1513,7 @@ document.addEventListener("click", e => {
   const sl = e.target.closest("[data-sel]"); if (sl) { S.novo.sel = sl.dataset.sel; S.novo.entrega = ""; gNovo(); return }
   const pe = e.target.closest("[data-pedir]"); if (pe) { S.novo = {sel: pe.dataset.pedir, busca: "", entrega: pe.dataset.entrega || ""}; location.hash = "area/" + pe.dataset.pedir + "/pedido"; return }
   const q = e.target.closest("[data-q]"); if (q) { location.hash = "onde/" + encodeURIComponent(q.dataset.q); return }
-  const cp = e.target.closest("[data-copiar]"); if (cp) { const d = S.M.whatsapp.find(x => x.id === cp.dataset.copiar); copiar(d?.rascunho || "", "Rascunho copiado. Depois de enviar no WhatsApp, marque Respondi."); return }
+  const cp = e.target.closest("[data-copiar]"); if (cp) { const d = S.M.whatsapp.find(x => x.id === cp.dataset.copiar); copiar(rhDe(d)?.resposta || d?.rascunho || "", "Resposta copiada. Depois de enviar no WhatsApp, marque Respondi."); return }
   const cc = e.target.closest("[data-copiar-ch]"); if (cc) { const c = S.M.chamados.find(x => x.id === cc.dataset.copiarCh); copiar(c ? `${c.titulo_editado || c.titulo}\n\n${c.descricao_editada || c.descricao}` : "", "Texto do chamado copiado. Abra no GLPI e cole."); return }
   const gf = e.target.closest("[data-g-fora]"); if (gf) { S.g.fora = gf.dataset.gFora === "1"; abrir(); return }
   const ce = e.target.closest("[data-cen]"); if (ce) { S.g.cen = ce.dataset.cen; abrir(); $("#premissas")?.scrollIntoView?.({block: "nearest"}); return }

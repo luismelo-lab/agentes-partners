@@ -80,7 +80,7 @@ def sistema_gestao():
         return {"meta": {}, "semaforo": [], "previsao": {}, "desvios": [], "decisoes": [], "acoes": [], "avisos": [f"gestao.py indisponível: {str(e)[:100]}"]}
 
 
-GESTAO_SO_LUIS = ("meta", "previsao", "desvios", "decisoes", "acoes", "regras", "ritual", "confiabilidade", "decisoes_pendentes")  # o time vê só o semáforo
+GESTAO_SO_LUIS = ("meta", "previsao", "desvios", "decisoes", "acoes", "regras", "ritual", "confiabilidade", "decisoes_pendentes", "decisoes_sugeridas", "pre_analise", "dossies")  # o time vê só o semáforo (sem a pré-análise, que traz R$ e decisão sugerida)
 
 
 def gestao():
@@ -171,6 +171,22 @@ def chamado_sugerido(enc, glpi_areas):
     return {**base, "pronto": True, "agente": es.get("agente") or "", "descricao": desc, "especialista": es}
 
 
+def historico_item(i):
+    """Campos "historico" e "resposta_historico" do item da triagem (infra/historico-antes-do-glpi.md), só com o que a tela usa.
+    Sem consulta ao histórico, (None, None). A resposta só vale se tiver texto; trecho de fonte limitado a 220 caracteres."""
+    h, r = i.get("historico"), i.get("resposta_historico")
+    t = lambda v, n=400: str(v if v is not None else "").strip()[:n]
+    conf = lambda v: round(float(v), 2) if isinstance(v, (int, float)) and 0 <= float(v) <= 1 else None
+    H = {"consultado": bool(h.get("consultado", True)), "suficiente": h.get("suficiente") is True, "criterio": t(h.get("criterio"), 40) or None, "confianca": conf(h.get("confianca")),
+         "faltou": t(h.get("faltou"), 600), "nota": t(h.get("nota"), 600), "buscas": len(h.get("buscas") or []) if isinstance(h.get("buscas"), list) else 0} if isinstance(h, dict) else None
+    R = None
+    if isinstance(r, dict) and t(r.get("resposta"), 2000):
+        R = {"resposta": t(r.get("resposta"), 2000), "auditado": r.get("auditado") is True, "confianca": conf(r.get("confianca")), "criterio": t(r.get("criterio"), 40) or (H or {}).get("criterio"),
+             "area": t(r.get("area"), 80), "especialista": t(r.get("especialista"), 120),
+             "fontes": [{"fonte": t(f.get("fonte"), 30), "data": t(f.get("data"), 10), "trecho": t(f.get("trecho"), 220)} for f in r.get("fontes") or [] if isinstance(f, dict)][:6]}
+    return H, R
+
+
 def whatsapp_demandas():
     """Demandas lidas no WhatsApp dos parceiros (registro único + última triagem com IA), com a avaliação dos agentes.
     Contém nome de Master e de empresa: no perfil "time" vai só das três (cada uma vê as suas na tela)."""
@@ -186,15 +202,16 @@ def whatsapp_demandas():
     out = []
     for d in sorted(R["demandas"].values(), key=lambda d: d.get("aberta_em") or "", reverse=True):
         if d.get("origem") != "WhatsApp" or d["status"] not in ("responder", "acompanhar"): continue
-        i = itens.get(d.get("chave"), {}); rv = i.get("revisao") or {}; enc = i.get("encaminhar")
+        i = itens.get(d.get("chave"), {}); rv = i.get("revisao") or {}; enc = i.get("encaminhar"); hist, rhist = historico_item(i)
+        rasc = i.get("rascunho") or (rhist or {}).get("resposta")
         out.append({"id": d["id"], "pessoa": d["pessoa"], "chat": d.get("titulo"), "grupo": i.get("grupo"), "master": d.get("master") or i.get("master"),
                     "status": d["status"], "urgente": bool(d.get("urgente") or i.get("urgente")), "aguardando_h": d.get("aguardando_h"),
                     "aberta_em": d.get("aberta_em"), "o_que_pede": d.get("o_que_pede") or i.get("o_que_pede"), "rota": d.get("rota") or i.get("rota"),
                     "proximo_passo": d.get("proximo_passo") or i.get("proximo_passo"), "prazo": d.get("prazo") or i.get("prazo"),
                     "negocio": d.get("negocio"), "link": d.get("link"),
-                    "tipo": "Chamado à área" if enc else ("Responder ao parceiro" if d["status"] == "responder" else "Acompanhar"),
+                    "tipo": "Respondido pelo histórico" if rhist else "Chamado à área" if enc else ("Responder ao parceiro" if d["status"] == "responder" else "Acompanhar"),
                     "area_sugerida": GLPI_SKILL((enc or {}).get("area")) if enc else "", "entrega": i.get("entrega"), "precisa": i.get("precisa"), "falta": i.get("falta"),
-                    "rascunho": i.get("rascunho"), "auditoria": _auditar(i.get("rascunho")),
+                    "rascunho": rasc, "auditoria": _auditar(rasc), "historico": hist, "resposta_historico": rhist,
                     "revisao": {"gerente": rv.get("gerente"), "aprovado": rv.get("aprovado"), "rodadas": rv.get("rodadas"), "areas": rv.get("areas_consultadas")} if rv else None,
                     "rodada": i.get("_rodada"), "chamado": d.get("chamado"), "chamado_sugerido": chamado_sugerido(enc, glpi_areas)})
     return out

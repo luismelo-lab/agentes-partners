@@ -106,7 +106,12 @@ WHATS = [
      "aberta_em": "2026-10-23T08:10", "o_que_pede": "Status de 3 negócios e o próximo passo de cada um", "rota": "Daniela responde com o status do HubSpot", "proximo_passo": "Enviar o status hoje", "prazo": "2026-10-23",
      "tipo": "Responder ao parceiro", "area_sugerida": "", "entrega": "- Empresa A: diagnóstico em andamento\n- Empresa B: contrato assinado, execução\n- Empresa C: aguardando documentos do cliente",
      "precisa": "A Empresa C está parada há 12 dias por falta de documento.", "falta": "nada", "rascunho": "Oi! Segue o status: A em diagnóstico, B em execução e C aguardando os documentos do cliente (lista em anexo). Assim que chegarem, seguimos.",
-     "auditoria": {"ok": True, "achados": []}, "revisao": {"gerente": "Gerente da Central Masters", "aprovado": True, "rodadas": 1, "areas": []}, "rodada": "2026-10-23 08h", "chamado": None, "chamado_sugerido": None},
+     "auditoria": {"ok": True, "achados": []}, "revisao": {"gerente": "Gerente da Central Masters", "aprovado": True, "rodadas": 1, "areas": []}, "rodada": "2026-10-23 08h", "chamado": None, "chamado_sugerido": None,
+     "tipo": "Respondido pelo histórico", "historico": {"consultado": True, "suficiente": True, "criterio": "dado_do_caso", "confianca": 0.85, "faltou": "", "nota": "Etapas conferidas no download do dia.", "buscas": 2},
+     "resposta_historico": {"resposta": "Oi! Segue o status: A em diagnóstico, B em execução e C aguardando os documentos do cliente (lista em anexo). Assim que chegarem, seguimos.", "auditado": True, "confianca": 0.85,
+                            "criterio": "dado_do_caso", "area": "Central Masters", "especialista": "Retorno ao Parceiro",
+                            "fontes": [{"fonte": "caso", "data": "2026-10-23", "trecho": "Empresa A: etapa Apresentação de Diagnóstico; Empresa B: Contrato Assinado"},
+                                       {"fonte": "triagem", "data": "2026-10-16", "trecho": "Resposta aprovada ao Master 2 sobre a lista de documentos da Empresa C"}]}},
     {"id": "D-0415", "pessoa": "daniela", "chat": "Grupo Master 6 · Save", "grupo": "Master 6 · Save", "master": "Master 6", "status": "responder", "urgente": True, "aguardando_h": 26,
      "aberta_em": "2026-10-22T09:20", "o_que_pede": "Extrato de repasse de setembro", "rota": "Operações de Canal", "proximo_passo": "Pedir o extrato à área", "prazo": "2026-10-24",
      "tipo": "Responder ao parceiro", "area_sugerida": "depto-operacoes-canal", "entrega": "O extrato de setembro ainda não foi fechado pelo Financeiro.", "precisa": "Dois ganhos sem % de honorário travam o extrato.",
@@ -117,6 +122,7 @@ WHATS = [
      "aberta_em": "2026-10-23T10:45", "o_que_pede": "Cliente recebeu despacho decisório; quer saber se cabe defesa e o prazo", "rota": "Jurídico", "proximo_passo": "Aprovar o chamado ao Jurídico", "prazo": "2026-10-26",
      "tipo": "Chamado à área", "area_sugerida": "depto-juridico", "entrega": "O despacho nega parte do PER de 2024. A ciência parece ser de 01/10.", "precisa": "O prazo pode estar correndo desde a ciência.",
      "falta": "Autorização do cliente: Master 4.", "rascunho": "Recebemos o despacho e já encaminhamos ao Jurídico para avaliar a defesa e confirmar o prazo. Retornamos com a orientação.",
+     "historico": {"consultado": True, "suficiente": False, "criterio": None, "confianca": 0.3, "buscas": 3, "faltou": "documento novo com prazo (despacho decisório): exige análise nova do Jurídico", "nota": "Concordo com a pré-avaliação: há casos parecidos, mas o prazo depende da ciência deste despacho."},
      "auditoria": {"ok": True, "achados": []}, "revisao": {"gerente": "Gerente Jurídico", "aprovado": True, "rodadas": 1, "areas": ["depto-juridico"]}, "rodada": "2026-10-23 14h", "chamado": None,
      "chamado_sugerido": {"area": "jur_comunicados", "grupo": "Juridico > Comunicados RFB", "titulo": "Demandas Diversas - Jurídico EMPRESA D x despacho decisório PER 2024", "urgencia": 4, "prazo": "2026-10-26",
                           "empresa": "Empresa D", "assunto": "despacho decisório", "documentos": "Despacho decisório (PDF)", "skill": "depto-juridico", "pronto": True, "agente": "Gerente Jurídico", "especialista": ESP,
@@ -169,10 +175,24 @@ def mt(id_, nome, bloco, valor, unidade, anterior, meta, status, confianca, nota
     return {"id": id_, "nome": nome, "bloco": bloco, "valor": valor, "unidade": unidade, "anterior": anterior, "variacao_pct": var, "meta": meta,
             "tolerancia": {"verde": ">= 0.9*meta", "amarelo": ">= 0.7*meta"} if meta is not None else {"verde": "proposta: >= 0.9*meta", "amarelo": "proposta: >= 0.7*meta"},
             "status": status, "fonte": fonte, "confianca": confianca, "nota": nota}
+def mes(m, nome, meta, real, dt, dd, status, situacao):
+    dr = dt - dd; rn = round((meta - real) / dr) if dr else None; ra = round(real / dd) if dd else None
+    return {"mes": m, "nome": nome, "meta_rs": meta, "realizado_rs": real, "ganhos_n": 35 if real else 0, "falta_rs": meta - real, "pct": round(real / meta * 100, 1),
+            "dias_uteis_total": dt, "dias_uteis_decorridos": dd, "dias_uteis_restantes": dr, "ritmo_necessario_rs_dia": rn, "ritmo_atual_rs_dia": ra,
+            "fator_ritmo": round(rn / ra, 1) if rn and ra else None, "situacao": situacao, "status": status}
+MESES = [mes("2026-10", "outubro", 75 * MI, int(16.4 * MI), 21, 17, "vermelho", "em andamento"), mes("2026-11", "novembro", 100 * MI, 0, 19, 0, "cinza", "a iniciar"),
+         mes("2026-12", "dezembro", 75 * MI, 0, 22, 0, "cinza", "a iniciar")]
+PESOS = [40.9, 18.2, 12.5, 9.8, 7.1, 5.0, 3.6, 2.9]
+META_D111 = {"unidade": "credito_contrato_fechado", "decisao": "D111 (26/10/2026)", "q4_rs": 250 * MI, "realizado_rs": int(16.4 * MI), "falta_rs": int(233.6 * MI), "dias_uteis_restantes": 45,
+    "ritmo_necessario_rs_dia": 5_190_656, "ritmo_atual_rs_dia": 965_910, "mes_atual": MESES[0], "meses": MESES,
+    "total": {"meta_rs": 250 * MI, "realizado_rs": int(16.4 * MI), "falta_rs": int(233.6 * MI), "pct": 6.6, "dias_uteis_total": 62, "dias_uteis_decorridos": 17, "dias_uteis_restantes": 45,
+              "ritmo_necessario_rs_dia": 5_190_656, "ritmo_atual_rs_dia": 965_910, "fator_ritmo": 5.4, "status": "vermelho"},
+    "por_master": {"proposta": True, "status": "proposta (não aprovada; meta é alçada do Luis)", "metodo": "Peso = 50% da participação no pipeline aberto + 50% da participação no fechado de 12 meses no volume limpo. Meta do Master = peso × meta do mês.",
+                   "alerta": "O pipeline concentra em poucos Masters: o desdobramento herda a concentração. A Daniela valida Master a Master antes de comunicar.",
+                   "masters": [{"master": f"Master {i + 1}", "peso_pct": w, "meses": [{"mes": x["mes"], "meta_rs": round(x["meta_rs"] * w / 100), "realizado_rs": round(x["realizado_rs"] * w / 100 * (1.1 if i == 0 else .8))} for x in MESES],
+                                "meta_q4_rs": round(250 * MI * w / 100), "realizado_q4_rs": round(16.4 * MI * w / 100 * (1.1 if i == 0 else .8))} for i, w in enumerate(PESOS)]}}
 PACOTE = {"data": "2026-10-26", "periodo": {"semana_de": "2026-10-19", "mes": "2026-10", "trimestre": "2026-Q4"},
-    "meta": {"q4_rs": 200 * MI, "unidade": "indefinida", "realizado_rs": 62 * MI, "falta_rs": 138 * MI, "dias_uteis_restantes": 46, "ritmo_necessario_rs_dia": 3 * MI, "ritmo_atual_rs_dia": int(1.4 * MI),
-             "leituras": {"credito": {"realizado_rs": 62 * MI, "falta_rs": 138 * MI, "ritmo_atual_rs_dia": int(1.4 * MI), "ritmo_necessario_rs_dia": 3 * MI},
-                          "liquido": {"realizado_rs": int(9.3 * MI), "falta_rs": int(20.7 * MI), "ritmo_atual_rs_dia": 210_000, "ritmo_necessario_rs_dia": 450_000, "meta_rs": 30 * MI}}},
+    "meta": META_D111,
     "metricas": [
         mt("ganhos_mes_rs", "Fechado no mês (limpo)", "resultado", int(18.4 * MI), "R$", int(22.1 * MI), 25 * MI, "amarelo", "alta", "Sem os 9 grupos de duplicidade; 3 ganhos sem honorário fora."),
         mt("ganhos_mes_n", "Contratos fechados no mês", "resultado", 14, "n", 19, 20, "amarelo", "alta", "Metade concentrada em 2 Masters."),
@@ -196,10 +216,16 @@ PACOTE = {"data": "2026-10-26", "periodo": {"semana_de": "2026-10-19", "mes": "2
                 {"texto": "Conversão caiu duas semanas seguidas.", "area": "Resultados", "severidade": "alta"}]}
 sem = ["2026-W44", "2026-W45", "2026-W46", "2026-W47", "2026-W48", "2026-W49", "2026-W50", "2026-W51", "2026-W52", "2027-W01", "2027-W02", "2027-W03", "2027-W04"]
 base = [1.1, 1.4, 0.9, 2.2, 1.6, 1.3, 2.8, 1.9, 0.7, 0.6, 1.2, 1.5, 1.8]; cons = [0.8, 1.0, 0.7, 1.4, 1.1, 0.9, 1.7, 1.2, 0.5, 0.4, 0.8, 1.0, 1.1]
+def cen(v, meta=None):
+    return {"esperado_rs": int(v * MI), "pct_da_meta": None if meta is None else round(v / meta * 100, 1), "faixa_p10_p90_rs": [int(v * .85 * MI), int(v * 1.2 * MI)], "probabilidade_meta_pct": 0.0}
 PREVISAO = {"data": "2026-10-26", "horizonte_semanas": 13,
     "cenarios": {"conservador": {"fechamento_q4_rs": 128 * MI, "liquido_q4_rs": 19 * MI, "premissas": ["Conversão das safras de agosto e setembro segue em 9,8%", "Só os 7 Masters ativos fecham negócio", "Nenhum PER de 2025 pago no Q4"]},
                  "base": {"fechamento_q4_rs": 156 * MI, "liquido_q4_rs": 24 * MI, "premissas": ["Conversão volta a 12%, média de 2026", "Lote 1 do Recuperador recupera 6 negócios perdidos", "Metade das compensações previstas entra em dezembro"]},
-                 "meta": {"fechamento_q4_rs": 200 * MI, "liquido_q4_rs": 30 * MI, "o_que_precisa": ["Conversão em 15% nas 3 safras abertas", "Os 9 Masters com pelo menos 2 contratos até 15/12", "Negócios parados abaixo de 120 até 30/11"]}},
+                 "esforco": {"fechamento_q4_rs": 66 * MI, "liquido_q4_rs": int(9.7 * MI), "premissas": ["Lote 1 do Recuperador decidido até 03/11", "60% dos contratos enviados assinam até 31/12", "Criação volta ao ritmo de setembro"]},
+                 "meta": {"fechamento_q4_rs": 250 * MI, "liquido_q4_rs": 30 * MI, "o_que_precisa": ["Conversão em 15% nas 3 safras abertas", "Os 9 Masters com pelo menos 2 contratos até 15/12", "Negócios parados abaixo de 120 até 30/11"]}},
+    "por_mes": {"meses": [{"mes": m, "nome": n, "meta_rs": mt_, "cenarios": {"conservador": cen(c, mt_ / MI), "base": cen(b, mt_ / MI), "esforco": cen(e, mt_ / MI)}} for m, n, mt_, c, b, e in
+                          [("2026-10", "outubro", 75 * MI, 18.8, 20.0, 20.6), ("2026-11", "novembro", 100 * MI, 5.8, 12.8, 21.3), ("2026-12", "dezembro", 75 * MI, 6.5, 15.6, 24.0)]],
+                "total": {"meta_rs": 250 * MI, "cenarios": {"conservador": cen(31.2, 250), "base": cen(48.5, 250), "esforco": cen(65.9, 250)}}},
     "caixa_13_semanas": [{"semana": s, "entrada_rs_base": int(b * MI), "entrada_rs_conservador": int(c * MI), "fonte": "PER/compensação/parcelamento"} for s, b, c in zip(sem, base, cons)],
     "pipeline_por_safra": [{"safra": "2026-08", "aberto_rs": 42 * MI, "conversao_real_pct": 9.1, "esperado_rs": int(3.8 * MI)}, {"safra": "2026-09", "aberto_rs": 57 * MI, "conversao_real_pct": 10.4, "esperado_rs": int(5.9 * MI)},
                            {"safra": "2026-10", "aberto_rs": 38 * MI, "conversao_real_pct": None, "esperado_rs": int(4.6 * MI)}],
@@ -221,10 +247,54 @@ CONTROLE = {"data": "2026-10-26",
                 {"regra": "C04", "metrica": "conversao_pct", "valor": 9.8, "limite": 10.5, "desde": "2026-10-19", "acao": "Revisar 11 diagnósticos sem contrato (safras 08 e 09)", "dono": "geovana", "prazo": "2026-11-02", "status": "aberto"},
                 {"regra": "C05", "metrica": "rotinas_falhas_n", "valor": 3, "limite": 0, "desde": "2026-10-26", "acao": "Registrar a causa das 2 quedas de internet e testar o reparo automático", "dono": "gerente-ti", "prazo": "2026-10-27", "status": "resolvido"}],
     "ritual": [{"quando": "segunda 7h30", "quem": "Conselho", "o_que": "pacote + previsão + desvios", "saida": "ata com decisões"}, {"quando": "sexta 16h", "quem": "Gabinete", "o_que": "consolidação e folha de decisões", "saida": "folha única"}]}
-ACOES = [{"id": "A-2026-10-26-1", "acao": "Definir a unidade da meta do Q4 (crédito ou líquido)", "dono": "luis", "prazo": "2026-10-28", "origem": "conselho", "status": "aberto"},
+ACOES = [{"id": "A-2026-10-26-1", "acao": "Validar o desdobramento da meta por Master antes de comunicar", "dono": "daniela", "prazo": "2026-10-30", "origem": "conselho", "status": "aberto"},
          {"id": "A-2026-10-26-2", "acao": "Aprovar as metas das 4 métricas cinza do semáforo", "dono": "luis", "prazo": "2026-11-03", "origem": "conselho", "status": "aberto"},
          {"id": "A-2026-10-19-3", "acao": "QBR com os 2 Masters sem negócio novo", "dono": "daniela", "prazo": "2026-11-14", "origem": "conselho", "status": "em_andamento"}]
-GESTAO = G.montar(PACOTE, PREVISAO, CONTROLE, [{"id": d["id"], "texto": d["texto"], "data": d["data"]} for d in dec], ACOES, [], hoje="2026-10-26")
+# Pré-análise das áreas por farol (formato de registro/gestao/pre-analise-<data>.json), exemplo sem cliente.
+def pa(mid, area, esp, leitura, fatos, hips, acoes, dec, efeito, conf, melhorar, pendente=False):
+    return {"metrica_id": mid, "area": area, "especialista": esp, "leitura": leitura, "causa": {"fatos": fatos, "hipoteses": hips},
+            "acoes": [{"acao": a, "dono": d, "prazo": pz} for a, d, pz in acoes], "decisao_sugerida": dec, "efeito": efeito, "confianca": conf, "melhorar_confianca": melhorar, "pendente": pendente}
+PRE = {"data": "2026-10-26", "itens": [
+    pa("conversao_pct", "depto-resultados", "forecast-pipeline", "Conversão de 9,8% contra 12,4% no período anterior; a queda está nas safras de agosto e setembro, com 11 diagnósticos sem contrato.",
+       ["Safra de agosto: 9,1% de conversão real (ganho ÷ fechados)", "Safra de setembro: 10,4%", "11 diagnósticos apresentados sem retorno há mais de 20 dias"],
+       ["Parte dos diagnósticos foi apresentada sem o Master na reunião", "Proposta enviada sem a coluna conservadora da tese"],
+       [("Revisar os 11 diagnósticos sem contrato e marcar o motivo de cada um", "geovana", "2026-10-30"), ("Reunião de retomada com os 3 Masters de maior volume parado", "daniela", "2026-11-04")],
+       "Levar ao Conselho a leitura da conversão por safra no deck da diretoria (sem promessa de recuperação).", "Estimativa: recuperar 3 dos 11 diagnósticos soma cerca de R$ 3 mi de crédito no Q4, com a premissa de ticket mediano. Não é previsão de resultado.",
+       "media", "Motivo de perda preenchido nos 11 casos (Geovana) e data da apresentação no card (Daniela)."),
+    pa("negocios_parados_n", "celula-daniela", "gestor-contas-chave", "212 negócios parados há mais de 30 dias, acima do limite proposto de 120; 60% estão em 3 Masters.",
+       ["Metade dos parados não tem próxima atividade no CRM", "3 Masters concentram 127 dos 212"], ["Masters com carteira grande não priorizam os negócios menores"],
+       [("Cobrar próxima atividade dos Masters 2, 5 e 7", "daniela", "2026-10-29"), ("Lista dos 20 parados de maior valor para o Recuperador", "geovana", "2026-11-03")],
+       None, "Estimativa: tirar 90 negócios da lista de parados devolve o indicador ao amarelo.", "alta", "Data da última atividade confiável no HubSpot (gerente de Dados)."),
+    pa("ganhos_sem_hon_pct", "depto-dados", "governanca-dados", "21% dos ganhos sem % de honorário; o campo vazio trava o repasse e o extrato do mês.",
+       ["3 ganhos de outubro sem o campo", "Regra C03 aberta desde 05/10"], ["O campo não é obrigatório na etapa de ganho"],
+       [("Pedir o % dos 3 ganhos ao Financeiro", "controller", "2026-10-28")], "Tornar obrigatório o % de honorário na etapa de ganho do HubSpot (pedido de rascunho à TI da Save).", "Sem efeito em R$; libera o extrato do mês.", "alta", ""),
+    pa("rotinas_falhas_n", "depto-ti", "rotinas-agendadas", "3 falhas de rotina na semana, duas por queda de internet.", ["Quedas em 19 e 26/10", "Reparo automático refez 2 das 3"], ["Roteador reinicia de madrugada"],
+       [("Registrar a causa e testar o reparo automático", "gerente-ti", "2026-10-27")], None, "", "media", "Log do roteador (TI da Save).", True)],
+  "decisoes_luis": [{"chave": "D30", "decisao": "Responder D30 (congelar até o G2) para tirar o tema da pauta do Q4.", "efeito": "Leitura única da conversão para a diretoria.", "metricas": ["conversao_pct"], "area": "depto-resultados", "status": "vermelho"}]}
+# Dossiês das decisões (formato de registro/gestao/dossies/<id>.json). A 1ª decisão do exemplo usa o dossiê real dela quando existe (decisões escolhidas
+# sem nome de cliente); sem o arquivo, um dossiê fictício. A 2ª fica sem dossiê, para a prévia mostrar a ausência.
+def val(area, esp, parecer, motivo, condicao="", base="ata do Conselho de 26/10 (exemplo)", ressalva=""):
+    return {"area": area, "especialista": esp, "parecer": parecer, "motivo": motivo, "base": base, "condicao": condicao, "ressalva": ressalva}
+DOSSIES = {d["id"]: {"id": d["id"], "titulo": t, "prazo": "2026-10-30", "o_que_decidir": o, "por_que_agora": pq, "custo_nao_decidir": cu,
+                     "contexto": [{"fato": "Conversão do mês em 9,8%, contra 12,4% no período anterior.", "fonte": "pacote de gestão de 26/10", "tipo": "fato"},
+                                  {"fato": "O cenário base do Q4 fecha perto de R$ 48 mi; a meta da D111 é R$ 250 mi.", "fonte": "previsão de 26/10", "tipo": "estimativa"},
+                                  {"fato": "Os Masters preferem receber a leitura por safra, não por mês.", "fonte": "conversa da Daniela com 3 Masters", "tipo": "opiniao"}],
+                     "opcoes": [{"nome": "A · Manter como está", "pros": "Nada muda para o time.", "contras": "O problema continua.", "risco": "Médio.", "efeito": "Nenhum."},
+                                {"nome": "B · Aprovar com o corte por safra", "pros": "Leitura única para a diretoria e para os Masters.", "contras": "Exige uma rodada a mais dos Dados.", "risco": "Baixo.", "efeito": "Deck de 30/10 sai com a leitura nova."},
+                                {"nome": "C · Adiar para dezembro", "pros": "Menos trabalho agora.", "contras": "Perde a janela do Q4.", "risco": "Alto.", "efeito": "Decisão volta em 01/12."}],
+                     "recomendacao": "Aprovar a opção B, com a revisão mensal no 1º dia útil de cada mês.", "se_reprovada": "Fica a opção A; o Controller registra o motivo e o tema volta ao Conselho em 30 dias.",
+                     "validacoes": vs, "divergencias": dv, "execucao": {"dono": "Controller", "prazo": "2026-10-30", "indicador": "deck enviado com a leitura por safra"}, "atualizado_em": "2026-10-26",
+                     "revisao": {"gerente": "Gabinete (Consolidador)", "aprovado": True, "rodadas": 1}}
+           for d, t, o, pq, cu, vs, dv in [
+               (dec[0], "Leitura da conversão por safra no deck da diretoria", "Se a conversão vai à diretoria por safra de criação, com a coluna conservadora.", "O deck sai em 30/10.", "A diretoria lê uma conversão que mistura safras e não mostra a queda.",
+                [val("Resultados", "forecast-pipeline", "concorda", "A leitura por safra é a que a previsão já usa."), val("Dados & BI", "governanca-dados", "concorda com ressalva", "Precisa de uma rodada a mais para limpar os duplicados.", "Lista conciliada até 29/10.", ressalva="Sem a conciliação, o número muda depois do envio."),
+                 val("Central Masters", "gestor-contas-chave", "concorda com ressalva", "Os Masters entendem melhor a leitura por safra.", "Daniela apresenta antes aos 3 maiores."), val("Qualidade", "auditor-promessas", "discorda", "O deck não pode trazer número de êxito por cliente.", "Tirar a coluna por cliente.")],
+                ["Qualidade discorda da coluna por cliente; Resultados mantém a coluna agregada por safra."]),
+               ({"id": "EX-2"}, "Campo de % de honorário obrigatório na etapa de ganho", "Se o campo vira obrigatório no HubSpot ao marcar o negócio como ganho.", "21% dos ganhos estão sem o campo e travam o repasse.", "O extrato do mês continua travado e o repasse atrasa.",
+                [val("Dados & BI", "governanca-dados", "concorda", "Resolve na origem."), val("Operações de Canal", "repasse", "concorda", "Destrava o extrato.")], [])]}
+_real = os.path.expanduser(f"~/agentes-partners/registro/gestao/dossies/{dec[0]['id']}.json")
+if os.path.exists(_real): DOSSIES[dec[0]["id"]] = json.load(open(_real, encoding="utf-8"))
+GESTAO = G.montar(PACOTE, PREVISAO, CONTROLE, [{"id": d["id"], "texto": d["texto"], "data": d["data"]} for d in dec], ACOES, [], hoje="2026-10-26", pre_analise=PRE, dossies={k: G._dossie(v) for k, v in DOSSIES.items()})
 
 EX = {"atualizado": D["atualizado"], "hoje": "2026-10-23", "gestao": GESTAO, "blocos": DIR["blocos"], "areas": DIR["areas"], "rotinas": DIR["rotinas"], "pastas": DIR["pastas"], "pessoas": DIR["pessoas"], "regras_casa": DIR.get("regras_casa", []),
       "demandas_num": D.get("demandas", {}), "alertas": D["gestao"]["alertas"], "manchete": D["gestao"]["manchete"], "masters": masters, "decisoes": dec,

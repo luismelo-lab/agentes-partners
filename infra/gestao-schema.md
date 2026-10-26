@@ -46,6 +46,8 @@ Status: verde dentro da tolerância, amarelo fora da verde, vermelho fora da ama
 ## 4. `gestao.json` (consolidado para o painel · `infra/gestao.py`)
 `{"data", "meta", "semaforo": [metricas com status], "previsao": {cenarios, caixa_13_semanas}, "desvios": [...], "decisoes": [{"id": "D101", "texto", "dono", "prazo", "status"}], "acoes": [{"acao", "dono", "prazo", "origem": "conselho|controle", "status"}]}`. O `infra/portal_dados.py` copia para `portal/dados.json` em `gestao`; a tela "Gestão" do painel do Luis mostra.
 
+Desde 26/10/2026 (tela v3): `semaforo[i].pre_analise` vem de `pre-analise-<data>.json` (por `metrica_id`: leitura, causa {fatos, hipoteses}, acoes, decisao_sugerida, efeito, confianca, melhorar_confianca, area, especialista, pendente); `decisoes_sugeridas` vem de `decisoes_luis` do mesmo arquivo; `decisoes[i].dossie` vem de `dossies/<id>.json` (o `indice.json` é ignorado) e `dossies` traz os dossiês de decisões fora da lista acima. Tudo opcional: sem arquivo, `null` e um aviso. No perfil time, nada disso vai ao painel.
+
 ## Regras
 - Métrica sem meta aprovada: status cinza e `meta: null`, mas com `tolerancia` sugerida e marcada "proposta".
 - Meta do Q4 (D111, 26/10/2026): crédito de contrato fechado, mensal 75/100/75 = R$ 250 mi; mostrar primeiro a meta do mês (`mes_atual`), depois a total. Realizado no volume limpo. A previsão traz `por_mes` (cenários conservador/base/esforço por mês, probabilidade e `novembro_precisa`); o cenário `esforco` entra ao lado de `meta` em `cenarios`.

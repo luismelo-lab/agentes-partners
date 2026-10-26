@@ -257,7 +257,8 @@ class Gestao(unittest.TestCase):
         g = self.G.consolidar(self.tmp)
         self.assertEqual((g["semaforo"], g["desvios"], g["decisoes"], g["acoes"]), ([], [], [], []))
         self.assertEqual(g["meta"]["unidade"], "indefinida"); self.assertEqual(g["previsao"]["cenarios"], {})
-        self.assertEqual(len(g["avisos"]), 4)  # pacote, previsão, controle e decisoes.md ausentes
+        self.assertEqual(len(g["avisos"]), 5)  # pacote, previsão, controle, pré-análise e decisoes.md ausentes
+        self.assertEqual((g["decisoes_sugeridas"], g["dossies"], g["pre_analise"]), ([], {}, {}))
         for k in ("data", "meta", "semaforo", "previsao", "desvios", "decisoes", "acoes"): self.assertIn(k, g)
 
     def test_consolida_e_tolera_quebrado(self):
@@ -301,6 +302,101 @@ class Gestao(unittest.TestCase):
         self.assertEqual([m["valor"] for m in g["semaforo"]], [None, 86]); self.assertEqual([m["status"] for m in g["semaforo"]], ["amarelo", "verde"])
         self.assertTrue(all(m["meta"] is None and m["tolerancia"] == {} for m in g["semaforo"])); self.assertNotIn("5,0", g["semaforo"][0]["nota"])
         self.assertEqual(d["gestao"]["semaforo"][0]["valor"], 5e6)  # original intacto
+
+
+class GestaoPreAnaliseDossie(unittest.TestCase):
+    """Pré-análise por farol e dossiê por decisão (26/10/2026): junta por metrica_id e por id, tolera ausência e arquivo quebrado."""
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp(prefix="gestao-pa-"); self.r = os.path.join(self.tmp, "registro", "gestao"); os.makedirs(os.path.join(self.r, "dossies"))
+        self.G = carregar("gestao_pa_teste", os.path.join(REPO, "infra/gestao.py"))
+        json.dump({"data": "2026-10-26", "metricas": [{"id": "a", "nome": "A", "valor": 1, "status": "vermelho"}, {"id": "b", "nome": "B", "valor": 2, "status": "verde"}]}, open(os.path.join(self.r, "pacote-2026-10-26.json"), "w"))
+        os.makedirs(os.path.join(self.tmp, "conselho"))
+        open(os.path.join(self.tmp, "conselho", "decisoes.md"), "w").write("| ID | Data | Ata | Decisão | Status | Obs | Quando |\n|---|---|---|---|---|---|---|\n"
+            "| D9 | 2026-10-01 | a.md | Nove | pendente | Fica com o Luis | 2026-10-23 |\n| D12 | 2026-10-01 | a.md | Doze | pendente | Fica com o Luis | 2026-10-23 |\n")
+
+    def tearDown(self): shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_sem_pre_analise_nem_dossie(self):
+        g = self.G.consolidar(self.tmp)
+        self.assertEqual([m["pre_analise"] for m in g["semaforo"]], [None, None]); self.assertEqual([d["dossie"] for d in g["decisoes"]], [None, None])
+        self.assertEqual(g["decisoes_sugeridas"], []); self.assertTrue(any("pré-análise" in a for a in g["avisos"]))
+        m = self.G.montar({}, {}, {}, [], [], hoje="2026-10-26"); self.assertEqual((m["decisoes_sugeridas"], m["dossies"]), ([], {}))  # chamada antiga, sem os novos argumentos
+
+    def test_junta_pre_analise_e_dossie(self):
+        json.dump({"data": "2026-10-26", "itens": [
+            {"metrica_id": "a", "leitura": "L", "causa": {"fatos": ["f1", {"fato": "f2"}, ""], "hipoteses": ["h1"]}, "acoes": [{"acao": "fazer", "dono": "daniela", "prazo": "2026-10-30"}, {"sem": 1}, "lixo"],
+             "decisao_sugerida": "Responder D9", "efeito": "E", "confianca": "media", "melhorar_confianca": "M", "area": "depto-resultados", "especialista": "x", "pendente": False},
+            {"metrica_id": "zz", "leitura": "fora do semáforo"}, "lixo"],
+            "decisoes_luis": [{"chave": "D9", "decisao": "Responder D9", "metricas": ["a"], "status": "vermelho"}, {"chave": "sem decisão"}]}, open(os.path.join(self.r, "pre-analise-2026-10-26.json"), "w"))
+        V = lambda p: {"area": "Jurídico", "especialista": "e", "parecer": p, "motivo": "m", "base": "b", "condicao": "c"}
+        json.dump({"id": "D9", "titulo": "T9", "o_que_decidir": "O", "contexto": [{"fato": "x", "fonte": "y", "tipo": "palpite"}, {"sem_fato": 1}],
+                   "opcoes": [{"nome": "A", "pros": "p"}, {"pros": "sem nome"}], "validacoes": [V("concorda"), V("Concorda com ressalva"), V("discorda"), V("talvez com ressalva")],
+                   "divergencias": "Jurídico discorda do prazo.", "execucao": {"dono": "Controller", "prazo": "30/10"}, "atualizado_em": "2026-10-26", "<script>": "x"}, open(os.path.join(self.r, "dossies", "D9.json"), "w"))
+        json.dump({"id": "D50", "titulo": "Fora da alçada", "validacoes": []}, open(os.path.join(self.r, "dossies", "D50.json"), "w"))
+        json.dump({"itens": [{"id": "D9"}]}, open(os.path.join(self.r, "dossies", "indice.json"), "w"))
+        open(os.path.join(self.r, "dossies", "D12.json"), "w").write("{quebrado")
+        g = self.G.consolidar(self.tmp)
+        pa = g["semaforo"][0]["pre_analise"]
+        self.assertEqual((pa["leitura"], pa["causa"]["fatos"], pa["causa"]["hipoteses"]), ("L", ["f1", "f2"], ["h1"]))
+        self.assertEqual(pa["acoes"], [{"acao": "fazer", "dono": "daniela", "prazo": "2026-10-30"}]); self.assertEqual(pa["confianca"], "media")
+        self.assertIsNone(g["semaforo"][1]["pre_analise"]); self.assertEqual(g["pre_analise"]["itens"], 2)
+        self.assertEqual([x["chave"] for x in g["decisoes_sugeridas"]], ["D9"]); self.assertEqual(g["decisoes_sugeridas"][0]["dossie"]["titulo"], "T9")
+        d9, d12 = g["decisoes"]; D = d9["dossie"]
+        self.assertEqual([v["parecer"] for v in D["validacoes"]], ["concorda", "concorda com ressalva", "discorda", "concorda com ressalva"])
+        self.assertEqual(D["contexto"], [{"fato": "x", "fonte": "y", "tipo": "fato"}]); self.assertEqual([o["nome"] for o in D["opcoes"]], ["A"])
+        self.assertEqual(D["divergencias"], ["Jurídico discorda do prazo."]); self.assertEqual(D["execucao"]["dono"], "Controller"); self.assertNotIn("<script>", D)
+        self.assertIsNone(d12["dossie"]); self.assertTrue(any("D12.json" in a for a in g["avisos"]))  # quebrado vira aviso, decisão fica sem dossiê
+        self.assertEqual(list(g["dossies"]), ["D50"])  # dossiê fora da alçada listada vai à parte; indice.json é ignorado
+        json.dumps(g)
+
+    def test_time_nao_recebe_pre_analise_nem_dossie(self):
+        os.environ["PORTAL_PERFIL"] = "time"
+        try: M = carregar("portal_dados_teste_pa", os.path.join(REPO, "infra/portal_dados.py"))
+        finally: os.environ.pop("PORTAL_PERFIL", None)
+        d = {"gestao": {"semaforo": [{"id": "a", "nome": "A", "status": "vermelho", "pre_analise": {"leitura": "R$ 5 mi"}}], "decisoes": [{"id": "D9", "dossie": {}}],
+                        "decisoes_sugeridas": [{"chave": "D9"}], "dossies": {"D50": {}}, "pre_analise": {"itens": 1}}}
+        d2, _ = M.para_time(d, {"pastas": [], "areas": [], "rotinas": [], "pessoas": []}); g = d2["gestao"]
+        for k in ("decisoes", "decisoes_sugeridas", "dossies", "pre_analise"): self.assertNotIn(k, g)
+        self.assertNotIn("pre_analise", g["semaforo"][0])
+
+
+class HistoricoDemandas(unittest.TestCase):
+    """Demandas do WhatsApp respondidas pelo histórico antes do GLPI (infra/historico-antes-do-glpi.md, 26/10/2026)."""
+    def setUp(self):
+        self.M = carregar("portal_dados_hist", os.path.join(REPO, "infra/portal_dados.py"))
+        self.tmp = tempfile.mkdtemp(prefix="hist-"); os.makedirs(os.path.join(self.tmp, "registro")); os.makedirs(os.path.join(self.tmp, "celulas"))
+        self.M.AP = self.tmp
+
+    def tearDown(self): shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_campos_tolerantes(self):
+        H = self.M.historico_item
+        self.assertEqual(H({}), (None, None)); self.assertEqual(H({"historico": "x", "resposta_historico": []}), (None, None))
+        h, r = H({"historico": {"consultado": True, "suficiente": False, "confianca": 7, "faltou": "documento novo"}, "resposta_historico": {"resposta": "   "}})
+        self.assertEqual((h["suficiente"], h["confianca"], h["faltou"]), (False, None, "documento novo")); self.assertIsNone(r)  # resposta vazia não conta
+        h, r = H({"historico": {"suficiente": True, "criterio": "dado_do_caso", "confianca": 0.8}, "resposta_historico": {"resposta": "Oi", "auditado": True,
+                  "fontes": [{"fonte": "caso", "data": "2026-10-23", "trecho": "x" * 500}, "lixo"] + [{"fonte": "base"}] * 9}})
+        self.assertEqual((r["criterio"], r["confianca"], len(r["fontes"]), len(r["fontes"][0]["trecho"])), ("dado_do_caso", None, 6, 220))
+
+    def _registro(self, itens):
+        json.dump({"demandas": {"1": {"id": "D-1", "chave": "whatsapp|daniela|Grupo A", "origem": "WhatsApp", "status": "responder", "pessoa": "daniela", "titulo": "Grupo A", "aberta_em": "2026-10-26T09:00"}}},
+                  open(os.path.join(self.tmp, "registro", "demandas.json"), "w"))
+        json.dump({"rodada": "2026-10-26 09h", "pessoas": {"daniela": {"itens": itens}}}, open(os.path.join(self.tmp, "celulas", "whatsapp-triagem-2026-10-26-09h.json"), "w"))
+
+    def test_demanda_respondida_pelo_historico(self):
+        self._registro([{"chat": "Grupo A", "o_que_pede": "status", "historico": {"consultado": True, "suficiente": True, "criterio": "dado_do_caso", "confianca": 0.8},
+                         "resposta_historico": {"resposta": "Status: em diagnóstico.", "auditado": True, "fontes": [{"fonte": "caso", "data": "2026-10-26", "trecho": "etapa"}]}}])
+        d = self.M.whatsapp_demandas()[0]
+        self.assertEqual((d["tipo"], d["rascunho"]), ("Respondido pelo histórico", "Status: em diagnóstico.")); self.assertTrue(d["historico"]["suficiente"])
+        self.assertEqual(d["resposta_historico"]["fontes"][0]["fonte"], "caso")
+
+    def test_demanda_sem_historico_e_com_encaminhamento(self):
+        self._registro([{"chat": "Grupo A", "o_que_pede": "despacho", "rascunho": "R", "encaminhar": {"area": "jur_comunicados", "especialista": {}},
+                         "historico": {"consultado": True, "suficiente": False, "faltou": "documento novo com prazo"}}])
+        d = self.M.whatsapp_demandas()[0]
+        self.assertEqual(d["tipo"], "Chamado à área"); self.assertIsNone(d["resposta_historico"]); self.assertEqual(d["historico"]["faltou"], "documento novo com prazo")
+        self._registro([{"chat": "Grupo A", "o_que_pede": "x"}])  # triagem antiga, sem os campos
+        d = self.M.whatsapp_demandas()[0]; self.assertIsNone(d["historico"]); self.assertIsNone(d["resposta_historico"])
 
 
 class ChamadoSugerido(unittest.TestCase):
