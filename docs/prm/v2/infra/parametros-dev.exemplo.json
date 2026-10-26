@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ambiente": {
+      "value": "dev"
+    },
+    "skuSwa": {
+      "value": "Free"
+    },
+    "skuSql": {
+      "value": "gratuito"
+    },
+    "redePrivada": {
+      "value": false
+    },
+    "dominioPersonalizado": {
+      "value": ""
+    },
+    "orcamentoMensal": {
+      "value": 10
+    },
+    "inicioOrcamento": {
+      "value": "2026-11-01"
+    },
+    "maxInstanciasFunc": {
+      "value": 2
+    },
+    "sqlAdminGrupoNome": {
+      "value": "<NOME-DO-GRUPO-ENTRA-ADMIN-SQL>"
+    },
+    "sqlAdminGrupoObjectId": {
+      "value": "<OBJECT-ID-DO-GRUPO>"
+    },
+    "centralApiClientId": {
+      "value": "<CLIENT-ID-SAVE-SSO-MASTERS>"
+    },
+    "prmApiClientId": {
+      "value": "<CLIENT-ID-SAVE-PRM-PARCEIROS>"
+    },
+    "emailsAlerta": {
+      "value": [
+        "<EMAIL-DO-LUIS>",
+        "<EMAIL-DO-RESPONSAVEL-NA-TI>"
+      ]
+    }
+  }
+}

@@ -1,0 +1,506 @@
+/* PRM Save v2 · biblioteca de componentes · Design System Save v0.5
+   Especificação: docs/prm/v2/05-design.md (seção 4). Versão 2.0 · 26/10/2026 · Design/UX da Área Partners.
+
+   Carregar DEPOIS do save.css oficial:
+     <link rel="stylesheet" href="save.css">            (departamentos/marketing-marca/padrao/save.css)
+     <link rel="stylesheet" href="prm-componentes.css">
+   Portal do parceiro: modo claro (padrão do save.css). Visão da Save: class="escuro" no <html>.
+
+   Regra deste arquivo: nenhuma cor, fonte, raio, espaço ou duração escrita à mão. Tudo é var() dos tokens
+   do save.css (que espelham o marca.json). Os tokens --prm-* abaixo são só APELIDOS de papel, para o
+   componente dizer "para que serve" a cor e o contraste ficar garantido num lugar só.
+
+   Acessibilidade (WCAG 2.2 AA, medido em 26/10/2026):
+   - --ouro-texto dá 3,17:1 sobre branco e 2,96:1 sobre o fundo: NÃO serve para texto normal.
+     Aqui ele só aparece em texto grande (>= 24px, ou >= 18,66px em negrito) e em traço gráfico com rótulo.
+   - --texto-3 dá 3,56:1 (claro) e 3,36:1 (escuro, sobre cartão): só para texto desabilitado ou decorativo.
+   - --sucesso (claro) dá 4,21:1 e --alerta (claro) 3,68:1: só como ponto, borda ou ícone; o texto do chip é --texto.
+   - --borda-3 dá 1,61:1: não delimita campo de formulário (1.4.11 pede 3:1); o campo usa --texto-3 (3,56:1).
+   - Foco: anel duplo (traço na cor do texto + halo ouro), porque o ouro sozinho dá 1,53:1 sobre branco. */
+
+/* ---------------------------------------------------------------- 0. tokens de papel (apelidos) */
+:root {
+  --prm-sobre-ouro: var(--texto);          /* texto em cima do ouro: escuro nos dois modos */
+  --prm-acao: var(--ouro);                 /* fundo da ação principal e do "pede você" */
+  --prm-acao-suave: var(--ouro-suave);
+  --prm-linha: var(--borda);
+  --prm-campo-borda: var(--texto-3);       /* 3,56:1 no claro: passa 1.4.11 */
+  --prm-texto-apoio: var(--texto-2);
+  --prm-texto-mudo: var(--texto-3);        /* só desabilitado ou decorativo */
+  --prm-superficie: var(--cartao);
+  --prm-superficie-2: var(--fundo-2);
+  --prm-ok: var(--sucesso);
+  --prm-atencao: var(--alerta);
+  --prm-erro: var(--erro);
+  --prm-info: var(--info);
+  --prm-veu: color-mix(in srgb, var(--texto) 48%, transparent);   /* fundo atrás de gaveta e modal */
+  --prm-sombra: var(--sombra-2);
+  --prm-nav-m: 56px;                        /* altura da barra inferior no celular */
+  --prm-toque: 44px;                        /* área mínima de toque */
+  --prm-toque-primario: 48px;               /* botão principal no celular */
+}
+.escuro {
+  --prm-sobre-ouro: var(--fundo);          /* no escuro --texto é claro; sobre o ouro vai o preto */
+  --prm-campo-borda: var(--borda-3);
+  --prm-texto-mudo: var(--texto-2);        /* --texto-3 escuro reprova (3,36:1); o PRM usa o texto 2 */
+  --prm-superficie: var(--cartao);
+  --prm-superficie-2: var(--elevado);
+  --prm-veu: color-mix(in srgb, var(--fundo) 72%, transparent);
+}
+
+/* ---------------------------------------------------------------- 1. base e foco */
+.prm :where(button, input, select, textarea) { font: inherit; color: inherit; }
+.prm :focus-visible,
+.prm-foco:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--ouro);
+}
+.prm-so-leitor {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+.prm-pular {                               /* "Pular para o conteúdo" (2.4.1) */
+  position: absolute; left: var(--s-4); top: calc(-1 * var(--s-8)); z-index: 60;
+  background: var(--prm-acao); color: var(--prm-sobre-ouro);
+  padding: var(--s-3) var(--s-4); border-radius: var(--r-sm); font-weight: 600;
+}
+.prm-pular:focus { top: var(--s-4); }
+
+/* rótulo (eyebrow): no PRM em --texto-2, não em ouro (o .rotulo do save.css usa ouro-texto em 11px: reprova) */
+.prm-rotulo {
+  font: 500 var(--t-micro)/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--prm-texto-apoio);
+}
+.prm-rotulo--marca { color: var(--texto); }
+.prm-rotulo--marca::before {               /* o ouro entra como traço, não como texto */
+  content: ""; display: inline-block; width: var(--s-3); height: 3px; margin-right: var(--s-2);
+  vertical-align: middle; background: var(--ouro);
+}
+.prm-num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.prm-num--destaque { font: 500 var(--t-h4)/1.2 var(--mono); color: var(--texto); }
+
+/* ---------------------------------------------------------------- 2. casca (topo, menu, barra inferior) */
+.prm-casca { min-height: 100vh; display: grid; grid-template-columns: 248px minmax(0, 1fr); background: var(--fundo); }
+.prm-topo {
+  position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: var(--s-4);
+  min-height: 64px; padding: 0 var(--s-5); background: var(--prm-superficie);
+  border-bottom: 1px solid var(--prm-linha); box-shadow: inset 0 3px 0 var(--ouro);
+}
+.prm-topo__logo { height: 24px; width: auto; }
+.prm-topo__acoes { margin-left: auto; display: flex; align-items: center; gap: var(--s-2); }
+.prm-icbtn {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  width: var(--prm-toque); height: var(--prm-toque); border-radius: var(--r-sm);
+  border: 1px solid var(--borda-2); background: var(--prm-superficie); color: var(--texto); cursor: pointer;
+}
+.prm-icbtn svg { width: 20px; height: 20px; }
+.prm-menu {
+  display: flex; flex-direction: column; gap: var(--s-1); padding: var(--s-5) var(--s-3);
+  border-right: 1px solid var(--prm-linha); background: var(--fundo);
+}
+.prm-menu__grupo { padding: var(--s-4) var(--s-3) var(--s-2); }
+.prm-menu__item {
+  display: flex; align-items: center; gap: var(--s-3); width: 100%; min-height: var(--prm-toque);
+  padding: 0 var(--s-3); border: 1px solid transparent; border-radius: var(--r-sm);
+  background: transparent; color: var(--prm-texto-apoio); text-align: left; text-decoration: none;
+  font: 400 var(--t-pequeno)/1.3 var(--sans); cursor: pointer;
+  transition: background var(--d-hover) var(--ease), color var(--d-hover) var(--ease);
+}
+.prm-menu__item:hover { background: var(--prm-superficie-2); color: var(--texto); text-decoration: none; }
+.prm-menu__item[aria-current="page"] {
+  background: var(--prm-superficie); color: var(--texto); font-weight: 600;
+  border-color: var(--prm-linha); box-shadow: inset 3px 0 0 var(--ouro);
+}
+.prm-main { min-width: 0; width: 100%; max-width: 1180px; padding: var(--s-6) var(--s-6) var(--s-8); }
+
+/* barra inferior do celular: 5 destinos, o do meio é a ação "Registrar" */
+.prm-nav-m { display: none; }
+@media (max-width: 767px) {
+  .prm-casca { grid-template-columns: 1fr; }
+  .prm-menu { display: none; }
+  .prm-topo { padding: 0 var(--s-4); min-height: 56px; }
+  .prm-main { padding: var(--s-4) var(--s-4) calc(var(--prm-nav-m) + var(--s-7) + env(safe-area-inset-bottom)); }
+  .prm-nav-m {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: stretch;
+    min-height: var(--prm-nav-m); padding-bottom: env(safe-area-inset-bottom);
+    background: var(--prm-superficie); border-top: 1px solid var(--prm-linha);
+  }
+  .prm-nav-m__item {
+    position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2px; min-height: var(--prm-nav-m); border: 0; background: none; text-decoration: none;
+    color: var(--prm-texto-apoio); font: 500 var(--t-micro)/1.2 var(--sans); cursor: pointer;
+  }
+  .prm-nav-m__item svg { width: 22px; height: 22px; }
+  .prm-nav-m__item[aria-current="page"] { color: var(--texto); font-weight: 600; }
+  .prm-nav-m__item[aria-current="page"]::before {
+    content: ""; position: absolute; top: 0; left: 25%; right: 25%; height: 3px;
+    background: var(--ouro); border-radius: 0 0 var(--r-xs) var(--r-xs);
+  }
+  .prm-nav-m__acao {                        /* Registrar: botão ouro no centro */
+    align-self: center; justify-self: center; display: inline-flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px; min-width: 64px; min-height: var(--prm-toque-primario);
+    border-radius: var(--r-md); background: var(--prm-acao); color: var(--prm-sobre-ouro);
+    font: 600 var(--t-micro)/1.2 var(--sans); border: 0; text-decoration: none; cursor: pointer;
+  }
+}
+
+/* contador (badge) em menu, sino e barra inferior */
+.prm-contador {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px;
+  padding: 0 var(--s-1); border-radius: var(--r-sm); background: var(--prm-acao); color: var(--prm-sobre-ouro);
+  font: 600 var(--t-micro)/1 var(--mono); margin-left: auto;
+}
+.prm-icbtn .prm-contador, .prm-nav-m__item .prm-contador { position: absolute; top: 2px; right: 2px; margin: 0; }
+.prm-nav-m__item .prm-contador { right: calc(50% - 22px); }
+
+/* cabeçalho de tela */
+.prm-cab { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--s-3) var(--s-4); margin-bottom: var(--s-5); }
+.prm-cab h1 { font-size: var(--t-h3); margin: var(--s-1) 0 0; }
+.prm-cab p { margin: var(--s-2) 0 0; max-width: 68ch; color: var(--prm-texto-apoio); }
+@media (max-width: 767px) { .prm-cab h1 { font-size: var(--t-h4); } }
+
+/* ---------------------------------------------------------------- 3. botões */
+.prm-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+  min-height: var(--prm-toque); padding: 0 var(--s-5); border-radius: var(--r-sm);
+  border: 1px solid var(--prm-acao); background: var(--prm-acao); color: var(--prm-sobre-ouro);
+  font: 600 var(--t-pequeno)/1 var(--sans); white-space: nowrap; cursor: pointer; text-decoration: none;
+  transition: filter var(--d-hover) var(--ease);
+}
+.prm-btn:hover { filter: brightness(.96); text-decoration: none; }
+.prm-btn--sec { background: transparent; border-color: var(--prm-campo-borda); color: var(--texto); font-weight: 500; }
+.prm-btn--perigo { background: transparent; border-color: var(--erro); border-width: 2px; color: var(--texto); }  /* texto em --erro reprova no escuro (4,09:1) */
+.prm-btn--texto { background: none; border-color: transparent; color: var(--texto); padding: 0 var(--s-2);
+                  text-decoration: underline; text-decoration-color: var(--ouro-texto); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.prm-btn--bloco { width: 100%; }
+.prm-btn[aria-disabled="true"], .prm-btn:disabled { background: var(--prm-superficie-2); border-color: var(--prm-linha); color: var(--prm-texto-mudo); cursor: not-allowed; filter: none; }
+.prm-btn[aria-busy="true"] { cursor: progress; }
+.prm-btn[aria-busy="true"]::before {
+  content: ""; width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid currentColor; border-right-color: transparent; animation: prm-gira 800ms linear infinite;
+}
+@keyframes prm-gira { to { transform: rotate(360deg); } }
+.prm-acoes { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+@media (max-width: 767px) {
+  .prm-acoes--empilha { flex-direction: column; }
+  .prm-acoes--empilha .prm-btn { width: 100%; min-height: var(--prm-toque-primario); }
+}
+
+/* ---------------------------------------------------------------- 4. cartões, KPI e listas */
+.prm-grade { display: grid; gap: var(--s-4); }
+.prm-grade--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.prm-grade--3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.prm-grade--kpi { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 767px) { .prm-grade--kpi { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); } }
+
+.prm-cartao {
+  background: var(--prm-superficie); border: 1px solid var(--prm-linha); border-radius: var(--r-md);
+  padding: var(--s-5); box-shadow: var(--sombra-1); min-width: 0;
+}
+.prm-cartao > h2, .prm-cartao__titulo { font-size: var(--t-corpo-g); margin: 0 0 var(--s-3); }
+.prm-cartao--acao { border-color: var(--ouro); box-shadow: inset 4px 0 0 var(--ouro); }   /* "pede você" */
+.prm-cartao--clicavel { cursor: pointer; transition: border-color var(--d-hover) var(--ease); }
+.prm-cartao--clicavel:hover { border-color: var(--prm-campo-borda); }
+@media (max-width: 767px) { .prm-cartao { padding: var(--s-4); } }
+
+.prm-kpi { display: grid; gap: var(--s-1); }
+.prm-kpi__valor { font: 500 var(--t-h4)/1.15 var(--mono); font-variant-numeric: tabular-nums; color: var(--texto); }
+.prm-kpi__apoio { font-size: var(--t-legenda); color: var(--prm-texto-apoio); }
+@media (max-width: 767px) { .prm-kpi__valor { font-size: var(--t-corpo-g); } }
+
+.prm-lista { list-style: none; margin: 0; padding: 0; }
+.prm-lista__item {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-2) var(--s-4);
+  padding: var(--s-3) 0; border-top: 1px solid var(--prm-linha);
+}
+.prm-lista__item:first-child { border-top: 0; }
+.prm-lista__item > div { min-width: 0; }
+.prm-lista__titulo { font-weight: 500; color: var(--texto); overflow-wrap: anywhere; }
+.prm-lista__apoio { font-size: var(--t-pequeno); color: var(--prm-texto-apoio); }
+.prm-lista__link {                         /* linha inteira tocável no celular */
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-3);
+  min-height: 56px; color: inherit; text-decoration: none; font-weight: 400;
+}
+.prm-lista__link:hover { text-decoration: none; background: var(--prm-superficie-2); }
+
+/* descrição chave → valor (extrato, ficha) */
+.prm-dl { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--s-2) var(--s-4); margin: 0; font-size: var(--t-pequeno); }
+.prm-dl dt { color: var(--prm-texto-apoio); }
+.prm-dl dd { margin: 0; text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--texto); }
+.prm-dl .prm-dl__total { font-weight: 600; border-top: 1px solid var(--borda-3); padding-top: var(--s-2); }
+
+/* ---------------------------------------------------------------- 5. chips de estado */
+/* O texto do chip é sempre --texto; a cor entra no ponto/ícone e na borda (cor nunca é o único sinal). */
+.prm-chip {
+  display: inline-flex; align-items: center; gap: var(--s-2); min-height: 24px; padding: 0 var(--s-2);
+  border: 1px solid var(--borda-3); border-radius: var(--r-xs); background: transparent; color: var(--texto);
+  font: 500 var(--t-legenda)/1.4 var(--sans); white-space: nowrap;
+}
+.prm-chip::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--prm-texto-apoio); }
+.prm-chip--ok::before { background: var(--prm-ok); }
+.prm-chip--atencao::before { background: var(--prm-atencao); border-radius: var(--r-xs); transform: rotate(45deg); }
+.prm-chip--erro::before { background: var(--prm-erro); border-radius: 0; }
+.prm-chip--info::before { background: var(--prm-info); }
+.prm-chip--neutro::before { background: transparent; border: 2px solid var(--prm-texto-apoio); }
+.prm-chip--acao { background: var(--prm-acao); border-color: var(--prm-acao); color: var(--prm-sobre-ouro); font-weight: 600; }
+.prm-chip--acao::before { background: var(--prm-sobre-ouro); }
+.prm-chip--suave { background: var(--prm-acao-suave); border-color: var(--ouro); }
+/* Formas distintas (círculo, losango, quadrado, anel) mantêm o estado legível em tons de cinza e para daltônicos. */
+
+/* selo de produto/nível */
+.prm-selo {
+  display: inline-flex; align-items: center; gap: var(--s-1); padding: 2px var(--s-2); border-radius: var(--r-xs);
+  background: var(--prm-acao-suave); color: var(--texto); border: 1px solid var(--ouro);
+  font: 500 var(--t-micro)/1.6 var(--mono); letter-spacing: .06em; text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------- 6. linha do tempo de estados */
+/* Vertical por padrão (celular e detalhe); --horizontal para os 4 estados do extrato no desktop.
+   Marcação: <ol class="prm-tempo"><li class="prm-tempo__passo" data-estado="feito|atual|futuro|bloqueado" aria-current="step"> */
+.prm-tempo { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.prm-tempo__passo {
+  position: relative; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: var(--s-3);
+  padding-bottom: var(--s-4); color: var(--prm-texto-apoio); font-size: var(--t-pequeno);
+}
+.prm-tempo__passo::before {                /* marcador */
+  content: ""; grid-row: 1 / span 2; width: 16px; height: 16px; margin: 3px 4px 0;
+  border-radius: 50%; border: 2px solid var(--prm-campo-borda); background: var(--prm-superficie); z-index: 1;
+}
+.prm-tempo__passo::after {                 /* trilho */
+  content: ""; position: absolute; left: 11px; top: 22px; bottom: 0; width: 2px; background: var(--prm-linha);
+}
+.prm-tempo__passo:last-child::after { display: none; }
+.prm-tempo__titulo { font-weight: 500; color: var(--texto); }
+.prm-tempo__quando { font-family: var(--mono); font-size: var(--t-legenda); color: var(--prm-texto-apoio); }
+.prm-tempo__passo[data-estado="feito"]::before { background: var(--prm-ok); border-color: var(--prm-ok); }
+.prm-tempo__passo[data-estado="feito"]::after { background: var(--prm-ok); }
+.prm-tempo__passo[data-estado="atual"]::before { background: var(--ouro); border-color: var(--texto); }
+.prm-tempo__passo[data-estado="atual"] .prm-tempo__titulo { font-weight: 600; }
+.prm-tempo__passo[data-estado="bloqueado"]::before { border-color: var(--prm-atencao); border-style: dashed; }
+.prm-tempo__bola {                          /* "Com quem está": quem precisa agir agora */
+  display: inline-flex; gap: var(--s-1); margin-top: var(--s-1); font-size: var(--t-legenda); color: var(--texto);
+}
+@media (min-width: 768px) {
+  .prm-tempo--horizontal { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+  .prm-tempo--horizontal .prm-tempo__passo { grid-template-columns: 1fr; padding: var(--s-6) var(--s-2) 0 0; }
+  .prm-tempo--horizontal .prm-tempo__passo::before { position: absolute; top: 0; left: 0; margin: 0; }
+  .prm-tempo--horizontal .prm-tempo__passo::after { left: 18px; right: 0; top: 7px; bottom: auto; width: auto; height: 2px; }
+}
+
+/* ---------------------------------------------------------------- 7. extrato */
+.prm-extrato__linha { display: grid; gap: var(--s-3); }
+.prm-extrato__cab { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-2); }
+.prm-extrato__valor { font: 500 var(--t-h4)/1.2 var(--mono); font-variant-numeric: tabular-nums; color: var(--texto); }
+.prm-extrato__sem-valor { font-size: var(--t-pequeno); color: var(--prm-texto-apoio); }
+.prm-extrato__resumo {                     /* faixa no topo: pago no ano, liberado, em conferência */
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3);
+  padding: var(--s-4); border-radius: var(--r-md); background: var(--prm-superficie-2); border: 1px solid var(--prm-linha);
+}
+@media (max-width: 767px) { .prm-extrato__resumo { grid-template-columns: 1fr; } }
+
+/* ---------------------------------------------------------------- 8. barra de nível (progresso) */
+/* <div class="prm-nivel" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="72"
+        aria-valuetext="72% do caminho até Master Estratégico"> ... */
+.prm-nivel { display: grid; gap: var(--s-2); }
+.prm-nivel__trilho { position: relative; height: 12px; border-radius: var(--r-xs); background: var(--prm-superficie-2); border: 1px solid var(--prm-campo-borda); overflow: hidden; }
+.prm-nivel__barra { display: block; height: 100%; width: var(--prm-progresso, 0%); background: var(--ouro); border-right: 2px solid var(--texto); transition: width var(--d-modal) var(--ease); }
+.prm-nivel__marcos { display: flex; justify-content: space-between; font: 500 var(--t-legenda)/1.4 var(--mono); color: var(--prm-texto-apoio); }
+.prm-nivel__texto { font-size: var(--t-pequeno); color: var(--texto); }
+.prm-nivel__selo { display: inline-flex; align-items: center; gap: var(--s-3); }
+.prm-nivel__medalha {
+  display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px;
+  border-radius: 50%; background: var(--ouro); color: var(--prm-sobre-ouro); font: 600 var(--t-pequeno)/1 var(--mono);
+}
+
+/* passos de jornada (Registrado → Certificado → Pleno; N1 → N2) */
+.prm-passos { list-style: none; margin: 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--s-2); }
+.prm-passos__item { padding: var(--s-3); border: 1px solid var(--prm-linha); border-radius: var(--r-sm); background: var(--prm-superficie-2); font-size: var(--t-pequeno); }
+.prm-passos__item[data-estado="feito"] { background: var(--prm-superficie); border-color: var(--prm-ok); }
+.prm-passos__item[aria-current="step"] { background: var(--prm-acao-suave); border-color: var(--ouro); font-weight: 600; }
+@media (max-width: 767px) { .prm-passos { grid-auto-flow: row; } }
+
+/* ---------------------------------------------------------------- 9. formulário e registro com checagem em tempo real */
+.prm-form { display: grid; gap: var(--s-4); }
+.prm-campo { display: grid; gap: var(--s-1); }
+.prm-campo__rotulo { font: 600 var(--t-pequeno)/1.4 var(--sans); color: var(--texto); }
+.prm-campo__opcional { font-weight: 400; color: var(--prm-texto-apoio); }
+.prm-campo__dica { font-size: var(--t-legenda); color: var(--prm-texto-apoio); margin: 0; }
+.prm-campo__entrada {
+  width: 100%; min-width: 0; min-height: var(--prm-toque); padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--prm-campo-borda); border-radius: var(--r-sm);
+  background: var(--prm-superficie); color: var(--texto); font: 400 var(--t-corpo)/1.4 var(--sans);
+}
+.prm-campo__entrada::placeholder { color: var(--prm-texto-apoio); opacity: 1; }
+.prm-campo__entrada--mono { font-family: var(--mono); letter-spacing: .02em; }
+textarea.prm-campo__entrada { min-height: 96px; resize: vertical; }
+.prm-campo[data-estado="erro"] .prm-campo__entrada { border-color: var(--prm-erro); border-width: 2px; }
+.prm-campo[data-estado="ok"] .prm-campo__entrada { border-color: var(--prm-ok); }
+.prm-campo__msg { display: flex; gap: var(--s-2); align-items: flex-start; margin: 0; font-size: var(--t-pequeno); color: var(--texto); }
+.prm-campo__msg::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 7px; border-radius: 50%; background: var(--prm-texto-apoio); }
+.prm-campo[data-estado="erro"] .prm-campo__msg { color: var(--prm-erro); }
+.prm-campo[data-estado="erro"] .prm-campo__msg::before { background: var(--prm-erro); border-radius: 0; }
+.prm-campo[data-estado="ok"] .prm-campo__msg::before { background: var(--prm-ok); }
+.prm-campo[data-estado="consultando"] .prm-campo__msg::before {
+  background: transparent; border: 2px solid var(--prm-texto-apoio); border-right-color: transparent;
+  width: 10px; height: 10px; animation: prm-gira 800ms linear infinite;
+}
+.prm-campos { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+
+/* cartão da empresa encontrada na Receita (preenchimento automático do registro) */
+.prm-empresa {
+  display: grid; gap: var(--s-1); padding: var(--s-3) var(--s-4); border-radius: var(--r-sm);
+  background: var(--prm-superficie-2); border: 1px solid var(--prm-linha); font-size: var(--t-pequeno);
+}
+.prm-empresa__nome { font-weight: 600; color: var(--texto); overflow-wrap: anywhere; }
+.prm-empresa__meta { color: var(--prm-texto-apoio); font-family: var(--mono); font-size: var(--t-legenda); }
+
+/* resultado depois de enviar o registro */
+.prm-resultado {
+  display: grid; gap: var(--s-2); padding: var(--s-4) var(--s-5); border-radius: var(--r-md);
+  border: 1px solid var(--borda-3); border-left-width: 4px; background: var(--prm-superficie);
+}
+.prm-resultado h2, .prm-resultado h3 { font-size: var(--t-corpo-g); margin: 0; }
+.prm-resultado--recebido { border-left-color: var(--ouro); }
+.prm-resultado--seu { border-left-color: var(--prm-info); }
+.prm-resultado--bloqueado { border-left-color: var(--prm-atencao); }
+
+/* barra fixa de envio no celular (o botão principal fica sempre ao alcance do polegar) */
+@media (max-width: 767px) {
+  .prm-form__rodape {
+    position: sticky; bottom: calc(var(--prm-nav-m) + env(safe-area-inset-bottom)); z-index: 20;
+    margin: 0 calc(-1 * var(--s-4)); padding: var(--s-3) var(--s-4);
+    background: var(--prm-superficie); border-top: 1px solid var(--prm-linha);
+  }
+  .prm-form__rodape .prm-btn { width: 100%; min-height: var(--prm-toque-primario); }
+}
+
+/* ---------------------------------------------------------------- 10. avisos em linha, vazio, erro, carregando */
+.prm-aviso {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-3); align-items: start;
+  padding: var(--s-3) var(--s-4); border-radius: var(--r-sm); border: 1px solid var(--borda-3);
+  border-left-width: 4px; background: var(--prm-superficie); font-size: var(--t-pequeno); color: var(--texto);
+}
+.prm-aviso--info { border-left-color: var(--prm-info); }
+.prm-aviso--atencao { border-left-color: var(--prm-atencao); }
+.prm-aviso--erro { border-left-color: var(--prm-erro); }
+.prm-aviso--marca { border-left-color: var(--ouro); background: var(--prm-acao-suave); }
+.prm-aviso__icone { width: 20px; height: 20px; }
+.prm-aviso--info .prm-aviso__icone { color: var(--prm-info); }
+.prm-aviso--atencao .prm-aviso__icone { color: var(--texto); }
+.prm-aviso--erro .prm-aviso__icone { color: var(--prm-erro); }
+
+.prm-vazio {
+  display: grid; justify-items: start; gap: var(--s-3); padding: var(--s-6) var(--s-5);
+  border: 1px dashed var(--prm-campo-borda); border-radius: var(--r-md); background: var(--prm-superficie);
+}
+.prm-vazio h2, .prm-vazio h3 { font-size: var(--t-corpo-g); margin: 0; }
+.prm-vazio p { margin: 0; max-width: 56ch; color: var(--prm-texto-apoio); }
+
+.prm-esqueleto {
+  display: block; height: 1em; border-radius: var(--r-xs);
+  background: linear-gradient(90deg, var(--prm-superficie-2) 0%, var(--prm-linha) 50%, var(--prm-superficie-2) 100%);
+  background-size: 200% 100%; animation: prm-brilho 1.4s var(--ease) infinite;
+}
+.prm-esqueleto--titulo { height: var(--t-h4); width: 40%; }
+.prm-esqueleto--linha { height: var(--t-pequeno); margin-top: var(--s-2); }
+.prm-esqueleto--cartao { height: 96px; border-radius: var(--r-md); }
+@keyframes prm-brilho { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+
+/* ---------------------------------------------------------------- 11. toasts */
+/* Região: <div class="prm-toasts" role="status" aria-live="polite"> (erro que pede ação NÃO vai em toast). */
+.prm-toasts {
+  position: fixed; z-index: 70; right: var(--s-5); bottom: var(--s-5);
+  display: grid; gap: var(--s-2); width: min(400px, calc(100vw - 2 * var(--s-4)));
+}
+.prm-toast {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--s-3); align-items: start;
+  padding: var(--s-3) var(--s-4); border-radius: var(--r-md); background: var(--prm-superficie);
+  border: 1px solid var(--borda-3); border-left-width: 4px; box-shadow: var(--prm-sombra);
+  font-size: var(--t-pequeno); color: var(--texto);
+  animation: prm-entra var(--d-abre) var(--ease);
+}
+.prm-toast--ok { border-left-color: var(--prm-ok); }
+.prm-toast--info { border-left-color: var(--prm-info); }
+.prm-toast--atencao { border-left-color: var(--prm-atencao); }
+.prm-toast__titulo { font-weight: 600; }
+.prm-toast__acao { min-height: var(--prm-toque); }
+@keyframes prm-entra { from { opacity: 0; transform: translateY(var(--s-2)); } to { opacity: 1; transform: none; } }
+@media (max-width: 767px) {
+  .prm-toasts { left: var(--s-4); right: var(--s-4); width: auto; bottom: calc(var(--prm-nav-m) + var(--s-3) + env(safe-area-inset-bottom)); }
+}
+
+/* ---------------------------------------------------------------- 12. caixa de avisos (gaveta do sino) */
+.prm-veu { position: fixed; inset: 0; z-index: 50; background: var(--prm-veu); }
+.prm-gaveta {
+  position: fixed; z-index: 51; top: 0; right: 0; bottom: 0; width: min(440px, 100vw);
+  display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; background: var(--prm-superficie);
+  border-left: 1px solid var(--prm-linha); box-shadow: var(--prm-sombra);
+  animation: prm-desliza var(--d-modal) var(--ease);
+}
+@keyframes prm-desliza { from { transform: translateX(var(--s-6)); opacity: 0; } to { transform: none; opacity: 1; } }
+.prm-gaveta__cab { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); padding: var(--s-4) var(--s-5); border-bottom: 1px solid var(--prm-linha); }
+.prm-gaveta__cab h2 { font-size: var(--t-corpo-g); margin: 0; }
+.prm-gaveta__corpo { overflow-y: auto; overscroll-behavior: contain; padding: 0 var(--s-5); }
+.prm-gaveta__rodape { padding: var(--s-3) var(--s-5); border-top: 1px solid var(--prm-linha); }
+@media (max-width: 767px) { .prm-gaveta { width: 100vw; border-left: 0; } }
+
+.prm-filtros { display: flex; gap: var(--s-2); overflow-x: auto; padding: var(--s-3) var(--s-5); border-bottom: 1px solid var(--prm-linha); scrollbar-width: none; }
+.prm-filtro {
+  flex: none; min-height: 36px; padding: 0 var(--s-3); border-radius: var(--r-sm); border: 1px solid var(--prm-campo-borda);
+  background: transparent; color: var(--texto); font: 500 var(--t-legenda)/1 var(--sans); cursor: pointer;
+}
+.prm-filtro[aria-pressed="true"] { background: var(--texto); border-color: var(--texto); color: var(--prm-superficie); }
+@media (pointer: coarse) { .prm-filtro { min-height: var(--prm-toque); } }
+
+.prm-aviso-item {
+  display: grid; grid-template-columns: 8px minmax(0, 1fr); gap: var(--s-3); padding: var(--s-4) 0;
+  border-bottom: 1px solid var(--prm-linha); color: inherit; text-decoration: none;
+}
+.prm-aviso-item:hover { text-decoration: none; background: var(--prm-superficie-2); }
+.prm-aviso-item::before { content: ""; width: 8px; height: 8px; margin-top: 7px; border-radius: 50%; background: transparent; }
+.prm-aviso-item[data-lido="false"]::before { background: var(--ouro); box-shadow: 0 0 0 1px var(--texto); }
+.prm-aviso-item[data-lido="false"] .prm-aviso-item__titulo { font-weight: 600; }
+.prm-aviso-item__titulo { color: var(--texto); }
+.prm-aviso-item__texto { font-size: var(--t-pequeno); color: var(--prm-texto-apoio); }
+.prm-aviso-item__quando { font: 400 var(--t-legenda)/1.4 var(--mono); color: var(--prm-texto-apoio); }
+.prm-aviso-grupo { padding: var(--s-4) 0 var(--s-1); }
+
+/* ---------------------------------------------------------------- 13. modal de confirmação */
+.prm-modal {
+  position: fixed; z-index: 52; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(520px, calc(100vw - 2 * var(--s-4))); max-height: calc(100vh - 2 * var(--s-6)); overflow-y: auto;
+  padding: var(--s-5); border-radius: var(--r-lg); background: var(--prm-superficie);
+  border: 1px solid var(--prm-linha); box-shadow: var(--prm-sombra);
+}
+.prm-modal h2 { font-size: var(--t-h4); }
+@media (max-width: 767px) {
+  .prm-modal { top: auto; bottom: 0; left: 0; transform: none; width: 100vw; border-radius: var(--r-xl) var(--r-xl) 0 0;
+               padding-bottom: calc(var(--s-5) + env(safe-area-inset-bottom)); }
+}
+
+/* ---------------------------------------------------------------- 14. tabela densa (visão da Save) */
+.prm-tabela { overflow-x: auto; border: 1px solid var(--prm-linha); border-radius: var(--r-md); background: var(--prm-superficie); }
+.prm-tabela table { min-width: 640px; }
+.prm-tabela th[aria-sort] { cursor: pointer; }
+.prm-tabela tbody tr:hover { background: var(--prm-superficie-2); }
+.prm-tabela td.num, .prm-tabela th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+/* No celular, a visão da Save troca tabela por lista de cartões (.prm-lista) em vez de rolar de lado. */
+@media (max-width: 767px) { .prm-tabela--vira-lista { display: none; } }
+.prm-so-celular { display: none; }
+@media (max-width: 767px) { .prm-so-celular { display: block; } .prm-so-desktop { display: none; } }
+
+/* barra de filtros e busca da visão da Save */
+.prm-barra-filtro { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; margin-bottom: var(--s-4); }
+.prm-barra-filtro .prm-campo__entrada { width: auto; flex: 1 1 240px; }
+
+/* ---------------------------------------------------------------- 15. movimento e impressão */
+@media (prefers-reduced-motion: reduce) {
+  .prm *, .prm *::before, .prm *::after { animation: none !important; transition: none !important; }
+}
+@media print {
+  .prm-nav-m, .prm-menu, .prm-topo__acoes, .prm-toasts, .prm-acoes { display: none !important; }
+  .prm-casca { grid-template-columns: 1fr; }
+  .prm-cartao { break-inside: avoid; box-shadow: none; }
+}
