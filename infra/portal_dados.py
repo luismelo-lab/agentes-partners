@@ -393,6 +393,7 @@ def para_time(d, D):
     for r in D["rotinas"]: r["links"] = limpa(r["links"])
     for p in D["pessoas"]:
         if p["chave"] not in TIME: p["url"] = p["plano_url"] = ""; p["pasta"] = aviso if p["chave"] == "luis" else p["pasta"]
+    d.pop("entregas", None)
     D["perfil"] = "time"
     return d, D
 
@@ -407,6 +408,10 @@ def main():
     d["pastas_web"] = {p["chave"]: {"url": p["url"], "plano_url": p["plano_url"]} for p in D["pessoas"] if p["url"]}
     d["arquivos_dia"] = arquivos_dia()
     d["janelas"] = janelas()
+    try:  # sentinela das entregas (infra/entregas_esperadas.py): o que não saiu hoje e falhas de rotina, no topo do painel do Luis
+        d["entregas"] = json.load(open(os.path.join(os.path.expanduser("~/agentes-partners"), "registro", "entregas-faltando.json")))
+    except Exception:
+        d["entregas"] = {"faltando": [], "falhas_hoje": []}
     if PERFIL == "time": d, D = para_time(d, D)
     os.makedirs(SAIDA, exist_ok=True)
     json.dump(d, open(os.path.join(SAIDA, "dados.json"), "w"), ensure_ascii=False, indent=1)

@@ -562,6 +562,14 @@ function painelApont(p) {
       <label style="display:flex;gap:10px;align-items:center;font-weight:400"><input id="a-ponte" type="checkbox" style="width:20px;min-height:20px"> Foi só ponte (receber, repassar, cobrar ou devolver)</label>
       <div class="acoes"><button class="btn sec" type="submit" ${Fonte.pode() ? "" : "disabled"}>Registrar</button></div></form></details>`;
 }
+/* Sentinela das entregas (infra/entregas_esperadas.py, 26/10/2026): o que não saiu hoje e falhas de rotina, no topo da mesa do Luis. */
+function avisoEntregas() {
+  const E = (S.D && S.D.entregas) || {}, f = E.faltando || [], x = E.falhas_hoje || [];
+  if (!f.length && !x.length) return "";
+  const itens = f.map(i => `<li><b>${esc(i.nome)}</b> não saiu até agora (esperada desde as ${esc(i.desde)}). ${i.tipo === "script" ? (i.reparo === "falhou de novo" ? "A nova tentativa automática também falhou." : "Nova tentativa automática em andamento.") : "A Central refaz na próxima rodada."}</li>`).join("")
+    + x.map(l => `<li>${esc(l)}</li>`).join("");
+  return `<section class="painel aviso-entregas" role="status" style="border-color:var(--ouro);margin-bottom:16px"><div class="painel-cab"><h2>Entregas atrasadas hoje</h2><span class="sub">conferido às ${esc(E.hora || "")}</span></div><ul style="margin:0;padding:8px 20px 14px 36px;display:grid;gap:6px">${itens}</ul></section>`;
+}
 function mesaLuis() {
   const M = S.M, ps = M.pedidos, dn = M.demandasNum, itens = itensAcao("luis"), time = M.perfil === "time";
   const hj = new Date(hoje() + "T12:00");
@@ -578,6 +586,7 @@ function mesaLuis() {
     return {k, ap, uso, foco, resp: dn[k]?.responder || 0} });
   const mx = Math.max(1, ...linhasTime.map(x => x.uso));
   return cab(dataLonga(), `${saudacao()}, Luis`, time ? "Esta é a Central do time. As suas decisões ficam no seu painel próprio; aqui você acompanha os pedidos, as demandas e as janelas de receita." : "Aqui fica só o que é da sua alçada: regra, preço, meta, remuneração, produto em validação e material em escala. Chamados, lotes e listas são decididos por quem é dona da entrega.", `${time ? "" : `<a class="btn sec" href="#decisoes">Ver decisões</a>`}<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`, true)
+  + avisoEntregas()
   + `<div class="kpis">${time ? kpi({r: "Decisões suas", v: "—", s: "ficam no seu painel próprio", tag: "alçada", tagForte: true}) : kpi({r: "Decisões suas", v: totalDecisoes(), s: "regra, preço, meta e produto em validação", go: "decisoes", dest: true, tag: "alçada", tagForte: true, sp: spark(serie(M.decisoes.map(d => d.data), 8, 7), "Decisões pendentes por semana de registro, últimas 8 semanas")})}
       ${kpi({r: "Pedidos em andamento", v: nf + na + nap, s: `${nf} na fila · ${na} em análise · ${nap} para aprovar`, go: "pedidos", tag: "14 dias", sp: spark(serie(ps.map(p => p.criado_em)), "Pedidos abertos por dia nos últimos 14 dias")})}
       ${kpi({r: "Janela mais próxima", v: prox ? prox.d + "d" : "—", s: prox ? esc(prox.j.janela) : "sem janela com data", tag: prox ? data(prox.j.prazo) : "", tagForte: prox && prox.d <= 14, dest: prox && prox.d <= 14})}
