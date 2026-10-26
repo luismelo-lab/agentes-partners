@@ -18,13 +18,14 @@ import json, logging, math, os, subprocess, sys, threading, time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 
-sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from .caminhos import dados as _dados, preparar_lib  # noqa: E402  (L5: caminhos por variável)
+preparar_lib()
 from cnpj import cnpj_valido, completar_cnpj  # noqa: E402
 from . import negocio_ativo  # noqa: E402
 
 log = logging.getLogger("central_api.regime")
 
-BASE = os.path.expanduser(os.environ.get("CENTRAL_RECEITA", "~/agentes-partners/dados-publicos/receita"))  # só a trilha de auditoria
+BASE = os.path.expanduser(os.environ.get("CENTRAL_RECEITA") or str(_dados() / "dados-publicos/receita"))  # só a trilha de auditoria
 LIMITE_LOTE = 20
 LIMITE_DIA = int(os.environ.get("CENTRAL_LIMITE_DIA", "200"))
 LIMITE_ATIVO = int(os.environ.get("CENTRAL_LIMITE_ATIVO", "10"))  # acertos "negócio ativo" por usuário por dia (anti-enumeração da base)
@@ -144,21 +145,32 @@ def publico(r):
     return {k: v for k, v in r.items() if not str(k).startswith("_")}
 
 
-def consultar(entrada, faturamento=None):
+# Fonte local de teste (modo local do PRM, dados fictícios): função cnpj -> resposta no formato do Minha Receita, ou None.
+# Fica None em produção; o servidor local do PRM a liga só com fixtures (central_api/prm/fixtures).
+FONTE_LOCAL = None
+
+
+def consultar(entrada, faturamento=None, protegido=None):
+    """`protegido`: função cnpj -> True/False/None da regra única de cliente protegido (PRM, U1/L14). Sem ela,
+    vale a 1ª checagem do índice (negocio_ativo.tem_negocio_ativo), como antes."""
     cnpj = completar_cnpj(str(entrada or ""))
     saida = {"cnpj": cnpj, "faixa": "invalido", "titulo": "CNPJ inválido", "fonte": None, "ano_base": None, "empresa": None}
     if not cnpj_valido(cnpj):
         saida["detalhe"] = "Confira os 14 caracteres e os dois dígitos finais."
         return saida
-    ativo = negocio_ativo.tem_negocio_ativo(cnpj)  # 1ª checagem: cliente Save nunca é enviado a serviço externo
+    ativo = (protegido or negocio_ativo.tem_negocio_ativo)(cnpj)  # 1ª checagem: cliente Save nunca é enviado a serviço externo
     if ativo is None:
         return neutra(cnpj, "indice_ausente")
     if ativo:
-        return neutra(cnpj, "negocio_ativo")
-    if os.environ.get("CENTRAL_API_EXTERNA", "1") != "1":
+        return neutra(cnpj, ativo if isinstance(ativo, str) else "negocio_ativo")
+    local = FONTE_LOCAL(cnpj) if FONTE_LOCAL else None
+    if local is not None:
+        dados, fonte, motivo = local, "Base de teste (fictícia)", None
+    elif os.environ.get("CENTRAL_API_EXTERNA", "1") != "1":
         saida.update(faixa="indisponivel", titulo="Consulta externa desligada", detalhe="A consulta a APIs externas está desligada neste ambiente.")
         return saida
-    dados, fonte, motivo = _buscar(cnpj)
+    else:
+        dados, fonte, motivo = _buscar(cnpj)
     if dados is not None:
         dados = _sanear(dados)
     if dados is None:

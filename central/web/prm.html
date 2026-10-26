@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PRM Save</title>
+  <link rel="stylesheet" href="save.css">
+  <link rel="stylesheet" href="prm-componentes.css">
+  <link rel="stylesheet" href="prm.css">
+</head>
+<body class="prm">
+  <a class="prm-pular" href="#conteudo" id="pular">Pular para o conteúdo</a>
+  <div id="app" class="prm-raiz" aria-busy="true">
+    <main class="prm-login" id="conteudo" tabindex="-1">
+      <p class="prm-texto-apoio">Carregando…</p>
+    </main>
+  </div>
+  <div id="anuncio" class="prm-so-leitor" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div id="toasts" class="prm-toasts" role="status" aria-live="polite"></div>
+  <script src="vendor/msal-browser-5.24.0.min.js"></script>
+  <script src="config.js"></script>
+  <script src="prm.js"></script>
+</body>
+</html>

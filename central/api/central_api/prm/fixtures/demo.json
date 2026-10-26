@@ -1,0 +1,130 @@
+{
+ "_nota": "Dados FICTÍCIOS para a demonstração e os testes do PRM (nada real). CNPJs alfanuméricos de teste: só a raiz e a ordem ficam aqui; o dígito verificador é calculado na carga (lib/cnpj.py), para nenhum CNPJ completo morar no repositório. Datas em dias relativos a hoje (negativo = passado). Percentuais dos termos são de teste.",
+ "parceiros": [
+  {"parceiro_id": "P-0001", "nome_exibicao": "Master A", "tipo": "master", "etapa_jornada": "master", "vigencia": true},
+  {"parceiro_id": "P-0002", "nome_exibicao": "Master B", "tipo": "master", "etapa_jornada": "master"},
+  {"parceiro_id": "P-0003", "nome_exibicao": "Master C", "tipo": "master", "etapa_jornada": "master"},
+  {"parceiro_id": "P-0004", "nome_exibicao": "Master D", "tipo": "master", "etapa_jornada": "master"},
+  {"parceiro_id": "P-0005", "nome_exibicao": "Master E", "tipo": "master", "etapa_jornada": "master"},
+  {"parceiro_id": "P-0006", "nome_exibicao": "Master F", "tipo": "master", "etapa_jornada": "master"},
+  {"parceiro_id": "P-0007", "nome_exibicao": "Master G", "tipo": "master", "etapa_jornada": "master"},
+  {"parceiro_id": "P-0008", "nome_exibicao": "Master H", "tipo": "master", "etapa_jornada": "master"},
+  {"parceiro_id": "P-0009", "nome_exibicao": "Master I", "tipo": "master", "etapa_jornada": "master"},
+  {"parceiro_id": "P-0010", "nome_exibicao": "Consultor A1", "tipo": "consultor", "master_id": "P-0001", "etapa_jornada": "certificado"},
+  {"parceiro_id": "P-0011", "nome_exibicao": "Consultor A2", "tipo": "consultor", "master_id": "P-0001", "etapa_jornada": "registrado"},
+  {"parceiro_id": "P-0012", "nome_exibicao": "Consultor B1", "tipo": "consultor", "master_id": "P-0002", "etapa_jornada": "registrado"},
+  {"parceiro_id": "P-0013", "nome_exibicao": "Indicador X", "tipo": "indicador", "master_id": "P-0003", "etapa_jornada": "registrado"}
+ ],
+ "usuarios": [
+  {"usuario_id": "U-0001", "parceiro_id": "P-0001", "nome": "Titular do Master A", "papel": "titular", "estado": "ativo", "email": "titular.a@example.com", "termos": true},
+  {"usuario_id": "U-0002", "parceiro_id": "P-0001", "consultor_parceiro_id": "P-0010", "nome": "Consultor A1", "papel": "consultor", "estado": "ativo", "email": "consultor.a1@example.com", "termos": false},
+  {"usuario_id": "U-0003", "parceiro_id": "P-0002", "nome": "Titular do Master B", "papel": "titular", "estado": "ativo", "email": "titular.b@example.com", "termos": true},
+  {"usuario_id": "U-0004", "parceiro_id": "P-0001", "consultor_parceiro_id": "P-0011", "nome": "Consultor A2", "papel": "consultor", "estado": "ativo", "email": "consultor.a2@example.com", "termos": true}
+ ],
+ "usuarios_login_simulado": ["U-0001", "U-0002", "daniela", "luis", "financeiro"],
+ "termos": [
+  {"parceiro_id": "P-0001", "percentual_recuperacao": 0.25, "vigencia_ini": -400},
+  {"parceiro_id": "P-0002", "percentual_recuperacao": 0.25},
+  {"parceiro_id": "P-0003", "percentual_recuperacao": 0.25}
+ ],
+ "empresas": {
+  "01": {"raiz": "TESTE001", "nome": "Empresa 01 Panificação Ltda", "uf": "SP", "cnae": "1091102", "cnae_desc": "Fabricação de produtos de padaria", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "02": {"raiz": "TESTE002", "nome": "Empresa 02 Supermercados Ltda", "uf": "MG", "cnae": "4711302", "cnae_desc": "Comércio varejista de mercadorias - supermercados", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "03": {"raiz": "TESTE003", "nome": "Empresa 03 Transportes Ltda", "uf": "PR", "cnae": "4930202", "cnae_desc": "Transporte rodoviário de carga", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "04": {"raiz": "TESTE004", "nome": "Empresa 04 Alimentos S.A.", "uf": "GO", "cnae": "1011201", "cnae_desc": "Frigorífico - abate de bovinos", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "05": {"raiz": "TESTE005", "nome": "Empresa 05 Confecções Ltda", "uf": "SC", "cnae": "1412601", "cnae_desc": "Confecção de peças do vestuário", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "06": {"raiz": "TESTE006", "nome": "Empresa 06 Distribuidora Ltda", "uf": "SP", "cnae": "4639701", "cnae_desc": "Comércio atacadista de produtos alimentícios", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "07": {"raiz": "TESTE007", "nome": "Empresa 07 Serviços Ltda", "uf": "RJ", "cnae": "8211300", "cnae_desc": "Serviços combinados de escritório", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "08": {"raiz": "TESTE008", "nome": "Empresa 08 Logística Ltda", "uf": "BA", "cnae": "5211701", "cnae_desc": "Armazéns gerais", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "09": {"raiz": "TESTE009", "nome": "Empresa 09 Comércio Ltda", "uf": "PE", "cnae": "4789099", "cnae_desc": "Comércio varejista de outros produtos", "porte": "DEMAIS", "regime": "LUCRO REAL", "situacao": "BAIXADA"},
+  "10": {"raiz": "TESTE010", "nome": "Empresa 10 Padaria ME", "uf": "RS", "cnae": "1091102", "cnae_desc": "Fabricação de produtos de padaria", "porte": "MICRO EMPRESA", "regime": null, "simples": true},
+  "11": {"raiz": "TESTE011", "nome": "Empresa 11 Metalúrgica Ltda", "uf": "SP", "cnae": "2599399", "cnae_desc": "Fabricação de outros produtos de metal", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "12": {"raiz": "TESTE012", "nome": "Empresa 12 Agro Ltda", "uf": "MT", "cnae": "0115600", "cnae_desc": "Cultivo de soja", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "13": {"raiz": "TESTE013", "nome": "Empresa 13 Engenharia Ltda", "uf": "DF", "cnae": "7112000", "cnae_desc": "Serviços de engenharia", "porte": "DEMAIS", "regime": "LUCRO PRESUMIDO"},
+  "14": {"raiz": "TESTE014", "nome": "Empresa 14 Têxtil Ltda", "uf": "CE", "cnae": "1321900", "cnae_desc": "Tecelagem de fios de algodão", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "15": {"raiz": "TESTE015", "nome": "Empresa 15 Plásticos Ltda", "uf": "SP", "cnae": "2222600", "cnae_desc": "Fabricação de embalagens de material plástico", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "16": {"raiz": "TESTE016", "nome": "Empresa 16 Química Ltda", "uf": "RJ", "cnae": "2029100", "cnae_desc": "Fabricação de produtos químicos orgânicos", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "17": {"raiz": "TESTE017", "nome": "Empresa 17 Cerâmica Ltda", "uf": "SC", "cnae": "2342702", "cnae_desc": "Fabricação de produtos cerâmicos", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "18": {"raiz": "TESTE018", "nome": "Empresa 18 Bebidas Ltda", "uf": "GO", "cnae": "1122401", "cnae_desc": "Fabricação de refrigerantes", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "19": {"raiz": "TESTE019", "nome": "Empresa 19 Móveis Ltda", "uf": "PR", "cnae": "3101200", "cnae_desc": "Fabricação de móveis de madeira", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "20": {"raiz": "TESTE020", "nome": "Empresa 20 Embalagens Ltda", "uf": "SP", "cnae": "1731100", "cnae_desc": "Fabricação de embalagens de papel", "porte": "DEMAIS", "regime": "LUCRO REAL"},
+  "21": {"raiz": "TESTE021", "nome": "Empresa 21 Hotelaria Ltda", "uf": "BA", "cnae": "5510801", "cnae_desc": "Hotéis", "porte": "DEMAIS", "regime": "LUCRO REAL"}
+ },
+ "cenarios_cnpj": {
+  "06": "livre: registro recebido (M-01) e aprovação pela Daniela",
+  "13": "livre, Lucro Presumido",
+  "07": "cliente da Save (negócio de venda direta): consulta neutra; registro recebe o mesmo M-01",
+  "21": "cliente da Save só no índice HMAC (fora do espelho): mesma resposta neutra",
+  "08": "registro vivo de outro parceiro (Master B): mesmo M-01; a Save vê 'outro canal'",
+  "09": "empresa baixada na Receita: só registramos empresas ativas",
+  "10": "Simples Nacional: não é Lucro Real",
+  "01": "já é seu (registro do Titular do Master A)"
+ },
+ "negocios": [
+  {"deal_id": "9100000003", "empresa": "03", "parceiro_id": "P-0001", "master_id": "P-0001", "pipeline": "RT - Real & Presumido", "etapa": "Em Diagnóstico", "status": "aberto", "criado": -35, "entrou_etapa": -12, "ultima_atividade": -3, "valor_credito": 650000},
+  {"deal_id": "9100000004", "empresa": "04", "parceiro_id": "P-0010", "master_id": "P-0001", "pipeline": "RT - Real & Presumido", "etapa": "Negócio Fechado", "status": "ganho", "criado": -150, "fechado": -60, "valor_credito": 800000, "honorario_pct": 0.2, "parceiro_pct_card": 0.25},
+  {"deal_id": "9100000005", "empresa": "05", "parceiro_id": "P-0001", "master_id": "P-0001", "pipeline": "RT - Real & Presumido", "etapa": "Apresentação de Diagnóstico", "status": "aberto", "criado": -90, "entrou_etapa": -9, "ultima_atividade": -9, "valor_credito": 420000},
+  {"deal_id": "9100000007", "empresa": "07", "parceiro_id": null, "master_id": null, "pipeline": "RT - Real & Presumido", "etapa": "Negociação", "status": "aberto", "criado": -40, "entrou_etapa": -5, "valor_credito": 300000},
+  {"deal_id": "9100000012", "empresa": "12", "parceiro_id": "P-0002", "master_id": "P-0002", "pipeline": "RT - Real & Presumido", "etapa": "Negócio Fechado", "status": "ganho", "criado": -200, "fechado": -100, "valor_credito": 1200000, "honorario_pct": 0.2, "parceiro_pct_card": 0.25},
+  {"deal_id": "9100000014", "empresa": "14", "parceiro_id": "P-0001", "master_id": "P-0001", "pipeline": "RT - Real & Presumido", "etapa": "Negócio Perdido", "status": "perdido", "criado": -80, "fechado": -30, "valor_credito": 150000},
+  {"deal_id": "9100000015", "empresa": "15", "parceiro_id": "P-0003", "master_id": "P-0003", "pipeline": "RT - Real & Presumido", "etapa": "Em Contato", "status": "aberto", "criado": -20, "entrou_etapa": -20, "valor_credito": 250000},
+  {"deal_id": "9100000017", "empresa": "17", "parceiro_id": "P-0010", "master_id": "P-0001", "pipeline": "RT - Real & Presumido", "etapa": "Negócio Fechado", "status": "ganho", "criado": -320, "fechado": -200, "valor_credito": 500000, "honorario_pct": 0.2, "parceiro_pct_card": 0.25},
+  {"deal_id": "9100000018", "empresa": "18", "parceiro_id": "P-0001", "master_id": "P-0001", "pipeline": "RT - Real & Presumido", "etapa": "Negócio Fechado", "status": "ganho", "criado": -260, "fechado": -120, "valor_credito": 900000, "honorario_pct": null, "parceiro_pct_card": 0.25},
+  {"deal_id": "9100000019", "empresa": "19", "parceiro_id": "P-0001", "master_id": "P-0001", "pipeline": "RT - Real & Presumido", "etapa": "Negócio Fechado", "status": "ganho", "criado": -400, "fechado": -300, "valor_credito": 300000, "honorario_pct": 0.2, "parceiro_pct_card": 0.25},
+  {"deal_id": "9100000020", "empresa": "20", "parceiro_id": "P-0011", "master_id": "P-0001", "pipeline": "RT - Real & Presumido", "etapa": "Negócio Fechado", "status": "ganho", "criado": -240, "fechado": -150, "valor_credito": 700000, "honorario_pct": 0.2, "parceiro_pct_card": 0.25}
+ ],
+ "indice_extra": ["21"],
+ "registros": [
+  {"chave": "R1", "empresa": "01", "usuario_id": "U-0001", "estado": "aprovado", "carimbo": -110, "interesse": "recuperacao", "checagem": "livre", "decidido": -109},
+  {"chave": "R2", "empresa": "02", "usuario_id": "U-0002", "estado": "em_analise", "carimbo": -2, "interesse": "recuperacao", "checagem": "livre"},
+  {"chave": "R3", "empresa": "03", "usuario_id": "U-0001", "estado": "convertido", "carimbo": -40, "interesse": "recuperacao", "checagem": "livre", "decidido": -39, "deal_id": "9100000003"},
+  {"chave": "R4", "empresa": "04", "usuario_id": "U-0002", "estado": "protegido_cliente", "carimbo": -160, "interesse": "recuperacao", "checagem": "livre", "decidido": -159, "deal_id": "9100000004"},
+  {"chave": "R5", "empresa": "11", "usuario_id": "U-0004", "estado": "aprovado", "carimbo": -20, "interesse": "passivo", "checagem": "livre", "decidido": -19},
+  {"chave": "R6", "empresa": "08", "usuario_id": "U-0003", "estado": "aprovado", "carimbo": -15, "interesse": "recuperacao", "checagem": "livre", "decidido": -14},
+  {"chave": "R7", "empresa": "15", "usuario_id": "U-0001", "estado": "em_conflito", "carimbo": -5, "interesse": "recuperacao", "checagem": "outro_parceiro", "conflito": true},
+  {"chave": "R8", "empresa": "14", "usuario_id": "U-0001", "estado": "encerrado_sem_contrato", "carimbo": -85, "interesse": "recuperacao", "checagem": "livre", "decidido": -84, "deal_id": "9100000014", "encerrado": -30},
+  {"chave": "R9", "empresa": "16", "usuario_id": "U-0001", "estado": "aguardando_parceiro", "carimbo": -1, "interesse": "planejamento", "checagem": "livre", "pergunta": "Qual a data da reunião marcada com o sócio da empresa?", "complemento_ate": 2}
+ ],
+ "pendencias": [
+  {"deal_id": "9100000005", "tipo": "documento", "texto": "ECF e EFD-Contribuições dos últimos 5 anos", "aberta": -9}
+ ],
+ "extrato_linhas": [
+  {"deal_id": "9100000004", "estado": "previsto", "percentual": 0.25},
+  {"deal_id": "9100000018", "estado": "em_conferencia", "motivo": "C01 % honorário vazio"},
+  {"deal_id": "9100000017", "estado": "previsto", "percentual": 0.25},
+  {"deal_id": "9100000019", "estado": "previsto", "percentual": 0.25},
+  {"deal_id": "9100000020", "estado": "previsto", "percentual": 0.25},
+  {"deal_id": "9100000012", "estado": "previsto", "percentual": 0.25}
+ ],
+ "movimentos": [
+  {"deal_id": "9100000019", "passos": [["recebimento", "recebido_pela_save", -70, {"base_recebida": 20000.0, "competencia_recebimento": "M-2", "recebimento_por": "financeiro:outra"}],
+                                      ["calculo", "calculado", -64, {"percentual_aplicado": 0.25, "valor_bruto": 5000.0}],
+                                      ["liberacao", "liberado", -60, {"contestacao_ate": -50, "nf_limite": "15", "dia_pagamento": "20"}],
+                                      ["publicacao", "aguardando_nf", -60, {}],
+                                      ["pagamento", "pago", -40, {"nf_numero": "1023", "pago_em": -40, "valor_liquido": 4925.0, "retencoes_texto": "Imposto de Renda retido (IRRF) R$ 75,00", "retencoes_lista": [{"nome": "Imposto de Renda retido (IRRF)", "valor": "R$ 75,00"}]}]]},
+  {"deal_id": "9100000017", "passos": [["recebimento", "recebido_pela_save", -25, {"base_recebida": 30000.0, "competencia_recebimento": "M-1", "recebimento_por": "financeiro:outra"}],
+                                      ["calculo", "calculado", -20, {"percentual_aplicado": 0.25, "valor_bruto": 7500.0}],
+                                      ["liberacao", "liberado", -3, {"contestacao_ate": 7, "nf_limite": "15", "dia_pagamento": "20"}],
+                                      ["publicacao", "aguardando_nf", -3, {}]]},
+  {"deal_id": "9100000020", "passos": [["recebimento", "recebido_pela_save", -4, {"base_recebida": 24000.0, "competencia_recebimento": "M-0", "recebimento_por": "financeiro:outra"}],
+                                      ["calculo", "calculado", -1, {"percentual_aplicado": 0.25, "valor_bruto": 6000.0}]]}
+ ],
+ "conflitos": [
+  {"registro": "R7", "partes": ["P-0001", "P-0003"], "tipo": "registro_x_negocio", "severidade": "alta", "aberto": -4}
+ ],
+ "demandas": [
+  {"chave": "DM1", "usuario_id": "U-0001", "tipo": "status", "empresa_registro": "R3", "texto": "Como está o diagnóstico da Empresa 03? O cliente perguntou ontem.", "aberta": -2,
+   "resposta": "O diagnóstico está com o time técnico, que está lendo os documentos da empresa. Avisamos aqui quando houver novidade.", "respondida": -1},
+  {"chave": "DM2", "usuario_id": "U-0002", "tipo": "tecnica", "texto": "Uma empresa de transporte de carga no Lucro Real pode ter crédito de PIS e COFINS sobre pneus? Quero entender antes da reunião.", "aberta": -1},
+  {"chave": "DM3", "usuario_id": "U-0001", "tipo": "remuneracao", "texto": "Gostaria de entender como a remuneração do contrato da Empresa 04 vai aparecer no extrato.", "aberta": -14}
+ ],
+ "demanda_unica": [
+  {"demanda_id": "D-2026-0901", "origem": "WhatsApp", "canal": "whatsapp", "estado": "responder", "parceiro_id": "P-0002", "tipo_sla": "COM-STATUS", "aberta": -1},
+  {"demanda_id": "D-2026-0902", "origem": "E-mail-Central", "canal": "email", "estado": "acompanhar", "parceiro_id": "P-0004", "tipo_sla": null, "aberta": -3}
+ ],
+ "historico": [
+  {"pergunta": "Qual o status do diagnóstico da empresa? Como está o andamento?", "resposta": "O diagnóstico está com o time técnico. Assim que houver novidade, avisamos por aqui.", "data": "2026-10-20"},
+  {"pergunta": "Quais documentos preciso enviar para o diagnóstico da empresa?", "resposta": "Para o diagnóstico, o técnico pede a ECF e a EFD-Contribuições dos últimos 5 anos, enviadas pelo canal de sempre com a Área Partners.", "data": "2026-10-15"},
+  {"pergunta": "Como funciona a prorrogação do registro da empresa?", "resposta": "A prorrogação pode ser pedida nos 30 dias antes do vencimento, contando o avanço com a empresa. A Área Partners responde em 1 dia útil.", "data": "2026-10-22"}
+ ]
+}

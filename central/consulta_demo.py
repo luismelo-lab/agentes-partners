@@ -19,6 +19,7 @@ HOSTS = {"localhost:%d" % PORTA, "127.0.0.1:%d" % PORTA, "[::1]:%d" % PORTA}  # 
 with open(os.path.join(WEB, "staticwebapp.config.json"), encoding="utf-8") as _f:
     CAB = json.load(_f)["globalHeaders"]
 CAB = {k: v for k, v in CAB.items() if k != "Strict-Transport-Security"}
+CAB["Content-Security-Policy"] = CAB["Content-Security-Policy"].replace("; upgrade-insecure-requests", "")  # localhost é http
 CAB["Content-Security-Policy"] = CAB["Content-Security-Policy"].replace("connect-src 'self' https://login.microsoftonline.com", "connect-src 'self'")
 USUARIO = "demo-local"
 os.environ.setdefault("CENTRAL_APROVACAO", "autonoma")  # demo: entrega na hora (o auditor continua barrando promessa); a nuvem começa em "obrigatoria"

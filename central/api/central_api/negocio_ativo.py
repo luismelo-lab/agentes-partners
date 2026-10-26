@@ -18,11 +18,12 @@ Uso:  python3 negocio_ativo.py construir [--arquivo hubspot-AAAA-MM-DD.json]
 """
 import argparse, datetime, glob, hashlib, hmac, json, logging, os, secrets, sys, time, unicodedata
 
-sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from .caminhos import dados as _dados, preparar_lib  # noqa: E402  (L5: caminhos por variável)
+preparar_lib()
 from cnpj import cnpj_valido, normalizar_cnpj, raiz_cnpj  # noqa: E402
 
 log = logging.getLogger("central_api.negocio_ativo")
-DIR = os.path.expanduser(os.environ.get("CENTRAL_ESTEIRA", "~/agentes-partners/central-esteira"))
+DIR = os.path.expanduser(os.environ.get("CENTRAL_ESTEIRA") or str(_dados() / "central-esteira"))
 INDICE = os.path.join(DIR, "indice-negocios-ativos.json")
 STATUS_ATIVOS = {"aberto", "ganho"}
 STATUS_CONHECIDOS = STATUS_ATIVOS | {"perdido"}
@@ -187,7 +188,7 @@ def main():
         print("índice com %s raízes, %.1f dia(s) de idade (limite %d), fora do índice: %s" % (
             i.get("total"), idade, IDADE_MAX_DIAS, i.get("negocios_fora_do_indice")))
         sys.exit(1 if idade > IDADE_MAX_DIAS else 0)
-    f = a.arquivo or sorted(glob.glob(os.path.expanduser("~/agentes-partners/departamentos/resultados/dados/hubspot-*.json")))[-1]
+    f = a.arquivo or sorted(glob.glob(str(_dados() / "departamentos/resultados/dados/hubspot-*.json")))[-1]
     with open(f) as fh:
         dados = json.load(fh)
     idx = construir(dados["negocios"], dados.get("baixado_em"), os.path.basename(f))

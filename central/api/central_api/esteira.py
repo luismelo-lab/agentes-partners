@@ -17,7 +17,8 @@ Uso:  esteira.py fila | status --id E-0001 | publicar --id E-0001 --arquivo resu
 import argparse, fcntl, hashlib, json, logging, os, re, shutil, subprocess, sys, tempfile, time
 from pathlib import Path
 
-sys.path.insert(0, os.path.expanduser("~/agentes-partners/lib"))
+from .caminhos import dados as _dados, preparar_lib  # noqa: E402  (L5: caminhos por variável)
+preparar_lib()
 from cnpj import cnpj_valido, completar_cnpj  # noqa: E402
 from . import dossie as DS  # noqa: E402
 from . import dossie_base as DB  # noqa: E402
