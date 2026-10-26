@@ -13,8 +13,11 @@ CENTRAL_SCOPE (padrão Central.Acesso).
 """
 import json, os, threading, time, urllib.request
 
-import jwt
-from jwt import PyJWK
+try:
+    import jwt
+    from jwt import PyJWK
+except ImportError:  # sem PyJWT (ex.: CI só com a biblioteca padrão): nenhum token é aceito (falha fechada)
+    jwt = PyJWK = None
 
 LEEWAY = 60
 JWKS_TTL = 3600
@@ -57,6 +60,8 @@ class Chaves:
 
     def _atualizar(self):
         dados = self._buscar(self.url)
+        if PyJWK is None:
+            raise TokenInvalido("PyJWT ausente")
         self._chaves = {k["kid"]: PyJWK(k, algorithm="RS256").key for k in dados.get("keys", []) if k.get("kid") and k.get("kty") == "RSA"}
         self._quando = time.time()
 
@@ -80,6 +85,8 @@ def extrair_bearer(cabecalhos):
 
 def validar(token, cfg, chaves):
     """Devolve a identidade validada: {tipo, oid, nome, usuario, papeis, escopos}. Levanta TokenInvalido."""
+    if jwt is None:
+        raise TokenInvalido("PyJWT ausente")
     try:
         cab = jwt.get_unverified_header(token)
     except jwt.PyJWTError as e:

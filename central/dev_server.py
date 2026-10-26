@@ -8,7 +8,8 @@
                                                  (gerado pelo prm_local.py), sem fixtures
 
 No modo --prm não lê local.settings.json nem config.js (o login é o seletor de usuário de teste, que só existe aqui:
-PRM_LOGIN_SIMULADO=1 + Host localhost + fora da Azure). Estado da demo em <repositório>/registro/prm-demo/ (fora do git),
+PRM_LOGIN_SIMULADO=1 + Host de teste + fora da Azure; no GitHub Codespaces,
+CODESPACES=true libera o host exato do próprio codespace e o servidor ouve em 0.0.0.0). Estado da demo em <repositório>/registro/prm-demo/ (fora do git),
 refeito a cada início (use --manter para continuar de onde parou). Aplica os cabeçalhos do staticwebapp.config.json.
 """
 import argparse, http.server, json, os, sys
@@ -46,7 +47,15 @@ sys.path.insert(0, os.path.join(AQUI, "api"))
 from central_api import rotas  # noqa: E402
 
 PORTA = A.porta
+os.environ["PRM_PORTA"] = str(PORTA)
 HOSTS = {"localhost:%d" % PORTA, "127.0.0.1:%d" % PORTA, "[::1]:%d" % PORTA}
+# GitHub Codespaces: ouve em 0.0.0.0 (o encaminhamento de porta chega de fora do contêiner) e aceita só o host exato do
+# próprio codespace (CODESPACE_NAME + porta + domínio de encaminhamento). A porta fica privada no devcontainer.json.
+from central_api.prm.identidade import host_codespaces  # noqa: E402
+CODESPACE = host_codespaces(PORTA)
+if CODESPACE:
+    HOSTS |= {CODESPACE, CODESPACE + ":443"}
+ESCUTA = "0.0.0.0" if CODESPACE else "localhost"
 CAB = json.load(open(os.path.join(WEB, "staticwebapp.config.json")))["globalHeaders"]
 CAB = {k: v for k, v in CAB.items() if k != "Strict-Transport-Security"}  # localhost é http
 CAB["Content-Security-Policy"] = CAB["Content-Security-Policy"].replace("; upgrade-insecure-requests", "")  # idem
@@ -160,4 +169,6 @@ class H(http.server.SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     print(("PRM local em http://localhost:%d/prm.html" if PRM else "Central local em http://localhost:%d/") % PORTA, "(Ctrl+C para parar)")
-    http.server.ThreadingHTTPServer(("localhost", PORTA), H).serve_forever()
+    if CODESPACE:
+        print("Codespaces: https://%s/%s" % (CODESPACE, "prm.html" if PRM else ""))
+    http.server.ThreadingHTTPServer((ESCUTA, PORTA), H).serve_forever()

@@ -1,7 +1,7 @@
 // PRM Save v2 · as duas faces do mesmo site (05-design.md): parceiro (claro, barra inferior) e Save (escuro, seção Canal).
 // Sem biblioteca além do MSAL. Todo conteúdo entra por textContent (nunca innerHTML com dado). Quem decide acesso é a API.
 // Login: em produção, MSAL (Entra). No servidor local, seletor de usuário de teste — só quando /api/prm/dev/usuarios
-// responde, o que a API só faz em localhost com PRM_LOGIN_SIMULADO=1 e fora da Azure.
+// responde, o que a API só faz no servidor de teste (localhost ou o próprio Codespace) com PRM_LOGIN_SIMULADO=1 e fora da Azure.
 (function () {
   "use strict";
 
@@ -44,6 +44,7 @@
     livro: ["M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z", "M20 17v4H6.5"],
     nivel: ["M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12z", "M8.2 13.9 7 22l5-3 5 3-1.2-8.1"],
     chave: ["M15 7a4 4 0 1 1-4 4", "M11 11 3 19v2h3l1-1v-2h2v-2h2l1-1"],
+    funil: ["M3 4h18", "M6 9h12", "M9 14h6", "M11 19h2"],
   };
   function icone(nome) {
     const s = document.createElementNS(SVGNS, "svg");
@@ -150,14 +151,14 @@
   // ------------------------------------------------------------------ casca (topo, menu, barra inferior)
   const MENU_P = [
     ["inicio", "Início", "inicio", (c) => c.pedem_voce],
-    ["empresas", "Empresas", "empresas", (c) => c.precisa],
+    ["negocios", "Negócios", "funil", (c) => c.precisa],
     ["registrar", "Registrar", "registrar", null],
     ["pedidos", "Pedidos", "pedidos", (c) => c.respostas],
     ["extrato", "Extrato", "extrato", (c) => c.nf],
   ];
-  const MAIS_P = [["nivel", "Nível e jornada", "nivel"], ["biblioteca", "Biblioteca e Academia", "livro"], ["ajuda", "Ajuda e glossário", "info"]];
+  const MAIS_P = [["empresas", "Empresas e registros", "empresas"], ["nivel", "Nível e jornada", "nivel"], ["biblioteca", "Biblioteca e Academia", "livro"], ["ajuda", "Ajuda e glossário", "info"]];
   const MENU_S = [
-    ["canal", "Visão do canal", "canal"], ["canal/registros", "Registros", "lista"], ["canal/conflitos", "Conflitos", "alerta"],
+    ["canal", "Visão do canal", "canal"], ["canal/dashboard", "Dashboard comercial", "funil"], ["canal/negocios", "Negócios", "empresas"], ["canal/registros", "Registros", "lista"], ["canal/conflitos", "Conflitos", "alerta"],
     ["canal/demandas", "Demandas", "pedidos"], ["canal/extratos", "Extratos", "extrato"], ["canal/dossies", "Dossiês e esteira", "livro"],
     ["canal/acessos", "Acessos", "chave"], ["canal/niveis", "Níveis (em teste)", "nivel"], ["canal/parametros", "Parâmetros", "lista"],
   ];
@@ -191,7 +192,7 @@
       menu = h("nav", { class: "prm-menu", "aria-label": "Principal" },
         h("a", { class: "prm-btn prm-menu__principal", href: "#/registrar" }, icone("registrar"), "Registrar oportunidade"),
         MENU_P.filter((m) => m[0] !== "registrar").map(([k, n, ic, f]) => h("a", { class: "prm-menu__item", href: "#/" + k, "aria-current": ativa(k) ? "page" : null,
-          "aria-label": f ? nomeComContador(n, f(cont), k === "empresas" ? "pedem você" : k === "pedidos" ? "respostas novas" : k === "extrato" ? "pedem NF" : "pendências") : null },
+          "aria-label": f ? nomeComContador(n, f(cont), k === "negocios" ? "pedem você" : k === "pedidos" ? "respostas novas" : k === "extrato" ? "pedem NF" : "pendências") : null },
           icone(ic), n, f ? contador(f(cont)) : null)),
         h("div", { class: "prm-menu__grupo" }, rotulo("Programa")),
         MAIS_P.map(([k, n, ic]) => h("a", { class: "prm-menu__item", href: "#/" + k, "aria-current": ativa(k) ? "page" : null }, icone(ic), n)),
@@ -291,11 +292,12 @@
   // ------------------------------------------------------------------ rotas
   const ROTAS_P = [
     [/^inicio$/, vInicio], [/^registrar$/, vRegistrar], [/^empresas$/, vEmpresas], [/^empresas\/([0-9a-f]{16})$/, vFicha],
+    [/^negocios$/, vNegocios], [/^negocios\/([0-9a-f]{16})$/, vNegocio],
     [/^pedidos$/, vPedidos], [/^pedidos\/novo$/, vNovoPedido], [/^pedidos\/([0-9a-f]{16})$/, vPedido], [/^extrato$/, vExtrato],
     [/^avisos$/, vAvisosTela], [/^nivel$/, vNivel], [/^biblioteca$/, vBiblioteca], [/^ajuda$/, vAjuda], [/^mais$/, vMais],
   ];
   const ROTAS_S = [
-    [/^canal$/, sCanal], [/^canal\/registros$/, sRegistros], [/^canal\/registros\/(R-\d{4}-\d{6})$/, sRegistros], [/^canal\/conflitos$/, sConflitos],
+    [/^canal$/, sCanal], [/^canal\/dashboard$/, sDashboard], [/^canal\/negocios$/, sNegocios], [/^canal\/negocios\/(\d{1,20})$/, sNegocio], [/^canal\/registros$/, sRegistros], [/^canal\/registros\/(R-\d{4}-\d{6})$/, sRegistros], [/^canal\/conflitos$/, sConflitos],
     [/^canal\/demandas$/, sDemandas], [/^canal\/demandas\/(D-\d{4}-\d{4})$/, sDemandas], [/^canal\/extratos$/, sExtratos], [/^canal\/dossies$/, sDossies],
     [/^canal\/acessos$/, sAcessos], [/^canal\/niveis$/, sNiveis], [/^canal\/parametros$/, sParametros], [/^avisos$/, vAvisosTela], [/^canal\/mais$/, sMais],
   ];
@@ -348,7 +350,7 @@
     const escolher = (u) => { sessionStorage.setItem("prm-dev", u.id); S.dev = u.id; location.hash = u.face === "save" ? "#/canal" : "#/inicio"; iniciarSessao(); };
     app.append(h("main", { class: "prm-login", id: "conteudo", tabindex: "-1" },
       h("img", { src: "logo-save-fundo-claro.png", alt: "Save Co.", class: "prm-topo__logo" }),
-      h("div", { class: "prm-aviso prm-aviso--atencao" }, icone("alerta"), h("div", null, "Servidor local de teste, com dados fictícios. Este seletor só existe em localhost; em produção o login é pela conta Microsoft (Entra).")),
+      h("div", { class: "prm-aviso prm-aviso--atencao" }, icone("alerta"), h("div", null, "Servidor de teste, com dados fictícios. Este seletor só existe no servidor de teste (no computador ou no Codespace do time); em produção o login é pela conta Microsoft (Entra).")),
       h("div", { class: "prm-pilha--peq" }, h("h1", { class: "prm-titulo-secao" }, "Entrar como"),
         h("div", { class: "prm-login__opcoes" }, S.usuariosTeste.map((u) => h("button", { class: "prm-login__opcao", type: "button", onclick: () => escolher(u) },
           h("strong", null, u.nome), h("span", { class: "prm-texto-apoio" }, u.face === "save" ? "Save · " + u.papel : (u.escritorio || "") + " · " + u.papel))))),
@@ -452,12 +454,24 @@
   }
 
   // ================================================================== FACE DO PARCEIRO
-  async function vInicio(main) {
+  function abasInicio(main, atual) {
+    main.append(h("nav", { class: "prm-abas", "aria-label": "Início" }, [["resumo", "Resumo", "#/inicio"], ["painel", "Painel de vendas", "#/inicio?aba=painel"]].map(([k, n, go]) =>
+      h("a", { class: "prm-aba", href: go, "aria-current": k === atual ? "page" : null }, n))));
+  }
+
+  async function vInicio(main, _x, params) {
+    if (params && params.get("aba") === "painel") {
+      cab(main, "Painel de vendas", "Pipeline, conversão e resultados do seu escritório.");
+      abasInicio(main, "painel");
+      painelParceiro(main, params);
+      return;
+    }
     await carregar(main, "parceiro/inicio", (o) => {
       S.inicio = o;
       casca("inicio");  // contadores atualizados
       main = document.getElementById("conteudo");
       cab(main, "Olá, " + (o.nome || ""), null);
+      abasInicio(main, "resumo");
       if (!o.kpis.empresas && !o.pede_voce.length) {
         main.append(h("div", { class: "prm-vazio" }, h("h2", null, "Você ainda não registrou empresas"),
           h("p", null, "Comece pela que você conhece melhor: o registro leva poucos minutos e protege a sua indicação por um prazo."),
@@ -472,7 +486,7 @@
       const k = o.kpis;
       const kpi = (r, v, a, go) => h("a", { class: "prm-cartao prm-kpi prm-kpi-link", href: go }, h("span", { class: "prm-rotulo" }, r), h("span", { class: "prm-kpi__valor" }, String(v)), h("span", { class: "prm-kpi__apoio" }, a));
       const kpis = h("section", { "aria-label": "Resumo" }, h("div", { class: "prm-grade prm-grade--kpi" },
-        kpi("Pedem você", k.pedem_voce, "itens com ação sua", "#/empresas?aba=precisa_de_voce"), kpi("Em andamento", k.em_andamento, "de " + k.empresas + " empresas", "#/empresas?aba=andamento"),
+        kpi("Pedem você", k.pedem_voce, "itens com ação sua", "#/empresas?aba=precisa_de_voce"), kpi("Em andamento", k.em_andamento, "de " + k.empresas + " empresas", "#/negocios"),
         kpi("Registros válidos", k.registros_validos, "proteção em vigor", "#/empresas?aba=registros"), kpi("Respostas novas", k.respostas_novas, "dos seus pedidos", "#/pedidos")));
       const mudou = h("section", { class: "prm-cartao", "aria-labelledby": "t-mudou" }, h("h2", { id: "t-mudou" }, "O que mudou"),
         o.mudou.length ? h("ul", { class: "prm-lista" }, o.mudou.map((m) => h("li", { class: "prm-lista__item" }, h("div", null,
@@ -781,6 +795,7 @@
       main.append(lista, ...Object.values(paineis));
       // Andamento
       if (o.negocio) {
+        paineis.andamento.append(h("a", { class: "prm-btn prm-btn--sec", href: "#/negocios/" + o.negocio.ref }, "Ver o acompanhamento completo do negócio"));
         paineis.andamento.append(h("ol", { class: "prm-tempo" }, o.negocio.passos.map((p) => h("li", { class: "prm-tempo__passo", "data-estado": p.situacao, "aria-current": p.situacao === "atual" || p.situacao === "bloqueado" ? "step" : null },
           h("span", { class: "prm-tempo__titulo" }, p.titulo), h("span", { class: "prm-tempo__quando" }, { feito: "concluído", atual: "atual", bloqueado: "esperando você", futuro: "próximo" }[p.situacao])))),
           h("p", null, h("strong", null, "Próximo passo: "), o.negocio.proximo_passo));
@@ -1247,6 +1262,415 @@
       const [t, l] = tabela("Parâmetros do PRM", [{ t: "Chave", v: (p) => p.chave }, { t: "Valor", v: (p) => JSON.stringify(p.valor) }, { t: "Unidade", v: (p) => p.unidade }, { t: "Marca", v: (p) => p.marca }, { t: "Dona", v: (p) => p.quem_muda }], o.itens);
       main.append(t, l);
     });
+  }
+
+  // ================================================================== NEGÓCIOS, PAINEL DE VENDAS E DASHBOARD COMERCIAL (PRM-R113 a R118)
+  // Gráficos próprios em HTML (skill dataviz): barras finas com ponta arredondada, um eixo, dica no hover e no foco, legenda quando há
+  // mais de uma série, tabela alternativa em "Ver como tabela". Cor = rampa de ouro (--prm-serie-1..4) + cinza; estado nunca só por cor.
+  const reais = (v) => (v === null || v === undefined ? "—" : "R$ " + new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(v));
+  const reaisC = (v) => {
+    if (v === null || v === undefined) return "—";
+    const a = Math.abs(v);
+    if (a >= 1e6) return "R$ " + (v / 1e6).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + " mi";
+    if (a >= 1e3) return "R$ " + Math.round(v / 1e3).toLocaleString("pt-BR") + " mil";
+    return reais(v);
+  };
+  const pctTxt = (v) => (v === null || v === undefined ? "—" : String(v).replace(".", ",") + "%");
+  const fracTxt = (v) => (v === null || v === undefined ? "—" : (v * 100).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + "%");
+  const dataBR = (iso) => { if (!iso) return "—"; const p = String(iso).slice(0, 10).split("-"); return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : String(iso); };
+  const mono = (t) => h("span", { class: "prm-mono" }, t);
+  const nTxt = (n, um, varios) => n + " " + (n === 1 ? um : varios);
+
+  let dicaEl = null;
+  function dica(alvo, texto) {
+    const mostrar = (x, y) => {
+      if (!dicaEl) { dicaEl = h("div", { class: "prm-dica", role: "tooltip" }); document.body.append(dicaEl); }
+      dicaEl.textContent = texto; dicaEl.hidden = false;
+      const r = dicaEl.getBoundingClientRect();
+      dicaEl.style.left = Math.max(8, Math.min(window.innerWidth - r.width - 8, x + 12)) + "px";
+      dicaEl.style.top = Math.max(8, y - r.height - 12) + "px";
+    };
+    const esconder = () => { if (dicaEl) dicaEl.hidden = true; };
+    alvo.addEventListener("mousemove", (e) => mostrar(e.clientX, e.clientY));
+    alvo.addEventListener("mouseleave", esconder);
+    alvo.addEventListener("focus", () => { const r = alvo.getBoundingClientRect(); mostrar(r.left + r.width / 2, r.top); });
+    alvo.addEventListener("blur", esconder);
+    return alvo;
+  }
+  window.addEventListener("hashchange", () => { if (dicaEl) dicaEl.hidden = true; });
+
+  function tabelaAlt(cols, linhas) {
+    return h("details", { class: "prm-graf__tabela" }, h("summary", null, "Ver como tabela"),
+      h("table", null, h("thead", null, h("tr", null, cols.map((c) => h("th", { scope: "col", class: c.num ? "num" : null }, c.t)))),
+        h("tbody", null, linhas.map((l) => h("tr", null, cols.map((c, i) => i === 0 ? h("th", { scope: "row" }, c.v(l)) : h("td", { class: c.num ? "num" : null }, c.v(l))))))));
+  }
+
+  function legenda(series, meta) {
+    return h("ul", { class: "prm-legenda", "aria-label": "Legenda" }, series.map((s) => h("li", null, h("span", { class: "prm-legenda__amostra", "data-serie": String(s.serie) }), s.rotulo)),
+      meta ? h("li", null, h("span", { class: "prm-legenda__meta" }), meta) : null);
+  }
+
+  // barras horizontais; itens [{rotulo, valor (escala), texto (à direita), dica, serie, partes?[{valor, serie, rotulo}], aoClicar}]
+  function barras({ titulo, apoio: ap, itens, cols, series, vazio, idTitulo }) {
+    const max = Math.max(0, ...itens.map((i) => (i.partes ? i.partes.reduce((a, p) => a + (p.valor || 0), 0) : i.valor || 0)));
+    const id = idTitulo || uid("graf");
+    const corpo = itens.length && max > 0 ? h("div", { class: "prm-barras" }, itens.map((i) => {
+      const segs = (i.partes || [{ valor: i.valor, serie: i.serie || 2 }]).filter((p) => p.valor > 0)
+        .map((p) => h("span", { class: "prm-barras__barra", "data-serie": String(p.serie), estilo: { width: (100 * p.valor / max).toFixed(2) + "%" } }));
+      const filhos = [h("span", { class: "prm-barras__rotulo" }, i.rotulo), h("span", { class: "prm-barras__trilho", "aria-hidden": "true" }, segs), h("span", { class: "prm-barras__valor" }, i.texto)];
+      const el = i.aoClicar
+        ? h("button", { class: "prm-barras__linha", type: "button", onclick: i.aoClicar, "aria-label": i.rotulo + ": " + (i.dica || i.texto).replace(/\n/g, ", ") + ". Abrir a lista." }, filhos)
+        : h("div", { class: "prm-barras__linha", tabindex: "0", role: "group", "aria-label": i.rotulo + ": " + (i.dica || i.texto).replace(/\n/g, ", ") }, filhos);
+      return dica(el, i.rotulo + "\n" + (i.dica || i.texto));
+    })) : apoio(vazio || "Sem dados no período.");
+    return h("figure", { class: "prm-graf", "aria-labelledby": id }, h("figcaption", null, h("h3", { id }, titulo), ap ? apoio(ap) : null),
+      series && series.length > 1 ? legenda(series) : null, corpo, cols && itens.length ? tabelaAlt(cols, itens.map((i) => i.linha || i)) : null);
+  }
+
+  // colunas empilhadas por mês contra a meta (um eixo em R$)
+  function colunasMeta({ titulo, apoio: ap, meses, series, aoClicar }) {
+    const id = uid("graf");
+    const topo = Math.max(1, ...meses.map((m) => Math.max(m.meta || 0, series.reduce((a, s) => a + (m[s.chave] || 0), 0)))) * 1.08;
+    const area = h("div", { class: "prm-colunas__area", "aria-hidden": "true" }, meses.map((m) => {
+      const col = h("div", { class: "prm-colunas__col" }, series.filter((s) => m[s.chave] > 0).map((s) => dica(h("button", { class: "prm-colunas__seg", type: "button", tabindex: "-1",
+        "data-serie": String(s.serie), estilo: { height: (100 * m[s.chave] / topo).toFixed(2) + "%" }, onclick: () => aoClicar && aoClicar(m, s) }),
+        m.rotulo + " · " + s.rotulo + "\n" + reais(m[s.chave]) + (m["n_" + s.n] !== undefined ? " (" + nTxt(m["n_" + s.n], "negócio", "negócios") + ")" : ""))));
+      if (m.meta) col.append(h("span", { class: "prm-colunas__meta", estilo: { bottom: (100 * m.meta / topo).toFixed(2) + "%" } }));
+      return col;
+    }));
+    const eixo = h("div", { class: "prm-colunas__eixo", "aria-hidden": "true" }, h("span", null, reaisC(topo)), h("span", null, reaisC(topo / 2)), h("span", null, "0"));
+    const rotulos = h("div", { class: "prm-colunas__rotulos", "aria-hidden": "true" }, meses.map((m) => h("span", null, m.rotulo)));
+    const resumo = h("ul", { class: "prm-lista" }, meses.map((m) => h("li", { class: "prm-lista__item" },
+      h("div", null, h("div", { class: "prm-lista__titulo" }, m.rotulo), h("div", { class: "prm-lista__apoio" },
+        "Realizado " + reais(m.realizado) + (m.meta ? " de " + reais(m.meta) + " (" + pctTxt(m.pct_meta_realizado) + " da meta)" : ""))),
+      aoClicar ? h("button", { class: "prm-btn prm-btn--texto", type: "button", onclick: () => aoClicar(m, series[0]) }, "Ver ganhos") : null)));
+    return h("figure", { class: "prm-graf", "aria-labelledby": id }, h("figcaption", null, h("h3", { id }, titulo), ap ? apoio(ap) : null),
+      legenda(series, "Meta do mês"), h("div", { class: "prm-colunas" }, eixo, area, rotulos), resumo,
+      tabelaAlt([{ t: "Mês", v: (m) => m.rotulo }].concat(series.map((s) => ({ t: s.rotulo, v: (m) => reais(m[s.chave]), num: true })), [{ t: "Meta", v: (m) => reais(m.meta), num: true }]), meses));
+  }
+
+  function kpiComp(rot, valor, apoioTxt, comp, fmt, sentido) {
+    let delta = null;
+    if (comp && comp.delta !== null && comp.delta !== undefined && comp.anterior !== null) {
+      const d = comp.delta, txt = fmt ? fmt(Math.abs(d)) : String(Math.abs(d)).replace(".", ",");
+      delta = d === 0 ? "= igual ao anterior" : (d > 0 ? "▲ +" : "▼ −") + txt + " vs. anterior";
+    }
+    return h("div", { class: "prm-cartao prm-kpi" }, h("span", { class: "prm-rotulo" }, rot), h("span", { class: "prm-kpi__valor prm-kpi__valor--compacto prm-mono" }, valor),
+      apoioTxt ? h("span", { class: "prm-kpi__apoio" }, apoioTxt) : null, delta ? h("span", { class: "prm-kpi__delta" }, delta) : null);
+  }
+
+  const taxaTxt = (c) => (c.base_pequena ? "base pequena" : pctTxt(c.pct));
+  const SERIES_AGING = [{ serie: 1, rotulo: "até 15 dias" }, { serie: 2, rotulo: "16 a 30 dias" }, { serie: 3, rotulo: "31 a 60 dias" }, { serie: 4, rotulo: "mais de 60 dias" }];
+
+  function grafAging(ag, aoClicar) {
+    return barras({ titulo: "Tempo na etapa atual (negócios em andamento)", apoio: "Parado = mais de " + ag.limite_dias + " dias na mesma etapa.", series: SERIES_AGING,
+      itens: ag.por_estado.map((e) => ({ rotulo: e.rotulo, partes: e.faixas.map((f, i) => ({ valor: f.n, serie: i + 1 })), texto: nTxt(e.n, "negócio", "negócios"),
+        dica: e.faixas.map((f) => f.faixa + ": " + f.n).join("\n") + "\nParados: " + e.parados, aoClicar: aoClicar ? () => aoClicar(e) : null, linha: e })),
+      cols: [{ t: "Etapa", v: (e) => e.rotulo }].concat(ag.faixas.map((f, i) => ({ t: f, v: (e) => String(e.faixas[i].n), num: true })), [{ t: "Parados", v: (e) => String(e.parados), num: true }]) });
+  }
+
+  function grafFunil(f, apoioTxt) {
+    return barras({ titulo: "Funil de conversão", apoio: apoioTxt || ("Negócios que entraram no período (" + f.coorte + ") e até onde chegaram."),
+      itens: f.etapas.map((e) => ({ rotulo: e.rotulo, valor: e.n, serie: 2, texto: e.n + " · " + pctTxt(e.pct_do_inicio),
+        dica: e.n + " negócio(s) · " + pctTxt(e.pct_do_inicio) + " do início" + (e.pct_da_anterior !== undefined ? " · " + pctTxt(e.pct_da_anterior) + " da etapa anterior" : ""), linha: e })),
+      cols: [{ t: "Etapa", v: (e) => e.rotulo }, { t: "Negócios", v: (e) => String(e.n), num: true }, { t: "% do início", v: (e) => pctTxt(e.pct_do_inicio), num: true },
+        { t: "% da anterior", v: (e) => pctTxt(e.pct_da_anterior), num: true }], vazio: "Nenhum negócio entrou no período." });
+  }
+
+  function grafPipeline(pipe, comValor, aoClicar) {
+    return barras({ titulo: "Pipeline por etapa", apoio: comValor ? "Crédito estimado dos negócios em andamento. Barra = valor; texto = quantidade e valor." : "Negócios em andamento por etapa.",
+      itens: pipe.map((p) => ({ rotulo: p.rotulo, valor: comValor ? p.valor : p.n, serie: 2, texto: comValor ? p.n + " · " + reaisC(p.valor) : String(p.n),
+        dica: nTxt(p.n, "negócio", "negócios") + (comValor ? "\n" + reais(p.valor) + (p.sem_valor ? "\n" + p.sem_valor + " sem valor no CRM" : "") : ""),
+        aoClicar: aoClicar ? () => aoClicar(p) : null, linha: p })),
+      cols: [{ t: "Etapa", v: (p) => p.rotulo }, { t: "Negócios", v: (p) => String(p.n), num: true }].concat(comValor ? [{ t: "Crédito estimado", v: (p) => reais(p.valor), num: true },
+        { t: "Sem valor", v: (p) => String(p.sem_valor), num: true }] : []), vazio: "Nenhum negócio em andamento." });
+  }
+
+  function avisoRessalva(r) {
+    if (!r || !r.valor_credito) return null;
+    return h("div", { class: "prm-aviso prm-aviso--info" }, icone("info"), h("div", null, h("strong", null, "Valores: "), r.valor_credito + " Não há probabilidade de êxito nem prazo de restituição nesta tela."));
+  }
+
+  // ---------------- cartão de negócio (lista e quadro)
+  function cartaoNegocio(i, save, compacto) {
+    const go = save ? "#/canal/negocios/" + i.deal_id : "#/negocios/" + i.ref;
+    const meta = [];
+    if (i.etapa_crm) meta.push(h("span", null, "Etapa: " + i.etapa_crm));
+    if (i.dias_na_etapa !== null && i.dias_na_etapa !== undefined) meta.push(h("span", null, "há " + nTxt(i.dias_na_etapa, "dia", "dias") + " na etapa"));
+    if (!compacto) meta.push(h("span", null, i.produto));
+    if (i.valor_credito !== undefined) meta.push(h("span", null, "Crédito estimado* ", h("span", { class: "prm-neg__valor" }, i.valor_credito === null ? "sem valor no CRM" : reais(i.valor_credito))));
+    if (i.remuneracao_prevista) meta.push(h("span", null, "Remuneração prevista* ", h("span", { class: "prm-neg__valor" }, reais(i.remuneracao_prevista))));
+    if (i.previsao_fechamento_em) meta.push(h("span", null, "Previsão de assinatura: ", mono(dataBR(i.previsao_fechamento_em))));
+    if (i.fechado_em) meta.push(h("span", null, "Encerrado em ", mono(dataBR(i.fechado_em))));
+    if (save && i.master) meta.push(h("span", null, "Master: " + i.master));
+    if (i.consultor) meta.push(h("span", null, "Consultor: " + i.consultor));
+    const topo = h("div", { class: "prm-neg__topo" }, h("div", null, h("div", { class: "prm-lista__titulo" }, i.nome), h("div", { class: "prm-lista__apoio prm-mono" }, i.cnpj_mascara || "")),
+      h("div", { class: "prm-linha" }, i.parado ? h("span", { class: "prm-tag-parado" }, icone("alerta"), "Parado") : null, compacto ? null : chip(i.rotulo, i.chip)));
+    if (compacto) return h("a", { class: "prm-quadro__cartao", href: go }, topo, h("div", { class: "prm-neg__meta" }, meta));
+    return h("li", { class: "prm-lista__item" }, h("a", { class: "prm-lista__link prm-neg", href: go }, topo, h("div", { class: "prm-neg__meta" }, meta)));
+  }
+
+  // ---------------- lista + quadro (parceiro e Save)
+  async function telaNegocios(main, params, save) {
+    const base = save ? "canal/negocios" : "negocios";
+    const st = Object.fromEntries(params.entries());
+    st.situacao = st.situacao || "andamento"; st.visao = st.visao || "lista"; st.pagina = st.pagina || "1";
+    const consulta = () => { const q = new URLSearchParams(); for (const [k, v] of Object.entries(st)) if (v && k !== "visao") q.set(k, v); if (st.visao === "quadro") { q.set("por_pagina", "200"); q.set("pagina", "1"); } return q.toString(); };
+    carregando(main, 4);
+    const r0 = await api("GET", (save ? "save/negocios" : "parceiro/negocios") + "?" + consulta());
+    if (r0.st === 401 || r0.st === 428) return;
+    if (r0.st !== 200) return erroBloco(main, r0.o, r0.st, () => navegar());
+    pronto(main);
+    const f = r0.o.filtros;
+    cab(main, "Negócios", save ? "Negócios do canal com parceiro, com filtros. Nada desta tela vai ao parceiro." : "Cada negócio que veio da sua indicação, do primeiro contato ao contrato.",
+      save ? [h("a", { class: "prm-btn prm-btn--sec", href: "#/canal/dashboard" }, "Voltar ao dashboard")] : [h("a", { class: "prm-btn prm-btn--sec", href: "#/inicio?aba=painel" }, "Ver painel"), h("a", { class: "prm-btn", href: "#/registrar" }, "Registrar empresa")], save ? "Canal" : null);
+    const ress = avisoRessalva(r0.o.ressalvas);
+    if (ress) main.append(ress);
+    const sel = (rot, chave, opcoes, todos) => {
+      const s = h("select", { class: "prm-campo__entrada" }, todos ? h("option", { value: "" }, todos) : null, opcoes.map(([v, t]) => h("option", { value: v, selected: st[chave] === v ? true : null }, t)));
+      s.addEventListener("change", () => { st[chave] = s.value; st.pagina = "1"; atualizar(); });
+      return h("label", null, rot, s);
+    };
+    const busca = h("input", { class: "prm-campo__entrada", type: "search", placeholder: "Nome ou CNPJ", valor: st.q || "" });
+    busca.addEventListener("input", debounce(() => { st.q = busca.value.trim(); st.pagina = "1"; atualizar(); }, 300));
+    const data = (rot, chave) => { const i = h("input", { class: "prm-campo__entrada", type: "date", valor: st[chave] || "" }); i.addEventListener("change", () => { st[chave] = i.value; st.pagina = "1"; atualizar(); }); return h("label", null, rot, i); };
+    const mais = ["tese", "etapa", "consultor", "master", "de", "ate"].some((k) => st[k]);
+    const filtros = h("div", { class: "prm-filtros-neg", role: "group", "aria-label": "Filtros dos negócios" },
+      h("label", null, "Buscar", busca),
+      sel("Situação", "situacao", f.situacoes.map((s) => [s.chave, s.rotulo])),
+      sel("Estado", "estado", f.estados.map((e) => [e.estado, e.rotulo]), "Todos"),
+      sel("Ordenar por", "ordem", f.ordens.map((o) => [o.chave, o.rotulo])));
+    const filtros2 = h("div", { class: "prm-filtros-neg", role: "group", "aria-label": "Mais filtros" },
+      sel("Produto", "produto", f.produtos.map((p) => [p, p]), "Todos"),
+      f.teses.length ? sel("Tese", "tese", f.teses.map((t) => [t, t]), "Todas") : null,
+      f.etapas && f.etapas.length ? sel("Etapa no CRM", "etapa", f.etapas.map((t) => [t, t]), "Todas") : null,
+      f.consultores && f.consultores.length ? sel("Consultor", "consultor", f.consultores.map((u) => [u.id, u.nome]), "Todos") : null,
+      f.masters ? sel("Master", "master", f.masters.map((m) => [m.id, m.nome]), "Todos") : null,
+      data("Entrada desde", "de"), data("Entrada até", "ate"));
+    const visoes = h("div", { class: "prm-filtros", role: "group", "aria-label": "Visão" }, [["lista", "Lista"], ["quadro", "Quadro por estado"]].map(([k, n]) =>
+      h("button", { class: "prm-filtro", type: "button", "aria-pressed": String(st.visao === k), onclick: (e) => { st.visao = k; visoes.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b === e.currentTarget))); atualizar(); } }, n)));
+    const extras = h("div", { class: "prm-linha" }, st.parado ? h("button", { class: "prm-btn prm-btn--texto", type: "button", onclick: () => { delete st.parado; atualizar(); } }, "Tirar o filtro de parados") : null,
+      ["registrado", "mes_previsao", "mes_fechamento"].filter((k) => st[k]).map((k) => h("button", { class: "prm-btn prm-btn--texto", type: "button", onclick: (e) => { delete st[k]; e.currentTarget.remove(); atualizar(); } }, "Tirar o filtro: " + k.replace(/_/g, " ") + " " + st[k])));
+    const resumo = h("p", { class: "prm-texto-apoio", "aria-live": "polite" });
+    const res = h("div");
+    main.append(filtros, h("details", { class: "prm-detalhe prm-filtros-mais", open: mais || st.produto ? true : null }, h("summary", null, "Mais filtros"), filtros2),
+      h("div", { class: "prm-linha prm-linha--entre" }, visoes, extras), resumo, res);
+    function desenhar(o) {
+      limpar(res);
+      resumo.textContent = nTxt(o.total, "negócio", "negócios") + (o.valor_total !== null && o.valor_total !== undefined ? " · " + reais(o.valor_total) + " em crédito estimado*" : "");
+      if (!o.total) { res.append(h("div", { class: "prm-vazio" }, h("p", null, "Nenhum negócio com estes filtros."))); return; }
+      if (st.visao === "quadro") {
+        res.append(h("div", { class: "prm-quadro", role: "region", "aria-label": "Quadro por estado", tabindex: "0" }, o.colunas.map((c, idx) => {
+          const xs = o.itens.filter((i) => i.estado === c.estado);
+          return h("section", { class: "prm-quadro__col", "aria-label": c.rotulo }, h("div", { class: "prm-quadro__cab", "data-serie": String(Math.min(4, idx + 1)) },
+            h("h2", null, c.rotulo), h("span", { class: "prm-texto-apoio prm-mono" }, nTxt(c.n, "negócio", "negócios") + (c.valor !== null && c.valor !== undefined ? " · " + reaisC(c.valor) : ""))),
+            xs.length ? h("ul", { class: "prm-quadro__lista" }, xs.map((i) => h("li", null, cartaoNegocio(i, save, true)))) : apoio("Nenhum."));
+        })));
+        if (o.total > o.itens.length) res.append(apoio("Mostrando " + o.itens.length + " de " + o.total + ". Use os filtros para ver o restante."));
+      } else {
+        res.append(h("ul", { class: "prm-lista prm-cartao" }, o.itens.map((i) => cartaoNegocio(i, save))));
+        if (o.paginas > 1) {
+          const ir = (p) => { st.pagina = String(p); atualizar(); main.querySelector("h1").scrollIntoView(); };
+          res.append(h("nav", { class: "prm-paginacao", "aria-label": "Páginas" }, h("button", { class: "prm-btn prm-btn--sec", type: "button", disabled: o.pagina <= 1 ? true : null, onclick: () => ir(o.pagina - 1) }, "Anterior"),
+            h("span", { class: "prm-texto-apoio prm-mono" }, "Página " + o.pagina + " de " + o.paginas),
+            h("button", { class: "prm-btn prm-btn--sec", type: "button", disabled: o.pagina >= o.paginas ? true : null, onclick: () => ir(o.pagina + 1) }, "Próxima")));
+        }
+      }
+      if (o.ressalvas && o.ressalvas.valor_credito) res.append(h("p", { class: "prm-ressalva" }, "* " + o.ressalvas.valor_credito));
+    }
+    async function atualizar() {
+      const q = new URLSearchParams(Object.entries(st).filter(([, v]) => v)).toString();
+      history.replaceState(null, "", "#/" + base + (q ? "?" + q : ""));
+      res.setAttribute("aria-busy", "true");
+      const r = await api("GET", (save ? "save/negocios" : "parceiro/negocios") + "?" + consulta());
+      res.removeAttribute("aria-busy");
+      if (r.st !== 200) { limpar(res).append(h("div", { class: "prm-aviso prm-aviso--erro", role: "alert" }, icone("alerta"), h("div", null, r.o.erro || "Não conseguimos carregar agora."))); return; }
+      desenhar(r.o);
+    }
+    desenhar(r0.o);
+  }
+
+  // ---------------- ficha completa do negócio
+  function valorCampo(c) {
+    if (c.tipo === "reais") return mono(reais(c.valor));
+    if (c.tipo === "pct") return mono(fracTxt(c.valor));
+    if (c.tipo === "data") return mono(dataBR(c.valor));
+    if (c.tipo === "lista") return h("span", null, c.valor.join(" · "));
+    return h("span", null, String(c.valor));
+  }
+
+  function telaFicha(main, o, save) {
+    const voltar = save ? "#/canal/negocios" : "#/negocios";
+    cab(main, o.nome, null, save ? [h("a", { class: "prm-btn prm-btn--sec", href: voltar }, "Voltar à lista")]
+      : [h("a", { class: "prm-btn prm-btn--sec", href: "#/pedidos/novo?empresa=" + o.ref }, "Perguntar sobre este negócio")], save ? "Canal · negócio " + o.deal_id : "Negócio");
+    main.querySelector(".prm-cab > div").append(h("p", { class: "prm-mono" }, o.cnpj_mascara || ""),
+      h("div", { class: "prm-linha" }, chip(o.rotulo, o.chip), apoio("Com: " + o.com + (o.desde ? " desde " + o.desde : "")),
+        o.dias_na_etapa !== null && o.dias_na_etapa !== undefined ? apoio("há " + nTxt(o.dias_na_etapa, "dia", "dias") + " na etapa atual") : null));
+    const pend = (o.pendencias || []).filter((p) => !p.resolvida_em);
+    if (pend.length && !save) main.append(h("section", { class: "prm-cartao prm-cartao--acao", "aria-labelledby": "t-npend" }, h("h2", { id: "t-npend" }, "Precisa de você"),
+      pend.map((p) => h("p", null, (p.texto || p.tipo) + " (desde " + p.desde + ")")), h("a", { class: "prm-btn", href: "#/pedidos/novo?empresa=" + o.ref }, "Avisar a Save")));
+    main.append(h("section", { class: "prm-cartao", "aria-labelledby": "t-nand" }, h("h2", { id: "t-nand" }, "Andamento"),
+      h("ol", { class: "prm-tempo" }, o.passos.map((p) => h("li", { class: "prm-tempo__passo", "data-estado": p.situacao, "aria-current": p.situacao === "atual" || p.situacao === "bloqueado" ? "step" : null },
+        h("span", { class: "prm-tempo__titulo" }, p.titulo), h("span", { class: "prm-tempo__quando" }, { feito: "concluído", atual: "atual", bloqueado: "esperando você", futuro: "próximo" }[p.situacao])))),
+      h("p", null, h("strong", null, "Próximo passo: "), o.proximo_passo)));
+    main.append(h("div", { class: "prm-campos-neg" }, o.secoes.map((s) => h("section", { class: "prm-cartao", "aria-label": s.titulo }, h("h2", null, s.titulo),
+      h("dl", null, s.campos.map((c) => [h("dt", null, c.rotulo + (c.ressalva ? "*" : "")), h("dd", null, valorCampo(c), c.ressalva ? h("p", { class: "prm-ressalva" }, "* " + c.ressalva) : null)]))))));
+    if (o.linha_do_tempo) main.append(h("section", { class: "prm-cartao", "aria-labelledby": "t-nlt" }, h("h2", { id: "t-nlt" }, "Linha do tempo das etapas"),
+      h("ol", { class: "prm-linha-tempo" }, o.linha_do_tempo.map((x) => h("li", { "data-atual": String(x.atual), "aria-current": x.atual ? "step" : null }, h("span", { class: "prm-linha-tempo__ponto", "aria-hidden": "true" }),
+        h("div", null, h("div", { class: "prm-lista__titulo" }, x.etapa + (x.atual ? " (atual)" : "")), x.estado ? h("div", { class: "prm-lista__apoio" }, x.estado) : null),
+        h("div", { class: "prm-lista__apoio prm-mono" }, x.desde + (x.dias !== null ? " · " + nTxt(x.dias, "dia", "dias") : "")))))));
+    const blocos = [];
+    if (o.documentos) blocos.push(h("section", { class: "prm-cartao", "aria-labelledby": "t-ndoc" }, h("h2", { id: "t-ndoc" }, "Documentos e acessos pedidos"),
+      o.documentos.length ? h("ul", { class: "prm-lista" }, o.documentos.map((d) => h("li", { class: "prm-lista__item" }, h("span", null, d.item),
+        chip({ recebido: "Recebido", liberado: "Liberado", pendente: "Pendente" }[d.situacao] || d.situacao, d.situacao === "pendente" ? "atencao" : "ok")))) : apoio("Nenhum documento pedido.")));
+    if (o.pendencias) blocos.push(h("section", { class: "prm-cartao", "aria-labelledby": "t-npe" }, h("h2", { id: "t-npe" }, "Pendências"),
+      o.pendencias.length ? h("ul", { class: "prm-lista" }, o.pendencias.map((p) => h("li", { class: "prm-lista__item" }, h("div", null, h("div", { class: "prm-lista__titulo" }, p.texto || p.tipo),
+        h("div", { class: "prm-lista__apoio" }, "Aberta em " + p.desde + (p.resolvida_em ? " · resolvida em " + p.resolvida_em : ""))), chip(p.resolvida_em ? "Resolvida" : "Aberta", p.resolvida_em ? "ok" : "acao")))) : apoio("Nenhuma pendência.")));
+    if (o.registro !== undefined) blocos.push(h("section", { class: "prm-cartao", "aria-labelledby": "t-nreg" }, h("h2", { id: "t-nreg" }, "Registro de oportunidade"),
+      o.registro ? [h("dl", { class: "prm-dl prm-dl--esq" }, h("dt", null, "Registro"), h("dd", null, o.registro.registro_id), h("dt", null, "Situação"), h("dd", null, o.registro.rotulo),
+        o.registro.carimbo ? [h("dt", null, "Data e hora"), h("dd", null, o.registro.carimbo)] : null, o.registro.valido_ate ? [h("dt", null, "Válido até"), h("dd", null, o.registro.valido_ate)] : null),
+        !save && o.registro.ref ? h("a", { class: "prm-btn prm-btn--texto", href: "#/empresas/" + o.registro.ref }, "Abrir a empresa") : null] : apoio("Este negócio chegou à Save sem registro pelo portal.")));
+    else if (!save) blocos.push(h("section", { class: "prm-cartao" }, h("h2", null, "Registro de oportunidade"), apoio("Este negócio chegou à Save sem registro pelo portal.")));
+    if (o.pedidos) blocos.push(h("section", { class: "prm-cartao", "aria-labelledby": "t-nped" }, h("h2", { id: "t-nped" }, "Pedidos ligados"),
+      o.pedidos.length ? h("ul", { class: "prm-lista" }, o.pedidos.map((p) => h("li", { class: "prm-lista__item" }, save ? h("span", null, p.id + " · " + p.aberta_em) : h("a", { class: "prm-lista__link", href: "#/pedidos/" + p.ref },
+        h("div", null, h("div", { class: "prm-lista__titulo" }, p.id), h("div", { class: "prm-lista__apoio" }, p.aberta_em))), chip(p.rotulo, p.chip)))) : apoio("Nenhum pedido sobre este negócio.")));
+    if (o.extrato) blocos.push(h("section", { class: "prm-cartao", "aria-labelledby": "t-next" }, h("h2", { id: "t-next" }, "Extrato ligado"),
+      o.extrato.length ? o.extrato.map(linhaExtrato) : apoio("Sem linha de extrato para este negócio.")));
+    main.append(h("div", { class: "prm-grade prm-grade--2" }, blocos));
+  }
+
+  async function vNegocios(main, _x, params) { await telaNegocios(main, params, false); }
+  async function vNegocio(main, ref) { await carregar(main, "parceiro/negocios/" + ref, (o) => telaFicha(main, o, false), 4); }
+  async function sNegocios(main, _x, params) { await telaNegocios(main, params, true); }
+  async function sNegocio(main, id) { await carregar(main, "save/negocios/" + id, (o) => telaFicha(main, o, true), 4); }
+
+  // ---------------- P-1b Painel de vendas do parceiro (aba do Início)
+  function painelParceiro(alvo, params) {
+    const periodo = params.get("periodo") || "90", consultor = params.get("consultor") || "";
+    const q = "?periodo=" + encodeURIComponent(periodo) + (consultor ? "&consultor=" + encodeURIComponent(consultor) : "");
+    const area = h("div", { class: "prm-pilha" });
+    alvo.append(area);
+    carregar(area, "parceiro/painel" + q, (o) => {
+      const ir = (extra) => { location.hash = "#/negocios?" + new URLSearchParams(Object.assign({ situacao: "andamento" }, consultor ? { consultor } : {}, extra)).toString(); };
+      const per = h("select", { class: "prm-campo__entrada" }, [["30", "Últimos 30 dias"], ["90", "Últimos 90 dias"], ["180", "Últimos 180 dias"], ["365", "Últimos 12 meses"]].map(([v, t]) => h("option", { value: v, selected: v === periodo ? true : null }, t)));
+      const muda = () => { const p = new URLSearchParams({ aba: "painel", periodo: per.value }); if (cs && cs.value) p.set("consultor", cs.value); location.hash = "#/inicio?" + p.toString(); };
+      per.addEventListener("change", muda);
+      let cs = null;
+      if (o.consultores && o.consultores.length) { cs = h("select", { class: "prm-campo__entrada" }, h("option", { value: "" }, "Escritório inteiro"), o.consultores.map((u) => h("option", { value: u.id, selected: u.id === consultor ? true : null }, u.nome))); cs.addEventListener("change", muda); }
+      area.append(h("div", { class: "prm-filtros-neg", role: "group", "aria-label": "Período do painel" }, h("label", null, "Período", per), cs ? h("label", null, "Consultor", cs) : null),
+        apoio("Período de " + dataBR(o.periodo.de) + " a " + dataBR(o.periodo.ate) + ", comparado com " + dataBR(o.periodo.anterior_de) + " a " + dataBR(o.periodo.anterior_ate) + ". Só os números do seu escritório: o portal não compara parceiros."));
+      const ress = avisoRessalva(o.ressalvas); if (ress) area.append(ress);
+      const pa = o.periodo_atual, c = o.comparacao;
+      const comValor = pa.ganhos.valor !== null && pa.ganhos.valor !== undefined;
+      const abertoN = o.pipeline.reduce((a, p) => a + p.n, 0), abertoV = o.pipeline.reduce((a, p) => a + (p.valor || 0), 0);
+      area.append(h("section", { "aria-label": "Indicadores do período" }, h("div", { class: "prm-grade prm-grade--kpi prm-grade--kpi-auto" },
+        kpiComp("Em andamento", String(abertoN), comValor ? reaisC(abertoV) + " em crédito estimado*" : "negócios abertos", null),
+        kpiComp("Contratos assinados", String(pa.ganhos.n), comValor ? reaisC(pa.ganhos.valor) + "*" : "no período", c.ganhos_n),
+        kpiComp("Taxa de conversão", taxaTxt(pa.conversao), "ganhos sobre encerrados (" + pa.conversao.n + ")", pa.conversao.base_pequena ? null : c.conversao_pct, (v) => String(v).replace(".", ",") + " p.p."),
+        kpiComp("Ciclo médio", pa.ciclo.media_dias === null ? "—" : String(Math.round(pa.ciclo.media_dias)), "dias, da entrada ao contrato", c.ciclo_dias, (v) => Math.round(v) + " dias"))));
+      area.append(h("div", { class: "prm-grade prm-grade--2" },
+        h("section", { class: "prm-cartao" }, grafPipeline(o.pipeline, comValor, (p) => ir({ estado: p.estado }))),
+        h("section", { class: "prm-cartao" }, grafFunil(o.funil))));
+      const parados = h("section", { class: "prm-cartao", "aria-labelledby": "t-ppar" }, h("h2", { id: "t-ppar" }, "Negócios parados (" + o.aging.total_parados + ")"),
+        o.aging.parados.length ? h("ul", { class: "prm-lista" }, o.aging.parados.map((i) => cartaoNegocio(i, false))) : apoio("Nenhum negócio parado há mais de " + o.aging.limite_dias + " dias."),
+        o.aging.total_parados ? h("button", { class: "prm-btn prm-btn--texto", type: "button", onclick: () => ir({ parado: "1", ordem: "parado" }) }, "Ver todos os parados") : null);
+      area.append(h("div", { class: "prm-grade prm-grade--2" }, h("section", { class: "prm-cartao" }, grafAging(o.aging, (e) => ir({ estado: e.estado, ordem: "parado" }))), parados));
+      const ganhosPerd = barras({ titulo: "Contratos assinados e encerrados sem contrato", apoio: "No período, comparado com o período anterior.",
+        series: [{ serie: 2, rotulo: "Período atual" }, { serie: 0, rotulo: "Período anterior" }],
+        itens: [["Contratos assinados", "ganhos"], ["Encerrados sem contrato", "perdidos"], ["Negócios novos", "novos"]].flatMap(([r, k]) => [
+          { rotulo: r, valor: pa[k].n, serie: 2, texto: String(pa[k].n) + (pa[k].valor ? " · " + reaisC(pa[k].valor) : ""), dica: "Período atual: " + pa[k].n, linha: { r, k } },
+          { rotulo: r + " (anterior)", valor: o.periodo_anterior[k].n, serie: 0, texto: String(o.periodo_anterior[k].n), dica: "Período anterior: " + o.periodo_anterior[k].n, linha: { r: r + " (anterior)", k } }]),
+        cols: [{ t: "Indicador", v: (l) => l.r }, { t: "Quantidade", v: (l) => String((l.r.endsWith("(anterior)") ? o.periodo_anterior : pa)[l.k].n), num: true }] });
+      const ativ = h("section", { class: "prm-cartao", "aria-labelledby": "t-pativ" }, h("h2", { id: "t-pativ" }, "Atividade"),
+        h("dl", { class: "prm-dl" }, h("dt", null, "Registros neste mês"), h("dd", null, String(o.atividade.registros_no_mes)), h("dt", null, "Registros no período"), h("dd", null, String(o.atividade.registros_no_periodo)),
+          h("dt", null, "Pedidos em aberto"), h("dd", null, String(o.atividade.demandas_abertas)), h("dt", null, "Negócios em andamento"), h("dd", null, String(o.atividade.negocios_abertos))));
+      area.append(h("div", { class: "prm-grade prm-grade--2" }, h("section", { class: "prm-cartao" }, ganhosPerd), ativ));
+      if (o.remuneracao) {
+        const r = o.remuneracao;
+        area.append(h("section", { class: "prm-cartao" }, barras({ titulo: "Sua remuneração", apoio: "Percentual do seu termo: " + fracTxt(r.percentual_termo) + ". " + (r.ganhos_sem_calculo ? r.ganhos_sem_calculo + " contrato(s) ainda sem dado para calcular." : ""),
+          series: [{ serie: 1, rotulo: "Prevista*" }, { serie: 3, rotulo: "Recebida pela Save" }, { serie: 4, rotulo: "Paga a você" }],
+          itens: [{ rotulo: "Prevista*", valor: r.prevista, serie: 1, texto: reais(r.prevista), linha: { r: "Prevista*", v: r.prevista } },
+            { rotulo: "Recebida pela Save", valor: r.recebida_pela_save, serie: 3, texto: reais(r.recebida_pela_save), linha: { r: "Recebida pela Save", v: r.recebida_pela_save } },
+            { rotulo: "Paga a você", valor: r.paga, serie: 4, texto: reais(r.paga), linha: { r: "Paga a você", v: r.paga } }],
+          cols: [{ t: "Situação", v: (l) => l.r }, { t: "Valor", v: (l) => reais(l.v), num: true }] }), h("p", { class: "prm-ressalva" }, "* " + r.ressalva),
+          h("a", { class: "prm-btn prm-btn--texto", href: "#/extrato" }, "Ver extrato")));
+      }
+      const linhaC = (rot, k, fmt) => ({ rot, a: c[k].atual, b: c[k].anterior, d: c[k].delta, fmt });
+      const comp = [linhaC("Contratos assinados", "ganhos_n", String), linhaC("Crédito dos contratos assinados*", "ganhos_valor", reaisC), linhaC("Encerrados sem contrato", "perdidos_n", String),
+        linhaC("Negócios novos", "novos_n", String), linhaC("Taxa de conversão", "conversao_pct", pctTxt), linhaC("Ciclo médio (dias)", "ciclo_dias", (v) => (v === null ? "—" : String(Math.round(v))))].filter((l) => l.a !== null || l.b !== null);
+      area.append(h("section", { class: "prm-cartao", "aria-labelledby": "t-pcomp" }, h("h2", { id: "t-pcomp" }, "Comparação com o período anterior"),
+        h("div", { class: "prm-tabela prm-tabela--compacta" }, h("table", null, h("caption", { class: "prm-so-leitor" }, "Comparação com o período anterior"),
+          h("thead", null, h("tr", null, h("th", { scope: "col" }, "Indicador"), h("th", { scope: "col", class: "num" }, "Período atual"), h("th", { scope: "col", class: "num" }, "Anterior"), h("th", { scope: "col", class: "num" }, "Variação"))),
+          h("tbody", null, comp.map((l) => h("tr", null, h("td", null, l.rot), h("td", { class: "num" }, l.fmt(l.a)), h("td", { class: "num" }, l.fmt(l.b)),
+            h("td", { class: "num" }, l.d === null || l.d === undefined ? "—" : (l.d > 0 ? "▲ +" : l.d < 0 ? "▼ −" : "= ") + l.fmt(Math.abs(l.d))))))))));
+      if (o.ressalvas && o.ressalvas.valor_credito) area.append(h("p", { class: "prm-ressalva" }, "* " + o.ressalvas.valor_credito));
+    }, 4);
+  }
+
+  // ---------------- Save · Dashboard comercial
+  async function sDashboard(main, _x, params) {
+    const periodo = params.get("periodo") || "90", master = params.get("master") || "";
+    await carregar(main, "save/dashboard?periodo=" + encodeURIComponent(periodo) + (master ? "&master=" + encodeURIComponent(master) : ""), (o) => {
+      cab(main, "Dashboard comercial", "Pipeline, conversão e previsão do canal. Sem café e sem negócio fora do roster. Nada desta tela vai ao parceiro.", [h("a", { class: "prm-btn prm-btn--sec", href: "#/canal/negocios" }, "Ver negócios")], "Canal");
+      const drill = (f) => { location.hash = "#/canal/negocios?" + new URLSearchParams(Object.assign({}, master ? { master } : {}, f)).toString(); };
+      const per = h("select", { class: "prm-campo__entrada" }, [["30", "Últimos 30 dias"], ["90", "Últimos 90 dias"], ["180", "Últimos 180 dias"], ["365", "Últimos 12 meses"]].map(([v, t]) => h("option", { value: v, selected: v === periodo ? true : null }, t)));
+      const ms = h("select", { class: "prm-campo__entrada" }, h("option", { value: "" }, "Canal inteiro"), o.masters.map((m) => h("option", { value: m.id, selected: m.id === master ? true : null }, m.nome)));
+      const muda = () => { const p = new URLSearchParams({ periodo: per.value }); if (ms.value) p.set("master", ms.value); location.hash = "#/canal/dashboard?" + p.toString(); };
+      per.addEventListener("change", muda); ms.addEventListener("change", muda);
+      main.append(h("div", { class: "prm-filtros-neg", role: "group", "aria-label": "Filtros do dashboard" }, h("label", null, "Período", per), h("label", null, "Master", ms)),
+        apoio("Período de " + dataBR(o.periodo.de) + " a " + dataBR(o.periodo.ate) + " (comparado com os " + o.periodo.dias + " dias anteriores). Espelho do HubSpot até " + (o.fonte.espelho_ate ? dataBR(o.fonte.espelho_ate) : "—") + "."));
+      const k = o.kpis, c = o.comparacao;
+      main.append(h("section", { "aria-label": "Indicadores" }, h("div", { class: "prm-grade prm-grade--kpi prm-grade--kpi-auto" },
+        kpiComp("Pipeline em andamento", reaisC(k.pipeline_valor), nTxt(k.pipeline_n, "negócio", "negócios"), null),
+        kpiComp("Ganhos no período", reaisC(k.ganhos_valor), nTxt(k.ganhos_n, "contrato", "contratos"), c.ganhos_valor, reaisC),
+        kpiComp("Win rate", taxaTxt(k.conversao), k.conversao.ganhos + " de " + k.conversao.n + " encerrados", k.conversao.base_pequena ? null : c.conversao_pct, (v) => String(v).replace(".", ",") + " p.p."),
+        kpiComp("Ciclo médio", k.ciclo.media_dias === null ? "—" : String(Math.round(k.ciclo.media_dias)), "dias · mediana " + (k.ciclo.mediana_dias === null ? "—" : Math.round(k.ciclo.mediana_dias) + " dias"), c.ciclo_dias, (v) => Math.round(v) + " dias"),
+        kpiComp("Parados", String(k.parados), "mais de " + o.aging.limite_dias + " dias na etapa", null),
+        kpiComp("Dormentes", String(k.dormentes), "parceiros com ganho em 12 meses e sem negócio novo", null),
+        kpiComp("Negócios novos", String(k.novos_n), "no período", c.novos_n),
+        kpiComp("Concentração top 5", o.concentracao.top5_pct === null ? "—" : pctTxt(o.concentracao.top5_pct), "crédito ganho em 12 meses (guarda)", null))));
+      const f = o.forecast;
+      main.append(h("section", { class: "prm-cartao" }, colunasMeta({ titulo: "Previsão por mês contra a meta" + (master ? "" : " (D111)"), apoio: f.nota + " Fonte da meta: " + f.fonte_meta + ".",
+        meses: f.meses, series: [{ chave: "realizado", rotulo: "Realizado (ganhos)", serie: 4, n: "realizado" }, { chave: "em_contrato", rotulo: "Em contrato, previsão no mês", serie: 2, n: "contrato" },
+          { chave: "demais_abertos", rotulo: "Demais abertos, previsão no mês", serie: 1, n: "demais" }],
+        aoClicar: (m, s) => drill(s.chave === "realizado" ? m.drill : Object.assign({}, m.drill_previsao, s.chave === "em_contrato" ? { estado: "contrato" } : {})) })));
+      main.append(h("div", { class: "prm-grade prm-grade--2" },
+        h("section", { class: "prm-cartao" }, barras({ titulo: "Pipeline por Master", apoio: "Crédito estimado em andamento (ordem alfabética, não é ranking).",
+          itens: o.por_master.map((m) => ({ rotulo: m.nome, valor: m.valor_aberto, serie: 2, texto: m.abertos + " · " + reaisC(m.valor_aberto),
+            dica: nTxt(m.abertos, "aberto", "abertos") + " · " + reais(m.valor_aberto) + "\nGanhos no período: " + m.ganhos_n + " · " + reais(m.ganhos_valor) + "\nWin rate: " + taxaTxt(m.conversao) + "\nParados: " + m.parados,
+            aoClicar: () => drill({ master: m.master_id, situacao: "andamento" }), linha: m })),
+          cols: [{ t: "Master", v: (m) => m.nome }, { t: "Abertos", v: (m) => String(m.abertos), num: true }, { t: "Valor aberto", v: (m) => reais(m.valor_aberto), num: true },
+            { t: "Ganhos", v: (m) => String(m.ganhos_n), num: true }, { t: "Valor ganho", v: (m) => reais(m.ganhos_valor), num: true }, { t: "Win rate", v: (m) => taxaTxt(m.conversao), num: true },
+            { t: "Ciclo (dias)", v: (m) => (m.ciclo_medio_dias === null ? "—" : String(Math.round(m.ciclo_medio_dias))), num: true }, { t: "Parados", v: (m) => String(m.parados), num: true }] })),
+        h("section", { class: "prm-cartao" }, grafPipeline(o.pipeline, true, (p) => drill(p.drill)))));
+      main.append(h("div", { class: "prm-grade prm-grade--2" }, h("section", { class: "prm-cartao" }, grafFunil(o.funil)),
+        h("section", { class: "prm-cartao" }, grafAging(o.aging, (e) => drill(e.drill)))));
+      const cr = o.conversao_registro;
+      main.append(h("div", { class: "prm-grade prm-grade--2" },
+        h("section", { class: "prm-cartao" }, barras({ titulo: "Conversão: registrado × não registrado", apoio: cr.nota + " Grupo com menos de 20 encerrados aparece como base pequena.",
+          itens: [["Com registro no portal", cr.registrado], ["Sem registro", cr.nao_registrado]].map(([r, x]) => ({ rotulo: r, valor: x.pct || 0, serie: 2,
+            texto: taxaTxt(x) + " (" + x.ganhos + "/" + x.n + ")", dica: x.ganhos + " ganhos e " + x.perdidos + " perdidos", aoClicar: () => drill(x.drill), linha: Object.assign({ r }, x) })),
+          cols: [{ t: "Grupo", v: (l) => l.r }, { t: "Ganhos", v: (l) => String(l.ganhos), num: true }, { t: "Perdidos", v: (l) => String(l.perdidos), num: true }, { t: "Taxa", v: (l) => taxaTxt(l), num: true }] })),
+        h("section", { class: "prm-cartao" }, barras({ titulo: "Concentração (crédito ganho em 12 meses)", apoio: "Top 1: " + pctTxt(o.concentracao.top1_pct) + " · Top 5: " + pctTxt(o.concentracao.top5_pct) + ". Métrica de guarda, sem meta.",
+          itens: o.concentracao.top5.map((x) => ({ rotulo: x.nome, valor: x.pct, serie: 3, texto: pctTxt(x.pct), dica: reais(x.valor), linha: x })),
+          cols: [{ t: "Master", v: (x) => x.nome }, { t: "Crédito ganho", v: (x) => reais(x.valor), num: true }, { t: "% do total", v: (x) => pctTxt(x.pct), num: true }] }))));
+      main.append(h("div", { class: "prm-grade prm-grade--2" },
+        h("section", { class: "prm-cartao" }, barras({ titulo: "Produtos", apoio: "Crédito estimado em andamento por produto.",
+          itens: o.por_produto.map((p) => ({ rotulo: p.produto, valor: p.valor_aberto, serie: 2, texto: p.abertos + " · " + reaisC(p.valor_aberto),
+            dica: "Ganhos no período: " + p.ganhos_n + " · " + reais(p.ganhos_valor) + "\nWin rate: " + taxaTxt(p.conversao), aoClicar: () => drill(p.drill), linha: p })),
+          cols: [{ t: "Produto", v: (p) => p.produto }, { t: "Abertos", v: (p) => String(p.abertos), num: true }, { t: "Valor aberto", v: (p) => reais(p.valor_aberto), num: true }, { t: "Ganhos", v: (p) => String(p.ganhos_n), num: true }] })),
+        h("section", { class: "prm-cartao" }, barras({ titulo: "Teses nos negócios em andamento", apoio: "Um negócio pode ter mais de uma tese.",
+          itens: o.por_tese.map((t) => ({ rotulo: t.tese, valor: t.abertos, serie: 2, texto: String(t.abertos), dica: reais(t.valor_aberto) + "\nGanhos em 12 meses: " + t.ganhos_12m, aoClicar: () => drill(t.drill), linha: t })),
+          cols: [{ t: "Tese", v: (t) => t.tese }, { t: "Abertos", v: (t) => String(t.abertos), num: true }, { t: "Valor aberto", v: (t) => reais(t.valor_aberto), num: true }, { t: "Ganhos 12 m", v: (t) => String(t.ganhos_12m), num: true }] }))));
+      const [tc, lc] = tabela("Pipeline por consultor e indicador", [{ t: "Parceiro", v: (x) => x.nome }, { t: "Master", v: (x) => x.master }, { t: "Abertos", v: (x) => String(x.abertos), num: true },
+        { t: "Valor aberto", v: (x) => reais(x.valor_aberto), num: true }, { t: "Ganhos no período", v: (x) => String(x.ganhos_n), num: true }, { t: "Valor ganho", v: (x) => reais(x.ganhos_valor), num: true }], o.por_consultor);
+      const [td, ld] = tabela("Parceiros dormentes", [{ t: "Parceiro", v: (x) => x.nome }, { t: "Tipo", v: (x) => x.tipo }, { t: "Dias sem negócio novo", v: (x) => String(x.dias_sem_negocio), num: true },
+        { t: "Ganhos em 12 meses", v: (x) => String(x.ganhos_12m), num: true }], o.dormentes);
+      main.append(h("section", { class: "prm-pilha--peq", "aria-labelledby": "t-dcons" }, h("h2", { id: "t-dcons", class: "prm-titulo-secao" }, "Por consultor e indicador"), o.por_consultor.length ? [tc, lc] : apoio("Sem consultores com negócio.")),
+        h("section", { class: "prm-pilha--peq", "aria-labelledby": "t-ddor" }, h("h2", { id: "t-ddor", class: "prm-titulo-secao" }, "Dormentes"), o.dormentes.length ? [td, ld] : apoio("Nenhum parceiro dormente.")),
+        h("section", { class: "prm-pilha--peq", "aria-labelledby": "t-dpar" }, h("h2", { id: "t-dpar", class: "prm-titulo-secao" }, "Parados há mais tempo"),
+          o.aging.parados.length ? h("ul", { class: "prm-lista prm-cartao" }, o.aging.parados.map((i) => cartaoNegocio(i, true))) : apoio("Nenhum negócio parado.")));
+    }, 6);
   }
 
   // ------------------------------------------------------------------ início

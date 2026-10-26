@@ -1,0 +1,25 @@
+name: PRM · testes da Central e do PRM
+# Roda em todo push e PR que mexe em central/ (Luis, 26/10/2026: desenvolvimento na nuvem).
+# Só dados fictícios: não usa segredo nem dado de cliente.
+on:
+  push:
+    paths: ["central/**", "lib/**", ".github/workflows/prm-testes.yml"]
+  pull_request:
+    paths: ["central/**", "lib/**"]
+  workflow_dispatch:
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: ln -sfn "$GITHUB_WORKSPACE" ~/agentes-partners
+      - run: pip install -r central/api/requirements.txt
+      - name: Testes da API (Central + PRM)
+        run: cd central/api && PYTHONPATH=../../lib python3 -m unittest
+      - name: Sintaxe do front
+        run: node --check central/web/prm.js

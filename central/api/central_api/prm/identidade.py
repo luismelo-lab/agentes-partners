@@ -7,11 +7,12 @@
    (titular vê o escritório; consultor vê só o que é dele). Matriz de ações = 02 §2.2.
 3. Dono da linha: `ve(ator, linha)`; fora do escopo o serviço responde 404 (PRM-R02), nunca 403.
 
-Login simulado (só o servidor local, só localhost, nunca na Azure): cabeçalho X-PRM-Dev-Usuario com o id de um usuário
-de teste. Três travas: PRM_LOGIN_SIMULADO=1, Host localhost/127.0.0.1 e ausência de WEBSITE_INSTANCE_ID (variável que
-toda Function na Azure tem).
+Login simulado (só o servidor de teste, nunca na Azure): cabeçalho X-PRM-Dev-Usuario com o id de um usuário de teste.
+Três travas: PRM_LOGIN_SIMULADO=1, Host de teste e ausência de WEBSITE_INSTANCE_ID (variável que toda Function na Azure tem).
+Host de teste = localhost/127.0.0.1/[::1] ou, só com CODESPACES=true, exatamente <CODESPACE_NAME>-<porta>.<GITHUB_CODESPACES_
+PORT_FORWARDING_DOMAIN> do próprio codespace (porta = PRM_PORTA, padrão 4280). Sem curinga: Host de outro codespace é recusado.
 """
-import os
+import os, re
 from dataclasses import dataclass, field
 
 from .. import permissoes as P
@@ -152,9 +153,30 @@ def _host_local(cab):
     return nome in ("localhost", "127.0.0.1", "[::1]")
 
 
+def host_codespaces(porta=None):
+    """Host do encaminhamento de porta do próprio codespace, ou None fora do Codespaces (ou com variável faltando/estranha)."""
+    if os.environ.get("CODESPACES") != "true":
+        return None
+    nome = (os.environ.get("CODESPACE_NAME") or "").strip().lower()
+    dominio = (os.environ.get("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN") or "").strip().lower()
+    porta = str(porta or os.environ.get("PRM_PORTA") or "4280")
+    if not re.fullmatch(r"[a-z0-9](?:[a-z0-9-]{0,98}[a-z0-9])?", nome) or not re.fullmatch(r"[a-z0-9-]+(?:\.[a-z0-9-]+)+", dominio) or not porta.isdigit():
+        return None
+    return "%s-%s.%s" % (nome, porta, dominio)
+
+
+def host_de_teste(cab, porta=None):
+    """Host local ou, só no Codespaces, o host exato do próprio codespace (com ou sem :443)."""
+    if _host_local(cab):
+        return True
+    cs = host_codespaces(porta)
+    h = (cab.get("Host") or cab.get("host") or "").strip().lower()
+    return bool(cs) and h in (cs, cs + ":443")
+
+
 def login_simulado_ativo(cab):
     return (os.environ.get("PRM_LOGIN_SIMULADO") == "1" and not os.environ.get("WEBSITE_INSTANCE_ID")
-            and _host_local(cab))
+            and host_de_teste(cab))
 
 
 def ator_de_usuario(app, usuario, face="parceiro", oid="", publico="central"):

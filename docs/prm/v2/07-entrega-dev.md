@@ -136,6 +136,35 @@ Operacionais criados pelo código (a dona valida): `registro.piso_resposta_ms` =
 
 ---
 
+## 7A. Acompanhamento de negócios e dashboards de vendas (26/10/2026)
+
+**Pedido do Luis:** visão dos negócios em andamento para o parceiro, com todas as informações do card, e dashboards de CRM de vendas. **Decisão do Luis:** o parceiro vê os valores (supera a DL-09 nesta tela), com ressalva e sem promessa. Regras novas: PRM-R113 a PRM-R118 (02 §11A).
+
+| Parte | Onde | O que faz |
+|---|---|---|
+| Back-end | `prm/acompanhamento.py` (novo), `prm/rotas.py` | Lista paginada com filtros (situação, estado, etapa, produto, tese, período, consultor, busca, parados, registrado, mês de previsão), ordenação e colunas do quadro; ficha completa com seções (situação, valores, datas, pessoas, empresa), linha do tempo das etapas, pendências, documentos e acessos, registro e validade, pedidos e extrato ligados; painel do parceiro e dashboard comercial da Save, todos calculados no servidor |
+| Visibilidade | `parametros.json` → `negocio.visibilidade_campos` | Matriz campo → visível ao parceiro, só titular, rótulo, ressalva, auditar, travado. Padrão: tudo visível. Travados em código (nunca saem): notas internas, motivo interno da perda, conflito, outro parceiro, probabilidade e forecast do CRM, comissões internas, dado pessoal de sócio. Remuneração prevista, percentual do termo e extrato: só titular. Próximo passo do CRM passa pelo auditor (PRM-R115) |
+| Rotas (6 novas, 50 no total) | `06-contrato-api.md` §3 e §4 | Parceiro: `GET negocios`, `GET negocios/{ref}`, `GET painel`. Save: `GET dashboard`, `GET negocios`, `GET negocios/{deal_id}` |
+| Front-end | `prm.js`, `prm.css` | Parceiro: "Negócios" na barra (lista e quadro por estado, filtros, busca, paginação, ficha completa); "Empresas e registros" foi para o menu Programa; Início ganhou a aba "Painel de vendas" (pipeline por etapa, funil, aging e parados, contratos e perdas contra o período anterior, conversão, ciclo, remuneração prevista × recebida × paga, atividade). Save: "Dashboard comercial" (KPIs, previsão por mês contra a meta D111, pipeline por Master, funil, aging, conversão registrado × não registrado, concentração top 5, produtos, teses, consultores, dormentes, parados) com drill-down de cada barra para "Negócios" do canal |
+| Gráficos | `prm.js` (barras, colunas com meta, legenda, dica, tabela) | HTML próprio, sem biblioteca. Barras finas com ponta arredondada, um eixo, dica no hover e no foco do teclado, legenda quando há mais de uma série, "Ver como tabela" em todo gráfico. Rampa sequencial de ouro derivada dos tokens (`--prm-serie-1..4`), validada pelo `validate_palette` da skill dataviz no claro (#FFFFFF) e no escuro (#171717); estado sempre com texto ("Parado" com ícone, chip com rótulo) |
+| Dados de teste | `prm/fixtures.py` (`gerar_carteira`, `enriquecer`) | 64 negócios fictícios a mais (75 no total), determinísticos, nos 9 Masters, consultores e indicador, com histórico de etapas, teses, previsão, documentos, campos internos (para provar que não saem) e 2 cafés. Nenhum nome real |
+| Espelho local | `skills/depto-dados/scripts/prm_local.py` | Leva produto, segmento, responsável, previsão de assinatura, próximo passo, anexo do diagnóstico, histórico de etapas, probabilidade e motivo interno da perda (os dois últimos só para a Save). Nome da empresa e dado de sócio continuam fora do JSON local |
+| Testes | `tests/test_prm_acompanhamento.py` (34) | Visibilidade por campo, trava, falha fechada, só titular, auditor no próximo passo; autorização (consultor não vê o de outro, outro escritório 404, parceiro 403 no dashboard e na lista do canal, financeiro só agregado); lista (paginação, ordem, filtros, quadro); agregados com carteira controlada (funil, conversão, base pequena, ciclo, comparação, aging, parados, pipeline, remuneração, forecast × meta, concentração, conversão registrado × não, dormentes, filtro de Master); auditor nos rótulos, ressalvas e textos novos da tela |
+
+**Verificações:** 377 testes OK (331 anteriores + 34 + 12 do Codespaces), também com Python 3.12 num HOME limpo (sem `registro/` e com `~/agentes-partners` apontando para o checkout); `node --check` OK; navegador em 375 px e no desktop (parceiro: Início, Painel, Negócios lista e quadro, ficha, Empresas, Extrato; Save: Dashboard, filtro de Master, drill-down, Negócios, ficha) sem erro de console e sem rolagem lateral; auditor de promessas 0 ALTO e 0 MÉDIO nos textos novos; `infra/checar-dados.py` 0 achados.
+
+**O que ficou de fora:**
+1. O download do HubSpot (`hubspot_fonte.py`) ainda não traz as datas de entrada em cada etapa (`hs_v2_date_entered_*`), o próximo passo (`hs_next_step`) nem o motivo da perda; sem elas, no modo real a linha do tempo mostra só a entrada e a etapa atual. Dono: Dados (sem tocar no HubSpot, só no download).
+2. Nome da empresa: o espelho local não guarda `dealname` (03 §4.1); fora das fixtures, negócio sem registro aparece como "Empresa indicada" com o CNPJ mascarado.
+3. Meta por Master: o `gestao.json` tem a meta por Master pelo nome; o dashboard mostra só a meta do canal (com filtro de Master, sem meta).
+4. `extrato.mostra_valor_previsto` continua `false` no Extrato; a decisão do Luis vale na tela Negócios e no Painel. Mudar o parâmetro é uma linha, se ele quiser o mesmo no Extrato.
+5. "Documentos pedidos" vem de uma propriedade proposta (`documentos_solicitados`) que não existe no HubSpot; hoje a lista real é pendências + e-CAC + anexo do diagnóstico.
+
+## 7B. GitHub Codespaces (26/10/2026)
+`dev_server.py` ouve em `0.0.0.0` só com `CODESPACES=true` e aceita, além dos hosts locais, exatamente `<CODESPACE_NAME>-<porta>.<GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN>` (com ou sem `:443`); o login simulado (`identidade.host_de_teste`) aceita o mesmo host com as outras travas mantidas (`PRM_LOGIN_SIMULADO=1`, sem `WEBSITE_INSTANCE_ID`). Nome com curinga, ponto ou vazio desliga a regra. Testes em `tests/test_prm_codespaces.py` (12, incluindo host de outro codespace recusado com 421 no servidor real e 404/401 nas rotas). Sem PyJWT, `token.py` recusa todo token (falha fechada) e `tests/test_api.py` aparece como pulado com o motivo: o workflow `prm-testes.yml` precisa de `pip install -r central/api/requirements.txt` para rodar os testes de token no Actions.
+
+---
+
 ## 8. Entrega em 3 blocos
 
 **1. O que você pediu**

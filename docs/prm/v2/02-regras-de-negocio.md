@@ -165,6 +165,12 @@ Tabela `config` (chave, valor, unidade, marca, quem muda, vigência). Mudança g
 | `retencao_dados.contato_decisor_dias` | 90 | dias após recusa, expiração ou perda | [P · DL-13] | Jurídico | LGPD art. 6º III; art. 16 |
 | `retencao_dados.registro_anos` | 5 | anos após o fim da relação | [P · DL-13] | Jurídico | CC art. 206 §5º I; Lei 4.886 art. 44 parágrafo único |
 | `retencao_dados.acesso_log_meses` | 12 | meses (mínimo legal 6) | [P · DL-13] | Jurídico + TI | Lei 12.965/2014, art. 15 |
+| `negocio.visibilidade_campos` | matriz campo → {parceiro, so_titular, rotulo, ressalva, auditar, travado}; padrão: tudo visível, menos os campos travados (§11A) | — | [A · Luis 26/10/2026] | Luis | PRM-R113, R114 |
+| `negocio.parado_dias` | 30 | dias na mesma etapa (aging) | [O·dev] | Daniela | PRM-R116 |
+| `negocio.produto_por_pipeline` | funil do HubSpot → produto | — | [O·dev] | Daniela | 03 §2.4 (lacuna "produto") |
+| `painel.base_pequena` | 5 | n mínimo para mostrar taxa | [O·dev] | — | PRM-R118; 03 §5 |
+| `canal.base_pequena_conversao_registro` | 20 | n mínimo por grupo | [O·dev] | — | 03 §5 |
+| `canal.meta_mensal` | out R$ 75 mi · nov R$ 100 mi · dez R$ 75 mi | R$ de crédito de contrato fechado | [A · D111] | Luis | vale quando `registro/gestao/gestao.json` não está disponível |
 
 **Percentuais por parceiro:** nunca no código nem nesta especificação. A fonte é `termo.percentual_recuperacao` (cadastrado por Contratos, D65); enquanto o termo não estiver no cadastro, a carga inicial vem de `departamentos/operacoes-canal/percentual-parceiros.json` (informado pelo Luis em 13/10/2026) com o selo interno "termo a localizar". O percentual do card do HubSpot (`honorarios_parceiro`) só serve para alerta de divergência (PRM-R60).
 
@@ -297,7 +303,7 @@ PRM-R42 [P · DL-05] · Percentual de remuneração de negócio originado pela B
 | Encerrado (`encerrado`) | Negócio Perdido; ou Negócio Fechado com distrato registrado | — | Perdido: "Atendimento encerrado sem contrato." Distrato: "O contrato com a empresa foi encerrado." |
 
 PRM-R43 [O] · O mapa acima é a tabela `mapa_etapas (pipeline, etapa, estado_parceiro)`; a Daniela valida e pode ajustar sem deploy. Outros funis (Gestão de Passivo, Produtos Jurídicos, Produtos Tributários, Planejamento Tributário, Save Partners – BDR/SDR e Closer) entram com mapa próprio antes de aparecer ao parceiro. Etapa sem mapa: o negócio mantém o último estado conhecido (ou `recebido` se nunca teve) e sai alerta "etapa sem mapa" para o Dados.
-PRM-R44 [A] · O parceiro vê só dado objetivo: estado, data de entrada no estado, próximo passo e quem está com a bola. Nunca vê valor do crédito, honorário, tese técnica aplicada, parecer, prazo de PER, chance de êxito nem o motivo interno da perda. Origem: D28; R21; desenho §7 item 6.
+PRM-R44 [A] · O parceiro vê só dado objetivo: estado, data de entrada no estado, próximo passo e quem está com a bola. Nunca vê valor do crédito, honorário, tese técnica aplicada, parecer, prazo de PER, chance de êxito nem o motivo interno da perda. Origem: D28; R21; desenho §7 item 6. **Alterada em 26/10/2026 pela PRM-R113 (instrução do Luis):** na tela Negócios o parceiro vê os valores e a tese conforme a matriz `negocio.visibilidade_campos`, sempre com a ressalva; continuam proibidos chance de êxito, prazo de PER e o motivo interno da perda (§11A).
 PRM-R45 [A] · Ligação negócio ↔ parceiro: `nome_do_parceiro` normalizado pelo roster e pelos aliases (`config-canal.json`, `aliases-parceiros.json`); ligação ao consultor por `email_de_quem_esta_indicando_o_leadcliente` ou pelo alias do nome. Negócio sem ligação segura vai à "fila de vínculo" da Daniela e não aparece a ninguém do lado externo.
 PRM-R46 [A] · Clientes sem Master e café não aparecem (D76; R30 vale para métricas; o negócio de café do próprio parceiro aparece normalmente em Meus negócios, mas fora de nível e metas).
 
@@ -622,6 +628,21 @@ PRM-R107 [A] · Mudança de versão dos Termos de Uso exige novo aceite no próx
 | PRM-R112 | Clientes sem Master e café ficam fora dos indicadores. | [A] | D76; R30 |
 
 ---
+
+## 11A. Acompanhamento de negócios e dashboards de vendas (Luis, 26/10/2026)
+
+Pedido do Luis: "Quero que o parceiro tenha visão dos negócios em andamento, e todas as informações que constam nela. Quero também que construa dashboards como um CRM de vendas." Decisão do Luis na mesma conversa: o parceiro vê os valores, o que supera a recomendação da DL-09 (decisão 6) **nesta tela**. O parâmetro `extrato.mostra_valor_previsto` do extrato continua como está até o Luis mudar.
+
+| ID | Regra | Marca | Origem |
+|---|---|---|---|
+| PRM-R113 | **Visibilidade de valores.** O parceiro vê, nos negócios do seu escopo, os campos do card do HubSpot listados na matriz `negocio.visibilidade_campos` (padrão: todos). Todo valor de crédito sai com o rótulo "Estimativa do diagnóstico · sujeita à análise e homologação da Receita; não é valor garantido." A remuneração estimada do escritório sai como "Previsto", com a mesma ressalva, e só ao titular (como o extrato, PRM-R15). Nunca há chance de êxito, probabilidade nem prazo de restituição. | [A] | Instrução do Luis, 26/10/2026 |
+| PRM-R114 | Campos travados nunca vão ao parceiro, mesmo que a matriz diga sim: notas internas da Save, motivo interno da perda, motivo de conflito, dados de outro parceiro, probabilidade e forecast do CRM, comissões internas (R111) e dado pessoal de sócio do cliente. Campo fora da matriz também não sai (falha fechada). | [A] | R12; R21; LGPD art. 6º III |
+| PRM-R115 | Texto livre do CRM (próximo passo combinado) só vai ao parceiro depois do auditor de promessas e do bloqueio de dado pessoal; reprovado, o campo some da ficha e o parceiro vê o próximo passo padrão do estado. | [A] | 02 §17 |
+| PRM-R116 | Os agregados (pipeline, funil, aging, conversão, ciclo, forecast) são calculados no servidor. O parceiro recebe só os do próprio escopo (titular: escritório; consultor: os dele); nunca comparação ou ranking com outro parceiro (R27). | [A] | R27; 04 §2.1 |
+| PRM-R117 | O dashboard comercial é só da Save (`ver_canal_agregado`); a lista de drill-down exige `ver_negocios`. Café e negócio sem Master ficam fora (R112). Master aparece em ordem alfabética, nunca como ranking. | [A] | R110, R112 |
+| PRM-R118 | Taxa com base pequena (menos de `painel.base_pequena` encerrados; 20 por grupo na conversão registrado × não registrado) aparece como "base pequena", sem número. | [A] | 03 §5 |
+
+**Definições usadas nos dashboards.** Pipeline = negócios abertos por estado, com o crédito estimado (`amount`). Funil = coorte dos negócios que entraram no período e a etapa mais alta a que chegaram (histórico de etapas + estado atual; ganho = contrato assinado). Conversão (win rate) = ganhos ÷ (ganhos + perdidos) com fechamento no período. Ciclo = dias da entrada ao contrato, nos ganhos do período (média e mediana). Aging = dias na etapa atual, em quatro faixas (até 15, 16–30, 31–60, mais de 60); parado = mais de `negocio.parado_dias`. Comparação = mesmo indicador no período anterior de mesmo tamanho. Forecast (só Save) = ganhos do mês + abertos com data de assinatura prevista no mês, sem ponderar por probabilidade, contra a meta D111. Remuneração prevista = crédito × honorário do contrato × percentual do termo, nos ganhos sem recebimento; recebida e paga vêm do extrato.
 
 ## 12. Casos de borda transversais
 

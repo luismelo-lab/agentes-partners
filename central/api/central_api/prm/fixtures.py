@@ -26,6 +26,133 @@ def cnpj_de(raiz, ordem="0001"):
     return b + dv_cnpj(b)
 
 
+# ---------------------------------------------------------------- carteira fictícia para o acompanhamento e os dashboards
+SEGMENTOS = [("1091102", "Fabricação de produtos de padaria", "Panificação"), ("4711302", "Supermercados", "Supermercados"),
+             ("4930202", "Transporte rodoviário de carga", "Transportes"), ("1011201", "Frigorífico", "Alimentos"),
+             ("4639701", "Atacado de alimentos", "Distribuidora"), ("2222600", "Embalagens plásticas", "Embalagens"),
+             ("4744099", "Materiais de construção", "Materiais"), ("1531901", "Calçados de couro", "Calçados"),
+             ("2539001", "Usinagem e tornearia", "Metalúrgica"), ("4930201", "Transporte municipal de carga", "Logística"),
+             ("8610101", "Hospital geral", "Saúde"), ("4731800", "Comércio de combustíveis", "Combustíveis")]
+UFS = ["SP", "MG", "PR", "SC", "RS", "GO", "BA", "PE", "RJ", "ES", "MT", "CE"]
+TESES = ["Insumos de PIS/COFINS", "Exclusão do ICMS da base do PIS/COFINS", "ICMS-ST na base do PIS/COFINS", "ISS na base do PIS/COFINS (Tema 118)",
+         "Créditos extemporâneos de PIS/COFINS", "Contribuições ao Sistema S"]
+FUNIS = ["RT - Real & Presumido"] * 7 + ["RT - Simples Nacional", "Gestão de Passivo", "Planejamento Tributário"]
+ETAPAS_NIVEL = [["Novo Negócio", "Em Contato", "Agendamento", "Contato Futuro"], ["Em Diagnóstico", "Análise de Documentos", "Autorização Equipe Senior LR"],
+                ["Apresentação de Diagnóstico"], ["Negociação", "Contrato Enviado", "Pendência Fechamento"]]
+NIVEL_ETAPA = {e: i for i, xs in enumerate(ETAPAS_NIVEL) for e in xs}
+NIVEL_ETAPA.update({"Análise com Pendência": 1, "Documentação Pendente": 1, "Em Apresentação": 2, "Contrato Assinado": 3, "Lead Novo - Prospecção": 0, "Follow - Up": 0})
+RESPONSAVEIS = ["Daniela (Área Master)", "Área Partners · Masters", "Área Partners · técnico"]
+PASSOS = {0: ["Agendar a primeira conversa com o financeiro da empresa", "Retomar o contato com o decisor"],
+          1: ["Conferir os arquivos do SPED recebidos", "Concluir a leitura técnica dos documentos"],
+          2: ["Combinar a data da apresentação do diagnóstico com você", "Apresentar o resultado do diagnóstico à diretoria"],
+          3: ["Acompanhar a assinatura do contrato pela empresa", "Ajustar a minuta com o jurídico da empresa"]}
+DOCS = ["SPED Contribuições dos últimos 5 anos", "SPED Fiscal (EFD ICMS/IPI)", "Procuração eletrônica no e-CAC", "Balancetes do último exercício", "Relação de notas de entrada"]
+# Master → (peso, consultores) — o Master A concentra a carteira, como no canal real
+MASTERS = {"P-0001": (9, ["P-0010", "P-0011"]), "P-0002": (5, ["P-0012"]), "P-0003": (4, ["P-0013"]), "P-0004": (3, []), "P-0005": (3, []),
+           "P-0006": (2, []), "P-0007": (2, []), "P-0008": (1, []), "P-0009": (1, [])}
+
+
+def _historico(rnd, nivel_final, criado, fim, etapa_final):
+    """Etapas passadas em ordem, com o dia relativo de entrada (criado ≤ ... ≤ fim)."""
+    niveis = list(range(0, nivel_final + 1))
+    pontos = sorted(rnd.randint(criado, fim) for _ in niveis[1:])
+    h = []
+    for i, nv in enumerate(niveis):
+        etapa = etapa_final if (i == len(niveis) - 1 and etapa_final in NIVEL_ETAPA) else rnd.choice(ETAPAS_NIVEL[nv])
+        h.append({"etapa": etapa, "dia": criado if i == 0 else pontos[i - 1]})
+    return h
+
+
+def enriquecer(n, rnd):
+    """Campos do card do HubSpot que o mapeamento da 03 traz (dados FICTÍCIOS). Não sobrescreve o que a fixture já tem."""
+    st = n["status"]
+    criado = n.get("criado") if n.get("criado") is not None else -30
+    if st == "aberto":
+        nv = NIVEL_ETAPA.get(n["etapa"], 0)
+        ent = n.get("entrou_etapa") if n.get("entrou_etapa") is not None else criado
+        hist = _historico(rnd, nv, criado, ent, n["etapa"])
+        hist[-1]["dia"] = ent
+    else:
+        fim = n.get("fechado") if n.get("fechado") is not None else 0
+        nv = 3 if st == "ganho" else rnd.randint(0, 3)
+        hist = _historico(rnd, nv, criado, max(criado, fim - 5), None)
+        hist.append({"etapa": n["etapa"], "dia": fim})
+    seg = rnd.choice(SEGMENTOS)
+    base = {"historico": hist, "teses": rnd.sample(TESES, rnd.randint(1, 3)) if n["pipeline"].startswith("RT") else [],
+            "responsavel": rnd.choice(RESPONSAVEIS), "uf": rnd.choice(UFS), "porte": rnd.choice(["DEMAIS", "DEMAIS", "EPP"]), "segmento": seg[2],
+            "proximo_passo": rnd.choice(PASSOS[min(nv, 3)]) if st == "aberto" else None,
+            "previsao": rnd.randint(3, 65) if st == "aberto" else None,
+            "ecac": rnd.random() < 0.5 if nv >= 1 else False, "anexo_diagnostico": nv >= 2, "parecer": nv >= 2 and rnd.random() < 0.6,
+            "documentos": [{"item": d, "situacao": rnd.choice(["recebido", "recebido", "pendente"])} for d in rnd.sample(DOCS, 2 + min(nv, 2))] if nv >= 1 else [],
+            "notas_internas": "Nota interna fictícia da Área Partners (não vai ao parceiro).", "probabilidade": [0.1, 0.2, 0.4, 0.6, 0.9][min(nv + 1, 4)] if st == "aberto" else None,
+            "motivo_perda": "Motivo interno fictício" if st == "perdido" else None, "contato_socio": "Sócio fictício da empresa", "id_bitrix": ("BX-%s" % n["deal_id"][-4:]) if st == "ganho" else None,
+            "ultima_atividade": n.get("ultima_atividade") if n.get("ultima_atividade") is not None else (hist[-1]["dia"] if st == "aberto" else None)}
+    for k, v in base.items():
+        n.setdefault(k, v)
+    return n
+
+
+def gerar_carteira(fx, quantos=64):
+    """Empresas 22+ e negócios 9200000001+ fictícios e determinísticos (semente fixa). Sem nenhum negócio em etapa de pendência
+    no Master A (os testes contam as pendências dele)."""
+    import random
+    rnd = random.Random(2026)
+    pesos = [(m, w) for m, (w, _) in MASTERS.items()]
+    total = sum(w for _, w in pesos)
+    empresas, negocios = {}, []
+    for i in range(quantos):
+        k = "%02d" % (22 + i)
+        seg = SEGMENTOS[i % len(SEGMENTOS)]
+        empresas[k] = {"raiz": "TESTE%03d" % (22 + i), "nome": "Empresa %s %s Ltda" % (k, seg[2]), "uf": UFS[i % len(UFS)], "cnae": seg[0], "cnae_desc": seg[1],
+                       "porte": "DEMAIS", "regime": "LUCRO REAL"}
+        x = rnd.uniform(0, total)
+        for m, w in pesos:
+            x -= w
+            if x <= 0:
+                break
+        cons = MASTERS[m][1]
+        pid = rnd.choice(cons) if cons and rnd.random() < 0.4 else m
+        r = rnd.random()
+        st = "aberto" if r < 0.5 else ("ganho" if r < 0.78 else "perdido")
+        criado = -rnd.randint(4, 330)
+        n = {"deal_id": "92%08d" % (i + 1), "empresa": k, "parceiro_id": pid, "master_id": m, "pipeline": rnd.choice(FUNIS), "status": st, "criado": criado,
+             "empresa_nome": empresas[k]["nome"]}
+        valor = rnd.choice([90, 140, 220, 310, 450, 600, 780, 950, 1200, 1600, 2300, 3100]) * 1000 + rnd.randint(0, 99) * 100
+        if st == "aberto":
+            nv = rnd.choice([0, 0, 1, 1, 1, 2, 2, 3, 3])
+            etapas = ETAPAS_NIVEL[nv] + (["Análise com Pendência"] if nv == 1 and m != "P-0001" else [])
+            n["etapa"] = rnd.choice(etapas)
+            n["entrou_etapa"] = min(0, criado + rnd.randint(0, max(1, -criado)))
+            n["valor_credito"] = valor if rnd.random() < 0.8 else None
+        else:
+            fim = min(-1, criado + rnd.randint(25, 200))
+            if st == "ganho" and rnd.random() < 0.3:
+                fim = -rnd.randint(1, 24)       # ganhos do mês corrente (realizado contra a meta)
+                criado = min(criado, fim - 30); n["criado"] = criado
+            n["fechado"] = fim
+            n["etapa"] = "Negócio Fechado" if st == "ganho" else "Negócio Perdido"
+            n["valor_credito"] = valor
+            if st == "ganho":
+                n["honorario_pct"] = 0.2 if rnd.random() < 0.8 else None
+                n["parceiro_pct_card"] = 0.25
+        n["cafe"] = i in (5, 40)
+        negocios.append(enriquecer(n, rnd))
+    return empresas, negocios
+
+
+def ler_completo():
+    """demo.json + a carteira gerada (o que a carga usa)."""
+    import random
+    fx = ler()
+    emp, negs = gerar_carteira(fx)
+    fx["empresas"].update(emp)
+    for n in fx["negocios"]:
+        enriquecer(n, random.Random(int(n["deal_id"])))
+        n.setdefault("empresa_nome", fx["empresas"][n["empresa"]]["nome"])  # fictício; o espelho real não guarda o nome (03 §4.1)
+    fx["negocios"] = fx["negocios"] + negs
+    return fx
+
+
 def cenarios(fx=None):
     """Lista para o painel de teste do servidor local: empresa, CNPJ (calculado na hora) e o que acontece."""
     from cnpj import formatar_cnpj
@@ -66,7 +193,7 @@ def montar_indice(fx, pasta_esteira):
 
 
 def carregar(app, pasta_esteira, limpar=True):
-    fx = ler()
+    fx = ler_completo()
     base = app.agora()
     hoje = CAL.dia(base)
 
@@ -114,7 +241,15 @@ def carregar(app, pasta_esteira, limpar=True):
                      "cnpj_raiz_hmac": app.hmac_raiz(c), "cnpj_mascara": app.mascara(c), "parceiro_id": n.get("parceiro_id"), "master_id": n.get("master_id"),
                      "criado_em": d(n.get("criado")), "fechado_em": d(n.get("fechado")), "entrou_etapa_em": ts(n.get("entrou_etapa") if n.get("entrou_etapa") is not None else n.get("criado")),
                      "ultima_atividade_em": ts(n.get("ultima_atividade")), "hs_modificado_em": ts(-1), "valor_credito": n.get("valor_credito"),
-                     "honorario_pct": n.get("honorario_pct"), "parceiro_pct_card": n.get("parceiro_pct_card"), "cafe": False})
+                     "honorario_pct": n.get("honorario_pct"), "parceiro_pct_card": n.get("parceiro_pct_card"), "cafe": bool(n.get("cafe")),
+                     "empresa_nome": n.get("empresa_nome"), "teses": n.get("teses") or [], "produto": n.get("produto"), "owner_nome": n.get("responsavel"),
+                     "uf": n.get("uf"), "porte": n.get("porte"), "segmento": n.get("segmento"), "proximo_passo_crm": n.get("proximo_passo"),
+                     "previsao_fechamento_em": d(n.get("previsao")), "ecac_liberado": bool(n.get("ecac")), "tem_parecer": bool(n.get("parecer")),
+                     "tem_anexo_diagnostico": bool(n.get("anexo_diagnostico")), "documentos_solicitados": n.get("documentos") or [],
+                     "historico_etapas": [{"etapa": x["etapa"], "entrou_em": ts(x["dia"])} for x in n.get("historico") or []],
+                     "notas_internas": n.get("notas_internas"), "probabilidade": n.get("probabilidade"), "motivo_perda_interno": n.get("motivo_perda"),
+                     "contato_socio": n.get("contato_socio"), "id_bitrix": n.get("id_bitrix"),
+                     "outras_comissoes": {"vendedor_pct": 0.03} if n["status"] == "ganho" else None})
     app.repo.carregar_gerado("negocio", negs)
     por_deal = {n["deal_id"]: n for n in negs}
     linhas = []

@@ -7,6 +7,7 @@ da linha (404 fora do escopo) → regra → trilha de acesso. Erro inesperado de
 """
 import logging, re
 
+from . import acompanhamento as AC
 from . import canal as CN
 from . import catalogo as CAT
 from . import decisao as DC
@@ -147,6 +148,10 @@ P = [  # (método, padrão, função, face, exige_termos)
     ("POST", r"/api/prm/parceiro/avisos/lidos", lambda app, a, c, m: (200, {"marcados": NT.marcar_lidas(app, a, c.get("ids"))}), "parceiro", False),
     ("GET", r"/api/prm/parceiro/nivel", lambda app, a, c, m: (exigir(a, "ver_nivel") and 200, NV.visao_parceiro(app, a)), "parceiro", True),
     ("GET", r"/api/prm/parceiro/biblioteca", lambda app, a, c, m: (200, PT.biblioteca(app, a)), "parceiro", True),
+    # acompanhamento de negócios e painel de vendas (PRM-R113 a R118)
+    ("GET", r"/api/prm/parceiro/negocios", lambda app, a, c, m: (200, AC.listar(app, a, c)), "parceiro", True),
+    ("GET", r"/api/prm/parceiro/negocios/" + REF, lambda app, a, c, m: (200, AC.ficha_parceiro(app, a, m["ref"])), "parceiro", True),
+    ("GET", r"/api/prm/parceiro/painel", lambda app, a, c, m: (200, AC.painel_parceiro(app, a, c)), "parceiro", True),
     # ------------------------------------------------------------ Save (seção Canal)
     ("GET", r"/api/prm/save/canal", lambda app, a, c, m: (200, CN.visao(app, a)), "save", False),
     ("GET", r"/api/prm/save/registros", lambda app, a, c, m: (200, CN.registros(app, a, c.get("estado"))), "save", False),
@@ -160,6 +165,9 @@ P = [  # (método, padrão, função, face, exige_termos)
     ("GET", r"/api/prm/save/acessos", lambda app, a, c, m: (200, CN.acessos(app, a)), "save", False),
     ("GET", r"/api/prm/save/niveis", lambda app, a, c, m: (200, CN.niveis(app, a)), "save", False),
     ("GET", r"/api/prm/save/parametros", lambda app, a, c, m: (200, CN.parametros(app, a)), "save", False),
+    ("GET", r"/api/prm/save/dashboard", lambda app, a, c, m: (200, AC.dashboard_canal(app, a, c)), "save", False),
+    ("GET", r"/api/prm/save/negocios", lambda app, a, c, m: (200, AC.listar(app, a, c)), "save", False),
+    ("GET", r"/api/prm/save/negocios/(?P<id>\d{1,20})", lambda app, a, c, m: (200, AC.ficha_save(app, a, m["id"])), "save", False),
     ("GET", r"/api/prm/save/avisos", _avisos, "save", False),
     ("POST", r"/api/prm/save/avisos/lidos", lambda app, a, c, m: (200, {"marcados": NT.marcar_lidas(app, a, c.get("ids"))}), "save", False),
     ("POST", r"/api/prm/save/decidir", lambda app, a, c, m: (200, DC.decidir(app, a, c)), "save", False),

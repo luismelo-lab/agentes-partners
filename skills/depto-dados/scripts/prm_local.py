@@ -209,6 +209,12 @@ def espelho(negocios, vinculo, regras):
             "ecac_liberado": str(ex.get("ecac")).lower() == "true", "tem_parecer": bool(ex.get("parecer_rt")), "id_bitrix": ex.get("id_bitrix"),
             "importado": str(ex.get("importado")).lower() == "true", "indicado_por_email_preenchido": bool(ex.get("indicado_por_email")),
             "cafe": cafe(d, regras, d.get("nome")),
+            # acompanhamento de negócios do parceiro (PRM-R113+, 26/10/2026). Nome da empresa e dado de sócio NÃO entram no JSON local.
+            "produto": ex.get("produto"), "segmento": d.get("segmento"), "owner_nome": ex.get("owner_nome"),
+            "previsao_fechamento_em": str(fechado) if (st == "aberto" and fechado) else None,
+            "proximo_passo_crm": ex.get("proximo_passo"), "tem_anexo_diagnostico": bool(ex.get("anexo_diagnostico")),
+            "historico_etapas": [{"etapa": h.get("etapa"), "entrou_em": h.get("entrou_em")} for h in (ex.get("historico_etapas") or []) if isinstance(h, dict) and h.get("etapa")],
+            "probabilidade": d.get("prob"), "motivo_perda_interno": ex.get("motivo_perda"),
         })
     return linhas
 

@@ -4,6 +4,8 @@ PRM-R43 mapa etapa → estado no parâmetro negocio.mapa_etapas (a Daniela ajust
 último estado conhecido (ou "recebido") e conta como alerta "etapa sem mapa" para o Dados.
 PRM-R44 o parceiro vê só dado objetivo: estado, data, próximo passo e com quem está a bola. Nunca valor do crédito,
 honorário, tese técnica, parecer, prazo de PER, chance de êxito nem motivo interno da perda.
+         (Alterada pela PRM-R113 em 26/10/2026: a tela Negócios, em acompanhamento.py, mostra os valores pela matriz
+         negocio.visibilidade_campos, com ressalva. Esta visão resumida da ficha da empresa continua sem valor.)
 PRM-R45 negócio sem ligação segura com o parceiro não aparece a ninguém do lado externo.
 """
 from . import calendario as CAL

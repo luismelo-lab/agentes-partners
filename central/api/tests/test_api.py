@@ -4,9 +4,12 @@
 """
 import json, time, unittest, uuid
 
-import jwt
-from cryptography.hazmat.primitives.asymmetric import rsa
-from jwt.algorithms import RSAAlgorithm
+try:
+    import jwt
+    from cryptography.hazmat.primitives.asymmetric import rsa
+    from jwt.algorithms import RSAAlgorithm
+except ImportError:  # CI sem as dependências: o módulo aparece como pulado, com o motivo (não some em silêncio)
+    raise unittest.SkipTest("PyJWT[crypto] ausente: rode pip install -r central/api/requirements.txt")
 
 from central_api import permissoes as P
 from central_api import rotas
