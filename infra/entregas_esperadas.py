@@ -23,7 +23,7 @@ REG = os.path.join(AP, "registro")
 # tipo "script": bin/partners <etapa>; tipo "ia": a Central lê ~/.claude/scheduled-tasks/<rotina>/SKILL.md e executa
 ESPERADAS = [
     ("dados-bi", "Dados-BI do dia", range(0, 5), 9, lambda: glob.glob(os.path.join(REL, f"Dados-BI-{H}.xlsx")), "script", ["dados-bi", "onedrive"]),
-    ("plano", "Planos do dia", range(0, 5), 9, lambda: glob.glob(os.path.join(SAIDA, f"Plano-do-dia-Luis-{H}.xlsx")) or glob.glob(os.path.join(AP, "departamentos/operacao/Luis", f"Plano-do-dia-Luis-{H}.xlsx")), "ia", "operacao-areas"),
+    ("plano", "Planos do dia", range(0, 5), 9, lambda: glob.glob(os.path.join(CENTRAL, "Plano do dia", f"Plano-do-dia-Luis-{H}.xlsx")) or glob.glob(os.path.join(SAIDA, f"Plano-do-dia-Luis-{H}.xlsx")) or glob.glob(os.path.join(AP, "departamentos/operacao/Luis", f"Plano-do-dia-Luis-{H}.xlsx")), "ia", "operacao-areas"),
     ("portal", "Dados do painel", range(0, 5), 9, lambda: [f for f in [os.path.join(AP, "portal/dados.json")] if os.path.exists(f) and date.fromtimestamp(os.path.getmtime(f)) == HOJE], "script", ["portal"]),
     ("areas", "Relatórios semanais das áreas", [0], 9, lambda: glob.glob(os.path.join(REL, f"Conferencia-Repasses-{H}.xlsx")), "script", ["areas", "onedrive"]),
     ("resultados", "Relatório semanal de resultados", [0], 8, lambda: glob.glob(os.path.join(RES, f"Resultado-Semanal-{H}.pptx")), "ia", "relatorio-semanal-resultados"),
@@ -52,6 +52,26 @@ def reparar(itens):
         it["reparo"] = "refeito" if ok else "falhou de novo"
 
 
+def avisar_caixa(itens):
+    """Caixa de entrada do Luis (26/10/2026), prioridade alta: uma mensagem por entrega atrasada por dia (marca em logs/).
+    Antes o aviso ia para a pasta do e-mail pausado e ninguém via."""
+    novos = []
+    for x in itens:
+        marca = os.path.join(AP, "logs", f".caixa-entrega-{x['id']}-{H}")
+        if not os.path.exists(marca): novos.append((x, marca))
+    if not novos: return
+    try:
+        import caixa
+        linhas = [f"- {x['nome']}: esperada desde as {x['desde']}. " + ("Nova tentativa automática: " + (x.get("reparo") or "na próxima rodada") + "." if x["tipo"] == "script"
+                  else "A Central refaz na próxima rodada.") for x, _ in novos]
+        nomes = ", ".join(x["nome"] for x, _ in novos)
+        if caixa.enviar("luis", f"Entrega atrasada hoje: {nomes}"[:150], "O que não saiu até agora:\n" + "\n".join(linhas), "sentinela", "alta",
+                        acoes=[{"rotulo": "Abrir minha mesa", "go": "mesa"}, {"rotulo": "Ver rotinas", "go": "rotinas"}]):
+            for _, marca in novos: open(marca, "w").close()
+    except Exception as erro:  # noqa: BLE001  a sentinela não para por causa da caixa
+        print(f"aviso: caixa de entrada não recebeu o alerta ({erro})")
+
+
 if __name__ == "__main__":
     f = faltando()
     if "--reparar" in sys.argv:
@@ -66,4 +86,5 @@ if __name__ == "__main__":
     json.dump({"data": H, "hora": AGORA.strftime("%H:%M"), "faltando": f, "falhas_hoje": falhas[-10:]},
               open(os.path.join(REG, "entregas-faltando.json"), "w"), ensure_ascii=False, indent=1)
     for x in f: print(f"FALTA {x['id']:<12} {x['nome']} ({x['tipo']}: {x['refazer']}) {x.get('reparo') or ''}")
+    avisar_caixa(f)
     print(f"{len(f)} entrega(s) faltando · {len(falhas)} falha(s) de rotina hoje")

@@ -4,7 +4,8 @@
 Rodam em pasta temporária, com registro em memória: não tocam no registro real, no db do Artifact, no GLPI nem no e-mail.
   python3 -m unittest -v lib/test_portal_fluxo.py
 Cobrem: autor dos registros do painel (A3), pedido direto à área com `codigo` vazio, aprovação só por quem pediu
-(painel e e-mail), chamado só aprovado pela dona, versão "time" dos dados do portal (A2).
+(painel e e-mail), chamado só aprovado pela dona, versão "time" dos dados do portal (A2) e a caixa de entrada (26/10/2026):
+fila → entregue, idempotência, destinatário por e-mail, texto sem HTML nem dado sensível, painel do time sem mensagem do Luis.
 """
 import contextlib, importlib.util, io, json, os, shutil, sys, tempfile, types, unittest
 
@@ -258,6 +259,123 @@ class ChamadoSugerido(unittest.TestCase):
         self.assertTrue(M._auditar("")["ok"])
         r = M._auditar("Garantimos o resultado e o crédito sai em 30 dias.")
         self.assertIs(r["ok"], False); self.assertTrue(r["achados"])  # promessa de êxito e de prazo
+
+
+class CaixaEntrada(unittest.TestCase):
+    """Caixa de entrada da Central (lib/caixa.py): fila local → painel certo → entregue."""
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp(prefix="caixa-teste-")
+        self.od = os.path.join(self.tmp, "od"); os.makedirs(os.path.join(self.od, "Área Partners · Agentes", "Central Masters · Daniela", "Plano do dia"))
+        self.env = {k: os.environ.get(k) for k in ("PARTNERS_AP", "OD_BASE", "OD_RAIZ", "CAIXA_AUDITAR", "CAIXA_PASTA")}
+        os.environ.update({"PARTNERS_AP": self.tmp, "OD_BASE": self.od, "CAIXA_AUDITAR": "0"}); os.environ.pop("OD_RAIZ", None); os.environ.pop("CAIXA_PASTA", None)
+        import caixa, portal_contas as PC
+        self.C, self.PC = caixa, PC
+        self._pc = (PC.CONTAS, PC.ALERTAS)
+        PC.CONTAS = os.path.join(self.tmp, "contas.json"); PC.ALERTAS = os.path.join(self.tmp, "registro", "portal-alertas.json")
+        json.dump({"contas": {LUIS: "luis", DANI: "daniela", GEO: "geovana"}}, open(PC.CONTAS, "w"))
+
+    def tearDown(self):
+        self.PC.CONTAS, self.PC.ALERTAS = self._pc
+        for k, v in self.env.items():
+            if v is None: os.environ.pop(k, None)
+            else: os.environ[k] = v
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_fila_entregue_e_idempotencia(self):
+        C, t = self.C, "2026-10-26T07:42:00-03:00"
+        ids = C.enviar("daniela", "Plano do dia", "texto", "plano", criado_em=t)
+        self.assertEqual(C.enviar("daniela", "Plano do dia", "texto", "plano", criado_em=t), ids)  # repetido não entra de novo
+        self.assertEqual(len(C.pendentes("time")), 1)
+        w = C.lote("time")
+        self.assertEqual([x["doc_id"] for x in w], ids)
+        self.assertEqual(w[0]["op"], "set"); self.assertEqual(w[0]["collection"], "caixa")
+        d = json.load(open(w[0]["file_path"]))
+        self.assertEqual(set(d), {"para", "assunto", "resumo", "origem", "tipo", "prioridade", "anexos", "acoes", "criado_em", "lido_por", "auditoria"})
+        self.assertEqual(d["lido_por"], {})
+        self.assertEqual(C.marcar_entregues(ids, "time"), 1)
+        self.assertEqual(C.marcar_entregues(ids, "time"), 0)   # marcar de novo não duplica
+        self.assertEqual(C.lote("time"), [])                    # nada a reenviar
+        self.assertEqual(C.marcar_entregues(ids, "luis"), 0)   # id do time não vira entregue no painel do Luis
+
+    def test_destinatario_por_email(self):
+        C = self.C
+        self.assertEqual(C.pessoa_de("Daniela.Maciel@savecompany.com.br"), "daniela")
+        self.assertEqual(C.pessoa_de("geovana.goncalves@savecompany.com.br"), "geovana")
+        self.assertIsNone(C.pessoa_de("outra.pessoa@savecompany.com.br"))
+        self.assertEqual(C.enviar(["outra.pessoa@savecompany.com.br"], "a", "b"), [])  # ninguém do portal: nada na fila
+        ids = C.enviar(["luis.melo@savecompany.com.br", "jenifer.carvalho@savecompany.com.br", "luis"], "Aviso", "texto", "agentes")
+        self.assertEqual(len(ids), 2)  # uma mensagem por pessoa, sem repetir o Luis
+
+    def test_time_nao_recebe_mensagem_do_luis(self):
+        C = self.C
+        C.enviar("luis", "Falha na rotina", "detalhe", "alerta", "alta")
+        C.enviar("time", "Radar", "texto", "radar"); C.enviar("geovana", "Lote", "texto", "recuperador")
+        time = [json.load(open(w["file_path"]))["para"] for w in C.lote("time")]
+        luis = [json.load(open(w["file_path"]))["para"] for w in C.lote("luis")]
+        self.assertNotIn("luis", time); self.assertEqual(sorted(time), ["geovana", "time"])
+        self.assertEqual(luis, ["luis"])
+        m = C.pendentes("luis")[0]; self.assertEqual((m["tipo"], m["prioridade"]), ("alerta", "alta"))
+
+    def test_texto_sem_html_nem_dado_sensivel(self):
+        n = lambda k, d="9": d * k  # números gerados (o scanner do repositório bloqueia exemplos reais)
+        corpo = (f'<html><head><style>p{{color:red}}</style></head><body><p>Olá <b>Daniela</b></p><ul><li>fone ({n(2, "1")}) {n(5)}-{n(4)}</li>'
+                 f'<li>CPF {n(11, "1")}</li></ul><script>alert(1)</script><p>R$ 12.345 em 2026-10-26 · <a href="https://x">link</a></p></body></html>' + "x " * 2000)
+        C = self.C; C.enviar("daniela", "<i>Assunto</i>", corpo, "plano")
+        m = C.pendentes("time")[0]
+        for t in (m["assunto"], m["resumo"]):
+            self.assertNotIn("<", t); self.assertNotIn(">", t)
+        self.assertNotIn(n(5) + "-" + n(4), m["resumo"]); self.assertNotIn(n(11, "1"), m["resumo"])
+        self.assertNotIn("alert(1)", m["resumo"]); self.assertNotIn("color:red", m["resumo"])
+        self.assertIn("- fone", m["resumo"]); self.assertIn("R$ 12.345", m["resumo"])
+        self.assertLessEqual(len(m["resumo"]), C.LIMITE_RESUMO)
+
+    def test_auditoria_marca_conferir(self):
+        os.environ["CAIXA_AUDITAR"] = "1"
+        import protecao
+        orig = protecao.auditar; protecao.auditar = lambda t: "garantido" not in t
+        try:
+            self.C.enviar("daniela", "Aviso", "Resultado garantido", "agentes"); self.C.enviar("daniela", "Aviso", "Texto neutro", "agentes")
+        finally: protecao.auditar = orig
+        self.assertEqual(sorted(m["auditoria"] for m in self.C.pendentes("time")), ["conferir", "ok"])
+
+    def test_anexos_e_acoes(self):
+        C = self.C
+        no_od = os.path.join(self.od, "Área Partners · Agentes", "Central Masters · Daniela", "Plano do dia", "Plano-do-dia-2026-10-26.xlsx"); open(no_od, "w").close()
+        local = os.path.join(self.tmp, "local", "Plano-do-dia-2026-10-26.xlsx"); os.makedirs(os.path.dirname(local)); open(local, "w").close()
+        so_mac = os.path.join(self.tmp, "local", "print-do-parceiro.png"); open(so_mac, "w").close()
+        C.enviar("daniela", "Plano", "texto", "plano", anexos=[local, so_mac],
+                 acoes=[{"rotulo": "Abrir minha mesa", "go": "mesa"}, {"rotulo": "x", "go": "javascript:alert(1)"}, {"rotulo": "y", "go": "https://fora"}])
+        m = C.pendentes("time")[0]
+        self.assertEqual([a["nome"] for a in m["anexos"]], ["Plano-do-dia-2026-10-26.xlsx"])  # arquivo só do Mac não entra
+        self.assertTrue(m["anexos"][0]["pasta_link"].startswith("https://gruposave-my.sharepoint.com/my?id="))
+        self.assertIn("Plano%20do%20dia", m["anexos"][0]["pasta_link"])                      # link da PASTA, não do arquivo
+        self.assertEqual(m["acoes"], [{"rotulo": "Abrir minha mesa", "go": "mesa"}])       # só rota interna do portal
+
+    def test_leituras_so_da_propria_conta(self):
+        pasta = os.path.join(self.tmp, "painel"); os.makedirs(os.path.join(pasta, "caixa_lidas"))
+        json.dump({"pessoa": "daniela", "por_id": DANI, "lidas": {"cx-1": {"em": "2026-10-26T08:00"}}}, open(os.path.join(pasta, "caixa_lidas", DANI + ".json"), "w"))
+        json.dump({"pessoa": "luis", "por_id": GEO, "lidas": {"cx-2": {"em": "x"}}}, open(os.path.join(pasta, "caixa_lidas", GEO + ".json"), "w"))
+        self.assertEqual(self.C.registrar_lidas(pasta), 1)
+        self.assertEqual(self.C.registrar_lidas(pasta), 0)  # idempotente
+        L = json.load(open(os.path.join(self.tmp, "registro", "caixa", "lidas.json")))
+        self.assertEqual(list(L), ["cx-1|daniela"])
+        self.assertTrue(any(a["colecao"] == "caixa_lidas" for a in json.load(open(self.PC.ALERTAS))))
+
+    def test_transicao_da_pasta(self):
+        C = self.C
+        self.assertTrue(C.manter_pasta())  # sem entrega ainda: a pasta continua
+        ids = C.enviar("daniela", "a", "b"); C.marcar_entregues(ids, "time")
+        self.assertTrue(C.manter_pasta())  # caixa entregando há menos de 1 semana
+        f = os.path.join(self.tmp, "registro", "caixa", "entregues.jsonl")
+        open(f, "w").write(json.dumps({"id": ids[0], "painel": "time", "em": "2026-01-01T08:00:00-03:00"}) + "\n")
+        self.assertFalse(C.manter_pasta())  # 1 semana depois: a pasta para de receber (não é apagada)
+        os.environ["CAIXA_PASTA"] = "1"; self.assertTrue(C.manter_pasta())  # a chave manda
+
+    def test_email_layout_manda_para_a_caixa(self):
+        L = carregar("email_layout_teste", os.path.join(REPO, "skills/depto-marketing/scripts/email_layout.py"))
+        ids = L.para_caixa(["geovana.goncalves@savecompany.com.br"], [], "[Partners · automático] Falha: x", "<p>falhou</p>")
+        m = self.C.pendentes("time")[0]
+        self.assertEqual((ids, m["para"], m["origem"], m["tipo"]), ([m["id"]], "geovana", "alerta", "alerta"))
 
 
 if __name__ == "__main__":

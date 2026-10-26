@@ -135,17 +135,37 @@ def md(t):
     return "".join(out)
 
 
-def outlook(para, cc, assunto, corpo, anexos=(), enviar=False, abrir=False):
+def para_caixa(para, cc, assunto, corpo, anexos=(), origem=None, prioridade=None, acoes=None, resumo=None):
+    """Caixa de entrada da Central (Luis, 26/10/2026): toda mensagem enviada também vai à caixa do portal de quem a recebe.
+    O texto vai sem HTML (até 1.500 caracteres), limpo pelo lib/protecao.py; o anexo vai como nome + link da pasta.
+    Devolve os ids gravados (vazio se ninguém do portal recebe ou se a caixa falhou: o envio nunca para por causa dela)."""
+    try:
+        import sys as _s; _s.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); import caixa
+        quem = list(para) + list(cc or [])
+        return caixa.enviar(quem, assunto, resumo if resumo is not None else corpo, origem, prioridade or "normal", list(anexos or []), acoes)
+    except Exception as erro:  # noqa: BLE001
+        print(f"aviso: caixa de entrada não recebeu a mensagem ({erro})", file=_sys.stderr)
+        return []
+
+
+def outlook(para, cc, assunto, corpo, anexos=(), enviar=False, abrir=False, origem=None, prioridade=None, acoes=None, resumo=None, anexos_caixa=None):
     """Cria a mensagem no Outlook do Mac (clássico). enviar=False → rascunho; enviar=True → envia.
     Na nuvem (AGENTES_EMAIL=graph), usa a caixa compartilhada pelo Microsoft Graph (lib/graph.py).
-    Trava de domínio (Qualidade + Jurídico, 02/10): nada sai para fora de @savecompany.com.br."""
+    Trava de domínio (Qualidade + Jurídico, 02/10): nada sai para fora de @savecompany.com.br.
+    Caixa de entrada (26/10/2026): com enviar=True a mensagem também vai à caixa do portal (lib/caixa.py); quando o Graph
+    voltar, a caixa continua e o e-mail vira cópia. origem/prioridade/acoes/resumo enriquecem a mensagem da caixa;
+    anexos_caixa: onde os anexos estão no OneDrive, quando não é o caminho local enviado no e-mail."""
     import sys as _s; _s.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); import protecao
     fora = protecao.interno(list(para), list(cc))
     if fora or not para: return False, f"BLOQUEADO: destinatário fora do domínio ou vazio {fora}"
+    na_caixa = para_caixa(para, cc, assunto, corpo, anexos if anexos_caixa is None else anexos_caixa, origem, prioridade, acoes, resumo) if enviar else []
     pausa = os.path.expanduser("~/agentes-partners/.email-pausado")
     if os.path.exists(pausa) and not (os.environ.get("AGENTES_EMAIL") == "graph" or os.path.exists(os.path.expanduser("~/agentes-partners/.email-graph"))):
-        # E-mail pausado (Luis, 13/10: sem Outlook no Mac, aguardando a TI liberar o Graph): a mensagem vira página
-        # no OneDrive em vez de falhar. Para religar: apagar ~/agentes-partners/.email-pausado (ou AGENTES_EMAIL=graph).
+        # E-mail pausado (Luis, 13/10: sem Outlook no Mac, aguardando a TI liberar o Graph): a mensagem vai à caixa de entrada
+        # do portal e, durante a transição (1 semana, chave CAIXA_PASTA), também vira página no OneDrive.
+        # Para religar o e-mail: apagar ~/agentes-partners/.email-pausado (ou AGENTES_EMAIL=graph).
+        if na_caixa and not __import__("caixa").manter_pasta():
+            return True, f"na caixa de entrada da Central ({len(na_caixa)} mensagem(ns)): {', '.join(na_caixa)}"
         import re as _re, shutil as _sh, time as _t; import caminhos
         d = os.path.join(caminhos.luis("central"), "Caixa de saída (e-mail pausado)"); os.makedirs(d, exist_ok=True)
         nome = _t.strftime("%Y-%m-%d %Hh%M%S") + " · " + _re.sub(r'[\\/:*?"<>|]', "-", assunto)[:90] + ".html"
@@ -153,7 +173,7 @@ def outlook(para, cc, assunto, corpo, anexos=(), enviar=False, abrir=False):
         open(os.path.join(d, nome), "w", encoding="utf-8").write(cab + corpo)
         for x in anexos or ():
             if x and os.path.exists(x): _sh.copy2(x, os.path.join(d, os.path.basename(x)))
-        return True, f"salvo no OneDrive (e-mail pausado): {nome}"
+        return True, f"salvo no OneDrive (e-mail pausado): {nome}" + (f" · na caixa de entrada: {', '.join(na_caixa)}" if na_caixa else "")
     if (os.environ.get("AGENTES_EMAIL") == "graph" or os.path.exists(os.path.expanduser("~/agentes-partners/.email-graph"))):
         import sys as _s; _s.path.insert(0, os.path.expanduser("~/agentes-partners/lib")); import graph
         return graph.enviar(list(para), list(cc), assunto, corpo, [a for a in anexos if a], rascunho=not enviar)

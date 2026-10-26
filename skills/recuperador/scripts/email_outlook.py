@@ -59,7 +59,8 @@ def montar(lote):
 
 
 def outlook(para, cc, assunto, corpo, anexo, abrir, enviar=False):
-    return L.outlook(para, cc, assunto, corpo, [anexo], enviar=enviar, abrir=abrir)
+    kw = dict(origem="recuperador", acoes=[{"rotulo": "Abrir lote", "go": "mesa"}]) if hasattr(L, "para_caixa") else {}  # caixa de entrada (26/10/2026)
+    return L.outlook(para, cc, assunto, corpo, [anexo], enviar=enviar, abrir=abrir, **kw)
 
 
 def eml(para, cc, assunto, corpo, anexo):

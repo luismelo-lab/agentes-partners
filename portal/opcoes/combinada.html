@@ -264,6 +264,19 @@ table.t .num{text-align:right;font-family:var(--mono);font-variant-numeric:tabul
 .wa-det .d-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .wa-det h2{margin:4px 0 0;font-size:18px;font-weight:600;line-height:1.3}
 .wa-det .fechar-m{display:none}
+/* ---------- caixa de entrada (26/10/2026) ---------- */
+.cx-linha{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;padding:14px 16px;border:0;border-bottom:1px solid var(--linha-fina);border-left:3px solid transparent;background:transparent;width:100%;text-align:left;cursor:pointer;color:inherit;font:inherit}
+.cx-linha:hover{background:var(--hover)} .cx-linha.sel{border-left-color:var(--ouro);background:var(--hover)}
+.cx-linha .ponto{margin-top:7px} .ponto.apaga{background:transparent;border:1.5px solid var(--linha-3)}
+.cx-linha .cl{display:flex;flex-direction:column;gap:4px;min-width:0}
+.cx-linha .cl-topo{color:var(--texto-2);font-weight:400;line-height:1.35;overflow-wrap:anywhere} .cx-linha.nova .cl-topo{font-weight:700;color:var(--texto)}
+.cx-linha .cl-sub{font-size:12px;color:var(--texto-4)}
+.cx-linha .cl-txt{color:var(--texto-3);font-size:13px;line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cx-linha .cl-dir{display:flex;flex-direction:column;align-items:flex-end;gap:6px} .cx-linha .cl-dir .mono{font-size:12px;color:var(--texto-4);white-space:nowrap}
+.cx-linha .cl-dir .sub{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--texto-4)}
+.mini-ic{width:13px;height:13px}
+.cx-anexo{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--linha-fina)} .cx-anexo:last-child{border-bottom:0}
+.cx-anexo .tit{display:flex;align-items:center;gap:8px;min-width:0;overflow-wrap:anywhere} .cx-anexo .ic{width:16px;height:16px;flex:none;color:var(--ouro-texto)}
 .mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .mini div{border:1px solid var(--linha);border-radius:10px;padding:10px;min-width:0} .mini small{display:block;font-size:11px;color:var(--texto-4)} .mini b{font-weight:500;display:block;overflow-wrap:anywhere}
 .mini .ouro{color:var(--ouro-texto)}
@@ -340,7 +353,7 @@ table.t .num{text-align:right;font-family:var(--mono);font-variant-numeric:tabul
   .mini{grid-template-columns:repeat(2,minmax(0,1fr))} .mini div:last-child{grid-column:1/-1}
   .res-l{grid-template-columns:36px minmax(0,1fr);padding:12px 16px} .res-l .ico{width:36px;height:36px} .res-l .lks{grid-column:2;align-items:flex-start;flex-direction:row;flex-wrap:wrap}
   .conversa{position:fixed;inset:0;z-index:45;border-radius:0;border:0;min-height:0;max-height:none;padding-top:env(safe-area-inset-top,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-  .nav-m{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--fundo);border-top:1px solid var(--linha);
+  .nav-m{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--fundo);border-top:1px solid var(--linha);
     padding:6px max(8px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
   .nav-m a,.nav-m button{min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-decoration:none;color:var(--texto-3);font:400 11px var(--sans);border:0;background:none;cursor:pointer;position:relative;padding:0}
   .nav-m a[aria-current="page"]{color:var(--ouro-texto)} .nav-m .ic{width:20px;height:20px}
@@ -387,12 +400,12 @@ const Fonte = {
         decisoes: X.decisoes, decisoesTotal: X.decisoes_total, demandas: X.demandas, demandasNum: X.demandas_num, alertas: X.alertas, manchete: X.manchete,
         masters: X.masters, janelas: X.janelas, lote: X.lote, arquivos: X.arquivos,
         pedidos: X.pedidos.map(p => ({...p, campos: {precisa: p.precisa, uso: p.uso, prazo: p.prazo}, para: {"celula-daniela": "daniela", "celula-jenifer": "jenifer", "recuperador": "geovana", "revisor-diagnostico": "geovana"}[p.area] || "luis"})),
-        chamados: X.chamados, whatsapp: X.whatsapp || []} }
+        chamados: X.chamados, whatsapp: X.whatsapp || [], caixa: X.caixa || []} }
     const [D, R] = await Promise.all([this.json("dados.json"), this.json("diretorio.json")]);
     const pw = D.pastas_web || {};
     return {atualizado: D.atualizado, areas: R.areas, blocos: R.blocos, rotinas: R.rotinas, pastas: R.pastas, pessoas: R.pessoas, regras: R.regras_casa || [],
       decisoes: D.conselho || [], decisoesTotal: null, demandas: D.demandas_lista || [], demandasNum: D.demandas || {}, alertas: D.gestao?.alertas || [], manchete: D.gestao?.manchete,
-      masters: D.gestao?.masters || [], janelas: D.janelas || [], lote: D.lote || [], arquivos: D.arquivos_dia || {}, pedidos: [], chamados: [], pastasWeb: pw, mastersLista: D.gestao?.masters || [], perfil: D.perfil || "completo", whatsapp: D.whatsapp_demandas || []};
+      masters: D.gestao?.masters || [], janelas: D.janelas || [], lote: D.lote || [], arquivos: D.arquivos_dia || {}, pedidos: [], chamados: [], pastasWeb: pw, mastersLista: D.gestao?.masters || [], perfil: D.perfil || "completo", whatsapp: D.whatsapp_demandas || [], caixa: []};
   },
   async conectar() {
     if (this.previa && /demo/.test(location.search)) { this.sample = demoSample(); return }
@@ -412,6 +425,7 @@ const Fonte = {
     const chave = dono ? "luis" : ["daniela", "jenifer", "geovana"].find(k => ps.includes(k)) || null;
     this.dono = dono; return {id: me?.id || null, chave, dono};
   },
+  ouvirDoc(c, cb, erro) { return this.db.doc(c).onSnapshot(s => cb(s.exists ? s.data() : null), erro) },
   ouvir(col, ordem, lim, cb, erro) { let q = this.db.collection(col); if (ordem) q = q.orderBy(ordem, "desc"); return q.limit(lim).onSnapshot(s => cb(s.docs.map(d => ({id: d.id, ...d.data()}))), erro) },
   pode() { return this.previa || (!!this.db && S.identificado) },
   async criar(col, dados) { if (this.previa) return {id: "prev-" + Date.now()}; return this.db.collection(col).add(dados) },
@@ -443,7 +457,7 @@ const lsGet = k => { try { return localStorage.getItem(k) } catch (e) { return n
 const lsSet = (k, v) => { try { localStorage.setItem(k, v) } catch (e) {} };
 const P = {mesa: "M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z", pedidos: "M4 4h16v16H4zM4 13h5l1.5 3h3L15 13h5", areas: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
   onde: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4", rotinas: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2", decisoes: "M4 12l5 5L20 6",
-  sino: "M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20h4", mais: "M12 5v14M5 12h14", fechar: "M6 6l12 12M18 6 6 18", menu: "M4 7h16M4 12h16M4 17h16",
+  sino: "M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20h4", caixa: "M3 6h18v12H3zM3 7l9 6 9-6", mais: "M12 5v14M5 12h14", fechar: "M6 6l12 12M18 6 6 18", menu: "M4 7h16M4 12h16M4 17h16",
   chat: "M4 5h16v11H8l-4 4z", whats: "M4 5h16v11H8l-4 4zM8 9h8M8 12h5", sol: "M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
   lua: "M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z", pasta: "M3 6h6l2 2h10v11H3z", parar: "M7 7h10v10H7z", voltar: "M19 12H5M11 6l-6 6 6 6", enviar: "M5 12h14M13 6l6 6-6 6",
   glpi: "M4 4h16v16H4zM8 9h8M8 13h8M8 17h5", doc: "M6 3h9l4 4v14H6zM14 3v5h5", pessoa: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0", esp: "M12 3l2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.5-.8z"};
@@ -459,7 +473,8 @@ const ST_CH = {proposto: "Aguarda aprovação", aprovado: "Aprovado · abrindo n
 const FIXADAS = [["depto-tributario", "TR", "Tributário"], ["depto-save-invest", "SI", "Save Invest"], ["depto-juridico", "JU", "Jurídico"], ["depto-internacional", "IN", "Internacional"]];
 const S = {M: null, eu: null, meuId: null, identificado: false, acoes: {}, recup: {}, conselho: {}, apont: [],
   f: {fase: "", area: "", pessoa: ""}, wa: {q: "", pessoa: "", status: ""}, kPessoa: "", kCol: "aprovar", vista: "quadro", aba: {}, waSel: null, rotaAnt: "",
-  novo: {sel: null, busca: "", entrega: "", texto: "", contexto: ""}, chats: {}, chatOff: "", msg: ""};
+  novo: {sel: null, busca: "", entrega: "", texto: "", contexto: ""}, chats: {}, chatOff: "", msg: "",
+  cx: {f: "", q: "", sel: null}, lidas: {}, lidasP: {}, cxGrava: Promise.resolve()};
 const fase = p => FASE[p.status] || "fila";
 /* Aprovações valem só para a dona (alçadas): na versão online, a pessoa precisa estar identificada pela conta do Claude
    (o seletor de perfil é só para consulta). Na prévia, basta o perfil escolhido. */
@@ -549,7 +564,7 @@ function mesaTime(p) {
     ${kpi({r: "Para aprovar", v: m.prontos.length + m.chamados.length + m.lote.length, s: p === "geovana" ? "respostas, chamados e lote" : "respostas e chamados", dest: true, tag: "você aprova", tagForte: true})}
     ${kpi({r: "Em andamento", v: m.andamento.length, s: "pedidos que você fez", go: "pedidos", tag: "14 dias", sp: spark(serie(meus), "Pedidos feitos por dia nos últimos 14 dias")})}
     ${kpi({r: "Para a sua área", v: m.paraArea.length, s: "pedidos de outras pessoas", go: "pedidos"})}</div>
-  <div class="grade-2">${listaAcao("Para agir agora", itens, 8)}<div class="pilha">${painelPedidos("Meus pedidos em andamento", m.andamento, "Nenhum pedido seu em andamento.")}${painelArquivos(m)}</div></div>
+  <div class="grade-2">${listaAcao("Para agir agora", itens, 8)}<div class="pilha">${painelCaixa()}${painelPedidos("Meus pedidos em andamento", m.andamento, "Nenhum pedido seu em andamento.")}${painelArquivos(m)}</div></div>
   ${m.acompanhar.length ? `<section class="painel"><div class="painel-cab"><h2>Demandas que você acompanha</h2><span class="sub">${m.acompanhar.length}</span></div><div class="linhas" style="--cols:minmax(0,1fr) auto">${m.acompanhar.map(d => `<button class="lh" data-go="demanda/${esc(d.id)}"><span><span class="tit">${esc(d.titulo)}</span><span class="sub">${esc(d.master || "")} · ${data(d.aberta_em)}</span></span><span class="chip p fila">Acompanhar</span></button>`).join("")}</div></section>` : ""}
   ${painelApont(p)}`;
 }
@@ -602,7 +617,85 @@ function mesaLuis() {
     <div class="pilha"><details class="painel"><summary class="painel-cab" style="cursor:pointer"><h2>Saúde dos Masters</h2><span class="sub">${M.masters.length} Masters</span></summary>
       <div class="linhas" style="--cols:minmax(0,1fr) 64px 64px 84px"><div class="lh cab"><span>Master</span><span>Saúde</span><span>Parados</span><span>Ganhos 90d</span></div>
       ${M.masters.slice().sort((a, b) => a.saude - b.saude).map(m => `<div class="lh" style="grid-template-columns:minmax(0,1fr) 64px 64px 84px !important"><span>${esc(m.parceiro)}</span><span class="mono">${esc(m.saude)}${m.saude < 60 ? " ↓" : ""}</span><span class="mono">${esc(m.parados)}</span><span class="mono">${esc(m.ganhos_90d)}</span></div>`).join("")}</div></details>
-    ${painelArquivos(mesaDe("luis"))}</div></div>`;
+    ${painelCaixa()}${painelArquivos(mesaDe("luis"))}</div></div>`;
+}
+
+/* ===================== Caixa de entrada =====================
+   Relatórios, alertas e avisos que antes iam para a pasta "Caixa de saída (e-mail pausado)" (Luis, 26/10/2026).
+   As rotinas gravam caixa/<id> (só o dono escreve, lib/caixa.py). Cada pessoa vê só o que é para ela ou para "time"
+   e marca como lida em caixa_lidas/<id da conta> (só ela escreve ali; ninguém altera a mensagem).
+   Tudo do db é não confiável: escape sempre, ação só para rota interna, anexo só com link do OneDrive da Save. */
+const CX_F = [["", "Todas"], ["nao_lidas", "Não lidas"], ["relatorio", "Relatórios"], ["alerta", "Alertas"], ["pedido", "Pedidos"]];
+const CX_ORIGEM = {alerta: "Alerta de rotina", sentinela: "Sentinela das entregas", central: "Central de Agentes", plano: "Plano do dia", recuperador: "Recuperador", whatsapp: "WhatsApp", radar: "Radar de mercado", resultados: "Resultados", conselho: "Conselho", agentes: "Agentes"};
+const CX_TIPO = {relatorio: "Relatório", alerta: "Alerta", pedido: "Pedido"};
+const CX_ROTA = /^(mesa|pedidos|whatsapp|areas|onde|rotinas|decisoes|caixa|novo)$|^(pedido|lote|decisao|chamado|demanda|wa|area|caixa)\/[A-Za-z0-9_.:-]{1,80}$/;
+const linkOD = u => /^https:\/\/gruposave-my\.sharepoint\.com\//i.test(String(u || "")) ? esc(u) : "";
+const cxOrigem = m => CX_ORIGEM[m.origem] || "Agentes";
+function lidasDe() { if (!Fonte.previa) return S.lidas; const k = S.eu || ""; if (!S.lidasP[k]) { let v = {}; try { v = JSON.parse(lsGet("cx-lidas-" + k) || "{}") || {} } catch (e) {} S.lidasP[k] = v } return S.lidasP[k] }
+const cxVis = () => !S.eu ? [] : (S.M.caixa || []).filter(m => m && typeof m === "object" && (m.para === S.eu || m.para === "time")).sort((a, b) => String(b.criado_em || "").localeCompare(String(a.criado_em || "")));
+const cxLida = m => !!(lidasDe()[m.id] || (m.lido_por && typeof m.lido_por === "object" && m.lido_por[S.eu]));
+const cxNaoLidas = () => cxVis().filter(m => !cxLida(m)).length;
+function cxFiltrada() {
+  const f = S.cx.f, ts = sem(S.cx.q).trim().split(/\s+/).filter(Boolean);
+  return cxVis().filter(m => !f || (f === "nao_lidas" ? !cxLida(m) : m.tipo === f))
+    .filter(m => { if (!ts.length) return true; const a = sem([m.assunto, m.resumo, cxOrigem(m), (Array.isArray(m.anexos) ? m.anexos : []).map(x => x?.nome).join(" ")].join(" ")); return ts.every(t => a.includes(t)) });
+}
+const cxPrio = m => m.prioridade === "alta" ? `<span class="chip urg">Alta</span>` : m.prioridade === "baixa" ? `<span class="chip">Baixa</span>` : "";
+const cxAnexos = m => (Array.isArray(m.anexos) ? m.anexos : []).filter(a => a && a.nome);
+const cxAcoes = m => (Array.isArray(m.acoes) ? m.acoes : []).filter(a => a && CX_ROTA.test(String(a.go || ""))).slice(0, 3);
+function linhaCaixa(m) {
+  const nl = !cxLida(m), sel = m.id === S.cx.sel, na = cxAnexos(m).length;
+  return `<button class="cx-linha ${nl ? "nova" : ""} ${sel ? "sel" : ""}" data-go="caixa/${esc(m.id)}" ${sel ? 'aria-current="true"' : ""}>
+    <span class="ponto ${nl ? "ouro" : "apaga"}" aria-hidden="true"></span>
+    <span class="cl"><span class="cl-topo">${esc(m.assunto || "(sem assunto)")}</span>
+      <span class="cl-sub">${esc(cxOrigem(m))}${m.para === "time" ? " · para o time" : ""}${nl ? '<span class="so-leitor"> · não lida</span>' : ""}</span>
+      <span class="cl-txt">${esc(String(m.resumo || "").replace(/\s+/g, " ").slice(0, 160))}</span></span>
+    <span class="cl-dir"><span class="mono">${data(m.criado_em)}</span>${cxPrio(m)}${na ? `<span class="sub" title="${na} anexo(s)">${icone("doc", "ic mini-ic")}${na}</span>` : ""}</span></button>`;
+}
+function listaCaixa() {
+  const xs = cxFiltrada();
+  return xs.map(linhaCaixa).join("") || `<div class="vazio">${!S.eu ? "Entre com a sua conta do Claude para ver a sua caixa." : S.cx.q.trim() ? "Nenhuma mensagem com essa busca." : S.cx.f === "nao_lidas" ? "Tudo lido por aqui." : "Nenhuma mensagem aqui ainda."}</div>`;
+}
+function detalheCaixa(id) {
+  const m = id ? cxVis().find(x => x.id === id) : null;
+  const fecharM = `<button class="icbtn fechar-m" data-fechar aria-label="Voltar à lista">${icone("fechar")}</button>`;
+  if (!m) return `<div class="d-topo"><div class="vazio" style="padding:8px 0">${id ? "Mensagem fora do seu perfil ou já removida." : S.eu ? "Escolha uma mensagem para ler." : "Entre com a sua conta do Claude para ver a sua caixa."}</div>${id ? fecharM : ""}</div>`;
+  const an = cxAnexos(m), ac = cxAcoes(m);
+  return `<div class="d-topo"><div style="min-width:0"><span class="rot">${esc(cxOrigem(m))} · ${data(m.criado_em)}</span><h2 class="quebra">${esc(m.assunto || "(sem assunto)")}</h2></div>${fecharM}</div>
+    <div class="filtros"><span class="chip">${esc(CX_TIPO[m.tipo] || "Aviso")}</span>${cxPrio(m)}${m.para === "time" ? `<span class="chip area">Para o time</span>` : ""}${cxLida(m) ? `<span class="chip p concluido">Lida</span>` : ""}</div>
+    <div class="resp">${md(m.resumo || "") || `<p>Sem resumo.</p>`}</div>
+    ${m.auditoria === "conferir" ? `<div class="nota">A Qualidade apontou algo a conferir neste texto. Confira antes de repassar.</div>` : ""}
+    ${an.length ? `<div><span class="rot">Anexos</span>${an.map(a => `<div class="cx-anexo"><span class="tit">${icone("doc")}<span>${esc(a.nome)}</span></span>${linkOD(a.pasta_link) ? `<a class="lk-pasta" href="${linkOD(a.pasta_link)}" target="_blank" rel="noopener">Abrir pasta</a>` : `<span class="sub">sem link</span>`}</div>`).join("")}</div>` : ""}
+    <div class="acoes">${ac.map((a, i) => `<button class="btn ${i ? "sec" : ""}" data-go="${esc(a.go)}">${esc(a.rotulo || "Abrir")}</button>`).join("")}${cxLida(m) ? `<button class="btn sec" data-cx-nl="${esc(m.id)}">Marcar como não lida</button>` : ""}</div>`;
+}
+function telaCaixa(sel) {
+  const xs = cxVis(), n = f => xs.filter(m => !f || (f === "nao_lidas" ? !cxLida(m) : m.tipo === f)).length, nl = n("nao_lidas");
+  S.cx.sel = sel || cxFiltrada()[0]?.id || null;
+  const timeLuis = S.eu === "luis" && S.M.perfil === "time";
+  return cab("", "Caixa de entrada", timeLuis ? "Esta é a Central do time. As suas mensagens chegam no seu painel próprio; aqui ficam só as do time." : "Relatórios, alertas e avisos dos agentes, no lugar da pasta do e-mail pausado. Os arquivos continuam nas pastas do OneDrive: aqui vão o resumo, o nome do arquivo e o link da pasta.",
+      `${nl ? `<span class="chip forte">${nl} não ${nl === 1 ? "lida" : "lidas"}</span><button class="btn sec" id="cx-todas">Marcar todas como lidas</button>` : ""}`)
+  + `<div class="barra-f"><div class="seg" role="group" aria-label="Filtrar mensagens">${CX_F.map(([k, t]) => `<button data-cx-f="${k}" aria-pressed="${S.cx.f === k}">${t} <span class="n">${n(k)}</span></button>`).join("")}</div></div>
+  <div class="busca-grande">${icone("onde")}<label for="q-cx" class="so-leitor">Buscar na caixa</label><input id="q-cx" type="search" value="${esc(S.cx.q)}" placeholder="Buscar por assunto, origem, texto ou arquivo" autocomplete="off"></div>
+  <div class="wa-lay"><section class="painel wa-lista" aria-label="Mensagens"><div id="res-cx">${listaCaixa()}</div></section>
+    <section class="wa-det ${sel ? "aberto" : ""}" id="cx-det" aria-label="Mensagem">${detalheCaixa(S.cx.sel)}</section></div>`;
+}
+/* Mesa: as 3 últimas mensagens, com as não lidas em destaque. */
+function painelCaixa() {
+  const xs = cxVis().slice(0, 3), nl = cxNaoLidas();
+  return `<section class="painel" aria-labelledby="t-cx"><div class="painel-cab"><h2 id="t-cx">Novas na caixa</h2><a class="lnk" href="#caixa">${nl ? `Ver as ${nl} não ${nl === 1 ? "lida" : "lidas"}` : "Abrir caixa"}</a></div>
+    ${xs.map(linhaCaixa).join("") || `<div class="vazio">${S.eu ? "Nenhuma mensagem ainda. Relatórios e alertas dos agentes chegam aqui." : "Entre com a sua conta para ver a sua caixa."}</div>`}</section>`;
+}
+/* Marca como lida (ou não lida) só no documento da própria conta: caixa_lidas/<id da conta>. Uma gravação por vez. */
+function marcarLidas(ids, lida = true) {
+  if (!S.eu || !ids.length) return;
+  const atual = {...lidasDe()}; let mudou = false;
+  for (const i of ids) { if (lida && !atual[i]) { atual[i] = {em: agora()}; mudou = true } if (!lida && atual[i]) { delete atual[i]; mudou = true } }
+  if (!mudou) return;
+  const vivos = new Set((S.M.caixa || []).map(m => m.id)), mapa = Object.fromEntries(Object.entries(atual).filter(([k]) => vivos.has(k)).sort((a, b) => String(b[1]?.em).localeCompare(String(a[1]?.em))).slice(0, 400));
+  if (Fonte.previa) { S.lidasP[S.eu || ""] = mapa; lsSet("cx-lidas-" + (S.eu || ""), JSON.stringify(mapa)); return }
+  S.lidas = mapa;
+  if (!Fonte.db || !S.meuId || !S.identificado) return;
+  S.cxGrava = S.cxGrava.then(() => Fonte.gravar("caixa_lidas/" + S.meuId, {pessoa: S.eu, por_id: S.meuId, lidas: S.lidas, atualizado: agora()})).catch(() => toast("Não consegui marcar como lida"));
 }
 
 /* ===================== Pedidos ===================== */
@@ -965,19 +1058,19 @@ async function acao(tipo, id, valor) {
 }
 
 /* ===================== Render e rotas ===================== */
-const MENU = [["mesa", "Minha mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "WhatsApp · Demandas", "whats"], ["areas", "Áreas", "areas"], ["onde", "Onde está", "onde"], ["rotinas", "Rotinas", "rotinas"], ["decisoes", "Decisões", "decisoes"]];
-const MIGALHA = {mesa: "Minha mesa", pedidos: "Pedidos", whatsapp: "WhatsApp · Demandas", areas: "Áreas", onde: "Onde está", rotinas: "Rotinas", decisoes: "Decisões"};
+const MENU = [["caixa", "Caixa de entrada", "caixa"], ["mesa", "Minha mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "WhatsApp · Demandas", "whats"], ["areas", "Áreas", "areas"], ["onde", "Onde está", "onde"], ["rotinas", "Rotinas", "rotinas"], ["decisoes", "Decisões", "decisoes"]];
+const MIGALHA = {caixa: "Caixa de entrada", mesa: "Minha mesa", pedidos: "Pedidos", whatsapp: "WhatsApp · Demandas", areas: "Áreas", onde: "Onde está", rotinas: "Rotinas", decisoes: "Decisões"};
 function moldura(r) {
   const n = pendentes(S.eu), dono = {pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: "whatsapp", area: "areas", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r] || r;
   const andamento = S.M.pedidos.filter(p => fase(p) !== "concluido").length, wa = waVis().filter(d => d.status === "responder").length, dec = S.eu === "luis" ? totalDecisoes() : 0;
-  const badge = {mesa: n, pedidos: andamento, whatsapp: wa, decisoes: dec};
+  const nl = cxNaoLidas(), badge = {caixa: nl, mesa: n, pedidos: andamento, whatsapp: wa, decisoes: dec};
   $("#menu").innerHTML = MENU.map(([k, t, ic]) => `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}<span class="t">${t}</span>${badge[k] ? `<span class="cont">${badge[k]}</span>` : ""}</a>`).join("");
   $("#fixadas").innerHTML = FIXADAS.filter(([k]) => area(k)).map(([k, sg, nm]) => `<a href="#area/${esc(k)}/conversa"><span class="sig" aria-hidden="true">${sg}</span><span class="t">${nm}</span></a>`).join("") + `<a href="#areas"><span class="sig" aria-hidden="true">+</span><span class="t">Todas as áreas</span></a>`;
-  $("#nav-m").innerHTML = [["mesa", "Mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "Demandas", "whats"], ["areas", "Áreas", "areas"]].map(([k, t, ic]) => `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}${t}${badge[k] ? `<span class="cont">${badge[k]}</span>` : ""}</a>`).join("")
+  $("#nav-m").innerHTML = [["caixa", "Caixa", "caixa"], ["mesa", "Mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "Demandas", "whats"], ["areas", "Áreas", "areas"]].map(([k, t, ic]) => `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}${t}${badge[k] ? `<span class="cont">${badge[k]}</span>` : ""}</a>`).join("")
     + `<button type="button" id="abrir-menu" aria-label="Abrir menu completo">${icone("menu")}Mais</button>`;
   const area_ = r === "area" ? area(rota().p[0]) : null;
   $("#crumb").textContent = area_ ? "Áreas / " + area_.nome : MIGALHA[dono] || "Minha mesa";
-  $("#sino").innerHTML = icone("sino") + (n ? `<span class="pt">${n}</span>` : ""); $("#sino").setAttribute("aria-label", `Notificações: ${n}`);
+  $("#sino").innerHTML = icone("sino") + (n + nl ? `<span class="pt">${n + nl}</span>` : ""); $("#sino").setAttribute("aria-label", `Notificações: ${n} para agir, ${nl} não lidas na caixa`);
   const sig = S.eu ? PESSOAS[S.eu].slice(0, 2).toUpperCase() : "—";
   for (const id of ["#av", "#av-m"]) { $(id).textContent = sig; $(id).classList.toggle("vazio-av", !S.eu) }
   $("#perfil-nome").textContent = S.eu ? PESSOAS[S.eu] : "Visitante";
@@ -992,9 +1085,9 @@ function moldura(r) {
 function abrir() {
   if (!S.M) return; const {r, p} = rota(); moldura(r); document.body.classList.remove("menu-aberto");
   const fundo = {mesa: telaMesa, pedidos: telaPedidos, pedido: telaPedidos, novo: telaPedidos, areas: telaAreas, area: () => telaArea(p[0], p[1] === "conversa"), onde: () => telaOnde(p.join("/")), rotinas: telaRotinas, decisoes: telaDecisoes,
-    whatsapp: () => telaWhatsapp(), wa: () => telaWhatsapp(p[0]), wachamado: () => telaWhatsapp(p[0] || null, true),
+    caixa: () => telaCaixa(p[0]), whatsapp: () => telaWhatsapp(), wa: () => telaWhatsapp(p[0]), wachamado: () => telaWhatsapp(p[0] || null, true),
     demanda: telaMesa, chamado: telaMesa, lote: telaMesa, decisao: S.eu === "luis" ? telaMesa : telaDecisoes}[r] || telaMesa;
-  const foco = ["q-onde", "q-wa", "chat-in"].includes(document.activeElement?.id) ? document.activeElement.id : "";
+  const foco = ["q-onde", "q-wa", "q-cx", "chat-in"].includes(document.activeElement?.id) ? document.activeElement.id : "";
   const chatTxt = $("#chat-in")?.value || "";
   const rotaAgora = location.hash, nova = rotaAgora !== S.rotaAnt; S.rotaAnt = rotaAgora;
   $("#pag").innerHTML = fundo(); $("#camada").innerHTML = "";
@@ -1004,6 +1097,7 @@ function abrir() {
   if (r === "area" && p[1] === "pedido") { if (S.novo.sel !== p[0]) S.novo = {sel: p[0], busca: "", entrega: S.novo.entrega || ""}; gNovo(p[0]) }
   if (r === "area" && p[1] === "conversa" && nova) { const box = $("#chat-corpo"); if (box) box.scrollTop = box.scrollHeight; $("#chat-in")?.focus({preventScroll: true}) }
   if ((r === "wa" || r === "wachamado") && nova && matchMedia("(max-width:1099px)").matches) $("#wa-det")?.scrollTo?.(0, 0);
+  if (r === "caixa" && p[0] && nova) { const m = cxVis().find(x => x.id === p[0]); if (m && !cxLida(m)) { marcarLidas([m.id]); moldura(r); $("#res-cx").innerHTML = listaCaixa(); $("#cx-det").innerHTML = detalheCaixa(m.id) } }
   if (r === "demanda") { const d = S.M.demandas.find(x => x.id === p[0]); if (d) gaveta(esc(d.titulo), `<span class="mono">${esc(d.id)}</span> · ${esc(d.master || "")}`, `<div class="filtros">${d.urgente ? `<span class="chip urg">Urgente</span>` : ""}<span class="chip">${esc(d.origem || "WhatsApp")}</span></div><p style="margin:0">${esc(d.o_que_pede)}</p><dl class="dl"><dt>Aberta</dt><dd>${data(d.aberta_em)}</dd>${d.rota ? `<dt>Encaminhar</dt><dd>${esc(d.rota)}</dd>` : ""}${d.proximo_passo ? `<dt>Próximo passo</dt><dd>${esc(d.proximo_passo)}</dd>` : ""}</dl>${url(d.link) ? `<a href="${url(d.link)}" target="_blank" rel="noopener">${esc(d.negocio || "Abrir no HubSpot")}</a>` : ""}`,
       d.pessoa === S.eu ? `<button class="btn" data-acao="demanda" data-id="${esc(d.id)}" data-v="respondido">Respondi</button><button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="encaminhado">Encaminhei à área</button><button class="btn sec" data-acao="demanda" data-id="${esc(d.id)}" data-v="nao_e_demanda">Não é demanda</button>` : "") }
   if (r === "chamado") { const c = S.M.chamados.find(x => x.id === p[0]); if (c) { const pode = c.status === "proposto" && podeDecidir(c.pessoa); gaveta(esc(c.titulo_editado || c.titulo), esc(c.grupo || "Chamado"), `${passosGlpi(c, c.pessoa)}<div class="filtros"><span class="chip p ${c.status === "proposto" ? "aprovar" : "concluido"}">${esc(ST_CH[c.status] || c.status)}</span>${c.urgencia >= 4 ? `<span class="chip urg">Urgência ${esc(c.urgencia)}</span>` : ""}</div>
@@ -1017,7 +1111,7 @@ function abrir() {
   if (foco) { const q = $("#" + foco); if (q && !$("#camada .gaveta")) { q.focus({preventScroll: true}); try { q.setSelectionRange(q.value.length, q.value.length) } catch (e) {} } }
 }
 function fechar() {
-  const {r, p} = rota(); const volta = {pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: p[0] ? "wa/" + p[0] : "whatsapp", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r];
+  const {r, p} = rota(); const volta = {caixa: p[0] ? "caixa" : "", pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: p[0] ? "wa/" + p[0] : "whatsapp", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r];
   if (r === "area" && p[1]) { const c = chatDe(p[0]); c.ctl?.abort(); location.hash = "area/" + p[0]; return }
   if (volta) location.hash = volta; else $("#camada").innerHTML = "";
 }
@@ -1032,9 +1126,10 @@ function paleta() {
   q.addEventListener("input", rodar); rodar();
 }
 function notificacoes() {
-  const it = itensAcao(S.eu).slice(0, 6);
+  const it = itensAcao(S.eu).slice(0, 6), cx = cxVis().filter(m => !cxLida(m)).slice(0, 3);
   $("#camada").innerHTML = `<div class="veu" data-fechar-p style="background:transparent"></div><div class="pop" role="dialog" aria-label="Notificações"><div class="painel-cab"><h2>Para você</h2><span class="sub">${pendentes(S.eu)} itens</span></div>
-    <div class="linhas" style="--cols:minmax(0,1fr)">${it.map(i => `<button class="lh" data-go="${esc(i.go)}"><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.tipo)}</span></span></button>`).join("") || `<div class="vazio">${S.eu ? "Nada pendente." : "Entre com a sua conta para ver o que é seu."}</div>`}</div></div>`;
+    <div class="linhas" style="--cols:minmax(0,1fr)">${it.map(i => `<button class="lh" data-go="${esc(i.go)}"><span><span class="tit">${esc(i.t)}</span><span class="sub">${esc(i.tipo)}</span></span></button>`).join("") || `<div class="vazio">${S.eu ? "Nada pendente." : "Entre com a sua conta para ver o que é seu."}</div>`}</div>
+    ${S.eu ? `<div class="painel-cab"><h2>Caixa de entrada</h2><a class="lnk" href="#caixa">${cxNaoLidas()} não ${cxNaoLidas() === 1 ? "lida" : "lidas"}</a></div><div class="linhas" style="--cols:minmax(0,1fr)">${cx.map(m => `<button class="lh" data-go="caixa/${esc(m.id)}"><span><span class="tit">${esc(m.assunto || "(sem assunto)")}</span><span class="sub">${esc(cxOrigem(m))} · ${data(m.criado_em)}</span></span></button>`).join("") || `<div class="vazio">Tudo lido.</div>`}</div>` : ""}</div>`;
 }
 
 /* ===================== Eventos ===================== */
@@ -1052,6 +1147,9 @@ document.addEventListener("click", e => {
   const q = e.target.closest("[data-q]"); if (q) { location.hash = "onde/" + encodeURIComponent(q.dataset.q); return }
   const cp = e.target.closest("[data-copiar]"); if (cp) { const d = S.M.whatsapp.find(x => x.id === cp.dataset.copiar); copiar(d?.rascunho || "", "Rascunho copiado. Depois de enviar no WhatsApp, marque Respondi."); return }
   const cc = e.target.closest("[data-copiar-ch]"); if (cc) { const c = S.M.chamados.find(x => x.id === cc.dataset.copiarCh); copiar(c ? `${c.titulo_editado || c.titulo}\n\n${c.descricao_editada || c.descricao}` : "", "Texto do chamado copiado. Abra no GLPI e cole."); return }
+  const cf = e.target.closest("[data-cx-f]"); if (cf) { S.cx.f = cf.dataset.cxF; abrir(); return }
+  const cn = e.target.closest("[data-cx-nl]"); if (cn) { marcarLidas([cn.dataset.cxNl], false); abrir(); toast("Marcada como não lida"); return }
+  if (e.target.closest("#cx-todas")) { marcarLidas(cxVis().filter(m => !cxLida(m)).map(m => m.id)); abrir(); toast("Caixa marcada como lida"); return }
   const wf = e.target.closest("[data-wa-st]"); if (wf) { S.wa.status = wf.dataset.waSt; abrir(); return }
   const wp = e.target.closest("[data-wa-pedir]"); if (wp) { const d = S.M.whatsapp.find(x => x.id === wp.dataset.waPedir); if (d) { const sk = area(d.area_sugerida) ? d.area_sugerida : null;
     S.novo = {sel: sk, busca: "", entrega: "", texto: d.o_que_pede || "", contexto: `Demanda ${d.id} do WhatsApp (${d.master || d.chat || ""}). O que os agentes já levantaram: ${(d.entrega || "").replace(/\s+/g, " ")}`.slice(0, 1500)};
@@ -1081,11 +1179,12 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape") {
     if ($("#camada").innerHTML) { if ($("#camada .paleta, #camada .pop")) $("#camada").innerHTML = ""; else fechar() }
     else if (document.body.classList.contains("menu-aberto")) document.body.classList.remove("menu-aberto");
-    else { const {r, p} = rota(); if ((r === "area" && p[1]) || r === "wa" || r === "wachamado") fechar() } }
+    else { const {r, p} = rota(); if ((r === "area" && p[1]) || r === "wa" || r === "wachamado" || (r === "caixa" && p[0])) fechar() } }
 });
 document.addEventListener("input", e => {
   if (e.target.id === "q-onde") { $("#res-onde").innerHTML = resOnde(e.target.value) }
   if (e.target.id === "q-wa") { S.wa.q = e.target.value; $("#res-wa").innerHTML = listaWa() }
+  if (e.target.id === "q-cx") { S.cx.q = e.target.value; $("#res-cx").innerHTML = listaCaixa() }
   if (e.target.id === "q-area") { S.novo.busca = e.target.value; $("#lista-areas").innerHTML = listaAreasNovo() }
   if (e.target.id === "p-precisa") S.novo.texto = e.target.value;
   if (e.target.id === "p-contexto") S.novo.contexto = e.target.value;
@@ -1126,6 +1225,8 @@ async function iniciar() {
     Fonte.ouvir("conselho", null, 200, xs => { S.conselho = Object.fromEntries(xs.map(d => [d.id, d])); refaz() }, erro);
     Fonte.ouvir("apontamentos", "data", 300, xs => { S.apont = xs; refaz() }, erro);
     Fonte.ouvir("chamados", "proposto_em", 300, xs => { S.M.chamados = xs; refaz() }, erro);
+    Fonte.ouvir("caixa", "criado_em", 300, xs => { S.M.caixa = xs; refaz() }, erro);
+    if (S.meuId && S.identificado) Fonte.ouvirDoc("caixa_lidas/" + S.meuId, d => { S.lidas = d && d.lidas && typeof d.lidas === "object" ? d.lidas : {}; refaz() }, () => {});
   }
   abrir();
 }

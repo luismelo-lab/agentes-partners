@@ -28,7 +28,10 @@ corpo = L.documento(L.cabecalho("Área Partners · Agentes", f"Falha na rotina {
     L.paragrafo("<b>Últimas linhas do log:</b><br>" + L.esc(fim).replace("\n", "<br>")),
     L.paragrafo("Para ver tudo: <b>partners logs " + L.esc(nome) + "</b>. Este aviso sai uma vez por dia por rotina."),
     L.rodape("Aviso automático do terminal dos agentes."))
-ok, _ = L.outlook(["luis.melo@savecompany.com.br"], [], f"[Partners · automático] Falha: {nome}", corpo, enviar=True)
+resumo = f"A rotina {nome} falhou agora. As etapas que dependem dela foram puladas para não usar dado desatualizado.\n\nÚltimas linhas do log:\n" + "\n".join("- " + l.strip() for l in fim.splitlines() if l.strip())[-1000:] + f"\n\nPara ver tudo: partners logs {nome}."
+env = (["luis.melo@savecompany.com.br"], [], f"[Partners · automático] Falha: {nome}", corpo)
+try: ok, _ = L.outlook(*env, enviar=True, origem="alerta", prioridade="alta", acoes=[{"rotulo": "Ver rotinas", "go": "rotinas"}], resumo=resumo)  # também na caixa do Luis
+except TypeError: ok, _ = L.outlook(*env, enviar=True)  # cópia viva do email_layout ainda sem a caixa
 sys.exit(0 if ok else 1)
 PY
 }

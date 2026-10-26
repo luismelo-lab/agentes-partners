@@ -320,7 +320,12 @@ def cmd_responder(a):
         d_od = os.path.join(caminhos.pasta(P["pessoa"]), "Pedidos", P["id"]); os.makedirs(d_od, exist_ok=True)
         for x in anexos: subprocess.run(["cp", x, d_od])
         print("arquivos no OneDrive:", ", ".join(f"{PASTA_OD[P['pessoa']]} / Pedidos / {P['id']} / {os.path.basename(x)}" for x in anexos) or "nenhum")
-    ok, msg = L.outlook([P["email"]], [], assunto, L.documento(*blocos), anexos, enviar=not a.rascunho)
+    # caixa de entrada da Central (26/10/2026): resumo e botão para o pedido no portal; os arquivos vão pelo nome + link da pasta
+    kw = dict(origem="central", resumo=(J.get("resumo") or "") + ("\n\nOs arquivos estão na sua pasta do OneDrive, em Pedidos / " + P["id"] + "." if anexos else ""),
+              acoes=[{"rotulo": "Abrir pedido", "go": "pedido/" + str(P["portal_id"])}] if P.get("portal_id") else [{"rotulo": "Ver pedidos", "go": "pedidos"}]) if hasattr(L, "para_caixa") else {}
+    if kw and (getattr(a, "painel", False) or getattr(a, "aviso", False)):  # anexos já copiados para Pedidos/P-NNNN: o link é o dessa pasta
+        kw["anexos_caixa"] = [os.path.join(caminhos.pasta(P["pessoa"]), "Pedidos", P["id"], os.path.basename(x)) for x in anexos]
+    ok, msg = L.outlook([P["email"]], [], assunto, L.documento(*blocos), anexos, enviar=not a.rascunho, **kw)
     if not ok:  # nada é gravado: a versão não sobe e o pedido continua na fila para a próxima rodada
         sys.exit("FALHOU " + msg[:200] + " · " + assunto)
     P["status"] = "aguardando_aprovacao"

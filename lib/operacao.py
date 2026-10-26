@@ -516,7 +516,13 @@ def plano(previa=False, so_urgentes=False):
         assunto = f"[Partners · automático] {'Aviso da tarde' if so_urgentes else 'Plano do dia'} · {nome} · {HOJE.strftime('%d/%m')}"
         if previa:
             f = os.path.join(tempfile.gettempdir(), f"plano-{p}.html"); open(f, "w").write(corpo); print(p, len(meus), "→", f, "·", anexo or "sem anexo"); continue
-        ok, msg = L.outlook([email], [], assunto, corpo, [anexo] if anexo else (), enviar=True)
+        # caixa de entrada da Central (26/10/2026): resumo curto + nome da planilha com o link da pasta da pessoa (Plano do dia)
+        resumo = (f"{len(meus)} item(ns) no {'aviso da tarde' if so_urgentes else 'plano de hoje'}, {sum(1 for e in meus if e['tipo'] in URGENTE)} urgente(s).\n"
+                  + "\n".join(f"- {NOME[t]}: {len(por[t])}" for t in ordem if por.get(t))
+                  + ("\n\nA lista completa, com os links do HubSpot e do Bitrix, está na planilha, na sua pasta do OneDrive (Plano do dia)." if anexo else ""))
+        kw = dict(origem="plano", prioridade="alta" if so_urgentes else "normal", resumo=resumo,
+                  acoes=[{"rotulo": "Abrir minha mesa", "go": "mesa"}]) if hasattr(L, "para_caixa") else {}
+        ok, msg = L.outlook([email], [], assunto, corpo, [anexo] if anexo else (), enviar=True, **kw)
         print(p, len(meus), "enviado" if ok else f"FALHOU {msg}")
         falhas += not ok
         if ok:
@@ -558,7 +564,7 @@ def planilha(p, nome, evs, aviso=False, copiar=True):
     if not copiar or os.environ.get("OPERACAO_REG"): return f
     try:
         import shutil, caminhos
-        if p in ("daniela", "jenifer", "geovana"):
+        if p in ("daniela", "jenifer", "geovana", "luis"):  # o do Luis também (26/10/2026): a caixa de entrada aponta para a pasta, não para a "Caixa de saída"
             destino = os.path.join(caminhos.pasta(p), "Plano do dia"); os.makedirs(destino, exist_ok=True)
             shutil.copy2(f, os.path.join(destino, os.path.basename(f)))
     except Exception as erro:

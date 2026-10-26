@@ -135,9 +135,35 @@ ARQ = {"daniela": [{"nome": "Plano-do-dia-2026-10-23.xlsx", "hora": "07:42", "pa
        "geovana": [{"nome": "Plano-do-dia-2026-10-23.xlsx", "hora": "07:42", "pasta": "Plano do dia"}, {"nome": "Folha-do-lote-semana-43.xlsx", "hora": "09:00", "pasta": "Fichas do Recuperador"}],
        "luis": [{"nome": "Plano-do-dia-Luis-2026-10-23.xlsx", "hora": "07:42", "pasta": ""}, {"nome": "Decisoes-Pendentes-2026-10-23.xlsx", "hora": "07:50", "pasta": ""}]}
 
+SP = "https://gruposave-my.sharepoint.com/my?id=%2Fpersonal%2Fexemplo%2FDocuments%2FExemplo"  # link de exemplo (não abre pasta real)
+def cx(i, para, assunto, resumo, origem, tipo, quando, prioridade="normal", anexos=(), acoes=(), lido=False):
+    return {"id": f"cx-20261023-{para[:3]}-{i}", "para": para, "assunto": assunto, "resumo": resumo, "origem": origem, "tipo": tipo, "prioridade": prioridade,
+            "anexos": [{"nome": n, "pasta_link": SP} for n in anexos], "acoes": [{"rotulo": r, "go": g} for r, g in acoes], "criado_em": quando,
+            "lido_por": {para: {"em": quando}} if lido else {}, "auditoria": "ok"}
+CAIXA = [  # mensagens de exemplo da caixa de entrada (sem cliente)
+    cx("a1", "luis", "Falha na rotina areas:icp", "A rotina areas:icp falhou agora. As etapas que dependem dela foram puladas para não usar dado desatualizado.\n\nÚltimas linhas do log:\n- Timeout ao baixar a base do HubSpot (só leitura)\n- Nova tentativa na próxima rodada\n\nPara ver tudo: partners logs areas.",
+       "alerta", "alerta", "2026-10-23T10:12:00-03:00", "alta", acoes=[("Ver rotinas", "rotinas")]),
+    cx("a2", "luis", "Entrega atrasada hoje: Relatório semanal de resultados", "O que não saiu até agora:\n- Relatório semanal de resultados: esperada desde as 8h. A Central refaz na próxima rodada.",
+       "sentinela", "alerta", "2026-10-23T09:05:00-03:00", "alta", acoes=[("Abrir minha mesa", "mesa"), ("Ver rotinas", "rotinas")]),
+    cx("a3", "luis", "Plano do dia · Luis · 23/10", "18 item(ns) no plano de hoje, 3 urgente(s).\n- Prazo da Receita: 1\n- Contrato sem assinatura: 4\n- Comercial parado: 13\n\nA lista completa, com os links do HubSpot e do Bitrix, está na planilha, na sua pasta do OneDrive (Plano do dia).",
+       "plano", "relatorio", "2026-10-23T07:42:00-03:00", anexos=["Plano-do-dia-Luis-2026-10-23.xlsx"], acoes=[("Abrir minha mesa", "mesa")], lido=True),
+    cx("d1", "daniela", "Plano do dia · Daniela · 23/10", "12 item(ns) no plano de hoje, 2 urgente(s).\n- Demanda atrasada: 2\n- Contrato sem assinatura: 3\n- Comercial parado: 7\n\nA lista completa está na planilha, na sua pasta do OneDrive (Plano do dia).",
+       "plano", "relatorio", "2026-10-23T07:42:00-03:00", anexos=["Plano-do-dia-2026-10-23.xlsx"], acoes=[("Abrir minha mesa", "mesa")]),
+    cx("d2", "daniela", "[AGENTES] #P-0031 · Conferência de repasses do Master 2 · resposta v1", "A conferência de repasses do Master 2 está pronta para a sua aprovação. O percentual vem do que foi negociado com o Master (D64); dois ganhos ficaram fora por falta do % de honorário no card.\n\nOs arquivos estão na sua pasta do OneDrive, em Pedidos / P-0031.",
+       "central", "pedido", "2026-10-23T11:20:00-03:00", anexos=["Conferencia-Repasses-Master-2.xlsx"], acoes=[("Abrir pedido", "pedido/P-0031")]),
+    cx("d3", "daniela", "WhatsApp · 3 demandas para responder", "Rodada das 8h: 3 demandas para responder, 1 urgente (despacho decisório com prazo hoje). Os rascunhos conferidos pelas áreas estão na tela de demandas.",
+       "whatsapp", "relatorio", "2026-10-23T08:35:00-03:00", "alta", acoes=[("Abrir demandas", "whatsapp")], lido=True),
+    cx("t1", "time", "Radar de mercado da semana", "Três mudanças da semana que afetam a esteira:\n- Prazo de opção da reforma: sem alteração\n- Nova IN sobre compensação: só leitura, sem efeito imediato\n- Agenda de capacitação dos Masters publicada\n\nTudo é pré-análise, sem promessa de valor.",
+       "radar", "relatorio", "2026-10-23T10:00:00-03:00", anexos=["radar-2026-10-23.md"], acoes=[("Ver as áreas", "areas")]),
+    cx("g1", "geovana", "Recuperador · Lote 43 da semana", "Lote da semana com 8 casos para decidir. Para cada caso, a folha traz a hipótese de tese, o que o técnico concluiu e os documentos a pedir. Hipóteses a verificar, sem promessa de valor.",
+       "recuperador", "relatorio", "2026-10-23T09:00:00-03:00", anexos=["Fila-Recuperador-2026-10-23.xlsx"], acoes=[("Abrir lote", "mesa")]),
+    cx("j1", "jenifer", "Plano do dia · Jenifer · 23/10", "6 item(ns) no plano de hoje, nenhum urgente.\n- Comercial parado: 6", "plano", "relatorio", "2026-10-23T07:42:00-03:00",
+       anexos=["Plano-do-dia-2026-10-23.xlsx"], acoes=[("Abrir minha mesa", "mesa")]),
+]
+
 EX = {"atualizado": D["atualizado"], "hoje": "2026-10-23", "blocos": DIR["blocos"], "areas": DIR["areas"], "rotinas": DIR["rotinas"], "pastas": DIR["pastas"], "pessoas": DIR["pessoas"], "regras_casa": DIR.get("regras_casa", []),
       "demandas_num": D.get("demandas", {}), "alertas": D["gestao"]["alertas"], "manchete": D["gestao"]["manchete"], "masters": masters, "decisoes": dec,
-      "decisoes_total": len(D.get("conselho", [])), "janelas": janelas, "pedidos": PEDIDOS, "demandas": DEMANDAS, "chamados": CHAMADOS, "lote": LOTE, "arquivos": ARQ, "whatsapp": WHATS}
+      "decisoes_total": len(D.get("conselho", [])), "janelas": janelas, "pedidos": PEDIDOS, "demandas": DEMANDAS, "chamados": CHAMADOS, "lote": LOTE, "arquivos": ARQ, "whatsapp": WHATS, "caixa": CAIXA}
 open(os.path.join(AQUI, "exemplo-dados.js"), "w").write("/* Gerado por gerar_exemplo.py. Pedidos, demandas, chamados, lote e arquivos são EXEMPLOS fictícios. */\nwindow.EX = "
                                                         + json.dumps(EX, ensure_ascii=False) + ";\n")
 print("exemplo-dados.js:", len(PEDIDOS), "pedidos de exemplo,", len(DIR["areas"]), "áreas")

@@ -141,14 +141,16 @@ def main():
             print(f"{k}: nada novo para responder desde a última rodada, e-mail não enviado"); continue
         assunto, corpo = email_dono(k, P, rodada, hoje)
         anexos = [os.path.expanduser(x) for i in P.get("itens", []) for x in (i.get("anexos") or []) if os.path.exists(os.path.expanduser(x))]
-        ok, msg = L.outlook([DONOS[k][1]], [], assunto, corpo, anexos, enviar=enviar)
+        # caixa de entrada (26/10/2026): os anexos do parceiro ficam no Mac (LGPD) e não vão à caixa, nem pelo nome
+        kw = dict(origem="whatsapp", anexos_caixa=[], acoes=[{"rotulo": "Abrir demandas", "go": "whatsapp"}]) if hasattr(L, "para_caixa") else {}
+        ok, msg = L.outlook([DONOS[k][1]], [], assunto, corpo, anexos, enviar=enviar, **kw)
         P["enviado"] = ok  # a próxima triagem só dá como "já avisado" o que de fato saiu
         if not ok: falhas.append(k)
         print(f"{k}: {'enviado' if ok and enviar else 'rascunho criado' if ok else 'FALHOU ' + msg[:200]} · {assunto}")
     json.dump(T, open(os.path.expanduser(a.triagem), "w"), ensure_ascii=False, indent=1)
     if not sem_ia:
         assunto, corpo = email_luis(T, rodada, hoje)
-        ok, msg = L.outlook([LUIS], [], assunto, corpo, enviar=enviar)
+        ok, msg = L.outlook([LUIS], [], assunto, corpo, enviar=enviar, **(dict(origem="whatsapp", acoes=[{"rotulo": "Abrir demandas", "go": "whatsapp"}]) if hasattr(L, "para_caixa") else {}))
         if not ok: falhas.append("luis")
         print(f"luis: {'enviado' if ok and enviar else 'rascunho criado' if ok else 'FALHOU ' + msg[:200]} · {assunto}")
     else:
