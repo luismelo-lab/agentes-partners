@@ -38,8 +38,11 @@ Rotina semanal de consolidação da Área Partners (sexta, 16h). O objetivo é q
    - Acrescente as decisões novas da semana, cada uma com a conversa de origem e o prazo.
    - Gere a folha de novo com `folha_decisoes.py gerar`. As respostas ainda não aplicadas são mantidas.
 
+7b. **Controle (Luis, 26/10/2026; `infra/controle.md`):** rode `python3 ~/agentes-partners/infra/controle.py --resumo`. Ele lê o pacote e a previsão mais recentes, aplica as regras de `infra/controle.json`, grava `registro/gestao/controle-<hoje>.json` e manda cada desvio novo à caixa de entrada da pessoa dona (uma vez por semana). No resumo ao Luis, liste os desvios abertos (regra, dono, prazo, alçada), os vencidos e os escalados a ele, e as ações de `registro/gestao/acoes.jsonl` com prazo vencido (C21). Desvio com dono agente vai para a pauta do Conselho de segunda; não crie decisão nova na folha para o que a alçada diz que é da dona ou do gerente.
+
 8. **Resumo ao Luis:** e-mail pelo caminho da Central (Graph ligado; se não estiver, grave em `04 · Gestão/Central de Agentes/Caixa de saída`). O resumo traz:
    - branches a juntar, com o comando de merge;
+   - desvios do controle (abertos, vencidos, escalados) e ações vencidas;
    - arquivos resgatados;
    - divergências;
    - inconsistências;

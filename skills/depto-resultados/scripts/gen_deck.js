@@ -1,5 +1,5 @@
 // Gera o deck semanal de resultados a partir de metricas-AAAA-MM-DD.json + texto-AAAA-MM-DD.json
-// Uso: node gen_deck.js <metricas.json> <texto.json> <saida.pptx>
+// Uso: node gen_deck.js <metricas.json> <texto.json> <saida.pptx> [pacote-gestao.json]
 const fs = require('fs');
 const pptxgen = require('pptxgenjs');
 const [, , fMet, fTxt, out] = process.argv;
@@ -172,6 +172,34 @@ const cr = M.crescimento, ytd = M.crescimento_acumulado_ano, mg = M.margem_carte
     s.addText(arr.map((t, j) => ({ text: t, options: { bullet: { indent: 14 }, breakLine: j < arr.length - 1 } })),
       { x: x + 0.25, y: 2.45, w: 3.45, h: 4.2, fontFace: F, fontSize: 12, color: C.text, paraSpaceAfter: 8, valign: 'top', isTextBox: true });
   });
+}
+
+// 9. Semáforo de gestão (pacote_gestao.py → registro/gestao/pacote-AAAA-MM-DD.json; 4º argumento, opcional)
+const fPac = process.argv[5];
+if (fPac && fs.existsSync(fPac)) {
+  const G = JSON.parse(fs.readFileSync(fPac, 'utf8'));
+  const s = base('Semáforo de gestão: resultado, previsibilidade e controle', 'SEMÁFORO DE GESTÃO · TOLERÂNCIAS PROPOSTAS');
+  const cor = { verde: C.green, amarelo: C.amber, vermelho: C.red, cinza: C.mute };
+  const val = m => m.valor === null || m.valor === undefined ? 'sem dado' : m.unidade === 'R$' ? mi(m.valor) : m.unidade === '%' ? nf(m.valor) + '%' : m.unidade === 'x' ? fx(m.valor) : nf(m.valor) + (m.unidade === 'n' ? '' : ' ' + m.unidade);
+  const ordem = { vermelho: 0, amarelo: 1, verde: 2, cinza: 3 };
+  const lista = G.metricas.filter(m => !m.id.startsWith('meta_q4')).sort((a, b) => ordem[a.status] - ordem[b.status]).slice(0, 22);
+  const H = ['Métrica', 'Valor', 'Status', 'Tolerância (proposta)'].map(t => ({ text: t, options: { bold: true, color: C.gold, fill: { color: C.card } } }));
+  const rows = lista.map(m => [m.nome, val(m), m.status === 'cinza' ? 'sem dado' : m.status, m.tolerancia.verde || '—']
+    .map((t, j) => ({ text: t, options: { color: j === 2 ? cor[m.status] : C.text, bold: j === 2, fill: { color: C.bg } } })));
+  s.addTable([H].concat(rows), { x: 0.6, y: 1.75, w: 8.3, colW: [4.0, 1.4, 0.9, 2.0], fontFace: F, fontSize: 8, border: { type: 'solid', color: C.line, pt: 0.5 }, rowH: 0.22 });
+  const mt = G.meta, lc = mt.leituras.credito, ll = mt.leituras.liquido;
+  card(s, 9.2, 1.75, 3.5, 5.1);
+  s.addText('META DO Q4 · R$ 200 MI (D64)', { x: 9.4, y: 1.9, w: 3.1, h: 0.3, fontFace: F, fontSize: 10, bold: true, color: C.gold, margin: 0, isTextBox: true });
+  const linhas = [
+    `Unidade: ${mt.unidade} (pergunta R1 ao Luis)`,
+    `Leitura crédito: ${mi(lc.realizado_rs)} (${nf(lc.pct_realizado)}%) · ritmo ${mi(lc.ritmo_atual_rs_dia)}/dia útil × necessário ${mi(lc.ritmo_necessario_rs_dia)} (${fx(lc.fator_ritmo)})`,
+    `Leitura líquido: ${mi(ll.realizado_rs)} (${nf(ll.pct_realizado)}%) · necessário ${mi(ll.ritmo_necessario_rs_dia)}/dia útil (${fx(ll.fator_ritmo)})`,
+    `Dias úteis: ${mt.dias_uteis_decorridos} decorridos · ${mt.dias_uteis_restantes} restantes`,
+    `Qualidade: índice ${nf(G.confiabilidade.indice_qualidade_ganhos)}% · ${nf(G.confiabilidade.ganhos_sem_honorario_pct)}% dos ganhos sem honorário · ${nf(G.confiabilidade.duplicados_grupos)} grupos duplicados`,
+    `Status: ${Object.entries(G.resumo_status).map(([k, v]) => `${v} ${k}`).join(' · ')}`,
+    'Tolerâncias são propostas do Controller até o Luis aprovar; cinza = sem dado (quem fornece está na nota de cada métrica).'];
+  s.addText(linhas.map((t, j) => ({ text: t, options: { bullet: { indent: 12 }, breakLine: j < linhas.length - 1 } })),
+    { x: 9.4, y: 2.3, w: 3.15, h: 4.4, fontFace: F, fontSize: 9.5, color: C.text, paraSpaceAfter: 6, valign: 'top', isTextBox: true });
 }
 
 pres.writeFile({ fileName: out }).then(f => console.log('ok', f));

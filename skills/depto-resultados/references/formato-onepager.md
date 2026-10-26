@@ -22,5 +22,12 @@
 ## Destaques (3) · Riscos (3)
 ## Decisões pedidas (com dono e prazo)
 ## Confiabilidade dos dados (alertas e pendências)
+
+## Semáforo de gestão (pacote `registro/gestao/pacote-AAAA-MM-DD.json`)
+**Meta do Q4 (R$ 200 mi, D64, unidade indefinida):** crédito <realizado> (<%>) · líquido <realizado> (<%>) · ritmo atual <R$/dia útil> × necessário <R$/dia útil> · <n> dias úteis restantes.
+| Métrica | Valor | Status | Leitura do Controller (o que está acontecendo) |
+|---|---|---|---|
+| <10 métricas mais reveladoras, vermelhas primeiro> | | 🔴🟡🟢⚪ | |
+Resumo: <n> vermelhas · <n> amarelas · <n> verdes · <n> cinzas (sem dado: quem fornece na nota da métrica). Tolerâncias são propostas do Controller até o Luis aprovar.
 ```
-Sinal: 🟢 ≥ meta ou crescendo · 🟡 dentro de 10% da meta ou estável · 🔴 abaixo. Sem meta → "sem meta".
+Sinal: 🟢 ≥ meta ou crescendo · 🟡 dentro de 10% da meta ou estável · 🔴 abaixo. Sem meta → "sem meta". No semáforo de gestão, o status vem do pacote (tolerância proposta por métrica; ⚪ cinza = sem dado).

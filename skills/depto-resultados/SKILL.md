@@ -12,7 +12,7 @@ Departamento de Resultados & Controladoria virtual da Área Partners da Save Com
 Você é o **Controller** da Área Partners. Seu produto é o **relatório semanal de resultados**: 1 deck (8 slides) + 1 one-pager, prontos para o Luis revisar e apresentar. Português do Brasil.
 
 ## Regras inegociáveis
-1. **Números vêm do script, nunca da sua cabeça.** Todo número do relatório sai de `scripts/calc_semana.py`. Você interpreta e escreve; não recalcula de memória.
+1. **Números vêm do script, nunca da sua cabeça.** Todo número do relatório sai de `scripts/calc_semana.py`; os do semáforo de gestão, de `scripts/pacote_gestao.py`. Você interpreta e escreve; não recalcula de memória.
 2. **Fórmulas fixas:** use `references/metricas.md`. Mudou uma definição? Registre a versão e avise na capa.
 3. **ROI oficial = trimestral** (D16, aprovada 29/09): rótulo "potencial, antes de impostos, custo só da área"; o mensal vai só em nota. **Três versões** (D17, aprovada): contratado · conservador (glosa, prazo até o caixa, custo das áreas de apoio, com premissas declaradas) · realizado (quando houver dado de caixa). O relatório não traz rotina de orçado × realizado (D19 rejeitada).
 4. **Potencial ≠ realizado.** Honorário contratado não é receita recebida. O ROI oficial é o realizado; sem dado de caixa, ele aparece como pendente.
@@ -56,12 +56,13 @@ Na rotina semanal você pode assumir todos os papéis em sequência. Use subagen
 2. **Qualidade:** leia `alertas`, `pendencias` e `anomalias_margem`; compare com a edição anterior (`dados/metricas-*.json`).
 3. **Leitura:** identifique o que mudou e por quê; pergunte "e daí?" para cada número.
 4. **Texto:** escreva `dados/texto-AAAA-MM-DD.json` (chaves: titulo, periodo, manchete, nota_capa, titulo_dados, ressalvas[], titulo_volume, titulo_crescimento, leitura_crescimento, titulo_margem, leitura_margem, titulo_lucro, leitura_lucro, titulo_funil, leitura_funil, destaques[], riscos[], decisoes[]). Todo número no texto precisa existir no JSON de métricas.
-5. **Deck:** `cd ~/.claude/skills/depto-resultados/scripts && node gen_deck.js <metricas.json> <texto.json> ~/agentes-partners/departamentos/resultados/relatorios/Resultado-Semanal-AAAA-MM-DD.pptx`
-6. **One-pager:** `relatorios/Resultado-Semanal-AAAA-MM-DD.md` no formato de `references/formato-onepager.md`.
+4b. **Pacote de gestão (entrega oficial semanal, Luis 26/10/2026):** `python3 ~/.claude/skills/depto-resultados/scripts/pacote_gestao.py --data AAAA-MM-DD` → `~/agentes-partners/registro/gestao/pacote-AAAA-MM-DD.json`, no contrato de `infra/gestao-schema.md` (seção 1). Junta, com o Dados & BI, as métricas de resultado (volume limpo × bruto, meta do Q4 nas duas leituras com ritmo por dia útil, win rate, ticket, clientes com 2+ produtos, funil por produto), caixa (recebido × contratado, aging do PER, glosa por tese, decadência mensal, valor em janelas), risco (qualidade dos ganhos, duplicados, probabilidade real × configurada, pipeline parado > 90 dias, dependência de um Master, Masters em queda), canal (margem líquida por Master, consultores dormentes e 2º ganho) e operação (tempo de resposta ao parceiro, adoção pelo time, entregas no prazo, acerto dos agentes, Recuperador). Cada métrica leva fonte, confiança, tolerância **proposta** e status semáforo; sem dado fica cinza com quem fornece. O bloco `conferencia` confere o pacote contra o `metricas-*.json` e registra divergências. O pacote alimenta o `gestao.json` do painel do Luis (`infra/gestao.py`) e o Conselho de segunda; os JSON `previsao-*` (Previsibilidade) e `controle-*` (Controle) são de outras frentes e ficam na mesma pasta.
+5. **Deck:** `cd ~/.claude/skills/depto-resultados/scripts && NODE_PATH=~/.partners-node/node_modules node gen_deck.js <metricas.json> <texto.json> ~/agentes-partners/departamentos/resultados/relatorios/Resultado-Semanal-AAAA-MM-DD.pptx ~/agentes-partners/registro/gestao/pacote-AAAA-MM-DD.json` (o 4º argumento gera o slide 9 "Semáforo de gestão").
+6. **One-pager:** `relatorios/Resultado-Semanal-AAAA-MM-DD.md` no formato de `references/formato-onepager.md`, com a seção "Semáforo de gestão".
 7. **Entrega:** no chat, a manchete, os 3 números principais, os alertas e as decisões pedidas, com os caminhos dos arquivos. Se o Conselho for se reunir, o one-pager entra no dossiê dele.
 
-## Os 8 slides (fixos)
-1. Capa + manchete + 4 KPIs · 2. Confiabilidade dos dados e pendências · 3. Volume criado × fechado (13 meses) · 4. Fator e % de crescimento · 5. Margem e margem líquida · 6. Lucro da área e ROI (3 versões) · 7. Funil, canal e concentração · 8. Destaques, riscos e decisões.
+## Os 9 slides (fixos)
+1. Capa + manchete + 4 KPIs · 2. Confiabilidade dos dados e pendências · 3. Volume criado × fechado (13 meses) · 4. Fator e % de crescimento · 5. Margem e margem líquida · 6. Lucro da área e ROI (3 versões) · 7. Funil, canal e concentração · 8. Destaques, riscos e decisões · 9. Semáforo de gestão (pacote de gestão: métricas por status com tolerância proposta, meta do Q4 nas duas leituras e ritmo por dia útil; desde 26/10/2026).
 
 ## Revisão do Gerente (obrigatória, regra do Luis de 15/10/2026)
 Siga `~/agentes-partners/infra/protocolo-gerente.md`.

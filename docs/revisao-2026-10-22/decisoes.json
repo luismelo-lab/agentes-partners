@@ -70,6 +70,72 @@
    "dono_aplicacao": "depto-operacoes-canal",
    "padrao": false,
    "alcada": "Fica com o Luis (D98): preço"
+  },
+  {
+   "id": "21",
+   "bloco": "Trava a operação",
+   "tema": "Meta do Q4",
+   "decisao": "D106 · Definir a unidade e a natureza da meta: crédito ganho com tese e % (recomendação), honorário bruto ou líquido; interna ou compromisso externo. Meta de gestão R$ 70 mi, com R$ 200 mi como alongamento",
+   "porque": "Sem isso, forecast, ritmo e controle leem em crédito por padrão; custo ≈ R$ 0,2–0,3 mi de líquido por semana",
+   "prazo": "29/10",
+   "onde": "conselho/atas/2026-10-26-extraordinaria-gestao.md",
+   "dono_aplicacao": "depto-resultados + Conselho",
+   "padrao": false
+  },
+  {
+   "id": "22",
+   "bloco": "Trava a operação",
+   "tema": "Lançamento ao time",
+   "decisao": "D107 · D0 em 03/11 e regra de 3 dias úteis: decisão reversível sem resposta aplica o padrão",
+   "porque": "Destrava R$ 7,7 mi esperados no Recuperador e os pedidos parados",
+   "prazo": "30/10",
+   "onde": "conselho/atas/2026-10-26-extraordinaria-gestao.md",
+   "dono_aplicacao": "gabinete + celula-daniela",
+   "padrao": false
+  },
+  {
+   "id": "23",
+   "bloco": "Aberta",
+   "tema": "Produtos em validação",
+   "decisao": "D108 · 0 h do time em Crédito Internacional e Maquila até o G2; decisões D30–D39 e D49–D60 congeladas; estoque art. 381 (J03) para 2027",
+   "porque": "Foco do time no que fecha no Q4",
+   "prazo": "06/11",
+   "onde": "conselho/atas/2026-10-26-extraordinaria-gestao.md",
+   "dono_aplicacao": "depto-internacional",
+   "padrao": false
+  },
+  {
+   "id": "24",
+   "bloco": "Aberta",
+   "tema": "Repasse e honorário",
+   "decisao": "D109 · % de honorário preenchido pelo contrato por Financeiro e Contratos, sem aprovação caso a caso (200 maiores em 6 semanas); atípico sobe",
+   "porque": "Margem calculável e repasse com lastro",
+   "prazo": "06/11",
+   "onde": "conselho/atas/2026-10-26-extraordinaria-gestao.md",
+   "dono_aplicacao": "depto-operacoes-canal + depto-contratos",
+   "padrao": true
+  },
+  {
+   "id": "25",
+   "bloco": "Aberta",
+   "tema": "Caixa",
+   "decisao": "D110 · Custo/hora provisório R$ 141/h e pedido ao Financeiro do recebido por negócio, aging e impostos",
+   "porque": "Sem o recebido, a previsão de caixa fica com confiança baixa",
+   "prazo": "07/11",
+   "onde": "conselho/atas/2026-10-26-extraordinaria-gestao.md",
+   "dono_aplicacao": "depto-resultados",
+   "padrao": true
+  },
+  {
+   "id": "26",
+   "bloco": "Aberta",
+   "tema": "Tolerâncias",
+   "decisao": "Aprovar as tolerâncias propostas do semáforo de gestão (infra/controle.md §1) na revisão mensal",
+   "porque": "Define o que é verde, amarelo e vermelho em cada métrica",
+   "prazo": "03/11",
+   "onde": "infra/controle.md",
+   "dono_aplicacao": "gabinete",
+   "padrao": true
   }
  ],
  "historico": [

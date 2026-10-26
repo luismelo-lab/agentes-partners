@@ -38,7 +38,7 @@ EMAIL = {"luis.melo@savecompany.com.br": "luis", "daniela.maciel@savecompany.com
 PRIORIDADES = ("alta", "normal", "baixa")
 TIPOS = ("relatorio", "alerta", "pedido")
 LIMITE_RESUMO = 1500
-ROTAS = re.compile(r"^(mesa|pedidos|whatsapp|areas|onde|rotinas|decisoes|caixa|novo)$|^(pedido|lote|decisao|chamado|demanda|wa|area|caixa)/[A-Za-z0-9_.:-]{1,80}$")
+ROTAS = re.compile(r"^(mesa|pedidos|whatsapp|areas|onde|rotinas|decisoes|caixa|novo|gestao)$|^(pedido|lote|decisao|chamado|demanda|wa|area|caixa)/[A-Za-z0-9_.:-]{1,80}$")
 DIAS_TRANSICAO = 7  # depois de 1 semana com a caixa entregando, a pasta "Caixa de saída (e-mail pausado)" para de receber
 
 
