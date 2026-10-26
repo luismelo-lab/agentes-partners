@@ -2,19 +2,19 @@
 
 Esta folha reúne as decisões que as cinco frentes (Regras, Dados, TI, Design e o inventário da Central) deixaram para a alçada do Luis. Cada uma traz a recomendação já validada pela área dona. O código da Fase 1 sai com o padrão da recomendação em parâmetro: se o Luis decidir diferente, muda o parâmetro e não o código. Responda pelo número, por exemplo "1 ok, 4 ajuste: …".
 
-## Até 30/10
+## 1. Até 30/10
 | # | Decisão | Recomendação | Origem |
 |---|---|---|---|
 | 1 | **D102 · repasse:** liberar o valor conferido à medida do recebimento; atípico só com contrato | Opção A | Regras §18.1; dossiê D102 |
 
-## Até 06/11
+## 2. Até 06/11
 | # | Decisão | Recomendação | Origem |
 |---|---|---|---|
 | 2 | **D65 · registro único de exceções de honorário** | Opção A, com o inventário dos 9 termos em 2 semanas | Regras |
 | 3 | **D109 · % de honorário preenchido pelo contrato** | Ordem da opção B | Regras |
 | 4 | **DL-07 · base da recuperação:** honorário recebido bruto ou líquido de tributos | Bruto, até o Financeiro mostrar a prática; mudança só para contratos novos | Regras |
 
-## Até 14/11 (fase 0 · regras)
+## 3. Até 14/11 (fase 0 · regras)
 | # | Decisão | Recomendação | Origem |
 |---|---|---|---|
 | 5 | **DL-01 · regra de registro R1–R3:** pela raiz do CNPJ; precedência pelo registro completo; desempate em 4 níveis; nunca duas remunerações integrais; cliente ganho protegido pelo contrato + 12 meses; conflito decidido em 10 dias úteis | Aprovar como v1 e revisar em 90 dias com os dados da fila; o legado fica caso a caso | Regras, Dados |
@@ -26,7 +26,7 @@ Esta folha reúne as decisões que as cinco frentes (Regras, Dados, TI, Design e
 | 11 | **DL-11 · Master padrinho** vê só os marcos de onboarding do indicador | Aprovar | Regras |
 | 12 | **Fase 1 no painel com os dados no Mac** (registro em `registro/prm/`, CNPJ mascarado) | Aprovar; é reversível | Desenho |
 
-## Até 30/11
+## 4. Até 30/11
 | # | Decisão | Recomendação | Origem |
 |---|---|---|---|
 | 13 | **DL-05 · % em lead gerado pela BDR** | O % do termo em 2026, revisto na política 2027 | Regras |
@@ -34,7 +34,7 @@ Esta folha reúne as decisões que as cinco frentes (Regras, Dados, TI, Design e
 | 15 | **DL-08 · estorno:** linha negativa de até 50% por ciclo, por até 24 meses, só com cláusula no termo | Aprovar; Contratos escreve a cláusula | Regras |
 | 16 | **DL-17 · parceiro só pessoa jurídica** (sem PF nem MEI) | Aprovar | Regras |
 
-## Antes do pedido à TI e do piloto (Fase 2, Azure)
+## 5. Antes do pedido à TI e do piloto (Fase 2, Azure)
 | # | Decisão | Recomendação | Origem |
 |---|---|---|---|
 | 17 | **DL-16 · guardar CNPJ e contato do decisor no Azure SQL** e consultar CNPJ fora do Mac. É exceção à regra "dado de cliente fica no Mac" | Aprovar condicionado ao parecer LGPD do Jurídico: Brazil South, tenant da Save, mínimo necessário, campos cifrados e retenção definida | Regras, Dados, TI |
@@ -48,11 +48,11 @@ Esta folha reúne as decisões que as cinco frentes (Regras, Dados, TI, Design e
 | 25 | **DL-12 · textos-modelo como frases permitidas**, com envio automático só dos textos fixos de estado | Aprovar; texto livre segue com uma pessoa | Regras |
 | 26 | **Pedido à TI da Save** (assinatura no tenant, registros de aplicativo, convites B2B, DNS) | Autorizar o envio do rascunho (`04-ti-arquitetura.md` §5) depois do item 17, com um responsável nomeado na TI | TI |
 
-## Depois de pareceres
+## 6. Depois de pareceres
 - **DL-15 · natureza jurídica do Master:** decidir com o parecer do Jurídico de 31/10. Até lá, pagamento no dia 20 e pós-rescisão conforme o termo.
 - **DL-18 · certificação N2** como porta de Gestão de Passivo: aprovar o desenho e ligar em 2027, quando os módulos estiverem validados.
 
-## Pedidos a outros donos (não sobem ao Luis)
+## 7. Pedidos a outros donos (não sobem ao Luis)
 - **Financeiro:** arquivo mensal de recebimentos. Sem ele, o extrato não passa de "previsto".
 - **Dono do CRM:** propriedades `id_registro_prm` e Produto (D37), e o `hs_merged_object_ids` no download antes da mescla dos 357 cards duplicados.
 - **Daniela:**
