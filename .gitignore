@@ -5,6 +5,7 @@
 !.gitignore
 !.gitattributes
 !.github/**
+!.devcontainer/devcontainer.json
 !README.md
 !CLAUDE.md
 !RUNBOOK.md

@@ -1,0 +1,13 @@
+{
+  // PRM Save no GitHub Codespaces (Luis, 26/10/2026: desenvolver e rodar na nuvem, poupando o Mac).
+  // Só dados fictícios (fixtures do PRM). Nenhum segredo, nenhum dado de cliente: registro/, departamentos/ e .env
+  // ficam fora do git e não existem aqui. A porta 4280 é privada: só quem tem acesso ao repositório abre.
+  "name": "PRM Save",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "features": { "ghcr.io/devcontainers/features/node:1": { "version": "20" } },
+  "forwardPorts": [4280],
+  "portsAttributes": { "4280": { "label": "PRM Save (dados fictícios)", "onAutoForward": "openBrowser", "visibility": "private" } },
+  "postCreateCommand": "ln -sfn \"$PWD\" ~/agentes-partners",
+  "postAttachCommand": "python3 central/dev_server.py --prm",
+  "customizations": { "codespaces": { "openFiles": ["central/README.md"] } }
+}
