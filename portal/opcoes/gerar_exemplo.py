@@ -161,7 +161,72 @@ CAIXA = [  # mensagens de exemplo da caixa de entrada (sem cliente)
        anexos=["Plano-do-dia-2026-10-23.xlsx"], acoes=[("Abrir minha mesa", "mesa")]),
 ]
 
-EX = {"atualizado": D["atualizado"], "hoje": "2026-10-23", "blocos": DIR["blocos"], "areas": DIR["areas"], "rotinas": DIR["rotinas"], "pastas": DIR["pastas"], "pessoas": DIR["pessoas"], "regras_casa": DIR.get("regras_casa", []),
+# ---------- Sistema de gestão (26/10/2026): exemplo no contrato infra/gestao-schema.md, montado pelo próprio infra/gestao.py ----------
+import sys; sys.path.insert(0, os.path.join(REPO, "infra")); import gestao as G
+MI = 1_000_000
+def mt(id_, nome, bloco, valor, unidade, anterior, meta, status, confianca, nota, fonte="hubspot 26/10 06:53"):
+    var = round((valor - anterior) / anterior * 100, 1) if anterior else None
+    return {"id": id_, "nome": nome, "bloco": bloco, "valor": valor, "unidade": unidade, "anterior": anterior, "variacao_pct": var, "meta": meta,
+            "tolerancia": {"verde": ">= 0.9*meta", "amarelo": ">= 0.7*meta"} if meta is not None else {"verde": "proposta: >= 0.9*meta", "amarelo": "proposta: >= 0.7*meta"},
+            "status": status, "fonte": fonte, "confianca": confianca, "nota": nota}
+PACOTE = {"data": "2026-10-26", "periodo": {"semana_de": "2026-10-19", "mes": "2026-10", "trimestre": "2026-Q4"},
+    "meta": {"q4_rs": 200 * MI, "unidade": "indefinida", "realizado_rs": 62 * MI, "falta_rs": 138 * MI, "dias_uteis_restantes": 46, "ritmo_necessario_rs_dia": 3 * MI, "ritmo_atual_rs_dia": int(1.4 * MI),
+             "leituras": {"credito": {"realizado_rs": 62 * MI, "falta_rs": 138 * MI, "ritmo_atual_rs_dia": int(1.4 * MI), "ritmo_necessario_rs_dia": 3 * MI},
+                          "liquido": {"realizado_rs": int(9.3 * MI), "falta_rs": int(20.7 * MI), "ritmo_atual_rs_dia": 210_000, "ritmo_necessario_rs_dia": 450_000, "meta_rs": 30 * MI}}},
+    "metricas": [
+        mt("ganhos_mes_rs", "Fechado no mês (limpo)", "resultado", int(18.4 * MI), "R$", int(22.1 * MI), 25 * MI, "amarelo", "alta", "Sem os 9 grupos de duplicidade; 3 ganhos sem honorário fora."),
+        mt("ganhos_mes_n", "Contratos fechados no mês", "resultado", 14, "n", 19, 20, "amarelo", "alta", "Metade concentrada em 2 Masters."),
+        mt("conversao_pct", "Conversão diagnóstico → contrato", "resultado", 9.8, "%", 12.4, 15, "vermelho", "media", "Queda nas safras de agosto e setembro."),
+        mt("ticket_medio_rs", "Ticket médio do crédito", "resultado", int(1.3 * MI), "R$", int(1.2 * MI), None, "cinza", "alta", "Sem meta aprovada; tolerância proposta."),
+        mt("recebido_mes_rs", "Recebido no mês", "caixa", int(4.1 * MI), "R$", int(3.6 * MI), 5 * MI, "amarelo", "alta", "PER de 2025 ainda em análise na Receita.", "financeiro 24/10"),
+        mt("per_analise_rs", "PER em análise (crédito)", "caixa", 31 * MI, "R$", 28 * MI, None, "cinza", "media", "Prazo de 360 dias correndo em 11 pedidos.", "pós-venda 23/10"),
+        mt("recebiveis_30d_rs", "A receber em 30 dias", "caixa", int(6.8 * MI), "R$", int(5.9 * MI), 6 * MI, "verde", "media", "Estimativa com base nas compensações previstas."),
+        mt("masters_ativos_n", "Masters ativos no mês", "canal", 7, "n", 8, 9, "amarelo", "alta", "Dois Masters sem negócio novo há 45 dias."),
+        mt("negocios_parados_n", "Negócios parados > 30 dias", "canal", 212, "n", 198, 120, "vermelho", "alta", "60% em 3 Masters; metade sem próxima atividade."),
+        mt("demandas_sla_pct", "Demandas respondidas no prazo", "canal", 86, "%", 81, 90, "verde", "alta", "Rodadas de 8h e 14h do WhatsApp.", "registro de demandas 26/10"),
+        mt("ganhos_sem_hon_pct", "Ganhos sem % de honorário", "risco", 21, "%", 24, 5, "vermelho", "alta", "Trava o repasse e o extrato do mês.", "conferência de repasses 26/10"),
+        mt("qualidade_ganhos", "Índice de qualidade dos ganhos", "risco", 72, "n", 69, 85, "amarelo", "media", "Duplicidade e campos vazios pesam.", "dados-bi 26/10"),
+        mt("decadencia_90d_rs", "Crédito que decai em 90 dias", "risco", int(19.2 * MI), "R$", int(14.8 * MI), None, "cinza", "media", "Pré-análise; validação do técnico por crédito.", "pós-venda 23/10"),
+        mt("pedidos_sla_pct", "Pedidos à Central no prazo", "operacao", 91, "%", 88, 90, "verde", "alta", "12 pedidos na semana.", "central 26/10"),
+        mt("entregas_atrasadas_n", "Entregas atrasadas hoje", "operacao", 1, "n", 0, 0, "amarelo", "alta", "Relatório semanal refeito pela Central.", "sentinela 26/10 07:30"),
+        mt("rotinas_falhas_n", "Falhas de rotina na semana", "operacao", 3, "n", 1, 0, "vermelho", "alta", "Duas por queda de internet (19 e 26/10).", "sentinela 26/10"),
+    ],
+    "confiabilidade": {"indice_qualidade_ganhos": 72, "ganhos_sem_honorario_pct": 21, "duplicados_grupos": 9, "volume_bruto_rs": int(21.7 * MI), "volume_limpo_rs": int(18.4 * MI)},
+    "alertas": [{"texto": "Volume bruto do mês tem 9 grupos de duplicidade; o painel usa o limpo.", "area": "Dados & BI", "severidade": "media"},
+                {"texto": "Conversão caiu duas semanas seguidas.", "area": "Resultados", "severidade": "alta"}]}
+sem = ["2026-W44", "2026-W45", "2026-W46", "2026-W47", "2026-W48", "2026-W49", "2026-W50", "2026-W51", "2026-W52", "2027-W01", "2027-W02", "2027-W03", "2027-W04"]
+base = [1.1, 1.4, 0.9, 2.2, 1.6, 1.3, 2.8, 1.9, 0.7, 0.6, 1.2, 1.5, 1.8]; cons = [0.8, 1.0, 0.7, 1.4, 1.1, 0.9, 1.7, 1.2, 0.5, 0.4, 0.8, 1.0, 1.1]
+PREVISAO = {"data": "2026-10-26", "horizonte_semanas": 13,
+    "cenarios": {"conservador": {"fechamento_q4_rs": 128 * MI, "liquido_q4_rs": 19 * MI, "premissas": ["Conversão das safras de agosto e setembro segue em 9,8%", "Só os 7 Masters ativos fecham negócio", "Nenhum PER de 2025 pago no Q4"]},
+                 "base": {"fechamento_q4_rs": 156 * MI, "liquido_q4_rs": 24 * MI, "premissas": ["Conversão volta a 12%, média de 2026", "Lote 1 do Recuperador recupera 6 negócios perdidos", "Metade das compensações previstas entra em dezembro"]},
+                 "meta": {"fechamento_q4_rs": 200 * MI, "liquido_q4_rs": 30 * MI, "o_que_precisa": ["Conversão em 15% nas 3 safras abertas", "Os 9 Masters com pelo menos 2 contratos até 15/12", "Negócios parados abaixo de 120 até 30/11"]}},
+    "caixa_13_semanas": [{"semana": s, "entrada_rs_base": int(b * MI), "entrada_rs_conservador": int(c * MI), "fonte": "PER/compensação/parcelamento"} for s, b, c in zip(sem, base, cons)],
+    "pipeline_por_safra": [{"safra": "2026-08", "aberto_rs": 42 * MI, "conversao_real_pct": 9.1, "esperado_rs": int(3.8 * MI)}, {"safra": "2026-09", "aberto_rs": 57 * MI, "conversao_real_pct": 10.4, "esperado_rs": int(5.9 * MI)},
+                           {"safra": "2026-10", "aberto_rs": 38 * MI, "conversao_real_pct": None, "esperado_rs": int(4.6 * MI)}],
+    "decadencia_mensal": [{"mes": "2026-11", "credito_que_sai_rs": int(4.2 * MI), "clientes_n": 6}, {"mes": "2026-12", "credito_que_sai_rs": int(12.5 * MI), "clientes_n": 14},
+                          {"mes": "2027-01", "credito_que_sai_rs": int(2.1 * MI), "clientes_n": 3}, {"mes": "2027-02", "credito_que_sai_rs": 800_000, "clientes_n": 2}, {"mes": "2027-03", "credito_que_sai_rs": int(3.4 * MI), "clientes_n": 5}],
+    "janelas": [{"janela": "Decadência de novembro de 2021 (créditos de nov/2021)", "prazo": "2026-11-30", "base_rs": int(4.2 * MI), "clientes_n": 6, "area": "Pós-venda"},
+                {"janela": "Saldos credores da reforma: opção até 31/12", "prazo": "2026-12-31", "base_rs": int(12.5 * MI), "clientes_n": 14, "area": "Tributário"},
+                {"janela": "Prazo de manifestação em despacho decisório", "prazo": "2026-10-31", "base_rs": int(1.6 * MI), "clientes_n": 1, "area": "Jurídico"}],
+    "riscos": [{"risco": "Compensação de ofício engolir o PER de 2025", "probabilidade": "media", "impacto_rs": int(2.4 * MI), "mitigacao": "Conferir débitos em aberto antes do pedido", "dono": "geovana", "prazo": "2026-11-05"},
+               {"risco": "Dois Masters saírem do programa", "probabilidade": "baixa", "impacto_rs": 18 * MI, "mitigacao": "Plano de conta e QBR em novembro", "dono": "daniela", "prazo": "2026-11-14"}]}
+CONTROLE = {"data": "2026-10-26",
+    "regras": [{"id": "C01", "metrica": "ganhos_mes_rs", "condicao": "status == vermelho por 2 semanas", "acao": "Conselho revisa o plano da semana", "dono": "luis", "prazo_dias": 3, "alcada": "luis"},
+               {"id": "C02", "metrica": "negocios_parados_n", "condicao": "valor > 120", "acao": "Daniela cobra próxima atividade dos 3 Masters com mais parados", "dono": "daniela", "prazo_dias": 5, "alcada": "dona"},
+               {"id": "C03", "metrica": "ganhos_sem_hon_pct", "condicao": "valor > 5%", "acao": "Controller pede o % ao Financeiro e trava o extrato", "dono": "controller", "prazo_dias": 3, "alcada": "gerente"},
+               {"id": "C04", "metrica": "conversao_pct", "condicao": "valor < 10,5% (amarelo)", "acao": "Geovana revisa os diagnósticos sem contrato das 2 safras", "dono": "geovana", "prazo_dias": 7, "alcada": "dona"},
+               {"id": "C05", "metrica": "rotinas_falhas_n", "condicao": "valor > 0", "acao": "TI refaz e registra a causa", "dono": "gerente-ti", "prazo_dias": 1, "alcada": "gerente"}],
+    "desvios": [{"regra": "C02", "metrica": "negocios_parados_n", "valor": 212, "limite": 120, "desde": "2026-10-12", "acao": "Cobrar próxima atividade dos Masters 2, 5 e 7", "dono": "daniela", "prazo": "2026-10-29", "status": "em_andamento"},
+                {"regra": "C03", "metrica": "ganhos_sem_hon_pct", "valor": 21, "limite": 5, "desde": "2026-10-05", "acao": "Pedir o % de 3 ganhos ao Financeiro", "dono": "controller", "prazo": "2026-10-28", "status": "aberto"},
+                {"regra": "C04", "metrica": "conversao_pct", "valor": 9.8, "limite": 10.5, "desde": "2026-10-19", "acao": "Revisar 11 diagnósticos sem contrato (safras 08 e 09)", "dono": "geovana", "prazo": "2026-11-02", "status": "aberto"},
+                {"regra": "C05", "metrica": "rotinas_falhas_n", "valor": 3, "limite": 0, "desde": "2026-10-26", "acao": "Registrar a causa das 2 quedas de internet e testar o reparo automático", "dono": "gerente-ti", "prazo": "2026-10-27", "status": "resolvido"}],
+    "ritual": [{"quando": "segunda 7h30", "quem": "Conselho", "o_que": "pacote + previsão + desvios", "saida": "ata com decisões"}, {"quando": "sexta 16h", "quem": "Gabinete", "o_que": "consolidação e folha de decisões", "saida": "folha única"}]}
+ACOES = [{"id": "A-2026-10-26-1", "acao": "Definir a unidade da meta do Q4 (crédito ou líquido)", "dono": "luis", "prazo": "2026-10-28", "origem": "conselho", "status": "aberto"},
+         {"id": "A-2026-10-26-2", "acao": "Aprovar as metas das 4 métricas cinza do semáforo", "dono": "luis", "prazo": "2026-11-03", "origem": "conselho", "status": "aberto"},
+         {"id": "A-2026-10-19-3", "acao": "QBR com os 2 Masters sem negócio novo", "dono": "daniela", "prazo": "2026-11-14", "origem": "conselho", "status": "em_andamento"}]
+GESTAO = G.montar(PACOTE, PREVISAO, CONTROLE, [{"id": d["id"], "texto": d["texto"], "data": d["data"]} for d in dec], ACOES, [], hoje="2026-10-26")
+
+EX = {"atualizado": D["atualizado"], "hoje": "2026-10-23", "gestao": GESTAO, "blocos": DIR["blocos"], "areas": DIR["areas"], "rotinas": DIR["rotinas"], "pastas": DIR["pastas"], "pessoas": DIR["pessoas"], "regras_casa": DIR.get("regras_casa", []),
       "demandas_num": D.get("demandas", {}), "alertas": D["gestao"]["alertas"], "manchete": D["gestao"]["manchete"], "masters": masters, "decisoes": dec,
       "decisoes_total": len(D.get("conselho", [])), "janelas": janelas, "pedidos": PEDIDOS, "demandas": DEMANDAS, "chamados": CHAMADOS, "lote": LOTE, "arquivos": ARQ, "whatsapp": WHATS, "caixa": CAIXA}
 open(os.path.join(AQUI, "exemplo-dados.js"), "w").write("/* Gerado por gerar_exemplo.py. Pedidos, demandas, chamados, lote e arquivos são EXEMPLOS fictícios. */\nwindow.EX = "

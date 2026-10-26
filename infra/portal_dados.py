@@ -70,6 +70,19 @@ def qualidade():
     return [{"area": "Qualidade", "texto": txt}]
 
 
+def sistema_gestao():
+    """Sistema de gestão (infra/gestao.py, 26/10/2026): meta do Q4, semáforo, previsão, desvios, decisões e ações para a tela "Gestão".
+    Tolerante: sem os JSON de registro/gestao/, vêm blocos vazios com avisos; se o módulo falhar, só um aviso."""
+    try:
+        sys.path.insert(0, os.path.join(REPO, "infra")); import gestao as G
+        return G.consolidar()
+    except Exception as e:
+        return {"meta": {}, "semaforo": [], "previsao": {}, "desvios": [], "decisoes": [], "acoes": [], "avisos": [f"gestao.py indisponível: {str(e)[:100]}"]}
+
+
+GESTAO_SO_LUIS = ("meta", "previsao", "desvios", "decisoes", "acoes", "regras", "ritual", "confiabilidade", "decisoes_pendentes")  # o time vê só o semáforo
+
+
 def gestao():
     t = ler(ult("departamentos/resultados/dados/texto-*.json"))
     dec = open(os.path.join(AP, "conselho/decisoes.md")).read().splitlines()
@@ -77,7 +90,7 @@ def gestao():
     o = ler(ult("departamentos/operacoes-canal/conferencia-repasses-*.json"))
     c = ler(ult("departamentos/contratos/controle-contratos-*.json"))
     b = ler(ult("departamentos/dados/dados-bi-*.json"))
-    return {"manchete": t.get("manchete"), "periodo": t.get("periodo"), "decisoes_pendentes": list(dict.fromkeys(pend)),
+    return {**sistema_gestao(), "manchete": t.get("manchete"), "periodo": t.get("periodo"), "decisoes_pendentes": list(dict.fromkeys(pend)),
             "alertas": [
                 {"area": "Operações de Canal", "texto": f"{o.get('duplicidade_grupos', 0)} possíveis cards duplicados em ganhos; {o.get('status', {}).get('Bloqueado', 0)} ganhos sem dado para calcular o repasse."},
                 {"area": "Contratos", "texto": f"{(c.get('em_contrato') or {}).get('negocios', 0)} negócios em etapa de contrato, {(c.get('em_contrato') or {}).get('com_alerta', 0)} com alerta."},
@@ -375,7 +388,11 @@ def arquivos_dia():
 def para_time(d, D):
     """Versão "time" (A2): tira o que é só do Luis e troca o link das pastas dele por um aviso."""
     d = dict(d); D = json.loads(json.dumps(D))
-    d.pop("conselho", None); d["gestao"] = {k: v for k, v in (d.get("gestao") or {}).items() if k != "decisoes_pendentes"}
+    d.pop("conselho", None); d["gestao"] = {k: v for k, v in (d.get("gestao") or {}).items() if k not in GESTAO_SO_LUIS}
+    # semáforo do time: só nome, bloco, status, variação, confiança e nota; sem meta em R$, sem valor em R$ nem tolerância
+    d["gestao"]["semaforo"] = [{**{k: m.get(k) for k in ("id", "nome", "bloco", "status", "variacao_pct", "confianca", "nota", "unidade", "fonte")},
+                                "valor": None if m.get("unidade") == "R$" else m.get("valor"), "meta": None, "tolerancia": {},
+                                "nota": re.sub(r"R\$\s?[\d.,]+(\s?(mi|mil|bi))?", "R$ —", str(m.get("nota") or ""))} for m in d["gestao"].get("semaforo") or []]
     d["demandas"] = {k: v for k, v in (d.get("demandas") or {}).items() if k in TIME}
     d["demandas_lista"] = [x for x in d.get("demandas_lista") or [] if x.get("pessoa") in TIME]
     d["whatsapp_demandas"] = [x for x in d.get("whatsapp_demandas") or [] if x.get("pessoa") in TIME]

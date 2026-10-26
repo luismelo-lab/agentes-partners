@@ -245,6 +245,64 @@ class PortalDadosTime(unittest.TestCase):
         self.assertEqual(d["conselho"], [{"id": "D9"}])  # não altera o original
 
 
+class Gestao(unittest.TestCase):
+    """infra/gestao.py (26/10/2026): consolidação tolerante a arquivo ausente, contrato da seção 4 e recorte do perfil time."""
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp(prefix="gestao-teste-"); os.makedirs(os.path.join(self.tmp, "registro", "gestao"))
+        self.G = carregar("gestao_teste", os.path.join(REPO, "infra/gestao.py"))
+
+    def tearDown(self): shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_sem_arquivos_nao_derruba(self):
+        g = self.G.consolidar(self.tmp)
+        self.assertEqual((g["semaforo"], g["desvios"], g["decisoes"], g["acoes"]), ([], [], [], []))
+        self.assertEqual(g["meta"]["unidade"], "indefinida"); self.assertEqual(g["previsao"]["cenarios"], {})
+        self.assertEqual(len(g["avisos"]), 4)  # pacote, previsão, controle e decisoes.md ausentes
+        for k in ("data", "meta", "semaforo", "previsao", "desvios", "decisoes", "acoes"): self.assertIn(k, g)
+
+    def test_consolida_e_tolera_quebrado(self):
+        r = os.path.join(self.tmp, "registro", "gestao")
+        json.dump({"data": "2026-10-26", "meta": {"q4_rs": 200, "unidade": "indefinida", "realizado_rs": 62},
+                   "metricas": [{"id": "a", "nome": "A", "bloco": "resultado", "valor": 1, "unidade": "n", "meta": 2, "status": "amarelo", "confianca": "alta"},
+                                {"id": "b", "nome": "B", "bloco": "xyz", "valor": None, "meta": None, "status": "verde", "tolerancia": {"verde": ">= x", "_verde": 9, "origem": "proposta"}},
+                                {"id": "c", "nome": "C", "bloco": "risco", "valor": 5, "meta": None, "status": "vermelho", "tolerancia": {"origem": "proposta", "_verde": 4}}]}, open(os.path.join(r, "pacote-2026-10-26.json"), "w"))
+        json.dump({"data": "2026-10-20", "metricas": [{"id": "velho"}]}, open(os.path.join(r, "pacote-2026-10-20.json"), "w"))
+        open(os.path.join(r, "previsao-2026-10-26.json"), "w").write("{quebrado")
+        json.dump({"data": "2026-10-26", "regras": [{"id": "C01", "metrica": "a", "acao": "agir", "dono": "daniela", "alcada": "dona"}],
+                   "desvios": [{"regra": "C01", "metrica": "a", "valor": 1, "limite": 2, "desde": "2026-10-19", "status": "aberto"}, "lixo"], "ritual": [{"quando": "segunda"}]}, open(os.path.join(r, "controle-2026-10-26.json"), "w"))
+        open(os.path.join(r, "acoes.jsonl"), "w").write('{"id": "A1", "acao": "fazer", "dono": "luis", "prazo": "2026-11-01", "origem": "conselho"}\nnão é json\n{"sem_acao": 1}\n')
+        os.makedirs(os.path.join(self.tmp, "conselho"))
+        open(os.path.join(self.tmp, "conselho", "decisoes.md"), "w").write("| ID | Data | Ata | Decisão | Status | Obs | Quando |\n|---|---|---|---|---|---|---|\n"
+            "| D9 | 2026-10-01 | a.md | Texto **forte** | pendente | Fica com o Luis (D98) | 2026-10-23 |\n| D10 | 2026-10-01 | a.md | Outra | aprovada | ok | 2026-10-23 |\n"
+            "| D11 | 2026-10-01 | a.md | Delegada | pendente | delegada à Daniela | 2026-10-23 |\n| D9 | 2026-10-01 | a.md | Repetida | pendente | Fica com o Luis | 2026-10-23 |\n")
+        g = self.G.consolidar(self.tmp)
+        self.assertEqual([m["id"] for m in g["semaforo"]], ["a", "b", "c"])              # pacote mais recente
+        self.assertEqual([m["status"] for m in g["semaforo"]], ["amarelo", "cinza", "vermelho"])  # sem valor → cinza; sem meta mas com tolerância proposta → status do Controller
+        self.assertEqual(g["semaforo"][1]["bloco"], "operacao"); self.assertTrue(g["semaforo"][2]["meta_proposta"]); self.assertEqual(g["semaforo"][2]["limite_proposto"], 4)
+        self.assertEqual(g["semaforo"][1]["tolerancia"], {"verde": ">= x"})          # "_verde" e "origem" não vão à tela
+        self.assertEqual(g["meta"]["q4_rs"], 200); self.assertEqual(g["previsao"]["cenarios"], {}); self.assertTrue(any("previsão" in a for a in g["avisos"]))
+        self.assertEqual(len(g["desvios"]), 1); d = g["desvios"][0]
+        self.assertEqual((d["acao"], d["dono"], d["alcada"], d["origem"]), ("agir", "daniela", "dona", "controle")); self.assertTrue(d["id"].startswith("c01-a-"))
+        self.assertEqual(g["ritual"], [{"quando": "segunda"}])
+        self.assertEqual([a["id"] for a in g["acoes"]], ["A1"]); self.assertTrue(any("linha 2" in a for a in g["avisos"]))
+        self.assertEqual([x["id"] for x in g["decisoes"]], ["D9"]); self.assertEqual(g["decisoes"][0]["texto"], "Texto forte"); self.assertEqual(g["decisoes"][0]["dono"], "luis")
+        json.dumps(g)  # serializável
+
+    def test_perfil_time_so_semaforo(self):
+        os.environ["PORTAL_PERFIL"] = "time"
+        try: M = carregar("portal_dados_teste3", os.path.join(REPO, "infra/portal_dados.py"))
+        finally: os.environ.pop("PORTAL_PERFIL", None)
+        d = {"gestao": {"meta": {"q4_rs": 1}, "semaforo": [{"id": "a", "nome": "A", "bloco": "caixa", "valor": 5e6, "unidade": "R$", "meta": 6e6, "status": "amarelo", "tolerancia": {"verde": "x"}, "confianca": "alta", "nota": "R$ 5,0 mi de R$ 6 mi"},
+                                                           {"id": "b", "nome": "B", "bloco": "canal", "valor": 86, "unidade": "%", "meta": 90, "status": "verde"}],
+                       "previsao": {"cenarios": {}}, "desvios": [1], "decisoes": [1], "acoes": [1], "alertas": [], "decisoes_pendentes": ["D9"]}}
+        D = {"pastas": [], "areas": [], "rotinas": [], "pessoas": []}
+        d2, _ = M.para_time(d, D); g = d2["gestao"]
+        for k in M.GESTAO_SO_LUIS: self.assertNotIn(k, g)
+        self.assertEqual([m["valor"] for m in g["semaforo"]], [None, 86]); self.assertEqual([m["status"] for m in g["semaforo"]], ["amarelo", "verde"])
+        self.assertTrue(all(m["meta"] is None and m["tolerancia"] == {} for m in g["semaforo"])); self.assertNotIn("5,0", g["semaforo"][0]["nota"])
+        self.assertEqual(d["gestao"]["semaforo"][0]["valor"], 5e6)  # original intacto
+
+
 class ChamadoSugerido(unittest.TestCase):
     def test_chamado_ideal_e_auditor(self):
         M = carregar("portal_dados_teste2", os.path.join(REPO, "infra/portal_dados.py"))

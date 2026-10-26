@@ -282,6 +282,47 @@ table.t .num{text-align:right;font-family:var(--mono);font-variant-numeric:tabul
 .passos li{flex:1;text-align:center;font-size:12px;padding:8px 6px;border-radius:8px;border:1px solid var(--linha-2);color:var(--texto-4)}
 .passos li.feito{background:var(--ouro);border-color:var(--ouro);color:var(--sobre-ouro);font-weight:600}
 .passos li.agora{border-color:var(--ouro);color:var(--texto)}
+/* ---------- Gestão (26/10/2026): meta do Q4, semáforo, previsão, desvios e decisões ---------- */
+.meta-cab{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.meta-cab>div{border:1px solid var(--linha);border-radius:12px;background:var(--poco);padding:12px 14px;display:grid;gap:4px;min-width:0}
+.meta-cab small{font-size:11.5px;color:var(--texto-4);letter-spacing:.06em;text-transform:uppercase;font-family:var(--mono)}
+.meta-cab b{font:500 22px/1.1 var(--mono);letter-spacing:-.5px;font-variant-numeric:tabular-nums;color:var(--texto);overflow-wrap:anywhere}
+.meta-cab b.ouro{color:var(--ouro-texto)} .meta-cab span{font-size:12.5px;color:var(--texto-3)}
+.prog{height:8px;border-radius:4px;background:var(--linha);overflow:hidden;display:flex} .prog b{display:block;height:100%;background:var(--ouro)} .prog i{display:block;height:100%;border-left:2px solid var(--texto-4)}
+.leituras{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:12px}
+.leitura{border:1px dashed var(--linha-3);border-radius:12px;padding:12px 14px;display:grid;gap:6px} .leitura h3{margin:0;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.leitura dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:13px} .leitura dt{color:var(--texto-4)} .leitura dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;color:var(--texto)}
+.st{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1 var(--mono);letter-spacing:.04em;padding:5px 8px;border-radius:6px;border:1px solid var(--linha-3);color:var(--texto-2);white-space:nowrap}
+.st i{font-style:normal;width:14px;height:14px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:1.5px solid currentColor}
+.st.verde{border-color:var(--texto-3);color:var(--texto)} .st.verde i{background:var(--texto);color:var(--fundo);border-color:var(--texto)}
+.st.amarelo{background:var(--ouro);border-color:var(--ouro);color:var(--sobre-ouro)} .st.amarelo i{border-color:var(--sobre-ouro)}
+.st.vermelho{border-color:var(--erro);color:var(--erro)} .st.vermelho i{background:var(--erro);color:#fff;border-color:var(--erro)}
+.st.cinza{border-style:dashed;color:var(--texto-4)}
+.sem-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.met{border:1px solid var(--linha);border-radius:12px;background:var(--sup);padding:14px;display:grid;gap:8px;min-width:0;border-left-width:3px}
+.met.vermelho{border-left-color:var(--erro)} .met.amarelo{border-left-color:var(--ouro)} .met.verde{border-left-color:var(--texto-3)} .met.cinza{border-left-style:dashed}
+.met .m-topo{display:flex;justify-content:space-between;gap:8px;align-items:flex-start} .met .m-topo .nome{font-size:13px;color:var(--texto-2);line-height:1.35;min-width:0}
+.met .m-val{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap} .met strong{font:500 26px/1 var(--mono);letter-spacing:-.6px;font-variant-numeric:tabular-nums;color:var(--texto)}
+.met .var{font:500 12px var(--mono);color:var(--texto-3)} .met .var.sobe::before{content:"▲ "} .met .var.desce::before{content:"▼ "}
+.met .m-meta{font-size:12px;color:var(--texto-4);display:flex;flex-wrap:wrap;gap:4px 10px} .met .m-meta b{color:var(--texto-2);font-weight:500}
+.met .m-nota{font-size:12.5px;color:var(--texto-3);line-height:1.4}
+.conf{font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--texto-4)} .conf.baixa{color:var(--erro)}
+.graf{width:100%;height:auto;display:block;overflow:visible} .graf text{font-family:var(--mono);font-size:11px;fill:var(--texto-3)} .graf .eixo{stroke:var(--linha-2)} .graf .ref{stroke:var(--texto-4);stroke-dasharray:4 4}
+.graf .b-cons{fill:var(--linha-3)} .graf .b-base{fill:var(--ouro)} .graf .b-meta{fill:none;stroke:var(--texto-3);stroke-dasharray:4 3} .graf .l-cons{fill:none;stroke:var(--texto-2);stroke-width:1.8;stroke-dasharray:5 4}
+.graf .a-base{fill:var(--ouro-suave);stroke:var(--ouro-linha);stroke-width:1.8} .graf .b-dec{fill:var(--linha-3)} .graf .b-dec.perto{fill:var(--ouro)} .graf .val{fill:var(--texto);font-weight:500}
+.graf .clic{cursor:pointer} .graf .clic:hover{opacity:.8} .graf .sel{stroke:var(--texto);stroke-width:1.5}
+.legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--texto-3)} .legenda span{display:inline-flex;align-items:center;gap:6px}
+.legenda i{width:14px;height:8px;border-radius:2px;display:inline-block} .legenda i.base{background:var(--ouro)} .legenda i.cons{background:var(--linha-3)} .legenda i.linha-c{height:0;border-top:2px dashed var(--texto-2)} .legenda i.meta{border:1px dashed var(--texto-3);height:8px}
+.premissas{border:1px dashed var(--linha-3);border-radius:10px;padding:10px 14px;display:grid;gap:6px} .premissas h3{margin:0;font-size:13.5px;font-weight:600} .premissas ul{margin:0;padding-left:18px;color:var(--texto-2);font-size:13px}
+.cen-seg{display:flex;flex-wrap:wrap;gap:6px}
+.desv-lh{--cols:64px minmax(0,1.6fr) 130px 96px 84px auto}
+.desv-lh .d-acoes{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:6px}
+.dec-lh{--cols:64px minmax(0,1fr) auto} .dec-lh .acoes{justify-content:flex-end}
+.janela .base.rs{font-size:12.5px}
+.fora-l{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--linha-fina)} .fora-l:last-child{border-bottom:0}
+.fora-l strong{font:500 18px/1 var(--mono);font-variant-numeric:tabular-nums;color:var(--texto)}
+@media (max-width:900px){ .meta-cab{grid-template-columns:repeat(2,minmax(0,1fr))} .meta-cab b{font-size:17px} .meta-cab>div.largo{grid-column:1/-1} .sem-grade{grid-template-columns:1fr} .met strong{font-size:24px}
+  .desv-lh .d-acoes{justify-content:flex-start} .dec-lh .acoes{justify-content:flex-start} .fora-l{padding:12px 16px} }
 /* Onde está */
 .res-l{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--linha-fina)} .res-l:last-child{border-bottom:0} .res-l:hover{background:var(--hover)}
 .res-l .ico{width:40px;height:40px;border-radius:10px;background:var(--sup-2);border:1px solid var(--linha-2);color:var(--ouro-texto);display:flex;align-items:center;justify-content:center}
@@ -394,12 +435,12 @@ const Fonte = {
         decisoes: X.decisoes, decisoesTotal: X.decisoes_total, demandas: X.demandas, demandasNum: X.demandas_num, alertas: X.alertas, manchete: X.manchete,
         masters: X.masters, janelas: X.janelas, lote: X.lote, arquivos: X.arquivos,
         pedidos: X.pedidos.map(p => ({...p, campos: {precisa: p.precisa, uso: p.uso, prazo: p.prazo}, para: {"celula-daniela": "daniela", "celula-jenifer": "jenifer", "recuperador": "geovana", "revisor-diagnostico": "geovana"}[p.area] || "luis"})),
-        chamados: X.chamados, whatsapp: X.whatsapp || [], caixa: X.caixa || []} }
+        chamados: X.chamados, whatsapp: X.whatsapp || [], caixa: X.caixa || [], gestao: X.gestao || {}} }
     const [D, R] = await Promise.all([this.json("dados.json"), this.json("diretorio.json")]);
     const pw = D.pastas_web || {};
     return {atualizado: D.atualizado, areas: R.areas, blocos: R.blocos, rotinas: R.rotinas, pastas: R.pastas, pessoas: R.pessoas, regras: R.regras_casa || [],
       decisoes: D.conselho || [], decisoesTotal: null, demandas: D.demandas_lista || [], demandasNum: D.demandas || {}, alertas: D.gestao?.alertas || [], manchete: D.gestao?.manchete,
-      masters: D.gestao?.masters || [], janelas: D.janelas || [], lote: D.lote || [], arquivos: D.arquivos_dia || {}, pedidos: [], chamados: [], pastasWeb: pw, mastersLista: D.gestao?.masters || [], perfil: D.perfil || "completo", whatsapp: D.whatsapp_demandas || [], caixa: []};
+      masters: D.gestao?.masters || [], janelas: D.janelas || [], lote: D.lote || [], arquivos: D.arquivos_dia || {}, pedidos: [], chamados: [], pastasWeb: pw, mastersLista: D.gestao?.masters || [], perfil: D.perfil || "completo", whatsapp: D.whatsapp_demandas || [], caixa: [], gestao: D.gestao || {}};
   },
   async conectar() {
     if (this.previa && /demo/.test(location.search)) { this.sample = demoSample(); return }
@@ -449,7 +490,7 @@ const md = t => { let h = "", l = false; for (const x of String(t || "").split("
   if (s) h += s.startsWith("### ") ? `<h4>${s.slice(4)}</h4>` : `<p>${s}</p>` } return h + (l ? "</ul>" : "") };
 const lsGet = k => { try { return localStorage.getItem(k) } catch (e) { return null } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v) } catch (e) {} };
-const P = {mesa: "M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z", pedidos: "M4 4h16v16H4zM4 13h5l1.5 3h3L15 13h5", areas: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
+const P = {mesa: "M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z", gestao: "M4 20h16M4 16l5-5 4 3 7-8M16 6h4v4", pedidos: "M4 4h16v16H4zM4 13h5l1.5 3h3L15 13h5", areas: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
   onde: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4", rotinas: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2", decisoes: "M4 12l5 5L20 6",
   sino: "M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20h4", caixa: "M3 6h18v12H3zM3 7l9 6 9-6", mais: "M12 5v14M5 12h14", fechar: "M6 6l12 12M18 6 6 18", menu: "M4 7h16M4 12h16M4 17h16",
   chat: "M4 5h16v11H8l-4 4z", whats: "M4 5h16v11H8l-4 4zM8 9h8M8 12h5", sol: "M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
@@ -465,7 +506,7 @@ const PARA_AREA = {"celula-daniela": "daniela", "celula-jenifer": "jenifer", "re
 const GLPI_SKILL = k => /^trib_/.test(k || "") ? "depto-tributario" : /^(jur_|contrato)/.test(k || "") ? "depto-juridico" : "";
 const ST_CH = {proposto: "Aguarda aprovação", aprovado: "Aprovado · abrindo no GLPI", aberto: "Aberto no GLPI", aprovado_manual: "Aprovado · abrir manualmente", recusado: "Recusado"};
 const FIXADAS = [["depto-tributario", "TR", "Tributário"], ["depto-save-invest", "SI", "Save Invest"], ["depto-juridico", "JU", "Jurídico"], ["depto-internacional", "IN", "Internacional"]];
-const S = {M: null, eu: null, meuId: null, identificado: false, acoes: {}, recup: {}, conselho: {}, apont: [],
+const S = {M: null, eu: null, meuId: null, identificado: false, acoes: {}, recup: {}, conselho: {}, apont: [], acoesG: {}, g: {fora: false, cen: "base", leitura: ""},
   f: {fase: "", area: "", pessoa: ""}, wa: {q: "", pessoa: "", status: ""}, kPessoa: "", kCol: "aprovar", vista: "quadro", aba: {}, waSel: null, rotaAnt: "",
   novo: {sel: null, busca: "", entrega: "", texto: "", contexto: ""}, chats: {}, chatOff: "", msg: "",
   cx: {f: "", q: "", sel: null}, lidas: {}, lidasP: {}, cxGrava: Promise.resolve()};
@@ -596,7 +637,7 @@ function mesaLuis() {
   const mx = Math.max(1, ...linhasTime.map(x => x.uso));
   return cab(dataLonga(), `${saudacao()}, Luis`, time ? "Esta é a Central do time. As suas decisões ficam no seu painel próprio; aqui você acompanha os pedidos, as demandas e as janelas de receita." : "Aqui fica só o que é da sua alçada: regra, preço, meta, remuneração, produto em validação e material em escala. Chamados, lotes e listas são decididos por quem é dona da entrega.", `${time ? "" : `<a class="btn sec" href="#decisoes">Ver decisões</a>`}<a class="btn" href="#novo">${icone("mais")}Novo pedido</a>`, true)
   + avisoEntregas()
-  + `<div class="kpis">${time ? kpi({r: "Decisões suas", v: "—", s: "ficam no seu painel próprio", tag: "alçada", tagForte: true}) : kpi({r: "Decisões suas", v: totalDecisoes(), s: "regra, preço, meta e produto em validação", go: "decisoes", dest: true, tag: "alçada", tagForte: true, sp: spark(serie(M.decisoes.map(d => d.data), 8, 7), "Decisões pendentes por semana de registro, últimas 8 semanas")})}
+  + `<div class="kpis">${time ? "" : kpiMetaQ4()}${time ? kpi({r: "Decisões suas", v: "—", s: "ficam no seu painel próprio", tag: "alçada", tagForte: true}) : kpi({r: "Decisões suas", v: totalDecisoes(), s: "regra, preço, meta e produto em validação", go: "decisoes", dest: true, tag: "alçada", tagForte: true, sp: spark(serie(M.decisoes.map(d => d.data), 8, 7), "Decisões pendentes por semana de registro, últimas 8 semanas")})}
       ${kpi({r: "Pedidos em andamento", v: nf + na + nap, s: `${nf} na fila · ${na} em análise · ${nap} para aprovar`, go: "pedidos", tag: "14 dias", sp: spark(serie(ps.map(p => p.criado_em)), "Pedidos abertos por dia nos últimos 14 dias")})}
       ${kpi({r: "Janela mais próxima", v: prox ? prox.d + "d" : "—", s: prox ? esc(prox.j.janela) : "sem janela com data", tag: prox ? data(prox.j.prazo) : "", tagForte: prox && prox.d <= 14, dest: prox && prox.d <= 14})}
       ${kpi({r: "Para responder", v: resp, s: ["daniela", "jenifer", "geovana"].map(k => `${PESSOAS[k]} ${dn[k]?.responder || 0}`).join(" · "), go: "whatsapp", tag: "14 dias", sp: spark(serie(M.demandas.map(d => d.aberta_em)), "Demandas abertas por dia nos últimos 14 dias")})}</div>
@@ -607,7 +648,7 @@ function mesaLuis() {
     <div class="rolagem"><table class="t"><thead><tr><th scope="col">Pessoa</th><th scope="col">O que está com ela</th><th scope="col" style="text-align:right">Para responder</th><th scope="col" style="text-align:right">Para aprovar</th><th scope="col">Pedidos em 7 dias</th></tr></thead>
     <tbody>${linhasTime.map(x => `<tr><td><span class="pessoa"><span class="av m">${esc(PESSOAS[x.k].slice(0, 2).toUpperCase())}</span><span><b>${PESSOAS[x.k]}</b><small>${PAPEL[x.k]}</small></span></span></td><td>${esc(x.foco)}</td><td class="num">${x.resp}</td><td class="num">${x.ap}</td>
       <td><span class="barra"><i><b style="width:${Math.round(x.uso / mx * 100)}%"></b></i><span>${Fonte.pode() ? x.uso : "—"}</span></span></td></tr>`).join("")}</tbody></table></div></section>
-  <div class="grade-2"><section class="painel"><div class="painel-cab"><h2>Alertas das áreas</h2><span class="sub">${M.alertas.length}</span></div>${M.alertas.map(a => `<div class="linha-a"><span class="ponto" aria-hidden="true"></span><span class="meio"><span class="tit quebra">${esc(a.texto)}</span><span class="sub">${esc(a.area)}</span></span></div>`).join("") || `<div class="vazio">Sem alertas.</div>`}</section>
+  <div class="grade-2"><div class="pilha">${time ? "" : painelFora()}<section class="painel"><div class="painel-cab"><h2>Alertas das áreas</h2><span class="sub">${M.alertas.length}</span></div>${M.alertas.map(a => `<div class="linha-a"><span class="ponto" aria-hidden="true"></span><span class="meio"><span class="tit quebra">${esc(a.texto)}</span><span class="sub">${esc(a.area)}</span></span></div>`).join("") || `<div class="vazio">Sem alertas.</div>`}</section></div>
     <div class="pilha"><details class="painel"><summary class="painel-cab" style="cursor:pointer"><h2>Saúde dos Masters</h2><span class="sub">${M.masters.length} Masters</span></summary>
       <div class="linhas" style="--cols:minmax(0,1fr) 64px 64px 84px"><div class="lh cab"><span>Master</span><span>Saúde</span><span>Parados</span><span>Ganhos 90d</span></div>
       ${M.masters.slice().sort((a, b) => a.saude - b.saude).map(m => `<div class="lh" style="grid-template-columns:minmax(0,1fr) 64px 64px 84px !important"><span>${esc(m.parceiro)}</span><span class="mono">${esc(m.saude)}${m.saude < 60 ? " ↓" : ""}</span><span class="mono">${esc(m.parados)}</span><span class="mono">${esc(m.ganhos_90d)}</span></div>`).join("")}</div></details>
@@ -622,7 +663,7 @@ function mesaLuis() {
 const CX_F = [["", "Todas"], ["nao_lidas", "Não lidas"], ["relatorio", "Relatórios"], ["alerta", "Alertas"], ["pedido", "Pedidos"]];
 const CX_ORIGEM = {alerta: "Alerta de rotina", sentinela: "Sentinela das entregas", central: "Central de Agentes", plano: "Plano do dia", recuperador: "Recuperador", whatsapp: "WhatsApp", radar: "Radar de mercado", resultados: "Resultados", conselho: "Conselho", agentes: "Agentes"};
 const CX_TIPO = {relatorio: "Relatório", alerta: "Alerta", pedido: "Pedido"};
-const CX_ROTA = /^(mesa|pedidos|whatsapp|areas|onde|rotinas|decisoes|caixa|novo)$|^(pedido|lote|decisao|chamado|demanda|wa|area|caixa)\/[A-Za-z0-9_.:-]{1,80}$/;
+const CX_ROTA = /^(mesa|gestao|pedidos|whatsapp|areas|onde|rotinas|decisoes|caixa|novo)$|^(pedido|lote|decisao|chamado|demanda|wa|area|caixa)\/[A-Za-z0-9_.:-]{1,80}$/;
 const linkOD = u => /^https:\/\/gruposave-my\.sharepoint\.com\//i.test(String(u || "")) ? esc(u) : "";
 const cxOrigem = m => CX_ORIGEM[m.origem] || "Agentes";
 function lidasDe() { if (!Fonte.previa) return S.lidas; const k = S.eu || ""; if (!S.lidasP[k]) { let v = {}; try { v = JSON.parse(lsGet("cx-lidas-" + k) || "{}") || {} } catch (e) {} S.lidasP[k] = v } return S.lidasP[k] }
@@ -690,6 +731,175 @@ function marcarLidas(ids, lida = true) {
   S.lidas = mapa;
   if (!Fonte.db || !S.meuId || !S.identificado) return;
   S.cxGrava = S.cxGrava.then(() => Fonte.gravar("caixa_lidas/" + S.meuId, {pessoa: S.eu, por_id: S.meuId, lidas: S.lidas, atualizado: agora()})).catch(() => toast("Não consegui marcar como lida"));
+}
+
+/* ===================== Gestão (26/10/2026) =====================
+   Sistema de gestão do Luis (infra/gestao-schema.md → infra/gestao.py → dados.json "gestao"): meta do Q4, semáforo, previsão,
+   desvios e decisões. Gravações: "Definir unidade" → conselho/meta-q4-unidade (só o Luis, como as decisões do Conselho);
+   andamento de desvio ou ação → acoes/<id> (só a dona da ação ou o Luis, com por_id). Perfil time: só o semáforo, sem R$ nem decisões.
+   Cenários e curvas são estimativas com premissas escritas; nada aqui é promessa. Tudo o que vem do JSON ou do db passa por esc(). */
+const G = () => (S.M && S.M.gestao && typeof S.M.gestao === "object") ? S.M.gestao : {};
+const gMeta = () => G().meta && typeof G().meta === "object" ? G().meta : {};
+const BLOCO_G = {resultado: "Resultado", caixa: "Caixa", canal: "Canal", risco: "Risco", operacao: "Operação"};
+const ST_G = {verde: ["✓", "Dentro"], amarelo: ["!", "Atenção"], vermelho: ["✕", "Fora"], cinza: ["–", "Sem meta"]};
+const ST_A = {aberto: "Aberto", em_andamento: "Em andamento", resolvido: "Resolvido"};
+const stG = s => ST_G[s] ? s : "cinza";
+const selo = s => { const k = stG(s), [i, t] = ST_G[k]; return `<span class="st ${k}"><i aria-hidden="true">${i}</i>${t}</span>` };
+const vazioN = v => v === null || v === undefined || v === "" || isNaN(v);
+const num = (v, d = 0) => vazioN(v) ? "—" : Number(v).toLocaleString("pt-BR", {minimumFractionDigits: d, maximumFractionDigits: d});
+const rs = v => vazioN(v) ? "—" : Math.abs(v) >= 1e6 ? "R$ " + num(v / 1e6, 1) + " mi" : Math.abs(v) >= 1e3 ? "R$ " + num(Math.round(v / 1e3)) + " mil" : "R$ " + num(v);
+const fmtU = (v, u) => vazioN(v) ? "—" : u === "R$" ? rs(v) : u === "%" ? num(v, Number.isInteger(+v) ? 0 : 1) + "%" : u === "dias" ? num(v) + (+v === 1 ? " dia" : " dias") : num(v, Number.isInteger(+v) ? 0 : 1);
+const pct = (a, b) => b ? Math.max(0, Math.min(100, Math.round(a / b * 100))) : 0;
+const foraTol = m => m.status === "vermelho" || m.status === "amarelo";
+const semaforo = () => (Array.isArray(G().semaforo) ? G().semaforo : []).filter(m => m && typeof m === "object");
+const dist = m => !vazioN(m.meta) && !vazioN(m.valor) && +m.meta ? Math.abs(m.valor - m.meta) / Math.abs(m.meta) : 0;
+const piores = () => semaforo().filter(foraTol).sort((a, b) => (a.status === "vermelho" ? 0 : 1) - (b.status === "vermelho" ? 0 : 1) || dist(b) - dist(a));
+const unidadeDef = () => { const u = String(S.conselho["meta-q4-unidade"]?.decisao || "").toLowerCase(), m = gMeta().unidade; return /cred/.test(u) ? "credito" : /liq/.test(u) ? "liquido" : (m === "credito" || m === "liquido") ? m : "indefinida" };
+const UNID = {credito: "crédito contratado", liquido: "líquido Save", indefinida: "unidade a definir"};
+const donoNome = d => PESSOAS[d] || {controller: "Controller", "gerente-ti": "Gerente de TI", "gerente-central": "Gerente da Central", "gerente-dados": "Gerente de Dados", "arquiteto-agentes": "Arquiteto de Agentes"}[d] || String(d || "—").replace(/^gerente-/, "Gerente de ").replace(/^\w/, c => c.toUpperCase());
+const mesCurto = m => { const [a, mm] = String(m || "").split("-"), n = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"][+mm - 1]; return n ? `${n}/${String(a).slice(2)}` : String(m || "") };
+const largG = () => Math.max(300, Math.min(680, ($("#pag")?.clientWidth || 900) - 40));
+const gestaoDoTime = () => S.M.perfil === "time" || S.eu !== "luis";
+/* Mesa do Luis: cartão da meta e os 3 piores do semáforo. */
+function kpiMetaQ4() {
+  const m = gMeta(); if (!m.q4_rs) return kpi({r: "Meta do Q4", v: "—", s: "sem pacote de gestão ainda", go: "gestao", tag: "gestão"});
+  const u = unidadeDef(), L = (m.leituras || {})[u] || m, real = L.realizado_rs ?? m.realizado_rs ?? 0, alvo = L.meta_rs || m.q4_rs;
+  return kpi({r: "Meta do Q4", v: pct(real, alvo) + "%", s: `${rs(real)} de ${rs(alvo)} · ${UNID[u]}`, go: "gestao", dest: true, tag: m.dias_uteis_restantes ? num(m.dias_uteis_restantes) + " dias úteis" : "", tagForte: true});
+}
+function painelFora() {
+  const xs = piores().slice(0, 3);
+  return `<section class="painel" aria-labelledby="t-fora"><div class="painel-cab"><h2 id="t-fora">Fora da tolerância</h2><a class="lnk" href="#gestao">Ver o semáforo</a></div>
+    ${xs.map(m => `<div class="fora-l">${selo(m.status)}<span style="min-width:0;display:grid;gap:2px"><span class="tit quebra">${esc(m.nome)}</span><span class="sub quebra">${esc(BLOCO_G[m.bloco] || m.bloco || "")} · meta ${fmtU(m.meta, m.unidade)}${m.nota ? " · " + esc(m.nota) : ""}</span></span><strong>${fmtU(m.valor, m.unidade)}</strong></div>`).join("")
+      || `<div class="vazio">${semaforo().length ? "Nenhuma métrica fora da tolerância." : "Sem pacote de gestão ainda: o Controller publica em registro/gestao/."}</div>`}</section>`;
+}
+function telaGestao(sub, id) {
+  const g = G(), time = gestaoDoTime(), avisos = (Array.isArray(g.avisos) ? g.avisos : []).map(a => `<li>${esc(a)}</li>`).join("");
+  const cabG = cab(g.data ? "Dados de " + data(g.data) : "Gestão", "Gestão", time ? "Semáforo das métricas da área. Meta em R$, previsão, desvios e decisões ficam no painel do Luis." : "Resultado, previsibilidade e controle num só lugar. Cenários e curvas são estimativas com premissas escritas; a decisão é sua.", time ? "" : `<a class="btn sec" href="#decisoes">${icone("decisoes")}Decisões</a>`, true);
+  if (!g.semaforo && !g.meta) return cabG + `<div class="vazio">Sem dados de gestão ainda. O Controller publica o pacote em registro/gestao/ e a rotina consolida com infra/gestao.py.</div>`;
+  return cabG + (avisos && !time ? `<div class="nota"><b>Avisos da consolidação</b><ul style="margin:6px 0 0;padding-left:18px">${avisos}</ul></div>` : "")
+    + (time ? "" : secMeta()) + secSemaforo() + (time ? "" : secPrevisao() + secDesvios() + secDecisoes());
+}
+function secMeta() {
+  const m = gMeta(); if (!m.q4_rs) return `<section class="painel"><div class="painel-cab"><h2>Meta do Q4</h2></div><div class="vazio">Sem pacote do Controller ainda.</div></section>`;
+  const u = unidadeDef(), ind = u === "indefinida", L = ind ? m : ((m.leituras || {})[u] || m);
+  const real = L.realizado_rs ?? m.realizado_rs ?? 0, alvo = L.meta_rs || m.q4_rs, falta = L.falta_rs ?? Math.max(0, alvo - real), rn = L.ritmo_necessario_rs_dia ?? m.ritmo_necessario_rs_dia, ra = L.ritmo_atual_rs_dia ?? m.ritmo_atual_rs_dia;
+  const ritmoOk = rn && ra ? ra >= rn : null, per = m.periodo || {};
+  const bloco = (rot, val, sub, ouro, largo) => `<div class="${largo ? "largo" : ""}"><small>${rot}</small><b class="${ouro ? "ouro" : ""}">${val}</b>${sub ? `<span>${sub}</span>` : ""}</div>`;
+  const leitura = (k, t) => { const x = (m.leituras || {})[k]; if (!x) return ""; const a = x.meta_rs || m.q4_rs; return `<div class="leitura"><h3>${t}</h3><dl><dt>Meta</dt><dd>${rs(a)}</dd><dt>Realizado</dt><dd>${rs(x.realizado_rs)} (${pct(x.realizado_rs, a)}%)</dd><dt>Falta</dt><dd>${rs(x.falta_rs ?? a - x.realizado_rs)}</dd><dt>Ritmo necessário × atual</dt><dd>${rs(x.ritmo_necessario_rs_dia)} × ${rs(x.ritmo_atual_rs_dia)}/dia</dd></dl></div>` };
+  return `<section class="painel" aria-labelledby="t-meta"><div class="painel-cab"><h2 id="t-meta">Meta do Q4${per.trimestre ? ` · ${esc(per.trimestre)}` : ""}</h2>
+      <div class="acoes">${ind ? `<span class="chip urg">Unidade indefinida</span>` : `<span class="chip">${esc(UNID[u])}${S.conselho["meta-q4-unidade"] || m.unidade_definida_no_painel ? " · definida no painel" : ""}</span>`}${S.eu === "luis" ? `<button class="btn ${ind ? "" : "sec"} peq" data-go="gestao/unidade">${ind ? "Definir unidade" : "Mudar unidade"}</button>` : ""}</div></div>
+    <div class="painel-corpo">
+      <div class="meta-cab">${bloco("Meta", rs(alvo), ind ? "leitura principal em crédito" : UNID[u], true)}${bloco("Realizado", rs(real), pct(real, alvo) + "% da meta")}${bloco("Falta", rs(falta), ind ? "para a meta em crédito" : "para a meta")}
+        ${bloco("Ritmo necessário × atual", `${rs(rn)} × ${rs(ra)}`, ritmoOk === null ? "por dia útil" : ritmoOk ? "por dia útil · no ritmo" : "por dia útil · abaixo do ritmo", ritmoOk === false, true)}${bloco("Dias úteis restantes", num(m.dias_uteis_restantes), per.trimestre ? "no " + esc(per.trimestre) : "no trimestre")}</div>
+      <div class="prog" role="img" aria-label="${pct(real, alvo)}% da meta realizado"><b style="width:${pct(real, alvo)}%"></b></div>
+      ${ind ? `<div class="aviso"><b>Pergunta ao Luis:</b> a meta de ${rs(m.q4_rs)} do Q4 é em crédito contratado ou em líquido Save? Enquanto não for definida, as duas leituras ficam lado a lado.</div><div class="leituras">${leitura("credito", "Leitura em crédito contratado")}${leitura("liquido", "Leitura em líquido Save")}</div>` : ""}
+    </div></section>`;
+}
+function secSemaforo() {
+  const xs = semaforo(), vis = S.g.fora ? xs.filter(foraTol) : xs, nFora = xs.filter(foraTol).length, conta = s => xs.filter(m => stG(m.status) === s).length;
+  const blocos = Object.keys(BLOCO_G).filter(b => vis.some(m => m.bloco === b)), soltos = vis.filter(m => !BLOCO_G[m.bloco]);
+  const grupo = (t, ms) => `<div class="bloco"><h2>${esc(t)}</h2><div class="sem-grade">${ms.map(cartaoMet).join("")}</div></div>`;
+  return `<section class="painel" aria-labelledby="t-sem"><div class="painel-cab"><h2 id="t-sem">Semáforo</h2><div class="filtros"><span class="legenda">${["verde", "amarelo", "vermelho", "cinza"].map(s => `<span>${selo(s)}<span class="mono">${conta(s)}</span></span>`).join("")}</span>
+      <div class="seg" role="group" aria-label="Filtrar métricas"><button data-g-fora="0" aria-pressed="${!S.g.fora}">Todas <span class="n">${xs.length}</span></button><button data-g-fora="1" aria-pressed="${S.g.fora}">Só fora da tolerância <span class="n">${nFora}</span></button></div></div></div>
+    <div class="painel-corpo">${blocos.map(b => grupo(BLOCO_G[b], vis.filter(m => m.bloco === b))).join("")}${soltos.length ? grupo("Outras", soltos) : ""}${vis.length ? "" : `<div class="vazio">${xs.length ? "Nenhuma métrica fora da tolerância." : "Sem métricas ainda."}</div>`}</div></section>`;
+}
+function cartaoMet(m) {
+  if (gestaoDoTime()) m = {...m, valor: m.unidade === "R$" ? null : m.valor, anterior: m.unidade === "R$" ? null : m.anterior, meta: null, limite_proposto: null, tolerancia: {}, nota: String(m.nota || "").replace(/R\$\s?[\d.,]+(\s?(mi|mil|bi))?/g, "R$ —")};  /* time: sem R$ nem meta, mesmo que o JSON traga */
+  const v = vazioN(m.variacao_pct) ? null : +m.variacao_pct, cls = v > 0 ? "sobe" : v < 0 ? "desce" : "", st = stG(m.status), semMeta = vazioN(m.meta);
+  const tol = m.tolerancia && typeof m.tolerancia === "object" ? Object.entries(m.tolerancia).filter(([k, x]) => !k.startsWith("_") && k !== "origem" && x).map(([k, x]) => `${k}: ${x}`).join(" · ") : "";
+  const uMeta = m.meta_unidade || (m.unidade === "%" && +m.meta > 100 ? "R$" : m.unidade);
+  return `<article class="met ${st}"><div class="m-topo"><span class="nome">${esc(m.nome)}</span>${selo(st)}</div>
+    <div class="m-val"><strong>${fmtU(m.valor, m.unidade)}</strong>${v !== null ? `<span class="var ${cls}">${num(Math.abs(v), 1)}% vs. anterior</span>` : ""}</div>
+    <div class="m-meta"><span>${gestaoDoTime() ? "" : semMeta ? `Meta proposta <b>${vazioN(m.limite_proposto) ? "não aprovada" : fmtU(m.limite_proposto, m.unidade) + ", não aprovada"}</b>` : `Meta <b>${fmtU(m.meta, uMeta)}</b>${m.meta_proposta ? " (proposta)" : ""}`}</span>${vazioN(m.anterior) ? "" : `<span>Anterior <b>${fmtU(m.anterior, m.unidade)}</b></span>`}${tol ? `<span title="${esc(tol)}">Tolerância <b>${esc(tol.length > 44 ? tol.slice(0, 43) + "…" : tol)}</b></span>` : ""}</div>
+    ${m.nota ? `<div class="m-nota">${esc(m.nota)}</div>` : ""}<div class="m-meta"><span class="conf ${esc(m.confianca || "")}">confiança ${esc(m.confianca || "—")}</span>${m.fonte ? `<span>${esc(m.fonte)}</span>` : ""}</div></article>`;
+}
+/* Gráficos em SVG inline (sem biblioteca): barras dos cenários, área da curva de caixa e barras da decadência. Texto em mono, cor por token. */
+function grafCenarios(c) {
+  const ks = [["conservador", "Conservador"], ["base", "Base"], ["meta", "Meta"]].filter(([k]) => c[k] && typeof c[k] === "object");
+  if (!ks.length) return `<div class="vazio">Sem cenários.</div>`;
+  const W = largG(), L = 96, R = 84, H = 24, gap = 6, grupos = [["fechamento_q4_rs", "Fechamento no Q4"], ["liquido_q4_rs", "Líquido Save no Q4"]];
+  const mx = Math.max(1, ...ks.flatMap(([k]) => grupos.map(([f]) => +c[k][f] || 0)));
+  let y = 0, out = "";
+  for (const [f, t] of grupos) {
+    out += `<text x="0" y="${y + 12}" class="val">${esc(t)}</text>`; y += 22;
+    for (const [k, nome] of ks) { const v = +c[k][f] || 0, w = Math.max(2, (W - L - R) * v / mx), sel = S.g.cen === k;
+      out += `<g class="clic" data-cen="${k}" role="button" tabindex="0" aria-pressed="${sel}" aria-label="${esc(nome)}: ${rs(v)}; ver premissas"><text x="0" y="${y + H / 2 + 4}">${esc(nome)}</text><rect x="${L}" y="${y}" width="${w.toFixed(1)}" height="${H}" rx="4" class="b-${k} ${sel ? "sel" : ""}"/><text x="${(L + w + 8).toFixed(1)}" y="${y + H / 2 + 4}" class="val">${rs(v)}</text></g>`; y += H + gap }
+    y += 8 }
+  return `<svg class="graf" viewBox="0 0 ${W} ${y}" width="${W}" height="${y}" role="group" aria-label="Cenários do Q4">${out}</svg>`;
+}
+function grafCaixa(xs) {
+  xs = xs.filter(x => x && x.semana); if (!xs.length) return `<div class="vazio">Sem curva de caixa.</div>`;
+  const W = largG(), H = 200, L = 56, R = 12, T = 14, B = 34, n = xs.length;
+  const b = xs.map(x => +x.entrada_rs_base || 0), c = xs.map(x => +x.entrada_rs_conservador || 0), mx = Math.max(1, ...b, ...c) * 1.1;
+  const X = i => L + (n > 1 ? i * (W - L - R) / (n - 1) : 0), Y = v => T + (H - T - B) * (1 - v / mx), pts = a => a.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(" ");
+  const passo = W < 480 ? 3 : n > 8 ? 2 : 1, sb = b.reduce((s, v) => s + v, 0), sc = c.reduce((s, v) => s + v, 0);
+  const ticks = [0, .5, 1].map(f => `<line x1="${L}" x2="${W - R}" y1="${Y(mx * f).toFixed(1)}" y2="${Y(mx * f).toFixed(1)}" class="eixo"/><text x="${L - 6}" y="${(Y(mx * f) + 4).toFixed(1)}" text-anchor="end">${rs(mx * f).replace("R$ ", "")}</text>`).join("");
+  return `<svg class="graf" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Entradas de caixa por semana: base soma ${rs(sb)}, conservador soma ${rs(sc)}"><title>Entradas de caixa por semana: cenário base (área) e conservador (linha tracejada)</title>${ticks}
+    <polygon points="${X(0).toFixed(1)},${Y(0).toFixed(1)} ${pts(b)} ${X(n - 1).toFixed(1)},${Y(0).toFixed(1)}" class="a-base"/><polyline points="${pts(c)}" class="l-cons"/>
+    ${xs.map((x, i) => i % passo ? "" : `<text x="${X(i).toFixed(1)}" y="${H - 12}" text-anchor="middle">${esc(String(x.semana).replace(/^\d{4}-/, ""))}</text>`).join("")}</svg>`;
+}
+function grafDecad(xs) {
+  xs = xs.filter(x => x && x.mes); if (!xs.length) return `<div class="vazio">Sem decadência mapeada.</div>`;
+  const W = largG(), H = 190, L = 8, R = 8, T = 26, B = 40, n = xs.length, mx = Math.max(1, ...xs.map(x => +x.credito_que_sai_rs || 0));
+  const bw = Math.min(72, (W - L - R) / n * .62), X = i => L + (i + .5) * (W - L - R) / n, Y = v => T + (H - T - B) * (1 - v / mx), hj = new Date(hoje() + "T12:00");
+  return `<svg class="graf" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Crédito que decai por mês"><title>Crédito que decai por mês, com o número de clientes; os 2 próximos meses em ouro</title>
+    ${xs.map((x, i) => { const v = +x.credito_que_sai_rs || 0, perto = (new Date(String(x.mes) + "-01T12:00") - hj) < 62 * 864e5;
+      return `<rect x="${(X(i) - bw / 2).toFixed(1)}" y="${Y(v).toFixed(1)}" width="${bw.toFixed(1)}" height="${(Y(0) - Y(v)).toFixed(1)}" rx="4" class="b-dec ${perto ? "perto" : ""}"/><text x="${X(i).toFixed(1)}" y="${(Y(v) - 6).toFixed(1)}" text-anchor="middle" class="val">${rs(v)}</text>
+        <text x="${X(i).toFixed(1)}" y="${H - 22}" text-anchor="middle">${esc(mesCurto(x.mes))}</text><text x="${X(i).toFixed(1)}" y="${H - 8}" text-anchor="middle">${num(x.clientes_n)} cli.</text>` }).join("")}</svg>`;
+}
+function secPrevisao() {
+  const p = G().previsao && typeof G().previsao === "object" ? G().previsao : {}, c = p.cenarios && typeof p.cenarios === "object" ? p.cenarios : {}, sel = c[S.g.cen] ? S.g.cen : Object.keys(c)[0];
+  const prem = sel ? (Array.isArray(c[sel].premissas) ? c[sel].premissas : Array.isArray(c[sel].o_que_precisa) ? c[sel].o_que_precisa : []) : [];
+  const cx = Array.isArray(p.caixa_13_semanas) ? p.caixa_13_semanas : [], sb = cx.reduce((s, x) => s + (+x.entrada_rs_base || 0), 0), sc = cx.reduce((s, x) => s + (+x.entrada_rs_conservador || 0), 0);
+  const hj = new Date(hoje() + "T12:00"), dias = d => d ? Math.ceil((new Date(d + "T23:59") - hj) / 864e5) : null;
+  const js = (Array.isArray(p.janelas) ? p.janelas : []).slice().sort((a, b) => String(a.prazo || "9999").localeCompare(String(b.prazo || "9999"))), rk = Array.isArray(p.riscos) ? p.riscos : [];
+  return `<section class="painel" aria-labelledby="t-prev"><div class="painel-cab"><h2 id="t-prev">Previsão</h2><span class="sub">${p.data ? "previsão de " + data(p.data) + " · " : ""}estimativas com premissas, sem promessa</span></div>
+    <div class="painel-corpo"><div class="grade-2">
+      <div class="pilha"><span class="rot">Três cenários do Q4</span>${grafCenarios(c)}<div class="legenda"><span><i class="cons"></i>Conservador</span><span><i class="base"></i>Base</span><span><i class="meta"></i>Meta</span><span>Clique numa barra para ver as premissas</span></div>
+        ${sel ? `<div class="premissas" id="premissas"><h3>${esc({conservador: "Premissas do cenário conservador", base: "Premissas do cenário base", meta: "O que a meta precisa"}[sel] || sel)}</h3><ul>${prem.map(x => `<li>${esc(x)}</li>`).join("") || "<li>Sem premissas escritas.</li>"}</ul></div>` : ""}</div>
+      <div class="pilha"><span class="rot">Caixa em ${num(p.horizonte_semanas || cx.length || 13)} semanas</span>${grafCaixa(cx)}<div class="legenda"><span><i class="base"></i>Base · soma ${rs(sb)}</span><span><i class="linha-c"></i>Conservador · soma ${rs(sc)}</span></div>${cx[0]?.fonte ? `<span class="sub quebra">Fonte: ${esc(cx[0].fonte)}</span>` : ""}</div>
+    </div><div class="grade-2">
+      <div class="pilha"><span class="rot">Decadência mensal</span>${grafDecad(Array.isArray(p.decadencia_mensal) ? p.decadencia_mensal : [])}<span class="sub quebra">Crédito que sai por mês se o pedido não entrar antes; pré-análise, com validação do técnico por crédito.</span></div>
+      <div class="pilha"><span class="rot">Janelas por prazo</span><div class="painel">${js.map(j => { const d = dias(j.prazo); return `<div class="janela"><span class="dias ${d !== null && d >= 0 && d <= 14 ? "perto" : ""}">${d === null ? "sem data" : d < 0 ? "encerrada" : d + (d === 1 ? " dia" : " dias")}</span><span style="min-width:0"><span class="tit quebra">${esc(j.janela)}</span><span class="sub quebra">${esc(j.area || "")}${j.clientes_n ? ` · ${num(j.clientes_n)} clientes` : ""}${j.prazo ? " · " + data(j.prazo) : ""}</span></span><span class="base rs">${rs(j.base_rs)}</span></div>` }).join("") || `<div class="vazio">Sem janelas na previsão.</div>`}</div></div>
+    </div>${rk.length ? `<details class="painel"><summary class="painel-cab" style="cursor:pointer"><h2>Riscos</h2><span class="sub">${rk.length}</span></summary><div class="linhas" style="--cols:minmax(0,1fr) 110px 150px"><div class="lh cab"><span>Risco e mitigação</span><span>Impacto</span><span>Dono · prazo</span></div>${rk.map(r => `<div class="lh"><span><span class="tit quebra">${esc(r.risco)}</span><span class="sub quebra">${esc(r.mitigacao || "")} · probabilidade ${esc(r.probabilidade || "—")}</span><span class="sub quebra so-m-b">${rs(r.impacto_rs)} · ${esc(donoNome(r.dono))} · ${data(r.prazo)}</span></span><span class="mono esconde-m">${rs(r.impacto_rs)}</span><span class="sub esconde-m">${esc(donoNome(r.dono))} · ${data(r.prazo)}</span></div>`).join("")}</div></details>` : ""}</div></section>`;
+}
+const stAcao = x => (S.acoesG[x.id] && ST_A[S.acoesG[x.id].status]) ? S.acoesG[x.id].status : (ST_A[x.status] ? x.status : "aberto");
+const podeMarcar = x => podeDecidir("luis") || (!!PESSOAS[x.dono] && podeDecidir(x.dono));
+const itensAcaoG = () => [...(Array.isArray(G().desvios) ? G().desvios : []).map(x => ({...x, _t: "desvio"})), ...(Array.isArray(G().acoes) ? G().acoes : []).map(x => ({...x, _t: "acao"}))].filter(x => x && x.id);
+function secDesvios() {
+  const xs = itensAcaoG().sort((a, b) => (stAcao(a) === "resolvido") - (stAcao(b) === "resolvido") || String(a.prazo || "9999").localeCompare(String(b.prazo || "9999"))), hj = hoje();
+  const bts = x => { const s = stAcao(x); if (!podeMarcar(x) || s === "resolvido") return ""; return `${s !== "em_andamento" ? `<button class="btn sec peq" data-acao="acaoG" data-id="${esc(x.id)}" data-v="em_andamento">Em andamento</button>` : ""}<button class="btn peq" data-acao="acaoG" data-id="${esc(x.id)}" data-v="resolvido">Resolvido</button>` };
+  const chipSt = s => `<span class="chip p ${s === "resolvido" ? "concluido" : s === "em_andamento" ? "analise" : "aprovar"}">${ST_A[s]}</span>`;
+  return `<section class="painel" aria-labelledby="t-desv"><div class="painel-cab"><h2 id="t-desv">Desvios e ações</h2><span class="sub">${xs.filter(x => stAcao(x) !== "resolvido").length} em aberto · a dona marca o andamento</span></div>
+    <div class="linhas desv-lh"><div class="lh cab"><span>Regra</span><span>Ação e métrica</span><span>Valor × limite</span><span>Dono</span><span>Prazo</span><span>Status</span></div>
+    ${xs.map(x => { const s = stAcao(x), met = semaforo().find(m => m.id === x.metrica), u = met?.unidade || "n", temV = !vazioN(x.valor), atras = x.prazo && String(x.prazo) < hj && s !== "resolvido", reg = x.regra || (x.origem === "conselho" ? "Conselho" : "—");
+      return `<div class="lh"><span class="mono esconde-m">${esc(reg)}</span>
+        <span><span class="tit quebra">${esc(x.acao || "—")}</span><span class="sub quebra">${met ? esc(met.nome) : esc(x.metrica || (x.origem === "conselho" ? "ação do Conselho" : ""))}${x.texto ? " · " + esc(x.texto) : x.condicao ? " · " + esc(x.condicao) : ""}${x.desde ? " · desde " + data(x.desde) : ""}${x.escalado_para ? " · escalado para " + esc(donoNome(x.escalado_para)) : ""}</span>
+          <span class="sub quebra so-m-b">${esc(reg)} · ${temV ? `${fmtU(x.valor, u)} × ${fmtU(x.limite, u)} · ` : ""}${esc(donoNome(x.dono))}${x.prazo ? " · " + data(x.prazo) : ""}${atras ? " · atrasada" : ""}</span></span>
+        <span class="mono esconde-m">${temV ? `${fmtU(x.valor, u)} × ${fmtU(x.limite, u)}` : "—"}</span><span class="esconde-m">${esc(donoNome(x.dono))}</span><span class="esconde-m"><span class="mono">${x.prazo ? data(x.prazo) : "—"}</span>${atras ? ` <span class="chip urg">atrasada</span>` : ""}</span>
+        <span class="d-acoes">${chipSt(s)}${bts(x)}</span></div>` }).join("") || `<div class="vazio">Nenhum desvio nem ação registrada.</div>`}</div>
+    ${!Fonte.pode() && xs.length ? `<div class="nota" style="margin:12px 18px">Para marcar o andamento, abra a Central pelo link do Claude com a sua conta da Save.</div>` : ""}</section>`;
+}
+function secDecisoes() {
+  const ds = decisoesPend(), pode = podeDecidir("luis");
+  return `<section class="painel" aria-labelledby="t-decg"><div class="painel-cab"><h2 id="t-decg">Decisões do Luis</h2><span class="sub">${ds.length} pendentes · alçada do Luis</span></div>
+    <div class="linhas dec-lh">${ds.map(d => `<div class="lh"><span class="mono esconde-m">${esc(d.id)}</span><span><span class="tit quebra">${esc(d.texto)}</span><span class="sub quebra">${esc(d.id)}${d.data ? " · " + data(d.data) : ""}${d.obs ? " · " + esc(String(d.obs).length > 120 ? String(d.obs).slice(0, 119) + "…" : d.obs) : ""}</span></span>
+      <span class="acoes">${pode ? `<button class="btn peq" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec peq" data-go="gestao/decisao/${esc(d.id)}">Aprovar com ajuste</button><button class="btn perigo peq" data-go="gestao/decisao/${esc(d.id)}">Reprovar</button>` : `<button class="btn sec peq" data-go="gestao/decisao/${esc(d.id)}">Ver</button>`}</span></div>`).join("") || `<div class="vazio">Nenhuma decisão pendente.</div>`}</div>
+    ${S.eu === "luis" && !pode && ds.length ? `<div class="nota" style="margin:12px 18px">Para aprovar, abra a Central pelo link do Claude com a sua conta da Save.</div>` : ""}</section>`;
+}
+/* Gaveta "Definir unidade": grava conselho/meta-q4-unidade como o Luis grava as decisões do Conselho (painel_sync lê a coleção; gestao.py aplica a unidade). */
+function gUnidade() {
+  const m = gMeta(), pode = podeDecidir("luis");
+  gaveta("Definir a unidade da meta", "Meta do Q4 · " + rs(m.q4_rs), `<p style="margin:0">A meta de ${rs(m.q4_rs)} é medida em <b>crédito contratado</b> (valor do crédito dos contratos fechados) ou em <b>líquido Save</b> (honorário da Save, sem o parceiro)? A escolha vai para o livro de decisões como registro seu, e o painel passa a mostrar só a leitura escolhida.</p>
+    <div class="leituras">${["credito", "liquido"].map(k => { const x = (m.leituras || {})[k]; return `<div class="leitura"><h3>${UNID[k].replace(/^\w/, c => c.toUpperCase())}</h3>${x ? `<dl><dt>Meta</dt><dd>${rs(x.meta_rs || m.q4_rs)}</dd><dt>Realizado</dt><dd>${rs(x.realizado_rs)}</dd><dt>Ritmo necessário × atual</dt><dd>${rs(x.ritmo_necessario_rs_dia)} × ${rs(x.ritmo_atual_rs_dia)}</dd></dl>` : `<span class="sub">sem leitura no pacote</span>`}</div>` }).join("")}</div>
+    ${pode ? `<label for="n-dec">Observação <small>(opcional)</small></label><input id="n-dec" maxlength="400">` : semIdent("luis") || `<div class="nota">Só o Luis define a unidade da meta.</div>`}`,
+    pode ? `<button class="btn" data-acao="unidade" data-id="meta-q4-unidade" data-v="credito">Crédito contratado</button><button class="btn sec" data-acao="unidade" data-id="meta-q4-unidade" data-v="liquido">Líquido Save</button>` : "");
+}
+/* Gaveta de uma decisão do Conselho (mesa, tela Decisões e tela Gestão). */
+function gDecisao(id) {
+  const d = S.M.decisoes.find(x => x.id === id); if (!d) return;
+  gaveta(esc(d.id), esc(data(d.data) || "") + (d.ata ? " · " + esc(d.ata) : ""), `<p style="margin:0;font-size:15px">${esc(d.texto)}</p>${d.obs ? `<p class="sub quebra">${esc(d.obs)}</p>` : ""}${podeDecidir("luis") ? `<label for="n-dec">Observação <small>(opcional)</small></label><input id="n-dec" maxlength="400">` : semIdent("luis") || `<div class="nota">Só o Luis decide as decisões do Conselho.</div>`}`,
+    podeDecidir("luis") ? `<button class="btn" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada com ajuste">Aprovar com ajuste</button><button class="btn perigo" data-acao="decisao" data-id="${esc(d.id)}" data-v="rejeitada">Reprovar</button>` : "");
 }
 
 /* ===================== Pedidos ===================== */
@@ -1043,21 +1253,24 @@ async function acao(tipo, id, valor) {
     if (tipo === "demanda") { const d = S.M.demandas.find(x => x.id === id) || S.M.whatsapp.find(x => x.id === id); if (!d || d.pessoa !== S.eu) return; await Fonte.gravar("acoes_demandas/" + id, {status: valor, por: S.eu, por_id: S.meuId, quando: agora()}); S.acoes[id] = {status: valor}; toast({respondido: "Marcada como respondida", encaminhado: "Marcada como encaminhada", nao_e_demanda: "Marcada como não é demanda"}[valor]) }
     if (tipo === "lote") { if (!podeDecidir("geovana")) return; await Fonte.gravar("recuperador/" + id, {decisao: valor, motivo: v("#r-m"), por: S.eu, por_id: S.meuId, quando: agora()}); S.recup[id] = {decisao: valor}; toast(valor) }
     if (tipo === "decisao") { if (!podeDecidir("luis")) return; await Fonte.gravar("conselho/" + id, {decisao: valor, nota: v("#n-dec"), por: S.eu, por_id: S.meuId, quando: agora()}); S.conselho[id] = {decisao: valor}; toast("Decisão registrada: " + valor) }
+    if (tipo === "unidade") { if (!podeDecidir("luis") || !UNID[valor] || valor === "indefinida") return; const dec = "unidade: " + valor; await Fonte.gravar("conselho/meta-q4-unidade", {decisao: dec, nota: v("#n-dec"), por: S.eu, por_id: S.meuId, quando: agora(), tipo: "meta_q4_unidade"}); S.conselho["meta-q4-unidade"] = {decisao: dec}; toast("Unidade da meta registrada: " + UNID[valor]) }
+    if (tipo === "acaoG") { const x = itensAcaoG().find(y => y.id === id); if (!x || !podeMarcar(x) || !ST_A[valor]) return; await Fonte.gravar("acoes/" + id, {status: valor, por: S.eu, por_id: S.meuId, quando: agora(), dono: x.dono || "", origem: x.origem || "controle"}); S.acoesG[id] = {status: valor}; toast("Marcado: " + ST_A[valor]) }
     if (tipo === "chamado") { const c = S.M.chamados.find(x => x.id === id); if (!c || c.status !== "proposto" || !podeDecidir(c.pessoa)) return;
       const dados = valor === "aprovado" ? {status: "aprovado", titulo_editado: v("#ct"), descricao_editada: v("#cd"), aprovado_por: S.eu, aprovado_por_id: S.meuId, aprovado_em: agora()} : {status: "recusado", motivo: v("#cm"), recusado_por: S.eu, recusado_por_id: S.meuId, recusado_em: agora()};
       if (valor === "recusado" && !dados.motivo) { $("#cm").focus(); return toast("Diga por que não abrir") }
       await Fonte.atualizar("chamados/" + id, dados); if (Fonte.previa) Object.assign(c, dados); toast(valor === "aprovado" ? "Chamado aprovado" : "Chamado não aberto") }
-    location.hash = tipo === "decisao" && S.eu === "luis" ? "decisoes" : "mesa";
+    const fica = rota().r === "gestao" || tipo === "unidade" || tipo === "acaoG";
+    location.hash = fica ? "gestao" : tipo === "decisao" && S.eu === "luis" ? "decisoes" : "mesa"; if (fica) abrir();
   } catch (x) { toast("Não consegui registrar") }
 }
 
 /* ===================== Render e rotas ===================== */
-const MENU = [["caixa", "Caixa de entrada", "caixa"], ["mesa", "Minha mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "WhatsApp · Demandas", "whats"], ["areas", "Áreas", "areas"], ["onde", "Onde está", "onde"], ["rotinas", "Rotinas", "rotinas"], ["decisoes", "Decisões", "decisoes"]];
-const MIGALHA = {caixa: "Caixa de entrada", mesa: "Minha mesa", pedidos: "Pedidos", whatsapp: "WhatsApp · Demandas", areas: "Áreas", onde: "Onde está", rotinas: "Rotinas", decisoes: "Decisões"};
+const MENU = [["caixa", "Caixa de entrada", "caixa"], ["mesa", "Minha mesa", "mesa"], ["gestao", "Gestão", "gestao"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "WhatsApp · Demandas", "whats"], ["areas", "Áreas", "areas"], ["onde", "Onde está", "onde"], ["rotinas", "Rotinas", "rotinas"], ["decisoes", "Decisões", "decisoes"]];
+const MIGALHA = {caixa: "Caixa de entrada", mesa: "Minha mesa", gestao: "Gestão", pedidos: "Pedidos", whatsapp: "WhatsApp · Demandas", areas: "Áreas", onde: "Onde está", rotinas: "Rotinas", decisoes: "Decisões"};
 function moldura(r) {
   const n = pendentes(S.eu), dono = {pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: "whatsapp", area: "areas", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r] || r;
   const andamento = S.M.pedidos.filter(p => fase(p) !== "concluido").length, wa = waVis().filter(d => d.status === "responder").length, dec = S.eu === "luis" ? totalDecisoes() : 0;
-  const nl = cxNaoLidas(), badge = {caixa: nl, mesa: n, pedidos: andamento, whatsapp: wa, decisoes: dec};
+  const nl = cxNaoLidas(), badge = {caixa: nl, mesa: n, pedidos: andamento, whatsapp: wa, decisoes: dec, gestao: S.eu === "luis" && S.M.perfil !== "time" ? piores().length : 0};
   $("#menu").innerHTML = MENU.map(([k, t, ic]) => `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}<span class="t">${t}</span>${badge[k] ? `<span class="cont">${badge[k]}</span>` : ""}</a>`).join("");
   $("#fixadas").innerHTML = FIXADAS.filter(([k]) => area(k)).map(([k, sg, nm]) => `<a href="#area/${esc(k)}/conversa"><span class="sig" aria-hidden="true">${sg}</span><span class="t">${nm}</span></a>`).join("") + `<a href="#areas"><span class="sig" aria-hidden="true">+</span><span class="t">Todas as áreas</span></a>`;
   $("#nav-m").innerHTML = [["caixa", "Caixa", "caixa"], ["mesa", "Mesa", "mesa"], ["pedidos", "Pedidos", "pedidos"], ["whatsapp", "Demandas", "whats"], ["areas", "Áreas", "areas"]].map(([k, t, ic]) => `<a href="#${k}" ${dono === k ? 'aria-current="page"' : ""}>${icone(ic)}${t}${badge[k] ? `<span class="cont">${badge[k]}</span>` : ""}</a>`).join("")
@@ -1078,7 +1291,7 @@ function moldura(r) {
 }
 function abrir() {
   if (!S.M) return; const {r, p} = rota(); moldura(r); document.body.classList.remove("menu-aberto");
-  const fundo = {mesa: telaMesa, pedidos: telaPedidos, pedido: telaPedidos, novo: telaPedidos, areas: telaAreas, area: () => telaArea(p[0], p[1] === "conversa"), onde: () => telaOnde(p.join("/")), rotinas: telaRotinas, decisoes: telaDecisoes,
+  const fundo = {mesa: telaMesa, pedidos: telaPedidos, pedido: telaPedidos, novo: telaPedidos, areas: telaAreas, area: () => telaArea(p[0], p[1] === "conversa"), onde: () => telaOnde(p.join("/")), rotinas: telaRotinas, decisoes: telaDecisoes, gestao: () => telaGestao(p[0], p[1]),
     caixa: () => telaCaixa(p[0]), whatsapp: () => telaWhatsapp(), wa: () => telaWhatsapp(p[0]), wachamado: () => telaWhatsapp(p[0] || null, true),
     demanda: telaMesa, chamado: telaMesa, lote: telaMesa, decisao: S.eu === "luis" ? telaMesa : telaDecisoes}[r] || telaMesa;
   const foco = ["q-onde", "q-wa", "q-cx", "chat-in"].includes(document.activeElement?.id) ? document.activeElement.id : "";
@@ -1100,12 +1313,13 @@ function abrir() {
         : ["aprovado_manual", "aprovado", "aberto"].includes(c.status) ? `${url(c.url) ? `<a class="btn sec" href="${url(c.url)}" target="_blank" rel="noopener">Chamado #${esc(c.glpi_id)} no GLPI</a>` : ""}<button class="btn sec" data-copiar-ch="${esc(c.id)}">Copiar texto do chamado</button>${c.nota_agente ? `<span class="sub quebra">${esc(c.nota_agente)}</span>` : ""}` : "") } }
   if (r === "lote") { const l = S.M.lote.find(x => x.deal === p[0]); if (l) gaveta(esc(l.negocio), esc(l.parceiro), `<div class="filtros"><span class="chip">${esc(l.tipo)}</span><span class="chip">${esc(l.segmento)} · ${esc(l.uf)}</span></div><p style="margin:0">Potencial estimado ${mi(l.esperado)}, a validar caso a caso.</p>${l.hipotese ? `<div class="resp"><p>${esc(l.hipotese)}</p>${l.parecer ? `<p>Parecer: ${esc(l.parecer)}</p>` : ""}${l.documentos ? `<p>Pedir: ${esc(l.documentos)}</p>` : ""}</div>` : ""}${url(l.link) ? `<a href="${url(l.link)}" target="_blank" rel="noopener">Abrir no HubSpot</a>` : ""}${podeDecidir("geovana") ? `<label for="r-m">Motivo ou observação</label><input id="r-m" maxlength="300">` : semIdent("geovana") || `<div class="nota">Quem decide o lote é a Geovana.</div>`}`,
       podeDecidir("geovana") ? `<button class="btn" data-acao="lote" data-id="${esc(l.deal)}" data-v="Aprovar para reanálise">Aprovar para reanálise</button><button class="btn perigo" data-acao="lote" data-id="${esc(l.deal)}" data-v="Vetar">Vetar</button><button class="btn sec" data-acao="lote" data-id="${esc(l.deal)}" data-v="Precisa de dado">Precisa de dado</button>` : "") }
-  if (r === "decisao") { const d = S.M.decisoes.find(x => x.id === p[0]); if (d) gaveta(esc(d.id), esc(data(d.data) || "") + (d.ata ? " · " + esc(d.ata) : ""), `<p style="margin:0;font-size:15px">${esc(d.texto)}</p>${d.obs ? `<p class="sub quebra">${esc(d.obs)}</p>` : ""}${podeDecidir("luis") ? `<label for="n-dec">Observação <small>(opcional)</small></label><input id="n-dec" maxlength="400">` : semIdent("luis") || `<div class="nota">Só o Luis decide as decisões do Conselho.</div>`}`,
-      podeDecidir("luis") ? `<button class="btn" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada">Aprovar</button><button class="btn sec" data-acao="decisao" data-id="${esc(d.id)}" data-v="aprovada com ajuste">Aprovar com ajuste</button><button class="btn perigo" data-acao="decisao" data-id="${esc(d.id)}" data-v="rejeitada">Rejeitar</button>` : "") }
+  if (r === "decisao") gDecisao(p[0]);
+  if (r === "gestao" && p[0] === "decisao") gDecisao(p[1]);
+  if (r === "gestao" && p[0] === "unidade") gUnidade();
   if (foco) { const q = $("#" + foco); if (q && !$("#camada .gaveta")) { q.focus({preventScroll: true}); try { q.setSelectionRange(q.value.length, q.value.length) } catch (e) {} } }
 }
 function fechar() {
-  const {r, p} = rota(); const volta = {caixa: p[0] ? "caixa" : "", pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: p[0] ? "wa/" + p[0] : "whatsapp", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r];
+  const {r, p} = rota(); const volta = {caixa: p[0] ? "caixa" : "", gestao: p[0] ? "gestao" : "", pedido: "pedidos", novo: "pedidos", wa: "whatsapp", wachamado: p[0] ? "wa/" + p[0] : "whatsapp", demanda: "mesa", chamado: "mesa", lote: "mesa", decisao: S.eu === "luis" ? "mesa" : "decisoes"}[r];
   if (r === "area" && p[1]) { const c = chatDe(p[0]); c.ctl?.abort(); location.hash = "area/" + p[0]; return }
   if (volta) location.hash = volta; else $("#camada").innerHTML = "";
 }
@@ -1141,6 +1355,8 @@ document.addEventListener("click", e => {
   const q = e.target.closest("[data-q]"); if (q) { location.hash = "onde/" + encodeURIComponent(q.dataset.q); return }
   const cp = e.target.closest("[data-copiar]"); if (cp) { const d = S.M.whatsapp.find(x => x.id === cp.dataset.copiar); copiar(d?.rascunho || "", "Rascunho copiado. Depois de enviar no WhatsApp, marque Respondi."); return }
   const cc = e.target.closest("[data-copiar-ch]"); if (cc) { const c = S.M.chamados.find(x => x.id === cc.dataset.copiarCh); copiar(c ? `${c.titulo_editado || c.titulo}\n\n${c.descricao_editada || c.descricao}` : "", "Texto do chamado copiado. Abra no GLPI e cole."); return }
+  const gf = e.target.closest("[data-g-fora]"); if (gf) { S.g.fora = gf.dataset.gFora === "1"; abrir(); return }
+  const ce = e.target.closest("[data-cen]"); if (ce) { S.g.cen = ce.dataset.cen; abrir(); $("#premissas")?.scrollIntoView?.({block: "nearest"}); return }
   const cf = e.target.closest("[data-cx-f]"); if (cf) { S.cx.f = cf.dataset.cxF; abrir(); return }
   const cn = e.target.closest("[data-cx-nl]"); if (cn) { marcarLidas([cn.dataset.cxNl], false); abrir(); toast("Marcada como não lida"); return }
   if (e.target.closest("#cx-todas")) { marcarLidas(cxVis().filter(m => !cxLida(m)).map(m => m.id)); abrir(); toast("Caixa marcada como lida"); return }
@@ -1168,6 +1384,7 @@ document.addEventListener("submit", e => {
     if (!Fonte.pode() || !S.eu) return; Fonte.criar("apontamentos", {pessoa: S.eu, por_id: S.meuId, data: agora(), descricao: $("#a-desc").value.trim(), tipo: $("#a-tipo").value, minutos: Number($("#a-min").value) || 0, ponte: $("#a-ponte").checked}).then(() => { toast("Tarefa registrada"); $("#a-desc").value = "" }, () => toast("Não consegui registrar a tarefa")) }
 });
 document.addEventListener("keydown", e => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.closest?.("[data-cen]")) { e.preventDefault(); S.g.cen = e.target.closest("[data-cen]").dataset.cen; abrir(); return }
   if (e.target.id === "chat-in" && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("#f-chat").requestSubmit() }
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); paleta() }
   if (e.key === "Escape") {
@@ -1191,6 +1408,7 @@ document.addEventListener("change", e => {
   if (e.target.id === "p-entrega") S.novo.entrega = e.target.value;
 });
 window.addEventListener("hashchange", abrir);
+window.addEventListener("resize", () => { clearTimeout(S._rz); S._rz = setTimeout(() => { if (rota().r === "gestao" && !editando() && !$("#camada .gaveta")) abrir() }, 250) });  /* gráficos em SVG seguem a largura */
 /* A pessoa está escrevendo? (foco num campo, texto digitado na gaveta, na conversa, no chamado ou no registro de tarefa, busca ou notificações abertas)
    Nesse caso a atualização do db só refaz a moldura; a tela é refeita quando ela sai do campo. */
 function editando() {
@@ -1220,6 +1438,7 @@ async function iniciar() {
     Fonte.ouvir("apontamentos", "data", 300, xs => { S.apont = xs; refaz() }, erro);
     Fonte.ouvir("chamados", "proposto_em", 300, xs => { S.M.chamados = xs; refaz() }, erro);
     Fonte.ouvir("caixa", "criado_em", 300, xs => { S.M.caixa = xs; refaz() }, erro);
+    Fonte.ouvir("acoes", null, 300, xs => { S.acoesG = Object.fromEntries(xs.map(d => [d.id, d])); refaz() }, erro);
     if (S.meuId && S.identificado) Fonte.ouvirDoc("caixa_lidas/" + S.meuId, d => { S.lidas = d && d.lidas && typeof d.lidas === "object" ? d.lidas : {}; refaz() }, () => {});
   }
   abrir();
