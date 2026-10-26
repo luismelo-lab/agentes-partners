@@ -80,6 +80,10 @@ Gestão de Passivo e Transação somam 45 chamados (1 a 3 dias); Holding (estrut
    - documento pendente: dizer qual e se já está no card;
    - despacho decisório: há autorização do parceiro ou do cliente para a manifestação? Se sim, ela vai no assunto.
 5. **Dados mínimos:** comparar com a lista do tipo. Faltou: rascunho 3b ao parceiro, e a demanda fica "aguardando parceiro" (o relógio do SLA para; o do prazo legal não).
+5b. **Histórico antes do GLPI (Luis, 26/10/2026; `infra/historico-antes-do-glpi.md`).** Antes de definir a rota, rode `python3 ~/agentes-partners/lib/historico.py avaliar "<pedido>" --master … --empresa … --cnpj … --chat … --antes … --json`.
+   - Se houver resposta suficiente (dado do caso, chamado já existente, mesma pergunta respondida e ainda válida, regra da casa explícita), a rota é **responder** sem GLPI. A ficha leva `historico` e `resposta_historico`, e o rascunho fica com o Retorno ao Parceiro.
+   - Sem resposta suficiente, registre `historico.buscas` e `historico.faltou`. Só então a rota sugere GLPI, com o achado como contexto no chamado ideal.
+   - Documento novo com prazo, cálculo novo e conferência em sistema nunca se resolvem só com o histórico.
 6. **Rota:** departamento virtual (pré-análise para o humano validar), área humana (modelo 2 ou GLPI), Daniela resolve com script, ou Luis decide (`references/roteamento.md`). Gestão de Passivo e estruturação patrimonial vão ao Apoio Jurídico ao Canal (`apoio-juridico-canal.md`).
 7. **Prazos:** 1ª resposta e solução do `sla.json`, salvo prazo de reunião ou legal menor.
 8. **Registrar** depois do Portão 1: `pendencias.py --adicionar ... --aprovado-por Daniela`.

@@ -12,9 +12,9 @@
 > Pedido do Luis: "Amanhã cedo tenho reunião com a diretoria. Me diz em quanto estamos da meta do Q4 de R$ 200 milhões, em percentual, com uma frase de leitura. Quero um número só."
 
 **Deve conter:**
-- Lembra que a meta do Q4 é a da folha de 22/10 (D64) · `D64 | 200 mi | r$ 200 | 200 milhoes`
-- Mostra as duas leituras possíveis da meta, em crédito e em honorário líquido, porque a unidade não está escrita · `credito` + `honorario liquido | liquido`
-- Pede ao Luis que confirme a unidade antes de cravar um percentual único · `unidade`
+- Corrige a meta: desde a D111 (26/10) o Q4 é R$ 250 mi, não R$ 200 mi · `D111 | 250 mi | r$ 250 | 250 milhoes`
+- Diz a unidade: crédito de contrato fechado (ganho) · `credito`
+- Mostra primeiro a meta do mês e depois a total · `meta do mes | mes`
 - Os números saem do script da área, não de cálculo de cabeça · `calc_semana | script`
 - Clientes sem Master ficam fora do realizado e da meta da área · `D76 | sem master`
 

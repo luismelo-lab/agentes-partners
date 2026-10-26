@@ -24,7 +24,8 @@
 ## Confiabilidade dos dados (alertas e pendências)
 
 ## Semáforo de gestão (pacote `registro/gestao/pacote-AAAA-MM-DD.json`)
-**Meta do Q4 (R$ 200 mi, D64, unidade indefinida):** crédito <realizado> (<%>) · líquido <realizado> (<%>) · ritmo atual <R$/dia útil> × necessário <R$/dia útil> · <n> dias úteis restantes.
+**Meta do mês (<mês>: R$ <meta> mi, D111, crédito de contrato fechado):** <realizado limpo> (<%>) · falta <R$> · ritmo atual <R$/dia útil> × necessário <R$/dia útil> · <n> dias úteis restantes · <status>.
+**Meta do Q4 (R$ 250 mi):** <realizado> (<%>) · falta <R$> · ritmo atual × necessário · cenário base <R$> (probabilidade <%>).
 | Métrica | Valor | Status | Leitura do Controller (o que está acontecendo) |
 |---|---|---|---|
 | <10 métricas mais reveladoras, vermelhas primeiro> | | 🔴🟡🟢⚪ | |

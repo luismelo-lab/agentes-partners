@@ -4,7 +4,7 @@
 
 | # | Pergunta | Para quem | Por que importa | Especialista | Aberta em |
 |---|---|---|---|---|---|
-| R1 | A meta do Q4 de R$ 200 mi (D64) está em crédito, em honorário bruto ou em honorário líquido potencial? | Luis | Em líquido, a meta supõe cerca de R$ 1,16 bi de crédito no trimestre; em crédito, cerca de R$ 35 mi de líquido. A cobertura e o desdobramento mudam por completo | `metas-medicao-produto`, `forecast-pipeline` | 22/10/2026 |
+| R1 | ~~A meta do Q4 de R$ 200 mi (D64) está em crédito, em honorário bruto ou em honorário líquido potencial?~~ **Respondida pela D111 (26/10/2026): crédito de contrato fechado, mensal 75/100/75, total R$ 250 mi.** | Luis | Em líquido, a meta supõe cerca de R$ 1,16 bi de crédito no trimestre; em crédito, cerca de R$ 35 mi de líquido. A cobertura e o desdobramento mudam por completo | `metas-medicao-produto`, `forecast-pipeline` | 22/10/2026 |
 | R2 | Qual é o regime tributário da Save (Presumido ou Real), a receita bruta anual e a alíquota de ISS do município de emissão? | Financeiro | Troca a faixa de 11,3% a 16,5% pelo número real; liga ou não a majoração da LC 224/2025 acima de R$ 5 mi | `margem-dre`, `roi-caixa` | 22/10/2026 |
 | R3 | Existe registro do honorário recebido por negócio, com o ID do HubSpot? Quem pode enviar mensalmente? | Financeiro | Sem ele, o ROI realizado (oficial pela D17) e o backlog não existem | `controladoria-receita`, `roi-caixa` | 22/10/2026 |
 | R4 | Qual evento dispara o reconhecimento por variante: homologação, compensação aceita, ressarcimento ou fatura? | Financeiro com o contador da Save | Define a coluna "reconhecido" pelo CPC 47 e o mês em que a meta é cumprida | `controladoria-receita` | 22/10/2026 |

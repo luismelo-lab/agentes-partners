@@ -9,8 +9,8 @@ Status: **verde** dentro da faixa, **amarelo** fora da verde, **vermelho** fora 
 
 | Bloco | Métrica (id) | Verde | Amarelo | Por quê (justificativa curta) |
 |---|---|---|---|---|
-| Resultado | Ritmo de criação ÷ ritmo necessário da meta (`criados_ritmo_pct`) | ≥ 90% | ≥ 70% | Abaixo de 70% por 2 semanas a meta do Q4 sai do alcance mesmo com win rate alto; 90% é a folga que o ciclo de 30 a 60 dias permite. *Proposta.* |
-| Resultado | Fechado ÷ ritmo necessário (`ganhos_ritmo_pct`) | ≥ 90% | ≥ 70% | Contrato §1 (0,9 e 0,7 × meta). Meta Q4 R$ 200 mi; unidade indefinida: leitura em crédito até o Luis responder (R1). *Proposta.* |
+| Resultado | Ritmo de criação ÷ ritmo necessário da meta do mês (`criados_ritmo_pct`) e do Q4 (`criados_ritmo_q4_pct`) | ≥ 90% | ≥ 70% | Meta D111 em crédito de contrato fechado: out R$ 75 mi, nov R$ 100 mi, dez R$ 75 mi (Q4 R$ 250 mi). Criação da semana por dia útil contra o necessário. |
+| Resultado | Ritmo de fechamento ÷ ritmo necessário da meta do mês (`ganhos_ritmo_pct`) e do Q4 (`ganhos_ritmo_q4_pct`) | ≥ 90% | ≥ 70% | Ritmo atual = fechado limpo (sem duplicidade de alta confiança) ÷ dias úteis decorridos; necessário = falta ÷ dias úteis restantes. Tolerância do Luis (D111). |
 | Resultado | Win rate 3 meses (`win_rate_3m`) | ≥ 30% | ≥ 20% | 26% em 26/10; abaixo de 20% o pipeline precisa dobrar para a mesma meta; 30% foi o patamar de 2025. *Proposta.* |
 | Resultado | Fator do mês sobre o mesmo período do anterior (`ganhos_mom_fator`) | ≥ 0,9× | ≥ 0,7× | Queda acima de 30% exige causa escrita (safra, Master, tese, sazonalidade). *Proposta.* |
 | Caixa | Semanas sem fonte de honorário recebido (`semanas_sem_fonte_caixa`) | 0 | ≤ 4 | D18 (29/09) aprovou a fonte de recebimentos; sem ela ROI realizado e backlog ficam cinza. |
@@ -36,8 +36,8 @@ Persistência "por 2 semanas" = status fora da tolerância em dois controles seg
 
 | Regra | Se… | Então… | Dono | Prazo | Alçada |
 |---|---|---|---|---|---|
-| C01 | criação de negócios < 70% do ritmo necessário por 2 semanas | Jenifer e Daniela revisam a cadência e os Masters em queda; Conselho na segunda | Jenifer (com Daniela) | 5 | dona · Conselho |
-| C02 | fechado no mês < 70% do ritmo necessário por 2 semanas | Conselho revisa o plano da semana; Daniela revisa o funil de cada Master com o técnico | Daniela (com Luis) | 3 | Luis · Conselho |
+| C01 | criação de negócios < 70% do ritmo necessário da meta do mês ou do Q4 por 2 semanas | Jenifer e Daniela revisam a cadência e os Masters em queda; Conselho na segunda | Jenifer (com Daniela) | 5 | dona · Conselho |
+| C02 | ritmo de fechamento < 70% do ritmo necessário da meta do mês ou do Q4 por 2 semanas | Conselho revisa o plano da semana; Daniela revisa o funil de cada Master com o técnico | Daniela (com Luis) | 3 | Luis · Conselho |
 | C03 | win rate 3 meses < 20% | Jenifer e Daniela revisam a qualificação (SQL) e os motivos de perda | Jenifer | 10 | dona |
 | C04 | fechado do mês < 0,7× o mesmo período do mês anterior | Controller explica a causa no pacote e diz se o Q4 muda de cenário | Controller | 3 | gerente |
 | C05 | sem fonte de honorário recebido há mais de 4 semanas | TI e Operações de Canal redigem o pedido ao Financeiro e ao CRM (D18) | Gerente de TI | 10 | Luis |
@@ -72,6 +72,6 @@ Como funciona na prática: `controle.py` roda todo dia útil (sentinela, C17 e C
 Formato de `acoes.jsonl` (uma linha por ação): `{"id": "A-2026-001", "acao": "...", "dono": "daniela", "prazo": "2026-11-03", "origem": "conselho|controle", "ata": "conselho/atas/<data>.md", "regra": "C09", "status": "aberta|em_andamento|concluida|cancelada", "registrado_em": "..."}`. Só o Conselho e a consolidação escrevem; `controle.py` só lê (C21).
 
 ## 4. O que ainda depende do Luis (26/10/2026)
-1. **Unidade da meta do Q4** (crédito, honorário bruto ou líquido): C01 e C02 leem em crédito até a resposta.
+1. ~~Unidade da meta do Q4~~ resolvida pela **D111** (26/10/2026): crédito de contrato fechado, mensal 75/100/75 = R$ 250 mi. C01 e C02 leem o ritmo da meta do mês e do Q4 (cada uma vira desvio próprio). Falta o Luis aprovar o desdobramento por Master (proposta no pacote, `meta.por_master`).
 2. **Tolerâncias marcadas "proposta"**: aprovar ou ajustar na revisão mensal de 03/11.
 3. **Fonte de recebimentos** (C05, D18): pedido ao Financeiro e ao CRM a partir de 02/11.

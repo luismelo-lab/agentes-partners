@@ -5,7 +5,15 @@ Pedido do Luis: "utilizar toda a capacidade dos agentes e do Conselho para gerar
 ## 1. `pacote-<AAAA-MM-DD>.json` (Resultado e controle · Controller com Dados)
 ```json
 {"data": "2026-10-26", "periodo": {"semana_de": "2026-10-19", "mes": "2026-10", "trimestre": "2026-Q4"},
- "meta": {"q4_rs": 200000000, "unidade": "indefinida|credito|liquido", "realizado_rs": 0, "falta_rs": 0, "dias_uteis_restantes": 0, "ritmo_necessario_rs_dia": 0, "ritmo_atual_rs_dia": 0},
+ "meta": {"unidade": "credito_contrato_fechado", "decisao": "D111",
+          "mes_atual": {<item de meses>},
+          "meses": [{"mes": "2026-10", "nome", "meta_rs": 75000000, "realizado_rs", "realizado_bruto_rs", "duplicidade_rs", "falta_rs", "pct", "pct_do_proporcional",
+                     "dias_uteis_total", "dias_uteis_decorridos", "dias_uteis_restantes", "ritmo_planejado_rs_dia", "ritmo_necessario_rs_dia", "ritmo_atual_rs_dia",
+                     "situacao": "a iniciar|em andamento|encerrado", "status": "verde|amarelo|vermelho|cinza"}],   // out 75, nov 100, dez 75 mi
+          "total": {"meta_rs": 250000000, "realizado_rs", "falta_rs", "pct", "ritmo_necessario", "ritmo_atual", "status", ...},
+          "por_master": {"proposta": true, "metodo", "masters": [{"master", "peso_pct", "meses": [{"mes", "meta_rs", "realizado_rs", "pct"}], "meta_q4_rs"}]},
+          // compatibilidade (derivadas do total):
+          "q4_rs": 250000000, "realizado_rs": 0, "falta_rs": 0, "dias_uteis_restantes": 0, "ritmo_necessario_rs_dia": 0, "ritmo_atual_rs_dia": 0, "leituras": {"credito", "liquido"}},
  "metricas": [{"id": "ganhos_mes_rs", "nome": "Fechado no mês (limpo)", "bloco": "resultado|caixa|canal|risco|operacao",
    "valor": 0, "unidade": "R$|%|n|dias", "anterior": 0, "variacao_pct": 0, "meta": null, "tolerancia": {"verde": ">= 0.9*meta", "amarelo": ">= 0.7*meta"},
    "status": "verde|amarelo|vermelho|cinza", "fonte": "hubspot 26/10 06:53", "confianca": "alta|media|baixa", "nota": "texto curto"}],
@@ -19,7 +27,7 @@ Status: verde dentro da tolerância, amarelo fora da verde, vermelho fora da ama
 {"data": "2026-10-26", "horizonte_semanas": 13,
  "cenarios": {"conservador": {"fechamento_q4_rs": 0, "liquido_q4_rs": 0, "premissas": ["..."]},
               "base": {"fechamento_q4_rs": 0, "liquido_q4_rs": 0, "premissas": ["..."]},
-              "meta": {"fechamento_q4_rs": 200000000, "liquido_q4_rs": 0, "o_que_precisa": ["..."]}},
+              "meta": {"fechamento_q4_rs": 250000000, "liquido_q4_rs": 0, "o_que_precisa": ["..."]}},
  "caixa_13_semanas": [{"semana": "2026-W44", "entrada_rs_base": 0, "entrada_rs_conservador": 0, "fonte": "PER/compensação/parcelamento"}],
  "pipeline_por_safra": [{"safra": "2026-08", "aberto_rs": 0, "conversao_real_pct": 0, "esperado_rs": 0}],
  "decadencia_mensal": [{"mes": "2026-11", "credito_que_sai_rs": 0, "clientes_n": 0}],
@@ -40,6 +48,6 @@ Status: verde dentro da tolerância, amarelo fora da verde, vermelho fora da ama
 
 ## Regras
 - Métrica sem meta aprovada: status cinza e `meta: null`, mas com `tolerancia` sugerida e marcada "proposta".
-- Meta do Q4: enquanto a unidade for "indefinida", mostrar as duas leituras (crédito e líquido) e a pergunta ao Luis.
+- Meta do Q4 (D111, 26/10/2026): crédito de contrato fechado, mensal 75/100/75 = R$ 250 mi; mostrar primeiro a meta do mês (`mes_atual`), depois a total. Realizado no volume limpo. A previsão traz `por_mes` (cenários conservador/base/esforço por mês, probabilidade e `novembro_precisa`); o cenário `esforco` entra ao lado de `meta` em `cenarios`.
 - Volume limpo = volume sem os grupos de duplicidade de alta confiança (`saneamento_duplicados.py`).
 - Nunca prometer: cenários são estimativas com premissas escritas.

@@ -17,7 +17,7 @@
 ## 1. Entrega única
 **O desdobramento da meta (Q4/2026 e 2027) por produto, Master e mês, e o painel de funil por produto, com o realizado em três colunas e o status das metas de validação.** Formato:
 - Bloco `metas` do JSON de métricas e linha de meta em cada KPI do slide 1 ("sem meta" quando não houver).
-- **Semanal (desde 26/10/2026): o bloco `meta` e as métricas `meta_q4_credito_pct` e `meta_q4_liquido_pct` do pacote de gestão** (`scripts/pacote_gestao.py` → `registro/gestao/pacote-AAAA-MM-DD.json`, contrato `infra/gestao-schema.md`): realizado, falta, dias úteis restantes (feriados nacionais do trimestre), ritmo necessário × atual por dia útil e o fator entre eles, nas duas leituras (crédito e líquido) enquanto a unidade da D64 for indefinida; tolerância proposta = proporcional aos dias úteis decorridos (verde) e 70% disso (amarelo). Este especialista também propõe a tolerância de cada métrica do pacote junto com o dono da área e marca como "proposta" até o Luis aprovar.
+- **Semanal (desde 26/10/2026): o bloco `meta` e as métricas "Meta do mês" (`meta_mes_pct`) e "Meta do Q4" (`meta_q4_pct`) do pacote de gestão** (`scripts/pacote_gestao.py` → `registro/gestao/pacote-AAAA-MM-DD.json`, contrato `infra/gestao-schema.md`). Meta D111: crédito de contrato fechado, out R$ 75 mi, nov R$ 100 mi, dez R$ 75 mi, total R$ 250 mi. `meta.meses` traz, por mês, meta, realizado (volume limpo; o bruto e a duplicidade ao lado), falta, %, dias úteis total e restantes, ritmo necessário × atual e status; `meta.mes_atual` destaca o mês corrente; `meta.total` o Q4; `meta.por_master` o desdobramento **proposto** (peso = 50% do pipeline aberto + 50% do fechado limpo de 12 meses, sem cards >= R$ 50 mi). As chaves antigas (`q4_rs`, `realizado_rs`, `ritmo_*`) derivam do total. Tolerância (Luis, D111): verde >= 90% do proporcional aos dias úteis, amarelo >= 70%. A previsão (`previsao_gestao.py`) dá os cenários e a probabilidade de cada mês e o que novembro precisaria para recuperar outubro (`por_mes`). Este especialista também propõe a tolerância de cada métrica do pacote junto com o dono da área e marca como "proposta" até o Luis aprovar.
 - Mensal: `relatorios/Metas-Produto-AAAA-MM.xlsx` com abas *Meta oficial* (unidade, origem e decisão), *Por produto* (funil e taxa por etapa), *Por Master*, *Validação* (marcos dos produtos em portão) e *Fora do escopo* (sem Master, café, variante A).
 - Proposta anual à diretoria: desdobramento de 2027 quando a diretoria sugerir a meta (D75).
 
@@ -29,7 +29,7 @@
 | Honorário bruto | crédito × % de honorário | receita potencial da Save |
 | Honorário líquido | honorário − repasse | meta do plano 2027 (R$ 49,8 mi no base, reprovado como meta pela D75) |
 | Realizado | honorário recebido | sem fonte hoje |
-Com honorário efetivo de 25,0% e líquido de 17,3% do crédito (carteira, 05/10/2026), R$ 200 mi de crédito equivalem a cerca de R$ 50 mi de honorário bruto e R$ 35 mi de líquido. Se a meta do Q4 (D64) estiver em honorário líquido, ela supõe cerca de R$ 1,16 bi de crédito fechado no trimestre: a unidade decide se a meta é plausível.
+Com líquido de cerca de 15% a 17% do crédito (carteira e ganhos recentes, out/2026), os R$ 250 mi de crédito da D111 equivalem a cerca de R$ 37 a 43 mi de líquido potencial. A unidade foi fixada em crédito (D111): nunca compare essa meta com realizado em honorário.
 
 **Funil por família de cobrança (medição 2027):**
 - *Êxito (P1 a P3, P5, P8 com êxito):* lead → diagnóstico → apresentação → contrato → pleito (PER, PER/DCOMP, ação) → homologação ou uso → caixa. Indicadores: conversão por etapa, crédito por ganho, tempo até o pleito, % homologado.
@@ -55,7 +55,7 @@ Fontes secundárias (consulta em 22/10/2026):
 - **CLT, art. 457, §2º:** prêmios não integram a remuneração [texto não relido: não confirmado].
 
 ## 4. Regras da casa
-- **D64 (22/10/2026):** meta do Q4 = R$ 200 mi. A pergunta original (15/10/2026) era "em honorário líquido potencial"; a unidade da resposta não está escrita. Até confirmar, o painel mostra a meta nas duas leituras.
+- **D111 (26/10/2026):** meta do Q4 em crédito de contrato fechado (ganho), mensal: outubro R$ 75 mi, novembro R$ 100 mi, dezembro R$ 75 mi; total R$ 250 mi. Substitui a leitura de R$ 200 mi da D64 e resolve a unidade (D106). Os relatórios mostram a meta do mês e depois a total.
 - **D75 (22/10/2026):** a meta 2027 será sugerida pela diretoria; o cenário base de R$ 49,8 mi não é meta. Conservador (R$ 27,5 mi) e otimista (R$ 84,6 mi) ficam como cenários.
 - **D76 (22/10/2026):** clientes sem Master são de outra área e ficam fora dos números, das metas e das listas.
 - **D34 e D49 (pendentes):** Crédito Internacional e Maquila com metas de validação, fora da meta oficial; sem meta individual de crédito para o time.
@@ -80,8 +80,8 @@ Fontes secundárias (consulta em 22/10/2026):
 Limites: produto sem a propriedade "Produto" não tem meta própria (fica em "não identificado"); meta de Master abaixo de 5 ganhos em 12 meses é meta de atividade; desvio acima de 20% no trimestre vai ao Luis com a causa (volume, conversão, ticket ou capacidade).
 
 ## 6. Perguntas de diagnóstico
-1. A meta do Q4 de R$ 200 mi está em crédito, em honorário bruto ou em honorário líquido?
-   - Muda a meta de ganhos em cerca de 5 vezes entre crédito e líquido.
+1. ~~A meta do Q4 está em crédito ou em líquido?~~ Respondida pela D111 (crédito de contrato fechado, 75/100/75). Pergunta que segue: o Luis aprova o desdobramento por Master proposto no pacote, ou a Daniela ajusta Master a Master?
+   - Sem desdobramento aprovado, o Master não sabe quanto do mês é dele.
 2. Quando a diretoria vai sugerir a meta 2027, e em qual unidade?
    - Define o desdobramento e o prazo do plano de conta com os Masters (15/12/2026).
 3. A meta inclui os produtos da Save Invest ou só a contribuição do canal?
@@ -118,7 +118,7 @@ Limites: produto sem a propriedade "Produto" não tem meta própria (fica em "n�
 ### Caso 1: a meta do Q4 sem unidade (interno, 15/10/2026 e 22/10/2026)
 - **Situação:** a reunião de 15/10/2026 pediu a meta do Q4 em honorário líquido potencial; a folha de 22/10/2026 respondeu "R$ 200 mi".
 - **Leitura do sênior:** em honorário líquido, R$ 200 mi num trimestre é cerca de 4 vezes o cenário base anual de 2027; em crédito, equivale a cerca de R$ 35 mi de líquido, ordem de grandeza compatível com o histórico.
-- **O que foi feito:** o painel mostra as duas leituras e a pergunta foi ao dono (`perguntas-ao-dono.md`).
+- **O que foi feito:** o painel mostrou as duas leituras e a pergunta foi ao dono (`perguntas-ao-dono.md`). Em 26/10/2026 o Luis decidiu (D111): crédito de contrato fechado, mensal 75/100/75, total R$ 250 mi.
 
 ### Caso 2: o cenário base que não virou meta (interno, 09/10/2026 e 22/10/2026)
 - **Situação:** o plano 2027 propôs R$ 49,8 mi de honorário líquido potencial como meta base.

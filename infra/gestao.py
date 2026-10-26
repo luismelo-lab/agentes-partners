@@ -135,11 +135,15 @@ def _metrica(m):
 
 def _meta(p, unidade_luis):
     m = p.get("meta") if isinstance(p.get("meta"), dict) else {}
-    u = unidade_luis or m.get("unidade")
-    return {"q4_rs": _int(m.get("q4_rs")), "unidade": u if u in ("credito", "liquido") else "indefinida", "realizado_rs": _int(m.get("realizado_rs")),
+    u = m.get("unidade")  # D111: "credito_contrato_fechado" vale sobre a escolha antiga do painel
+    u = "credito" if str(u).startswith("credito") else (unidade_luis or u)
+    return {"q4_rs": _int(m.get("q4_rs")), "unidade": u if u in ("credito", "liquido") else "indefinida", "unidade_detalhe": str(m.get("unidade") or ""), "decisao": str(m.get("decisao") or ""),
+            "mes_atual": m.get("mes_atual") if isinstance(m.get("mes_atual"), dict) else {}, "meses": [x for x in m.get("meses", []) if isinstance(x, dict)],
+            "total": m.get("total") if isinstance(m.get("total"), dict) else {}, "por_master": m.get("por_master") if isinstance(m.get("por_master"), dict) else {},
+            "realizado_rs": _int(m.get("realizado_rs")),
             "falta_rs": _int(m.get("falta_rs")), "dias_uteis_restantes": _int(m.get("dias_uteis_restantes")), "ritmo_necessario_rs_dia": _int(m.get("ritmo_necessario_rs_dia")),
             "ritmo_atual_rs_dia": _int(m.get("ritmo_atual_rs_dia")), "leituras": m.get("leituras") if isinstance(m.get("leituras"), dict) else {},
-            "unidade_definida_no_painel": bool(unidade_luis), "periodo": p.get("periodo") if isinstance(p.get("periodo"), dict) else {}}
+            "unidade_definida_no_painel": bool(unidade_luis) and not str(m.get("unidade") or "").startswith("credito"), "periodo": p.get("periodo") if isinstance(p.get("periodo"), dict) else {}}
 
 
 def _desvios(c):
@@ -184,7 +188,7 @@ def montar(pacote, previsao, controle, decisoes, acoes, avisos=None, unidade_lui
           "cenarios": {k: x for k, x in (v.get("cenarios") or {}).items() if isinstance(x, dict)},
           "caixa_13_semanas": [x for x in v.get("caixa_13_semanas", []) if isinstance(x, dict)], "pipeline_por_safra": [x for x in v.get("pipeline_por_safra", []) if isinstance(x, dict)],
           "decadencia_mensal": [x for x in v.get("decadencia_mensal", []) if isinstance(x, dict)], "janelas": [x for x in v.get("janelas", []) if isinstance(x, dict)],
-          "riscos": [x for x in v.get("riscos", []) if isinstance(x, dict)]}
+          "riscos": [x for x in v.get("riscos", []) if isinstance(x, dict)], "por_mes": v.get("por_mes") if isinstance(v.get("por_mes"), dict) else {}}
     return {"data": p.get("data") or v.get("data") or c.get("data") or (hoje or date.today().isoformat()), "gerado_em": hoje or date.today().isoformat(),
             "fontes": {"pacote": p.get("data"), "previsao": v.get("data"), "controle": c.get("data")},
             "meta": _meta(p, unidade_luis), "semaforo": [_metrica(m) for m in sem],

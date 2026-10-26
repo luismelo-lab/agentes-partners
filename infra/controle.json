@@ -1,11 +1,13 @@
 {
-  "versao": "1.0",
+  "versao": "1.1",
   "data": "2026-10-26",
   "fonte": "infra/controle.md (seção 2 e 3); contrato em infra/gestao-schema.md §3",
   "nota": "Lido por infra/controle.py. `metrica` é o id no pacote (ou calculado do metricas-<data>.json). `operador` compara o valor com `limite`; `semanas` é a persistência mínima (status fora da tolerância por N semanas seguidas). Regras de `tipo` lista (operação) não têm limite numérico: cada item da lista vira um desvio. `prazo_dias` em dias úteis. `alcada`: luis | dona | gerente (infra/alcadas.md §1).",
   "tolerancias": {
-    "criados_ritmo_pct":        {"unidade": "%",    "verde": ">= 90", "amarelo": ">= 70", "justificativa": "Ritmo de criação (R$/dia útil) sobre o ritmo necessário para a meta do Q4. Abaixo de 70% por 2 semanas a meta sai do alcance mesmo com win rate alto; 90% é a folga que o ciclo de 30 a 60 dias permite.", "proposta": true},
-    "ganhos_ritmo_pct":         {"unidade": "%",    "verde": ">= 90", "amarelo": ">= 70", "justificativa": "Fechado no mês sobre o ritmo necessário. Contrato §1: verde >= 0,9×meta, amarelo >= 0,7×meta.", "proposta": true},
+    "criados_ritmo_pct":        {"unidade": "%",    "verde": ">= 90", "amarelo": ">= 70", "justificativa": "Criação da semana (R$/dia útil) sobre o ritmo necessário da META DO MÊS (D111: out 75, nov 100, dez 75 mi em crédito de contrato fechado). Abaixo de 70% por 2 semanas a meta sai do alcance mesmo com win rate alto.", "proposta": false},
+    "criados_ritmo_q4_pct":     {"unidade": "%",    "verde": ">= 90", "amarelo": ">= 70", "justificativa": "Criação da semana (R$/dia útil) sobre o ritmo necessário da meta do Q4 (R$ 250 mi, D111).", "proposta": false},
+    "ganhos_ritmo_pct":         {"unidade": "%",    "verde": ">= 90", "amarelo": ">= 70", "justificativa": "Ritmo atual do mês (fechado limpo ÷ dias úteis decorridos) sobre o ritmo necessário da META DO MÊS (falta ÷ dias úteis restantes). D111, tolerância do Luis: verde >= 90%, amarelo >= 70%.", "proposta": false},
+    "ganhos_ritmo_q4_pct":      {"unidade": "%",    "verde": ">= 90", "amarelo": ">= 70", "justificativa": "Ritmo atual do Q4 sobre o ritmo necessário da meta do Q4 (R$ 250 mi − realizado ÷ dias úteis restantes). D111.", "proposta": false},
     "win_rate_3m":              {"unidade": "%",    "verde": ">= 30", "amarelo": ">= 20", "justificativa": "Média móvel de 3 meses: 26% em 26/10. Abaixo de 20% o pipeline precisa dobrar para a mesma meta; 30% é o patamar de 2025.", "proposta": true},
     "ganhos_mom_fator":         {"unidade": "x",    "verde": ">= 0.9", "amarelo": ">= 0.7", "justificativa": "Fator do mês sobre o anterior (dicionário de métricas, nível 1). Queda de mais de 30% exige explicação de causa (safra, Master, tese).", "proposta": true},
     "semanas_sem_fonte_caixa":  {"unidade": "sem",  "verde": "== 0", "amarelo": "<= 4", "justificativa": "ROI realizado e backlog exigem o honorário recebido (D18 aprovada em 29/09). Quatro semanas é o prazo do time de CRM e Financeiro abrirem a fonte.", "proposta": false},
@@ -28,11 +30,11 @@
     "acoes_vencidas_n":         {"unidade": "n",    "verde": "== 0", "amarelo": "<= 2", "justificativa": "Ações do Conselho e do Controle (registro/gestao/acoes.jsonl) com prazo vencido e sem status final. Mais de duas é o ritual falhando.", "proposta": false}
   },
   "regras": [
-    {"id": "C01", "bloco": "resultado", "metrica": "criados_ritmo_pct", "operador": "<", "limite": 70, "semanas": 2,
-     "condicao": "criação de negócios abaixo de 70% do ritmo necessário da meta por 2 semanas",
+    {"id": "C01", "bloco": "resultado", "metrica": "criados_ritmo_pct", "metricas_extra": ["criados_ritmo_q4_pct"], "operador": "<", "limite": 70, "semanas": 2,
+     "condicao": "criação de negócios abaixo de 70% do ritmo necessário da meta do mês (ou do Q4) por 2 semanas",
      "acao": "Jenifer e Daniela revisam a cadência de prospecção e os Masters em queda; o Conselho trata na segunda", "dono": "jenifer", "co_donos": ["daniela"], "prazo_dias": 5, "alcada": "dona", "conselho": true},
-    {"id": "C02", "bloco": "resultado", "metrica": "ganhos_ritmo_pct", "operador": "<", "limite": 70, "semanas": 2,
-     "condicao": "fechado no mês abaixo de 70% do ritmo necessário da meta por 2 semanas",
+    {"id": "C02", "bloco": "resultado", "metrica": "ganhos_ritmo_pct", "metricas_extra": ["ganhos_ritmo_q4_pct"], "operador": "<", "limite": 70, "semanas": 2,
+     "condicao": "ritmo de fechamento abaixo de 70% do ritmo necessário da meta do mês (ou do Q4) por 2 semanas",
      "acao": "Conselho revisa o plano da semana; Daniela revisa o funil de cada Master com o técnico (o que está em diagnóstico há mais de 30 dias)", "dono": "daniela", "co_donos": ["luis"], "prazo_dias": 3, "alcada": "luis", "conselho": true},
     {"id": "C03", "bloco": "resultado", "metrica": "win_rate_3m", "operador": "<", "limite": 20, "semanas": 1,
      "condicao": "win rate de 3 meses abaixo de 20%",

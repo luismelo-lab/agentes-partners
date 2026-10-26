@@ -72,6 +72,10 @@ Especialista da Central Masters (célula da Daniela Maciel). Revisão: 22/10/202
 1. **Partir da ficha de triagem aprovada** (tipo, rota, prazos). Sem ficha aprovada, não há mensagem.
 2. **Escolher o momento** (3a a 3e) e o canal (WhatsApp × e-mail, critério do item 2).
 3. **Buscar padrão** em `padroes-resposta.md` para o mesmo tipo. Existe: partir dele. Não existe: modelo 3.
+3b. **Resposta pelo histórico (Luis, 26/10/2026):** quando a ficha vem com `historico.suficiente` = true, escreva `resposta_historico.resposta` com base nas fontes citadas (`infra/historico-antes-do-glpi.md`). Não copie o trecho antigo: atualize a data, cite o dado (etapa, parecer, regra) e diga o próximo passo.
+   - Resposta antiga vence pela validade da intenção: status 7 dias, parecer e contrato 30 dias.
+   - Com chamado só `proposto`, diga que o pedido está registrado com a área e não prometa data.
+   - O texto é o mesmo do `rascunho` e passa pelo auditor (passo 7).
 4. **Escrever a 1ª frase com o que muda para o parceiro** (recebido, falta, mudou, chegou, atrasou).
 5. **Pôr data em todo prazo**, vinda da área ou do `sla.json`. Prazo legal: só a data confirmada pelo Jurídico.
 6. **Tema jurídico ou técnico:** a mensagem sai depois da validação do humano (Daniela advogada, Jurídico real, técnico). O rascunho marca "aguardando validação".

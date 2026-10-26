@@ -36,6 +36,11 @@ function stat(s, x, y, w, h, label, value, sub, subColor) {
   s.addText(value, { x: x + 0.25, y: y + 0.5, w: w - 0.5, h: 0.75, fontFace: F, fontSize: 28, bold: true, color: C.text, margin: 0, fit: 'shrink', isTextBox: true });
   if (sub) s.addText(sub, { x: x + 0.25, y: y + h - 0.5, w: w - 0.5, h: 0.35, fontFace: F, fontSize: 11, color: subColor || C.mute, margin: 0, isTextBox: true });
 }
+// Pacote de gestão (4º argumento) e previsão do mesmo dia: meta D111 abre o deck (slide 2) e alimenta o semáforo (último slide)
+const fPac = process.argv[5];
+const G = fPac && fs.existsSync(fPac) ? JSON.parse(fs.readFileSync(fPac, 'utf8')) : null;
+const fPrev = fPac ? fPac.replace(/pacote-(\d{4}-\d{2}-\d{2})\.json$/, 'previsao-$1.json') : null;
+const PV = fPrev && fPrev !== fPac && fs.existsSync(fPrev) ? JSON.parse(fs.readFileSync(fPrev, 'utf8')) : null;
 const cr = M.crescimento, ytd = M.crescimento_acumulado_ano, mg = M.margem_carteira || {}, L = M.lucro_roi || {};
 
 // 1. Capa + manchete
@@ -57,6 +62,36 @@ const cr = M.crescimento, ytd = M.crescimento_acumulado_ano, mg = M.margem_carte
   ];
   k.forEach((r, i) => stat(s, 0.6 + i * 3.08, 4.05, 2.86, 1.85, ...r));
   s.addText(T.nota_capa || '', { x: 0.6, y: 6.15, w: 12.1, h: 0.6, fontFace: F, fontSize: 11, color: C.mute, margin: 0, isTextBox: true });
+}
+
+// 2. Meta do mês e Meta do Q4 (D111: crédito de contrato fechado; out 75, nov 100, dez 75 = R$ 250 mi). Só com o pacote de gestão.
+if (G && G.meta && G.meta.meses) {
+  const mt = G.meta, ma = mt.mes_atual, tt = mt.total, cor = { verde: C.green, amarelo: C.amber, vermelho: C.red, cinza: C.mute };
+  const s = base(T.titulo_meta || `Meta do mês: ${nf(ma.pct)}% de ${mi(ma.meta_rs)} em ${ma.nome}; Q4 em ${nf(tt.pct)}% de ${mi(tt.meta_rs)}`, 'META DO MÊS E META DO Q4 · D111 · CRÉDITO DE CONTRATO FECHADO');
+  stat(s, 0.6, 1.75, 3.9, 1.75, `Meta do mês · ${ma.nome}`, `${mi(ma.realizado_rs)} de ${mi(ma.meta_rs)}`,
+       `${nf(ma.pct)}% · faltam ${mi(ma.falta_rs)} em ${ma.dias_uteis_restantes} dias úteis`, cor[ma.status]);
+  stat(s, 0.6, 3.65, 3.9, 1.75, 'Meta do Q4', `${mi(tt.realizado_rs)} de ${mi(tt.meta_rs)}`, `${nf(tt.pct)}% · faltam ${mi(tt.falta_rs)} em ${tt.dias_uteis_restantes} dias úteis`, cor[tt.status]);
+  s.addText(`Ritmo do mês: ${mi(ma.ritmo_atual_rs_dia)}/dia útil × necessário ${mi(ma.ritmo_necessario_rs_dia)}\nRitmo do Q4: ${mi(tt.ritmo_atual)}/dia útil × necessário ${mi(tt.ritmo_necessario)}`,
+    { x: 0.6, y: 5.55, w: 3.9, h: 0.6, fontFace: F, fontSize: 10, color: C.text, margin: 0, isTextBox: true });
+  const pm = PV && PV.por_mes ? PV.por_mes : null, cen = (i, k) => pm ? pm.meses[i].cenarios[k] : null;
+  const Hd = ['Mês', 'Meta', 'Realizado', 'Falta', 'Ritmo nec. × atual', 'Status', ...(pm ? ['Base (prob.)'] : [])].map(t => ({ text: t, options: { bold: true, color: C.gold, fill: { color: C.card } } }));
+  const linhas = mt.meses.map((x, i) => [x.nome, mi(x.meta_rs), mi(x.realizado_rs), mi(x.falta_rs), `${mi(x.ritmo_necessario_rs_dia)} × ${x.ritmo_atual_rs_dia == null ? '—' : mi(x.ritmo_atual_rs_dia)}`, x.situacao === 'a iniciar' ? 'a iniciar' : x.status,
+    ...(pm ? [`${mi(cen(i, 'base').esperado_rs)} (${nf(cen(i, 'base').probabilidade_meta_pct)}%)`] : [])]
+    .map((t, j) => ({ text: String(t), options: { color: j === 5 ? cor[x.status] : C.text, bold: j === 5, fill: { color: C.bg } } })));
+  const tot = ['Q4', mi(tt.meta_rs), mi(tt.realizado_rs), mi(tt.falta_rs), `${mi(tt.ritmo_necessario)} × ${mi(tt.ritmo_atual)}`, tt.status, ...(pm ? [`${mi(pm.total.cenarios.base.esperado_rs)} (${nf(pm.total.cenarios.base.probabilidade_meta_pct)}%)`] : [])]
+    .map((t, j) => ({ text: String(t), options: { bold: true, color: j === 5 ? cor[tt.status] : C.text, fill: { color: C.card } } }));
+  const cw = pm ? [1.0, 0.95, 1.05, 1.0, 1.9, 0.75, 1.35] : [1.2, 1.1, 1.2, 1.2, 2.2, 1.1];
+  s.addTable([Hd, ...linhas, tot], { x: 4.75, y: 1.75, w: 8.0, colW: cw, fontFace: F, fontSize: 9, border: { type: 'solid', color: C.line, pt: 0.5 }, rowH: 0.3 });
+  const pmM = (mt.por_master || {}).masters || [];
+  if (pmM.length) {
+    s.addText(`POR MASTER · PROPOSTA (não aprovada): ${mt.por_master.metodo}`, { x: 4.75, y: 3.45, w: 8.0, h: 0.45, fontFace: F, fontSize: 8, bold: true, color: C.gold, margin: 0, isTextBox: true });
+    const H2 = ['Master', 'Peso', `Meta ${ma.nome}`, `Realizado ${ma.nome}`, 'Meta Q4 (proposta)'].map(t => ({ text: t, options: { bold: true, color: C.gold, fill: { color: C.card } } }));
+    const iM = mt.meses.findIndex(x => x.mes === ma.mes);
+    const r2 = pmM.slice(0, 8).map(x => [x.master, nf(x.peso_pct) + '%', mi(x.meses[iM].meta_rs), mi(x.meses[iM].realizado_rs), mi(x.meta_q4_rs)].map(t => ({ text: String(t), options: { color: C.text, fill: { color: C.bg } } })));
+    s.addTable([H2, ...r2], { x: 4.75, y: 3.95, w: 8.0, colW: [2.6, 0.9, 1.5, 1.5, 1.5], fontFace: F, fontSize: 8, border: { type: 'solid', color: C.line, pt: 0.5 }, rowH: 0.25 });
+  }
+  s.addText(`Status: realizado ÷ proporcional aos dias úteis (verde >= 90%, amarelo >= 70%). Volume limpo: sem duplicidade de alta confiança (${mi(tt.duplicidade_rs || 0)} fora no Q4).${pm ? ' Probabilidade: Monte Carlo da previsão do dia; estimativa, não promessa.' : ''}`,
+    { x: 0.6, y: 6.6, w: 12.1, h: 0.35, fontFace: F, fontSize: 8.5, color: C.mute, margin: 0, isTextBox: true });
 }
 
 // 2. Confiabilidade dos dados
@@ -174,27 +209,25 @@ const cr = M.crescimento, ytd = M.crescimento_acumulado_ano, mg = M.margem_carte
   });
 }
 
-// 9. Semáforo de gestão (pacote_gestao.py → registro/gestao/pacote-AAAA-MM-DD.json; 4º argumento, opcional)
-const fPac = process.argv[5];
-if (fPac && fs.existsSync(fPac)) {
-  const G = JSON.parse(fs.readFileSync(fPac, 'utf8'));
+// Último slide: semáforo de gestão (pacote_gestao.py → registro/gestao/pacote-AAAA-MM-DD.json; 4º argumento, opcional)
+if (G) {
   const s = base('Semáforo de gestão: resultado, previsibilidade e controle', 'SEMÁFORO DE GESTÃO · TOLERÂNCIAS PROPOSTAS');
   const cor = { verde: C.green, amarelo: C.amber, vermelho: C.red, cinza: C.mute };
   const val = m => m.valor === null || m.valor === undefined ? 'sem dado' : m.unidade === 'R$' ? mi(m.valor) : m.unidade === '%' ? nf(m.valor) + '%' : m.unidade === 'x' ? fx(m.valor) : nf(m.valor) + (m.unidade === 'n' ? '' : ' ' + m.unidade);
   const ordem = { vermelho: 0, amarelo: 1, verde: 2, cinza: 3 };
-  const lista = G.metricas.filter(m => !m.id.startsWith('meta_q4')).sort((a, b) => ordem[a.status] - ordem[b.status]).slice(0, 22);
+  const lista = G.metricas.filter(m => !m.id.startsWith('meta_')).sort((a, b) => ordem[a.status] - ordem[b.status]).slice(0, 22);
   const H = ['Métrica', 'Valor', 'Status', 'Tolerância (proposta)'].map(t => ({ text: t, options: { bold: true, color: C.gold, fill: { color: C.card } } }));
   const rows = lista.map(m => [m.nome, val(m), m.status === 'cinza' ? 'sem dado' : m.status, m.tolerancia.verde || '—']
     .map((t, j) => ({ text: t, options: { color: j === 2 ? cor[m.status] : C.text, bold: j === 2, fill: { color: C.bg } } })));
   s.addTable([H].concat(rows), { x: 0.6, y: 1.75, w: 8.3, colW: [4.0, 1.4, 0.9, 2.0], fontFace: F, fontSize: 8, border: { type: 'solid', color: C.line, pt: 0.5 }, rowH: 0.22 });
-  const mt = G.meta, lc = mt.leituras.credito, ll = mt.leituras.liquido;
+  const mt = G.meta, ma = mt.mes_atual || {}, tt = mt.total || {};
   card(s, 9.2, 1.75, 3.5, 5.1);
-  s.addText('META DO Q4 · R$ 200 MI (D64)', { x: 9.4, y: 1.9, w: 3.1, h: 0.3, fontFace: F, fontSize: 10, bold: true, color: C.gold, margin: 0, isTextBox: true });
+  s.addText(`META · ${mi(mt.q4_rs).toUpperCase()} NO Q4 (D111)`, { x: 9.4, y: 1.9, w: 3.1, h: 0.3, fontFace: F, fontSize: 10, bold: true, color: C.gold, margin: 0, isTextBox: true });
   const linhas = [
-    `Unidade: ${mt.unidade} (pergunta R1 ao Luis)`,
-    `Leitura crédito: ${mi(lc.realizado_rs)} (${nf(lc.pct_realizado)}%) · ritmo ${mi(lc.ritmo_atual_rs_dia)}/dia útil × necessário ${mi(lc.ritmo_necessario_rs_dia)} (${fx(lc.fator_ritmo)})`,
-    `Leitura líquido: ${mi(ll.realizado_rs)} (${nf(ll.pct_realizado)}%) · necessário ${mi(ll.ritmo_necessario_rs_dia)}/dia útil (${fx(ll.fator_ritmo)})`,
-    `Dias úteis: ${mt.dias_uteis_decorridos} decorridos · ${mt.dias_uteis_restantes} restantes`,
+    'Unidade: crédito de contrato fechado (ganho), volume limpo',
+    `Meta do mês (${ma.nome}): ${mi(ma.realizado_rs)} de ${mi(ma.meta_rs)} (${nf(ma.pct)}%) · ritmo ${mi(ma.ritmo_atual_rs_dia)}/dia útil × necessário ${mi(ma.ritmo_necessario_rs_dia)}`,
+    `Meta do Q4: ${mi(tt.realizado_rs)} de ${mi(tt.meta_rs)} (${nf(tt.pct)}%) · ritmo ${mi(tt.ritmo_atual)}/dia útil × necessário ${mi(tt.ritmo_necessario)}`,
+    `Dias úteis do Q4: ${tt.dias_uteis_decorridos} decorridos · ${tt.dias_uteis_restantes} restantes`,
     `Qualidade: índice ${nf(G.confiabilidade.indice_qualidade_ganhos)}% · ${nf(G.confiabilidade.ganhos_sem_honorario_pct)}% dos ganhos sem honorário · ${nf(G.confiabilidade.duplicados_grupos)} grupos duplicados`,
     `Status: ${Object.entries(G.resumo_status).map(([k, v]) => `${v} ${k}`).join(' · ')}`,
     'Tolerâncias são propostas do Controller até o Luis aprovar; cinza = sem dado (quem fornece está na nota de cada métrica).'];

@@ -29,7 +29,8 @@ LEDGER = os.path.join(GESTAO, "controle-enviados.jsonl")
 ACOES = os.path.join(GESTAO, "acoes.jsonl")
 PESSOAS = ("luis", "daniela", "jenifer", "geovana")
 FERIADOS = {"2026-11-02", "2026-11-20", "2026-12-25", "2027-01-01", "2026-10-12", "2026-09-07"}
-META_Q4_RS = 200_000_000
+META_Q4_RS = 250_000_000  # D111 (26/10/2026): crédito de contrato fechado, mensal 75/100/75
+METAS_MES = {"2026-10": 75_000_000, "2026-11": 100_000_000, "2026-12": 75_000_000}
 DATA_SEM_CAIXA_DESDE = date(2026, 9, 28)  # 1º relatório semanal sem fonte de honorário recebido (D18 em 29/09)
 STATUS_ORDEM = {"verde": 0, "cinza": 0, "amarelo": 1, "vermelho": 2}
 
@@ -120,33 +121,35 @@ def metricas_base(F, hoje):
     bi = _json(F["dados_bi"]) if F["dados_bi"] else None
     prev = _json(F["previsao"]) if F["previsao"] else None
 
-    # --- resultado: ritmo da meta
-    dias_rest = uteis_entre(hoje, date(2026, 12, 31))
-    if pac and isinstance(pac.get("meta"), dict) and pac["meta"].get("ritmo_necessario_rs_dia"):
-        pm = pac["meta"]; nec = float(pm["ritmo_necessario_rs_dia"]); unidade = pm.get("unidade", "indefinida")
-        fonte_meta = f"pacote {pac.get('data')}"
-    else:
-        realizado = 0
-        if met:
-            realizado = sum(v.get("ganhos_rs", 0) for k, v in (met.get("serie_mensal") or {}).items() if k >= "2026-10")
-        nec = (META_Q4_RS - realizado) / max(dias_rest, 1); unidade = "indefinida"
-        fonte_meta = f"meta Q4 R$ 200 mi (folha 22/10) − realizado {realizado:,.0f} (HubSpot) ÷ {dias_rest} dias úteis".replace(",", ".")
-    nota_meta = ("unidade da meta indefinida: leitura em crédito (HubSpot); a leitura em líquido depende do Luis" if unidade == "indefinida" else f"unidade: {unidade}")
-    conf_meta = "baixa" if unidade == "indefinida" else "media"
-    if pac and any(x.get("id") == "criados_ritmo_pct" for x in pac.get("metricas", [])):
-        for x in pac["metricas"]:
-            if x.get("id") in ("criados_ritmo_pct", "ganhos_ritmo_pct", "win_rate_3m", "ganhos_mom_fator"):
-                m(x["id"], x.get("valor"), x.get("fonte", fonte_meta), x.get("confianca", conf_meta), x.get("nota", nota_meta), x.get("anterior"))
-    if met and "criados_ritmo_pct" not in M:
-        s = met.get("semana_hubspot") or met.get("semana") or {}
-        ant = s.get("anterior") or {}
+    # --- resultado: ritmo da meta do mês e do Q4 (D111). Valor = ritmo atual ÷ ritmo necessário × 100 (verde >= 90, amarelo >= 70)
+    s = (met or {}).get("semana_hubspot") or (met or {}).get("semana") or {}; ant = s.get("anterior") or {}
+    pm = pac.get("meta") if pac and isinstance(pac.get("meta"), dict) else {}
+    ma, tt = pm.get("mes_atual") or {}, pm.get("total") or {}
+    if ma.get("ritmo_necessario_rs_dia") is not None and tt.get("ritmo_necessario") is not None:
+        nec_m, nec_q = float(ma["ritmo_necessario_rs_dia"]), float(tt["ritmo_necessario"])
+        at_m, at_q = float(ma.get("ritmo_atual_rs_dia") or 0), float(tt.get("ritmo_atual") or 0)
+        fonte_meta = f"pacote {pac.get('data')} (D111, volume limpo)"; conf_meta = "alta"; nome_m = f"{ma.get('nome')} R$ {ma.get('meta_rs', 0)/1e6:.0f} mi"
+    else:  # sem pacote: meta do mês corrente e do Q4 contra o realizado do metricas (bruto)
+        mes = hoje.isoformat()[:7]; serie = (met or {}).get("serie_mensal") or {}
+        real_m = float((serie.get(mes) or {}).get("ganhos_rs", 0)); real_q = sum(float(v.get("ganhos_rs", 0)) for k, v in serie.items() if "2026-10" <= k <= "2026-12")
+        ini = hoje.replace(day=1); fim = (ini + timedelta(days=32)).replace(day=1) - timedelta(days=1)
+        du_pass_m = uteis_entre(ini - timedelta(days=1), hoje); du_rest_m = max(uteis_entre(hoje, fim), 1)
+        du_pass_q = uteis_entre(date(2026, 9, 30), hoje); du_rest_q = max(uteis_entre(hoje, date(2026, 12, 31)), 1)
+        nec_m = max(METAS_MES.get(mes, 0) - real_m, 0) / du_rest_m; nec_q = max(META_Q4_RS - real_q, 0) / du_rest_q
+        at_m = real_m / max(du_pass_m, 1); at_q = real_q / max(du_pass_q, 1)
+        fonte_meta = f"metricas {(met or {}).get('data_relatorio')} (bruto) × D111"; conf_meta = "media"; nome_m = mes
+    r = lambda v, n: round(100 * v / n, 1) if n else 100.0
+    nota_m = f"meta do mês ({nome_m}): ritmo atual R$ {at_m:,.0f}/dia útil × necessário R$ {nec_m:,.0f}/dia útil".replace(",", ".")
+    nota_q = f"meta do Q4 (R$ 250 mi): ritmo atual R$ {at_q:,.0f}/dia útil × necessário R$ {nec_q:,.0f}/dia útil".replace(",", ".")
+    gan_ant = ant.get("ganhos_rs", 0) / 5
+    m("ganhos_ritmo_pct", r(at_m, nec_m), fonte_meta, conf_meta, nota_m, r(gan_ant, nec_m) if s else None)
+    m("ganhos_ritmo_q4_pct", r(at_q, nec_q), fonte_meta, conf_meta, nota_q, r(gan_ant, nec_q) if s else None)
+    if s:
         cri, cri_ant = s.get("criados_rs", 0) / 5, ant.get("criados_rs", 0) / 5
-        gan, gan_ant = s.get("ganhos_rs", 0) / 5, ant.get("ganhos_rs", 0) / 5
-        mh = met.get("mes_ate_hoje") or {}; du_mes = uteis_entre(hoje.replace(day=1) - timedelta(days=1), hoje)
-        cri_mes = mh.get("criados_rs", 0) / max(du_mes, 1)
-        nota_cri = nota_meta + (f"; semana {s.get('de')}–{s.get('ate')}: R$ {s.get('criados_rs', 0):,.0f} em {s.get('criados_n', 0)} negócios (muitos sem valor: confiança baixa); mês até hoje R$ {cri_mes:,.0f}/dia útil = {100 * cri_mes / nec:.0f}% do necessário".replace(",", "."))
-        m("criados_ritmo_pct", round(100 * cri / nec, 1), f"{fonte_meta}; semana HubSpot {met.get('data_relatorio')}", "baixa", nota_cri, round(100 * cri_ant / nec, 1))
-        m("ganhos_ritmo_pct", round(100 * gan / nec, 1), f"{fonte_meta}; semana HubSpot {met.get('data_relatorio')}", conf_meta, nota_meta + f"; ritmo necessário R$ {nec:,.0f}/dia útil".replace(",", "."), round(100 * gan_ant / nec, 1))
+        nota_c = f"semana {s.get('de')}–{s.get('ate')}: R$ {s.get('criados_rs', 0):,.0f} criados em {s.get('criados_n', 0)} negócios (muitos sem valor: confiança baixa)".replace(",", ".")
+        m("criados_ritmo_pct", r(cri, nec_m), fonte_meta, "baixa", nota_c + "; " + nota_m.replace("ritmo atual", "fechado"), r(cri_ant, nec_m))
+        m("criados_ritmo_q4_pct", r(cri, nec_q), fonte_meta, "baixa", nota_c + "; " + nota_q.replace("ritmo atual", "fechado"), r(cri_ant, nec_q))
+    if met:
         m("win_rate_3m", met.get("win_rate_3m"), f"metricas {met.get('data_relatorio')}", "media", "ganhos ÷ (ganhos + perdidos), 3 meses")
         mom = ((met.get("mes_ate_hoje") or {}).get("crescimento") or {}).get("ganhos_rs") or {}
         m("ganhos_mom_fator", mom.get("fator"), f"metricas {met.get('data_relatorio')}", "media", f"mês até hoje R$ {mom.get('atual', 0):,.0f} vs mesmo período do mês anterior R$ {mom.get('anterior', 0):,.0f}".replace(",", "."))
@@ -319,20 +322,21 @@ def aplicar(cfg, M, L, hoje, controles_ant):
                 dono = it["pessoa"] or ("luis" if r["dono"] == "pessoa" else r["dono"])
                 desvios.append(_desvio(r, it["valor"], it["texto"], dono, hoje, anteriores, chave=f"{r['id']}|{it['item']}"))
             continue
-        x = M.get(r["metrica"])
-        if not x or x["valor"] is None: continue
-        if not _cmp(r["operador"], float(x["valor"]), float(r["limite"])): continue
-        n = semanas_fora(r, x, hist, tol)
-        if n < r.get("semanas", 1): continue
-        desde = hoje - timedelta(weeks=n - 1)
-        op = {"<": "abaixo de", "<=": "até", ">": "acima de", ">=": "a partir de", "==": "igual a"}[r["operador"]]
-        texto = f"{r['metrica']} = {x['valor']} {tol.get(r['metrica'], {}).get('unidade', '')} (gatilho: {op} {r['limite']}); {x['nota']}".strip("; ")
-        d = _desvio(r, x["valor"], texto, r["dono"], hoje, anteriores, chave=f"{r['id']}|{r['metrica']}", desde=x.get("desde") or desde.isoformat(), confianca=x["confianca"])
-        escala = (r.get("escala_se_rs") and float(x["valor"]) > r["escala_se_rs"]) or (r.get("escala_dias") and uteis_entre(date.fromisoformat(d["desde"]), hoje) >= r["escala_dias"])
-        if r.get("escala_para") and escala:
-            d["escalado_para"] = r["escala_para"]; d["co_donos"] = [d["dono"]] + [c for c in d["co_donos"] if c != d["dono"]]; d["dono"] = r["escala_para"]
-            d["acao"] += f" [escalado a {r['escala_para']}: prazo da regra vencido]"
-        desvios.append(d)
+        for met_id in [r["metrica"]] + list(r.get("metricas_extra", [])):  # C01/C02: meta do mês e meta do Q4 (D111)
+            x = M.get(met_id); rr = dict(r, metrica=met_id)
+            if not x or x["valor"] is None: continue
+            if not _cmp(r["operador"], float(x["valor"]), float(r["limite"])): continue
+            n = semanas_fora(rr, x, hist, tol)
+            if n < r.get("semanas", 1): continue
+            desde = hoje - timedelta(weeks=n - 1)
+            op = {"<": "abaixo de", "<=": "até", ">": "acima de", ">=": "a partir de", "==": "igual a"}[r["operador"]]
+            texto = f"{met_id} = {x['valor']} {tol.get(met_id, {}).get('unidade', '')} (gatilho: {op} {r['limite']}); {x['nota']}".strip("; ")
+            d = _desvio(rr, x["valor"], texto, r["dono"], hoje, anteriores, chave=f"{r['id']}|{met_id}", desde=x.get("desde") or desde.isoformat(), confianca=x["confianca"])
+            escala = (r.get("escala_se_rs") and float(x["valor"]) > r["escala_se_rs"]) or (r.get("escala_dias") and uteis_entre(date.fromisoformat(d["desde"]), hoje) >= r["escala_dias"])
+            if r.get("escala_para") and escala:
+                d["escalado_para"] = r["escala_para"]; d["co_donos"] = [d["dono"]] + [c for c in d["co_donos"] if c != d["dono"]]; d["dono"] = r["escala_para"]
+                d["acao"] += f" [escalado a {r['escala_para']}: prazo da regra vencido]"
+            desvios.append(d)
     for d in desvios: d["vencido"] = d["prazo"] < hoje.isoformat()
     abertos = {d["chave"] for d in desvios}
     resolvidos = [{**a, "status": "resolvido", "resolvido_em": hoje.isoformat()} for k, a in anteriores.items() if k not in abertos and a.get("status") != "resolvido"]
@@ -397,7 +401,7 @@ def rodar(hoje, com_caixa=True):
              "semaforo": semaforo, "desvios": desvios, "resolvidos": resolvidos, "ritual": cfg["ritual"], "caixa_enviadas": enviados,
              "revisao": {"gerente": "Gabinete", "especialistas": ["Qualidade (controle de entregas)", "Operações de Canal", "Dados (governança)"], "rodadas": 1,
                          "areas_consultadas": ["Resultados (dicionário de métricas)"], "aprovado": True,
-                         "ajustes": "tolerâncias marcadas 'proposta' até o Luis aprovar; meta do Q4 lida em crédito enquanto a unidade for indefinida"}}
+                         "ajustes": "tolerâncias marcadas 'proposta' até o Luis aprovar; meta D111 em crédito de contrato fechado: C01/C02 leem o ritmo da meta do mês e do Q4"}}
     os.makedirs(GESTAO, exist_ok=True)
     out = os.path.join(GESTAO, f"controle-{hoje.isoformat()}.json")
     json.dump(saida, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)

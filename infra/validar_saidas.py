@@ -47,6 +47,14 @@ def triagem(f):
             enc = i.get("encaminhar") or {}
             if enc and not (enc.get("especialista") or {}).get("pedidos") and not (enc.get("especialista") or {}).get("nao_abrir"):
                 out.append(f"{p} · {i.get('chat')}: chamado sem o texto do especialista (infra/chamado-ideal.md)")
+            # histórico antes do GLPI (Luis, 26/10/2026; infra/historico-antes-do-glpi.md)
+            hist, rh = i.get("historico") or {}, i.get("resposta_historico") or {}
+            if enc and not (hist.get("consultado") and hist.get("buscas")):
+                out.append(f"{p} · {i.get('chat')}: chamado sem consulta ao histórico (lib/historico.py avaliar; registre 'historico.buscas')")
+            if rh:
+                if enc: out.append(f"{p} · {i.get('chat')}: tem resposta_historico e encaminhar ao mesmo tempo")
+                if vazio(rh.get("resposta")) or not rh.get("fontes") or any(vazio(f.get("data")) for f in rh.get("fontes", [])):
+                    out.append(f"{p} · {i.get('chat')}: resposta_historico sem resposta ou sem fonte com data")
     return n, out
 
 

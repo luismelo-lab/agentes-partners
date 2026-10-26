@@ -121,6 +121,11 @@ Depois, a Triagem trata cada conversa sinalizada como se tivesse sido colada: fi
 - **links de negócio do HubSpot:** dados do card.
 
 Áudios ficam marcados para ouvir. Documentos pessoais (CNH, RG, CPF) não são lidos.
+**Histórico antes do GLPI (Luis, 26/10/2026):** antes de rotear, o especialista da área consulta `~/agentes-partners/lib/historico.py avaliar` e a base da área.
+- Com resposta suficiente, a rota é "responder", sem GLPI, e o item leva `resposta_historico`.
+- Sem resposta suficiente, registre `historico.buscas` e `historico.faltou`, e só então sugira GLPI com o chamado ideal.
+- Regras e campos: `~/agentes-partners/infra/historico-antes-do-glpi.md`.
+
 O agente interpreta o pedido e preenche, em cada item da triagem, a **entrega** (o que já dá para resolver) e o **rascunho** de resposta com a informação (o rascunho passa pelo auditor de promessas). O e-mail das 8h e 14h (com IA) leva isso à dona do número. Nas rodadas sem IA das 11h e 17h:
 - o e-mail vai só para quem tem pedido novo, sem resumo geral;
 - o que a IA julgou "sem ação" não volta sem mensagem nova;

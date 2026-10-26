@@ -22,7 +22,10 @@ AP = os.path.expanduser("~/agentes-partners")
 AQUI = os.path.dirname(os.path.abspath(__file__))
 DADOS = os.path.join(AP, "departamentos/resultados/dados")
 SAIDA = os.path.join(AP, "registro/gestao")
-META_Q4_RS = 200_000_000  # D64 (22/10/2026); unidade indefinida (pergunta R1)
+# Meta D111 (Luis, 26/10/2026): crédito de contrato fechado (ganho), mensal; substitui R$ 200 mi (D64) e resolve a unidade (D106)
+METAS_MES = {"2026-10": ("outubro", 75_000_000), "2026-11": ("novembro", 100_000_000), "2026-12": ("dezembro", 75_000_000)}
+META_Q4_RS = sum(v for _, v in METAS_MES.values())  # R$ 250 mi
+INICIO_Q4, FIM_Q4 = date(2026, 10, 1), date(2026, 12, 31)
 MARGEM_LIQ_REF = None  # preenchida com a carteira (metricas margem_carteira)
 # Feriados nacionais do Q4/2026 (Lei 662/1949, Lei 6.802/1980, Lei 14.759/2023). 15/11 cai no domingo. 24 e 31/12 não são feriado.
 FERIADOS = {date(2026, 10, 12), date(2026, 11, 2), date(2026, 11, 20), date(2026, 12, 25)}
@@ -149,7 +152,7 @@ def bloco_resultado(P, M, N, fonte_hs):
           tol(0.9 * pm["criados_n"], 0.7 * pm["criados_n"], ">= 90% do mesmo período do mês anterior", ">= 70%"), anterior=pm["criados_n"])
     P.add("ganhos_mes_rs", "Fechado no mês (R$ crédito, bruto)", "resultado", mes["ganhos_rs"], "R$", fonte_hs, "alta",
           tol(0.9 * pm["ganhos_rs"], 0.7 * pm["ganhos_rs"], ">= 90% do mesmo período do mês anterior", ">= 70%"), anterior=pm["ganhos_rs"],
-          nota="Sem meta mensal aprovada; a tolerância compara com setembro, que teve fechamentos grandes na última semana.")
+          nota="Bruto, comparado com o mesmo período de setembro. A leitura contra a meta mensal (D111) está em 'Meta do mês', no volume limpo.")
     P.add("ganhos_mes_n", "Fechado no mês (nº)", "resultado", mes["ganhos_n"], "n", fonte_hs, "alta",
           tol(0.9 * pm["ganhos_n"], 0.7 * pm["ganhos_n"], ">= 90% do mesmo período do mês anterior", ">= 70%"), anterior=pm["ganhos_n"])
     P.add("ganhos_semana_rs", "Fechado na semana (R$ crédito)", "resultado", sem["ganhos_rs"], "R$", fonte_hs, "alta",
@@ -180,46 +183,125 @@ def bloco_resultado(P, M, N, fonte_hs):
           nota="Produto lido pelo pipeline (ganho ou aberto). Esteira Destravar caixa → Proteger e controlar → Crescer (depto-solucoes).")
 
 
-def bloco_meta(P, M, N, hoje):
-    q4 = [d for d in N if d["status"] == "ganho" and "2026-10-01" <= (d["fechado"] or "") <= "2026-12-31"]
-    credito = sum(d["valor"] for d in q4); com_hon = [d for d in q4 if d["_liq"] is not None]
-    liq_inf = sum(d["_liq"] for d in com_hon); margem = M["margem_carteira"]["margem_liquida_pct"] / 100
-    liq_est = liq_inf + sum(d["valor"] for d in q4 if d["_liq"] is None) * margem
-    du_tot = dias_uteis(date(2026, 10, 1), date(2026, 12, 31)); du_pass = dias_uteis(date(2026, 10, 1), hoje); du_rest = du_tot - du_pass
-    def leitura(unidade, realizado):
-        falta = max(META_Q4_RS - realizado, 0)
-        return {"unidade": unidade, "meta_rs": META_Q4_RS, "realizado_rs": ri(realizado), "falta_rs": ri(falta), "pct_realizado": pct(realizado, META_Q4_RS),
-                "ritmo_necessario_rs_dia": ri(falta / du_rest) if du_rest else None, "ritmo_atual_rs_dia": ri(realizado / du_pass) if du_pass else None,
-                "fator_ritmo": round((falta / du_rest) / (realizado / du_pass), 1) if du_rest and realizado else None}
-    cred, liq = leitura("credito", credito), leitura("liquido", liq_est)
-    meta = {"q4_rs": META_Q4_RS, "unidade": "indefinida", "decisao": "D64 (22/10/2026)", "pergunta_ao_luis": "A meta de R$ 200 mi do Q4 está em crédito, honorário bruto ou honorário líquido? (pergunta R1)",
-            "realizado_rs": ri(credito), "falta_rs": ri(max(META_Q4_RS - credito, 0)), "dias_uteis_restantes": du_rest, "dias_uteis_decorridos": du_pass,
-            "dias_uteis_trimestre": du_tot, "ritmo_necessario_rs_dia": cred["ritmo_necessario_rs_dia"], "ritmo_atual_rs_dia": cred["ritmo_atual_rs_dia"],
-            "leituras": {"credito": cred, "liquido": liq},
-            "nota": f"Realizado = ganhos com fechamento em out–dez/2026 no escopo da área (café fora, D76 aplicada no mapeamento). Líquido: {len(com_hon)} de {len(q4)} ganhos têm honorário informado ({brl(liq_inf)}); o restante é estimado pela margem líquida da carteira ({M['margem_carteira']['margem_liquida_pct']}%). Feriados: 12/10, 02/11, 20/11, 25/12."}
-    P.add("meta_q4_credito_pct", "Meta Q4 realizada (leitura crédito)", "resultado", cred["pct_realizado"], "%", "hubspot + D64", "alta",
-          tol(100 * du_pass / du_tot, 70 * du_pass / du_tot, ">= proporcional aos dias úteis decorridos", ">= 70% do proporcional"), meta=META_Q4_RS,
-          nota=f"{brl(credito)} de R$ 200 mi. Ritmo atual {brl(cred['ritmo_atual_rs_dia'])}/dia útil × necessário {brl(cred['ritmo_necessario_rs_dia'])}/dia útil ({cred['fator_ritmo']}x).")
-    P.add("meta_q4_liquido_pct", "Meta Q4 realizada (leitura honorário líquido)", "resultado", liq["pct_realizado"], "%", "hubspot + margem carteira + D64", "media",
-          tol(100 * du_pass / du_tot, 70 * du_pass / du_tot, ">= proporcional aos dias úteis decorridos", ">= 70% do proporcional"), meta=META_Q4_RS,
-          nota=f"{brl(liq_est)} estimados de R$ 200 mi. Em líquido, a meta exige cerca de R$ 1,15 bi de crédito no trimestre.")
+def saem_duplicidade(P, sem_saneamento):
+    """Roda o saneamento de duplicados (Dados & BI) uma vez: devolve (grupos, ids dos cards que saem nos grupos de alta confiança)."""
+    if sem_saneamento: return None, set()
+    try:
+        cand = [os.path.join(AQUI, "../../depto-dados/scripts/saneamento_duplicados.py"), os.path.join(AP, "skills/depto-dados/scripts/saneamento_duplicados.py")]
+        san = modulo("saneamento", next(c for c in cand if os.path.exists(c)))
+        grupos, _, _ = san.montar()
+    except Exception as e:  # noqa: BLE001
+        P.alerta(f"Saneamento de duplicados não rodou ({e}); volume limpo = bruto.", "depto-dados", "media")
+        return None, set()
+    return grupos, {str(d["id"]) for x in grupos if x["alta"] for d in x["cards"][1:]}
+
+
+def _st_ritmo(pct_prop):
+    """Status pelo realizado ÷ proporcional aos dias úteis (= ritmo atual ÷ ritmo planejado): verde >= 90%, amarelo >= 70% (D111)."""
+    if pct_prop is None: return "cinza"
+    return "verde" if pct_prop >= 90 else "amarelo" if pct_prop >= 70 else "vermelho"
+
+
+def bloco_meta(P, M, N, hoje, saem):
+    """Meta D111: crédito de contrato fechado (ganho), mensal 75/100/75 = R$ 250 mi no Q4. Realizado no volume limpo (sem duplicidade de alta confiança)."""
+    ganhos = [d for d in N if d["status"] == "ganho" and "2026-10-01" <= (d["fechado"] or "") <= "2026-12-31"]
+    limpo = lambda xs: sum(d["valor"] for d in xs if str(d["id"]) not in saem)
+    hoje_c = min(max(hoje, INICIO_Q4), FIM_Q4)
+    meses = []
+    for mes, (nome, meta_rs) in METAS_MES.items():
+        ini = date(int(mes[:4]), int(mes[5:]), 1); fim = (date(ini.year + ini.month // 12, ini.month % 12 + 1, 1) - timedelta(days=1))
+        g = [d for d in ganhos if d["fechado"][:7] == mes and d["fechado"] <= hoje.isoformat()]
+        bruto, real = sum(d["valor"] for d in g), limpo(g)
+        du_tot = dias_uteis(ini, fim)
+        du_pass = 0 if hoje < ini else du_tot if hoje > fim else dias_uteis(ini, hoje)
+        du_rest = du_tot - du_pass; falta = max(meta_rs - real, 0)
+        situacao = "a iniciar" if hoje < ini else "encerrado" if hoje > fim else "em andamento"
+        prop = meta_rs * du_pass / du_tot if du_tot else 0
+        pct_prop = round(real / prop * 100, 1) if prop else None
+        if situacao == "encerrado": status = _st_ritmo(pct(real, meta_rs))
+        elif situacao == "a iniciar": status = "cinza"
+        else: status = _st_ritmo(pct_prop)
+        nec = falta / du_rest if du_rest else (falta if falta else 0)
+        atual = real / du_pass if du_pass else None
+        meses.append({"mes": mes, "nome": nome, "meta_rs": meta_rs, "realizado_rs": ri(real), "realizado_bruto_rs": ri(bruto), "duplicidade_rs": ri(bruto - real),
+                      "ganhos_n": len(g), "falta_rs": ri(falta), "pct": pct(real, meta_rs), "pct_do_proporcional": pct_prop,
+                      "dias_uteis_total": du_tot, "dias_uteis_decorridos": du_pass, "dias_uteis_restantes": du_rest,
+                      "ritmo_planejado_rs_dia": ri(meta_rs / du_tot), "ritmo_necessario_rs_dia": ri(nec), "ritmo_atual_rs_dia": ri(atual) if atual is not None else None,
+                      "fator_ritmo": round(nec / atual, 1) if atual else None, "situacao": situacao, "status": status})
+    atual_m = next((m for m in meses if m["situacao"] == "em andamento"), meses[-1] if hoje > FIM_Q4 else meses[0])
+    real_t = sum(m["realizado_rs"] for m in meses); bruto_t = sum(m["realizado_bruto_rs"] for m in meses)
+    du_tot = dias_uteis(INICIO_Q4, FIM_Q4); du_pass = dias_uteis(INICIO_Q4, hoje_c) if hoje >= INICIO_Q4 else 0; du_rest = du_tot - du_pass
+    falta_t = max(META_Q4_RS - real_t, 0)
+    # o plano mensal (75/100/75) até hoje: meses encerrados inteiros + fração do mês corrente
+    plano_ate_hoje = sum(m["meta_rs"] * m["dias_uteis_decorridos"] / m["dias_uteis_total"] for m in meses)
+    pct_prop_t = round(real_t / plano_ate_hoje * 100, 1) if plano_ate_hoje else None
+    total = {"meta_rs": META_Q4_RS, "realizado_rs": real_t, "realizado_bruto_rs": bruto_t, "duplicidade_rs": bruto_t - real_t, "falta_rs": falta_t, "pct": pct(real_t, META_Q4_RS),
+             "plano_ate_hoje_rs": ri(plano_ate_hoje), "pct_do_plano_ate_hoje": pct_prop_t, "dias_uteis_total": du_tot, "dias_uteis_decorridos": du_pass, "dias_uteis_restantes": du_rest,
+             "ritmo_necessario": ri(falta_t / du_rest) if du_rest else ri(falta_t), "ritmo_atual": ri(real_t / du_pass) if du_pass else None,
+             "status": _st_ritmo(pct_prop_t) if du_pass else "cinza"}
+    total["ritmo_necessario_rs_dia"], total["ritmo_atual_rs_dia"] = total["ritmo_necessario"], total["ritmo_atual"]
+    total["fator_ritmo"] = round(total["ritmo_necessario"] / total["ritmo_atual"], 1) if total["ritmo_atual"] else None
+    # leitura em líquido (informativa; a unidade é crédito pela D111)
+    q4 = [d for d in ganhos if d["fechado"] <= hoje.isoformat() and str(d["id"]) not in saem]; com_hon = [d for d in q4 if d["_liq"] is not None]
+    margem = M["margem_carteira"]["margem_liquida_pct"] / 100
+    liq_est = sum(d["_liq"] for d in com_hon) + sum(d["valor"] for d in q4 if d["_liq"] is None) * margem
+    leit = lambda u, meta_rs, real: {"unidade": u, "meta_rs": ri(meta_rs), "realizado_rs": ri(real), "falta_rs": ri(max(meta_rs - real, 0)), "pct_realizado": pct(real, meta_rs),
+                                     "ritmo_necessario_rs_dia": ri(max(meta_rs - real, 0) / du_rest) if du_rest else None, "ritmo_atual_rs_dia": ri(real / du_pass) if du_pass else None}
+    por_master = desdobrar_por_master(N, hoje, saem, meses)
+    meta = {"unidade": "credito_contrato_fechado", "decisao": "D111 (26/10/2026)", "substitui": "D64 (R$ 200 mi, unidade indefinida) e D106",
+            "definicao": "Crédito (valor do HubSpot) dos negócios ganhos com data de fechamento no mês, no escopo da área (café fora desde abr/2026), no volume limpo: sem os cards que saem dos grupos de duplicidade de alta confiança (saneamento_duplicados.py, D87).",
+            "mes_atual": atual_m, "meses": meses, "total": total, "por_master": por_master,
+            # chaves antigas (compatibilidade com gestao.py, controle.py e o painel): derivadas do total
+            "q4_rs": META_Q4_RS, "realizado_rs": real_t, "falta_rs": falta_t, "dias_uteis_restantes": du_rest, "dias_uteis_decorridos": du_pass, "dias_uteis_trimestre": du_tot,
+            "ritmo_necessario_rs_dia": total["ritmo_necessario"], "ritmo_atual_rs_dia": total["ritmo_atual"],
+            "leituras": {"credito": leit("credito", META_Q4_RS, real_t), "liquido": dict(leit("liquido", META_Q4_RS * margem, liq_est), nota=f"Informativa: meta em crédito (D111) × margem líquida da carteira ({M['margem_carteira']['margem_liquida_pct']}%). {len(com_hon)} de {len(q4)} ganhos do Q4 têm honorário informado.")},
+            "nota": f"Feriados nacionais: 12/10, 02/11, 20/11, 25/12. Dias úteis decorridos contam o dia da referência. Duplicidade no Q4: {brl(bruto_t - real_t)} fora do realizado."}
+    m = atual_m
+    P.add("meta_mes_pct", f"Meta do mês ({m['nome']}: {brl(m['meta_rs'])})", "resultado", m["pct"], "%", "hubspot + saneamento + D111", "alta",
+          tol(90 * m["dias_uteis_decorridos"] / m["dias_uteis_total"], 70 * m["dias_uteis_decorridos"] / m["dias_uteis_total"],
+              ">= 90% do proporcional aos dias úteis do mês", ">= 70% do proporcional"), meta=m["meta_rs"],
+          detalhe={k: m[k] for k in ("mes", "meta_rs", "realizado_rs", "falta_rs", "ritmo_necessario_rs_dia", "ritmo_atual_rs_dia", "dias_uteis_restantes", "pct_do_proporcional")},
+          nota=f"{brl(m['realizado_rs'])} de {brl(m['meta_rs'])} ({m['ganhos_n']} ganhos, volume limpo). Faltam {brl(m['falta_rs'])} em {m['dias_uteis_restantes']} dias úteis: "
+               f"ritmo necessário {brl(m['ritmo_necessario_rs_dia'])}/dia × atual {brl(m['ritmo_atual_rs_dia'])}/dia.")
+    P.metricas[-1]["meta_unidade"] = "R$"
+    P.add("meta_q4_pct", f"Meta do Q4 ({brl(META_Q4_RS)})", "resultado", total["pct"], "%", "hubspot + saneamento + D111", "alta",
+          tol(0.9 * pct(plano_ate_hoje, META_Q4_RS), 0.7 * pct(plano_ate_hoje, META_Q4_RS), ">= 90% do plano mensal acumulado até hoje", ">= 70% do plano") if plano_ate_hoje else None,
+          meta=META_Q4_RS, detalhe={k: total[k] for k in ("realizado_rs", "falta_rs", "plano_ate_hoje_rs", "ritmo_necessario", "ritmo_atual", "dias_uteis_restantes")},
+          nota=f"{brl(real_t)} de {brl(META_Q4_RS)}; plano até hoje (75/100/75 pelos dias úteis) {brl(plano_ate_hoje)}. Ritmo necessário {brl(total['ritmo_necessario'])}/dia útil × atual {brl(total['ritmo_atual'])}/dia ({total['fator_ritmo']}x).")
+    P.metricas[-1]["meta_unidade"] = "R$"
     return meta
 
 
-def bloco_confiabilidade(P, M, N, sem_saneamento, hoje):
+def desdobrar_por_master(N, hoje, saem, meses):
+    """PROPOSTA de desdobramento da meta por Master: 50% pelo pipeline aberto (R$) + 50% pelo fechado limpo de 12 meses (sem cards >= R$ 50 mi).
+    Não é meta aprovada: vai ao Luis com a Daniela (alçada: meta é do Luis)."""
+    ini12 = ym_add(hoje.isoformat()[:7], -11) + "-01"; chave = lambda d: d["parceiro"] if d["_roster"] else "Outros (fora do roster)"
+    ab, hist = Counter(), Counter()
+    for d in N:
+        if d["status"] == "aberto" and d["valor"]: ab[chave(d)] += d["valor"]
+        elif d["status"] == "ganho" and (d["fechado"] or "") >= ini12 and str(d["id"]) not in saem and d["valor"] < 50_000_000: hist[chave(d)] += d["valor"]
+    ta, th = sum(ab.values()) or 1, sum(hist.values()) or 1
+    share = {k: 0.5 * ab[k] / ta + 0.5 * hist[k] / th for k in set(ab) | set(hist)}
+    real = defaultdict(Counter)
+    for d in N:
+        if d["status"] == "ganho" and "2026-10-01" <= (d["fechado"] or "") <= hoje.isoformat() and str(d["id"]) not in saem: real[chave(d)][d["fechado"][:7]] += d["valor"]
+    linhas = []
+    for k, s in sorted(share.items(), key=lambda x: -x[1]):
+        linhas.append({"master": k, "peso_pct": round(s * 100, 1), "pipeline_aberto_rs": ri(ab[k]), "fechado_12m_limpo_rs": ri(hist[k]),
+                       "meses": [{"mes": m["mes"], "meta_rs": ri(m["meta_rs"] * s), "realizado_rs": ri(real[k][m["mes"]]), "pct": pct(real[k][m["mes"]], m["meta_rs"] * s)} for m in meses],
+                       "meta_q4_rs": ri(META_Q4_RS * s), "realizado_q4_rs": ri(sum(real[k].values()))})
+    return {"proposta": True, "status": "proposta (não aprovada; meta é alçada do Luis)",
+            "metodo": "Peso = 50% da participação no pipeline aberto (R$ crédito) + 50% da participação no fechado de 12 meses no volume limpo, sem cards >= R$ 50 mi (atípicos). Meta do Master = peso × meta do mês.",
+            "alerta": "O pipeline concentra em poucos Masters: o desdobramento herda a concentração (regra C09). Daniela valida Master a Master antes de comunicar.",
+            "masters": linhas}
+
+
+def bloco_confiabilidade(P, M, N, grupos, hoje):
     g = [d for d in N if d["status"] == "ganho"]; ini12 = ym_add(hoje.isoformat()[:7], -11) + "-01"
     g12 = [d for d in g if (d["fechado"] or "") >= ini12]; gm = [d for d in g if (d["fechado"] or "")[:7] == hoje.isoformat()[:7]]
     bruto12, brutom = sum(d["valor"] for d in g12), sum(d["valor"] for d in gm)
     conf = {"volume_bruto_rs": ri(bruto12), "volume_limpo_rs": ri(bruto12), "volume_bruto_mes_rs": ri(brutom), "volume_limpo_mes_rs": ri(brutom),
             "duplicados_grupos": None, "duplicados_grupos_alta": None, "excedente_alta_rs": None, "periodo_12m_desde": ini12}
-    grupos = None
-    if not sem_saneamento:
-        try:
-            cand = [os.path.join(AQUI, "../../depto-dados/scripts/saneamento_duplicados.py"), os.path.join(AP, "skills/depto-dados/scripts/saneamento_duplicados.py")]
-            san = modulo("saneamento", next(c for c in cand if os.path.exists(c)))
-            grupos, _, meta = san.montar()
-        except Exception as e:  # noqa: BLE001
-            P.alerta(f"Saneamento de duplicados não rodou ({e}); volume limpo = bruto.", "depto-dados", "media")
     if grupos is not None:
         alta = [x for x in grupos if x["alta"]]
         saem12 = [d for x in alta for d in x["cards"][1:] if (d.get("fechado") or "") >= ini12]
@@ -405,7 +487,7 @@ def conferir(P, M, conf, meta, N, hoje):
     """Confere cada número recalculado contra o metricas.json do dia. Divergência vai para 'divergencias'."""
     ab = [d for d in N if d["status"] == "aberto"]
     chk = [("pipeline_aberto.n", M["pipeline_aberto"]["n"], len(ab)), ("pipeline_aberto.rs", ri(M["pipeline_aberto"]["rs"]), ri(sum(d["valor"] for d in ab))),
-           ("ganhos_mes_rs", ri(M["mes_ate_hoje"]["ganhos_rs"]), meta["realizado_rs"] if hoje.month == 10 else None),
+           ("ganhos_mes_rs (bruto)", ri(M["mes_ate_hoje"]["ganhos_rs"]), meta["mes_atual"]["realizado_bruto_rs"] if meta["mes_atual"]["mes"] == hoje.isoformat()[:7] else None),
            ("cobertura_honorario.ganhos", M["cobertura_honorario_hubspot"]["ganhos"], sum(1 for d in N if d["status"] == "ganho")),
            ("fonte_cockpit.negocios", M["fonte_cockpit"]["negocios"], len(N))]
     ini12 = ym_add(hoje.isoformat()[:7], -11) + "-01"; g12 = [d for d in N if d["status"] == "ganho" and (d["fechado"] or "") >= ini12]
@@ -434,8 +516,9 @@ def main():
     ps = ler(ult(os.path.join(AP, "departamentos/partner-success/metricas/metricas-ps-*.json"), a.data))
     janelas = ler(os.path.join(AP, "docs/lancamento-2026/janelas.json")); resumos = ler(os.path.join(AP, "celulas/geovana/pareceres/resumos.json")) or {}
     P = Pacote(hoje)
-    bloco_resultado(P, M, N, fonte_hs); meta = bloco_meta(P, M, N, hoje)
-    conf = bloco_confiabilidade(P, M, N, a.sem_saneamento, hoje)
+    grupos, saem = saem_duplicidade(P, a.sem_saneamento)
+    bloco_resultado(P, M, N, fonte_hs); meta = bloco_meta(P, M, N, hoje, saem)
+    conf = bloco_confiabilidade(P, M, N, grupos, hoje)
     bloco_caixa(P, M, N, hoje, janelas, resumos); bloco_risco(P, M, N, hoje, bi); bloco_canal(P, M, N, hoje, bi, ps, roster); bloco_operacao(P, hoje)
     # alertas automáticos (semáforo vermelho e dados velhos)
     for m in P.metricas:

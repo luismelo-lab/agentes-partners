@@ -83,6 +83,10 @@ O Triador reconhece o gatilho; a área interpreta. Consulta em 22/10/2026; Plana
 3. **Ler os 3 campos que decidem:** o que precisa, para que vai usar, formato. Escrever a linha de entendimento.
 4. **Tipo:** código dado ou deduzido pela tabela de intenção; se ambíguo, o mais provável, declarado.
 5. **Checar o que já está no dado** (HubSpot, pareceres em `celulas/geovana/pareceres/resumos.json`, Receita, Bitrix, registro de demandas): status e parecer anexado se respondem sem área.
+5b. **Histórico antes do GLPI (Luis, 26/10/2026):** rode `python3 ~/agentes-partners/lib/historico.py avaliar "<precisa + contexto>" --master … --empresa … --json`.
+   - A busca cobre respostas anteriores da Central, triagens, WhatsApp, chamados escritos, HubSpot, pareceres, skills e decisões.
+   - Se houver resposta suficiente (critérios em `infra/historico-antes-do-glpi.md`), a área responde com ela, citando fonte e data, e não propõe chamado.
+   - Senão, registre em `historico` as buscas feitas e o que faltou. O chamado só é proposto se a área não responder com os dados.
 6. **Escolher as áreas** pelo fluxo único (no mínimo uma); originação com as 4 checagens.
 7. **Decidir o nível:**
    - **Resolve na Central** quando 1 ou 2 áreas bastam, não muda regra e o uso é interno ou um rascunho para o parceiro.

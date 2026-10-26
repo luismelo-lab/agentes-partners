@@ -36,7 +36,11 @@ MAPA = os.path.join(AP, "departamentos/resultados/mapeamento-hubspot.json")
 PARECERES = os.path.join(AP, "celulas/geovana/pareceres/resumos.json")
 FILA_DIR = os.path.join(AP, "celulas/geovana/recuperador")
 OUT_DIR = os.path.join(AP, "registro/gestao")
-META_Q4 = 200_000_000
+# Meta D111 (Luis, 26/10/2026): crédito de contrato fechado (ganho), mensal 75/100/75 = R$ 250 mi no Q4 (substitui D64 e D106)
+METAS_MES = {"2026-10": ("outubro", 75_000_000), "2026-11": ("novembro", 100_000_000), "2026-12": ("dezembro", 75_000_000)}
+META_Q4 = sum(v for _, v in METAS_MES.values())
+FERIADOS = {date(2026, 10, 12), date(2026, 11, 2), date(2026, 11, 20), date(2026, 12, 25)}
+N_SIM = 20_000  # simulações de Monte Carlo para a probabilidade de cada mês
 
 # ---------------------------------------------------------------- premissas (todas aparecem no JSON)
 PREMISSAS = {
@@ -94,6 +98,112 @@ def tipo_tese(d):
     if "(jud)" in t or "(msc)" in t: return "jud"
     if "aquisi" in t or "insumo" in t or "diesel" in t: return "per"     # crédito escritural: ressarcimento por PER (variante A/B)
     return "comp"                                                          # exclusões, verbas: compensação / conta gráfica
+
+
+def dias_uteis(a, b):
+    n, d = 0, a
+    while d <= b:
+        if d.weekday() < 5 and d not in FERIADOS: n += 1
+        d += timedelta(days=1)
+    return n
+
+
+def previsao_mensal(hoje, data, N, abertos, cen, c_deal, S, ciclos, esperado_novos, gt, ticket_med, ticket_apar, conv_pool, cria_sem, real, liq_fator, h_q4):
+    """Cenários por mês contra 75/100/75 (D111), probabilidade de cada mês por Monte Carlo e o que novembro precisa para recuperar outubro.
+    Mesma base do modelo do trimestre; o que muda: a sazonalidade de nov/dez só vale para nov/dez (outubro com 1,0) e o estoque fora da curva
+    (P = 25% até 31/12) se distribui pelos dias de cada mês. Estimativa com premissa escrita; não é promessa."""
+    import numpy as np
+    meses = list(METAS_MES)
+    fins = {m: date(int(m[:4]), int(m[5:]) % 12 + 1, 1) - timedelta(days=1) if m[5:] != "12" else date(int(m[:4]), 12, 31) for m in meses}
+    hs = [max((fins[m] - hoje).days, 0) for m in meses]
+    # realizado por mês: volume limpo do pacote do mesmo dia, se houver (duplicidade de alta confiança fora); senão bruto
+    pac = os.path.join(OUT_DIR, f"pacote-{data}.json"); real_m = {m: 0.0 for m in meses}; fonte_real = "bruto (HubSpot; pacote do dia ausente)"
+    try:
+        for x in json.load(open(pac))["meta"]["meses"]: real_m[x["mes"]] = float(x["realizado_rs"])
+        fonte_real = f"volume limpo do pacote-{data}.json"
+    except Exception:
+        for d in real: real_m[d["fechado"][:7]] = real_m.get(d["fechado"][:7], 0) + d["valor"]
+    def pf(idade, h):  # P(fechar até h | aberto, vai ganhar); estoque fora da curva: 25% até 31/12, distribuído pelos dias
+        sa = S(idade)
+        if sa < 0.03 or len(ciclos) < 15: return 0.25 * min(h, h_q4) / h_q4 if h_q4 else 0.25
+        return (sa - S(idade + h)) / sa
+    saz_cen = {"conservador": PREMISSAS["sazonal_fechamento"]["conservador"], "base": PREMISSAS["sazonal_fechamento"]["base"], "esforco": 1.0}
+    modelo = {"conservador": "conservador", "base": "base", "esforco": "meta"}
+    vals = np.array([d["valor"] for d in abertos], dtype=float)
+    trim = np.array(sorted(gt)[:max(1, int(len(gt) * .95))], dtype=float)  # tickets dos ganhos de 6 meses sem os 5% maiores
+    rng = np.random.default_rng(20261026)
+    R = {}
+    for k, mod in modelo.items():
+        P = np.zeros((len(abertos), 3))
+        for i, d in enumerate(abertos):
+            c = c_deal(mod, d); idade = (hoje - dt(d["criado"])).days; cum = [pf(idade, h) for h in hs]
+            inc = [cum[0], cum[1] - cum[0], cum[2] - cum[1]]
+            P[i] = [c * inc[0], c * inc[1] * saz_cen[k], c * inc[2] * saz_cen[k]]
+        esp_ab = P.T @ vals
+        nov_cum, nov_n = [], []
+        for m in meses:
+            t, _ = esperado_novos(mod, fins[m]) if fins[m] > hoje else (0.0, 0); nov_cum.append(t); nov_n.append(esperado_novos.ganhos_n if fins[m] > hoje else 0.0)
+        esp_nov = [nov_cum[0], nov_cum[1] - nov_cum[0], nov_cum[2] - nov_cum[1]]; lam = [nov_n[0], nov_n[1] - nov_n[0], nov_n[2] - nov_n[1]]
+        # Monte Carlo: cada aberto ganha no máximo uma vez (out, nov ou dez); novos ganhos ~ Poisson com ticket sorteado do histórico
+        U = rng.random((N_SIM, len(abertos))); C = np.cumsum(P, axis=1)
+        sim = np.zeros((N_SIM, 3))
+        for j in range(3):
+            lo = C[:, j - 1] if j else 0.0
+            sim[:, j] = ((U >= lo) & (U < C[:, j])).astype(float) @ vals
+        esc_tk = (ticket_med / ticket_apar) if k == "conservador" and ticket_apar else 1.0
+        for j in range(3):
+            n_g = rng.poisson(max(lam[j], 0), N_SIM); mx = int(n_g.max()) if len(n_g) else 0
+            if mx:
+                tk = rng.choice(trim, size=(N_SIM, mx)) * esc_tk
+                sim[:, j] += (tk * (np.arange(mx) < n_g[:, None])).sum(axis=1)
+        R[k] = {"esp_ab": esp_ab, "esp_nov": esp_nov, "sim": sim, "lam": lam}
+    out_meses = []
+    for j, m in enumerate(meses):
+        nome, meta = METAS_MES[m]; ini = date(int(m[:4]), int(m[5:]), 1)
+        linha = {"mes": m, "nome": nome, "meta_rs": meta, "realizado_ate_hoje_rs": int(real_m[m]), "dias_uteis": dias_uteis(ini, fins[m]),
+                 "dias_uteis_restantes": dias_uteis(max(ini, hoje + timedelta(days=1)), fins[m]), "cenarios": {}}
+        for k in modelo:
+            e = real_m[m] + R[k]["esp_ab"][j] + R[k]["esp_nov"][j]; tot = real_m[m] + R[k]["sim"][:, j]
+            linha["cenarios"][k] = {"esperado_rs": int(e), "pct_da_meta": round(100 * e / meta, 1), "gap_rs": int(meta - e),
+                                   "decomposicao_rs": {"realizado": int(real_m[m]), "pipeline_aberto": int(R[k]["esp_ab"][j]), "negocios_novos": int(R[k]["esp_nov"][j])},
+                                   "faixa_p10_p90_rs": [int(np.percentile(tot, 10)), int(np.percentile(tot, 90))],
+                                   "probabilidade_meta_pct": round(100 * float((tot >= meta).mean()), 1)}
+        out_meses.append(linha)
+    total = {"meta_rs": META_Q4, "realizado_ate_hoje_rs": int(sum(real_m.values())), "cenarios": {}}
+    for k in modelo:
+        tot = sum(real_m.values()) + R[k]["sim"].sum(axis=1); e = sum(x["cenarios"][k]["esperado_rs"] for x in out_meses)
+        out_acum = sum(real_m[m] for m in meses[:2]) + R[k]["sim"][:, :2].sum(axis=1)
+        total["cenarios"][k] = {"esperado_rs": int(e), "pct_da_meta": round(100 * e / META_Q4, 1), "gap_rs": int(META_Q4 - e), "liquido_estimado_rs": int(e * liq_fator),
+                                "faixa_p10_p90_rs": [int(np.percentile(tot, 10)), int(np.percentile(tot, 90))], "probabilidade_meta_pct": round(100 * float((tot >= META_Q4).mean()), 1),
+                                "probabilidade_out_nov_175mi_pct": round(100 * float((out_acum >= 175_000_000).mean()), 1)}
+    # o que novembro precisaria para recuperar o gap de outubro (base)
+    out_b = out_meses[0]["cenarios"]["base"]["esperado_rs"]; gap_out = max(METAS_MES["2026-10"][1] - out_b, 0)
+    nov_alvo = METAS_MES["2026-11"][1] + gap_out; du_nov = out_meses[1]["dias_uteis"]; sem_nov = du_nov / 5
+    out_ini = date(hoje.year, 10, 1); sem_out = max(dias_uteis(out_ini, hoje), 1) / 5
+    g_out = [d for d in real if d["fechado"][:7] == "2026-10"]; gps = len(g_out) / sem_out; tk_out = (sum(d["valor"] for d in g_out) / len(g_out)) if g_out else ticket_apar
+    nov_b = out_meses[1]["cenarios"]["base"]["esperado_rs"]; aberto_rs = float(vals.sum())
+    precisa = {"gap_outubro_base_rs": int(gap_out), "novembro_alvo_rs": int(nov_alvo), "novembro_base_rs": int(nov_b), "distancia_rs": int(nov_alvo - nov_b),
+               "semanas_uteis_novembro": round(sem_nov, 1),
+               "ganhos_por_semana_necessarios_ticket_aparado": round(nov_alvo / ticket_apar / sem_nov, 1), "ticket_aparado_rs": int(ticket_apar),
+               "ganhos_por_semana_outubro": round(gps, 1), "ticket_medio_outubro_rs": int(tk_out),
+               "ticket_necessario_no_ritmo_de_outubro_rs": int(nov_alvo / (gps * sem_nov)) if gps else None,
+               "conversao_do_pipeline_aberto_necessaria_pct": round(100 * nov_alvo / aberto_rs, 1) if aberto_rs else None, "conversao_pool_pct": round(conv_pool * 100, 1),
+               "pipeline_maduro_necessario_rs": int(nov_alvo / conv_pool) if conv_pool else None, "pipeline_aberto_rs": int(aberto_rs),
+               "leitura": []}
+    precisa["leitura"] = [
+        f"Outubro fecha perto de R$ {out_b/1e6:.1f} mi no cenário base: gap de R$ {gap_out/1e6:.1f} mi. Para recuperá-lo em novembro, o mês precisaria de R$ {nov_alvo/1e6:.1f} mi (meta R$ 100 mi + gap); o base de novembro é R$ {nov_b/1e6:.1f} mi.",
+        f"Em ganhos: com o ticket aparado de R$ {ticket_apar/1e3:.0f} mil, {nov_alvo/ticket_apar/sem_nov:.0f} ganhos por semana em {sem_nov:.1f} semanas úteis, contra {gps:.1f}/semana em outubro (ticket médio de outubro R$ {tk_out/1e3:.0f} mil).",
+        f"Em ticket: mantendo {gps:.1f} ganhos/semana, o ticket médio teria de ser R$ {(nov_alvo / (gps * sem_nov) if gps else 0)/1e6:.1f} mi por ganho, {(nov_alvo / (gps * sem_nov) if gps else 0)/ticket_apar:.0f} vezes o ticket aparado de 6 meses.",
+        f"Só a meta de novembro (R$ 100 mi, sem recuperar outubro) já pede {100e6/ticket_apar/sem_nov:.0f} ganhos por semana no ticket aparado, ou {100e6/aberto_rs*100:.0f}% do pipeline aberto com valor fechando no mês.",
+        f"Em conversão: R$ {nov_alvo/1e6:.0f} mi equivalem a {100*nov_alvo/aberto_rs:.0f}% de todo o pipeline aberto com valor (R$ {aberto_rs/1e6:.1f} mi); com a conversão real de {conv_pool*100:.0f}%, seria preciso R$ {nov_alvo/conv_pool/1e6:.0f} mi de pipeline maduro decidindo em novembro.",
+        "Sem promessa: o que mais aproxima novembro são entradas grandes já identificadas (contratos enviados, diagnósticos de alto crédito) e dar valor aos abertos sem valor; ver `alavancas`. Nenhum desses números é compromisso de resultado.",
+    ]
+    return {"meses": out_meses, "total": total, "novembro_precisa": precisa,
+            "metodo": [f"Realizado por mês: {fonte_real}.",
+                       "Cenários: mesmo modelo do trimestre (conversão por safra, curva de ciclo, parados pela metade, sazonalidade medida de nov/dez), separado por mês pela data provável de fechamento; a queda sazonal só vale para nov/dez. Esforço = conversão >= pool, parados cheios, sem queda sazonal.",
+                       f"Probabilidade: {N_SIM:,} simulações; cada aberto ganha no máximo uma vez, no mês sorteado pela curva; novos ganhos por Poisson com ticket sorteado dos ganhos de 6 meses (sem os 5% maiores; conservador escala para o ticket mediano). Negócios tratados como independentes: a faixa real é mais larga (Masters grandes fecham em bloco).".replace(",", "."),
+                       "Estimativa com premissa escrita. Nada aqui promete valor, prazo ou êxito."],
+            "confianca": "media"}
 
 
 def main(data, saida):
@@ -159,17 +269,17 @@ def main(data, saida):
     # ------------------------------------------------------------ pipeline aberto por safra e por cenário
     abertos = [d for d in N if d["status"] == "aberto" and d["valor"] > 0]
     sem_valor = sum(1 for d in N if d["status"] == "aberto" and not d["valor"])
+    def c_deal(cen, d, parado_fator=0.5):  # conversão do negócio no cenário (safra, pior safra, parado vale metade)
+        c, f = conv(ym(d["criado"])); c = c if (c is not None and f >= 30) else conv_pool
+        if cen == "conservador": c = min(c, conv_pior)
+        if cen == "meta": c = max(c, conv_pool)
+        idade = (hoje - dt(d["criado"])).days; ua = dt((d.get("extras") or {}).get("ultima_atividade") or "")
+        parado = idade > PREMISSAS["ciclo_estoque_x"] * ciclo_med and (ua is None or (hoje - ua).days > PREMISSAS["ciclo_estoque_x"] * ciclo_med)
+        return c * parado_fator if (parado and cen != "meta") else c
     def esperado_aberto(cen, h, saz=None, parado_fator=0.5, etapa_fixa=None):
         saz = PREMISSAS["sazonal_fechamento"][cen] if saz is None else saz; tot = 0.0; por_safra = defaultdict(float); por_parc = defaultdict(float); por_etapa = defaultdict(float)
         for d in abertos:
-            s = ym(d["criado"]); c, f = conv(s)
-            c = c if (c is not None and f >= 30) else conv_pool
-            if cen == "conservador": c = min(c, conv_pior)
-            if cen == "meta": c = max(c, conv_pool)
-            idade = (hoje - dt(d["criado"])).days
-            ua = dt((d.get("extras") or {}).get("ultima_atividade") or "")
-            parado = idade > PREMISSAS["ciclo_estoque_x"] * ciclo_med and (ua is None or (hoje - ua).days > PREMISSAS["ciclo_estoque_x"] * ciclo_med)
-            if parado and cen != "meta": c *= parado_fator
+            s = ym(d["criado"]); c = c_deal(cen, d, parado_fator); idade = (hoje - dt(d["criado"])).days
             p = c * p_fecha(idade, h) * (saz if cen != "meta" else 1.0)
             if etapa_fixa and d["etapa"] == etapa_fixa[0]: p = etapa_fixa[1]
             v = d["valor"] * p; tot += v; por_safra[s] += v; por_parc[d["parceiro"]] += v; por_etapa[d["etapa"]] += v
@@ -186,12 +296,14 @@ def main(data, saida):
     def esperado_novos(cen, fim, cria=None):
         tk = {"conservador": ticket_med, "base": ticket_apar, "meta": ticket_apar}[cen]
         c = {"conservador": conv_pior, "base": conv_pool, "meta": conv_pool}[cen]
-        tot = 0.0; n = 0.0; d0 = hoje + timedelta(days=1); cria = cria_sem if cria is None else cria
+        tot = 0.0; n = 0.0; d0 = hoje + timedelta(days=1); cria = cria_sem if cria is None else cria; ganhos_n = 0.0
         while d0 <= fim:
             f = PREMISSAS["sazonal_criacao"][cen].get(f"{d0.month:02d}", 1.0)
             n_dia = cria / 7 * f; n += n_dia
             tot += n_dia * tk * c * (1 - S((fim - d0).days))   # só o que fecha dentro do horizonte
+            ganhos_n += n_dia * c * (1 - S((fim - d0).days))
             d0 += timedelta(days=1)
+        esperado_novos.ganhos_n = ganhos_n
         return tot, n
 
     cen = {}
@@ -230,8 +342,14 @@ def main(data, saida):
                        f"Com ticket aparado de R$ {ticket_apar/1e3:.0f} mil: {wins_need:.0f} ganhos ({wins_need/sem_rest:.0f}/semana) contra {len(real)/((hoje-dt(tri_ini)).days/7):.1f}/semana em outubro.",
                        f"Com win rate de {conv_pool*100:.0f}%: {wins_need/conv_pool:.0f} negócios criados E fechados dentro do trimestre ({wins_need/conv_pool/sem_rest:.0f}/semana, contra {cria_sem:.0f}/semana hoje), ou R$ {falta/conv_pool/1e6:.0f} mi de pipeline novo com ciclo de {ciclo_med:.0f} dias.",
                        f"Converter 100% do pipeline aberto com valor (R$ {aberto_rs/1e6:.1f} mi) até 31/12 ainda deixaria R$ {(falta-aberto_rs)/1e6:.1f} mi faltando: a meta em crédito não é alcançável no Q4 sem entrada atípica; mesmo sem sazonalidade e sem corte de parados, o modelo chega a R$ {modelo_meta/1e6:.1f} mi.",
-                       f"Se a unidade for líquido Save (R$ 200 mi líquidos = R$ {META_Q4/liq_fator/1e9:.2f} bi de crédito), a distância é ainda maior. Leitura sugerida: tratar R$ 200 mi como meta de crédito do semestre (Q4 + Q1) ou como meta de pipeline criado (D74 define o escopo).",
+                       f"Unidade decidida (D111): crédito de contrato fechado, mensal 75/100/75. Em líquido Save, R$ {META_Q4/1e6:.0f} mi de crédito equivalem a cerca de R$ {META_Q4*liq_fator/1e6:.0f} mi ({liq_fator*100:.1f}%). A leitura por mês está em `por_mes`.",
                    ]}
+
+    # ------------------------------------------------------------ por mês (D111): cenários, probabilidade e o que novembro precisa
+    por_mes = previsao_mensal(hoje, data, N, abertos, cen, c_deal, S, ciclos, esperado_novos, gt, ticket_med, ticket_apar, conv_pool, cria_sem, real, liq_fator, h_q4)
+    cen["esforco"] = {"fechamento_q4_rs": por_mes["total"]["cenarios"]["esforco"]["esperado_rs"], "liquido_q4_rs": int(por_mes["total"]["cenarios"]["esforco"]["esperado_rs"] * liq_fator),
+                      "decomposicao_rs": cen["meta"]["decomposicao_rs"], "ate_31_01_rs": cen["meta"]["ate_31_01_rs"],
+                      "premissas": prem_comuns + ["Esforço: conversão no mínimo a do pool, parados com conversão cheia, sem queda sazonal de nov/dez no fechamento nem na criação, ticket aparado, sem glosa. É o teto plausível do modelo com o canal de hoje, não promessa."]}
 
     # ------------------------------------------------------------ pipeline por safra
     pipeline_safra = []
@@ -421,9 +539,9 @@ def main(data, saida):
     alavancas.append({"alavanca": "Registrar honorário e corrigir repasse", "como": "cada 3 pontos de honorário efetivo (ou de repasse) mudam o líquido dos ganhos de 12 meses", "efeito_credito_rs": 0, "efeito_liquido_rs": int(sens_hon), "dono": "Dados com Operações de Canal", "prazo": "2026-11-20"})
 
     out = {"data": data, "horizonte_semanas": 13, "fonte": fonte, "gerado_em": datetime.now().strftime("%Y-%m-%d %H:%M"),
-           "meta": {"q4_rs": META_Q4, "unidade": "indefinida", "realizado_rs": int(real_rs), "realizado_liquido_rs": int(real_liq), "falta_rs": int(falta), "dias_restantes": h_q4,
+           "meta": {"q4_rs": META_Q4, "unidade": "credito_contrato_fechado", "decisao": "D111 (26/10/2026)", "realizado_rs": int(real_rs), "realizado_liquido_rs": int(real_liq), "falta_rs": int(falta), "dias_restantes": h_q4,
                     "cobertura_base_x": round(cob / falta, 2) if falta else None, "leitura_liquido": {"meta_em_liquido_exige_credito_rs": int(META_Q4 / liq_fator), "liquido_se_meta_em_credito_rs": int(META_Q4 * liq_fator)}},
-           "cenarios": cen, "metodo_resumo": {"conversao_pool_pct": round(conv_pool * 100, 1), "conversao_pior_pct": round(conv_pior * 100, 1), "ciclo_mediano_dias": ciclo_med,
+           "cenarios": cen, "por_mes": por_mes, "metodo_resumo": {"conversao_pool_pct": round(conv_pool * 100, 1), "conversao_pior_pct": round(conv_pior * 100, 1), "ciclo_mediano_dias": ciclo_med,
                                                "criacao_semana_mm4": round(cria_sem, 1), "ticket_mediano_rs": int(ticket_med), "ticket_aparado_rs": int(ticket_apar),
                                                "honorario_efetivo_pct": round(hC * 100, 1), "repasse_pct": round(hP * 100, 1), "liquido_fator_pct": round(liq_fator * 100, 1),
                                                "pipeline_aberto_rs": int(aberto_rs), "pipeline_aberto_n": len(abertos), "abertos_sem_valor_n": sem_valor},
@@ -433,6 +551,8 @@ def main(data, saida):
     os.makedirs(os.path.dirname(saida), exist_ok=True)
     json.dump(out, open(saida + ".tmp", "w", encoding="utf-8"), ensure_ascii=False, indent=1); os.replace(saida + ".tmp", saida)
     print(saida)
+    for x in por_mes["meses"] + [dict(por_mes["total"], nome="Q4")]:
+        print(f"{x['nome']:9s} meta R$ {x['meta_rs']/1e6:5.0f} mi · " + " · ".join(f"{k} R$ {c['esperado_rs']/1e6:5.1f} mi (P {c['probabilidade_meta_pct']}%)" for k, c in x["cenarios"].items()))
     for k, v in cen.items(): print(f"{k:12s} crédito R$ {v['fechamento_q4_rs']/1e6:7.1f} mi · líquido R$ {v['liquido_q4_rs']/1e6:6.1f} mi · {v['decomposicao_rs']}")
     print("caixa 13 semanas base R$ %.1f mi · conservador R$ %.1f mi" % (sum(c["entrada_rs_base"] for c in caixa_13) / 1e6, sum(c["entrada_rs_conservador"] for c in caixa_13) / 1e6))
     return out

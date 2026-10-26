@@ -32,6 +32,7 @@
 | `jur_demandas` | pergunta jurídica exata e documento de apoio | parecer curto |
 
 ## Antes de entregar, o especialista confere
+0. **Histórico primeiro** (Luis, 26/10/2026, `infra/historico-antes-do-glpi.md`): `lib/historico.py avaliar` rodado e sem resposta suficiente. O que foi achado vai em "O que já levantamos" e em `checagens` ("Histórico consultado: <fontes> · <o que faltou>"). Se o histórico responde, não há chamado.
 1. "Checar antes de propor" e "Fora do GLPI" de `infra/glpi-regras.md`. Se cair ali, preenche `nao_abrir`.
 2. `registro/chamados-aprendizados.md`: motivos de chamados recusados pelo time.
 3. A categoria: se a triagem errou, corrige `area` e registra `reclassificado_de`.
