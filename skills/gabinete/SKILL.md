@@ -84,6 +84,9 @@ Salve em `~/agentes-partners/gabinete/pedidos/AAAA-MM-DD-<tema>.md` e registre e
 ## Pedidos que sobem da Central
 A `central-agentes` resolve o pedido do time com uma ou duas áreas. Ela sobe ao Gabinete quando o pedido cruza 3 ou mais áreas, muda regra, envolve crédito acima de R$ 1 mi com decisão, é produto em validação com condição pedida ou vem de cliente sem Master (D76). Critério completo em `skills/central-agentes/references/especialistas/triador-pedidos.md`. Esses pedidos chegam com a Ficha de Rota rascunhada pela Central; o Roteador confere o nível e segue.
 
+## Dossiê de decisão para o Luis (regra do Luis de 26/10/2026)
+Toda decisão pendente da alçada do Luis (`conselho/decisoes.md` e folha de decisões) leva dossiê em `registro/gestao/dossies/<id>.json`: o que decidir, por que agora e custo de não decidir com número, contexto com fonte e tipo (fato, estimativa, opinião), 2 a 4 opções com prós, contras, risco e efeito, recomendação, o que acontece se for reprovada, validação de cada área dona do tema (subagente que lê o SKILL.md e o especialista certo: concorda, concorda com ressalva ou discorda, com motivo, base e condição de sucesso), divergências e como o Gabinete as resolve, e a execução (dono, prazo, indicador). `scripts/dossies_decisao.py` lista as pendentes e aponta as sem dossiê ou com dossiê de mais de 7 dias; `--indice` grava o índice e `--md` gera o Markdown do Word (passos em `scripts/dossies/README.md`).
+
 ## Regras
 - Nenhuma área executa nada: tudo é rascunho, e o humano responsável aprova (o Luis no que é alçada dele; nos demais casos, a pessoa dona da entrega, `infra/alcadas.md` §1).
 - **Pessoas:** fatos observáveis, nunca rótulos de personalidade; decisões sobre pessoas são sempre do Luis (e do RH formal quando exigido); nada é compartilhado com o time sem ele decidir.
