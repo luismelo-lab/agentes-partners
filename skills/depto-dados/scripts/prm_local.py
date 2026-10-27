@@ -2,7 +2,8 @@
 """PRM Save · modo local da Fase 1: as mesmas tabelas do Azure SQL (docs/prm/v2/schema.sql) em JSON, em registro/prm/.
 
 Dono: Dados & BI (Engenheiro de Dados do HubSpot). Desenho: docs/prm/v2/03-dados.md, seção 4.
-Só leitura no HubSpot: lê o download do dia (departamentos/resultados/dados/hubspot-AAAA-MM-DD.json, rotina "Dados do dia").
+Só leitura no HubSpot: lê o download do dia (departamentos/resultados/dados/hubspot-AAAA-MM-DD.json, rotina "Dados do dia")
+e, se existir, o complemento da API do mesmo dia (prm-complemento-AAAA-MM-DD.json, prm_hubspot.py).
 Não chama API, não escreve no HubSpot nem no GLPI.
 
 Cada arquivo é uma tabela, com o mesmo nome e as mesmas colunas do esquema SQL, num envelope:
@@ -51,6 +52,8 @@ ESTADO_ETAPA = {
     "Análise com Pendência": 3, "Documentação Pendente": 3,
     "Apresentação de Diagnóstico": 4, "Em Apresentação": 4,
     "Negociação": 5, "Contrato Enviado": 5, "Pendência Fechamento": 5, "Contrato Assinado": 5,
+    # etapas que apareceram na linha do tempo real (API, 27/10/2026); mesma proposta, a Daniela valida
+    "Abordagem": 1, "Follow up": 1, "Reentrada": 1, "Em andamento": 1, "Funil de Aplicação": 1, "Funil de Aquisição": 1, "Funil Outbound": 1, "Aguardando Diagnóstico": 2, "Diagnóstico em Construção": 2, "Autorização - Gestor": 2, "Pendência da Automação": 2, "Pendência de Documentos": 3, "Aguardado E-CAC": 3, "Elaboração de Contrato": 5, "Contrato enviado": 5, "Análise jurídica": 5,
 }
 ESTADOS = {1: "Recebido", 2: "Em diagnóstico", 3: "Precisa de algo de você", 4: "Apresentação marcada",
            5: "Contrato em andamento", 6: "Em execução", 7: "Encerrado"}
@@ -215,6 +218,7 @@ def espelho(negocios, vinculo, regras):
             "proximo_passo_crm": ex.get("proximo_passo"), "tem_anexo_diagnostico": bool(ex.get("anexo_diagnostico")),
             "historico_etapas": [{"etapa": h.get("etapa"), "entrou_em": h.get("entrou_em")} for h in (ex.get("historico_etapas") or []) if isinstance(h, dict) and h.get("etapa")],
             "probabilidade": d.get("prob"), "motivo_perda_interno": ex.get("motivo_perda"),
+            "proximo_passo_crm_em": ex.get("proximo_passo_em"), "pendencia_crm_interna": ex.get("pendencia") or ex.get("pendencia_fechamento"),
         })
     return linhas
 
@@ -377,10 +381,22 @@ def qualidade(neg, parc):
     }
 
 
+def complementar(negocios, fonte):
+    """Junta aos `extras` o complemento da API (prm_hubspot.py, mesmo dia do download): datas por etapa, próximo passo,
+    motivo da perda e responsável. Sem o arquivo, o espelho sai como antes (só entrada e etapa atual)."""
+    p = os.path.join(os.path.dirname(fonte), os.path.basename(fonte).replace("hubspot-", "prm-complemento-", 1))
+    C = (ler(p, {}) or {}).get("negocios") or {}
+    for d in negocios:
+        if C.get(d["id"]):
+            d["extras"] = {**(d.get("extras") or {}), **C[d["id"]]}
+    return os.path.basename(p) if C else None
+
+
 def gerar(a):
     fonte = a.fonte or (sorted(glob.glob(os.path.join(DADOS, "hubspot-*.json"))) or [None])[-1]
     if not fonte: sys.exit("Sem download do HubSpot: rode `partners hubspot`.")
     D = ler(fonte); mapa = ler(MAPA, {}); negocios = D["negocios"]
+    comp = complementar(negocios, fonte)
     hoje = date.fromisoformat(a.hoje) if a.hoje else dia(D.get("baixado_em")) or date.today()
     pasta = a.saida
     parc, vinc, _ = parceiros(pasta, negocios, mapa, ler(ALIASES, {}))
@@ -408,9 +424,9 @@ def gerar(a):
             "prm_parceiro": len(parc), "prm_termo": len(termos), "prm_registro_oportunidade": len(regs)}
     gravar(pasta, "metricas", "prm.vw_metricas", [M], f)
     gravar(pasta, "qualidade", "ops.qualidade_execucao", [Q], f)
-    gravar(pasta, "manifesto", "ops.sync_execucao", [{"fonte": f, "hs_baixado_em": D.get("baixado_em"), "referencia": str(hoje),
+    gravar(pasta, "manifesto", "ops.sync_execucao", [{"fonte": f, "complemento_api": comp, "hs_baixado_em": D.get("baixado_em"), "referencia": str(hoje),
                                                       "modo": "total", "contagens": cont, "resultado": "ok"}], "prm_local.py gerar")
-    print(json.dumps({"saida": pasta, **cont, "conflitos": M["conflitos"], "extrato": M["extrato_pendente"]}, ensure_ascii=False))
+    print(json.dumps({"saida": pasta, **cont, "complemento_api": comp, "conflitos": M["conflitos"], "extrato": M["extrato_pendente"]}, ensure_ascii=False))
 
 
 def status(a):

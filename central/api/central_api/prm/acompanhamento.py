@@ -333,7 +333,8 @@ def _linha_do_tempo(app, n):
         ini = _dia(x["entrou_em"])
         fim = _dia(hist[i + 1]["entrou_em"]) if i + 1 < len(hist) else (None if n.get("status") == "aberto" else ini)
         atual = i == len(hist) - 1 and n.get("status") == "aberto"
-        est = mapa.get(x["etapa"]) or ("execucao" if x["etapa"] == "Negócio Fechado" else "encerrado" if x["etapa"] in ("Negócio Perdido", "Desqualificado") else None)
+        et = x["etapa"].lower()  # o HubSpot tem "Negócio Fechado" e "Negócio fechado" em funis diferentes
+        est = mapa.get(x["etapa"]) or ("execucao" if et == "negócio fechado" else "encerrado" if et in ("negócio perdido", "desqualificado") else None)
         out.append({"etapa": x["etapa"], "estado": NG.ROTULO.get(est) if est else None, "desde": CAL.fmt_data(ini) if ini else "", "desde_iso": str(ini) if ini else None,
                     "dias": ((fim or hoje) - ini).days if ini else None, "atual": atual})
     return out
