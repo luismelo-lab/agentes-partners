@@ -75,6 +75,20 @@ case "${1:-ajuda}" in
   indice-ativos) # índice de chaves (HMAC) das empresas com negócio aberto ou ganho: 1ª checagem do site de consulta dos parceiros
                 ( cd "$AP/central/api" && PYTHONPATH="$AP/lib" rodar indice-ativos python3 -m central_api.negocio_ativo construir ) ;;
   dados-bi)     rodar dados-bi python3 "$SK/depto-dados/scripts/dados_bi.py" ;;
+  ia)           # rotina com IA pelo terminal (Luis, 27/10/2026): partners ia <rotina> [--teste]. O texto é o de rotinas/<rotina>.md,
+                # o mesmo do app; horários em infra/launchd/ia_rotinas.py. Uma execução por rotina de cada vez (lockf).
+                R="${2:-}"; P="$AP/rotinas/$R.md"
+                [ -n "$R" ] && [ -f "$P" ] || { echo "uso: partners ia <rotina> · rotinas: $(ls "$AP/rotinas" | sed 's/\.md$//' | tr '\n' ' ')"; exit 2; }
+                export PATH="$HOME/.local/bin:$PATH"
+                command -v claude >/dev/null || { log "ia:$R" "ERRO Claude Code não instalado (docs/rotinas-no-terminal.md)"; alerta ia; exit 1; }
+                TXT=$(awk 'BEGIN{n=0} /^---$/ && n<2 {n++; next} n>=2' "$P")
+                [ "${3:-}" = "--teste" ] && TXT="TESTE DE INSTALAÇÃO, NÃO EXECUTE A ROTINA. Só confira se as ferramentas necessárias existem nesta sessão (Bash, Read, Write, Agent, WebSearch e, se a rotina abaixo citar o painel, ArtifactData: carregue com ToolSearch). Responda em uma linha: OK ou FALTA <ferramentas>.
+
+$TXT"
+                cd "$AP" && rodar "ia:$R" /usr/bin/caffeinate -i /usr/bin/lockf -t 0 "$LOG/.ia-$R.lock" claude -p "$TXT" --max-turns 120 \
+                  --permission-mode acceptEdits \
+                  --allowedTools Bash Read Write Edit Glob Grep WebSearch WebFetch Agent Task ToolSearch TodoWrite Skill ArtifactData Artifact \
+                  --disallowedTools "Bash(git push:*)" "Bash(rm -rf:*)" "Bash(sudo:*)" ;;
   prm)          # PRM (Fase 1): complemento da API (datas por etapa, responsável, motivo da perda) e espelho em registro/prm/
                 rodar prm-api python3 "$SK/depto-dados/scripts/prm_hubspot.py"; rodar prm python3 "$SK/depto-dados/scripts/prm_local.py" gerar ;;
   caixa)        # lê caixas e demandas do WhatsApp; pula se já leu nos últimos 20 min ("partners caixa forcar" lê de novo)
@@ -141,7 +155,7 @@ case "${1:-ajuda}" in
   ajuda|*)      cat <<'TXT'
 partners <comando>
   Operação     sentinelas · para-areas · plano (depois da rotina operacao-areas das 7h40; reserva às 9h, e-mail por pessoa) · tarde (13h30, só urgentes novos) · operacao.py resumo
-  Dados        hubspot [forcar] · indice-ativos · dados-bi · prm · areas · receita (mensal) · portal · onedrive · backup
+  Dados        hubspot [forcar] · indice-ativos · dados-bi · prm · ia <rotina> [--teste] · areas · receita (mensal) · portal · onedrive · backup
   WhatsApp     caixa [forcar] (dias úteis 7h45 e a cada 30 min das 8h15 às 18h45) · whatsapp-auto (rodada sem IA, e-mail só se houver pedido novo)
   Central      central [agora] (lê e-mails [AGENTES] e enfileira) · central-fila
   Técnica      recuperador (pareceres + fila) · revisor · resultados (métricas da semana)
